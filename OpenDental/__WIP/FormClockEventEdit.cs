@@ -138,7 +138,7 @@ namespace OpenDental
             if (Preferences.HasClinicsEnabled)
             {
                 var clinics = Clinics.GetForUserod(Security.CurUser);
-                if (!Security.CurUser.ClinicIsRestricted || Security.CurUser.ClinicNum == 0)
+                if (!Security.CurUser.ClinicRestricted || Security.CurUser.ClinicId == 0)
                 {
                     clinics.Insert(0, new Clinic
                     {

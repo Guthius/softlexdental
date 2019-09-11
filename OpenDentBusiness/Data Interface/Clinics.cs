@@ -174,16 +174,16 @@ namespace OpenDentBusiness{
 				if(Preference.GetString(PreferenceName.ClinicTrackLast)!="User") {
 					return;
 				}
-				List<UserOdPref> prefs = UserOdPrefs.GetByUserAndFkeyType(Security.CurUser.UserNum,UserOdFkeyType.ClinicLast);//should only be one.
+				List<UserPreference> prefs = UserOdPrefs.GetByUserAndFkeyType(Security.CurUser.Id,UserPreferenceName.LastSelectedClinic);//should only be one.
 				if(prefs.Count>0) {
 					prefs.ForEach(x => x.Fkey=value);
 					prefs.ForEach(UserOdPrefs.Update);
 					return;
 				}
 				UserOdPrefs.Insert(
-					new UserOdPref() {
-						UserNum=Security.CurUser.UserNum,
-						FkeyType=UserOdFkeyType.ClinicLast,
+					new UserPreference() {
+						UserId=Security.CurUser.Id,
+						FkeyType=UserPreferenceName.LastSelectedClinic,
 						Fkey=value,
 					});
 			}//end set
@@ -198,14 +198,14 @@ namespace OpenDentBusiness{
 			List<Clinic> listClinics = Clinics.GetForUserod(Security.CurUser);
 			switch(Preference.GetString(PreferenceName.ClinicTrackLast)) {
 				case "Workstation":
-					if(Security.CurUser.ClinicIsRestricted && Security.CurUser.ClinicNum!=ComputerPrefs.LocalComputer.ClinicNum) {//The user is restricted and it's not the clinic this computer has by default
+					if(Security.CurUser.ClinicRestricted && Security.CurUser.ClinicId!=ComputerPrefs.LocalComputer.ClinicNum) {//The user is restricted and it's not the clinic this computer has by default
 						//User's default clinic isn't the LocalComputer's clinic, see if they have access to the Localcomputer's clinic, if so, use it.
 						Clinic clinic=listClinics.Find(x => x.ClinicNum==ComputerPrefs.LocalComputer.ClinicNum);
 						if(clinic!=null) {
 							_clinicNum=clinic.ClinicNum;
 						}
 						else {
-							_clinicNum=Security.CurUser.ClinicNum;//Use the user's default clinic if they don't have access to LocalComputer's clinic.
+							_clinicNum=Security.CurUser.ClinicId;//Use the user's default clinic if they don't have access to LocalComputer's clinic.
 						}
 					}
 					else {//The user is not restricted, just use the clinic in the ComputerPref table.
@@ -213,13 +213,13 @@ namespace OpenDentBusiness{
 					}
 					return;//Error
 				case "User":
-					List<UserOdPref> prefs = UserOdPrefs.GetByUserAndFkeyType(Security.CurUser.UserNum,UserOdFkeyType.ClinicLast);//should only be one or none.
+					List<UserPreference> prefs = UserOdPrefs.GetByUserAndFkeyType(Security.CurUser.Id,UserPreferenceName.LastSelectedClinic);//should only be one or none.
 					if(prefs.Count==0) {
-						UserOdPref pref =
-							new UserOdPref() {
-								UserNum=Security.CurUser.UserNum,
-								FkeyType=UserOdFkeyType.ClinicLast,
-								Fkey=Security.CurUser.ClinicNum//default clinic num
+						UserPreference pref =
+							new UserPreference() {
+								UserId=Security.CurUser.Id,
+								FkeyType=UserPreferenceName.LastSelectedClinic,
+								Fkey=Security.CurUser.ClinicId//default clinic num
 							};
 						UserOdPrefs.Insert(pref);
 						prefs.Add(pref);
@@ -230,8 +230,8 @@ namespace OpenDentBusiness{
 					return;
 				case "None":
 				default:
-					if(listClinics.Any(x => x.ClinicNum==Security.CurUser.ClinicNum)) {
-						_clinicNum=Security.CurUser.ClinicNum;
+					if(listClinics.Any(x => x.ClinicNum==Security.CurUser.ClinicId)) {
+						_clinicNum=Security.CurUser.ClinicId;
 					}
 					break;
 			}
@@ -255,11 +255,11 @@ namespace OpenDentBusiness{
 			}
 			//We want to always upsert a user pref for the user because we will be looking at it for MobileWeb regardless of the preference for 
 			//ClinicTrackLast.
-			List<UserOdPref> UserPrefs=UserOdPrefs.GetByUserAndFkeyType(Security.CurUser.UserNum,UserOdFkeyType.ClinicLast);//should only be one or none.
+			List<UserPreference> UserPrefs=UserOdPrefs.GetByUserAndFkeyType(Security.CurUser.Id,UserPreferenceName.LastSelectedClinic);//should only be one or none.
 			if(UserPrefs.Count==0) {
-				UserOdPref pref=new UserOdPref() {
-					UserNum=Security.CurUser.UserNum,
-					FkeyType=UserOdFkeyType.ClinicLast,
+				UserPreference pref=new UserPreference() {
+					UserId=Security.CurUser.Id,
+					FkeyType=UserPreferenceName.LastSelectedClinic,
 					Fkey=Clinics.ClinicNum
 				};
 				UserOdPrefs.Insert(pref);
@@ -424,7 +424,7 @@ namespace OpenDentBusiness{
 				List<string> listUsers=new List<string>();
 				for(int i=0;i<table.Rows.Count;i++) {
 					long userNum=PIn.Long(table.Rows[i]["UserNum"].ToString());
-					User user=Userods.GetUser(userNum);
+					User user=User.GetUser(userNum);
 					if(user==null) {//Should not happen.
 						continue;
 					}
@@ -588,9 +588,9 @@ namespace OpenDentBusiness{
 				listClinics.Add(GetPracticeAsClinicZero(hqClinicName));
 			}
 			listClinics.AddRange(GetDeepCopy(true));//don't include hidden clinics
-			if(Preferences.HasClinicsEnabled && curUser.ClinicIsRestricted && curUser.ClinicNum!=0) {
+			if(Preferences.HasClinicsEnabled && curUser.ClinicRestricted && curUser.ClinicId!=0) {
 				//Clinics are enabled and user is restricted, return clinics the person has permission for.
-				List<long> listUserClinicNums=UserClinics.GetForUser(curUser.UserNum).Select(x => x.ClinicNum).ToList();
+				List<long> listUserClinicNums= UserClinic.GetForUser(curUser.Id).Select(x => x.ClinicId).ToList();
 				listClinics.RemoveAll(x => !listUserClinicNums.Contains(x.ClinicNum));//Remove all clinics that are not in the list of UserClinics.
 			}
 			return listClinics;
@@ -603,9 +603,9 @@ namespace OpenDentBusiness{
 			if(!Preferences.HasClinicsEnabled) {
 				return listClinics;
 			}
-			if(curUser.ClinicIsRestricted && curUser.ClinicNum!=0) {
-				List<UserClinic> listUserClinics=UserClinics.GetForUser(curUser.UserNum);
-				return listClinics.FindAll(x => listUserClinics.Exists(y => y.ClinicNum==x.ClinicNum)).ToList();
+			if(curUser.ClinicRestricted && curUser.ClinicId!=0) {
+				var listUserClinics=UserClinic.GetForUser(curUser.Id);
+				return listClinics.FindAll(x => listUserClinics.Any(y => y.ClinicId==x.ClinicNum)).ToList();
 			}
 			return listClinics;
 		}

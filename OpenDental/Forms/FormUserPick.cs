@@ -70,14 +70,14 @@ namespace OpenDental
             {
                 foreach (long userNum in SuggestedUserNumsList)
                 {
-                    int index = usersList.FindIndex(x => x.UserNum == userNum);
+                    int index = usersList.FindIndex(x => x.Id == userNum);
 
                     userListBox.SetSelected(index, true);
                 }
             }
             else
             {
-                userListBox.SelectedIndex = usersList.FindIndex(x => x.UserNum == SuggestedUserNum);
+                userListBox.SelectedIndex = usersList.FindIndex(x => x.Id == SuggestedUserNum);
             }
         }
 
@@ -118,7 +118,7 @@ namespace OpenDental
         void AllButton_Click(object sender, EventArgs e)
         {
             SelectedUserNum = -1;
-            SelectedUserNumsList = usersList.Select(x => x.UserNum).ToList();
+            SelectedUserNumsList = usersList.Select(x => x.Id).ToList();
 
             DialogResult = DialogResult.OK;
         }
@@ -150,7 +150,7 @@ namespace OpenDental
                 return;
             }
 
-            if (!IsSelectionmode && !Security.IsAuthorized(Permissions.TaskEdit, true) && Userods.GetInbox(usersList[userListBox.SelectedIndex].UserNum) != 0)
+            if (!IsSelectionmode && !Security.IsAuthorized(Permissions.TaskEdit, true) && Userods.GetInbox(usersList[userListBox.SelectedIndex].Id) != 0)
             {
                 MessageBox.Show(
                     Translation.Language.PleaseSelectAUserThatDoesNotHaveAnInbox,
@@ -161,10 +161,10 @@ namespace OpenDental
                 return;
             }
 
-            SelectedUserNum = usersList[userListBox.SelectedIndex].UserNum;
+            SelectedUserNum = usersList[userListBox.SelectedIndex].Id;
             foreach (int index in userListBox.SelectedIndices)
             {
-                SelectedUserNumsList.Add(usersList[index].UserNum);
+                SelectedUserNumsList.Add(usersList[index].Id);
             }
 
             DialogResult = DialogResult.OK;

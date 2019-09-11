@@ -51,28 +51,18 @@ namespace OpenDentBusiness
         IEnumerable<TRecord> All();
     }
 
-    public interface IDataRecordCache<TRecord> : IDataRecordCacheBase<TRecord> where TRecord : DataRecord
+    public class DataRecordCacheBase<TRecord> : IDataRecordCacheBase<TRecord> where TRecord : DataRecordBase
     {
-        /// <summary>
-        /// Gets the record with the specified ID.
-        /// </summary>
-        /// <param name="dataRecordId">The ID of the record.</param>
-        /// <returns>The record with the specified ID if it exists; otherwise, null.</returns>
-        TRecord GetById(long dataRecordId);
-    }
-
-    public class DataRecordCache<TRecord> : IDataRecordCache<TRecord> where TRecord : DataRecord
-    {
-        readonly string fillCommandText;
-        readonly DataRecordBuilder<TRecord> dataRecordBuilder;
-        readonly List<TRecord> dataRecords = new List<TRecord>();
+        protected readonly string fillCommandText;
+        protected readonly DataRecordBuilder<TRecord> dataRecordBuilder;
+        protected readonly List<TRecord> dataRecords = new List<TRecord>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DataRecordCache{T}"/> class.
         /// </summary>
         /// <param name="fillCommandText">The query to fill the cache.</param>
         /// <param name="dataRecordBuilder">The method that constructs the records in the cache.</param>
-        public DataRecordCache(string fillCommandText, DataRecordBuilder<TRecord> dataRecordBuilder)
+        public DataRecordCacheBase(string fillCommandText, DataRecordBuilder<TRecord> dataRecordBuilder)
         {
             if (string.IsNullOrWhiteSpace(fillCommandText))
                 throw new ArgumentException("The fill command cannot be empty.", nameof(fillCommandText));
@@ -83,27 +73,6 @@ namespace OpenDentBusiness
             CacheManager.Register(this);
 
             Refresh();
-        }
-
-        /// <summary>
-        /// Gets the record with the specified ID.
-        /// </summary>
-        /// <param name="dataRecordId">The ID of the record.</param>
-        /// <returns>The record with the specified ID if it exists; otherwise, null.</returns>
-        public TRecord GetById(long dataRecordId)
-        {
-            lock (dataRecords)
-            {
-                foreach (var dataRecord in dataRecords)
-                {
-                    if (dataRecord.Id == dataRecordId)
-                    {
-                        return dataRecord;
-                    }
-                }
-            }
-
-            return null;
         }
 
         /// <summary>
@@ -211,6 +180,50 @@ namespace OpenDentBusiness
         IEnumerator IEnumerable.GetEnumerator() => dataRecords.GetEnumerator();
     }
 
+    public interface IDataRecordCache<TRecord> : IDataRecordCacheBase<TRecord> where TRecord : DataRecord
+    {
+        /// <summary>
+        /// Gets the record with the specified ID.
+        /// </summary>
+        /// <param name="dataRecordId">The ID of the record.</param>
+        /// <returns>The record with the specified ID if it exists; otherwise, null.</returns>
+        TRecord GetById(long dataRecordId);
+    }
+
+    public class DataRecordCache<TRecord> : DataRecordCacheBase<TRecord>, IDataRecordCache<TRecord> where TRecord : DataRecord
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DataRecordCache{T}"/> class.
+        /// </summary>
+        /// <param name="fillCommandText">The query to fill the cache.</param>
+        /// <param name="dataRecordBuilder">The method that constructs the records in the cache.</param>
+        public DataRecordCache(string fillCommandText, DataRecordBuilder<TRecord> dataRecordBuilder) : 
+            base(fillCommandText, dataRecordBuilder)
+        {
+        }
+
+        /// <summary>
+        /// Gets the record with the specified ID.
+        /// </summary>
+        /// <param name="dataRecordId">The ID of the record.</param>
+        /// <returns>The record with the specified ID if it exists; otherwise, null.</returns>
+        public TRecord GetById(long dataRecordId)
+        {
+            lock (dataRecords)
+            {
+                foreach (var dataRecord in dataRecords)
+                {
+                    if (dataRecord.Id == dataRecordId)
+                    {
+                        return dataRecord;
+                    }
+                }
+            }
+
+            return null;
+        }
+    }
+
     public static class CacheManager
     {
         static readonly Dictionary<Type, List<IDataRecordCache>> dataRecordCaches = new Dictionary<Type, List<IDataRecordCache>>();
@@ -238,7 +251,7 @@ namespace OpenDentBusiness
         /// </summary>
         /// <typeparam name="T">The record type.</typeparam>
         /// <returns></returns>
-        private static List<IDataRecordCache> GetTypeCacheList<T>() where T : DataRecord
+        private static List<IDataRecordCache> GetTypeCacheList<T>() where T : DataRecordBase
         {
             lock (dataRecordCaches)
             {
@@ -258,7 +271,7 @@ namespace OpenDentBusiness
         /// <typeparam name="T">The record type.</typeparam>
         /// <param name="dataRecordCache">The cache.</param>
         /// <exception cref="ArgumentNullException">If <paramref name="dataRecordCache"/> is null.</exception>
-        internal static void Register<T>(DataRecordCache<T> dataRecordCache) where T : DataRecord
+        internal static void Register<T>(IDataRecordCacheBase<T> dataRecordCache) where T : DataRecordBase
         {
             if (dataRecordCache == null)
                 throw new ArgumentNullException(nameof(dataRecordCache));

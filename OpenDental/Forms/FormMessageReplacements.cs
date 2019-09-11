@@ -222,13 +222,13 @@ namespace OpenDental {
 			string retVal=message;
 			string userNameF="";
 			string userNameL="";
-			if(userod.ProvNum!=0) {
-				Provider prov=Providers.GetProv(userod.ProvNum);
+			if(userod.ProviderId!=0) {
+				Provider prov=Providers.GetProv(userod.ProviderId);
 				userNameF=prov.FName;
 				userNameL=prov.LName;
 			}
-			else if(userod.EmployeeNum!=0) {
-				Employee emp=Employee.GetById(userod.EmployeeNum);
+			else if(userod.EmployeeId!=0) {
+				Employee emp=Employee.GetById(userod.EmployeeId);
 				userNameF=emp.FirstName;
 				userNameL=emp.LastName;
 			}

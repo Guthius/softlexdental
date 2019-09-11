@@ -562,7 +562,7 @@ namespace OpenDental{
 				comboEmailFrom.Items.Add(_listEmailAddresses[i].SmtpUsername);
 			}
 			//Add user specific email address if present.
-			EmailAddress emailAddressMe=EmailAddress.GetByUser(Security.CurUser.UserNum);//can be null
+			EmailAddress emailAddressMe=EmailAddress.GetByUser(Security.CurUser.Id);//can be null
 			if(emailAddressMe!=null) {
 				_listEmailAddresses.Insert(0,emailAddressMe);
 				comboEmailFrom.Items.Insert(1,Lan.g(this,"Me")+" <"+emailAddressMe.SmtpUsername+">");//Just below Practice/Clinic
@@ -941,7 +941,7 @@ namespace OpenDental{
 						postcardCommlog.PatNum=PIn.Long(AddrTable.Rows[i]["PatNum"].ToString());
 						postcardCommlog.CommType=Commlogs.GetTypeAuto(CommItemTypeAuto.MISC);
 						postcardCommlog.SentOrReceived=CommSentOrReceived.Sent;
-						postcardCommlog.UserNum=Security.CurUser.UserNum;
+						postcardCommlog.UserNum=Security.CurUser.Id;
 					Commlogs.Insert(postcardCommlog);
 				}
 			}

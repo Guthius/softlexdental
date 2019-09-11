@@ -119,7 +119,7 @@ namespace OpenDental {
 				comboClinic.Items.Clear();
 				_listClinics=new List<Clinic>();
 				//Add "Unassigned/Default" option if the user isn't restricted or the selected clinic is 0.
-				if(!Security.CurUser.ClinicIsRestricted || Clinics.ClinicNum==0) {
+				if(!Security.CurUser.ClinicRestricted || Clinics.ClinicNum==0) {
 					Clinic clinicUnassigned=new Clinic();
 					clinicUnassigned.ClinicNum=0;
 					clinicUnassigned.Abbr=Lan.g(this,"Unassigned/Default");
@@ -292,7 +292,7 @@ namespace OpenDental {
 		private void comboClinic_SelectionChangeCommitted(object sender,EventArgs e) {
 			SaveEbill(_eBillCur);
 			Ebill eBill=null;
-			if((!Security.CurUser.ClinicIsRestricted || Clinics.ClinicNum==0) && comboClinic.SelectedIndex==0) {//Unassigned/Default
+			if((!Security.CurUser.ClinicRestricted || Clinics.ClinicNum==0) && comboClinic.SelectedIndex==0) {//Unassigned/Default
 				eBill=_eBillDefault;
 			}
 			else {//Otherwise locate the Ebill from the cache.

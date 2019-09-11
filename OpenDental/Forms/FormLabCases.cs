@@ -320,7 +320,7 @@ namespace OpenDental{
 			ODGridRow row;
 			List<long> operatoryNums = new List<long>();
 			if(Preferences.HasClinicsEnabled) {
-				if(comboClinic.SelectedIndex==0 && !Security.CurUser.ClinicIsRestricted) {//"All"
+				if(comboClinic.SelectedIndex==0 && !Security.CurUser.ClinicRestricted) {//"All"
 					operatoryNums=null;
 				}
 				else if(comboClinic.SelectedIndex==0) {//"All" that the user has access to.

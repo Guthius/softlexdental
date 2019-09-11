@@ -154,13 +154,13 @@ namespace OpenDentBusiness
         {
             DeleteNotYetCharged();
             List<long> listClinicNums = new List<long>();
-            if (Preferences.HasClinicsEnabled && Security.CurUser.ClinicIsRestricted)
+            if (Preferences.HasClinicsEnabled && Security.CurUser.ClinicRestricted)
             {
                 listClinicNums = listUserClinics.Select(x => x.ClinicNum).ToList();
             }
             //if no clinics are selected but clinics are enabled and the user is restricted, the results will be empty so no need to run the report
             //if clinics are enabled and the user is not restricted and selects no clinics, there will not be a clinic filter in the query, so all clinics
-            if (Preferences.HasClinicsEnabled && Security.CurUser.ClinicIsRestricted && listClinicNums.Count == 0)
+            if (Preferences.HasClinicsEnabled && Security.CurUser.ClinicRestricted && listClinicNums.Count == 0)
             {
                 ListRecurringChargeData = new List<RecurringChargeData>();
             }
@@ -648,7 +648,7 @@ namespace OpenDentBusiness
                 DateTime newPayDate = GetPayDate(chargeCur);
                 //Test if the user can create a payment with the new pay date.
                 bool isBeforeLockDate;
-                if (Security.CurUser.UserNum > 0)
+                if (Security.CurUser.Id > 0)
                 {
                     isBeforeLockDate = (!Security.IsAuthorized(Permissions.PaymentCreate, newPayDate, true));
                 }

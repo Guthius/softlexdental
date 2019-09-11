@@ -28,7 +28,7 @@ namespace OpenDental
             if (Order.DatePlaced.Year > 2200)
             {
                 datePlacedTextBox.Text = DateTime.Today.ToShortDateString();
-                Order.UserNum = Security.CurUser.UserNum;
+                Order.UserNum = Security.CurUser.Id;
             }
             else
             {
@@ -40,7 +40,7 @@ namespace OpenDental
             noteTextBox.Text = Order.Note;
 
             userComboBox.Items.Clear();
-            userComboBox.Items.Add(new ODBoxItem<User>(Translation.Language.None, new User { UserNum = 0 }));
+            userComboBox.Items.Add(new ODBoxItem<User>(Translation.Language.None, new User { Id = 0 }));
 
             var usersList = Userods.GetUsers().FindAll(x => !x.IsHidden);
             foreach (var user in usersList)
@@ -48,13 +48,13 @@ namespace OpenDental
                 var userBoxItem = new ODBoxItem<User>(user.UserName, user);
 
                 userComboBox.Items.Add(userBoxItem);
-                if (Order.UserNum == user.UserNum)
+                if (Order.UserNum == user.Id)
                 {
                     userComboBox.SelectedItem = userBoxItem;
                 }
             }
 
-            if (!usersList.Select(x => x.UserNum).Contains(Order.UserNum))
+            if (!usersList.Select(x => x.Id).Contains(Order.UserNum))
             {
                 userComboBox.IndexSelectOrSetText(-1, () =>
                 {
@@ -119,7 +119,7 @@ namespace OpenDental
                 Order.DatePlaced = DateTime.Parse(datePlacedTextBox.Text);
                 if (userComboBox.SelectedIndex > -1)
                 {
-                    Order.UserNum = userComboBox.SelectedTag<User>().UserNum;
+                    Order.UserNum = userComboBox.SelectedTag<User>().Id;
                 }
             }
 

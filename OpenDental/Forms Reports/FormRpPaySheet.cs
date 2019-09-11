@@ -342,7 +342,7 @@ namespace OpenDental{
 			date2.SelectionStart=DateTime.Today;
 			if(!Security.IsAuthorized(Permissions.ReportDailyAllProviders,true)) {
 				//They either have permission or have a provider at this point.  If they don't have permission they must have a provider.
-				_listProviders=_listProviders.FindAll(x => x.ProvNum==Security.CurUser.ProvNum);
+				_listProviders=_listProviders.FindAll(x => x.ProvNum==Security.CurUser.ProviderId);
 				Provider prov=_listProviders.FirstOrDefault();
 				if(prov!=null) {
 					_listProviders.AddRange(Providers.GetWhere(x => x.FName==prov.FName && x.LName==prov.LName && x.ProvNum!=prov.ProvNum));
@@ -369,7 +369,7 @@ namespace OpenDental{
 			}
 			else {
 				_listClinics=Clinics.GetForUserod(Security.CurUser);
-				if(!Security.CurUser.ClinicIsRestricted) {
+				if(!Security.CurUser.ClinicRestricted) {
 					listClin.Items.Add(Lan.g(this,"Unassigned"));
 					listClin.SetSelected(0,true);
 				}
@@ -492,7 +492,7 @@ namespace OpenDental{
 			}
 			if(Preferences.HasClinicsEnabled) {
 				for(int i=0;i<listClin.SelectedIndices.Count;i++) {
-					if(Security.CurUser.ClinicIsRestricted) {
+					if(Security.CurUser.ClinicRestricted) {
 						listClinicNums.Add(_listClinics[listClin.SelectedIndices[i]].ClinicNum);//we know that the list is a 1:1 to _listClinics
 					}
 					else {
@@ -540,7 +540,7 @@ namespace OpenDental{
 				subtitleProvs+=string.Join(", ",listProv.SelectedIndices.OfType<int>().ToList().Select(x => _listProviders[x].Abbr));
 			}
 			if(Preferences.HasClinicsEnabled) {
-				if(checkAllClin.Checked && !Security.CurUser.ClinicIsRestricted) {
+				if(checkAllClin.Checked && !Security.CurUser.ClinicRestricted) {
 					subtitleClinics=Lan.g(this,"All Clinics");
 				}
 				else {
@@ -548,7 +548,7 @@ namespace OpenDental{
 						if(i>0) {
 							subtitleClinics+=", ";
 						}
-						if(Security.CurUser.ClinicIsRestricted) {
+						if(Security.CurUser.ClinicRestricted) {
 							subtitleClinics+=_listClinics[listClin.SelectedIndices[i]].Abbr;
 						}
 						else {

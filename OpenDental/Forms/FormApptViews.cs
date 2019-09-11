@@ -27,7 +27,7 @@ namespace OpenDental
                 clinicsList = Clinics.GetForUserod(Security.CurUser);
                 clinicComboBox.Items.Clear();
 
-                if (!Security.CurUser.ClinicIsRestricted)
+                if (!Security.CurUser.ClinicRestricted)
                 {
                     clinicComboBox.Items.Add("Headquarters"); // In this form, the Headquarters list is the list of views that are not assigned to a clinic
                     clinicComboBox.SelectedIndex = 0;
@@ -38,7 +38,7 @@ namespace OpenDental
                     clinicComboBox.Items.Add(clinicsList[i].Abbr);
                     if (clinicNum == clinicsList[i].ClinicNum)
                     {
-                        clinicComboBox.SelectedIndex = Security.CurUser.ClinicIsRestricted ? i : i + 1;
+                        clinicComboBox.SelectedIndex = Security.CurUser.ClinicRestricted ? i : i + 1;
                     }
                 }
             }
@@ -85,7 +85,7 @@ namespace OpenDental
 
         void clinicComboBox_SelectionChangeCommitted(object sender, EventArgs e)
         {
-            if (Security.CurUser.ClinicIsRestricted)
+            if (Security.CurUser.ClinicRestricted)
             {
                 clinicNum = clinicsList[clinicComboBox.SelectedIndex].ClinicNum;
             }

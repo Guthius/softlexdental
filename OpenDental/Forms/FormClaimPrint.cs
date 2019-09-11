@@ -4443,7 +4443,7 @@ namespace OpenDental{
 				FormCP.ClaimNumCur=claim.ClaimNum;
 				FormCP.ClaimFormCur=null;//so that it will pull from the individual claim or plan.
 				if(FormCP.PrintImmediate(Lan.g(nameof(PrinterL),"CDA claim form printed"),PrintSituation.Claim,claim.PatNum)) {
-					Etranss.SetClaimSentOrPrinted(claim.ClaimNum,claim.PatNum,0,EtransType.ClaimPrinted,0,Security.CurUser.UserNum);
+					Etranss.SetClaimSentOrPrinted(claim.ClaimNum,claim.PatNum,0,EtransType.ClaimPrinted,0,Security.CurUser.Id);
 				}
 			}
 			catch {
@@ -4549,7 +4549,7 @@ namespace OpenDental{
 
 		private void butPrint_Click(object sender, System.EventArgs e){
 			if(PrintClaim()){
-				Etranss.SetClaimSentOrPrinted(ClaimNumCur,ClaimCur.PatNum,0,EtransType.ClaimPrinted,0,Security.CurUser.UserNum);
+				Etranss.SetClaimSentOrPrinted(ClaimNumCur,ClaimCur.PatNum,0,EtransType.ClaimPrinted,0,Security.CurUser.Id);
 				//Claims.UpdateStatus(ThisClaimNum,"P");
 				SecurityLogs.MakeLogEntry(Permissions.ClaimSend,ClaimCur.PatNum,Lan.g(this,"Claim printed from Claim Preview window."));
 				DialogResult=DialogResult.OK;

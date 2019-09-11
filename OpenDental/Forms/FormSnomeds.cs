@@ -21,7 +21,7 @@ namespace OpenDental {
 		}
 
 		private void FormSnomeds_Load(object sender,EventArgs e) {
-			_showingInfoButton=CDSPermissions.GetForUser(Security.CurUser.UserNum).ShowInfobutton;
+			_showingInfoButton=CDSPermissions.GetForUser(Security.CurUser.Id).ShowInfobutton;
 			_showingInfobuttonShift=(_showingInfoButton?1:0);
 			if(IsSelectionMode || IsMultiSelectMode) {
 				butClose.Text=Lan.g(this,"Cancel");
@@ -35,7 +35,7 @@ namespace OpenDental {
 			ActiveControl=textCode;
 			//This check is here to prevent Snomeds from being used in non-member nations.
 			groupBox1.Visible=false;
-			Provider prov=Providers.GetProv(Security.CurUser.ProvNum);
+			Provider prov=Providers.GetProv(Security.CurUser.ProviderId);
 			if(prov==null) {
 				return;
 			}
@@ -108,7 +108,7 @@ namespace OpenDental {
 		}
 
 		private void gridMain_CellClick(object sender,ODGridClickEventArgs e) {
-			if(!CDSPermissions.GetForUser(Security.CurUser.UserNum).ShowInfobutton) {//Security.IsAuthorized(Permissions.EhrInfoButton,true)) {
+			if(!CDSPermissions.GetForUser(Security.CurUser.Id).ShowInfobutton) {//Security.IsAuthorized(Permissions.EhrInfoButton,true)) {
 				return;
 			}
 			if(e.Column!=0) {

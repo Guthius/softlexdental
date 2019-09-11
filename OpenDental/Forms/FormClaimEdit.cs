@@ -332,7 +332,7 @@ namespace OpenDental{
 			}
 			FillCanadian();
 			if(Preferences.HasClinicsEnabled//Clinics enabled.
-					&& Security.CurUser.ClinicIsRestricted//User is restricted.
+					&& Security.CurUser.ClinicRestricted//User is restricted.
 					&& !listUserClinics.Any(x => x.ClinicNum==ClaimCur.ClinicNum))//User does not have access to clinic associated to claim.
 			{
 				SetFormReadOnly(this);
@@ -2351,7 +2351,7 @@ namespace OpenDental{
 			}
 			if(!notAuthorized) {//if already sent, we want to block users from changing sent date without permission.
 				//also changes claimstatus to sent, and date:
-				Etranss.SetClaimSentOrPrinted(ClaimCur.ClaimNum,ClaimCur.PatNum,0,EtransType.ClaimPrinted,0,Security.CurUser.UserNum);
+				Etranss.SetClaimSentOrPrinted(ClaimCur.ClaimNum,ClaimCur.PatNum,0,EtransType.ClaimPrinted,0,Security.CurUser.Id);
 			}
 			//ClaimCur.ClaimStatus="S";
 			//ClaimCur.DateSent=DateTime.Today;

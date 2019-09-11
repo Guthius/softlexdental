@@ -55,7 +55,7 @@ namespace OpenDental {
 			List <int> listSelectedItems=new List<int>();
 			_listClinics=Clinics.GetForUserod(Security.CurUser);
 			comboBoxMultiClinics.Items.Add(Lan.g(this,"All"));
-			if(!Security.CurUser.ClinicIsRestricted) {
+			if(!Security.CurUser.ClinicRestricted) {
 				comboBoxMultiClinics.Items.Add(Lan.g(this,"Unassigned"));
 				listSelectedItems.Add(1);
 			}
@@ -124,13 +124,13 @@ namespace OpenDental {
 					for(int j = 0;j<_listClinics.Count;j++) {
 						listClinicNums.Add(_listClinics[j].ClinicNum);//Add all clinics this person has access to.
 					}
-					if(!Security.CurUser.ClinicIsRestricted) {
+					if(!Security.CurUser.ClinicRestricted) {
 						listClinicNums.Add(0);
 					}
 				}
 				else {
 					for(int i = 0;i<comboBoxMultiClinics.ListSelectedIndices.Count;i++) {
-						if(Security.CurUser.ClinicIsRestricted) {
+						if(Security.CurUser.ClinicRestricted) {
 							listClinicNums.Add(_listClinics[comboBoxMultiClinics.ListSelectedIndices[i]-1].ClinicNum);
 						}
 						else if(comboBoxMultiClinics.ListSelectedIndices[i]==1) {

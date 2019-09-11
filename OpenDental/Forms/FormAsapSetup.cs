@@ -36,7 +36,7 @@ namespace OpenDental {
 		private void FillClinics() {
 			comboClinic.Items.Clear();
 			List<Clinic> listClinics=Clinics.GetForUserod(Security.CurUser);
-			if(!Security.CurUser.ClinicIsRestricted) {
+			if(!Security.CurUser.ClinicRestricted) {
 				comboClinic.Items.Add(new ComboClinicItem(Lan.g(this,"Default"),0));
 				comboClinic.SelectedIndex=0;
 			}

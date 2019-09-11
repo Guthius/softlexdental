@@ -46,7 +46,7 @@ namespace OpenDentBusiness.Crud{
 				histAppointment.HistUserNum          = PIn.Long  (row["HistUserNum"].ToString());
 				histAppointment.HistDateTStamp       = PIn.DateT (row["HistDateTStamp"].ToString());
 				histAppointment.HistApptAction       = (OpenDentBusiness.HistAppointmentAction)PIn.Int(row["HistApptAction"].ToString());
-				histAppointment.ApptSource           = (OpenDentBusiness.EServiceTypes)PIn.Int(row["ApptSource"].ToString());
+				histAppointment.ApptSource           = PIn.Int(row["ApptSource"].ToString());
 				histAppointment.AptNum               = PIn.Long  (row["AptNum"].ToString());
 				histAppointment.PatNum               = PIn.Int(row["PatNum"].ToString());
 				histAppointment.AptStatus            = (OpenDentBusiness.ApptStatus)PIn.Int(row["AptStatus"].ToString());

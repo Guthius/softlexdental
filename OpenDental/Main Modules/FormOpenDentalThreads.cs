@@ -169,7 +169,7 @@ namespace OpenDental
                 return;
             }
             long clinicNumCur = Clinics.ClinicNum;
-            long userNumCur = Security.CurUser.UserNum;
+            long userNumCur = Security.CurUser.Id;
             ODThread.WorkerDelegate getAlerts = new ODThread.WorkerDelegate((o) =>
             {
                 // TODO: Fix this...
@@ -638,7 +638,7 @@ namespace OpenDental
             ODThread odThread = new ODThread((o) =>
             {
                 RefreshMenuDashboards();
-                InitDashboards(Security.CurUser.UserNum, CurPatNum);
+                InitDashboards(Security.CurUser.Id, CurPatNum);
             });
             //If the thread that attempts to start Open Dental dashboard fails for any reason, silently fail.
             odThread.GroupName = FormODThreadNames.Dashboard.GetDescription();
@@ -854,14 +854,14 @@ namespace OpenDental
             ODThread threadTasks = new ODThread(new ODThread.WorkerDelegate((o) =>
             {
                 List<TaskNote> listRefreshedTaskNotes = null;
-                List<UserOdPref> listBlockedTaskLists = null;
+                List<UserPreference> listBlockedTaskLists = null;
                 //JM: Bug fix, but we do not know what would cause Security.CurUser to be null. Worst case task wont show till next signal tick.
-                long userNumCur = Security.CurUser?.UserNum ?? 0;
+                long userNumCur = Security.CurUser?.Id ?? 0;
                 List<OpenDentBusiness.Task> listRefreshedTasks = Tasks.GetNewTasksThisUser(userNumCur, Clinics.ClinicNum, listEditedTaskNums);
                 if (listRefreshedTasks.Count > 0)
                 {
                     listRefreshedTaskNotes = TaskNotes.GetForTasks(listRefreshedTasks.Select(x => x.TaskNum).ToList());
-                    listBlockedTaskLists = UserOdPrefs.GetByUserAndFkeyType(userNumCur, UserOdFkeyType.TaskListBlock);
+                    listBlockedTaskLists = UserOdPrefs.GetByUserAndFkeyType(userNumCur, UserPreferenceName.TaskListBlock);
                 }
                 this.Invoke((() => HandleRefreshedTasks(listSignalTasks, listEditedTaskNums, listRefreshedTasks, listRefreshedTaskNotes,
                     listBlockedTaskLists)));

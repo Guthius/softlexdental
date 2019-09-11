@@ -189,7 +189,7 @@ namespace OpenDental{
 			if(Preferences.HasClinicsEnabled) {//clinics
 				List <int> listSelectedItems=new List<int>();
 				_listClinics=Clinics.GetForUserod(Security.CurUser);
-				if(!Security.CurUser.ClinicIsRestricted) {
+				if(!Security.CurUser.ClinicRestricted) {
 					comboClinic.Items.Add(Lan.g(this,"All"));
 					listSelectedItems.Add(0);
 				}
@@ -223,11 +223,11 @@ namespace OpenDental{
 			}
 			else {
 				List<long> listSelectedClinicNums=new List<long>();
-				if(!Security.CurUser.ClinicIsRestricted && comboClinic.SelectedIndices.Contains(0)) {//All is an option in comboClinic and is selected.
+				if(!Security.CurUser.ClinicRestricted && comboClinic.SelectedIndices.Contains(0)) {//All is an option in comboClinic and is selected.
 					//Blank by design for Deposits.GetForClinics(...).
 				}
 				else {
-					int listStep=(Security.CurUser.ClinicIsRestricted?0:1);//If the All option is available, then all indices are offset by 1.
+					int listStep=(Security.CurUser.ClinicRestricted?0:1);//If the All option is available, then all indices are offset by 1.
 					comboClinic.ListSelectedIndices.ForEach(x => listSelectedClinicNums.Add(_listClinics[x-listStep].ClinicNum));
 				}
 				DList=Deposits.GetForClinics(listSelectedClinicNums,IsSelectionMode);
@@ -258,7 +258,7 @@ namespace OpenDental{
 		}
 
 		private void comboClinic_SelectionChangeCommitted(object sender,EventArgs e) {
-			if(!Security.CurUser.ClinicIsRestricted //All is in comboClinic
+			if(!Security.CurUser.ClinicRestricted //All is in comboClinic
 				&& comboClinic.SelectedIndices.Contains(0)//All is selected
 				&& comboClinic.SelectedIndices.Count>1)//Other clinics are also selected
 			{

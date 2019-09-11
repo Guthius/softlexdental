@@ -50,7 +50,7 @@ namespace OpenDental {
 				_listUserClinicNums=new List<long>();
 				comboClinic.Items.Clear();
 				//if PaySimple is enabled and the user is restricted to a clinic, don't allow the user to disable for all clinics
-				if(Security.CurUser.ClinicIsRestricted) {
+				if(Security.CurUser.ClinicRestricted) {
 					if(checkEnabled.Checked) {
 						checkEnabled.Enabled=false;
 					}
@@ -67,7 +67,7 @@ namespace OpenDental {
 					_listUserClinicNums.Add(listClinics[i].ClinicNum);
 					if(Clinics.ClinicNum==listClinics[i].ClinicNum) {
 						comboClinic.SelectedIndex=i;
-						if(!Security.CurUser.ClinicIsRestricted) {
+						if(!Security.CurUser.ClinicRestricted) {
 							comboClinic.SelectedIndex++;//increment the SelectedIndex to account for 'Headquarters' in the list at position 0 if the user is not restricted.
 						}
 					}

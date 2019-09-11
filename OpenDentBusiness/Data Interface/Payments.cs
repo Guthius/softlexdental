@@ -170,7 +170,7 @@ namespace OpenDentBusiness
         public static long Insert(Payment pay)
         {
             //Security.CurUser.UserNum gets set on MT by the DtoProcessor so it matches the user from the client WS.
-            pay.SecUserNumEntry = Security.CurUser.UserNum;
+            pay.SecUserNumEntry = Security.CurUser.Id;
             return Crud.PaymentCrud.Insert(pay);
         }
 
@@ -178,7 +178,7 @@ namespace OpenDentBusiness
         public static long Insert(Payment pay, bool useExistingPK)
         {
             //Security.CurUser.UserNum gets set on MT by the DtoProcessor so it matches the user from the client WS.
-            pay.SecUserNumEntry = Security.CurUser.UserNum;
+            pay.SecUserNumEntry = Security.CurUser.Id;
             return Crud.PaymentCrud.Insert(pay, useExistingPK);
         }
 
@@ -538,7 +538,7 @@ namespace OpenDentBusiness
              //this is the only case where a new trans is required.
                 trans = new Transaction();
                 trans.PayNum = payNum;
-                trans.UserNum = Security.CurUser.UserNum;
+                trans.UserNum = Security.CurUser.Id;
                 Transactions.Insert(trans);//sets entry date
                                            //first the deposit entry
                 JournalEntry je = new JournalEntry();

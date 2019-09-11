@@ -60,10 +60,10 @@ namespace OpenDental
         private void LoadWikiPageHome()
         {
             historyNavBack--;//We have to decrement historyNavBack to tell whether or not we need to branch our page history or add to page history
-            List<UserOdPref> listUserOdPrefs = UserOdPrefs.GetByUserAndFkeyType(Security.CurUser.UserNum, UserOdFkeyType.WikiHomePage);
+            List<UserPreference> listUserOdPrefs = UserOdPrefs.GetByUserAndFkeyType(Security.CurUser.Id, UserPreferenceName.WikiHomePage);
             if (listUserOdPrefs.Count > 0)
             {
-                LoadWikiPage(listUserOdPrefs[0].ValueString);
+                LoadWikiPage(listUserOdPrefs[0].Value);
             }
             else
             {
@@ -307,20 +307,20 @@ namespace OpenDental
                 MsgBox.Show(this, "Invalid wiki page selected.");
                 return;
             }
-            List<UserOdPref> listUserOdPrefs = UserOdPrefs.GetByUserAndFkeyType(Security.CurUser.UserNum, UserOdFkeyType.WikiHomePage);
+            List<UserPreference> listUserOdPrefs = UserOdPrefs.GetByUserAndFkeyType(Security.CurUser.Id, UserPreferenceName.WikiHomePage);
             if (listUserOdPrefs.Count > 0)
             {
                 //User is updating their current home page to a new one.
-                listUserOdPrefs[0].ValueString = WikiPageCur.PageTitle;
+                listUserOdPrefs[0].Value = WikiPageCur.PageTitle;
                 UserOdPrefs.Update(listUserOdPrefs[0]);
             }
             else
             {
                 //User is saving a custom home page for the first time.
-                UserOdPref userOdPref = new UserOdPref();
-                userOdPref.UserNum = Security.CurUser.UserNum;
-                userOdPref.ValueString = WikiPageCur.PageTitle;
-                userOdPref.FkeyType = UserOdFkeyType.WikiHomePage;
+                UserPreference userOdPref = new UserPreference();
+                userOdPref.UserId = Security.CurUser.Id;
+                userOdPref.Value = WikiPageCur.PageTitle;
+                userOdPref.FkeyType = UserPreferenceName.WikiHomePage;
                 UserOdPrefs.Insert(userOdPref);
             }
             MsgBox.Show(this, "Home page saved.");
@@ -522,7 +522,7 @@ namespace OpenDental
 
             if (result == DialogResult.Cancel) return;
             
-            WikiPages.Archive(WikiPageCur.PageTitle, Security.CurUser.UserNum);
+            WikiPages.Archive(WikiPageCur.PageTitle, Security.CurUser.Id);
 
             LoadWikiPage("Home");
         }
@@ -687,7 +687,7 @@ namespace OpenDental
                     else
                     {
                         //User wants to restore the WikiPage.
-                        WikiPages.WikiPageRestore(wikiPageDeleted, Security.CurUser.UserNum);
+                        WikiPages.WikiPageRestore(wikiPageDeleted, Security.CurUser.Id);
                     }
                 }
                 historyNavBack--;//We have to decrement historyNavBack to tell whether or not we need to branch our page history or add to page history

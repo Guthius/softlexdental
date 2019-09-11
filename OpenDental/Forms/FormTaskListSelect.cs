@@ -198,7 +198,7 @@ namespace OpenDental {
 
 		private void FormTaskListSelect_Load(object sender, System.EventArgs e) {
 			SetLabelText();
-			_userCurTaskListInbox=TaskLists.GetOne(Security.CurUser.TaskListInBox);
+			_userCurTaskListInbox=TaskLists.GetOne(Security.CurUser.TaskListId);
 			if(_userCurTaskListInbox!=null) {
 				_userCurTaskListInbox.Descript=Lan.g(this,"My Inbox")+": "+_userCurTaskListInbox.Descript;
 			}
@@ -282,7 +282,7 @@ namespace OpenDental {
 			List<TaskList> listFilteredTaskLists=FilterList(textFilter.Text,_listUnfilteredTaskList);
 			if(_userCurTaskListInbox!=null) {
 				if(_userCurTaskListInbox.Descript.ToUpper().Trim().Contains(textFilter.Text.ToUpper().Trim())
-					|| listFilteredTaskLists.Any(x => x.TaskListNum==Security.CurUser.TaskListInBox))//Show "My Inbox:" shortcut if current users inbox is in filtered list.
+					|| listFilteredTaskLists.Any(x => x.TaskListNum==Security.CurUser.TaskListId))//Show "My Inbox:" shortcut if current users inbox is in filtered list.
 				{
 					listFilteredTaskLists.Insert(0,_userCurTaskListInbox);
 				}

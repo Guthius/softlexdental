@@ -13,9 +13,9 @@ namespace OpenDental
         bool _sigChanged;
         bool _isStartingUp;
 
-        UserOdPref userOdPrefClearNote;
-        UserOdPref userOdPrefEndDate;
-        UserOdPref userOdPrefUpdateDateTimeNewPat;
+        UserPreference userOdPrefClearNote;
+        UserPreference userOdPrefEndDate;
+        UserPreference userOdPrefUpdateDateTimeNewPat;
         List<Definition> commlogTypeDefsList;
 
         public Commlog CommlogCur;
@@ -46,11 +46,11 @@ namespace OpenDental
         /// </summary>
         void RefreshUserPreferences()
         {
-            if (Security.CurUser == null || Security.CurUser.UserNum < 1) return;
+            if (Security.CurUser == null || Security.CurUser.Id < 1) return;
             
-            userOdPrefClearNote             = UserOdPrefs.GetByUserAndFkeyType(Security.CurUser.UserNum, UserOdFkeyType.CommlogPersistClearNote).FirstOrDefault();
-            userOdPrefEndDate               = UserOdPrefs.GetByUserAndFkeyType(Security.CurUser.UserNum, UserOdFkeyType.CommlogPersistClearEndDate).FirstOrDefault();
-            userOdPrefUpdateDateTimeNewPat  = UserOdPrefs.GetByUserAndFkeyType(Security.CurUser.UserNum, UserOdFkeyType.CommlogPersistUpdateDateTimeWithNewPatient).FirstOrDefault();
+            userOdPrefClearNote             = UserOdPrefs.GetByUserAndFkeyType(Security.CurUser.Id, UserPreferenceName.CommlogPersistClearNote).FirstOrDefault();
+            userOdPrefEndDate               = UserOdPrefs.GetByUserAndFkeyType(Security.CurUser.Id, UserPreferenceName.CommlogPersistClearEndDate).FirstOrDefault();
+            userOdPrefUpdateDateTimeNewPat  = UserOdPrefs.GetByUserAndFkeyType(Security.CurUser.Id, UserPreferenceName.CommlogPersistUpdateDateTimeWithNewPatient).FirstOrDefault();
         }
 
         /// <summary>
@@ -90,12 +90,12 @@ namespace OpenDental
                 // Post insert persistent user preferences.
                 if (IsPersistent)
                 {
-                    if (userOdPrefClearNote == null || PIn.Bool(userOdPrefClearNote.ValueString))
+                    if (userOdPrefClearNote == null || PIn.Bool(userOdPrefClearNote.Value))
                     {
                         clearNoteButton_Click(this, EventArgs.Empty);
                     }
 
-                    if (userOdPrefEndDate == null || PIn.Bool(userOdPrefEndDate.ValueString))
+                    if (userOdPrefEndDate == null || PIn.Bool(userOdPrefEndDate.Value))
                     {
                         endTextBox.Text = "";
                     }
@@ -131,7 +131,7 @@ namespace OpenDental
 
         public void SetUserNum(long userNum)
         {
-            CommlogCur.UserNum = Security.CurUser.UserNum;
+            CommlogCur.UserNum = Security.CurUser.Id;
             userTextBox.Text = GetUserodName(CommlogCur.UserNum);
         }
 
@@ -148,7 +148,7 @@ namespace OpenDental
 
         void signatureBoxWrapper_SignatureChanged(object sender, EventArgs e)
         {
-            SetUserNum(Security.CurUser.UserNum);
+            SetUserNum(Security.CurUser.Id);
         }
 
         void PatientChangedEvent_Fired(ODEventArgs e)
@@ -161,7 +161,7 @@ namespace OpenDental
             if (e.Tag is long patNum)
             {
                 SetPatNum(patNum);
-                if (IsPersistent && (userOdPrefUpdateDateTimeNewPat == null || PIn.Bool(userOdPrefUpdateDateTimeNewPat.ValueString)))
+                if (IsPersistent && (userOdPrefUpdateDateTimeNewPat == null || PIn.Bool(userOdPrefUpdateDateTimeNewPat.Value)))
                 {
                     startNowButton_Click(this, EventArgs.Empty);
                 }

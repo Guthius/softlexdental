@@ -1182,9 +1182,9 @@ namespace OpenDental{
 			for(int i=0;i<gridMain.SelectedIndices.Length;i++){
 				Provider prov=(Provider)gridMain.Rows[gridMain.SelectedIndices[0]].Tag;
 				User user=new User();
-				user.ProvNum=prov.ProvNum;
+				user.ProviderId=prov.ProvNum;
 				user.UserName=GetUniqueUserName(prov.LName,prov.FName);
-				user.LoginDetails=Authentication.GenerateLoginDetailsSHA512(user.UserName);
+				user.Password=Authentication.GenerateLoginDetailsSHA512(user.UserName);
 				try{
 					Userods.Insert(user,comboUserGroup.ListSelectedItems.OfType<ODBoxItem<UserGroup>>().Select(x => x.Tag.Id).ToList());
 				}

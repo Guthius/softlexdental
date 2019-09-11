@@ -53,7 +53,7 @@ namespace OpenDental
                 }
 
                 Security.CurUser.PasswordIsStrong = formUserPassword.PasswordIsStrong;
-                Security.CurUser.LoginDetails = formUserPassword.LoginDetails;
+                Security.CurUser.Password = formUserPassword.LoginDetails;
                 Security.PasswordTyped = formUserPassword.Password;
             }
 

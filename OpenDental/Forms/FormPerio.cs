@@ -114,7 +114,7 @@ namespace OpenDental
         private UI.Button butCopyPrevious;
         private PerioExam PerioExamCur;
         private CheckBox checkShowCurrent;
-        private UserOdPref _userPrefCurrentOnly;
+        private UserPreference _userPrefCurrentOnly;
 
         ///<summary>Directly references the tooth data from the tooth chart in the Chart module.  This data is passed into FormPerioGraphical.</summary>
         private ToothChartData _toothChartData;
@@ -1273,8 +1273,8 @@ namespace OpenDental
                 RefreshListPlaque();
             }
             listExams.SelectedIndex = PerioExams.ListExams.Count - 1;//this works even if no items.
-            _userPrefCurrentOnly = UserOdPrefs.GetByUserAndFkeyType(Security.CurUser.UserNum, UserOdFkeyType.PerioCurrentExamOnly).FirstOrDefault();
-            if (_userPrefCurrentOnly != null && PIn.Bool(_userPrefCurrentOnly.ValueString))
+            _userPrefCurrentOnly = UserOdPrefs.GetByUserAndFkeyType(Security.CurUser.Id, UserPreferenceName.PerioCurrentExamOnly).FirstOrDefault();
+            if (_userPrefCurrentOnly != null && PIn.Bool(_userPrefCurrentOnly.Value))
             {
                 checkShowCurrent.Checked = true;
             }
@@ -2521,18 +2521,18 @@ namespace OpenDental
         {
             if (_userPrefCurrentOnly == null)
             {
-                UserOdPrefs.Insert(new UserOdPref()
+                UserOdPrefs.Insert(new UserPreference()
                 {
-                    UserNum = Security.CurUser.UserNum,
-                    FkeyType = UserOdFkeyType.PerioCurrentExamOnly,
-                    ValueString = POut.Bool(checkShowCurrent.Checked)
+                    UserId = Security.CurUser.Id,
+                    FkeyType = UserPreferenceName.PerioCurrentExamOnly,
+                    Value = POut.Bool(checkShowCurrent.Checked)
                 });
             }
             else
             {
-                if (_userPrefCurrentOnly.ValueString != POut.Bool(checkShowCurrent.Checked))
+                if (_userPrefCurrentOnly.Value != POut.Bool(checkShowCurrent.Checked))
                 {//The user preference has changed.
-                    _userPrefCurrentOnly.ValueString = POut.Bool(checkShowCurrent.Checked);
+                    _userPrefCurrentOnly.Value = POut.Bool(checkShowCurrent.Checked);
                     UserOdPrefs.Update(_userPrefCurrentOnly);
                 }
             }

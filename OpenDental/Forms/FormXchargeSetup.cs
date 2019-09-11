@@ -499,7 +499,7 @@ namespace OpenDental{
 				groupPaySettings.Text=Lan.g(this,"Clinic Payment Settings");
 				_listUserClinicNums=new List<long>();
 				comboClinic.Items.Clear();
-				if(Security.CurUser.ClinicIsRestricted) {
+				if(Security.CurUser.ClinicRestricted) {
 					//if program link is enabled, disable the enable check box so the restricted user cannot disable for all clinics
 					checkEnabled.Enabled=!_progCur.Enabled;
 				}
@@ -515,7 +515,7 @@ namespace OpenDental{
 					_listUserClinicNums.Add(listClinics[i].ClinicNum);
 					if(Clinics.ClinicNum==listClinics[i].ClinicNum) {
 						comboClinic.SelectedIndex=i;
-						if(!Security.CurUser.ClinicIsRestricted) {
+						if(!Security.CurUser.ClinicRestricted) {
 							comboClinic.SelectedIndex++;//increment SelectedIndex for 'Headquarters' in the list at position 0 if the user is not restricted
 						}
 					}
@@ -755,7 +755,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please select a payment type first.");
 				return false;
 			}
-			if(!isAllClinics || !Preferences.HasClinicsEnabled || Security.CurUser.ClinicIsRestricted) {
+			if(!isAllClinics || !Preferences.HasClinicsEnabled || Security.CurUser.ClinicRestricted) {
 				return true;
 			}
 			//only validate payment types for all clinics if isAllClinics==true and clinics are enabled and the current user is not restricted to a clinic

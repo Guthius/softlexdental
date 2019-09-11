@@ -231,7 +231,7 @@ namespace OpenDentBusiness{
 					PatNum=PIn.Long(row["PatNum"].ToString()),
 					PayPlanDue=PIn.Double(row["PayPlanDue"].ToString()),
 					RepeatAmt=PIn.Double(row["ChargeAmt"].ToString()),	
-					UserNum=Security.CurUser.UserNum
+					UserNum=Security.CurUser.Id
 				},
 				RecurringChargeDate=PIn.DateT(row["RecurringChargeDate"].ToString()),
 				XChargeToken=row["XChargeToken"].ToString(),

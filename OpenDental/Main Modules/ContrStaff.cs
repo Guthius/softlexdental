@@ -431,7 +431,7 @@ namespace OpenDental
             if (Preferences.HasClinicsEnabled)
             {
                 listClinicNums = Clinics.GetAllForUserod(Security.CurUser).Select(x => x.ClinicNum).ToList();
-                if (!Security.CurUser.ClinicIsRestricted)
+                if (!Security.CurUser.ClinicRestricted)
                 {
                     listClinicNums.Add(0);
                 }
@@ -567,7 +567,7 @@ namespace OpenDental
 
             for (int i = 0; i < _listEmployees.Count; i++)
             {
-                if (_listEmployees[i].Id == Security.CurUser.EmployeeNum)
+                if (_listEmployees[i].Id == Security.CurUser.EmployeeId)
                 {
                     SelectEmployee(i);
                     return;
@@ -674,7 +674,7 @@ namespace OpenDental
 
             if (Preference.GetBool(PreferenceName.TimecardSecurityEnabled))
             {
-                if (Security.CurUser.EmployeeNum != _listEmployees[e.Row].Id)
+                if (Security.CurUser.EmployeeId != _listEmployees[e.Row].Id)
                 {
                     if (!Security.IsAuthorized(Permissions.TimecardsEditAll, true))
                     {
@@ -837,8 +837,8 @@ namespace OpenDental
         private void butViewSched_Click(object sender, EventArgs e)
         {
             List<long> listPreSelectedEmpNums = employeeGrid.SelectedGridRows.Select(x => ((Employee)x.Tag).Id).ToList();
-            List<long> listPreSelectedProvNums = Userods.GetWhere(x => listPreSelectedEmpNums.Contains(x.EmployeeNum) && x.ProvNum != 0)
-                .Select(x => x.ProvNum)
+            List<long> listPreSelectedProvNums = Userods.GetWhere(x => listPreSelectedEmpNums.Contains(x.EmployeeId) && x.ProviderId != 0)
+                .Select(x => x.ProviderId)
                 .ToList();
             FormSchedule formSched = new FormSchedule(listPreSelectedEmpNums, listPreSelectedProvNums);
             formSched.ShowDialog();

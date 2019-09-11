@@ -543,10 +543,10 @@ namespace OpenDental{
 
 		private void butPickPresenter_Click(object sender,EventArgs e) {
 			FormUserPick FormUP=new FormUserPick();
-			List<User> listUsers=Userods.GetWhere(x => x.ClinicIsRestricted == false || x.ClinicNum == Clinics.ClinicNum,true);
+			List<User> listUsers=Userods.GetWhere(x => x.ClinicRestricted == false || x.ClinicId == Clinics.ClinicNum,true);
 			FormUP.ListUserodsFiltered=listUsers;
 			if(_presenterCur!=null) {
-				FormUP.SuggestedUserNum=_presenterCur.UserNum;
+				FormUP.SuggestedUserNum=_presenterCur.Id;
 			}
 			FormUP.IsPickNoneAllowed=true;
 			FormUP.ShowDialog();
@@ -594,7 +594,7 @@ namespace OpenDental{
 			PlanCur.Heading=textHeading.Text;
 			PlanCur.Note=textNote.Text;
 			if(_presenterCur!=null) {
-				PlanCur.UserNumPresenter=_presenterCur.UserNum;
+				PlanCur.UserNumPresenter=_presenterCur.Id;
 			}
 			else {
 				PlanCur.UserNumPresenter=0;
@@ -602,7 +602,7 @@ namespace OpenDental{
 			//PlanCur.SecUserNumEntry is updated automatically by MySQL.
 			TreatPlans.Update(PlanCur);
 			SecurityLogs.MakeLogEntry(Permissions.TreatPlanEdit,PlanCur.PatNum,"Edit TP: "+PlanCur.DateTP.ToShortDateString());
-			if(_presenterCur!=null && (_presenterOld==null || _presenterCur.UserNum != _presenterOld.UserNum)) {
+			if(_presenterCur!=null && (_presenterOld==null || _presenterCur.Id != _presenterOld.Id)) {
 				SecurityLogs.MakeLogEntry(Permissions.TreatPlanPresenterEdit,PlanCur.PatNum,
 					"TP Presenter Changed from "+(_presenterOld==null?"\"null\"":_presenterOld.UserName)+" to "+_presenterCur.UserName+".");
 			}

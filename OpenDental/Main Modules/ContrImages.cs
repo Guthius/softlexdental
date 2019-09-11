@@ -116,7 +116,7 @@ namespace OpenDental
         ///<summary>Gets updated to PatCur.PatNum that the last security log was made with so that we don't make too many security logs for this patient.  When _patNumLast no longer matches PatCur.PatNum (e.g. switched to a different patient within a module), a security log will be entered.  Gets reset (cleared and the set back to PatCur.PatNum) any time a module button is clicked which will cause another security log to be entered.</summary>
         private long _patNumLast;
         ///<summary>Keeps track of which image categories are currently expanded.</summary>
-        private List<UserOdPref> listUserOdPrefImageCats = null;
+        private List<UserPreference> listUserOdPrefImageCats = null;
         /// <summary>Tracks the last user to load ContrImages</summary>
         private long UserNumPrev = -1;
         ///<summary>Used to flag when ImagesModuleTreeIsCollapsed=2 to disable some of the on expand and collapse logic.</summary>
@@ -1164,7 +1164,7 @@ namespace OpenDental
             else
             {//Document tree folders persistent expand/collapse per user
                 hasTreePrefsEnabled = true;//Initialize flag so that we don't run into duplication of the UserOdPref overrides rows.
-                if (UserNumPrev == Security.CurUser.UserNum)
+                if (UserNumPrev == Security.CurUser.Id)
                 {//User has not changed.  Maintain expanded nodes.
                     TreeNode selectedNode = treeDocuments.SelectedNode;//Save the selection so we can reselect after collapsing.
                     treeDocuments.CollapseAll();//Invalidates tree and clears selection too.
@@ -1185,14 +1185,14 @@ namespace OpenDental
                 else
                 {//User has changed.  Expand image categories based on user preference.
                     _listExpandedCats.Clear();
-                    listUserOdPrefImageCats = UserOdPrefs.GetByUserAndFkeyType(Security.CurUser.UserNum, UserOdFkeyType.Definition);//Update override list.
+                    listUserOdPrefImageCats = UserOdPrefs.GetByUserAndFkeyType(Security.CurUser.Id, UserPreferenceName.Definition);//Update override list.
                     foreach (Definition curDef in listImageCatDefs)
                     {
                         //Should only be one value with associated Fkey.
-                        UserOdPref userOdPrefTemp = listUserOdPrefImageCats.FirstOrDefault(x => x.Fkey == curDef.Id);
+                        UserPreference userOdPrefTemp = listUserOdPrefImageCats.FirstOrDefault(x => x.Fkey == curDef.Id);
                         if (userOdPrefTemp != null)
                         {//User has a preference for this image category.
-                            if (!userOdPrefTemp.ValueString.Contains("E"))
+                            if (!userOdPrefTemp.Value.Contains("E"))
                             {//The user's preference is to collapse this category.
                                 continue;
                             }
@@ -1224,7 +1224,7 @@ namespace OpenDental
                         }
                     }
                 }
-                UserNumPrev = Security.CurUser.UserNum;//Update the Previous user num.
+                UserNumPrev = Security.CurUser.Id;//Update the Previous user num.
                 hasTreePrefsEnabled = false;//Disable flag
             }
             if (XVWeb.IsDisplayingImagesInProgram && !_isFillingXVWebFromThread)
@@ -2996,14 +2996,14 @@ namespace OpenDental
                 curValue = curValue.Replace("E", "");//If it is, remove expanded flag.
             }
             //Always delete to remove previous value (prevents duplicates).
-            UserOdPrefs.DeleteForFkey(Security.CurUser.UserNum, UserOdFkeyType.Definition, defImageCatCur.Id);
+            UserOdPrefs.DeleteForFkey(Security.CurUser.Id, UserPreferenceName.Definition, defImageCatCur.Id);
             if (defaultValue != curValue)
             {//Insert an override in the UserOdPref table, only if the chosen value is different than the default.
-                UserOdPref userPrefCur = new UserOdPref();//Preference to be inserted to override.
-                userPrefCur.UserNum = Security.CurUser.UserNum;
+                UserPreference userPrefCur = new UserPreference();//Preference to be inserted to override.
+                userPrefCur.UserId = Security.CurUser.Id;
                 userPrefCur.Fkey = defImageCatCur.Id;
-                userPrefCur.FkeyType = UserOdFkeyType.Definition;
-                userPrefCur.ValueString = curValue;
+                userPrefCur.FkeyType = UserPreferenceName.Definition;
+                userPrefCur.Value = curValue;
                 UserOdPrefs.Insert(userPrefCur);
             }
         }

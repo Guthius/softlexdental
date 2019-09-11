@@ -2483,7 +2483,7 @@ namespace OpenDental{
 				adj.PatNum=PatCur.PatNum;
 				adj.ProvNum=_selectedProvNum;
 				adj.AdjNote=Lan.g(this,"Payment plan adjustment");
-				adj.SecUserNumEntry=Security.CurUser.UserNum;
+				adj.SecUserNumEntry=Security.CurUser.Id;
 				adj.SecDateTEdit=DateTime.Now;
 				if(Defs.GetDef(DefinitionCategory.AdjTypes,Preference.GetLong(PreferenceName.PayPlanAdjType))!=null) {
 					adj.AdjType=Defs.GetDef(DefinitionCategory.AdjTypes,Preference.GetLong(PreferenceName.PayPlanAdjType)).Id;

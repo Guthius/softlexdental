@@ -240,7 +240,7 @@ namespace OpenDentBusiness
             List<Definition> listMiscColorDefs = Definition.GetByCategory(DefinitionCategory.MiscColors);
             List<Definition> listProgNoteColorDefs = Definition.GetByCategory(DefinitionCategory.ProgNoteColors);
             Family family = Patients.GetFamily(patNum);
-            Dictionary<string, string> dictUserNames = Userods.GetUsers().ToDictionary(x => x.UserNum.ToString(), x => x.UserName);
+            Dictionary<string, string> dictUserNames = User.GetUsers().ToDictionary(x => x.Id.ToString(), x => x.UserName);
             if (componentsToLoad.ShowTreatPlan
                 || componentsToLoad.ShowCompleted
                 || componentsToLoad.ShowExisting
@@ -448,7 +448,7 @@ namespace OpenDentBusiness
                                     string userName;
                                     if (!dictUserNames.TryGetValue(rowCur["UserNum"].ToString(), out userName))
                                     {
-                                        userName = Userods.GetName(PIn.Long(rowCur["UserNum"].ToString()));
+                                        userName = User.GetName(PIn.Long(rowCur["UserNum"].ToString()));
                                     }
                                     row["note"] += string.IsNullOrEmpty(userName) ? "" : ("  " + userName);
                                     if (rowCur["SigPresent"].ToString() == "1")
@@ -472,7 +472,7 @@ namespace OpenDentBusiness
                         string userName;
                         if (!dictUserNames.TryGetValue(noteRowCur["UserNum"].ToString(), out userName))
                         {
-                            userName = Userods.GetName(PIn.Long(noteRowCur["UserNum"].ToString()));
+                            userName = User.GetName(PIn.Long(noteRowCur["UserNum"].ToString()));
                         }
                         row["user"] = userName;
                         row["signature"] = (noteRowCur["SigPresent"].ToString() == "1") ? Lans.g("ChartModule", "Signed") : "";
@@ -711,7 +711,7 @@ namespace OpenDentBusiness
                     row["toothNum"] = "";
                     row["ToothNum"] = "";
                     row["ToothRange"] = "";
-                    row["user"] = Userods.GetName(PIn.Long(rawComm.Rows[i]["UserNum"].ToString()));
+                    row["user"] = User.GetName(PIn.Long(rawComm.Rows[i]["UserNum"].ToString()));
                     row["WebChatSessionNum"] = 0;
                     row["EmailMessageHideIn"] = "0";
                     row["EmailMessageIsHtml"] = "0";
@@ -1070,7 +1070,7 @@ namespace OpenDentBusiness
                     {
                         if (!dictUserNames.TryGetValue(rawTaskRow["UserNum"].ToString(), out username))
                         {
-                            username = Userods.GetName(PIn.Long(rawTaskRow["UserNum"].ToString()));
+                            username = User.GetName(PIn.Long(rawTaskRow["UserNum"].ToString()));
                         }
                         txt += username + " - ";
                     }
@@ -1084,7 +1084,7 @@ namespace OpenDentBusiness
                             string noteUserName;
                             if (!dictUserNames.TryGetValue(noteCur.UserNum.ToString(), out noteUserName))
                             {
-                                noteUserName = Userods.GetName(noteCur.UserNum);
+                                noteUserName = User.GetName(noteCur.UserNum);
                             }
                             txt += "\r\n"//even on the first loop
                                 + "==" + noteUserName + " - "
@@ -1386,7 +1386,7 @@ namespace OpenDentBusiness
                     row["toothNum"] = "";
                     row["ToothNum"] = "";
                     row["ToothRange"] = "";
-                    row["user"] = Userods.GetName(PIn.Long(rawEmail.Rows[i]["UserNum"].ToString()));
+                    row["user"] = User.GetName(PIn.Long(rawEmail.Rows[i]["UserNum"].ToString()));
                     row["WebChatSessionNum"] = 0;
                     row["EmailMessageHideIn"] = rawEmail.Rows[i]["HideIn"].ToString();
                     row["EmailMessageIsHtml"] = rawEmail.Rows[i]["IsHTML"].ToString();

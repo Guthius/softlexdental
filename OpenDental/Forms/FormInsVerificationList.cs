@@ -34,7 +34,7 @@ namespace OpenDental {
 		///<summary>Indicates whether the "All" option is enabled for the listbox for clinics.</summary>
 		private bool _isAllClinicsEnabled {
 			get{
-				return Preferences.HasClinicsEnabled && !Security.CurUser.ClinicIsRestricted && !Preference.GetBool(PreferenceName.EnterpriseApptList);
+				return Preferences.HasClinicsEnabled && !Security.CurUser.ClinicRestricted && !Preference.GetBool(PreferenceName.EnterpriseApptList);
 			}
 		}
 
@@ -58,7 +58,7 @@ namespace OpenDental {
 			SetFilterControlsAndAction(() => FillGrids(),
 				textPatientEnrollmentDays,textInsBenefitEligibilityDays,textAppointmentScheduledDays,textVerifyCarrier);
 			if(Preference.GetBool(PreferenceName.InsVerifyDefaultToCurrentUser)) {
-				_verifyUserNum=Security.CurUser.UserNum;
+				_verifyUserNum=Security.CurUser.Id;
 			}
 			if(!Preferences.HasClinicsEnabled) {
 				labelClinic.Visible=false;
@@ -220,7 +220,7 @@ namespace OpenDental {
 				}
 				indexCur++;
 			}
-			if(!Security.CurUser.ClinicIsRestricted && !_isRegionSelected) {//Show "Unassigned" if user is not restricted and no region is selected.
+			if(!Security.CurUser.ClinicRestricted && !_isRegionSelected) {//Show "Unassigned" if user is not restricted and no region is selected.
 				//Add Unassigned at the bottom. ClinicNum of 0.
 				listBoxVerifyClinics.Items.Add(new ODBoxItem<Clinic>(Lan.g(this,"Unassigned"),new Clinic { ClinicNum=0 }));
 				if(_listClinicNumsVerifyClinicsFilter.Contains(0)) {
@@ -253,7 +253,7 @@ namespace OpenDental {
 			_listUsersInRegionWithAssignedIns=Userods.GetUsersForVerifyList(listClinicNums,false);
 			for(int i=0;i<_listUsersInRegionWithAssignedIns.Count;i++) {
 				comboVerifyUser.Items.Add(_listUsersInRegionWithAssignedIns[i].UserName);
-				if(_verifyUserNum==_listUsersInRegionWithAssignedIns[i].UserNum) {
+				if(_verifyUserNum==_listUsersInRegionWithAssignedIns[i].Id) {
 					comboVerifyUser.SelectedIndex=i+2;//Add 2 because of the "All Users" and "Unassigned" combo items.
 				}
 			}
@@ -264,7 +264,7 @@ namespace OpenDental {
 				comboVerifyUser.SelectedIndex=1;//"Unassigned"
 			}
 			for(int i=0;i<_listUsersInRegion.Count;i++) {
-				if(_assignUserNum==_listUsersInRegion[i].UserNum) {
+				if(_assignUserNum==_listUsersInRegion[i].Id) {
 					textAssignUser.Text=_listUsersInRegion[i].UserName;
 				}
 			}
@@ -837,7 +837,7 @@ namespace OpenDental {
 				_verifyUserNum=-1;
 			}
 			else {//Selected a real User.
-				_verifyUserNum=_listUsersInRegionWithAssignedIns[comboVerifyUser.SelectedIndex-2].UserNum;
+				_verifyUserNum=_listUsersInRegionWithAssignedIns[comboVerifyUser.SelectedIndex-2].Id;
 			}
 			FillGrids();
 		}
@@ -914,12 +914,12 @@ namespace OpenDental {
 			User user=(User)((MenuItem)sender).Tag;
 			if(tabControl1.SelectedTab==tabVerify) {
 				if(_gridRowSelected.PatInsVerify!=null) {
-					_gridRowSelected.PatInsVerify.UserNum=user.UserNum;
+					_gridRowSelected.PatInsVerify.UserNum=user.Id;
 					_gridRowSelected.PatInsVerify.DateLastAssigned=DateTime.Today;
 					InsVerifies.Update(_gridRowSelected.PatInsVerify);
 				}
 				if(_gridRowSelected.PlanInsVerify!=null) {
-					_gridRowSelected.PlanInsVerify.UserNum=user.UserNum;
+					_gridRowSelected.PlanInsVerify.UserNum=user.Id;
 					_gridRowSelected.PlanInsVerify.DateLastAssigned=DateTime.Today;
 					InsVerifies.Update(_gridRowSelected.PlanInsVerify);
 				}
@@ -928,12 +928,12 @@ namespace OpenDental {
 				List<InsVerifyGridObject> listRowsSelected=GetSelectedInsVerifyList();
 				foreach(InsVerifyGridObject gridRowObject in listRowsSelected) {
 					if(gridRowObject.PatInsVerify!=null) {
-						gridRowObject.PatInsVerify.UserNum=user.UserNum;
+						gridRowObject.PatInsVerify.UserNum=user.Id;
 						gridRowObject.PatInsVerify.DateLastAssigned=DateTime.Today;
 						InsVerifies.Update(gridRowObject.PatInsVerify);
 					}
 					if(gridRowObject.PlanInsVerify!=null) {
-						gridRowObject.PlanInsVerify.UserNum=user.UserNum;
+						gridRowObject.PlanInsVerify.UserNum=user.Id;
 						gridRowObject.PlanInsVerify.DateLastAssigned=DateTime.Today;
 						InsVerifies.Update(gridRowObject.PlanInsVerify);
 					}
@@ -1016,13 +1016,13 @@ namespace OpenDental {
 						gridObj.PatInsVerify.DateLastAssigned : 
 						gridObj.PlanInsVerify.DateLastAssigned);
 					if(isPatLastAssignedNewer) {
-						User userCur=listUsers.FirstOrDefault(x => x.UserNum==gridObj.PatInsVerify.UserNum);
+						User userCur=listUsers.FirstOrDefault(x => x.Id==gridObj.PatInsVerify.UserNum);
 						if(userCur!=null) {
 							AssignedTo=userCur.UserName;
 						}
 					}
 					else {
-						User userCur=listUsers.FirstOrDefault(x => x.UserNum==gridObj.PlanInsVerify.UserNum);
+						User userCur=listUsers.FirstOrDefault(x => x.Id==gridObj.PlanInsVerify.UserNum);
 						if(userCur!=null) {
 							AssignedTo=userCur.UserName;
 						}
@@ -1040,7 +1040,7 @@ namespace OpenDental {
 						VerifyStatus=dictStatusDefs[gridObj.PatInsVerify.DefNum].Description;
 					}
 					DateLastAssigned=gridObj.PatInsVerify.DateLastAssigned;
-					User userCur=listUsers.FirstOrDefault(x => x.UserNum==gridObj.PatInsVerify.UserNum);
+					User userCur=listUsers.FirstOrDefault(x => x.Id==gridObj.PatInsVerify.UserNum);
 					if(userCur!=null) {
 						AssignedTo=userCur.UserName;
 					}
@@ -1057,7 +1057,7 @@ namespace OpenDental {
 						VerifyStatus=dictStatusDefs[gridObj.PlanInsVerify.DefNum].Description;
 					}
 					DateLastAssigned=gridObj.PlanInsVerify.DateLastAssigned;
-					User userCur=listUsers.FirstOrDefault(x => x.UserNum==gridObj.PlanInsVerify.UserNum);
+					User userCur=listUsers.FirstOrDefault(x => x.Id==gridObj.PlanInsVerify.UserNum);
 					if(userCur!=null) {
 						AssignedTo=userCur.UserName;
 					}

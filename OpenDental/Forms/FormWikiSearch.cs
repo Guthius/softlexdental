@@ -176,7 +176,7 @@ namespace OpenDental
                 return;
             }
 
-            WikiPages.WikiPageRestore(wikiPageRestored, Security.CurUser.UserNum);
+            WikiPages.WikiPageRestore(wikiPageRestored, Security.CurUser.Id);
 
             // TODO: Should we navigate to the restored page?
 

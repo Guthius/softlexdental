@@ -11,11 +11,11 @@ using System.Linq;
 namespace OpenDental {
 	public partial class FormUserPrefAdditional:ODForm {
 		/// <summary>This is a list of providerclinic rows that were given to this form, containing any modifications that were made while in FormProvAdditional.</summary>
-		public List<UserOdPref> ListUserPrefOut=new List<UserOdPref>();
+		public List<UserPreference> ListUserPrefOut=new List<UserPreference>();
 		private User _userCur;
-		private List<UserOdPref> _listUserPref;
+		private List<UserPreference> _listUserPref;
 
-		public FormUserPrefAdditional(List<UserOdPref> listUserPref,User userCur) {
+		public FormUserPrefAdditional(List<UserPreference> listUserPref,User userCur) {
 			InitializeComponent();
 			_listUserPref=listUserPref.Select(x => x.Clone()).ToList();
 			_userCur=userCur.Copy();
@@ -35,29 +35,29 @@ namespace OpenDental {
 			gridUserProperties.Columns.Add(col);
 			gridUserProperties.Rows.Clear();
 			ODGridRow row;
-			UserOdPref userPrefDefault=_listUserPref.Find(x => x.ClinicNum==0);
+			UserPreference userPrefDefault=_listUserPref.Find(x => x.ClinicId==0);
 			//Doesn't exist in Db, create one
 			if(userPrefDefault==null) {
-				userPrefDefault=UserOdPrefs.GetByCompositeKey(_userCur.UserNum,Programs.GetCur(ProgramName.eRx).ProgramNum,UserOdFkeyType.Program,0);
+				userPrefDefault=UserOdPrefs.GetByCompositeKey(_userCur.Id,Programs.GetCur(ProgramName.eRx).ProgramNum,UserPreferenceName.Program,0);
 				//Doesn't exist in db, add to list to be synced later
 				_listUserPref.Add(userPrefDefault);
 			}
 			row=new ODGridRow();
 			row.Cells.Add("Default");
-			row.Cells.Add(userPrefDefault.ValueString);
+			row.Cells.Add(userPrefDefault.Value);
 			row.Tag=userPrefDefault;
 			gridUserProperties.Rows.Add(row);
 			foreach(Clinic clinicCur in Clinics.GetForUserod(Security.CurUser)) {
 				row=new ODGridRow();
-				UserOdPref userPrefCur=_listUserPref.Find(x => x.ClinicNum==clinicCur.ClinicNum);
+				UserPreference userPrefCur=_listUserPref.Find(x => x.ClinicId==clinicCur.ClinicNum);
 				//wasn't in list, check Db and create a new one if needed
 				if(userPrefCur==null) {
-					userPrefCur=UserOdPrefs.GetByCompositeKey(_userCur.UserNum,Programs.GetCur(ProgramName.eRx).ProgramNum,UserOdFkeyType.Program,clinicCur.ClinicNum);
+					userPrefCur=UserOdPrefs.GetByCompositeKey(_userCur.Id,Programs.GetCur(ProgramName.eRx).ProgramNum,UserPreferenceName.Program,clinicCur.ClinicNum);
 					//Doesn't exist in db, add to list to be synced later
 					_listUserPref.Add(userPrefCur);
 				}
 				row.Cells.Add(clinicCur.Abbr);		
-				row.Cells.Add(userPrefCur.ValueString);
+				row.Cells.Add(userPrefCur.Value);
 				row.Tag=userPrefCur;
 				gridUserProperties.Rows.Add(row);
 			}
@@ -67,14 +67,14 @@ namespace OpenDental {
 
 		private void gridProvProperties_CellLeave(object sender,ODGridClickEventArgs e) {
 			string newDoseSpotID=PIn.String(gridUserProperties.Rows[e.Row].Cells[e.Column].Text);
-			UserOdPref userPref=(UserOdPref)gridUserProperties.Rows[e.Row].Tag;
-			userPref.ValueString=newDoseSpotID;
+			UserPreference userPref=(UserPreference)gridUserProperties.Rows[e.Row].Tag;
+			userPref.Value=newDoseSpotID;
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
-			ListUserPrefOut=new List<UserOdPref>();
+			ListUserPrefOut=new List<UserPreference>();
 			foreach(ODGridRow row in gridUserProperties.Rows) {
-				ListUserPrefOut.Add((UserOdPref)row.Tag);
+				ListUserPrefOut.Add((UserPreference)row.Tag);
 			}
 			DialogResult=DialogResult.OK;
 		}

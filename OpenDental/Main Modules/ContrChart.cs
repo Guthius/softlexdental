@@ -5687,7 +5687,7 @@ namespace OpenDental
             CommlogCur.CommType = Commlogs.GetTypeAuto(CommItemTypeAuto.MISC);
             CommlogCur.Mode_ = CommItemMode.Phone;
             CommlogCur.SentOrReceived = CommSentOrReceived.Received;
-            CommlogCur.UserNum = Security.CurUser.UserNum;
+            CommlogCur.UserNum = Security.CurUser.Id;
             FormCommItem FormCI = new FormCommItem(CommlogCur);
             FormCI.IsNew = true;
         }
@@ -12638,7 +12638,7 @@ namespace OpenDental
                     TaskUnreads.DeleteForTask(taskCur);//clear out taskunreads. We have too many tasks to read the done ones.
                     Tasks.Update(taskCur, taskOld);
                     TaskHist taskHist = new TaskHist(taskOld);
-                    taskHist.UserNumHist = Security.CurUser.UserNum;
+                    taskHist.UserNumHist = Security.CurUser.Id;
                     TaskHists.Insert(taskHist);
                     long signalNum = Signalods.SetInvalid(InvalidType.Task, KeyType.Task, taskCur.TaskNum);
                     UserControlTasks.RefillLocalTaskGrids(taskCur, TaskNotes.GetForTask(taskCur.TaskNum), new List<long>() { signalNum });

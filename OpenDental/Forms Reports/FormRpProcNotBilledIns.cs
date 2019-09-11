@@ -108,7 +108,7 @@ namespace OpenDental{
 			List <int> listSelectedItems=new List<int>();
 			_listClinics=Clinics.GetForUserod(Security.CurUser);
 			comboBoxMultiClinics.Items.Add(Lan.g(this,"All"));
-			if(!Security.CurUser.ClinicIsRestricted) {
+			if(!Security.CurUser.ClinicRestricted) {
 				comboBoxMultiClinics.Items.Add(Lan.g(this,"Unassigned"));
 				listSelectedItems.Add(1);
 			}
@@ -136,13 +136,13 @@ namespace OpenDental{
 					for(int j=0;j<_listClinics.Count;j++) {
 						listClinicNums.Add(_listClinics[j].ClinicNum);//Add all clinics this person has access to.
 					}
-					if(!Security.CurUser.ClinicIsRestricted) {
+					if(!Security.CurUser.ClinicRestricted) {
 						listClinicNums.Add(0);//Unassigned
 					}
 				}
 				else {//All option not selected
 					for(int i=0;i<comboBoxMultiClinics.ListSelectedIndices.Count;i++) {
-						if(Security.CurUser.ClinicIsRestricted) {
+						if(Security.CurUser.ClinicRestricted) {
 							listClinicNums.Add(_listClinics[comboBoxMultiClinics.ListSelectedIndices[i]-1].ClinicNum);//Minus 1 to skip over the All.
 						}
 						else if(comboBoxMultiClinics.ListSelectedIndices[i]==1) {//Not restricted and user selected Unassigned.
@@ -169,7 +169,7 @@ namespace OpenDental{
 						if(i>0) {
 							subtitleClinics+=", ";
 						}
-						if(Security.CurUser.ClinicIsRestricted) {
+						if(Security.CurUser.ClinicRestricted) {
 							subtitleClinics+=_listClinics[comboBoxMultiClinics.ListSelectedIndices[i]-1].Abbr;//Minus 1 for All.
 						}
 						else {//Not restricted

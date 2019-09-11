@@ -76,7 +76,7 @@ namespace OpenDental{
 		private bool _cannotEdit {
 			get {
 				return Security.CurUser!=null &&
-					Security.CurUser.EmployeeNum==EmployeeCur.Id &&
+					Security.CurUser.EmployeeId==EmployeeCur.Id &&
 					Preference.GetBool(PreferenceName.TimecardSecurityEnabled) &&
 					Preference.GetBool(PreferenceName.TimecardUsersDontEditOwnCard);
 			}

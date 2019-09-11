@@ -40,26 +40,26 @@ namespace UnitTests
             for (int i = 0; i < 5; i++)
             {
                 User user = UserodT.CreateUser();
-                user.ProvNum = i % 2 + 1;
+                user.ProviderId = i % 2 + 1;
                 listTestUsers.Add(user);
                 Userods.Update(user);
             }
             listTestUsers = listTestUsers.Distinct().ToList();
             long examplePatnum = 2; //Patnum can be anything, needed for webmail.
                                     //Create one email for each provider.
-            foreach (long provnum in listTestUsers.Select(x => x.ProvNum).Distinct())
+            foreach (long provnum in listTestUsers.Select(x => x.ProviderId).Distinct())
             {
                 EmailMessageT.CreateWebMail(provnum, examplePatnum);
             }
             AlertItems_CreateAlertsForWebmailMethodCall();
             //Count the total # of alertitem entries, not what the description is.
-            var alertCount = DataConnection.ExecuteLong("SELECT COUNT(*) FROM alertitem WHERE UserNum IN (" + string.Join(",", listTestUsers.Select(x => POut.Long(x.UserNum)))
+            var alertCount = DataConnection.ExecuteLong("SELECT COUNT(*) FROM alertitem WHERE UserNum IN (" + string.Join(",", listTestUsers.Select(x => POut.Long(x.Id)))
                 + ") AND Type=" + POut.Int((int)AlertType.WebMailRecieved));
             Assert.AreEqual("5", alertCount);
             //
             //Clear out ALERT table and add some new emails
             AlertItemT.ClearAlertItemTable();
-            foreach (long provnum in listTestUsers.Select(x => x.ProvNum).Distinct())
+            foreach (long provnum in listTestUsers.Select(x => x.ProviderId).Distinct())
             {
                 EmailMessageT.CreateWebMail(provnum, examplePatnum);
                 EmailMessageT.CreateWebMail(provnum, examplePatnum);
@@ -69,31 +69,31 @@ namespace UnitTests
             //This section tests adding more unread emails, and changing the description of the alertitem
             User selectedUser = listTestUsers.First();
             AlertItems_CreateAlertsForWebmailMethodCall();
-            alertCount = DataConnection.ExecuteLong("SELECT Description FROM alertitem WHERE Type=" + POut.Int((int)AlertType.WebMailRecieved) + " AND UserNum=" + selectedUser.UserNum);
+            alertCount = DataConnection.ExecuteLong("SELECT Description FROM alertitem WHERE Type=" + POut.Int((int)AlertType.WebMailRecieved) + " AND UserNum=" + selectedUser.Id);
             Assert.AreEqual("5", alertCount);
             //
             //Add 3 more unread emails.
-            EmailMessageT.CreateWebMail(selectedUser.ProvNum, examplePatnum);
-            EmailMessageT.CreateWebMail(selectedUser.ProvNum, examplePatnum);
-            EmailMessageT.CreateWebMail(selectedUser.ProvNum, examplePatnum);
+            EmailMessageT.CreateWebMail(selectedUser.ProviderId, examplePatnum);
+            EmailMessageT.CreateWebMail(selectedUser.ProviderId, examplePatnum);
+            EmailMessageT.CreateWebMail(selectedUser.ProviderId, examplePatnum);
             AlertItems_CreateAlertsForWebmailMethodCall();
-            alertCount = DataConnection.ExecuteLong("SELECT Description FROM alertitem WHERE Type=" + POut.Int((int)AlertType.WebMailRecieved) + " AND UserNum=" + selectedUser.UserNum);
+            alertCount = DataConnection.ExecuteLong("SELECT Description FROM alertitem WHERE Type=" + POut.Int((int)AlertType.WebMailRecieved) + " AND UserNum=" + selectedUser.Id);
             Assert.AreEqual("8", alertCount);
             //
             //Mark 2 of the emails as read, to decrease the amount of unread emails
             string command = "UPDATE emailmessage SET SentOrReceived=" + POut.Int((int)EmailMessageStatus.WebMailRecdRead) +
-                " WHERE SentOrReceived=" + POut.Int((int)EmailMessageStatus.WebMailReceived) + " AND ProvNumWebMail=" + POut.Long(selectedUser.ProvNum) + " LIMIT 2";
+                " WHERE SentOrReceived=" + POut.Int((int)EmailMessageStatus.WebMailReceived) + " AND ProvNumWebMail=" + POut.Long(selectedUser.ProviderId) + " LIMIT 2";
             DataConnection.ExecuteNonQuery(command);
             AlertItems_CreateAlertsForWebmailMethodCall();
-            alertCount = DataConnection.ExecuteLong("SELECT Description FROM alertitem WHERE Type=" + POut.Int((int)AlertType.WebMailRecieved) + " AND UserNum=" + selectedUser.UserNum);
+            alertCount = DataConnection.ExecuteLong("SELECT Description FROM alertitem WHERE Type=" + POut.Int((int)AlertType.WebMailRecieved) + " AND UserNum=" + selectedUser.Id);
             Assert.AreEqual("6", alertCount);
             //
             //Now we mark all of this user's emails as read, as if that user has read all of their webmail.
             command = "UPDATE emailmessage SET SentOrReceived=" + POut.Int((int)EmailMessageStatus.WebMailRecdRead) +
-                " WHERE SentOrReceived=" + POut.Int((int)EmailMessageStatus.WebMailReceived) + " AND ProvNumWebMail=" + POut.Long(selectedUser.ProvNum);
+                " WHERE SentOrReceived=" + POut.Int((int)EmailMessageStatus.WebMailReceived) + " AND ProvNumWebMail=" + POut.Long(selectedUser.ProviderId);
             DataConnection.ExecuteNonQuery(command);
             AlertItems_CreateAlertsForWebmailMethodCall();
-            alertCount = DataConnection.ExecuteLong("SELECT COUNT(*) FROM alertitem WHERE Type=" + POut.Int((int)AlertType.WebMailRecieved) + " AND UserNum=" + selectedUser.UserNum);
+            alertCount = DataConnection.ExecuteLong("SELECT COUNT(*) FROM alertitem WHERE Type=" + POut.Int((int)AlertType.WebMailRecieved) + " AND UserNum=" + selectedUser.Id);
             Assert.AreEqual("0", alertCount);
         }
     }

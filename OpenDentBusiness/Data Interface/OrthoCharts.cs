@@ -180,7 +180,7 @@ namespace OpenDentBusiness{
 				if(listIns[i].FieldValue=="") {//do not insert new blank values. This happens when fields from today are not used.
 					continue;
 				}
-				listIns[i].UserNum=Security.CurUser.UserNum;
+				listIns[i].UserNum=Security.CurUser.Id;
 				Insert(listIns[i]);
 			}
 			for(int i=0;i<listUpdNew.Count;i++) {

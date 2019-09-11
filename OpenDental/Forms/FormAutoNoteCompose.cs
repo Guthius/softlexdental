@@ -14,7 +14,7 @@ namespace OpenDental
         public string MainTextNote;
         ///<summary>On load, the UserOdPref that contains the comma delimited list of expanded category DefNums is retrieved from the database.  On close
         ///the UserOdPref is updated with the current expanded DefNums.</summary>
-        private UserOdPref _userOdCurPref;
+        private UserPreference _userOdCurPref;
         private List<Definition> _listAutoNoteCatDefs;
 
         /// <summary>
@@ -26,7 +26,7 @@ namespace OpenDental
         private void FormAutoNoteCompose_Load(object sender, EventArgs e)
         {
             _listAutoNoteCatDefs = Definition.GetByCategory(DefinitionCategory.AutoNoteCats);;
-            _userOdCurPref = UserOdPrefs.GetByUserAndFkeyType(Security.CurUser.UserNum, UserOdFkeyType.AutoNoteExpandedCats).FirstOrDefault();
+            _userOdCurPref = UserOdPrefs.GetByUserAndFkeyType(Security.CurUser.Id, UserPreferenceName.AutoNoteExpandedCats).FirstOrDefault();
             FillListTree();
         }
 
@@ -43,7 +43,7 @@ namespace OpenDental
             List<long> listExpandedDefNums = new List<long>();
             if (_userOdCurPref != null)
             {//if this is the fill on load, the node count will be 0, expanded node list from pref
-                listExpandedDefNums = _userOdCurPref.ValueString.Split(',').Where(x => x != "" && x != "0").Select(x => PIn.Long(x)).ToList();
+                listExpandedDefNums = _userOdCurPref.Value.Split(',').Where(x => x != "" && x != "0").Select(x => PIn.Long(x)).ToList();
             }
             //clear current tree contents
             treeListMain.BeginUpdate();
@@ -496,16 +496,16 @@ namespace OpenDental
                 .Where(x => x.Tag is Definition && x.IsExpanded).Select(x => ((Definition)x.Tag).Id).Where(x => x > 0).ToList();
             if (_userOdCurPref == null)
             {
-                UserOdPrefs.Insert(new UserOdPref()
+                UserOdPrefs.Insert(new UserPreference()
                 {
-                    UserNum = Security.CurUser.UserNum,
-                    FkeyType = UserOdFkeyType.AutoNoteExpandedCats,
-                    ValueString = string.Join(",", listExpandedDefNums)
+                    UserId = Security.CurUser.Id,
+                    FkeyType = UserPreferenceName.AutoNoteExpandedCats,
+                    Value = string.Join(",", listExpandedDefNums)
                 });
             }
             else
             {
-                _userOdCurPref.ValueString = string.Join(",", listExpandedDefNums);
+                _userOdCurPref.Value = string.Join(",", listExpandedDefNums);
                 UserOdPrefs.Update(_userOdCurPref);
             }
         }

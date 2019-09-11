@@ -583,7 +583,7 @@ namespace OpenDental{
 				return;
 			}
 			List<Clinic> listClinics=new List<Clinic>();
-			if(!Security.CurUser.ClinicIsRestricted) {
+			if(!Security.CurUser.ClinicRestricted) {
 				listClinics.Add(new Clinic() { Abbr=Lan.g(this,"Headquarters") }); //Seed with "Headquarters"
 			}
 			//Do not re-organize from cache. They could either be alphabetized or sorted by item order.
@@ -890,7 +890,7 @@ namespace OpenDental{
 
 		private void comboClinic_SelectionChangeCommitted(object sender,EventArgs e) {
 			comboClinic.Text=Lan.g(this,"Show Practice Notes");
-			if(!Security.CurUser.ClinicIsRestricted && comboClinic.SelectedIndex>0) {
+			if(!Security.CurUser.ClinicRestricted && comboClinic.SelectedIndex>0) {
 				comboClinic.Text=Lan.g(this,"Show Practice and Clinic Notes");
 			}
 			FillEmployeesAndProviders();

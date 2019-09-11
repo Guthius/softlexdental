@@ -118,7 +118,7 @@ namespace OpenDentBusiness
         ProcComplCreate,
         ///<summary>24. At least one user must have this permission.</summary>
         [Description("Security Admin")]
-        SecurityAdmin,
+        SecurityAdmin = 1000,
         ///<summary>25. </summary>
         [Description("Appointment Create")]
         AppointmentCreate,

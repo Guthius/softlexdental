@@ -579,7 +579,7 @@ namespace OpenDental{
 			SetFilterControlsAndAction(() => FillGrid(),textSearch);
 			butOkSchedule.Visible=ShowOkSchedule;
 			_listClinics=new List<Clinic>();
-			if(!Security.CurUser.ClinicIsRestricted) {
+			if(!Security.CurUser.ClinicRestricted) {
 				_listClinics.Add(new Clinic() { Abbr=Lan.g(this,"Headquarters") }); //Seed with "Headquarters"
 			}
 			//do not re-organize from cache. They could either be alphabetizeded or sorted by item order.

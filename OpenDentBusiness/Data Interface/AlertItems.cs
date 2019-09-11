@@ -110,13 +110,13 @@ namespace OpenDentBusiness
             long provNum = 0;
             if (Security.CurUser != null && Userods.IsUserCpoe(Security.CurUser))
             {
-                provNum = Security.CurUser.ProvNum;
+                provNum = Security.CurUser.ProviderId;
             }
 
             long curUserNum = 0;
             if (Security.CurUser != null)
             {
-                curUserNum = Security.CurUser.UserNum;
+                curUserNum = Security.CurUser.Id;
             }
 
             // For AlertType.RadiologyProcedures we only care if the alert is associated to the current logged in provider.

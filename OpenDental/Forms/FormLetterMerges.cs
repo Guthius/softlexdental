@@ -611,7 +611,7 @@ namespace OpenDental{
 			CommlogCur.SentOrReceived=CommSentOrReceived.Sent;
 			CommlogCur.PatNum=PatCur.PatNum;
 			CommlogCur.Note="Letter sent: "+letterCur.Description+". ";
-			CommlogCur.UserNum=Security.CurUser.UserNum;
+			CommlogCur.UserNum=Security.CurUser.Id;
 			Commlogs.Insert(CommlogCur);
 			DialogResult=DialogResult.OK;
 		}
@@ -728,7 +728,7 @@ namespace OpenDental{
 			CommlogCur.SentOrReceived=CommSentOrReceived.Sent;
 			CommlogCur.PatNum=PatCur.PatNum;
 			CommlogCur.Note="Letter sent: "+letterCur.Description+". ";
-			CommlogCur.UserNum=Security.CurUser.UserNum;
+			CommlogCur.UserNum=Security.CurUser.Id;
 			Commlogs.Insert(CommlogCur);
 #else
 			MessageBox.Show(this, "This version of Open Dental does not support Microsoft Word.");

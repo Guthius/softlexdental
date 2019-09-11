@@ -41,7 +41,7 @@ namespace OpenDental
             clinicComboBox.SelectedIndex = 0;
 
             int offset = 1;
-            if (!Security.CurUser.ClinicIsRestricted)
+            if (!Security.CurUser.ClinicRestricted)
             {
                 clinicComboBox.Items.Add("Unassigned");
                 offset++;
@@ -60,7 +60,7 @@ namespace OpenDental
             var clinicNumsList = new List<long>();
             if (Preferences.HasClinicsEnabled && clinicComboBox.SelectedIndex != 0) //Not 'All' selected
             {
-                if (Security.CurUser.ClinicIsRestricted)
+                if (Security.CurUser.ClinicRestricted)
                 {
                     clinicNumsList.Add(clinicsList[clinicComboBox.SelectedIndex - 1].ClinicNum);
                 }

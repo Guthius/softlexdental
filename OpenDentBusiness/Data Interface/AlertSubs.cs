@@ -16,7 +16,7 @@ namespace OpenDentBusiness
                 return;
             }
 
-            Db.NonQ("DELETE FROM alertsub WHERE UserNum IN(" + string.Join(",", listUsers.Select(x => x.UserNum).ToList()) + ")");
+            Db.NonQ("DELETE FROM alertsub WHERE UserNum IN(" + string.Join(",", listUsers.Select(x => x.Id).ToList()) + ")");
             foreach (AlertSub alertSub in listAlertSubs)
             {
                 Db.NonQ(

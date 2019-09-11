@@ -22,7 +22,7 @@ namespace OpenDentBusiness
         public static long Insert(InsPlan plan, bool useExistingPK)
         {
             //Security.CurUser.UserNum gets set on MT by the DtoProcessor so it matches the user from the client WS.
-            plan.SecUserNumEntry = Security.CurUser.UserNum;
+            plan.SecUserNumEntry = Security.CurUser.Id;
             long planNum = 0;
             InsPlan planOld = plan.Copy();
 
@@ -49,7 +49,7 @@ namespace OpenDentBusiness
             }
             Crud.InsPlanCrud.Update(plan, planOld);
             //Security.CurUser.UserNum gets set on MT by the DtoProcessor so it matches the user from the client WS.
-            InsEditLogs.MakeLogEntry(plan, planOld, InsEditLogType.InsPlan, Security.CurUser.UserNum);
+            InsEditLogs.MakeLogEntry(plan, planOld, InsEditLogType.InsPlan, Security.CurUser.Id);
         }
 
         ///<summary>It's fastest if you supply a plan list that contains the plan, but it also works just fine if it can't initally locate the plan in the
@@ -654,7 +654,7 @@ namespace OpenDentBusiness
                 //log InsPlan's fee schedule update.
                 //Security.CurUser.UserNum gets set on MT by the DtoProcessor so it matches the user from the client WS.
                 InsEditLogs.MakeLogEntry(POut.String(table.Columns[1].ToString()),
-                    Security.CurUser.UserNum, POut.String(table.Rows[i][1].ToString()), feeSchedNum.ToString(),
+                    Security.CurUser.Id, POut.String(table.Rows[i][1].ToString()), feeSchedNum.ToString(),
                     InsEditLogType.InsPlan, PIn.Long(table.Rows[i][0].ToString()), 0,
                     table.Rows[i][2].ToString() + " - " + table.Rows[i][3].ToString());
             }
@@ -699,7 +699,7 @@ namespace OpenDentBusiness
                     sched.IsGlobal = true;
                     sched.ItemOrder = itemOrder;
                     //Security.CurUser.UserNum gets set on MT by the DtoProcessor so it matches the user from the client WS.
-                    sched.SecUserNumEntry = Security.CurUser.UserNum;
+                    sched.SecUserNumEntry = Security.CurUser.Id;
                     FeeScheds.Insert(sched);
                     itemOrder++;
                 }
@@ -726,7 +726,7 @@ namespace OpenDentBusiness
                 //Security.CurUser.UserNum gets set on MT by the DtoProcessor so it matches the user from the client WS.
                 listInsPlans.ForEach(x =>
                 {
-                    InsEditLogs.MakeLogEntry("AllowedFeeSched", Security.CurUser.UserNum, "0", POut.Long(sched.FeeSchedNum), InsEditLogType.InsPlan,
+                    InsEditLogs.MakeLogEntry("AllowedFeeSched", Security.CurUser.Id, "0", POut.Long(sched.FeeSchedNum), InsEditLogType.InsPlan,
                         x.PlanNum, 0, x.GroupNum.ToString() + " - " + x.GroupName.ToString());
                 });
             }
@@ -758,7 +758,7 @@ namespace OpenDentBusiness
             //Security.CurUser.UserNum gets set on MT by the DtoProcessor so it matches the user from the client WS.
             listInsPlans.ForEach(x =>
             {
-                InsEditLogs.MakeLogEntry("IsHidden", Security.CurUser.UserNum, "0", "1", InsEditLogType.InsPlan,
+                InsEditLogs.MakeLogEntry("IsHidden", Security.CurUser.Id, "0", "1", InsEditLogType.InsPlan,
                     x.PlanNum, 0, x.GroupNum.ToString() + " - " + x.GroupName.ToString());
             });
         }
@@ -1058,14 +1058,14 @@ namespace OpenDentBusiness
             //Security.CurUser.UserNum gets set on MT by the DtoProcessor so it matches the user from the client WS.
             listBenefits.ForEach(x =>
             {
-                InsEditLogs.MakeLogEntry(null, x, InsEditLogType.Benefit, Security.CurUser.UserNum); //log benefit deletion
+                InsEditLogs.MakeLogEntry(null, x, InsEditLogType.Benefit, Security.CurUser.Id); //log benefit deletion
             });
             InsPlans.ClearFkey(plan.PlanNum);//Zero securitylog FKey column for rows to be deleted.
             command = "DELETE FROM insplan "
                 + "WHERE PlanNum = '" + plan.PlanNum.ToString() + "'";
             Db.NonQ(command);
             //Security.CurUser.UserNum gets set on MT by the DtoProcessor so it matches the user from the client WS.
-            InsEditLogs.MakeLogEntry(null, plan, InsEditLogType.InsPlan, Security.CurUser.UserNum); //log insplan deletion
+            InsEditLogs.MakeLogEntry(null, plan, InsEditLogType.InsPlan, Security.CurUser.Id); //log insplan deletion
             InsVerifies.DeleteByFKey(plan.PlanNum, VerifyTypes.InsuranceBenefit);
         }
 
@@ -1087,7 +1087,7 @@ namespace OpenDentBusiness
             //Security.CurUser.UserNum gets set on MT by the DtoProcessor so it matches the user from the client WS.
             listBenefits.ForEach(x =>
             {
-                InsEditLogs.MakeLogEntry(null, x, InsEditLogType.Benefit, Security.CurUser.UserNum);
+                InsEditLogs.MakeLogEntry(null, x, InsEditLogType.Benefit, Security.CurUser.Id);
             });
             //claim.PlanNum/PlanNum2
             command = "UPDATE claim SET PlanNum=" + POut.Long(planNumTo) + " WHERE PlanNum=" + POut.Long(planNum);
@@ -1119,7 +1119,7 @@ namespace OpenDentBusiness
             //Security.CurUser.UserNum gets set on MT by the DtoProcessor so it matches the user from the client WS.
             listInsPlans.ForEach(x =>
             { //log insplan ClaimsUseUCR change.
-                InsEditLogs.MakeLogEntry("ClaimsUseUCR", Security.CurUser.UserNum, "0", "1", InsEditLogType.InsPlan,
+                InsEditLogs.MakeLogEntry("ClaimsUseUCR", Security.CurUser.Id, "0", "1", InsEditLogType.InsPlan,
                     x.PlanNum, 0, x.GroupNum + " - " + x.GroupName);
             });
             return listInsPlans.Count;
@@ -1158,7 +1158,7 @@ namespace OpenDentBusiness
             //Security.CurUser.UserNum gets set on MT by the DtoProcessor so it matches the user from the client WS.
             listInsPlans.ForEach(x =>
             {
-                InsEditLogs.MakeLogEntry("CobRule", Security.CurUser.UserNum, x.CobRule.ToString(), POut.Int((int)cobRule),
+                InsEditLogs.MakeLogEntry("CobRule", Security.CurUser.Id, x.CobRule.ToString(), POut.Int((int)cobRule),
                     InsEditLogType.InsPlan, x.PlanNum, 0, x.GroupNum + " - " + x.GroupName);
             });
         }

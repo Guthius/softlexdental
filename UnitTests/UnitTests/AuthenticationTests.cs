@@ -19,24 +19,24 @@ namespace UnitTests {
 		[TestMethod]
 		public void Authentication_CheckUserodPassword() {
 			User user=Security.CurUser;
-			user.LoginDetails=Authentication.GenerateLoginDetails("awesomePassword",HashTypes.SHA3_512);
+			user.Password=Authentication.GenerateLoginDetails("awesomePassword",HashTypes.SHA3_512);
 			bool result=Authentication.CheckPassword(user,"awesomePassword");
 			Assert.IsTrue(result);
-			Authentication.UpdatePasswordUserod(user,"awesomePassword");
+			Authentication.UpdatePassword(user,"awesomePassword");
 			//If this is middletier, we need the password to match in our current user object to refill the cache
 			Security.PasswordTyped="awesomePassword";
 			//Refresh our user object;
 			Userods.RefreshCache();
-			user=Userods.GetUser(user.UserNum);
+			user=Userods.GetUser(user.Id);
 			Assert.AreEqual(88,user.PasswordHash.Length);
-			string passhash=Authentication.HashPasswordSHA512("awesomePassword",user.LoginDetails.Salt);
+			string passhash=Authentication.HashPasswordSHA512("awesomePassword",user.Password.Salt);
 			Assert.IsTrue(Authentication.ConstantEquals(passhash,user.PasswordHash));
 			//Reset Security.CurUser password back to the unit test password
-			Authentication.UpdatePasswordUserod(user,UnitTestPassword);
+			Authentication.UpdatePassword(user,UnitTestPassword);
 			//Reset typed password
 			Security.PasswordTyped=UnitTestPassword;
 			Userods.RefreshCache();
-			Security.CurUser=Userods.GetUser(user.UserNum);
+			Security.CurUser=Userods.GetUser(user.Id);
 		}
 
 		[TestMethod]
@@ -73,20 +73,20 @@ namespace UnitTests {
 		[TestMethod]
 		public void Authentication_UpdatePasswordSchema() {
             User user =Security.CurUser;
-			bool result=Authentication.UpdatePasswordUserod(user,"brandSpankinNewPassword",HashTypes.SHA3_512);
+			bool result=Authentication.UpdatePassword(user,"brandSpankinNewPassword",HashTypes.SHA3_512);
 			//If this is middletier, we need the password to match in our current user object to refill the cache
 			Security.PasswordTyped="brandSpankinNewPassword";
 			Userods.RefreshCache();
-			user=Userods.GetUser(user.UserNum);
+			user=Userods.GetUser(user.Id);
 			Assert.IsTrue(result);
 			result=Authentication.CheckPassword(user,"brandSpankinNewPassword");
 			Assert.IsTrue(result);
 			//Reset Security.CurUser password back to the unit test password
-			Authentication.UpdatePasswordUserod(user,UnitTestPassword,HashTypes.SHA3_512);
+			Authentication.UpdatePassword(user,UnitTestPassword,HashTypes.SHA3_512);
 			//Reset typed password
 			Security.PasswordTyped=UnitTestPassword;
 			Userods.RefreshCache();
-			Security.CurUser=Userods.GetUser(user.UserNum);
+			Security.CurUser=Userods.GetUser(user.Id);
 		}
 
 		[TestMethod]

@@ -1095,7 +1095,7 @@ namespace OpenDental
             CommlogCur.PatNum = AptCur.PatNum;
             CommlogCur.CommDateTime = DateTime.Now;
             CommlogCur.CommType = Commlogs.GetTypeAuto(CommItemTypeAuto.APPT);
-            CommlogCur.UserNum = Security.CurUser.UserNum;
+            CommlogCur.UserNum = Security.CurUser.Id;
             FormCommItem FormCI = new FormCommItem(CommlogCur);
             FormCI.IsNew = true;
             FormCI.ShowDialog();
@@ -2548,7 +2548,7 @@ namespace OpenDental
                 task.KeyNum = AptCur.AptNum;
                 task.ObjectType = TaskObjectType.Appointment;
                 task.TaskListNum = formTaskListSelect.ListSelectedLists[0];
-                task.UserNum = Security.CurUser.UserNum;
+                task.UserNum = Security.CurUser.Id;
 
                 using (var formTaskEdit = new FormTaskEdit(task, taskOld))
                 {
@@ -2797,7 +2797,7 @@ namespace OpenDental
                         CommlogCur.CommType = Commlogs.GetTypeAuto(CommItemTypeAuto.APPT);
                         CommlogCur.Note = "Deleted Pt NOTE from schedule, saved copy: ";
                         CommlogCur.Note += appointmentNoteTextBox.Text;
-                        CommlogCur.UserNum = Security.CurUser.UserNum;
+                        CommlogCur.UserNum = Security.CurUser.Id;
                         //there is no dialog here because it is just a simple entry
                         Commlogs.Insert(CommlogCur);
                     }
@@ -2823,7 +2823,7 @@ namespace OpenDental
                             CommlogCur.Note += AptCur.ProcDescript + ": ";
                         }
                         CommlogCur.Note += appointmentNoteTextBox.Text;
-                        CommlogCur.UserNum = Security.CurUser.UserNum;
+                        CommlogCur.UserNum = Security.CurUser.Id;
                         //there is no dialog here because it is just a simple entry
                         Commlogs.Insert(CommlogCur);
                     }

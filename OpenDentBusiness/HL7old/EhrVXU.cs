@@ -454,14 +454,14 @@ namespace OpenDentBusiness.HL7
 			//ORD-8 Parent.  Optional.
 			//ORD-9 Date/Time of Transaction.  Optional.
 			//ORD-10 Entered By.  Required if known.  Cardinality [0..1].  Type XCN.  This is the person that entered the immunization record into the system.
-			User userod=Userods.GetUser(vaccine.UserNum);//Can be null if vaccine.UserNum=0 for older records before the vaccine.UserNum column existed.
+			User userod=User.GetById(vaccine.UserNum);//Can be null if vaccine.UserNum=0 for older records before the vaccine.UserNum column existed.
 			if(userod!=null) {
-				if(userod.ProvNum!=0) {
-					Provider provEnteredBy=Providers.GetProv(userod.ProvNum);
+				if(userod.ProviderId.HasValue) {
+					Provider provEnteredBy=Providers.GetProv(userod.ProviderId.Value);
 					WriteXCN(10,provEnteredBy.FName,provEnteredBy.LName,provEnteredBy.MI,vaccine.UserNum.ToString(),cityWhereEntered,stateWhereEntered,"D");
 				}
-				else if(userod.EmployeeNum!=0) {
-					Employee employee=Employee.GetById(userod.EmployeeNum);
+				else if(userod.EmployeeId.HasValue) {
+					Employee employee=Employee.GetById(userod.EmployeeId.Value);
 					WriteXCN(10,employee.FirstName,employee.LastName,employee.Initials,vaccine.UserNum.ToString(),cityWhereEntered,stateWhereEntered,"D");
 				}
 			}

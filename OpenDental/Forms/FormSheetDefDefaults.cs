@@ -110,7 +110,7 @@ namespace OpenDental {
 			comboClinicDefault.Items.Clear();
 			comboClinicDefault.DisplayMember="Abbr";
 			comboClinicDefault.ValueMember="Clinic";
-			if(!Security.CurUser.ClinicIsRestricted) {
+			if(!Security.CurUser.ClinicRestricted) {
 				comboClinicDefault.Items.Add(new ClinicWrapper(Lan.g(this,"Defaults")));
 			}
 			for(int i=0;i<listClinics.Count;i++) {

@@ -1409,7 +1409,7 @@ namespace OpenDentBusiness
         public static long Insert(Patient pat, bool useExistingPK)
         {
             //Security.CurUser.UserNum gets set on MT by the DtoProcessor so it matches the user from the client WS.
-            pat.SecUserNumEntry = Security.CurUser.UserNum;
+            pat.SecUserNumEntry = Security.CurUser.Id;
             if (!useExistingPK)
             {
                 return Crud.PatientCrud.Insert(pat);

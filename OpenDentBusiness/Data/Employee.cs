@@ -307,21 +307,21 @@ namespace OpenDentBusiness
                 }
                 foreach (User userCur in listUsers)
                 {//At this point we know there is at least one Userod associated to this employee.
-                    if (userCur.ClinicNum == 0)
+                    if (userCur.ClinicId == 0)
                     {//User's default clinic is HQ
                         listEmpsUnassigned.Add(empCur);
                         continue;
                     }
-                    if (!dictUserClinics.ContainsKey(userCur.UserNum))
+                    if (!dictUserClinics.ContainsKey(userCur.Id))
                     {//User is restricted to a clinic(s).  Compare to clinicNum
-                        dictUserClinics[userCur.UserNum] = UserClinics.GetForUser(userCur.UserNum);//run only once per user
+                        dictUserClinics[userCur.Id] = UserClinics.GetForUser(userCur.Id);//run only once per user
                     }
-                    if (dictUserClinics[userCur.UserNum].Count == 0)
+                    if (dictUserClinics[userCur.Id].Count == 0)
                     {//unrestricted user, employee should show in all lists
                         listEmpsUnassigned.Add(empCur);
                         listEmpsWithClinic.Add(empCur);
                     }
-                    else if (dictUserClinics[userCur.UserNum].Any(x => x.ClinicNum == clinicNum))
+                    else if (dictUserClinics[userCur.Id].Any(x => x.ClinicId == clinicNum))
                     {//user restricted to this clinic
                         listEmpsWithClinic.Add(empCur);
                     }

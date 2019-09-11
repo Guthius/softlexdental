@@ -378,7 +378,7 @@ namespace OpenDental{
 				return;
 			}
 			bool isProvOrder=false;
-			if(Security.CurUser.ProvNum!=0) {//The user who is currently logged in is a provider.
+			if(Security.CurUser.ProviderId!=0) {//The user who is currently logged in is a provider.
 				isProvOrder=true;
 			}
 			_medOrderNum=MedicationPats.InsertOrUpdateMedOrderForRx(RxPatCur,RxDefCur.RxCui,isProvOrder);//RxDefCur.RxCui can be 0.

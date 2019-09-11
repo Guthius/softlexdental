@@ -20,10 +20,10 @@ namespace OpenDentBusiness {
 		public DateTime HistDateTStamp;
 		///<summary>Enum:HistAppointmentAction .</summary>
 		public HistAppointmentAction HistApptAction;
-		///<summary>Enum:EServiceTypes .</summary>
-		public EServiceTypes ApptSource;
-		//Note that the columns ProcsColored and Note are VARCHAR(255) in this table while they are TEXT in the appointment table. This is intentional
-		//because it is less important to store the entire note and color when the appointment is not current.
+        //Note that the columns ProcsColored and Note are VARCHAR(255) in this table while they are TEXT in the appointment table. This is intentional
+        //because it is less important to store the entire note and color when the appointment is not current.
+
+        public int ApptSource;
 
 		///<summary>Pass in the old appointment that needs to be recorded.</summary>
 		public HistAppointment(Appointment appt) {

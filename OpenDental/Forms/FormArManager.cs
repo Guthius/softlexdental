@@ -559,7 +559,7 @@ namespace OpenDental
 				}
 				List<ProgramProperty> listProgProps;
 				if(!_dictClinicProgProps.TryGetValue(clinicNum,out listProgProps) //if the clinic doesn't have prog props, try to use the HQ prog props
-					&& (clinicNum==0 || !Preferences.HasClinicsEnabled || Security.CurUser.ClinicIsRestricted || !_dictClinicProgProps.TryGetValue(0,out listProgProps)))
+					&& (clinicNum==0 || !Preferences.HasClinicsEnabled || Security.CurUser.ClinicRestricted || !_dictClinicProgProps.TryGetValue(0,out listProgProps)))
 				{
 					listClinicsSkipped.Add(clinicNum);
 					continue;
@@ -574,7 +574,7 @@ namespace OpenDental
 				if(listClinicsSkipped.Contains(0)) {
 					listClinicsSkipped.AddRange(_listClinics.FindAll(x => !_dictClinicProgProps.ContainsKey(x.ClinicNum)).Select(x => x.ClinicNum));
 				}
-				else if(!Security.CurUser.ClinicIsRestricted && _dictClinicProgProps.ContainsKey(0)) {
+				else if(!Security.CurUser.ClinicRestricted && _dictClinicProgProps.ContainsKey(0)) {
 					//if clinics are enabled and the user is not restricted, any clinic without prog props will use the HQ prog props for the sftp connection
 					_listClinics.FindAll(x => !_dictClinicProgProps.ContainsKey(x.ClinicNum)).ForEach(x => _dictClinicProgProps[x.ClinicNum]=_dictClinicProgProps[0]);
 				}
@@ -1244,7 +1244,7 @@ namespace OpenDental
 						}
 						dictClinicNumListTransLogs[clinicNum].Add(new TsiTransLog() {
 							PatNum=pAgingCur.PatNum,
-							UserNum=Security.CurUser.UserNum,
+							UserNum=Security.CurUser.Id,
 							TransType=TsiTransType.RI,
 							//TransDateTime=DateTime.Now,//set on insert, not editable by user
 							//DemandType=TsiDemandType.Accelerator,//only used for placement messages
@@ -1267,7 +1267,7 @@ namespace OpenDental
 						dictClinicPlacementMsgs[clinicNum].Add(pAgingCur.PatNum,msg);
 						TsiTransLog logCur=new TsiTransLog() {
 							PatNum=pAgingCur.PatNum,
-							UserNum=Security.CurUser.UserNum,
+							UserNum=Security.CurUser.Id,
 							TransType=TsiTransType.PL,
 							//TransDateTime=DateTime.Now,//set on insert, not editable by user
 							DemandType=demandType,
@@ -1822,7 +1822,7 @@ namespace OpenDental
 					}
 					dictClinicNumListTransLogs[clinicNum].Add(new TsiTransLog() {
 						PatNum=pAgingCur.PatNum,
-						UserNum=Security.CurUser.UserNum,
+						UserNum=Security.CurUser.Id,
 						TransType=transType,
 						//TransDateTime=DateTime.Now,//set on insert, not editable by user
 						//DemandType=TsiDemandType.Accelerator,//only valid for placement msgs

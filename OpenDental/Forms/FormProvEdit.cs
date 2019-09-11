@@ -2010,8 +2010,8 @@ namespace OpenDental{
 				if(ProvCur.IsInstructor) {
 					User user=new User();
 					user.UserName=textUserName.Text;
-					user.LoginDetails=Authentication.GenerateLoginDetailsSHA512(textPassword.Text);
-					user.ProvNum=provNum;
+					user.Password=Authentication.GenerateLoginDetailsSHA512(textPassword.Text);
+					user.ProviderId=provNum;
 					try {
 						Userods.Insert(user,new List<long> { Preference.GetLong(PreferenceName.SecurityGroupForInstructors) });
 					}
@@ -2026,7 +2026,7 @@ namespace OpenDental{
 				try {
 					if(_existingUser!=null && (ProvCur.IsInstructor || ProvCur.SchoolClassNum!=0)) {
 						_existingUser.UserName=textUserName.Text;
-						_existingUser.LoginDetails=Authentication.GenerateLoginDetailsSHA512(textPassword.Text);
+						_existingUser.Password=Authentication.GenerateLoginDetailsSHA512(textPassword.Text);
 						Userods.Update(_existingUser);
 					}
 				}

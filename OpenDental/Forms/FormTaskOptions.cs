@@ -9,7 +9,7 @@ namespace OpenDental {
 		public bool IsShowFinishedTasks;
 		public DateTime DateTimeStartShowFinished;
 		public bool IsSortApptDateTime;
-		private UserOdPref _taskCollapsedPref;
+		private UserPreference _taskCollapsedPref;
 
 		public FormTaskOptions(bool isShowFinishedTasks, DateTime dateTimeStartShowFinished, bool isAptDateTimeSort) {
 			InitializeComponent();
@@ -17,9 +17,9 @@ namespace OpenDental {
 			checkShowFinished.Checked=isShowFinishedTasks;
 			textStartDate.Text=dateTimeStartShowFinished.ToShortDateString();
 			checkTaskSortApptDateTime.Checked=isAptDateTimeSort;
-			List<UserOdPref> listPrefs=UserOdPrefs.GetByUserAndFkeyType(Security.CurUser.UserNum,UserOdFkeyType.TaskCollapse);
+			List<UserPreference> listPrefs=UserOdPrefs.GetByUserAndFkeyType(Security.CurUser.Id,UserPreferenceName.TaskCollapse);
 			_taskCollapsedPref=listPrefs.Count==0? null : listPrefs[0];
-			checkCollapsed.Checked=_taskCollapsedPref==null ? false : PIn.Bool(_taskCollapsedPref.ValueString);
+			checkCollapsed.Checked=_taskCollapsedPref==null ? false : PIn.Bool(_taskCollapsedPref.Value);
 			if(!isShowFinishedTasks) {
 				labelStartDate.Enabled=false;
 				textStartDate.Enabled=false;
@@ -49,15 +49,15 @@ namespace OpenDental {
 				}
 			}
 			if(_taskCollapsedPref==null) {
-				_taskCollapsedPref=new UserOdPref();
+				_taskCollapsedPref=new UserPreference();
 				_taskCollapsedPref.Fkey=0;
-				_taskCollapsedPref.FkeyType=UserOdFkeyType.TaskCollapse;
-				_taskCollapsedPref.UserNum=Security.CurUser.UserNum;
-				_taskCollapsedPref.ValueString=POut.Bool(checkCollapsed.Checked);
+				_taskCollapsedPref.FkeyType=UserPreferenceName.TaskCollapse;
+				_taskCollapsedPref.UserId=Security.CurUser.Id;
+				_taskCollapsedPref.Value=POut.Bool(checkCollapsed.Checked);
 				UserOdPrefs.Insert(_taskCollapsedPref);
 			}
 			else { 
-				_taskCollapsedPref.ValueString=POut.Bool(checkCollapsed.Checked);
+				_taskCollapsedPref.Value=POut.Bool(checkCollapsed.Checked);
 				UserOdPrefs.Update(_taskCollapsedPref);
 			}
 			IsShowFinishedTasks=checkShowFinished.Checked;

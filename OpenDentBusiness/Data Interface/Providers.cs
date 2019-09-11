@@ -457,19 +457,19 @@ namespace OpenDentBusiness
             List<User> listUsersShort = Userods.GetDeepCopy(true);
             for (int i = 0; i < listUsersShort.Count; i++)
             {
-                Provider prov = Providers.GetProv(listUsersShort[i].ProvNum);
+                Provider prov = Providers.GetProv(listUsersShort[i].ProviderId);
                 if (prov == null)
                 {
                     continue;
                 }
-                List<UserClinic> listUserClinics = UserClinics.GetForUser(listUsersShort[i].UserNum);
+                List<UserClinic> listUserClinics = UserClinics.GetForUser(listUsersShort[i].Id);
                 //If filtering by a specific clinic, make sure the clinic matches the clinic passed in.
                 //If the user is associated to multiple clinics we check to make sure one of them isn't the clinic in question.
-                if (clinicNum > 0 && !listUserClinics.Exists(x => x.ClinicNum == clinicNum))
+                if (clinicNum > 0 && !listUserClinics.Exists(x => x.ClinicId == clinicNum))
                 {
                     continue;
                 }
-                if (listUsersShort[i].ClinicNum > 0)
+                if (listUsersShort[i].ClinicId > 0)
                 {//User is associated to a clinic, add the provider to the list of provs with clinics.
                     listProvsWithClinics.Add(prov);
                 }
@@ -534,12 +534,12 @@ namespace OpenDentBusiness
                 User user = Security.CurUser;
                 if (user != null)
                 {
-                    Provider prov = Providers.GetProv(user.ProvNum);
+                    Provider prov = Providers.GetProv(user.ProviderId);
                     if (prov != null)
                     {
                         if (!prov.IsSecondary)
                         {
-                            return user.ProvNum;
+                            return user.ProviderId;
                         }
                     }
                 }
@@ -631,9 +631,9 @@ namespace OpenDentBusiness
                 return Providers.GetDeepCopy(true);//if clinics not enabled, return all visible providers.
             }
             Dictionary<long, List<long>> dictUserClinics = Userods.GetDeepCopy()
-                .ToDictionary(x => x.UserNum, x => UserClinics.GetWhere(y => y.UserNum == x.UserNum).Select(y => y.ClinicNum).ToList());
-            Dictionary<long, List<long>> dictProvUsers = Userods.GetWhere(x => x.ProvNum > 0).GroupBy(x => x.ProvNum)
-                .ToDictionary(x => x.Key, x => x.Select(y => y.UserNum).ToList());
+                .ToDictionary(x => x.Id, x => UserClinics.GetWhere(y => y.UserId == x.Id).Select(y => y.ClinicId).ToList());
+            Dictionary<long, List<long>> dictProvUsers = Userods.GetWhere(x => x.ProviderId > 0).GroupBy(x => x.ProviderId)
+                .ToDictionary(x => x.Key, x => x.Select(y => y.Id).ToList());
             HashSet<long> hashSetProvsRestrictedOtherClinic = new HashSet<long>(ProviderClinicLinks.GetProvsRestrictedToOtherClinics(clinicNum));
             return Providers.GetWhere(x =>
                 (!dictProvUsers.ContainsKey(x.ProvNum) //provider not associated to any users.

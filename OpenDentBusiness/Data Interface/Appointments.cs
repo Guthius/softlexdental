@@ -2771,7 +2771,7 @@ namespace OpenDentBusiness
             }
             else
             {//Security.CurUser.UserNum gets set on MT by the DtoProcessor so it matches the user from the client WS.
-                appt.SecUserNumEntry = Security.CurUser.UserNum;
+                appt.SecUserNumEntry = Security.CurUser.Id;
             }
             //make sure all fields are properly filled:
             if (appt.Confirmed == 0)
@@ -3327,7 +3327,7 @@ namespace OpenDentBusiness
         public static bool Sync(List<Appointment> listNew, List<Appointment> listOld, long patNum, long userNum = 0, bool isOpMerge = false)
         {
             //Security.CurUser.UserNum gets set on MT by the DtoProcessor so it matches the user from the client WS.
-            userNum = Security.CurUser.UserNum;
+            userNum = Security.CurUser.Id;
             bool isChanged = Crud.AppointmentCrud.Sync(listNew, listOld, userNum);
             if (isChanged)
             {

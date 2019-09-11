@@ -91,7 +91,7 @@ namespace OpenDental
                 clinicComboBox.Visible = true;
                 clinicComboBox.Items.Clear();
 
-                if (!Security.CurUser.ClinicIsRestricted)
+                if (!Security.CurUser.ClinicRestricted)
                 {
                     clinicComboBox.Items.Add("All");
                     clinicComboBox.Items.Add("Headquarters");
@@ -123,7 +123,7 @@ namespace OpenDental
 
             if (Preferences.HasClinicsEnabled)
             {
-                if (Security.CurUser.ClinicIsRestricted)
+                if (Security.CurUser.ClinicRestricted)
                 {
                     clinicId = clinics[clinicComboBox.SelectedIndex].ClinicNum;
                 }
@@ -1095,7 +1095,7 @@ namespace OpenDental
                 if (Preferences.HasClinicsEnabled)
                 {
                     text += "\r\nClinic: ";
-                    if (Security.CurUser.ClinicIsRestricted)
+                    if (Security.CurUser.ClinicRestricted)
                     {
                         text += Clinics.GetAbbr(clinics[clinicComboBox.SelectedIndex].ClinicNum);
                     }

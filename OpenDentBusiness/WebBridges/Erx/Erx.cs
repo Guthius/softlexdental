@@ -300,17 +300,17 @@ namespace OpenDentBusiness
         public static bool IsUserAnEmployee(User user)
         {
             bool isEmp = false;
-            if (user.EmployeeNum == 0)
+            if (user.EmployeeId == 0)
             {//The current user does not have an employee associated.
                 isEmp = false;
             }
-            else if (user.ProvNum == 0)
+            else if (user.ProviderId == 0)
             {//The current user has an employee associated and no provider associated.
                 isEmp = true;
             }
             else
             {//Both an employee and provider are associated to the current user.
-                Provider provUser = Providers.GetProv(user.ProvNum);
+                Provider provUser = Providers.GetProv(user.ProviderId);
                 if (provUser.IsSecondary && provUser.NationalProvID == "")
                 {
                     isEmp = true;

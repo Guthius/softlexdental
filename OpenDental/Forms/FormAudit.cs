@@ -122,7 +122,7 @@ namespace OpenDental
             long userId = 0;
             if (userComboBox.SelectedIndex > 0)
             {
-                userId = users[userComboBox.SelectedIndex - 1].UserNum;
+                userId = users[userComboBox.SelectedIndex - 1].Id;
             }
 
 

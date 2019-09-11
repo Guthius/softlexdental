@@ -28,23 +28,23 @@ namespace OpenDental.Bridges {
 				if(!clientUrl.StartsWith("http")) {
 					clientUrl="https://"+clientUrl;
 				}
-				UserOdPref userNamePref=UserOdPrefs.GetByUserFkeyAndFkeyType(Security.CurUser.UserNum,progOryx.ProgramNum,UserOdFkeyType.ProgramUserName)
+				UserPreference userNamePref=UserOdPrefs.GetByUserFkeyAndFkeyType(Security.CurUser.Id,progOryx.ProgramNum,UserPreferenceName.ProgramUserName)
 					.FirstOrDefault();
-				UserOdPref passwordPref=UserOdPrefs.GetByUserFkeyAndFkeyType(Security.CurUser.UserNum,progOryx.ProgramNum,UserOdFkeyType.ProgramPassword)
+				UserPreference passwordPref=UserOdPrefs.GetByUserFkeyAndFkeyType(Security.CurUser.Id,progOryx.ProgramNum,UserPreferenceName.ProgramPassword)
 					.FirstOrDefault();
-				if((userNamePref==null || userNamePref.ValueString=="") && (passwordPref==null || passwordPref.ValueString=="")) {
+				if((userNamePref==null || userNamePref.Value=="") && (passwordPref==null || passwordPref.Value=="")) {
 					//User hasn't entered credentials yet. Launch the office's Oryx page where the user can then log in.
 					Process.Start(clientUrl);
 					return;
 				}
 				string apiUrl=clientUrl.TrimEnd('/')+"/api/auth/opendental/v1/login";
 				string passwordPlain;
-				if(!Encryption.TryDecrypt(passwordPref.ValueString,out passwordPlain)) {
+				if(!Encryption.TryDecrypt(passwordPref.Value,out passwordPlain)) {
 					MsgBox.Show("Oryx","Unable to decrypt password");
 					return;
 				}
 				var content=new {
-					username=userNamePref.ValueString,
+					username=userNamePref.Value,
 					password=passwordPlain,
 					patientId=(pat!=null ? pat.PatNum.ToString() : ""),
 				};

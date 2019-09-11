@@ -24,9 +24,10 @@ using System.Linq;
 
 namespace OpenDentBusiness
 {
-    public class Preference : DataRecord
+    public class Preference : DataRecordBase
     {
-        static readonly DataRecordCache<Preference> cache = CacheManager.Create("SELECT * FROM `preferences`", FromReader);
+        static readonly IDataRecordCacheBase<Preference> cache =
+            new DataRecordCacheBase<Preference>("SELECT * FROM `preferences`", FromReader);
 
         /// <summary>
         /// The key of the preference.

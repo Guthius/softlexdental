@@ -41,7 +41,7 @@ namespace OpenDental {
 			if(Preferences.HasClinicsEnabled) {//Using clinics
 				_listUserClinicNums=new List<long>();
 				comboClinic.Items.Clear();
-				if(Security.CurUser.ClinicIsRestricted) {
+				if(Security.CurUser.ClinicRestricted) {
 					if(checkEnabled.Checked) {
 						checkEnabled.Enabled=false;
 						_clinicNumCur=0;
@@ -60,7 +60,7 @@ namespace OpenDental {
 					_listUserClinicNums.Add(listClinics[i].ClinicNum);
 					if(Clinics.ClinicNum==listClinics[i].ClinicNum) {
 						comboClinic.SelectedIndex=i;
-						if(!Security.CurUser.ClinicIsRestricted) {
+						if(!Security.CurUser.ClinicRestricted) {
 							comboClinic.SelectedIndex++;//increment the SelectedIndex to account for 'Headquarters' in the list at position 0 if the user is not restricted.
 						}
 						_clinicNumCur=_listUserClinicNums[comboClinic.SelectedIndex];

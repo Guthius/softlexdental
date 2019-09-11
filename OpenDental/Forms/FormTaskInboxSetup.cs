@@ -22,7 +22,7 @@ namespace OpenDental {
 		private void FormTaskInboxSetup_Load(object sender,EventArgs e) {
 			UserList=Userods.GetDeepCopy(true);
 			UserListOld=Userods.GetDeepCopy(true);
-			TrunkList=TaskLists.RefreshMainTrunk(Security.CurUser.UserNum,TaskType.All);
+			TrunkList=TaskLists.RefreshMainTrunk(Security.CurUser.Id,TaskType.All);
 			listMain.Items.Add(Lan.g(this,"none"));
 			for(int i=0;i<TrunkList.Count;i++){
 				listMain.Items.Add(TrunkList[i].Descript);
@@ -43,7 +43,7 @@ namespace OpenDental {
 			for(int i=0;i<UserList.Count;i++){
 				row=new ODGridRow();
 				row.Cells.Add(UserList[i].UserName);
-				row.Cells.Add(GetDescription(UserList[i].TaskListInBox));
+				row.Cells.Add(GetDescription(UserList[i].TaskListId));
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();
@@ -71,10 +71,10 @@ namespace OpenDental {
 				return;
 			}
 			if(listMain.SelectedIndex==0){
-				UserList[gridMain.GetSelectedIndex()].TaskListInBox=0;
+				UserList[gridMain.GetSelectedIndex()].TaskListId=0;
 			}
 			else{
-				UserList[gridMain.GetSelectedIndex()].TaskListInBox=TrunkList[listMain.SelectedIndex-1].TaskListNum;
+				UserList[gridMain.GetSelectedIndex()].TaskListId=TrunkList[listMain.SelectedIndex-1].TaskListNum;
 			}
 			FillGrid();
 			listMain.SelectedIndex=-1;
@@ -84,7 +84,7 @@ namespace OpenDental {
 			bool changed=false;
 			Dictionary<string,List<User>> dictFailedUserUpdates=new Dictionary<string, List<User>>();
 			for(int i=0;i<UserList.Count;i++){
-				if(UserList[i].TaskListInBox!=UserListOld[i].TaskListInBox){
+				if(UserList[i].TaskListId!=UserListOld[i].TaskListId){
 					try {
 						Userods.Update(UserList[i]);
 						changed=true;

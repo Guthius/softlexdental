@@ -33,87 +33,15 @@ namespace OpenDentBusiness
         /// blank as well.  When isEcw is true then inputPass should already be hashed. If the inputPass is correct, the algorithm 
         /// used was MD5, and updateIfNeeded is true then the password stored in the database will be updated to SHA3-512
         /// </summary>
-        public static bool CheckPassword(User userod, string inputPass, bool isEcw = false)
+        public static bool CheckPassword(User user, string inputPass)
         {
-            PasswordContainer loginDetails = userod.LoginDetails;
+            var loginDetails = user.Password;
             if (loginDetails.HashType == HashTypes.None)
             {
                 return inputPass == "";
             }
 
-            if (isEcw) return ConstantEquals(inputPass, loginDetails.Hash);
-            
-            if (!CheckPassword(inputPass, loginDetails))
-            {
-                return false;
-            }
-
-            //The password passed in was correct.
-            return true;
-        }
-
-        /// <summary>
-        /// Checks a password against the UserWeb object.  Retruns true if the inputPass is correct.
-        /// Automatically upgrades the password to SHA3-512 if it isn't already hashed as such.
-        /// </summary>
-        public static bool CheckPassword(UserWeb userWeb, string inputPass)
-        {
-            string hashedPass = userWeb.PasswordHash;
-            if (hashedPass == "")
-            {
-                return inputPass == "";
-            }
-
-            bool result = CheckPassword(inputPass, userWeb.LoginDetails);
-            if (!result)
-            {
-                return false;
-            }
-
-            if (userWeb.LoginDetails.HashType != HashTypes.SHA3_512)
-            {
-                // Force update to SHA3-512.
-                UpdatePasswordUserWeb(userWeb, inputPass, HashTypes.SHA3_512);
-            }
-            return true;
-        }
-
-        /// <summary>
-        /// Trys to find the correct algorithm and compares the hashes. 
-        /// If the passHash is blank the inputPass should be too.
-        /// The salt is only used when using SHA3-512, not MD5 or MD5_ECW.
-        /// </summary>
-        public static bool CheckPassword(string inputPass, string salt, string passHash, bool isEcw = false)
-        {
-            if (salt == null)
-            {
-                salt = "";
-            }
-
-            if (passHash == "")
-            {
-                return inputPass == "";
-            }
-
-            // ECW pre-hashes passwords because they use an ascii encoding instead of unicode like we do.
-            if (isEcw) return ConstantEquals(inputPass, passHash);
-            
-            // MD5 hashed are 128 bits or 22 chars in base-64.  Sha3-512 is 512 bits or 86 chars in base-64.
-            // Passwords are stored in base-64, where each byte represents 6 bits of data, with '=' used for padding.
-            // Therefore, we can figure out which algorithm to use by looking at the length of the hash.
-            // This way of finding the hash algorithm won't work if another algorithm is added that has a output hash of the same length.
-            string hashedInputPass;
-            if (passHash.Length == 24)
-            {
-                // It's non-ECW MD5, which we should update.
-                hashedInputPass = HashPasswordMD5(inputPass);
-            }
-            else
-            {
-                hashedInputPass = HashPasswordSHA512(inputPass, salt);
-            }
-
-            return ConstantEquals(hashedInputPass, passHash);
+            return CheckPassword(inputPass, loginDetails);
         }
 
         /// <summary>
@@ -125,13 +53,13 @@ namespace OpenDentBusiness
         /// <summary>
         /// Compares a inputPass password and salt against a hash using the given hashing algorithm.
         /// </summary>
-        public static bool CheckPassword(string inputPass, string salt, string hash, HashTypes hashType)
+        public static bool CheckPassword(string password, string salt, string hash, HashTypes hashType)
         {
             if (salt == null)
             {
                 salt = "";
             }
-            string key = GetHash(inputPass, salt, hashType);
+            string key = GetHash(password, salt, hashType);
             return ConstantEquals(key, hash);
         }
 
@@ -139,16 +67,18 @@ namespace OpenDentBusiness
         /// Will return the hash of whatever is passed in, including empty strings.  
         /// Throws an exception if a passed in hash type is not implimented.
         /// </summary>
-        public static string GetHash(string inputPass, string salt, HashTypes type)
+        public static string GetHash(string password, string salt, HashTypes type)
         {
             switch (type)
             {
                 case HashTypes.MD5:
-                    return HashPasswordMD5(salt + inputPass);
+                    return HashPasswordMD5(salt + password);
+
                 case HashTypes.SHA3_512:
-                    return HashPasswordSHA512(inputPass, salt);
+                    return HashPasswordSHA512(password, salt);
+
                 case HashTypes.None:
-                    return inputPass;
+                    return password;
             }
             throw new ApplicationException("Hash Type not implimented: " + type.ToString());
         }
@@ -157,31 +87,14 @@ namespace OpenDentBusiness
         /// Updates a password for a given Userod account and saves it to the database.  Suggested hash type is SHA3-512.
         /// Throws an exception if a passed in hash type is not implimented.
         /// </summary>
-        public static bool UpdatePasswordUserod(User user, string inputPass, HashTypes hashType = HashTypes.SHA3_512)
+        public static bool UpdatePassword(User user, string password, HashTypes hashType = HashTypes.SHA3_512)
         {
             // Calculate the password strength.
-            bool passStrength = string.IsNullOrEmpty(Userods.IsPasswordStrong(inputPass));
-            PasswordContainer loginDetails = GenerateLoginDetails(inputPass, hashType);
+            bool passStrength = string.IsNullOrEmpty(User.IsPasswordStrong(password));
+            PasswordContainer loginDetails = GenerateLoginDetails(password, hashType);
             try
             {
-                Userods.UpdatePassword(user, loginDetails, passStrength);
-            }
-            catch
-            {
-                return false;
-            }
-            return true;
-        }
-
-        /// <summary>
-        /// Updates a password for a given UserWeb account and saves it to the database.  Suggested hash type is SHA3-512.
-        /// </summary>
-        public static bool UpdatePasswordUserWeb(UserWeb user, string inputPass, HashTypes hashType = HashTypes.SHA3_512)
-        {
-            user.LoginDetails = GenerateLoginDetails(inputPass, hashType);
-            try
-            {
-                UserWebs.Update(user);
+                User.UpdatePassword(user, loginDetails, passStrength);
             }
             catch
             {
@@ -234,13 +147,11 @@ namespace OpenDentBusiness
         /// Returns the hashed version of the password passed in.  Returns an empty string if the password passed in is empty.
         /// Salt will be prepended to inputPass and hashed using SHA3-512.
         /// </summary>
-        public static string HashPasswordSHA512(string inputPass, string salt = "")
+        public static string HashPasswordSHA512(string password, string salt = "")
         {
-            if (string.IsNullOrEmpty(inputPass))
-            {
-                return "";
-            }
-            byte[] unicodeBytes = Encoding.Unicode.GetBytes(salt + inputPass);
+            if (string.IsNullOrEmpty(password)) return "";
+            
+            var unicodeBytes = Encoding.Unicode.GetBytes(salt + password);
 
             using (var sha512 = new SHA512Managed())
             {
@@ -307,12 +218,6 @@ namespace OpenDentBusiness
             return sb.ToString();
         }
 
-        /// <summary>
-        /// Creates an encoded password string for storing in the database. For use independent from the PasswordContainer struct.
-        /// </summary>
-        private static string EncodePass(HashTypes hashType, string passHash, string salt) =>
-            string.Join("$", new string[] { hashType.ToString(), salt, passHash });
-        
         /// <summary>
         /// Creates a PasswordContainer struct from the passed in string. If it unable to decode the string, it will create a PasswordContainer
         /// with the 'None' hash type and store the string in the password field.  If the string is blank, it is assumed it is a blank password. 

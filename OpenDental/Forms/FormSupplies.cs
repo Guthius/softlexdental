@@ -496,7 +496,7 @@ namespace OpenDental
                 IsNew       = true,
                 DatePlaced  = new DateTime(2500, 1, 1), //date used for new 'pending' orders. // TODO: DatePlaced should become nullable, where null == pending
                 Note        = "",
-                UserNum     = Security.CurUser.UserNum
+                UserNum     = Security.CurUser.Id
             };
 
             var supplyOrderNum = SupplyOrders.Insert(supplyOrder);

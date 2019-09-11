@@ -100,11 +100,11 @@ namespace OpenDentBusiness
                 User userPresenter;
                 if (isPresenter)
                 {
-                    userPresenter = listUserods.FirstOrDefault(x => x.UserNum == treatPlanCur.UserNumPresenter);
+                    userPresenter = listUserods.FirstOrDefault(x => x.Id == treatPlanCur.UserNumPresenter);
                 }
                 else
                 { //radioEntryUser
-                    userPresenter = listUserods.FirstOrDefault(x => x.UserNum == treatPlanCur.SecUserNumEntry);
+                    userPresenter = listUserods.FirstOrDefault(x => x.Id == treatPlanCur.SecUserNumEntry);
                 }
                 ProcedureCode procCode = listProcCodes.First(x => x.CodeNum == procCur.CodeNum);
                 Appointment aptCur = listApts.FirstOrDefault(x => x.AptNum == procCur.AptNum);
@@ -118,7 +118,7 @@ namespace OpenDentBusiness
                     Adjustments = adjustments,
                     WriteOffs = writeOffs,
                     NetProd = netProd,
-                    UserNumPresenter = userPresenter == null ? 0 : userPresenter.UserNum,
+                    UserNumPresenter = userPresenter == null ? 0 : userPresenter.Id,
                     PresentedClinic = procCur.ClinicNum,
                     ProcStatus = procCur.ProcStatus,
                     TreatPlanNum = treatPlanCur.TreatPlanNum,

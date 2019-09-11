@@ -23,7 +23,7 @@ namespace OpenDental {
 		///<summary>The column index of the Status column within the Messages grid.
 		///This is a class-wide variable to prevent bugs if we decide to change the column order of the Messages grid.</summary>
 		private int _columnStatusIdx=0;
-		private UserOdPref _groupByPref=null;
+		private UserPreference _groupByPref=null;
 		private List<SmsFromMobile> _listSmsFromMobile=new List<SmsFromMobile>();
 		private List<SmsToMobile> _listSmsToMobile=new List<SmsToMobile>();
 		private Color _colorSelect=Color.FromArgb(224,243,255);
@@ -174,11 +174,11 @@ namespace OpenDental {
 			checkSent.Checked=isSent;
 			checkRead.Checked=isReceived;
 			_smsNotifier=smsNotifier;
-			_groupByPref=UserOdPrefs.GetFirstOrNewByUserAndFkeyType(Security.CurUser.UserNum,UserOdFkeyType.SmsGroupBy);
-			if(_groupByPref.ValueString=="1") {
+			_groupByPref=UserOdPrefs.GetFirstOrNewByUserAndFkeyType(Security.CurUser.Id,UserPreferenceName.SmsGroupBy);
+			if(_groupByPref.Value=="1") {
 				radioGroupByPatient.Checked=true;
 			}
-			else if(_groupByPref.ValueString=="2") {
+			else if(_groupByPref.Value=="2") {
 				radioGroupByPhone.Checked=true;
 			}
 			else {
@@ -193,7 +193,7 @@ namespace OpenDental {
 				comboClinic.Visible=true;
 				comboClinic.Items.Clear();
 				_listClinics=Clinics.GetForUserod(Security.CurUser);
-				if(!Security.CurUser.ClinicIsRestricted || Security.CurUser.ClinicNum==0) {
+				if(!Security.CurUser.ClinicRestricted || Security.CurUser.ClinicId==0) {
 					Clinic hqClinic=Clinics.GetPracticeAsClinicZero();
 					hqClinic.Abbr=(Preference.GetString(PreferenceName.PracticeTitle)+" ("+Lan.g(this,"Practice")+")");
 					_listClinics.Insert(0,hqClinic);//Add HQ
@@ -222,13 +222,13 @@ namespace OpenDental {
 			radioGroupByPhone.CheckedChanged+=new EventHandler(RadioGroupBy_CheckedChanged);
 			this.FormClosing+=new FormClosingEventHandler((o,e1) => {
 				if(radioGroupByNone.Checked) {
-					_groupByPref.ValueString="0";
+					_groupByPref.Value="0";
 				}
 				else if(radioGroupByPatient.Checked) {
-					_groupByPref.ValueString="1";
+					_groupByPref.Value="1";
 				}
 				else if(radioGroupByPhone.Checked) {
-					_groupByPref.ValueString="2";
+					_groupByPref.Value="2";
 				}
 				UserOdPrefs.Upsert(_groupByPref);
 			});

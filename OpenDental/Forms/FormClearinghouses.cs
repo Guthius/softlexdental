@@ -473,7 +473,7 @@ namespace OpenDental{
 
 		private void FillClinics() {
 			_listClinics=Clinics.GetForUserod(Security.CurUser);
-			if(!Security.CurUser.ClinicIsRestricted) {
+			if(!Security.CurUser.ClinicRestricted) {
 				Clinic clinicHq=new Clinic();
 				clinicHq.ClinicNum=0;
 				clinicHq.Abbr=Lan.g(this,"Unassigned/Default");

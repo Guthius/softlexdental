@@ -560,7 +560,7 @@ namespace OpenDental{
 			}
 			if(Preferences.HasClinicsEnabled) {
 				//if "All" is selected and the user is not restricted, show ALL clinics, including the 0 clinic.
-				if(checkAllClin.Checked && !Security.CurUser.ClinicIsRestricted){
+				if(checkAllClin.Checked && !Security.CurUser.ClinicRestricted){
 					rpo.ListClinicNums.Clear();
 					rpo.ListClinicNums.Add(0);
 					rpo.ListClinicNums.AddRange(Clinics.GetDeepCopy().Select(x => x.ClinicNum));

@@ -82,7 +82,7 @@ namespace OpenDental {
 					etrans.Note=row["Note"].ToString();
 					etrans.EtransMessageTextNum=PIn.Long(row["EtransMessageTextNum"].ToString());
 					etrans.TranSetId835=row["TranSetId835"].ToString();
-					etrans.UserNum=Security.CurUser.UserNum;
+					etrans.UserNum=Security.CurUser.Id;
 					etrans.DateTimeTrans=PIn.DateT(row["dateTimeTrans"].ToString());
 					_listAllEtrans.Add(etrans);
 				}

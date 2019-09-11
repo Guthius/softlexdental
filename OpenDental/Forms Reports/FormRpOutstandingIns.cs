@@ -114,7 +114,7 @@ namespace OpenDental {
 			get {
 				List<long> listUserNums = new List<long>();
 				if(!comboUserAssigned.ListSelectedItems.Select(x => ((ODBoxItem<User>)x).Tag).Contains(null)) { //"All" is selected.
-					listUserNums = comboUserAssigned.ListSelectedItems.Select(x => ((ODBoxItem<User>)x).Tag.UserNum).ToList();
+					listUserNums = comboUserAssigned.ListSelectedItems.Select(x => ((ODBoxItem<User>)x).Tag.Id).ToList();
 				}
 				return listUserNums;
 			}
@@ -907,7 +907,7 @@ namespace OpenDental {
 			FillDateFilterBy();
 			_listClaimSentEditUsers=Userods.GetUsersByPermission(Permissions.ClaimSentEdit,false);
 			FillUsers();
-			_listOldClaimTrackings=ClaimTrackings.RefreshForUsers(ClaimTrackingType.ClaimUser,_listClaimSentEditUsers.Select(x => x.UserNum).ToList());
+			_listOldClaimTrackings=ClaimTrackings.RefreshForUsers(ClaimTrackingType.ClaimUser,_listClaimSentEditUsers.Select(x => x.Id).ToList());
 			_listNewClaimTrackings=_listOldClaimTrackings.Select(x => x.Copy()).ToList();
 			if(Preferences.HasClinicsEnabled) {
 				comboBoxMultiClinics.Visible=true;
@@ -960,7 +960,7 @@ namespace OpenDental {
 
 		private void FillUsers() {
 			comboUserAssigned.Items.Add(new ODBoxItem<User>(Lans.g(this,"All"))); //tag=null
-			comboUserAssigned.Items.Add(new ODBoxItem<User>(Lans.g(this,"Unassigned"),new User() {UserNum=0}));
+			comboUserAssigned.Items.Add(new ODBoxItem<User>(Lans.g(this,"Unassigned"),new User() {Id=0}));
 			_listClaimSentEditUsers.ForEach(x => comboUserAssigned.Items.Add(new ODBoxItem<User>(x.UserName,x)));
 			comboUserAssigned.SetSelected(0,true);//Default to all
 		}
@@ -1243,10 +1243,10 @@ namespace OpenDental {
 					GotoModule.GotoAccount(((RpOutstandingIns.OutstandingInsClaim)gridMain.Rows[index].Tag).PatNum);
 				break;
 				case 1://Assign to Me
-					AssignUserHelper(Security.CurUser.UserNum);
+					AssignUserHelper(Security.CurUser.Id);
 				break;
 				case 2://Assign to User
-					AssignUserHelper(_listClaimSentEditUsers[((MenuItem)sender).Index].UserNum);
+					AssignUserHelper(_listClaimSentEditUsers[((MenuItem)sender).Index].Id);
 				break;
 			}
 		}
@@ -1337,7 +1337,7 @@ namespace OpenDental {
 				selectedIndex=1;//'Unassigned'
 			}
 			else if(filterUserNum!=-1){//Not 'All', this is a specific user selection.
-				int index=_listClaimSentEditUsers.FindIndex(x => x.UserNum==filterUserNum);
+				int index=_listClaimSentEditUsers.FindIndex(x => x.Id==filterUserNum);
 				if(index==-1) {//Just in case.
 					return;
 				}
@@ -1442,7 +1442,7 @@ namespace OpenDental {
 
 		private void butMine_Click(object sender,EventArgs e) {
 			FillClinics();
-			ComboUserPickHelper(Security.CurUser.UserNum);
+			ComboUserPickHelper(Security.CurUser.Id);
 		}
 
 		private void comboDateFilterBy_SelectedIndexChanged(object sender,EventArgs e) {

@@ -46,7 +46,7 @@ namespace OpenDental {
 				groupClinicSettings.Text=Lan.g(this,"Transworld Clinic Settings");
 				_listUserClinicNums=new List<long>();
 				//if Transworld is enabled and the user is restricted to a clinic, don't allow the user to disable for all clinics
-				if(Security.CurUser.ClinicIsRestricted) {
+				if(Security.CurUser.ClinicRestricted) {
 					if(checkEnabled.Checked) {
 						checkEnabled.Enabled=false;
 					}

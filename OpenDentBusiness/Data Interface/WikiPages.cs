@@ -282,7 +282,7 @@ namespace OpenDentBusiness
         public static void Rename(WikiPage wikiPage, string newPageTitle)
         {
             //Security.CurUser.UserNum gets set on MT by the DtoProcessor so it matches the user from the client WS.
-            wikiPage.UserNum = Security.CurUser.UserNum;
+            wikiPage.UserNum = Security.CurUser.Id;
             //a later improvement would be to validate again here in the business layer.
             InsertAndArchive(wikiPage);
             //Rename all pages in both tables: wikiPage and wikiPageHist.
@@ -292,7 +292,7 @@ namespace OpenDentBusiness
             Db.NonQ(command);
             //Update all home pages for users.
             command = "UPDATE userodpref SET ValueString='" + POut.String(newPageTitle) + "' "
-                + "WHERE FkeyType=" + POut.Int((int)UserOdFkeyType.WikiHomePage) + " "
+                + "WHERE FkeyType=" + POut.Int((int)UserPreferenceName.WikiHomePage) + " "
                 + "AND ValueString='" + POut.String(wikiPage.PageTitle) + "'";
             Db.NonQ(command);
             return;
@@ -525,7 +525,7 @@ namespace OpenDentBusiness
             wikiPage.DateTimeSaved = MiscData.GetNowDateTime();
             Crud.WikiPageCrud.Update(wikiPage);
             //Remove all associated home pages for all users.
-            UserOdPrefs.DeleteForValueString(0, UserOdFkeyType.WikiHomePage, pageTitle);
+            UserOdPrefs.DeleteForValueString(0, UserPreferenceName.WikiHomePage, pageTitle);
         }
 
         public static WikiPageHist PageToHist(WikiPage wikiPage)

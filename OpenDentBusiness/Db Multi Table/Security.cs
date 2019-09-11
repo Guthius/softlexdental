@@ -377,49 +377,5 @@ namespace OpenDentBusiness
             }
             return Permissions.None;
         }
-
-        #region eServices
-
-        ///<summary>Returns false if the currently logged in user is not designated for the eConnector or if the user does not have permission.</summary>
-        private static bool IsValidEServicePermission(Permissions perm)
-        {
-            //No need to check RemotingRole; no call to db.
-            if (curUser == null)
-            {
-                return false;
-            }
-            //Run specific checks against certain types of eServices.
-            switch (curUser.EServiceType)
-            {
-                case EServiceTypes.Broadcaster:
-                case EServiceTypes.BroadcastMonitor:
-                case EServiceTypes.ServiceMainHQ:
-                    return true;//These eServices are at HQ and we trust ourselves to have full permissions for any S class method.
-                case EServiceTypes.EConnector:
-                    return IsPermAllowedEConnector(perm);
-                case EServiceTypes.None:
-                default:
-                    return false;//Not an eService, let IsAuthorized handle the permission checking.
-            }
-        }
-
-        ///<summary>Returns true if the eConnector should be allowed to run methods with the passed in permission.</summary>
-        private static bool IsPermAllowedEConnector(Permissions perm)
-        {
-            //We are typically on the customers eConnector and need to be careful when giving access to certain permission types.
-            //Engineers must EXCPLICITLY add permissions to this switch statement as they need them.
-            //Be very cautious when adding permissions because the flood gates for that permission will be opened once added.
-            //E.g. we should never add a permission like Setup or SecurityAdmin.  If there is a need for such a thing, we need to rethink this paradigm.
-            switch (perm)
-            {
-                //Add additional permissions to this case as needed to grant access.
-                case Permissions.EmailSend:
-                    return true;
-                default:
-                    return false;
-            }
-        }
-
-        #endregion
     }
 }

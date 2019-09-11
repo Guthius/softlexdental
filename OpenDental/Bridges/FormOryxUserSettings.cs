@@ -9,9 +9,9 @@ namespace OpenDental
     public partial class FormOryxUserSettings : ODForm
     {
         ///<summary>User pref holding the user's Oryx username.</summary>
-        private UserOdPref _userNamePref;
+        private UserPreference _userNamePref;
         ///<summary>User pref holding the user's Oryx password.</summary>
-        private UserOdPref _passwordPref;
+        private UserPreference _passwordPref;
         ///<summary>Oryx program bridge.</summary>
         private Program _progOryx;
 
@@ -23,38 +23,38 @@ namespace OpenDental
         private void FormUserSetting_Load(object sender, EventArgs e)
         {
             _progOryx = Programs.GetCur(ProgramName.Oryx);
-            _userNamePref = UserOdPrefs.GetByUserFkeyAndFkeyType(Security.CurUser.UserNum, _progOryx.ProgramNum, UserOdFkeyType.ProgramUserName)
+            _userNamePref = UserOdPrefs.GetByUserFkeyAndFkeyType(Security.CurUser.Id, _progOryx.ProgramNum, UserPreferenceName.ProgramUserName)
                 .FirstOrDefault();
-            _passwordPref = UserOdPrefs.GetByUserFkeyAndFkeyType(Security.CurUser.UserNum, _progOryx.ProgramNum, UserOdFkeyType.ProgramPassword)
+            _passwordPref = UserOdPrefs.GetByUserFkeyAndFkeyType(Security.CurUser.Id, _progOryx.ProgramNum, UserPreferenceName.ProgramPassword)
                 .FirstOrDefault();
             if (_userNamePref != null)
             {
-                textUsername.Text = _userNamePref.ValueString;
+                textUsername.Text = _userNamePref.Value;
             }
             if (_passwordPref != null)
             {
                 string passwordPlain;
-                Encryption.TryDecrypt(_passwordPref.ValueString, out passwordPlain);
+                Encryption.TryDecrypt(_passwordPref.Value, out passwordPlain);
                 textPassword.Text = passwordPlain;
             }
         }
 
         private void butOK_Click(object sender, EventArgs e)
         {
-            _userNamePref = _userNamePref ?? new UserOdPref
+            _userNamePref = _userNamePref ?? new UserPreference
             {
                 Fkey = _progOryx.ProgramNum,
-                FkeyType = UserOdFkeyType.ProgramUserName,
-                UserNum = Security.CurUser.UserNum,
+                FkeyType = UserPreferenceName.ProgramUserName,
+                UserId = Security.CurUser.Id,
             };
-            _passwordPref = _passwordPref ?? new UserOdPref
+            _passwordPref = _passwordPref ?? new UserPreference
             {
                 Fkey = _progOryx.ProgramNum,
-                FkeyType = UserOdFkeyType.ProgramPassword,
-                UserNum = Security.CurUser.UserNum,
+                FkeyType = UserPreferenceName.ProgramPassword,
+                UserId = Security.CurUser.Id,
             };
-            _userNamePref.ValueString = textUsername.Text;
-            Encryption.TryEncrypt(textPassword.Text, out _passwordPref.ValueString);
+            _userNamePref.Value = textUsername.Text;
+            Encryption.TryEncrypt(textPassword.Text, out _passwordPref.Value);
             UserOdPrefs.Upsert(_userNamePref);
             UserOdPrefs.Upsert(_passwordPref);
             DialogResult = DialogResult.OK;

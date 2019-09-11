@@ -88,12 +88,12 @@ namespace OpenDentBusiness.Eclaims
             Relat patRelat2 = claim.PatRelat2;
             if (claim.ClaimType == "PreAuth")
             {
-                etrans = Etranss.SetClaimSentOrPrinted(queueItem.ClaimNum, queueItem.PatNum, clearinghouseClin.HqClearinghouseNum, EtransType.Predeterm_CA, 0, Security.CurUser.UserNum);
+                etrans = Etranss.SetClaimSentOrPrinted(queueItem.ClaimNum, queueItem.PatNum, clearinghouseClin.HqClearinghouseNum, EtransType.Predeterm_CA, 0, Security.CurUser.Id);
             }
             else if (claim.ClaimType == "S")
             {//Secondary
              //We first need to verify that the claimprocs on the secondary/cob claim are the same as the claimprocs on the primary claim.
-                etrans = Etranss.SetClaimSentOrPrinted(queueItem.ClaimNum, queueItem.PatNum, clearinghouseClin.HqClearinghouseNum, EtransType.ClaimCOB_CA, 0, Security.CurUser.UserNum);
+                etrans = Etranss.SetClaimSentOrPrinted(queueItem.ClaimNum, queueItem.PatNum, clearinghouseClin.HqClearinghouseNum, EtransType.ClaimCOB_CA, 0, Security.CurUser.Id);
                 long claimNumPrimary = 0;
                 for (int i = 0; i < claimProcsClaim.Count; i++)
                 {
@@ -171,7 +171,7 @@ namespace OpenDentBusiness.Eclaims
             }
             else
             { //primary claim
-                etrans = Etranss.SetClaimSentOrPrinted(queueItem.ClaimNum, queueItem.PatNum, clearinghouseClin.HqClearinghouseNum, EtransType.Claim_CA, 0, Security.CurUser.UserNum);
+                etrans = Etranss.SetClaimSentOrPrinted(queueItem.ClaimNum, queueItem.PatNum, clearinghouseClin.HqClearinghouseNum, EtransType.Claim_CA, 0, Security.CurUser.Id);
             }
             claim = Claims.GetClaim(claim.ClaimNum);//Refresh the claim since the status might have changed above.
             clinic = Clinics.GetClinic(claim.ClinicNum);
@@ -1039,7 +1039,7 @@ namespace OpenDentBusiness.Eclaims
             etransAck.CarrierNum = etrans.CarrierNum;
             etransAck.ClaimNum = etrans.ClaimNum;
             etransAck.DateTimeTrans = DateTime.Now;
-            etransAck.UserNum = Security.CurUser.UserNum;
+            etransAck.UserNum = Security.CurUser.Id;
             CCDFieldInputter fieldInputter = null;
             if (errorMsg != "")
             {

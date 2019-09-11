@@ -97,7 +97,7 @@ namespace OpenDental
                 // Users with SecurityAdmin authorization see every e-mail address. Users without SecurityAdmin authorization 
                 // will only see the e-mail address assigned to them and public e-mail addresses (e.g. e-mail addresses that have 
                 // no user assigned).
-                if (isSecurityAdmin || !emailAddress.UserId.HasValue || Security.CurUser.UserNum == emailAddress.UserId)
+                if (isSecurityAdmin || !emailAddress.UserId.HasValue || Security.CurUser.Id == emailAddress.UserId)
                 {
                     var row = new ODGridRow();
 

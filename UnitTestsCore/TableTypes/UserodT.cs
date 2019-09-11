@@ -18,18 +18,18 @@ namespace UnitTestsCore {
 			}
             User newUser =new User();
 			newUser.UserName=userName;
-			newUser.LoginDetails=Authentication.GenerateLoginDetails(password,HashTypes.SHA3_512);
-			newUser.ClinicNum=clinicNum;
-			newUser.ClinicIsRestricted=isClinicIsRestricted;
+			newUser.Password=Authentication.GenerateLoginDetails(password,HashTypes.SHA3_512);
+			newUser.ClinicId=clinicNum;
+			newUser.ClinicRestricted=isClinicIsRestricted;
 			do {
 				//In case the username is already taken
 				try {
-					newUser.UserNum=Userods.Insert(newUser,userGroupNumbers);
+					newUser.Id=Userods.Insert(newUser,userGroupNumbers);
 				}
 				catch {
 					newUser.UserName="Username"+MiscUtils.CreateRandomAlphaNumericString(8);
 				}
-			}while(newUser.UserNum==0);
+			}while(newUser.Id==0);
 			Userods.RefreshCache();
 			UserGroupAttaches.RefreshCache();
 			return newUser;

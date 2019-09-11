@@ -25,7 +25,7 @@ namespace OpenDental {
 			listUser.Items.AddRange(_listUsers.Select(x => x.UserName).ToArray());
 			checkAllUsers.Checked=true;
 			if(Preferences.HasClinicsEnabled) {
-				if(!Security.CurUser.ClinicIsRestricted) {
+				if(!Security.CurUser.ClinicRestricted) {
 					listClin.Items.Add(Lan.g(this,"Unassigned"));
 				}
 				_listClinics=Clinics.GetForUserod(Security.CurUser);
@@ -71,7 +71,7 @@ namespace OpenDental {
 				}
 				else {
 					for(int i = 0;i<listClin.SelectedIndices.Count;i++) {
-						if(Security.CurUser.ClinicIsRestricted) {
+						if(Security.CurUser.ClinicRestricted) {
 							listSelectedClinics.Add(_listClinics[listClin.SelectedIndices[i]]);
 						}
 						else {
@@ -90,7 +90,7 @@ namespace OpenDental {
 				}
 			}
 			List<long> clinicNums = listSelectedClinics.Select(y => y.ClinicNum).ToList();
-			List<long> userNums = listSelectedUsers.Select(y => y.UserNum).ToList();
+			List<long> userNums = listSelectedUsers.Select(y => y.Id).ToList();
 			DataTable table=RpTreatPlanPresentationStatistics.GetTreatPlanPresentationStatistics(date1.SelectionStart,date2.SelectionStart,radioFirstPresented.Checked
 				,checkAllClinics.Checked,Preferences.HasClinicsEnabled,radioPresenter.Checked,radioGross.Checked,checkAllUsers.Checked,userNums,clinicNums);			
 			QueryObject query=report.AddQuery(table,"","",SplitByKind.None,1,true);
@@ -158,10 +158,10 @@ namespace OpenDental {
 			List<long> listUserNums=new List<long>();
 			List<long> listClinicNums=new List<long>();
 			if(checkAllUsers.Checked) {
-				listUserNums=_listUsers.Select(x => x.UserNum).ToList();
+				listUserNums=_listUsers.Select(x => x.Id).ToList();
 			}
 			else {
-				listUserNums=listUser.SelectedIndices.OfType<int>().ToList().Select(x => _listUsers[x].UserNum).ToList();
+				listUserNums=listUser.SelectedIndices.OfType<int>().ToList().Select(x => _listUsers[x].Id).ToList();
 			}
 			if(Preferences.HasClinicsEnabled) {
 				if(checkAllClinics.Checked) {
@@ -169,7 +169,7 @@ namespace OpenDental {
 				}
 				else {
 					for(int i = 0;i<listClin.SelectedIndices.Count;i++) {
-						if(Security.CurUser.ClinicIsRestricted) {
+						if(Security.CurUser.ClinicRestricted) {
 							listClinicNums.Add(_listClinics[listClin.SelectedIndices[i]].ClinicNum);
 						}
 						else if(listClin.SelectedIndices[i]!=0) {
@@ -177,7 +177,7 @@ namespace OpenDental {
 						}
 					}
 				}
-				if(!Security.CurUser.ClinicIsRestricted && (listClin.GetSelected(0) || checkAllClinics.Checked)) {
+				if(!Security.CurUser.ClinicRestricted && (listClin.GetSelected(0) || checkAllClinics.Checked)) {
 					listClinicNums.Add(0);
 				}
 			}

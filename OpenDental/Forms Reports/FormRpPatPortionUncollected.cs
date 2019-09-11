@@ -154,7 +154,7 @@ namespace OpenDental{
 			}
 			else {
 				_listClinics=Clinics.GetForUserod(Security.CurUser);
-				if(!Security.CurUser.ClinicIsRestricted) {
+				if(!Security.CurUser.ClinicRestricted) {
 					listClin.Items.Add(Lan.g(this,"Unassigned"));
 					listClin.SetSelected(0,true);
 				}
@@ -198,7 +198,7 @@ namespace OpenDental{
 			List<long> listClinicNums=new List<long>();
 			if(Preferences.HasClinicsEnabled) {
 				for(int i=0;i<listClin.SelectedIndices.Count;i++) {
-					if(Security.CurUser.ClinicIsRestricted) {
+					if(Security.CurUser.ClinicRestricted) {
 						listClinicNums.Add(_listClinics[listClin.SelectedIndices[i]].ClinicNum);//we know that the list is a 1:1 to _listClinics
 					}
 					else {
@@ -214,7 +214,7 @@ namespace OpenDental{
 			DataTable table=RpPatPortionUncollected.GetPatUncollected(date1.SelectionStart,date2.SelectionStart,listClinicNums);
 			string subtitleClinics="";
 			if(Preferences.HasClinicsEnabled) {
-				if(checkAllClin.Checked && !Security.CurUser.ClinicIsRestricted) {
+				if(checkAllClin.Checked && !Security.CurUser.ClinicRestricted) {
 					subtitleClinics=Lan.g(this,"All Clinics");
 				}
 				else {
@@ -222,7 +222,7 @@ namespace OpenDental{
 						if(i>0) {
 							subtitleClinics+=", ";
 						}
-						if(Security.CurUser.ClinicIsRestricted) {
+						if(Security.CurUser.ClinicRestricted) {
 							subtitleClinics+=_listClinics[listClin.SelectedIndices[i]].Abbr;
 						}
 						else {

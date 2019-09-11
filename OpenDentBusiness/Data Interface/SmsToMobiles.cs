@@ -186,7 +186,7 @@ namespace OpenDentBusiness
                     long userNum = 0;
                     if (user != null)
                     {
-                        userNum = user.UserNum;
+                        userNum = user.Id;
                     }
                     Commlogs.Insert(new Commlog()
                     {

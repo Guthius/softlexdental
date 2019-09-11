@@ -211,7 +211,6 @@
     <Compile Include="Crud\SubstitutionLinkCrud.cs" />
     <Compile Include="Crud\StmtLinkCrud.cs" />
     <Compile Include="Crud\TsiTransLogCrud.cs" />
-    <Compile Include="Crud\UserGroupAttachCrud.cs" />
     <Compile Include="Crud\WebSchedRecallCrud.cs" />
     <Compile Include="Data Interface\AsapComms.cs" />
     <Compile Include="Data Interface\ClaimTrackings.cs" />
@@ -250,6 +249,7 @@
     <Compile Include="Misc\Authentication.cs" />
     <Compile Include="Misc\Introspection.cs" />
     <Compile Include="ODEvents\ODEvents.cs" />
+    <Compile Include="Plugins\EventName.cs" />
     <Compile Include="PrefNameExtensions.cs" />
     <Compile Include="Reports\RpProcOverpaid.cs" />
     <Compile Include="Reports\RpProdGoal.cs" />
@@ -318,7 +318,6 @@
     <Compile Include="Data Interface\SubstitutionLinks.cs" />
     <Compile Include="Data Interface\StmtLinks.cs" />
     <Compile Include="Data Interface\TsiTransLogs.cs" />
-    <Compile Include="Data Interface\UserGroupAttaches.cs" />
     <Compile Include="Data Interface\WebSchedRecalls.cs" />
     <Compile Include="Db Multi Table\TreatmentPlanModules.cs" />
     <Compile Include="Db\DataConnectionCancelable.cs" />
@@ -579,8 +578,6 @@
     <Compile Include="Crud\StateAbbrCrud.cs" />
     <Compile Include="Crud\TreatPlanAttachCrud.cs" />
     <Compile Include="Crud\UpdateHistoryCrud.cs" />
-    <Compile Include="Crud\UserClinicCrud.cs" />
-    <Compile Include="Crud\UserOdPrefCrud.cs" />
     <Compile Include="Crud\UserWebCrud.cs" />
     <Compile Include="Crud\XWebResponseCrud.cs" />
     <Compile Include="Data Interface\AlertItems.cs" />
@@ -608,10 +605,8 @@
     <Compile Include="Data Interface\SigMessages.cs" />
     <Compile Include="Data Interface\TreatPlanAttaches.cs" />
     <Compile Include="Data Interface\UpdateHistories.cs" />
-    <Compile Include="Data Interface\UserOdPrefs.cs" />
     <Compile Include="Data Interface\UserWebs.cs" />
     <Compile Include="Data Interface\XWebResponses.cs" />
-    <Compile Include="Data Interface\UserClinics.cs" />
     <Compile Include="Data Interface\ProviderErxs.cs" />
     <Compile Include="Data Interface\StateAbbrs.cs" />
     <Compile Include="Data Interface\RequiredFieldConditions.cs" />
@@ -643,7 +638,6 @@
     <Compile Include="Crud\TransactionCrud.cs" />
     <Compile Include="Crud\TreatPlanCrud.cs" />
     <Compile Include="Crud\UserodApptViewCrud.cs" />
-    <Compile Include="Crud\UserodCrud.cs" />
     <Compile Include="Crud\UserQueryCrud.cs" />
     <Compile Include="Crud\VaccineDefCrud.cs" />
     <Compile Include="Crud\VaccineObsCrud.cs" />
@@ -959,7 +953,6 @@
     <Compile Include="Logic\TelephoneNumbers.cs" />
     <Compile Include="Logic\Tooth.cs" />
     <Compile Include="Logic\ToothComparer.cs" />
-    <Compile Include="Data Interface\Userods.cs" />
     <Compile Include="Db\DbHelper.cs" />
     <Compile Include="Misc\HouseCallsQueries.cs" />
     <Compile Include="Misc\LetterMergesQueries.cs" />
@@ -1061,10 +1054,10 @@
     <Compile Include="TableTypes\MedLab.cs" />
     <Compile Include="TableTypes\StateAbbr.cs" />
     <Compile Include="TableTypes\TaskHist.cs" />
-    <Compile Include="TableTypes\UserClinic.cs" />
-    <Compile Include="TableTypes\UserGroupAttach.cs" />
+    <Compile Include="__WIP\UserClinic.cs" />
+    <Compile Include="__WIP\UserGroupUser.cs" />
     <Compile Include="TableTypes\UserodApptView.cs" />
-    <Compile Include="TableTypes\UserOdPref.cs" />
+    <Compile Include="__WIP\UserPreference.cs" />
     <Compile Include="TableTypes\UserWeb.cs" />
     <Compile Include="TableTypes\WebSchedRecall.cs" />
     <Compile Include="TableTypes\WikiListHist.cs" />
@@ -1376,11 +1369,12 @@
     <Compile Include="TableTypes\ToothInitial.cs" />
     <Compile Include="TableTypes\Transaction.cs" />
     <Compile Include="TableTypes\TreatPlan.cs" />
-    <Compile Include="TableTypes\User.cs" />
+    <Compile Include="__WIP\User.cs" />
     <Compile Include="Data\UserGroup.cs" />
     <Compile Include="TableTypes\UserQuery.cs" />
     <Compile Include="TableTypes\ZipCode.cs" />
     <Compile Include="X12\X12object.cs" />
+    <Compile Include="__WIP\UserPreferenceName.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CodeBase\xCodeBase.csproj">

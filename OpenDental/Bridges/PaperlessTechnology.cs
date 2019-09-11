@@ -355,7 +355,7 @@ namespace OpenDental.Bridges{
 			comm.CommType=Commlogs.GetTypeAuto(CommItemTypeAuto.MISC);
 			comm.Mode_=CommItemMode.None;
 			comm.Note=note;
-			comm.UserNum=Security.CurUser.UserNum;
+			comm.UserNum=Security.CurUser.Id;
 			Commlogs.Insert(comm);
 			MessageBox.Show("PT Dental import complete.");
 		}

@@ -120,17 +120,17 @@ namespace OpenDental
         {
             using (var formUserPick = new FormUserPick())
             {
-                formUserPick.SuggestedUserNum = ((User)userTextBox.Tag)?.UserNum ?? 0;
+                formUserPick.SuggestedUserNum = ((User)userTextBox.Tag)?.Id ?? 0;
 
                 if (formUserPick.ShowDialog() == DialogResult.OK)
                 {
                     var user = Userods.GetUser(formUserPick.SelectedUserNum);
-                    if (user.UserNum == (((User)userTextBox.Tag)?.UserNum ?? 0))
+                    if (user.Id == (((User)userTextBox.Tag)?.Id ?? 0))
                     {
                         return;
                     }
 
-                    var emailAddress = EmailAddress.GetByUser(user.UserNum);
+                    var emailAddress = EmailAddress.GetByUser(user.Id);
                     if (emailAddress != null)
                     {
                         MessageBox.Show(
@@ -184,7 +184,7 @@ namespace OpenDental
                 return;
             }
 
-            emailAddress.UserId = ((User)userTextBox.Tag)?.UserNum;
+            emailAddress.UserId = ((User)userTextBox.Tag)?.Id;
             emailAddress.SmtpServer = smtpServerTextBox.Text.Trim();
             emailAddress.SmtpUsername = usernameTextBox.Text;
             emailAddress.SmtpPassword = MiscUtils.Encrypt(passwordTextBox.Text);

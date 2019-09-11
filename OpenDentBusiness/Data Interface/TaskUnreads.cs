@@ -150,7 +150,7 @@ namespace OpenDentBusiness
                 listUnreadsToInsert.Add(taskUnread);
             }
             Crud.TaskUnreadCrud.InsertMany(listUnreadsToInsert);
-            if (listUserNums.Contains(Security.CurUser.UserNum))
+            if (listUserNums.Contains(Security.CurUser.Id))
             {//The IsUnread flag is only used for local refreshes.
                 task.IsUnread = true;
             }

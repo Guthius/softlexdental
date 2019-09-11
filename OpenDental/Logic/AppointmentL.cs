@@ -164,7 +164,7 @@ namespace OpenDental
                 procedureCur.DateEntryC = DateTime.Now;
                 procedureCur.ProcStatus = ProcStat.C;
                 procedureCur.ClinicNum = appt.ClinicNum;
-                procedureCur.UserNum = Security.CurUser.UserNum;
+                procedureCur.UserNum = Security.CurUser.Id;
                 procedureCur.Note = Lans.g("AppointmentEdit", "Appt BROKEN for") + " " + appt.ProcDescript + "  " + appt.AptDateTime.ToString();
                 procedureCur.PlaceService = (PlaceOfService)Preference.GetInt(PreferenceName.DefaultProcedurePlaceService);//Default proc place of service for the Practice is used. 
                 List<InsSub> listInsSubs = InsSubs.RefreshForFam(Patients.GetFamily(pat.PatNum));
@@ -237,7 +237,7 @@ namespace OpenDental
                 CommlogCur.CommType = Commlogs.GetTypeAuto(CommItemTypeAuto.APPT);
                 CommlogCur.Note = Lan.g("Appointment", "Appt BROKEN for") + " " + appt.ProcDescript + "  " + appt.AptDateTime.ToString();
                 CommlogCur.Mode_ = CommItemMode.None;
-                CommlogCur.UserNum = Security.CurUser.UserNum;
+                CommlogCur.UserNum = Security.CurUser.Id;
                 FormCommItem FormCI = new FormCommItem(CommlogCur);
                 FormCI.IsNew = true;
                 FormCI.ShowDialog();

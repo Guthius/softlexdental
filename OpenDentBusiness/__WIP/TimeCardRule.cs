@@ -139,13 +139,6 @@ namespace OpenDentBusiness
             }
         }
 
-
-
-
-
-
-
-
         /// <summary>
         /// Clears all automatic adjustments that have been calculated for the specified employee 
         /// within the given time period.
