@@ -93,11 +93,11 @@ namespace OpenDental {
 			if(EhrProvKeys.GetKeysByFLName(ProvPat.LName,ProvPat.FName).Count==0) {
 				labelProvPat.Text+=" (no ehr provider key entered)";
 			}
-			if(Security.CurrentUser.ProviderId==0) {
+			if(!Security.CurrentUser.ProviderId.HasValue) {
 				labelProvUser.Text="none";
 			}
 			else {
-				Provider provUser=Providers.GetProv(Security.CurrentUser.ProviderId);
+				Provider provUser=Providers.GetProv(Security.CurrentUser.ProviderId.Value);
 				labelProvUser.Text=Providers.GetLongDesc(provUser.ProvNum);
 				if(EhrProvKeys.GetKeysByFLName(provUser.LName,provUser.FName).Count==0) {
 					labelProvUser.Text+=" (no ehr provider key entered)";

@@ -82,7 +82,7 @@ namespace OpenDental{
 		}
 
 		///<summary>The permissions that logs should be made under. Uses the status of the claim when entering the window.</summary>
-		private Permissions _claimEditPermission {
+		private string _claimEditPermission {
 			get {
 				if(_claimOld==null) {
 					return Permissions.ClaimEdit;
@@ -1257,7 +1257,7 @@ namespace OpenDental{
 				row.Cells.Add(defValue);
 				row.Cells.Add(claimTrackingEntry.Note);
 				row.Cells.Add(Defs.GetName(DefinitionCategory.ClaimErrorCode,claimTrackingEntry.TrackingErrorDefNum));
-				row.Cells.Add(Userods.GetName(claimTrackingEntry.UserNum));
+				row.Cells.Add(User.GetName(claimTrackingEntry.UserNum));
 				gridStatusHistory.Rows.Add(row);
 				row.Tag=claimTrackingEntry;
 			}

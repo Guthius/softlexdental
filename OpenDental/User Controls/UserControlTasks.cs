@@ -172,9 +172,10 @@ namespace OpenDental {
 				cal.SelectionStart=Tasks.LastOpenDate;
 			}
 			_isTaskSortApptDateTime=Preference.GetBool(PreferenceName.TaskSortApptDateTime);//This sets it for use and also for the task options default value.
-			List<UserPreference> listPrefsForCollapsing=UserOdPrefs.GetByUserAndFkeyType(Security.CurrentUser.Id,UserPreferenceName.TaskCollapse);
-			_isCollapsedByDefault=listPrefsForCollapsing.Count==0 ? false : PIn.Bool(listPrefsForCollapsing[0].Value);
-			_hasListSwitched=true;
+
+            _isCollapsedByDefault = UserPreference.GetBool(Security.CurrentUser.Id, UserPreferenceName.TaskCollapse);
+
+            _hasListSwitched =true;
 			_taskCollapsedState=_isCollapsedByDefault ? 1 : 0;
 			SetFiltersToDefault();//Fills Tree and Grid
 			if(tabContr.SelectedTab!=tabOpenTickets) {//because it will have alread been set
@@ -939,14 +940,14 @@ namespace OpenDental {
 					}
 				}
 				if(!_listTasks[i].Descript.StartsWith("==") && _listTasks[i].UserNum!=0) {
-					objDesc+=Userods.GetName(_listTasks[i].UserNum)+" - ";
+					objDesc+= User.GetName(_listTasks[i].UserNum)+" - ";
 				}
 				notes="";
 				List<TaskNote> listNotesForTask=_listTaskNotes.FindAll(x => x.TaskNum==_listTasks[i].TaskNum);
 				if(!_listExpandedTaskNums.Contains(_listTasks[i].TaskNum) && listNotesForTask.Count>1) {
 					TaskNote lastNote=listNotesForTask[listNotesForTask.Count-1];
 					notes+="\r\n\u22EE\r\n" //Vertical ellipse followed by last note. \u22EE - vertical ellipses
-							+"=="+Userods.GetName(lastNote.UserNum)+" - "
+							+"=="+User.GetName(lastNote.UserNum)+" - "
 							+lastNote.DateTimeNote.ToShortDateString()+" "
 							+lastNote.DateTimeNote.ToShortTimeString()
 							+" - "+lastNote.Note;
@@ -954,7 +955,7 @@ namespace OpenDental {
 				else { 
 					foreach(TaskNote note in listNotesForTask) {
 						notes+="\r\n"//even on the first loop
-							+"=="+Userods.GetName(note.UserNum)+" - "
+							+"=="+User.GetName(note.UserNum)+" - "
 							+note.DateTimeNote.ToShortDateString()+" "
 							+note.DateTimeNote.ToShortTimeString()
 							+" - "+note.Note;
@@ -1310,8 +1311,9 @@ namespace OpenDental {
 			_isShowFinishedTasks=FormTO.IsShowFinishedTasks;
 			_dateTimeStartShowFinished=FormTO.DateTimeStartShowFinished;
 			_isTaskSortApptDateTime=FormTO.IsSortApptDateTime;
-			_isCollapsedByDefault=PIn.Bool(UserOdPrefs.GetByUserAndFkeyType(Security.CurrentUser.Id,UserPreferenceName.TaskCollapse)[0].Value);
-			_hasListSwitched=true;//To display tasks in correctly collapsed/expanded state
+            _isCollapsedByDefault = UserPreference.GetBool(Security.CurrentUser.Id, UserPreferenceName.TaskCollapse);
+
+            _hasListSwitched =true;//To display tasks in correctly collapsed/expanded state
 			FillGrid();
 		}
 

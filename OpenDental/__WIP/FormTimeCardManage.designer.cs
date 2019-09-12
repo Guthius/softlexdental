@@ -159,7 +159,7 @@ namespace OpenDental
             this.grid.Location = new System.Drawing.Point(13, 105);
             this.grid.Name = "grid";
             this.grid.ScrollValue = 0;
-            this.grid.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+            this.grid.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
             this.grid.Size = new System.Drawing.Size(1118, 477);
             this.grid.TabIndex = 9;
             this.grid.Title = "Employee Time Cards";

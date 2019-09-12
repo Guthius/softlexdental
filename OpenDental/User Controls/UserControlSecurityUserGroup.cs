@@ -162,14 +162,14 @@ namespace OpenDental {
 
 		///<summary>Returns a filtered list of userods that should be displayed. Returns all users when IsCEMT is true.</summary>
 		private List<User> GetFilteredUsersHelper() {
-			List<User> retVal = Userods.GetDeepCopy();
+			List<User> retVal = User.All();
 			if(IsForCEMT) {
 				return retVal;
 			}
 			if(_dictProvNumProvs == null) { //fill the dictionary if needed
-				_dictProvNumProvs=Providers.GetMultProviders(Userods.GetDeepCopy().Select(x => x.ProviderId).ToList()).ToDictionary(x => x.ProvNum,x => x);
+				_dictProvNumProvs=Providers.GetMultProviders(User.All().Select(x => x.ProviderId.GetValueOrDefault()).ToList()).ToDictionary(x => x.ProvNum,x => x);
 			}
-			retVal.RemoveAll(x => x.UserNumCEMT>0);//NEVER show CEMT users when not in the CEMT tool.
+
 			if(!checkShowHidden.Checked) {
 				retVal.RemoveAll(x => x.IsHidden);
 			}
@@ -186,15 +186,15 @@ namespace OpenDental {
 					break;
 				case UserFilters.Students:
 					//might not count user as student if attached to invalid providers.
-					retVal.RemoveAll(x => !_dictProvNumProvs.ContainsKey(x.ProviderId) || _dictProvNumProvs[x.ProviderId].IsInstructor);
+					retVal.RemoveAll(x => !_dictProvNumProvs.ContainsKey(x.ProviderId.GetValueOrDefault()) || _dictProvNumProvs[x.ProviderId.GetValueOrDefault()].IsInstructor);
 					if(classNum>0) {
-						retVal.RemoveAll(x => _dictProvNumProvs[x.ProviderId].SchoolClassNum!=classNum);
+						retVal.RemoveAll(x => _dictProvNumProvs[x.ProviderId.GetValueOrDefault()].SchoolClassNum!=classNum);
 					}
 					break;
 				case UserFilters.Instructors:
-					retVal.RemoveAll(x => !_dictProvNumProvs.ContainsKey(x.ProviderId) || !_dictProvNumProvs[x.ProviderId].IsInstructor);
+					retVal.RemoveAll(x => !_dictProvNumProvs.ContainsKey(x.ProviderId.GetValueOrDefault()) || !_dictProvNumProvs[x.ProviderId.GetValueOrDefault()].IsInstructor);
 					if(classNum>0) {
-						retVal.RemoveAll(x => _dictProvNumProvs[x.ProviderId].SchoolClassNum!=classNum);
+						retVal.RemoveAll(x => _dictProvNumProvs[x.ProviderId.GetValueOrDefault()].SchoolClassNum!=classNum);
 					}
 					break;
 				case UserFilters.Other:
@@ -213,12 +213,12 @@ namespace OpenDental {
 			if(!string.IsNullOrWhiteSpace(textPowerSearch.Text)) {
 				switch(((ODBoxItem<UserFilters>)comboShowOnly.SelectedItem).Tag) {
 					case UserFilters.Employees:
-						retVal.RemoveAll(x => !Employee.GetNameFL(x.EmployeeId).ToLower().Contains(textPowerSearch.Text.ToLower()));
+						retVal.RemoveAll(x => !Employee.GetNameFL(x.EmployeeId.GetValueOrDefault()).ToLower().Contains(textPowerSearch.Text.ToLower()));
 						break;
 					case UserFilters.Providers:
 					case UserFilters.Students:
 					case UserFilters.Instructors:
-						retVal.RemoveAll(x => !_dictProvNumProvs[x.ProviderId].GetLongDesc().ToLower().Contains(textPowerSearch.Text.ToLower()));
+						retVal.RemoveAll(x => !_dictProvNumProvs[x.ProviderId.GetValueOrDefault()].GetLongDesc().ToLower().Contains(textPowerSearch.Text.ToLower()));
 						break;
 					case UserFilters.AllUsers:
 					case UserFilters.Other:
@@ -270,12 +270,12 @@ namespace OpenDental {
 			List<UserGroup> listSelectedUserUserGroupsOld=SelectedUser.GetGroups();
 			List<UserGroup> listSelectedUserUserGroups=listUserTabUserGroups.SelectedTags<UserGroup>();
 			if(//Current selected groups do not contain SecurityAdmin permission
-				GroupPermissions.GetForUserGroups(listSelectedUserUserGroups.Select(x => x.Id).ToList(),Permissions.SecurityAdmin).Count==0
+				GroupPermission.GetByUserGroups(listSelectedUserUserGroups.Select(x => x.Id).ToList(),Permissions.SecurityAdmin).Count()==0
 				//Selected user had SecurityAdmin permission before new selections
-				&& GroupPermissions.GetForUserGroups(listSelectedUserUserGroupsOld.Select(x => x.Id).ToList(),Permissions.SecurityAdmin).Count>0) 
+				&& GroupPermission.GetByUserGroups(listSelectedUserUserGroupsOld.Select(x => x.Id).ToList(),Permissions.SecurityAdmin).Count()>0) 
 			{
 				//The SelectedUser is no longer part of SecurityAdmin group. Check that at least one other user is part of a SecurityAdmin Group.
-				if(!Userods.IsSomeoneElseSecurityAdmin(SelectedUser)) {
+				if(!User.IsSomeoneElseSecurityAdmin(SelectedUser)) {
 					MsgBox.Show(this,Lan.g(this,"At least one user must have Security Admin permission."));
 					RefreshUserTabGroups(); //set the groups back to what they were before.
 					return;
@@ -283,10 +283,10 @@ namespace OpenDental {
 			}
 			List<string> listDescriptionsOld=listSelectedUserUserGroupsOld.Select(x => x.Description).ToList();
 			List<string> listDescriptions=listSelectedUserUserGroups.Select(x => x.Description).ToList();
-			if(UserGroupAttaches.SyncForUser(SelectedUser,listSelectedUserUserGroups.Select(x => x.Id).ToList())!=0) {
-				UserGroupAttaches.RefreshCache();//only refreshes local cache. 
-			}
-			string logText="User group(s) for "+SelectedUser.UserName+" changed To: "+string.Join(", ",listDescriptions.ToArray())+" From: "
+
+            UserGroupUser.Synchronize(SelectedUser, listSelectedUserUserGroups.Select(x => x.Id).ToList());
+
+            string logText="User group(s) for "+SelectedUser.UserName+" changed To: "+string.Join(", ",listDescriptions.ToArray())+" From: "
 				+string.Join(", ",listDescriptionsOld.ToArray())+" by: "+Security.CurrentUser.UserName;
 			SecurityLogs.MakeLogEntry(Permissions.SecurityAdmin,0,logText);
 			RefreshUserTree();
@@ -346,8 +346,8 @@ namespace OpenDental {
 			foreach(User user in listFilteredUsers) {
 				ODGridRow row=new ODGridRow();
 				row.Cells.Add(user.UserName);
-				row.Cells.Add(Employee.GetNameFL(user.EmployeeId));
-				row.Cells.Add(Providers.GetLongDesc(user.ProviderId));
+				row.Cells.Add(Employee.GetNameFL(user.EmployeeId.GetValueOrDefault()));
+				row.Cells.Add(Providers.GetLongDesc(user.ProviderId.GetValueOrDefault()));
 				if(Preferences.HasClinicsEnabled) {
 					row.Cells.Add(Clinics.GetAbbr(user.ClinicId));
 					row.Cells.Add(user.ClinicRestricted?"X":"");
@@ -418,7 +418,7 @@ namespace OpenDental {
 		///This also dynamically sets the height of the control.</summary>
 		private void FillAssociatedUsers() {
 			listAssociatedUsers.Items.Clear();
-			List<User> listUsers = Userods.GetForGroup(SelectedUserGroup.Id);
+			List<User> listUsers = User.GetByGroup(SelectedUserGroup.Id);
 			foreach(User userCur in listUsers) {
 				listAssociatedUsers.Items.Add(new ODBoxItem<User>(userCur.UserName,userCur));
 			}

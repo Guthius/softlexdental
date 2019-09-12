@@ -266,14 +266,14 @@ namespace OpenDental
 
             if (!Security.IsAuthorized(Permissions.TimecardsEditAll, true)) statusComboBox.Enabled = false;
 
-            adjustTextBox.Text = ClockEvents.Format(clockEvent.AdjustAuto);
-            adjustTextBox.Text = clockEvent.Adjust.HasValue ? ClockEvents.Format(clockEvent.Adjust.Value) : "";
+            adjustTextBox.Text = ClockEvent.Format(clockEvent.AdjustAuto);
+            adjustTextBox.Text = clockEvent.Adjust.HasValue ? ClockEvent.Format(clockEvent.Adjust.Value) : "";
 
-            overtimeAutoTextBox.Text = ClockEvents.Format(clockEvent.OvertimeAuto);
-            overtimeTextBox.Text = clockEvent.Overtime.HasValue ? ClockEvents.Format(clockEvent.Overtime.Value) : "";
+            overtimeAutoTextBox.Text = ClockEvent.Format(clockEvent.OvertimeAuto);
+            overtimeTextBox.Text = clockEvent.Overtime.HasValue ? ClockEvent.Format(clockEvent.Overtime.Value) : "";
 
-            rate2AutoTextBox.Text = ClockEvents.Format(clockEvent.Rate2Auto);
-            rate2TextBox.Text = clockEvent.Rate2.HasValue ? ClockEvents.Format(clockEvent.Rate2.Value) : "";
+            rate2AutoTextBox.Text = ClockEvent.Format(clockEvent.Rate2Auto);
+            rate2TextBox.Text = clockEvent.Rate2.HasValue ? ClockEvent.Format(clockEvent.Rate2.Value) : "";
 
             CalculateAutoFields();
 
@@ -509,7 +509,7 @@ namespace OpenDental
                 clockEvent.Status = statusItem.Status;
             }
 
-            ClockEvents.Update(clockEvent);
+            ClockEvent.Update(clockEvent);
 
             Employee.UpdateClockStatus(clockEvent.EmployeeId);
 

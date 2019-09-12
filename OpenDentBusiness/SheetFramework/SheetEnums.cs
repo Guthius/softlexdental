@@ -267,6 +267,10 @@ namespace OpenDentBusiness
         /// </summary>
         public bool IsGridOnly = false;
 
+        public SheetGrowthAttribute()
+        {
+        }
+
         public SheetGrowthAttribute(bool isDynamic, bool isGridOnly = false)
         {
             IsDynamic = isDynamic;

@@ -42,12 +42,12 @@ namespace OpenDental
             textTimeEntry.Text = TimeAdjustCur.Date.ToString();
             if (TimeAdjustCur.HoursOvertime.TotalHours == 0)
             {
-                textHours.Text = ClockEvents.Format(TimeAdjustCur.HoursRegular);
+                textHours.Text = ClockEvent.Format(TimeAdjustCur.HoursRegular);
             }
             else
             {
                 checkOvertime.Checked = true;
-                textHours.Text = ClockEvents.Format(TimeAdjustCur.HoursOvertime);
+                textHours.Text = ClockEvent.Format(TimeAdjustCur.HoursOvertime);
             }
             textNote.Text = TimeAdjustCur.Note;
         }
@@ -59,7 +59,7 @@ namespace OpenDental
                 DialogResult = DialogResult.Cancel;
                 return;
             }
-            TimeAdjusts.Delete(TimeAdjustCur);
+            TimeAdjustment.Delete(TimeAdjustCur);
             DialogResult = DialogResult.OK;
         }
 
@@ -78,7 +78,7 @@ namespace OpenDental
             {
                 if (textHours.Text.Contains(":"))
                 {
-                    ClockEvents.ParseHours(textHours.Text);
+                    ClockEvent.ParseHours(textHours.Text);
                 }
                 else
                 {
@@ -96,7 +96,7 @@ namespace OpenDental
             TimeSpan hoursEntered;
             if (textHours.Text.Contains(":"))
             {
-                hoursEntered = ClockEvents.ParseHours(textHours.Text);//we know this will work because we tested ParseHours above.
+                hoursEntered = ClockEvent.ParseHours(textHours.Text);//we know this will work because we tested ParseHours above.
             }
             else
             {
@@ -115,11 +115,11 @@ namespace OpenDental
             TimeAdjustCur.Note = textNote.Text;
             if (IsNew)
             {
-                TimeAdjusts.Insert(TimeAdjustCur);
+                TimeAdjustment.Insert(TimeAdjustCur);
             }
             else
             {
-                TimeAdjusts.Update(TimeAdjustCur);
+                TimeAdjustment.Update(TimeAdjustCur);
             }
             DialogResult = DialogResult.OK;
         }

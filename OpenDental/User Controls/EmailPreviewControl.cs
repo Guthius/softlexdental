@@ -138,7 +138,7 @@ namespace OpenDental
             textUserName.Visible = true;
             if (_emailMessage.UserId.HasValue)
             {
-                textUserName.Text = (Userods.GetName(_emailMessage.UserId.Value));
+                textUserName.Text = (User.GetName(_emailMessage.UserId.Value));
             }
 
             FillAttachments();

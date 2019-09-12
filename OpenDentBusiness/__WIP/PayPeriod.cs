@@ -71,6 +71,8 @@ namespace OpenDentBusiness
         public static PayPeriod GetMostRecent() =>
             SelectOne("SELECT * FROM `pay_periods` WHERE `date_end` = (SELECT MAX(`date_end`) FROM `pay_periods`)", FromReader);
 
+        public static int GetCount() => cache.Count();
+
         public static long Insert(PayPeriod payPeriod) =>
             payPeriod.Id = DataConnection.ExecuteInsert(
                 "INSERT INTO `pay_periods` (`date_start`, `date_end`, `date_paycheck`) VALUES (?date_start, ?date_end, ?date_paycheck)",

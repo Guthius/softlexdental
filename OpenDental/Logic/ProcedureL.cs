@@ -116,7 +116,7 @@ namespace OpenDental {
 				return true;//paysplits exist on one of the completed procedures. Per Nathan, don't change the provider. User will need to change manually.
 			}
 			foreach(Procedure proc in listCompletedProcWithDifferentProv) {
-				Permissions perm=Permissions.EditCompletedProcedure;
+                string perm =Permissions.EditCompletedProcedure;
 				if(proc.ProcStatus.In(ProcStat.EC,ProcStat.EO)) {
 					perm=Permissions.EditProcedure;
 				}
@@ -125,7 +125,7 @@ namespace OpenDental {
 				}
 				if(!Security.IsAuthorized(perm,proc.ProcDate,true,true)) {
 					MessageBox.Show(Lan.g("Procedures","The appointment provider does not match the provider on at least one completed procedure.")+"\r\n"
-						+Lans.g("Procedures","Not authorized for")+": "+GroupPermissions.GetDesc(perm)+"\r\n"
+						+Lans.g("Procedures","Not authorized for")+": "+GroupPermission.GetDescription(perm)+"\r\n"
 						+Lan.g("Procedures","Any change to the provider on the completed procedure(s) will have to be made manually."));
 					return true;//user does not have permission to change the provider. Don't change provider.
 				}
@@ -274,7 +274,7 @@ namespace OpenDental {
 					|| !procOld.ProcFee.IsEqual(procFee) //If user changed the procedure fee
 					|| procOld.CodeNum != procNew.CodeNum) //If user changed the procedure code
 				{
-					Permissions perm=Permissions.EditCompletedProcedure;
+					string perm=Permissions.EditCompletedProcedure;
 					if(procNew.ProcStatus.In(ProcStat.EO,ProcStat.EC)) {
 						perm=Permissions.EditProcedure;
 					}

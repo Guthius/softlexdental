@@ -123,7 +123,7 @@
             this.rulesGrid.Location = new System.Drawing.Point(356, 19);
             this.rulesGrid.Name = "rulesGrid";
             this.rulesGrid.ScrollValue = 0;
-            this.rulesGrid.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+            this.rulesGrid.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
             this.rulesGrid.Size = new System.Drawing.Size(685, 487);
             this.rulesGrid.TabIndex = 5;
             this.rulesGrid.Title = "Rules";
@@ -144,7 +144,7 @@
             this.payPeriodsGrid.Margin = new System.Windows.Forms.Padding(3, 3, 20, 3);
             this.payPeriodsGrid.Name = "payPeriodsGrid";
             this.payPeriodsGrid.ScrollValue = 0;
-            this.payPeriodsGrid.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+            this.payPeriodsGrid.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
             this.payPeriodsGrid.Size = new System.Drawing.Size(320, 462);
             this.payPeriodsGrid.TabIndex = 1;
             this.payPeriodsGrid.Title = "Pay Periods";

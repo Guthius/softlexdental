@@ -36,7 +36,7 @@ namespace OpenDental{
 		private TextBox textDateStop;
 		private List<ClockEvent> ClockEventList;
 		private OpenDental.UI.Button butAdj;
-		public int SelectedPayPeriod;
+		public PayPeriod SelectedPayPeriod;
 		private Label labelOvertime;
 		private TextBox textOvertime;
 		private OpenDental.UI.Button butCalcWeekOT;
@@ -602,8 +602,8 @@ namespace OpenDental{
 			Text=Lan.g(this,"Time Card for")+" "+EmployeeCur.FirstName+" "+EmployeeCur.LastName
 				+(_cannotEdit ? " - You cannot modify your timecard":"");
 			TimeDelta=MiscData.GetNowDateTime()-DateTime.Now;
-			if(SelectedPayPeriod==0) {
-				SelectedPayPeriod=PayPeriods.GetForDate(dateInitial);
+			if(SelectedPayPeriod==null) {
+				SelectedPayPeriod=PayPeriod.GetByDate(dateInitial);
 			}
 			if(!Preference.GetBool(PreferenceName.ClockEventAllowBreak)) {//Breaks turned off, Lunch is now "Break", but maintains Lunch functionality.
 				IsBreaks=false;
@@ -620,40 +620,42 @@ namespace OpenDental{
 			}
 			radioTimeCard.Checked=!IsBreaks;
 			radioBreaks.Checked=IsBreaks;
-			_listPayPeriods=PayPeriods.GetDeepCopy();
+			_listPayPeriods=PayPeriod.All();
 			FillPayPeriod();
 			FillMain(true);
 		}
 
+        int payPeriodIndex = 0;
+
 		private void butLeft_Click(object sender,EventArgs e) {
-			if(SelectedPayPeriod==0){
+			if(payPeriodIndex == 0){
 				return;
 			}
 			SaveNoteToDb();
-			SelectedPayPeriod--;
+            payPeriodIndex--;
 			FillPayPeriod();
 			FillMain(true);
 		}
 
 		private void butRight_Click(object sender,EventArgs e) {
-			if(SelectedPayPeriod==_listPayPeriods.Count-1) {
+			if(payPeriodIndex == _listPayPeriods.Count-1) {
 				return;
 			}
 			SaveNoteToDb();
-			SelectedPayPeriod++;
+            payPeriodIndex++;
 			FillPayPeriod();
 			FillMain(true);
 		}
 
 		///<summary>SelectedPayPeriod should already be set.  This simply fills the screen with that data.</summary>
 		private void FillPayPeriod(){
-			textDateStart.Text=_listPayPeriods[SelectedPayPeriod].DateStart.ToShortDateString();
-			textDateStop.Text=_listPayPeriods[SelectedPayPeriod].DateEnd.ToShortDateString();
-			if(_listPayPeriods[SelectedPayPeriod].DatePaycheck.Year<1880){
+			textDateStart.Text=_listPayPeriods[payPeriodIndex].DateStart.ToShortDateString();
+			textDateStop.Text=_listPayPeriods[payPeriodIndex].DateEnd.ToShortDateString();
+			if(_listPayPeriods[payPeriodIndex].DatePaycheck.Year<1880){
 				textDatePaycheck.Text="";
 			}
 			else{
-				textDatePaycheck.Text=_listPayPeriods[SelectedPayPeriod].DatePaycheck.ToShortDateString();
+				textDatePaycheck.Text=_listPayPeriods[payPeriodIndex].DatePaycheck.ToShortDateString();
 			}
 			//fill the note for the pay period
 			_timeAdjustNote=GetOrCreatePayPeriodNote();
@@ -663,9 +665,9 @@ namespace OpenDental{
 		///<summary>Gets the pay period note from the timeadjust row on midnight of the first day in the pay period from the database,
 		///otherwise creates a new TimeAdjust object in memory to be inserted later.</summary>
 		private TimeAdjustment GetOrCreatePayPeriodNote() {
-			DateTime date=_listPayPeriods[SelectedPayPeriod].DateStart.Date;
+			DateTime date=_listPayPeriods[payPeriodIndex].DateStart.Date;
 			DateTime midnightFirstDay=new DateTime(date.Year,date.Month,date.Day,0,0,0);
-			TimeAdjustment noteRow=TimeAdjusts.GetPayPeriodNote(EmployeeCur.Id,midnightFirstDay);
+			TimeAdjustment noteRow=TimeAdjustment.GetPayPeriodNote(EmployeeCur.Id,midnightFirstDay);
 			if(noteRow==null) {
 				noteRow=new TimeAdjustment {
 					EmployeeId=EmployeeCur.Id,
@@ -717,12 +719,12 @@ namespace OpenDental{
 		///<summary>fromDB is set to false when it is refreshing every second so that there will be no extra network traffic.</summary>
 		private void FillMain(bool fromDB){
 			if(fromDB){
-				ClockEventList=ClockEvents.Refresh(EmployeeCur.Id,PIn.Date(textDateStart.Text),PIn.Date(textDateStop.Text),IsBreaks);
+				ClockEventList=ClockEvent.Refresh(EmployeeCur.Id,PIn.Date(textDateStart.Text),PIn.Date(textDateStop.Text),IsBreaks);
 				if(IsBreaks){
 					TimeAdjustList=new List<TimeAdjustment>();
 				}
 				else{
-					TimeAdjustList=TimeAdjusts.Refresh(EmployeeCur.Id,PIn.Date(textDateStart.Text),PIn.Date(textDateStop.Text));
+					TimeAdjustList=TimeAdjustment.Refresh(EmployeeCur.Id,PIn.Date(textDateStart.Text),PIn.Date(textDateStop.Text));
 				}
 			}
 			TimeAdjustList.RemoveAll(x => x.Id==_timeAdjustNote.Id);//Do not show the note row in the grid.
@@ -784,7 +786,7 @@ namespace OpenDental{
 			TimeSpan weekSpan=new TimeSpan(0);//used for weekly totals.
 			if(mergedAL.Count>0) {  //Have to check fromDB here because we dont want to call DB every timer tick
 				if(fromDB) {
-					weekSpan=ClockEvents.GetWeekTotal(EmployeeCur.Id,GetDateForRow(0));
+					weekSpan=ClockEvent.GetWeekTotal(EmployeeCur.Id,GetDateForRow(0));
 					storedWeekSpan=weekSpan;
 				}
 				else {
@@ -853,15 +855,15 @@ namespace OpenDental{
 						row.Cells[row.Cells.Count-1].ColorText = Color.Red;
 					}
 					//out-----------------------------
-					if(clock.Date2Displayed.Year<1880){
+					if(!clock.Date2Displayed.HasValue){
 						row.Cells.Add("");//not clocked out yet
 					}
 					else{
 						if(Preference.GetBool(PreferenceName.TimeCardShowSeconds)) {
-							row.Cells.Add(clock.Date2Displayed.ToLongTimeString());
+							row.Cells.Add(clock.Date2Displayed.Value.ToLongTimeString());
 						}
 						else {
-							row.Cells.Add(clock.Date2Displayed.ToShortTimeString());
+							row.Cells.Add(clock.Date2Displayed.Value.ToShortTimeString());
 						}
 						if (clock.Date2Entered!=clock.Date2Displayed){
 							row.Cells[row.Cells.Count-1].ColorText = Color.Red;
@@ -869,66 +871,54 @@ namespace OpenDental{
 					}
 					//total-------------------------------
 					if(IsBreaks){ //breaks
-						if(clock.Date2Displayed.Year<1880){
+						if(!clock.Date2Displayed.HasValue){
 							row.Cells.Add("");
 						}
 						else{
-							oneSpan=clock.Date2Displayed-clock.Date1Displayed;
-							row.Cells.Add(ClockEvents.Format(oneSpan));
+							oneSpan=clock.Date2Displayed.Value-clock.Date1Displayed;
+							row.Cells.Add(ClockEvent.Format(oneSpan));
 							daySpan+=oneSpan;
 							periodSpan+=oneSpan;
 						}
 					}
 					else{//regular hours
-						if(clock.Date2Displayed.Year<1880){
+						if(!clock.Date2Displayed.HasValue){
 							row.Cells.Add("");
 						}
 						else{
-							oneSpan=clock.Date2Displayed-clock.Date1Displayed;
-							row.Cells.Add(ClockEvents.Format(oneSpan));
+							oneSpan=clock.Date2Displayed.Value-clock.Date1Displayed;
+							row.Cells.Add(ClockEvent.Format(oneSpan));
 							daySpan+=oneSpan;
 							weekSpan+=oneSpan;
 							periodSpan+=oneSpan;
 						}
 					}
-					//Adjust---------------------------------
-					oneAdj=TimeSpan.Zero;
-					if(clock.AdjustOverridden) {
-						oneAdj+=clock.Adjust;
-					}
-					else {
-						oneAdj+=clock.AdjustAuto;//typically zero
-					}
-					daySpan+=oneAdj;
+                    //Adjust---------------------------------
+                    oneAdj = clock.Adjust ?? clock.AdjustAuto;
+                    daySpan +=oneAdj;
 					weekSpan+=oneAdj;
 					periodSpan+=oneAdj;
-					row.Cells.Add(ClockEvents.Format(oneAdj));
-					if(clock.AdjustOverridden) {
+					row.Cells.Add(ClockEvent.Format(oneAdj));
+					if(clock.Adjust.HasValue) {
 						row.Cells[row.Cells.Count-1].ColorText = Color.Red;
 					}
 					//Rate2---------------------------------
-					if(clock.Rate2!=TimeSpan.FromHours(-1)) {
-						rate2span+=clock.Rate2;
-						row.Cells.Add(ClockEvents.Format(clock.Rate2));
+					if(clock.Rate2.HasValue) {
+						rate2span+=clock.Rate2.Value;
+						row.Cells.Add(ClockEvent.Format(clock.Rate2.Value));
 						row.Cells[row.Cells.Count-1].ColorText = Color.Red;
 					}
 					else {
 						rate2span+=clock.Rate2Auto;
-						row.Cells.Add(ClockEvents.Format(clock.Rate2Auto));
+						row.Cells.Add(ClockEvent.Format(clock.Rate2Auto));
 					}
-					//Overtime------------------------------
-					oneOT=TimeSpan.Zero;
-					if(clock.Overtime!=TimeSpan.FromHours(-1)) {//overridden
-						oneOT=clock.Overtime;
-					}
-					else {
-						oneOT=clock.OvertimeAuto;//typically zero
-					}
-					otspan+=oneOT;
+                    //Overtime------------------------------
+                    oneOT = clock.Overtime ?? clock.OvertimeAuto;
+                    otspan +=oneOT;
 					daySpan-=oneOT;
 					weekSpan-=oneOT;
 					periodSpan-=oneOT;
-					row.Cells.Add(ClockEvents.Format(oneOT));
+					row.Cells.Add(ClockEvent.Format(oneOT));
 					if(clock.Overtime!=TimeSpan.FromHours(-1)) {//overridden
 						row.Cells[row.Cells.Count-1].ColorText = Color.Red;
 					}
@@ -938,18 +928,18 @@ namespace OpenDental{
 						|| GetDateForRow(i+1) != curDate)//or the next row is a different date
 					{
 						if(IsBreaks){
-							if(clock.Date2Displayed.Year<1880){//if they have not clocked back in yet from break
+							if(!clock.Date2Displayed.HasValue){//if they have not clocked back in yet from break
 								//display the timespan of oneSpan using current time as the other number.
 								oneSpan=DateTime.Now-clock.Date1Displayed+TimeDelta;
 								row.Cells.Add(oneSpan.ToStringHmmss());
 								daySpan+=oneSpan;
 							}
 							else{
-								row.Cells.Add(ClockEvents.Format(daySpan));
+								row.Cells.Add(ClockEvent.Format(daySpan));
 							}
 						}
 						else{
-							row.Cells.Add(ClockEvents.Format(daySpan));
+							row.Cells.Add(ClockEvent.Format(daySpan));
 						}
 						daySpan=new TimeSpan(0);
 					}
@@ -966,7 +956,7 @@ namespace OpenDental{
 						|| cal.GetWeekOfYear(GetDateForRow(i+1),rule,(DayOfWeek)Preference.GetInt(PreferenceName.TimeCardOvertimeFirstDayOfWeek))//or the next row has a
 						!= cal.GetWeekOfYear(clock.Date1Displayed.Date,rule,(DayOfWeek)Preference.GetInt(PreferenceName.TimeCardOvertimeFirstDayOfWeek)))//different week of year
 					{
-						row.Cells.Add(ClockEvents.Format(weekSpan));
+						row.Cells.Add(ClockEvent.Format(weekSpan));
 						weekSpan=new TimeSpan(0);
 					}
 					else {
@@ -975,7 +965,15 @@ namespace OpenDental{
 					}
 					//Clinic-----------------------------------------
 					if(Preferences.HasClinicsEnabled) {
-						row.Cells.Add(Clinics.GetAbbr(clock.ClinicId));
+                        if (clock.ClinicId.HasValue)
+                        {
+                            row.Cells.Add(Clinics.GetAbbr(clock.ClinicId.Value));
+                        }
+                        else
+                        {
+                            row.Cells.Add("");
+                        }
+						
 					}
 					//Note-----------------------------------------
 					row.Cells.Add(clock.Note);
@@ -1008,18 +1006,18 @@ namespace OpenDental{
 					daySpan+=adjust.HoursRegular;//might be negative
 					weekSpan+=adjust.HoursRegular;
 					periodSpan+=adjust.HoursRegular;
-					row.Cells.Add(ClockEvents.Format(adjust.HoursRegular));//6
+					row.Cells.Add(ClockEvent.Format(adjust.HoursRegular));//6
 					//Rate2-------------------------------
 					row.Cells.Add("");//
 					//Overtime------------------------------
 					otspan+=adjust.HoursOvertime;
-					row.Cells.Add(ClockEvents.Format(adjust.HoursOvertime));//7
+					row.Cells.Add(ClockEvent.Format(adjust.HoursOvertime));//7
 					//Daily-----------------------------------
 					//if this is the last entry for a given date
 					if(i==mergedAL.Count-1//if this is the last row
 						|| GetDateForRow(i+1) != curDate)//or the next row is a different date
 					{
-						row.Cells.Add(ClockEvents.Format(daySpan));//
+						row.Cells.Add(ClockEvent.Format(daySpan));//
 						daySpan=new TimeSpan(0);
 					}
 					else{
@@ -1035,7 +1033,7 @@ namespace OpenDental{
 						|| cal.GetWeekOfYear(GetDateForRow(i+1),rule,(DayOfWeek)Preference.GetInt(PreferenceName.TimeCardOvertimeFirstDayOfWeek))//or the next row has a
 						!= cal.GetWeekOfYear(adjust.Date.Date,rule,(DayOfWeek)Preference.GetInt(PreferenceName.TimeCardOvertimeFirstDayOfWeek)))//different week of year
 					{
-						ODGridCell cell=new ODGridCell(ClockEvents.Format(weekSpan));
+						ODGridCell cell=new ODGridCell(ClockEvent.Format(weekSpan));
 						cell.ColorText=Color.Black;
 						row.Cells.Add(cell);
 						weekSpan=new TimeSpan(0);
@@ -1045,7 +1043,16 @@ namespace OpenDental{
 					}
 					//Clinic-----------------------------------------
 					if(Preferences.HasClinicsEnabled) {
-						row.Cells.Add(Clinics.GetAbbr(adjust.ClinicId));
+                        if (adjust.ClinicId.HasValue)
+                        {
+
+                            row.Cells.Add(Clinics.GetAbbr(adjust.ClinicId.Value));
+                        }
+                        else
+                        {
+                            row.Cells.Add("");
+                        }
+						
 					}
 					//Note-----------------------------------------
 					row.Cells.Add(adjust.Note);
@@ -1136,13 +1143,13 @@ namespace OpenDental{
 			if(!Security.IsAuthorized(Permissions.TimecardsEditAll)) {
 				return;
 			}
-			TimeCardRule timeCardRule=TimeCardRules.GetTimeCardRule(EmployeeCur);
+			TimeCardRule timeCardRule=TimeCardRule.GetTimeCardRule(EmployeeCur);
 			if(timeCardRule!=null && timeCardRule.IsOvertimeExempt) {
 				MsgBox.Show(this,"This employee is marked as exempt from receiving overtime hours.");
 				return;
 			}
 			try {
-				TimeCardRules.CalculateWeeklyOvertime(EmployeeCur,PIn.Date(textDateStart.Text),PIn.Date(textDateStop.Text));
+				TimeCardRule.CalculateWeeklyOvertime(EmployeeCur,PIn.Date(textDateStart.Text),PIn.Date(textDateStop.Text));
 			}
 			catch(Exception ex) {
 				MessageBox.Show(this,ex.Message);
@@ -1155,18 +1162,18 @@ namespace OpenDental{
 			if(!Security.IsAuthorized(Permissions.TimecardsEditAll)) {
 				return;
 			}
-			string errors=TimeCardRules.ValidateOvertimeRules(new List<long>{EmployeeCur.Id});
+			string errors=TimeCardRule.ValidateOvertimeRules(new List<long>{EmployeeCur.Id});
 			if(errors != "") {
 				MessageBox.Show(this,"Please fix the following timecard rule errors first:\r\n"+errors);
 				return;
 			}
-			errors=TimeCardRules.ValidatePayPeriod(EmployeeCur,PIn.Date(textDateStart.Text),PIn.Date(textDateStop.Text));
+			errors=TimeCardRule.ValidatePayPeriod(EmployeeCur,PIn.Date(textDateStart.Text),PIn.Date(textDateStop.Text));
 			if(errors != "") {
 				MessageBox.Show(this,errors);
 				return;
 			}
 			try {
-				TimeCardRules.CalculateDailyOvertime(EmployeeCur,PIn.Date(textDateStart.Text),PIn.Date(textDateStop.Text));
+				TimeCardRule.CalculateDailyOvertime(EmployeeCur,PIn.Date(textDateStart.Text),PIn.Date(textDateStop.Text));
 			}
 			catch(Exception ex) {
 				MessageBox.Show(this,ex.Message);
@@ -1326,11 +1333,11 @@ namespace OpenDental{
 			_timeAdjustNote.Note=textNote.Text;
 			if(_timeAdjustNote.Id==0) {//adding a note for the first time.
 				if(textNote.Text!="") {//Do not create a row if not needed.
-					TimeAdjusts.Insert(_timeAdjustNote);
+					TimeAdjustment.Insert(_timeAdjustNote);
 				}
 			}
 			else {
-				TimeAdjusts.Update(_timeAdjustNote);
+                TimeAdjustment.Update(_timeAdjustNote);
 			}
 		}
 

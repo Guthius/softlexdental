@@ -113,6 +113,25 @@ namespace OpenDentBusiness
             return defaultValue;
         }
 
+        public static bool GetBool(long userId, string preferenceKey, bool defaultValue = false)
+        {
+            if (bool.TryParse(GetString(userId, preferenceKey), out var result))
+            {
+                return result;
+            }
+            return defaultValue;
+        }
+
+        public static bool GetBool(long clinicId, long userId, string preferenceKey, bool defaultValue = false)
+        {
+            if (bool.TryParse(GetString(clinicId, userId, preferenceKey), out var result))
+            {
+                return result;
+            }
+            return defaultValue;
+        }
+
+
         /// <summary>
         /// Inserts the specified user preference into the database.
         /// </summary>

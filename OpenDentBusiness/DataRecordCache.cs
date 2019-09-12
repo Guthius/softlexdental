@@ -232,7 +232,7 @@ namespace OpenDentBusiness
         /// Invalidates the cache of record type <typeparamref name="T"/>.
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        public static void Invalidate<T>() where T : DataRecord
+        public static void Invalidate<T>() where T : DataRecordBase
         {
             lock (dataRecordCaches)
             {

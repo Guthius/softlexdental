@@ -11,7 +11,7 @@ namespace OpenDental
     public partial class FormAuditOneType : FormBase
     {
         readonly long patientNum;
-        readonly List<Permissions> permTypes;
+        readonly List<string> permTypes;
         readonly long foreignKey;
         SecurityLog[] securityLogList;
 
@@ -22,14 +22,14 @@ namespace OpenDental
         /// <param name="permTypes"></param>
         /// <param name="title"></param>
         /// <param name="foreignKey"></param>
-        public FormAuditOneType(long patientNum, List<Permissions> permTypes, string title, long foreignKey)
+        public FormAuditOneType(long patientNum, List<string> permTypes, string title, long foreignKey)
         {
             InitializeComponent();
 
             Text = title;
 
             this.patientNum = patientNum;
-            this.permTypes = new List<Permissions>(permTypes);
+            this.permTypes = new List<string>(permTypes);
             this.foreignKey = foreignKey;
         }
 
@@ -76,7 +76,7 @@ namespace OpenDental
                 var row = new ODGridRow();
                 row.Cells.Add(securityLog.LogDateTime.ToShortDateString() + " " + securityLog.LogDateTime.ToShortTimeString());
 
-                var user = Userods.GetUser(securityLog.UserNum);
+                var user = User.GetById(securityLog.UserNum);
                 if (user == null)
                 {
                     row.Cells.Add(Translation.Language.UserUnknown);

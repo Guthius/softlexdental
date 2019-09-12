@@ -861,7 +861,7 @@ namespace OpenDental
                 if (listRefreshedTasks.Count > 0)
                 {
                     listRefreshedTaskNotes = TaskNotes.GetForTasks(listRefreshedTasks.Select(x => x.TaskNum).ToList());
-                    listBlockedTaskLists = UserOdPrefs.GetByUserAndFkeyType(userNumCur, UserPreferenceName.TaskListBlock);
+                    listBlockedTaskLists = UserPreference.GetByKey(userNumCur, UserPreferenceName.TaskListBlock);
                 }
                 this.Invoke((() => HandleRefreshedTasks(listSignalTasks, listEditedTaskNums, listRefreshedTasks, listRefreshedTaskNotes,
                     listBlockedTaskLists)));

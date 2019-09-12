@@ -149,7 +149,7 @@ namespace OpenDental
             }
 
 
-            var clockEvents = ClockEvents.GetAllForPeriod(selectedPayPeriods.Min(x => x.DateStart), selectedPayPeriods.Max(x => x.DateEnd));
+            var clockEvents = ClockEvent.GetAllForPeriod(selectedPayPeriods.Min(x => x.DateStart), selectedPayPeriods.Max(x => x.DateEnd));
             foreach (var payPeriod in selectedPayPeriods)
             {
                 var clockEventsForPayPeriod = clockEvents.Where(x => x.Date1Displayed >= payPeriod.DateStart && x.Date2Displayed <= payPeriod.DateEnd).ToList();
@@ -295,7 +295,7 @@ namespace OpenDental
 
             var timeCardRuleIds = rulesGrid.SelectedTags<TimeCardRule>().Select(x => x.Id).ToList();
 
-            TimeCardRules.DeleteMany(timeCardRuleIds);
+            TimeCardRule.DeleteMany(timeCardRuleIds);
 
             CacheManager.Invalidate<TimeCardRule>();
 
@@ -368,7 +368,7 @@ namespace OpenDental
 
         private void FormPayPeriods_FormClosing(object sender, FormClosingEventArgs e)
         {
-            var errors = TimeCardRules.ValidateOvertimeRules();
+            var errors = TimeCardRule.ValidateOvertimeRules();
             if (!string.IsNullOrEmpty(errors))
             {
                 MessageBox.Show(

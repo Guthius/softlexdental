@@ -8,6 +8,7 @@ using System.Drawing;
 using System.Drawing.Printing;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
@@ -149,7 +150,7 @@ namespace OpenDental
             }
 
             MainTable = 
-                ClockEvents.GetTimeCardManage(
+                ClockEvent.GetTimeCardManage(
                     selectedPayPeriod.DateStart, 
                     selectedPayPeriod.DateEnd, 
                     clinicId, isAll);
@@ -217,7 +218,7 @@ namespace OpenDental
             {
                 formTimeCard.IsByLastName = true;
                 formTimeCard.EmployeeCur = Employee.GetById(PIn.Long(MainTable.Rows[e.Row]["EmployeeNum"].ToString()));
-                formTimeCard.SelectedPayPeriod = selectedPayPeriod.Id;
+                formTimeCard.SelectedPayPeriod = selectedPayPeriod;
                 formTimeCard.ShowDialog(this);
 
                 FillMain();
@@ -231,7 +232,7 @@ namespace OpenDental
         private ODGrid GetGridForPrinting(Employee emp)
         {
             ODGrid gridTimeCard = new ODGrid();
-            List<ClockEvent> clockEventList = ClockEvents.Refresh(emp.Id, PIn.Date(dateStartTextBox.Text), PIn.Date(dateEndTextBox.Text), false);
+            List<ClockEvent> clockEventList = ClockEvent.Refresh(emp.Id, PIn.Date(dateStartTextBox.Text), PIn.Date(dateEndTextBox.Text), false);
             List<TimeAdjustment> timeAdjustList = TimeAdjustment.Refresh(emp.Id, PIn.Date(dateStartTextBox.Text), PIn.Date(dateEndTextBox.Text));
 
 
@@ -251,7 +252,7 @@ namespace OpenDental
             var mergedClockEvents = new List<IDateTimeStamped>();
             mergedClockEvents.AddRange(clockEventList);
             mergedClockEvents.AddRange(timeAdjustList);
-            mergedClockEvents.Sort((x, y) => x.GetDateTime().CompareTo(y.GetDateTime());
+            mergedClockEvents.Sort((x, y) => x.GetDateTime().CompareTo(y.GetDateTime()));
 
             gridTimeCard.BeginUpdate();
             gridTimeCard.Columns.Clear();
@@ -281,7 +282,7 @@ namespace OpenDental
             TimeSpan weekSpan = new TimeSpan(0);//used for weekly totals.
             if (mergedClockEvents.Count > 0)
             {
-                weekSpan = ClockEvents.GetWeekTotal(emp.Id, GetDateForRow(0, mergedClockEvents));
+                weekSpan = ClockEvent.GetWeekTotal(emp.Id, GetDateForRow(0, mergedClockEvents));
             }
             TimeSpan periodSpan = new TimeSpan(0);//used to add up totals for entire page.
             TimeSpan otspan = new TimeSpan(0);//overtime for the entire period
@@ -325,76 +326,61 @@ namespace OpenDental
                         row.Cells[row.Cells.Count - 1].ColorText = Color.Red;
                     }
                     //out-----------------------------
-                    if (clock.Date2Displayed.Year < 1880)
+                    if (!clock.Date2Displayed.HasValue)
                     {
                         row.Cells.Add("");//not clocked out yet
                     }
                     else
                     {
-                        row.Cells.Add(clock.Date2Displayed.ToShortTimeString());
+                        row.Cells.Add(clock.Date2Displayed.Value.ToShortTimeString());
                         if (clock.Date2Entered != clock.Date2Displayed)
                         {
                             row.Cells[row.Cells.Count - 1].ColorText = Color.Red;
                         }
                     }
                     //total-------------------------------
-                    if (clock.Date2Displayed.Year < 1880)
+                    if (!clock.Date2Displayed.HasValue)
                     {
                         row.Cells.Add("");
                     }
                     else
                     {
-                        oneSpan = clock.Date2Displayed - clock.Date1Displayed;
-                        row.Cells.Add(ClockEvents.Format(oneSpan));
+                        oneSpan = clock.Date2Displayed.Value - clock.Date1Displayed;
+                        row.Cells.Add(ClockEvent.Format(oneSpan));
                         daySpan += oneSpan;
                         weekSpan += oneSpan;
                         periodSpan += oneSpan;
                     }
                     //Adjust---------------------------------
-                    oneAdj = TimeSpan.Zero;
-                    if (clock.AdjustOverridden)
-                    {
-                        oneAdj += clock.Adjust;
-                    }
-                    else
-                    {
-                        oneAdj += clock.AdjustAuto;//typically zero
-                    }
+                    oneAdj = clock.Adjust ?? clock.AdjustAuto;  oneAdj += clock.AdjustAuto;//typically zero
+                    
                     daySpan += oneAdj;
                     weekSpan += oneAdj;
                     periodSpan += oneAdj;
-                    row.Cells.Add(ClockEvents.Format(oneAdj));
-                    if (clock.AdjustOverridden)
+                    row.Cells.Add(ClockEvent.Format(oneAdj));
+                    if (clock.Adjust.HasValue)
                     {
                         row.Cells[row.Cells.Count - 1].ColorText = Color.Red;
                     }
                     //Rate2---------------------------------
-                    if (clock.Rate2 != TimeSpan.FromHours(-1))
+                    if (clock.Rate2.HasValue)
                     {
-                        rate2span += clock.Rate2;
-                        row.Cells.Add(ClockEvents.Format(clock.Rate2));
+                        rate2span += clock.Rate2.Value;
+                        row.Cells.Add(ClockEvent.Format(clock.Rate2.Value));
                         row.Cells[row.Cells.Count - 1].ColorText = Color.Red;
                     }
                     else
                     {
                         rate2span += clock.Rate2Auto;
-                        row.Cells.Add(ClockEvents.Format(clock.Rate2Auto));
+                        row.Cells.Add(ClockEvent.Format(clock.Rate2Auto));
                     }
                     //Overtime------------------------------
-                    oneOT = TimeSpan.Zero;
-                    if (clock.Overtime != TimeSpan.FromHours(-1))
-                    {//overridden
-                        oneOT = clock.Overtime;
-                    }
-                    else
-                    {
-                        oneOT = clock.OvertimeAuto;//typically zero
-                    }
+                    oneOT = clock.Overtime ?? clock.OvertimeAuto;
                     otspan += oneOT;
                     daySpan -= oneOT;
                     weekSpan -= oneOT;
                     periodSpan -= oneOT;
-                    row.Cells.Add(ClockEvents.Format(oneOT));
+                    row.Cells.Add(ClockEvent.Format(oneOT));
                     if (clock.Overtime != TimeSpan.FromHours(-1))
                     {//overridden
                         row.Cells[row.Cells.Count - 1].ColorText = Color.Red;
@@ -404,7 +390,7 @@ namespace OpenDental
                     if (i == mergedClockEvents.Count - 1//if this is the last row
                         || GetDateForRow(i + 1, mergedClockEvents) != curDate)//or the next row is a different date
                     {
-                        row.Cells.Add(ClockEvents.Format(daySpan));
+                        row.Cells.Add(ClockEvent.Format(daySpan));
                         daySpan = new TimeSpan(0);
                     }
                     else
@@ -418,7 +404,7 @@ namespace OpenDental
                         || cal.GetWeekOfYear(GetDateForRow(i + 1, mergedClockEvents), rule, (DayOfWeek)Preference.GetInt(PreferenceName.TimeCardOvertimeFirstDayOfWeek))//or the next row has a
                         != cal.GetWeekOfYear(clock.Date1Displayed.Date, rule, (DayOfWeek)Preference.GetInt(PreferenceName.TimeCardOvertimeFirstDayOfWeek)))//different week of year
                     {
-                        row.Cells.Add(ClockEvents.Format(weekSpan));
+                        row.Cells.Add(ClockEvent.Format(weekSpan));
                         weekSpan = new TimeSpan(0);
                     }
                     else
@@ -429,7 +415,16 @@ namespace OpenDental
                     //Clinic---------------------------------------
                     if (Preferences.HasClinicsEnabled)
                     {
-                        row.Cells.Add(Clinics.GetAbbr(clock.ClinicId));
+                        if (clock.ClinicId.HasValue)
+                        {
+                            row.Cells.Add(Clinics.GetAbbr(clock.ClinicId.Value));
+                        }
+                        else
+                        {
+                            row.Cells.Add("");
+                        }
+
+                       
                     }
                     //Note-----------------------------------------
                     row.Cells.Add(clock.Note);
@@ -463,18 +458,18 @@ namespace OpenDental
                     daySpan += adjust.HoursRegular;//might be negative
                     weekSpan += adjust.HoursRegular;
                     periodSpan += adjust.HoursRegular;
-                    row.Cells.Add(ClockEvents.Format(adjust.HoursRegular));//6
+                    row.Cells.Add(ClockEvent.Format(adjust.HoursRegular));//6
                                                                        //Rate2-------------------------------
                     row.Cells.Add("");//
                                       //Overtime------------------------------
                     otspan += adjust.HoursOvertime;
-                    row.Cells.Add(ClockEvents.Format(adjust.HoursOvertime));//7
+                    row.Cells.Add(ClockEvent.Format(adjust.HoursOvertime));//7
                                                                          //Daily-----------------------------------
                                                                          //if this is the last entry for a given date
                     if (i == mergedClockEvents.Count - 1//if this is the last row
                         || GetDateForRow(i + 1, mergedClockEvents) != curDate)//or the next row is a different date
                     {
-                        row.Cells.Add(ClockEvents.Format(daySpan));//
+                        row.Cells.Add(ClockEvent.Format(daySpan));//
                         daySpan = new TimeSpan(0);
                     }
                     else
@@ -488,7 +483,7 @@ namespace OpenDental
                         || cal.GetWeekOfYear(GetDateForRow(i + 1, mergedClockEvents), rule, (DayOfWeek)Preference.GetInt(PreferenceName.TimeCardOvertimeFirstDayOfWeek))//or the next row has a
                         != cal.GetWeekOfYear(adjust.Date.Date, rule, (DayOfWeek)Preference.GetInt(PreferenceName.TimeCardOvertimeFirstDayOfWeek)))//different week of year
                     {
-                        ODGridCell cell = new ODGridCell(ClockEvents.Format(weekSpan));
+                        ODGridCell cell = new ODGridCell(ClockEvent.Format(weekSpan));
                         cell.ColorText = Color.Black;
                         row.Cells.Add(cell);
                         weekSpan = new TimeSpan(0);
@@ -500,7 +495,15 @@ namespace OpenDental
                     //Clinic---------------------------------------
                     if (Preferences.HasClinicsEnabled)
                     {
-                        row.Cells.Add(Clinics.GetAbbr(adjust.ClinicId));
+                        if (adjust.ClinicId.HasValue)
+                        {
+                            row.Cells.Add(Clinics.GetAbbr(adjust.ClinicId.Value));
+                        }
+                        else
+                        {
+                            row.Cells.Add("");
+                        }
+                        
                     }
                     //Note-----------------------------------------
                     row.Cells.Add("(Adjust)" + adjust.Note);//used to indicate adjust rows.
@@ -518,18 +521,8 @@ namespace OpenDental
             return gridTimeCard;
         }
 
-        private DateTime GetDateForRow(int index, IEnumerable<IDateTimeStamped> mergedAL)
-        {
-            if (mergedAL[index].GetType() == typeof(ClockEvent))
-            {
-                return ((ClockEvent)mergedAL[index]).Date1Displayed.Date;
-            }
-            else if (mergedAL[index].GetType() == typeof(TimeAdjustment))
-            {
-                return ((TimeAdjustment)mergedAL[index]).Date.Date;
-            }
-            return DateTime.MinValue;
-        }
+        private DateTime GetDateForRow(int index, IEnumerable<IDateTimeStamped> mergedAL) =>
+            mergedAL.ElementAt(index).GetDateTime().Date;
 
         private void PrintAllButton_Click(object sender, EventArgs e)
         {
@@ -846,7 +839,7 @@ namespace OpenDental
         {
             if (!Security.IsAuthorized(Permissions.TimecardsEditAll)) return;
 
-            var errorMessage = TimeCardRules.ValidateOvertimeRules(new List<long> { 0 }); // Validates the "all employees" timecard rules first.
+            var errorMessage = TimeCardRule.ValidateOvertimeRules(new List<long> { 0 }); // Validates the "all employees" timecard rules first.
             if (errorMessage.Length > 0)
             {
                 MessageBox.Show(
@@ -879,7 +872,7 @@ namespace OpenDental
             {
                 try
                 {
-                    TimeCardRules.CalculateDailyOvertime(
+                    TimeCardRule.CalculateDailyOvertime(
                         Employee.GetById(PIn.Long(MainTable.Rows[grid.SelectedIndices[i]]["EmployeeNum"].ToString())), 
                         X_DateStart, 
                         X_DateEnd);
@@ -945,7 +938,7 @@ namespace OpenDental
             {
                 try
                 {
-                    TimeCardRules.CalculateWeeklyOvertime(
+                    TimeCardRule.CalculateWeeklyOvertime(
                         Employee.GetById(PIn.Long(MainTable.Rows[grid.SelectedIndices[i]]["EmployeeNum"].ToString())),
                         X_DateStart,
                         X_DateEnd);
@@ -1118,7 +1111,7 @@ namespace OpenDental
 
                 using (var font = new Font("Arial", 13, FontStyle.Bold))
                 {
-                    e.Graphics.DrawString(text, font, Brushes.Black, center - g.MeasureString(text, font).Width / 2, y);
+                    e.Graphics.DrawString(text, font, Brushes.Black, center - e.Graphics.MeasureString(text, font).Width / 2, y);
                     if (Preferences.HasClinicsEnabled)
                     {
                         y += 75;

@@ -610,7 +610,7 @@ namespace OpenDental
             employeeGrid.SetSelected(index, true);
             EmployeeCur = _listEmployees[index];
 
-            ClockEvent clockEvent = ClockEvents.GetLastEvent(EmployeeCur.Id);
+            ClockEvent clockEvent = ClockEvent.GetLastEvent(EmployeeCur.Id);
             if (clockEvent == null) // New employee. They need to clock in.
             {
                 butClockIn.Enabled = true;
@@ -644,7 +644,7 @@ namespace OpenDental
             }
             else
             {//normal clock in/out
-                if (clockEvent.Date2Displayed.Year < 1880)
+                if (!clockEvent.Date2Displayed.HasValue)
                 {//clocked in to work, but not clocked back out.
                     butClockIn.Enabled = false;
                     butClockOut.Enabled = true;
@@ -703,7 +703,7 @@ namespace OpenDental
                     throw new Exception("You need to authenticate to clock-in");
                 }
 
-                ClockEvents.ClockIn(EmployeeCur.Id);
+                ClockEvent.ClockIn(EmployeeCur.Id);
             }
             catch (Exception ex)
             {
@@ -714,7 +714,7 @@ namespace OpenDental
             EmployeeCur.ClockStatus = Lan.g(this, "Working");
             Employee.Update(EmployeeCur);
             ModuleSelected(PatCurNum);
-            if (!PayPeriods.HasPayPeriodForDate(DateTime.Today))
+            if (PayPeriod.GetByDate(DateTime.Today) == null)
             {
                 MsgBox.Show(this, "No dates exist for this pay period.  Time clock events will not display until pay periods have been created for this date range");
             }
@@ -740,7 +740,7 @@ namespace OpenDental
                 {
                     throw new Exception("You need to authenticate to clock-out");
                 }
-                ClockEvents.ClockOut(EmployeeCur.Id, _listShownTimeClockStatuses[listStatus.SelectedIndex]);
+                ClockEvent.ClockOut(EmployeeCur.Id, _listShownTimeClockStatuses[listStatus.SelectedIndex]);
             }
             catch (Exception ex)
             {
@@ -775,11 +775,13 @@ namespace OpenDental
             {//Just in case
                 return;
             }
-            if (PayPeriods.GetCount() == 0)
+
+            if (PayPeriod.GetCount() == 0)
             {
                 MsgBox.Show(this, "The adminstrator needs to setup pay periods first.");
                 return;
             }
+
             if (!butTimeCard.Enabled)
             {
                 return;
@@ -797,7 +799,7 @@ namespace OpenDental
                 SelectEmployee(-1);
                 return;
             }
-            if (PayPeriods.GetCount() == 0)
+            if (PayPeriod.GetCount() == 0)
             {
                 MsgBox.Show(this, "The adminstrator needs to setup pay periods first.");
                 return;
@@ -816,7 +818,7 @@ namespace OpenDental
                 return;
             }
 
-            if (PayPeriods.GetCount() == 0)
+            if (PayPeriod.GetCount() == 0)
             {
                 MessageBox.Show(
                     "The adminstrator needs to setup pay periods first.",
@@ -836,12 +838,14 @@ namespace OpenDental
 
         private void butViewSched_Click(object sender, EventArgs e)
         {
-            List<long> listPreSelectedEmpNums = employeeGrid.SelectedGridRows.Select(x => ((Employee)x.Tag).Id).ToList();
-            List<long> listPreSelectedProvNums = Userods.GetWhere(x => listPreSelectedEmpNums.Contains(x.EmployeeId) && x.ProviderId != 0)
-                .Select(x => x.ProviderId)
-                .ToList();
-            FormSchedule formSched = new FormSchedule(listPreSelectedEmpNums, listPreSelectedProvNums);
-            formSched.ShowDialog();
+            // TODO: Fix me
+
+            //List<long> listPreSelectedEmpNums = employeeGrid.SelectedGridRows.Select(x => ((Employee)x.Tag).Id).ToList();
+            //List<long> listPreSelectedProvNums = User.GetWhere(x => listPreSelectedEmpNums.Contains(x.EmployeeId) && x.ProviderId != 0)
+            //    .Select(x => x.ProviderId)
+            //    .ToList();
+            //FormSchedule formSched = new FormSchedule(listPreSelectedEmpNums, listPreSelectedProvNums);
+            //formSched.ShowDialog();
         }
 
 
