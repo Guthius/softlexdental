@@ -107,11 +107,13 @@ namespace OpenDentBusiness
                 return new List<AlertItem>();
             }
 
-            long provNum = 0;
-            if (Security.CurUser != null && Userods.IsUserCpoe(Security.CurUser))
+            long? provNum = 0;
+            if (Security.CurUser != null && User.IsUserCPOE(Security.CurUser))
             {
                 provNum = Security.CurUser.ProviderId;
             }
+
+            if (!provNum.HasValue) return new List<AlertItem>();
 
             long curUserNum = 0;
             if (Security.CurUser != null)
@@ -125,7 +127,7 @@ namespace OpenDentBusiness
                 "SELECT * FROM alertitem " +
                 "WHERE Type IN (" + String.Join(",", listAlertTypes.Cast<int>().ToList()) + ") " +
                 "AND (UserNum=0 OR UserNum=" + POut.Long(curUserNum) + ") " +
-                "AND (CASE TYPE WHEN " + POut.Int((int)AlertType.RadiologyProcedures) + " THEN FKey=" + POut.Long(provNum) + " " +
+                "AND (CASE TYPE WHEN " + POut.Int((int)AlertType.RadiologyProcedures) + " THEN FKey=" + POut.Long(provNum.Value) + " " +
                 "ELSE ClinicNum = " + POut.Long(clinicNum) + " OR ClinicNum=-1 END)");
         }
 

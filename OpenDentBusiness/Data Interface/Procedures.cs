@@ -3503,7 +3503,7 @@ namespace OpenDentBusiness
                     }
                     procCur.Note += procNoteDefault;
                 }
-                if (Userods.IsUserCpoe(curUser))
+                if (User.IsUserCPOE(curUser))
                 {
                     //Only change the status of IsCpoe to true.  Never set it back to false for any reason.  Once true, always true.
                     procCur.IsCpoe = true;
@@ -4166,7 +4166,7 @@ namespace OpenDentBusiness
             proc.RevCode = procCodeCur.RevenueCodeDefault;
             proc.DiagnosticCode = Preference.GetString(PreferenceName.ICD9DefaultForNewProcs);
             proc.PlaceService = (PlaceOfService)Preference.GetInt(PreferenceName.DefaultProcedurePlaceService);//Default proc place of service for the Practice is used. 
-            if (Userods.IsUserCpoe(Security.CurUser))
+            if (User.IsUserCPOE(Security.CurUser))
             {
                 //This procedure is considered CPOE because the provider is the one that has added it.
                 proc.IsCpoe = true;

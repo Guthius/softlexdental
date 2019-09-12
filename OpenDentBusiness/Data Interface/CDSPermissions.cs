@@ -35,16 +35,18 @@ namespace OpenDentBusiness
         /// </summary>
         private static void InsertMissingValues()
         {
-            string command = "SELECT * FROM userod WHERE IsHidden=0 AND UserNum NOT IN (SELECT UserNum from cdsPermission)";
+            // TODO: Implement me...
 
-            foreach (var user in User.SelectMany(command))
-            {
-                Insert(new CDSPermission
-                {
-                    UserNum = user.Id
-                });
-            }
-            return;
+           //string command = "SELECT * FROM userod WHERE IsHidden=0 AND UserNum NOT IN (SELECT UserNum from cdsPermission)";
+           //
+           //foreach (var user in User.SelectMany(command))
+           //{
+           //    Insert(new CDSPermission
+           //    {
+           //        UserNum = user.Id
+           //    });
+           //}
+           //return;
         }
 
         ///<summary></summary>

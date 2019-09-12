@@ -195,10 +195,7 @@ namespace OpenDentBusiness
             //No need to check RemotingRole; no call to db.
             date = date.Date; //Remove the time portion of date so we can compare strictly as a date later.
                               //Check eConnector permission first.
-            if (IsValidEServicePermission(perm))
-            {
-                return true;
-            }
+
             if (!GroupPermissions.HasPermission(curUser, perm, fKey))
             {
                 if (!suppressMessage)

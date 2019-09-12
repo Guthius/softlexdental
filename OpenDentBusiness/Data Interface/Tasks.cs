@@ -172,14 +172,14 @@ namespace OpenDentBusiness
                 txt = "";
                 if (!taskCur.Descript.StartsWith("==") && taskCur.UserNum != 0)
                 {
-                    txt += Userods.GetName(PIn.Long(taskCur.UserNum.ToString())) + " - ";
+                    txt += User.GetName(PIn.Long(taskCur.UserNum.ToString())) + " - ";
                 }
                 txt += taskCur.Descript;
                 if (doIncludeTaskNote)
                 {
                     listTaskNotes.FindAll(x => x.TaskNum == taskCur.TaskNum)
                     .ForEach(x => txt += "\r\n"//even on the first loop
-                        + "==" + Userods.GetName(x.UserNum) + " - "
+                        + "==" + User.GetName(x.UserNum) + " - "
                         + x.DateTimeNote.ToShortDateString() + " "
                         + x.DateTimeNote.ToShortTimeString()
                         + " - " + x.Note);
@@ -812,7 +812,7 @@ namespace OpenDentBusiness
             {
                 return "";
             }
-            List<Clinic> listUnrestrictedClinics = Clinics.GetAllForUserod(Userods.GetUser(currentUserNum));
+            List<Clinic> listUnrestrictedClinics = Clinics.GetAllForUserod(User.GetById(currentUserNum));
             List<long> listFkeys = new List<long>() { 0 };//All users can see Tasks associated to HQ clinic or "0" region.
             switch (globalFilterType)
             {
@@ -1019,7 +1019,7 @@ namespace OpenDentBusiness
                 }
                 if (task.UserNum != oldTask.UserNum)
                 {
-                    TaskEditCreateLog(Lans.g("Tasks", "Changed user from") + " " + Userods.GetName(oldTask.UserNum), task);//+" To "+Userods.GetName(task.UserNum)),task);
+                    TaskEditCreateLog(Lans.g("Tasks", "Changed user from") + " " + User.GetName(oldTask.UserNum), task);//+" To "+Userods.GetName(task.UserNum)),task);
                 }
                 if (task.KeyNum != oldTask.KeyNum)
                 {//We know at this point that SOMETHING with the task association changed.

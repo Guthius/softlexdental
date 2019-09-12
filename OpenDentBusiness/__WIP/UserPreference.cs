@@ -95,6 +95,23 @@ namespace OpenDentBusiness
         public static string GetString(long clinicId, long userId, string preferenceKey, string defaultValue = "") =>
             GetByKey(userId, clinicId, preferenceKey)?.Value ?? defaultValue;
 
+        public static long GetLong(long userId, string preferenceKey, long defaultValue = 0)
+        {
+            if (long.TryParse(GetString(userId, preferenceKey), out var result))
+            {
+                return result;
+            }
+            return defaultValue;
+        }
+
+        public static long GetLong(long clinicId, long userId, string preferenceKey, long defaultValue = 0)
+        {
+            if (long.TryParse(GetString(clinicId, userId, preferenceKey), out var result))
+            {
+                return result;
+            }
+            return defaultValue;
+        }
 
         /// <summary>
         /// Inserts the specified user preference into the database.
@@ -121,6 +138,100 @@ namespace OpenDentBusiness
                     new MySqlParameter("clinic_id", userPreference.ClinicId.HasValue ? (object)userPreference.ClinicId.Value : DBNull.Value),
                     new MySqlParameter("user_id", userPreference.UserId),
                     new MySqlParameter("key", userPreference.Key ?? ""));
+        }
+
+        /// <summary>
+        /// Updates the value of the user preference with the specified key.
+        /// </summary>
+        /// <param name="userId">The ID of the user.</param>
+        /// <param name="preferenceKey">The key of the preference.</param>
+        /// <param name="value">The new value of the preference.</param>
+        /// <returns>A value indicating whether the preference was updated.</returns>
+        public static bool Update(long userId, string preferenceKey, string value)
+        {
+            value = value ?? "";
+
+            var preference = GetByKey(userId, preferenceKey);
+
+            if (preference != null)
+            {
+                if (!preference.Value.Equals(value, StringComparison.InvariantCulture))
+                {
+                    preference.Value = value;
+
+                    Insert(preference);
+
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public static bool Update(long userId, string preferenceKey, bool value) =>
+            Update(userId, preferenceKey, value.ToString());
+
+        public static bool Update(long userId, string preferenceKey, long value) =>
+            Update(userId, preferenceKey, value.ToString());
+
+        /// <summary>
+        /// Updates the value of the user preference with the specified key.
+        /// </summary>
+        /// <param name="clinicId">The ID of the clinic.</param>
+        /// <param name="userId">The ID of the user.</param>
+        /// <param name="preferenceKey">The key of the preference.</param>
+        /// <param name="value">The new value of the preference.</param>
+        /// <returns>A value indicating whether the preference was updated.</returns>
+        public static bool Update(long clinicId, long userId, string preferenceKey, string value)
+        {
+            value = value ?? "";
+
+            var preference = GetByKey(clinicId, userId, preferenceKey);
+
+            if (preference != null)
+            {
+                if (!preference.Value.Equals(value, StringComparison.InvariantCulture))
+                {
+                    preference.Value = value;
+
+                    Insert(preference);
+
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public static bool Update(long clinicId, long userId, string preferenceKey, bool value) =>
+            Update(clinicId, userId, preferenceKey, value.ToString());
+
+        public static bool Update(long clinicId, long userId, string preferenceKey, long value) =>
+            Update(clinicId, userId, preferenceKey, value.ToString());
+
+        /// <summary>
+        /// Updates the user preference with the specified key for all users across all clinics.
+        /// </summary>
+        /// <param name="preferenceKey">The preference key.</param>
+        /// <param name="value">The value of the preference.</param>
+        public static void UpdateAll(string preferenceKey, string value)
+        {
+            if (string.IsNullOrEmpty(preferenceKey)) return;
+
+            value = value ?? "";
+
+            foreach (var userPreference in cache)
+            {
+                if (userPreference.Key.Equals(preferenceKey, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    userPreference.Value = value;
+                }
+            }
+
+            DataConnection.ExecuteNonQuery(
+                "UPDATE `user_preferences` SET `value` = ?value WHERE `key` = ?key",
+                    new MySqlParameter("key", preferenceKey),
+                    new MySqlParameter("value", value));
         }
     }
 }

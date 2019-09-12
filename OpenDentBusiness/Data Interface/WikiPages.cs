@@ -290,12 +290,8 @@ namespace OpenDentBusiness
             Db.NonQ(command);
             command = "UPDATE wikipagehist SET PageTitle='" + POut.String(newPageTitle) + "'WHERE PageTitle='" + POut.String(wikiPage.PageTitle) + "'";
             Db.NonQ(command);
-            //Update all home pages for users.
-            command = "UPDATE userodpref SET ValueString='" + POut.String(newPageTitle) + "' "
-                + "WHERE FkeyType=" + POut.Int((int)UserPreferenceName.WikiHomePage) + " "
-                + "AND ValueString='" + POut.String(wikiPage.PageTitle) + "'";
-            Db.NonQ(command);
-            return;
+
+            UserPreference.UpdateAll(UserPreferenceName.WikiHomePage, wikiPage.PageTitle); // TODO: Store the ID of the wiki home page instead of the title???
         }
 
         ///<summary>Used in TranslateToXhtml to know whether to mark a page as not exists.</summary>
@@ -524,8 +520,6 @@ namespace OpenDentBusiness
             wikiPage.IsDeleted = true;
             wikiPage.DateTimeSaved = MiscData.GetNowDateTime();
             Crud.WikiPageCrud.Update(wikiPage);
-            //Remove all associated home pages for all users.
-            UserOdPrefs.DeleteForValueString(0, UserPreferenceName.WikiHomePage, pageTitle);
         }
 
         public static WikiPageHist PageToHist(WikiPage wikiPage)

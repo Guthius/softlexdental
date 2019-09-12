@@ -282,7 +282,7 @@ namespace OpenDentBusiness
             {
                 return command;
             }
-            List<Clinic> listUnrestrictedClinics = Clinics.GetAllForUserod(Userods.GetUser(currentUserNum));
+            List<Clinic> listUnrestrictedClinics = Clinics.GetAllForUserod(User.GetById(currentUserNum));
             List<long> listClinicNums = new List<long>() { 0 };//All users can see Tasks associated to HQ clinic or "0" region.
             List<long> listClinicNumsInRegion = new List<long>() { 0 };//All users can see Tasks associated to HQ clinic or "0" region.
             List<long> listUnrestrictedClinicNums = listUnrestrictedClinics.Select(x => x.ClinicNum).ToList();//User can view these clinicnums.

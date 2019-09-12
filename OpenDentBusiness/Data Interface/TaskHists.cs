@@ -74,9 +74,9 @@ namespace OpenDentBusiness
             if (taskNext.UserNum != taskCur.UserNum)
             {
                 strb.Append(Lans.g("TaskHists", "Task author changed from ")
-                    + Userods.GetUser(taskCur.UserNum).UserName
+                    + User.GetById(taskCur.UserNum).UserName
                     + " " + Lans.g("TaskHists", "to") + " "
-                    + Userods.GetUser(taskNext.UserNum).UserName + ".\r\n");
+                    + User.GetById(taskNext.UserNum).UserName + ".\r\n");
             }
             if (taskNext.DateTimeFinished != taskCur.DateTimeFinished)
             {

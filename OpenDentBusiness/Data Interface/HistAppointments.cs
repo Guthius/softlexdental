@@ -75,7 +75,7 @@ namespace OpenDentBusiness
             }
             HistAppointment hist = new HistAppointment();
             hist.HistUserNum = Security.CurUser.Id;
-            hist.ApptSource = Security.CurUser.EServiceType;
+            hist.ApptSource = 0;
             hist.HistApptAction = action;
             if (appt != null)
             {//Null if deleted

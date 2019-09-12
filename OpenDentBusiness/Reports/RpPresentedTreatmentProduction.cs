@@ -85,7 +85,7 @@ namespace OpenDentBusiness
             List<TreatPlan> listSavedTreatPlans = TreatPlans.GetFromProcTPs(listProcTPs); // attached proctps to treatment plans.
             List<ClaimProc> listClaimProcs = ClaimProcs.GetForProcsLimited(listTreatPlanProcs.Select(x => x.ProcNum).ToList(), ClaimProcStatus.Received, ClaimProcStatus.Supplemental, ClaimProcStatus.CapComplete, ClaimProcStatus.NotReceived);
             List<Adjustment> listAdjustments = Adjustments.GetForProcs(listTreatPlanProcs.Select(x => x.ProcNum).ToList());
-            List<User> listUserods = Userods.GetAll();
+            List<User> listUserods = User.All();
             List<TreatPlanPresenterEntry> listTreatPlanPresenterEntries = new List<TreatPlanPresenterEntry>();
             List<ProcedureCode> listProcCodes = ProcedureCodes.GetCodesForCodeNums(listTreatPlanProcs.Select(x => x.CodeNum).ToList());
             foreach (Procedure procCur in listTreatPlanProcs)

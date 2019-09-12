@@ -56,7 +56,7 @@ namespace OpenDentBusiness
             }
             List<ClaimProc> listClaimProcs = ClaimProcs.GetForProcsLimited(listProcsForTreatPlans.Select(x => x.ProcNum).ToList(), ClaimProcStatus.CapComplete, ClaimProcStatus.NotReceived, ClaimProcStatus.Received, ClaimProcStatus.Supplemental, ClaimProcStatus.Estimate);
             List<Adjustment> listAdjustments = Adjustments.GetForProcs(listProcsForTreatPlans.Select(x => x.ProcNum).ToList());
-            List<User> listUserods = Userods.GetAll();
+            List<User> listUserods = User.All();
             List<TreatPlanPresenterEntry> listTreatPlanPresenterEntries = new List<TreatPlanPresenterEntry>();
             List<ProcedureCode> listProcCodes = ProcedureCodes.GetCodesForCodeNums(listProcsForTreatPlans.Select(x => x.CodeNum).ToList());
             List<Appointment> listApts = Appointments.GetMultApts(listProcsForTreatPlans.Select(x => x.AptNum).ToList());

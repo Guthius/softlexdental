@@ -454,18 +454,20 @@ namespace OpenDentBusiness
         {
             //No need to check RemotingRole; no call to db.
             List<Provider> listProvsWithClinics = new List<Provider>();
-            List<User> listUsersShort = Userods.GetDeepCopy(true);
+            List<User> listUsersShort = User.All();
             for (int i = 0; i < listUsersShort.Count; i++)
             {
-                Provider prov = Providers.GetProv(listUsersShort[i].ProviderId);
+                if (!listUsersShort[i].ProviderId.HasValue) continue;
+
+                Provider prov = Providers.GetProv(listUsersShort[i].ProviderId.Value);
                 if (prov == null)
                 {
                     continue;
                 }
-                List<UserClinic> listUserClinics = UserClinics.GetForUser(listUsersShort[i].Id);
+                var listUserClinics = UserClinic.GetForUser(listUsersShort[i].Id);
                 //If filtering by a specific clinic, make sure the clinic matches the clinic passed in.
                 //If the user is associated to multiple clinics we check to make sure one of them isn't the clinic in question.
-                if (clinicNum > 0 && !listUserClinics.Exists(x => x.ClinicId == clinicNum))
+                if (clinicNum > 0 && !listUserClinics.Any(x => x.ClinicId == clinicNum))
                 {
                     continue;
                 }
@@ -527,25 +529,25 @@ namespace OpenDentBusiness
         }
 
         /// <summary>Takes a provNum. Normally returns that provNum. If in Orion mode, returns the user's ProvNum, if that user is a primary provider. Otherwise, in Orion Mode, returns 0.</summary>
-        public static long GetOrionProvNum(long provNum)
+        public static long GetOrionProvNum(long providerId)
         {
             if (Programs.UsingOrion)
             {
-                User user = Security.CurUser;
-                if (user != null)
+                var user = Security.CurUser;
+                if (user != null && user.ProviderId.HasValue)
                 {
-                    Provider prov = Providers.GetProv(user.ProviderId);
-                    if (prov != null)
+                    var provider = Providers.GetProv(user.ProviderId.Value);
+                    if (provider != null)
                     {
-                        if (!prov.IsSecondary)
+                        if (!provider.IsSecondary)
                         {
-                            return user.ProviderId;
+                            return user.ProviderId.Value;
                         }
                     }
                 }
                 return 0;
             }
-            return provNum;
+            return providerId;
         }
 
         ///<summary>Within the regular list of visible providers.  Will return -1 if the specified provider is not in the list.</summary>
@@ -555,13 +557,7 @@ namespace OpenDentBusiness
             return _providerCache.GetFindIndex(x => x.ProvNum == provNum, true);
         }
 
-        public static List<User> GetAttachedUsers(long provNum)
-        {
-            string command = "SELECT userod.* FROM userod,provider "
-                    + "WHERE userod.ProvNum=provider.ProvNum "
-                    + "AND provider.provNum=" + POut.Long(provNum);
-            return User.SelectMany(command);
-        }
+        public static List<User> GetAttachedUsers(long provNum) => User.GetByProviderId(provNum);
 
         ///<summary>If useClinic, then clinicInsBillingProv will be used.  Otherwise, the pref for the practice.  Either way, there are three different choices for getting the billing provider.  One of the three is to use the treating provider, so supply that as an argument.  It will return a valid provNum unless the supplied treatProv was invalid.</summary>
         public static long GetBillingProvNum(long treatProv, long clinicNum)
@@ -630,9 +626,9 @@ namespace OpenDentBusiness
             {
                 return Providers.GetDeepCopy(true);//if clinics not enabled, return all visible providers.
             }
-            Dictionary<long, List<long>> dictUserClinics = Userods.GetDeepCopy()
-                .ToDictionary(x => x.Id, x => UserClinics.GetWhere(y => y.UserId == x.Id).Select(y => y.ClinicId).ToList());
-            Dictionary<long, List<long>> dictProvUsers = Userods.GetWhere(x => x.ProviderId > 0).GroupBy(x => x.ProviderId)
+            Dictionary<long, List<long>> dictUserClinics = User.All()
+                .ToDictionary(x => x.Id, x => UserClinic.GetForUser(x.Id).Select(y => y.ClinicId).ToList());
+            Dictionary<long, List<long>> dictProvUsers = User.GetWithProvider().GroupBy(x => x.ProviderId.Value)
                 .ToDictionary(x => x.Key, x => x.Select(y => y.Id).ToList());
             HashSet<long> hashSetProvsRestrictedOtherClinic = new HashSet<long>(ProviderClinicLinks.GetProvsRestrictedToOtherClinics(clinicNum));
             return Providers.GetWhere(x =>

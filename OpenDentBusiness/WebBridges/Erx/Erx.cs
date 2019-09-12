@@ -297,27 +297,27 @@ namespace OpenDentBusiness
             }
         }
 
-        public static bool IsUserAnEmployee(User user)
-        {
-            bool isEmp = false;
-            if (user.EmployeeId == 0)
-            {//The current user does not have an employee associated.
-                isEmp = false;
-            }
-            else if (user.ProviderId == 0)
-            {//The current user has an employee associated and no provider associated.
-                isEmp = true;
-            }
-            else
-            {//Both an employee and provider are associated to the current user.
-                Provider provUser = Providers.GetProv(user.ProviderId);
-                if (provUser.IsSecondary && provUser.NationalProvID == "")
-                {
-                    isEmp = true;
-                }
-            }
-            return isEmp;
-        }
+        //public static bool IsUserAnEmployee(User user)
+        //{
+        //    bool isEmp = false;
+        //    if (user.EmployeeId.HasValue)
+        //    {//The current user does not have an employee associated.
+        //        isEmp = true;
+        //    }
+        //    else if (user.ProviderId == 0)
+        //    {//The current user has an employee associated and no provider associated.
+        //        isEmp = true;
+        //    }
+        //    else
+        //    {//Both an employee and provider are associated to the current user.
+        //        Provider provUser = Providers.GetProv(user.ProviderId);
+        //        if (provUser.IsSecondary && provUser.NationalProvID == "")
+        //        {
+        //            isEmp = true;
+        //        }
+        //    }
+        //    return isEmp;
+        //}
 
         ///<summary>Returns true if the passed in erxGuid is in a format that is consistent with DoseSpot.</summary>
         public static bool IsFromDoseSpot(string erxGuid)

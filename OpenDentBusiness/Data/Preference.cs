@@ -328,26 +328,8 @@ namespace OpenDentBusiness
         /// <param name="preferenceName">The name of the preference.</param>
         /// <param name="value">The new value of the preference.</param>
         /// <returns>A value indicating whether the preference was updated.</returns>
-        public static bool Update(PreferenceName preferenceName, string value)
-        {
-            value = value ?? "";
-
-            var preference = GetByName(preferenceName);
-
-            if (preference != null)
-            {
-                if (!preference.Value.Equals(value, StringComparison.InvariantCulture))
-                {
-                    preference.Value = value;
-
-                    Update(preference);
-
-                    return true;
-                }
-            }
-
-            return false;
-        }
+        public static bool Update(PreferenceName preferenceName, string value) =>
+            Update(preferenceName.ToString(), value);
 
         /// <summary>
         /// Updates the value of the preference with the specified key.
@@ -367,7 +349,7 @@ namespace OpenDentBusiness
                 {
                     preference.Value = value;
 
-                    Update(preference);
+                    Insert(preference);
 
                     return true;
                 }
@@ -375,16 +357,6 @@ namespace OpenDentBusiness
 
             return false;
         }
-
-        /// <summary>
-        /// Updates the specified preference in the database.
-        /// </summary>
-        /// <param name="preference">The preference.</param>
-        public static void Update(Preference preference) =>
-            DataConnection.ExecuteNonQuery(
-                "UPDATE `preferences` SET `value` = ?value WHERE `key` = ?key",
-                    new MySqlParameter("key", preference.Key ?? ""),
-                    new MySqlParameter("value", preference.Value ?? ""));
 
         /// <summary>
         /// Deletes the preference with the specified key from the database.
