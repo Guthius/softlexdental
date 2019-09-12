@@ -57,44 +57,44 @@ namespace OpenDentBusiness
         /// <para>Checks whether the current user has the specified permissions.</para>
         /// <para>Displays a message box if the user does not have the specified permissions.</para>
         /// </summary>
-        public static bool IsAuthorized(Permissions permission) => 
+        public static bool IsAuthorized(string permission) => 
             IsAuthorized(permission, DateTime.MinValue, false);
 
-        public static bool IsAuthorized(Permissions permission, DateTime date) =>
+        public static bool IsAuthorized(string permission, DateTime date) =>
             IsAuthorized(permission, date, false);
 
-        public static bool IsAuthorized(Permissions permission, bool suppressMessage) =>
+        public static bool IsAuthorized(string permission, bool suppressMessage) =>
             IsAuthorized(permission, DateTime.MinValue, suppressMessage);
 
-        public static bool IsAuthorized(Permissions permission, DateTime date, bool suppressMessage) =>
+        public static bool IsAuthorized(string permission, DateTime date, bool suppressMessage) =>
             IsAuthorized(permission, date, suppressMessage, false);
 
-        public static bool IsAuthorized(Permissions permission, DateTime date, bool suppressMessage, bool suppressLockDateMessage) => 
+        public static bool IsAuthorized(string permission, DateTime date, bool suppressMessage, bool suppressLockDateMessage) => 
             IsAuthorized(permission, date, suppressMessage, suppressLockDateMessage, 0, -1, 0, 0);
 
-        public static bool IsAuthorized(Permissions permission, long foreignKey, bool suppressMessage) =>
+        public static bool IsAuthorized(string permission, long foreignKey, bool suppressMessage) =>
             IsAuthorized(permission, DateTime.MinValue, suppressMessage, true, 0, -1, 0, foreignKey);
 
-        public static bool IsAuthorized(Permissions permission, out string msg) => 
+        public static bool IsAuthorized(string permission, out string msg) => 
             IsAuthorized(permission, DateTime.MinValue, true, true, 0, -1, 0, 0, out msg);
 
-        public static bool IsAuthorized(Permissions permission, DateTime date, long procedureCodeId, double procedureCodeFee) => 
+        public static bool IsAuthorized(string permission, DateTime date, long procedureCodeId, double procedureCodeFee) => 
             IsAuthorized(permission, date, false, false, procedureCodeId, procedureCodeFee, 0, 0);
         
-        public static bool IsAuthorized(Permissions permission, DateTime date, bool suppressMessage, bool suppressLockDateMessage, long procedureCodeId, double procedureCodeFee, long sheetDefinitionId, long foreignKey) => 
+        public static bool IsAuthorized(string permission, DateTime date, bool suppressMessage, bool suppressLockDateMessage, long procedureCodeId, double procedureCodeFee, long sheetDefinitionId, long foreignKey) => 
             IsAuthorized(permission, date, suppressMessage, suppressLockDateMessage, procedureCodeId, procedureCodeFee, sheetDefinitionId, foreignKey, out _);
         
         /// <summary>
         /// Checks to see if current user is authorized. It also checks any date restrictions. 
         /// If not authorized, it gives a Message box saying so and returns false.
         /// </summary>
-        public static bool IsAuthorized(Permissions permission, DateTime date, bool suppressMessage, bool suppressLockDateMessage, long procedureCodeId, double procedureCodeFee, long sheetDefinitionId, long foreignKey, out string message)
+        public static bool IsAuthorized(string permission, DateTime date, bool suppressMessage, bool suppressLockDateMessage, long procedureCodeId, double procedureCodeFee, long sheetDefinitionId, long foreignKey, out string message)
         {
             message = "";
 
             if (CurrentUser == null)
             {
-                message = "Not authorized for\r\n" + GroupPermissions.GetDesc(permission);
+                message = "Not authorized for\r\n" + GroupPermission.GetDescription(permission);
                 if (!suppressMessage)
                 {
                     MessageBox.Show(
@@ -126,19 +126,19 @@ namespace OpenDentBusiness
         /// <summary>
         /// Will throw an error if not authorized and message not suppressed.
         /// </summary>
-        public static bool IsAuthorized(Permissions permission, DateTime date, bool suppressMessage, bool suppressLockDateMessage, User curUser,
+        public static bool IsAuthorized(string permission, DateTime date, bool suppressMessage, bool suppressLockDateMessage, User curUser,
             long procedureCodeId, double procedureFee, long sheetDefNum, long fKey)
         {
             date = date.Date;
 
-            if (!GroupPermissions.HasPermission(curUser, permission, fKey))
+            if (!GroupPermission.HasPermission(curUser, permission, fKey))
             {
                 if (!suppressMessage)
                 {
                     throw new Exception(
                         "Not authorized.\r\n" +
                         "A user with the SecurityAdmin permission must grant you access for:\r\n" +
-                        GroupPermissions.GetDesc(permission));
+                        GroupPermission.GetDescription(permission));
                 }
 
                 return false;
@@ -162,23 +162,26 @@ namespace OpenDentBusiness
             }
 
             //Check date/days limits on individual permission----------------------------------------------------------------
-            if (!GroupPermissions.PermTakesDates(permission))
+            //if (!GroupPermission.PermTakesDates(permission))
+            //{
+            //    return true;
+            //}
+
+
+            var dateLimit = GroupPermission.GetDateRestrictedForPermission(permission, curUser.GetGroups().Select(x => x.Id).ToList());
+            if (!dateLimit.HasValue || date > dateLimit)
             {
                 return true;
             }
-            //Include CEMT users, as a CEMT user could be logged in when this is checked.
-            DateTime dateLimit = GetDateLimit(permission, curUser.GetGroups().Select(x => x.Id).ToList());
-            if (date > dateLimit)
-            {//authorized
-                return true;
-            }
+
+
             //Prevents certain bugs when 1/1/1 dates are passed in and compared----------------------------------------------
             //Handling of min dates.  There might be others, but we have to handle them individually to avoid introduction of bugs.
             if (permission == Permissions.ClaimDelete//older versions did not have SecDateEntry
                 || permission == Permissions.ClaimSentEdit//no date sent was entered before setting claim received
-                || permission == Permissions.ProcComplEdit//a completed procedure with a min date.
+                || permission == Permissions.EditCompletedProcedure//a completed procedure with a min date.
                 || permission == Permissions.ProcComplEditLimited//because ProcComplEdit was in this list
-                || permission == Permissions.ProcExistingEdit//a completed EO or EC procedure with a min date.
+                || permission == Permissions.EditProcedure//a completed EO or EC procedure with a min date.
                 || permission == Permissions.InsPayEdit//a claim payment with no date.
                 || permission == Permissions.InsWriteOffEdit//older versions did not have SecDateEntry or DateEntryC
                 || permission == Permissions.TreatPlanEdit
@@ -189,7 +192,7 @@ namespace OpenDentBusiness
                 || permission == Permissions.PerioEdit//In case perio chart exam has a creation date of DateTime.MinValue.
                 || permission == Permissions.PreAuthSentEdit)//older versions did not have SecDateEntry
             {
-                if (date.Year < 1880 && dateLimit.Year < 1880)
+                if (date.Year < 1880 && dateLimit.Value.Year < 1880)
                 {
                     return true;
                 }
@@ -197,21 +200,21 @@ namespace OpenDentBusiness
             if (!suppressMessage)
             {
                 throw new Exception("Not authorized for" + "\r\n"
-                    + GroupPermissions.GetDesc(permission) + "\r\n" + "Date limitation");
+                    + GroupPermission.GetDescription(permission) + "\r\n" + "Date limitation");
             }
             return false;
         }
 
-        public static bool IsGlobalDateLock(Permissions perm, DateTime date, bool isSilent = false, long codeNum = 0, double procFee = -1, long sheetDefNum = 0)
+        public static bool IsGlobalDateLock(string perm, DateTime date, bool isSilent = false, long codeNum = 0, double procFee = -1, long sheetDefNum = 0)
         {
             if (!(new[] {
                  Permissions.AdjustmentCreate
                 ,Permissions.AdjustmentEdit
                 ,Permissions.PaymentCreate
                 ,Permissions.PaymentEdit
-                ,Permissions.ProcComplCreate
-                ,Permissions.ProcComplEdit
-                ,Permissions.ProcExistingEdit
+                ,Permissions.CreateCompletedProcedure
+                ,Permissions.EditCompletedProcedure
+                ,Permissions.EditProcedure
 			//,Permissions.ProcComplEditLimited
 			//,Permissions.ImageDelete
 				,Permissions.InsPayCreate
@@ -231,11 +234,11 @@ namespace OpenDentBusiness
             {
                 return false;//Invalid or MinDate passed in.
             }
-            if (!Preference.GetBool(PreferenceName.SecurityLockIncludesAdmin) && GroupPermissions.HasPermission(Security.CurrentUser, Permissions.SecurityAdmin, 0))
+            if (!Preference.GetBool(PreferenceName.SecurityLockIncludesAdmin) && GroupPermission.HasPermission(CurrentUser, Permissions.SecurityAdmin, 0))
             {
                 return false;//admins are never affected by global date limitation when preference is false.
             }
-            if (perm.In(Permissions.ProcComplCreate, Permissions.ProcComplEdit, Permissions.ProcExistingEdit)
+            if (perm.In(Permissions.CreateCompletedProcedure, Permissions.EditCompletedProcedure, Permissions.EditProcedure)
                 && ProcedureCodes.CanBypassLockDate(codeNum, procFee))
             {
                 return false;
@@ -271,8 +274,8 @@ namespace OpenDentBusiness
         /// 
         /// Returns MinVal if the user is not restricted or does not have the permission.
         /// </summary>
-        private static DateTime GetDateLimit(Permissions permission, List<long> userGroupIds) =>
-            GroupPermissions.GetDateRestrictedForPermission(permission, userGroupIds);
+        private static DateTime? GetDateLimit(string permission, List<long> userGroupIds) =>
+            GroupPermission.GetDateRestrictedForPermission(permission, userGroupIds);
 
         /// <summary>
         /// Gets a module that the user has permission to use. 
@@ -298,19 +301,19 @@ namespace OpenDentBusiness
             return -1;
         }
 
-        private static Permissions PermofModule(int i)
+        private static string PermofModule(int i)
         {
             switch (i)
             {
-                case 0: return Permissions.AppointmentsModule;
-                case 1: return Permissions.FamilyModule;
-                case 2: return Permissions.AccountModule;
-                case 3: return Permissions.TPModule;
-                case 4: return Permissions.ChartModule;
-                case 5: return Permissions.ImagesModule;
-                case 6: return Permissions.ManageModule;
+                case 0: return Permissions.ModuleAppointments;
+                case 1: return Permissions.ModuleFamily;
+                case 2: return Permissions.ModuleAccount;
+                case 3: return Permissions.ModuleTreatmentPlan;
+                case 4: return Permissions.ModuleChart;
+                case 5: return Permissions.ModuleImages;
+                case 6: return Permissions.ModuleManagement;
             }
-            return Permissions.None;
+            return "";
         }
     }
 }

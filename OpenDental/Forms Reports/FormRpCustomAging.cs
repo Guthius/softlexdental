@@ -248,7 +248,7 @@ namespace OpenDental {
 		}
 
 		private void goToAccountToolStripMenuItem_Click(object sender,EventArgs e) {
-			if(!Security.IsAuthorized(Permissions.AccountModule)) {
+			if(!Security.IsAuthorized(Permissions.ModuleAccount)) {
 				return;
 			}
 			if(gridMain.SelectedGridRows.Count==0) {

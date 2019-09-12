@@ -213,9 +213,9 @@ namespace OpenDental{
 					logText+=Lan.g(this,"Teeth")+": "+_teethText+", ";
 				}
 				logText+=Lan.g(this,"Fee")+": "+_procCur.ProcFee.ToString("F")+", "+_procCodeCur.Descript;
-				Permissions perm=Permissions.ProcComplEdit;
+				Permissions perm=Permissions.EditCompletedProcedure;
 				if(_procCur.ProcStatus.In(ProcStat.EO,ProcStat.EC)) {
-					perm=Permissions.ProcExistingEdit;
+					perm=Permissions.EditProcedure;
 				}
 				SecurityLogs.MakeLogEntry(perm,_patCur.PatNum,logText);
 			}

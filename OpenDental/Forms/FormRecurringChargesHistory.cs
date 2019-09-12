@@ -161,7 +161,7 @@ namespace OpenDental {
 		
 		private void menuItemGoTo_Click(object sender,EventArgs e) {
 			RecurringCharge charge=gridMain.SelectedTag<RecurringCharge>();
-			if(charge==null || !Security.IsAuthorized(Permissions.AccountModule)) {
+			if(charge==null || !Security.IsAuthorized(Permissions.ModuleAccount)) {
 				return;
 			}
 			GotoModule.GotoAccount(charge.PatNum);

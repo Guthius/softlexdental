@@ -1054,7 +1054,7 @@ namespace OpenDental{
 				groupFeeScheds.Visible=false;
 				butEditCategories.Visible=false;
 			}
-			if(!Security.IsAuthorized(Permissions.ProcCodeEdit,true)) {
+			if(!Security.IsAuthorized(Permissions.EditProcedureCode,true)) {
 				groupProcCodeSetup.Visible=false;
 			}
 			if(!IsSelectionMode) {
@@ -1547,7 +1547,7 @@ namespace OpenDental{
 				return;
 			}
 			//else not selecting a code
-			if(!Security.IsAuthorized(Permissions.ProcCodeEdit)) {
+			if(!Security.IsAuthorized(Permissions.EditProcedureCode)) {
 				return;
 			}
 			if(e.Column>3) {
@@ -1950,7 +1950,7 @@ namespace OpenDental{
 				}
 				listCodes[i].ProvNumDefault=0;//Always import procedure codes with no specific provider set.  The incoming prov might not exist.
 				ProcedureCodes.Insert(listCodes[i]);				
-				SecurityLogs.MakeLogEntry(Permissions.ProcCodeEdit,0,"Code"+listCodes[i].ProcCode+" added from procedure code import.",listCodes[i].CodeNum,
+				SecurityLogs.MakeLogEntry(Permissions.EditProcedureCode,0,"Code"+listCodes[i].ProcCode+" added from procedure code import.",listCodes[i].CodeNum,
 					DateTime.MinValue);
 				retVal++;
 			}

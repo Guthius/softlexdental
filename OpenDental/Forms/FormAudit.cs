@@ -193,23 +193,23 @@ namespace OpenDental
                 row.Cells.Add(securityLog.PatientName);
 
                 row.Cells.Add(Userods.GetUser(securityLog.UserNum)?.UserName ?? "unknown");
-                if (securityLog.PermType == Permissions.ChartModule)
+                if (securityLog.PermType == Permissions.ModuleChart)
                 {
                     row.Cells.Add("ChartModuleViewed");
                 }
-                else if (securityLog.PermType == Permissions.FamilyModule)
+                else if (securityLog.PermType == Permissions.ModuleFamily)
                 {
                     row.Cells.Add("FamilyModuleViewed");
                 }
-                else if (securityLog.PermType == Permissions.AccountModule)
+                else if (securityLog.PermType == Permissions.ModuleAccount)
                 {
                     row.Cells.Add("AccountModuleViewed");
                 }
-                else if (securityLog.PermType == Permissions.ImagesModule)
+                else if (securityLog.PermType == Permissions.ModuleImages)
                 {
                     row.Cells.Add("ImagesModuleViewed");
                 }
-                else if (securityLog.PermType == Permissions.TPModule)
+                else if (securityLog.PermType == Permissions.ModuleTreatmentPlan)
                 {
                     row.Cells.Add("TreatmentPlanModuleViewed");
                 }

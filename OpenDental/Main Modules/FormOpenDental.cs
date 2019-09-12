@@ -547,7 +547,7 @@ namespace OpenDental
             {
                 menuItemProcLockTool.Visible = false;
             }
-            if (Security.IsAuthorized(Permissions.ProcCodeEdit, true) && !Preference.GetBool(PreferenceName.ADAdescriptionsReset))
+            if (Security.IsAuthorized(Permissions.EditProcedureCode, true) && !Preference.GetBool(PreferenceName.ADAdescriptionsReset))
             {
                 ProcedureCodes.ResetADAdescriptions();
                 Preference.Update(PreferenceName.ADAdescriptionsReset, true);
@@ -3524,7 +3524,7 @@ namespace OpenDental
             switch (myOutlookBar.SelectedIndex)
             {
                 case 0:
-                    if (!Security.IsAuthorized(Permissions.AppointmentsModule))
+                    if (!Security.IsAuthorized(Permissions.ModuleAppointments))
                     {
                         e.Cancel = true;
                         return;
@@ -3540,42 +3540,42 @@ namespace OpenDental
                     }
                     //Whether or not they were authorized by the special situation above,
                     //they can get into the Family module with the ordinary permissions.
-                    if (!Security.IsAuthorized(Permissions.FamilyModule))
+                    if (!Security.IsAuthorized(Permissions.ModuleFamily))
                     {
                         e.Cancel = true;
                         return;
                     }
                     break;
                 case 2:
-                    if (!Security.IsAuthorized(Permissions.AccountModule))
+                    if (!Security.IsAuthorized(Permissions.ModuleAccount))
                     {
                         e.Cancel = true;
                         return;
                     }
                     break;
                 case 3:
-                    if (!Security.IsAuthorized(Permissions.TPModule))
+                    if (!Security.IsAuthorized(Permissions.ModuleTreatmentPlan))
                     {
                         e.Cancel = true;
                         return;
                     }
                     break;
                 case 4:
-                    if (!Security.IsAuthorized(Permissions.ChartModule))
+                    if (!Security.IsAuthorized(Permissions.ModuleChart))
                     {
                         e.Cancel = true;
                         return;
                     }
                     break;
                 case 5:
-                    if (!Security.IsAuthorized(Permissions.ImagesModule))
+                    if (!Security.IsAuthorized(Permissions.ModuleImages))
                     {
                         e.Cancel = true;
                         return;
                     }
                     break;
                 case 6:
-                    if (!Security.IsAuthorized(Permissions.ManageModule))
+                    if (!Security.IsAuthorized(Permissions.ModuleManagement))
                     {
                         e.Cancel = true;
                         return;
@@ -6111,8 +6111,8 @@ namespace OpenDental
             if (listDisplayReports.Count > 0)
             {
                 List<long> listReportPermissionFkeys = GroupPermissions.GetPermsForReports()
-                    .Where(x => Security.CurrentUser.IsInUserGroup(x.UserGroupNum))
-                    .Select(x => x.FKey)
+                    .Where(x => Security.CurrentUser.IsInUserGroup(x.UserGroupId))
+                    .Select(x => x.ExternalId)
                     .ToList();
                 listDisplayReports.RemoveAll(x => !listReportPermissionFkeys.Contains(x.DisplayReportNum));//Remove reports user does not have permission for
                 menuItemReportsStandard.MenuItems.Add(Lans.g(this, "Standard Reports"), menuItemReportsStandard_Click);

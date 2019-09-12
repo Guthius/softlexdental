@@ -223,7 +223,7 @@ namespace OpenDentBusiness
                 getFieldDefLinksForLocation();
                 if (doMakeSecLog)
                 {
-                    SecurityLogs.MakeLogEntry(Permissions.AccountModule, patNum, "");
+                    SecurityLogs.MakeLogEntry(Permissions.ModuleAccount, patNum, "");
                 }
             };
             //Limiting to 4 threads so we don't get a "Too many connections" error from the Db.

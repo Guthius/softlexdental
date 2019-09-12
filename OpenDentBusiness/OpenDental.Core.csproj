@@ -459,7 +459,6 @@
     <Compile Include="Crud\FieldDefLinkCrud.cs" />
     <Compile Include="Crud\FormPatCrud.cs" />
     <Compile Include="Crud\GradingScaleItemCrud.cs" />
-    <Compile Include="Crud\GroupPermissionCrud.cs" />
     <Compile Include="Crud\GuardianCrud.cs" />
     <Compile Include="Crud\HcpcsCrud.cs" />
     <Compile Include="Crud\HL7DefCrud.cs" />
@@ -902,7 +901,6 @@
     <Compile Include="__WIP\ClockEventStatus.cs" />
     <Compile Include="__WIP\Defs.cs" />
     <Compile Include="Db Multi Table\FamilyModules.cs" />
-    <Compile Include="Data Interface\GroupPermissions.cs" />
     <Compile Include="Data Interface\Operatories.cs" />
     <Compile Include="Data Interface\SigButDefs.cs" />
     <Compile Include="Data Interface\SigElementDefs.cs" />
@@ -1055,6 +1053,7 @@
     <Compile Include="TableTypes\MedLab.cs" />
     <Compile Include="TableTypes\StateAbbr.cs" />
     <Compile Include="TableTypes\TaskHist.cs" />
+    <Compile Include="__WIP\Permissions.cs" />
     <Compile Include="__WIP\UserClinic.cs" />
     <Compile Include="__WIP\UserGroupUser.cs" />
     <Compile Include="TableTypes\UserodApptView.cs" />
@@ -1307,7 +1306,7 @@
     <Compile Include="Data\Employee.cs" />
     <Compile Include="TableTypes\Employer.cs" />
     <Compile Include="TableTypes\Fee.cs" />
-    <Compile Include="TableTypes\GroupPermission.cs" />
+    <Compile Include="__WIP\GroupPermission.cs" />
     <Compile Include="TableTypes\InsPlan.cs" />
     <Compile Include="TableTypes\InstructorOld.cs" />
     <Compile Include="Db\Interval.cs" />

@@ -869,7 +869,7 @@ namespace OpenDentBusiness{
 				DateTime datePrevious=code.DateTStamp;
 				code.Descript=codeList[i].Descript;
 				ProcedureCodes.Update(code);		
-				SecurityLogs.MakeLogEntry(Permissions.ProcCodeEdit,0,"Code "+code.ProcCode+" changed from '"+oldDescript+"' to '"+code.Descript+"' by D-Codes Tool."
+				SecurityLogs.MakeLogEntry(Permissions.EditProcedureCode,0,"Code "+code.ProcCode+" changed from '"+oldDescript+"' to '"+code.Descript+"' by D-Codes Tool."
 					,code.CodeNum,datePrevious);
 				count++;
 			}

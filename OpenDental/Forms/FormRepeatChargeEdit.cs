@@ -808,7 +808,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Invalid charge amount.");
 				return;
 			}
-			if(!Security.IsAuthorized(Permissions.ProcComplCreate,DateTimeOD.Today,ProcedureCodes.GetCodeNum(textCode.Text),procFee)) {
+			if(!Security.IsAuthorized(Permissions.CreateCompletedProcedure,DateTimeOD.Today,ProcedureCodes.GetCodeNum(textCode.Text),procFee)) {
 				return;
 			}
 			RepeatCharge chargeManual=RepeatCur.Copy();//Update the fields from the form in case the user made changes

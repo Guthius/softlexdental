@@ -139,7 +139,7 @@ namespace OpenDental {
 			Procedures.Update(_procCur,_procOld);
 			ProcedureCode procedureCode=ProcedureCodes.GetProcCode(_procCur.CodeNum);
 			string logText=procedureCode.ProcCode+" ("+_procCur.ProcStatus+"), "+Lan.g(this,"Fee")+": "+_procCur.ProcFee.ToString("c")+", "+procedureCode.Descript;
-			SecurityLogs.MakeLogEntry(IsNew ? Permissions.ProcComplCreate : Permissions.ProcComplEdit,_procCur.PatNum,logText);
+			SecurityLogs.MakeLogEntry(IsNew ? Permissions.CreateCompletedProcedure : Permissions.EditCompletedProcedure,_procCur.PatNum,logText);
 			DialogResult=DialogResult.OK;
 		}
 

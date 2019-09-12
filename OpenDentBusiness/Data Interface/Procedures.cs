@@ -314,7 +314,7 @@ namespace OpenDentBusiness
                 else if (procOld.ProcStatus.In(ProcStat.C, ProcStat.EO, ProcStat.EC) && !isNew)
                 {
                     #region SecurityLog for editing a previously completed proc
-                    Permissions perm = Permissions.ProcComplEdit;//If was complete before the window loaded.
+                    string perm = Permissions.EditCompletedProcedure;//If was complete before the window loaded.
                     string logText = procCode.ProcCode + " (" + procOld.ProcStatus + "), ";
                     if (!string.IsNullOrEmpty(procTeethStr))
                     {
@@ -323,7 +323,7 @@ namespace OpenDentBusiness
                     logText += Lans.g("Procedures", "Fee") + ": " + procNew.ProcFee.ToString("F") + ", " + procCode.Descript;
                     if (procOld.ProcStatus.In(ProcStat.EO, ProcStat.EC))
                     {
-                        perm = Permissions.ProcExistingEdit;
+                        perm = Permissions.EditProcedure;
                     }
                     #endregion
                     SecurityLogs.MakeLogEntry(perm, procNew.PatNum, logText);
@@ -1857,10 +1857,10 @@ namespace OpenDentBusiness
             {
                 return true;//Don't check security if the procedure isn't completed (or EO/EC).
             }
-            Permissions perm = Permissions.ProcComplEdit;
+            string perm = Permissions.EditCompletedProcedure;
             if (proc.ProcStatus.In(ProcStat.EO, ProcStat.EC))
             {
-                perm = Permissions.ProcExistingEdit;
+                perm = Permissions.EditProcedure;
             }
             if (includeCodeNumAndFee)
             {
@@ -4021,7 +4021,7 @@ namespace OpenDentBusiness
                 logText += Lans.g("Procedures", "Teeth") + ": " + toothNums + ", ";
             }
             logText += Lans.g("Procedures", "Fee") + ": " + procCur.ProcFee.ToString("F") + ", " + procCode.Descript;
-            SecurityLogs.MakeLogEntry(Permissions.ProcComplCreate, patNum, logText);
+            SecurityLogs.MakeLogEntry(Permissions.CreateCompletedProcedure, patNum, logText);
         }
 
         ///<summary>Creates securitylog entry for completed procedure where appointment ProvNum is different than the procedures provnum.</summary>
@@ -4035,7 +4035,7 @@ namespace OpenDentBusiness
                 logText += " " + Lans.g("Procedures", "Provider was changed from") + " " + Providers.GetAbbr(procOld.ProvNum) + " " + Lans.g("Procedures", "to") + " " +
                     Providers.GetAbbr(proc.ProvNum) + ".";
             }
-            SecurityLogs.MakeLogEntry(Permissions.ProcComplEdit, proc.PatNum, logText, proc.ProcNum, LogSources.None, procOld.DateTStamp);
+            SecurityLogs.MakeLogEntry(Permissions.EditCompletedProcedure, proc.PatNum, logText, proc.ProcNum, LogSources.None, procOld.DateTStamp);
         }
 
         ///<summary>Returns true when automation needed.
@@ -4053,10 +4053,10 @@ namespace OpenDentBusiness
                     //that if we make any other changes to this proc that are not in this section we should consolidate update statements.
                     Procedure procCur = listProcsForAppt[index];
                     Procedure procOld = procCur.Copy();
-                    Permissions perm = Permissions.ProcComplEdit;
+                    string perm = Permissions.EditCompletedProcedure;
                     if (procOld.ProcStatus.In(ProcStat.EO, ProcStat.EC))
                     {
-                        perm = Permissions.ProcExistingEdit;
+                        perm = Permissions.EditProcedure;
                     }
                     if (procOld.ProcStatus.In(ProcStat.C, ProcStat.EO, ProcStat.EC) && !Security.IsAuthorized(perm, procOld.ProcDate, true))
                     {

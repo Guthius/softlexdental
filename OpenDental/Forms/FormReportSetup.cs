@@ -250,7 +250,7 @@ namespace OpenDental {
 			}
 			if(Security.IsAuthorized(Permissions.SecurityAdmin)) {
 				GroupPermissions.Sync(userControlReportSetup.ListGroupPermissionsForReports,userControlReportSetup.ListGroupPermissionsOld);
-				if(userControlReportSetup.ListGroupPermissionsForReports.Exists(x => x.UserGroupNum==_userGroupNum)) {
+				if(userControlReportSetup.ListGroupPermissionsForReports.Exists(x => x.UserGroupId==_userGroupNum)) {
 					HasReportPerms=true;
 				}
 				DataValid.SetInvalid(InvalidType.Security);

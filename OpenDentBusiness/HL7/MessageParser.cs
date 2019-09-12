@@ -1866,7 +1866,7 @@ namespace OpenDentBusiness.HL7 {
 					logText+=Lans.g("Procedures","Teeth")+": "+procCur.ToothNum+", ";
 				}
 				logText+=Lans.g("Procedures","Fee")+": "+procCur.ProcFee.ToString("F")+", "+procCode.Descript;
-				SecurityLogs.MakeLogEntry(Permissions.ProcComplCreate,procCur.PatNum,logText,LogSources.HL7);
+				SecurityLogs.MakeLogEntry(Permissions.CreateCompletedProcedure,procCur.PatNum,logText,LogSources.HL7);
 			}
 			if(procStatus.In(ProcStat.C,ProcStat.EC,ProcStat.EO) && procCode.PaintType==ToothPaintingType.Extraction) {
 				ToothInitials.SetValue(procCur.PatNum,procCur.ToothNum,ToothInitialType.Missing);

@@ -55,14 +55,14 @@ namespace OpenDentBusiness
             }
             if (listSources.Count > 0)
             {
-                List<int> listPerms = new List<int>() { (int)Permissions.AppointmentCreate };
+                List<string> listPerms = new List<string>() { Permissions.AppointmentCreate };
                 if (sortBy == SortAndFilterBy.SecurityLogDate)
                 {
-                    listPerms.Add((int)Permissions.AppointmentEdit);
-                    listPerms.Add((int)Permissions.AppointmentMove);
+                    listPerms.Add(Permissions.AppointmentEdit);
+                    listPerms.Add(Permissions.AppointmentMove);
                 }
                 innerJoinWebSchedBoth = " INNER JOIN securitylog ON appointment.AptNum=securitylog.FKey"
-                    + " AND securitylog.PermType IN (" + string.Join(",", listPerms.Select(x => POut.Int(x))) + ") "
+                    + " AND securitylog.PermType IN (" + string.Join(",", listPerms.Select(x => POut.String(x))) + ") "
                     + " AND securitylog.LogSource IN (" + string.Join(",", listSources.Select(x => (int)x)) + ") ";
             }
             //Query

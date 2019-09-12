@@ -78,7 +78,7 @@ namespace OpenDentBusiness
             }
             if (doCreateSecLog)
             {
-                SecurityLogs.MakeLogEntry(Permissions.FamilyModule, patNum, "");
+                SecurityLogs.MakeLogEntry(Permissions.ModuleFamily, patNum, "");
             }
             return data;
         }

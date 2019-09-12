@@ -413,7 +413,7 @@ namespace OpenDentBusiness
             var isAdmin =
                 DataConnection.ExecuteLong(
                     "SELECT COUNT(*) FROM `group_permissions` " +
-                    "WHERE `type` = '" + (int)Permissions.SecurityAdmin + "' " +
+                    "WHERE `type` = '" + Permissions.SecurityAdmin + "' " +
                     "AND `user_group_id` IN (" + string.Join(", ", userGroupIds) + ")") > 0;
 
             if (!user.IsNew && !isAdmin && !IsSomeoneElseSecurityAdmin(user))
@@ -433,7 +433,7 @@ namespace OpenDentBusiness
                 "SELECT COUNT(*) FROM userod " +
                 "INNER JOIN user_user_groups ON user_user_groups.user_id = users.id " +
                 "INNER JOIN group_permissions ON user_user_groups.user_group_id = group_permissions.user_group_id " +
-                "WHERE group_permissions.type = '" + (int)Permissions.SecurityAdmin + "' " +
+                "WHERE group_permissions.type = '" + Permissions.SecurityAdmin + "' " +
                 "AND users.hidden = 0 " +
                 "AND users.id != " + excludeUser.Id;
 
@@ -580,13 +580,13 @@ namespace OpenDentBusiness
         /// <summary>
         /// Returns all users that are associated to the permission passed in. Returns empty list if no matches found.
         /// </summary>
-        public static List<User> GetByPermission(Permissions permission, bool showHidden)
+        public static List<User> GetByPermission(string permission, bool showHidden)
         {
             var users = new List<User>();
 
             foreach (var user in All().Where(user => showHidden || !user.IsHidden))
             {
-                if (GroupPermissions.HasPermission(user, permission, 0))
+                if (GroupPermission.HasPermission(user, permission, null))
                 {
                     users.Add(user);
                 }

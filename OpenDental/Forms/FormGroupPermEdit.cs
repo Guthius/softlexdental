@@ -195,7 +195,7 @@ namespace OpenDental{
 		#endregion
 
 		private void FormGroupPermEdit_Load(object sender, System.EventArgs e) {
-			textName.Text=GroupPermissions.GetDesc(Cur.PermType);
+			textName.Text=GroupPermissions.GetDesc(Cur.Permission);
 			if(Cur.NewerDate.Year<1880){
 				textDate.Text="";
 			}

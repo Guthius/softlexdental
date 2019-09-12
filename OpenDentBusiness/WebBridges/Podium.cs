@@ -67,7 +67,7 @@ namespace OpenDentBusiness
             string command = "SELECT * "
                 + "FROM appointment "
                 + "LEFT JOIN securitylog ON securitylog.FKey=appointment.AptNum "
-                    + "AND securitylog.PermType=" + POut.Int((int)Permissions.AppointmentEdit) + " AND securitylog.LogText LIKE '%Set Complete%' "
+                    + "AND securitylog.PermType=" + POut.String(Permissions.AppointmentEdit) + " AND securitylog.LogText LIKE '%Set Complete%' "
                 + "LEFT JOIN commlog ON commlog.PatNum=appointment.PatNum "
                     + "AND commlog.CommSource=" + POut.Int((int)CommItemSource.ProgramLink) + " "
                     + "AND DATE(commlog.DateTimeEnd)=CURDATE() "

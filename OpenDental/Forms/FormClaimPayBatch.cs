@@ -1163,7 +1163,7 @@ namespace OpenDental{
 
 		private void menuItemGotoAccount_Click(object sender,EventArgs e) {
 			//for the upper grid
-			if(gridAttached.SelectedIndices.Length!=1 || !Security.IsAuthorized(Permissions.AccountModule)) {
+			if(gridAttached.SelectedIndices.Length!=1 || !Security.IsAuthorized(Permissions.ModuleAccount)) {
 				return;
 			}
 			ClaimPaySplit selectedClaimPS=gridAttached.SelectedTag<ClaimPaySplit>();
@@ -1176,7 +1176,7 @@ namespace OpenDental{
 
 		private void menuItemGotoOut_Click(object sender,EventArgs e) {
 			//for the lower grid
-			if(gridOut.SelectedIndices.Length!=1 || !Security.IsAuthorized(Permissions.AccountModule)) {
+			if(gridOut.SelectedIndices.Length!=1 || !Security.IsAuthorized(Permissions.ModuleAccount)) {
 				return;
 			}
 			ClaimPaySplit selectedClaimPS=gridOut.SelectedTag<ClaimPaySplit>();

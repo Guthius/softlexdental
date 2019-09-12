@@ -412,7 +412,7 @@ namespace OpenDentBusiness
                     }
                     if (proc != null)
                     {
-                        SecurityLogs.MakeLogEntry(Permissions.ProcComplCreate, patNum, "D1351 " + Lans.g("Screens", "set complete during screening with tooth")
+                        SecurityLogs.MakeLogEntry(Permissions.CreateCompletedProcedure, patNum, "D1351 " + Lans.g("Screens", "set complete during screening with tooth")
                             + " " + proc.ToothNum.ToString() + " " + Lans.g("Screens", "and surface") + " " + proc.Surf);
                     }
                 }

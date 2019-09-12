@@ -448,7 +448,7 @@ namespace OpenDental{
 				Changed=true;
 				//yes, this really does refresh before moving on.
 				DataValid.SetInvalid(InvalidType.Defs, InvalidType.ProcCodes, InvalidType.Fees);
-				SecurityLogs.MakeLogEntry(Permissions.ProcCodeEdit,0,"T-Codes deleted.");
+				SecurityLogs.MakeLogEntry(Permissions.EditProcedureCode,0,"T-Codes deleted.");
 			}
 			#endregion
 			if(Changed) {

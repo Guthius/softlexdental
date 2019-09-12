@@ -782,9 +782,9 @@ namespace OpenDental{
 			else {
 				butLock.Visible=false;
 			}
-			Permissions perm=Permissions.ProcComplEdit;
+			Permissions perm=Permissions.EditCompletedProcedure;
 			if(GroupCur.ProcStatus.In(ProcStat.EO,ProcStat.EC)) {
-				perm=Permissions.ProcExistingEdit;
+				perm=Permissions.EditProcedure;
 			}
 			if(Security.IsGlobalDateLock(perm,GroupCur.ProcDate)) {
 				butLock.Enabled=false;
@@ -1590,7 +1590,7 @@ namespace OpenDental{
 			//This log entry is similar to the log entry made when right-clicking in the Chart and using the delete option,
 			//except there is an extra : in the description for this log entry, so we programmers can know for sure where the entry was made from.
 			if(_attachedToCompletedProc) {
-				SecurityLogs.MakeLogEntry(Permissions.ProcComplEdit,PatCur.PatNum,
+				SecurityLogs.MakeLogEntry(Permissions.EditCompletedProcedure,PatCur.PatNum,
 					":"+ProcedureCodes.GetStringProcCode(GroupCur.CodeNum).ToString()+" ("+GroupCur.ProcStatus+"), "+GroupCur.ProcDate.ToShortDateString());
 			}
 			else {

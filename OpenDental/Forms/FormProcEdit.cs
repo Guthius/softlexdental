@@ -196,7 +196,7 @@ namespace OpenDental {
 			}
 			if(IsNew){
 				if(_procCur.ProcStatus==ProcStat.C){
-					if(!_isQuickAdd && !Security.IsAuthorized(Permissions.ProcComplCreate)){
+					if(!_isQuickAdd && !Security.IsAuthorized(Permissions.CreateCompletedProcedure)){
 						DialogResult=DialogResult.Cancel;
 						return;
 					}
@@ -1016,10 +1016,10 @@ namespace OpenDental {
 				return;
 			}
 			//Use ProcDate to compare to the date/days newer restriction.
-			Permissions perm=Permissions.ProcComplEdit;
+			Permissions perm=Permissions.EditCompletedProcedure;
 			bool isComplete=true;
 			if(_procCur.ProcStatus.In(ProcStat.EO,ProcStat.EC)) {
-				perm=Permissions.ProcExistingEdit;
+				perm=Permissions.EditProcedure;
 				isComplete=false;
 			}
 			bool hasDateLock=Security.IsGlobalDateLock(perm,_procCur.ProcDate,isSilent);//really only used to silence other security messages.
@@ -1744,7 +1744,7 @@ namespace OpenDental {
 					isAllowedToCompl=false;
 				}
 				//else if so that we don't give multiple notifications to the user.
-				else if(!Security.IsAuthorized(Permissions.ProcComplCreate,PIn.Date(textDate.Text),_procCur.CodeNum,PIn.Double(textProcFee.Text))) {
+				else if(!Security.IsAuthorized(Permissions.CreateCompletedProcedure,PIn.Date(textDate.Text),_procCur.CodeNum,PIn.Double(textProcFee.Text))) {
 					isAllowedToCompl=false;
 				}
 				//Check to see if the user is allowed to set the procedure complete.
@@ -1814,7 +1814,7 @@ namespace OpenDental {
 					+"If you want to be able to set procedures complete, you must turn on that option in Setup | Chart | Chart Preferences.");
 				return;
 			}
-			if(!Security.IsAuthorized(Permissions.ProcComplCreate,PIn.Date(textDate.Text),_procCur.CodeNum,PIn.Double(textProcFee.Text))) {
+			if(!Security.IsAuthorized(Permissions.CreateCompletedProcedure,PIn.Date(textDate.Text),_procCur.CodeNum,PIn.Double(textProcFee.Text))) {
 				return;
 			}
 			//If user is trying to change status to complete and using eCW.
@@ -2097,7 +2097,7 @@ namespace OpenDental {
 					_procCur.ProcStatus=ProcStat.TP;
 					break;
 				case 1:
-					if(!Security.IsAuthorized(Permissions.ProcComplCreate,PIn.Date(textDate.Text),_procCur.CodeNum,PIn.Double(textProcFee.Text))) {
+					if(!Security.IsAuthorized(Permissions.CreateCompletedProcedure,PIn.Date(textDate.Text),_procCur.CodeNum,PIn.Double(textProcFee.Text))) {
 						//set it back to whatever it was before
 						if(_orionProcCur.Status2==OrionStatus.TP) {
 							comboStatus.SelectedIndex=0;
@@ -2414,9 +2414,9 @@ namespace OpenDental {
 
 		///<summary>This button is only visible when proc IsLocked.</summary>
 		private void butInvalidate_Click(object sender,EventArgs e) {
-			Permissions perm=Permissions.ProcComplEdit;
+			Permissions perm=Permissions.EditCompletedProcedure;
 			if(_procCur.ProcStatus.In(ProcStat.EO,ProcStat.EC)) {
-				perm=Permissions.ProcExistingEdit;
+				perm=Permissions.EditProcedure;
 			}
 			//What this will really do is "delete" the procedure.
 			if(!Security.IsAuthorized(perm,_procCur.ProcDate)) {
@@ -2559,12 +2559,12 @@ namespace OpenDental {
                 switch (_procOld.ProcStatus)
                 {
                     case ProcStat.C:
-                        perm = Permissions.ProcComplEdit;
+                        perm = Permissions.EditCompletedProcedure;
                         tag = ", " + Lan.g(this, "Deleted");
                         break;
                     case ProcStat.EO:
                     case ProcStat.EC:
-                        perm = Permissions.ProcExistingEdit;
+                        perm = Permissions.EditProcedure;
                         tag = ", " + Lan.g(this, "Deleted");
                         break;
                 }
@@ -2681,12 +2681,12 @@ namespace OpenDental {
 						textDate.Text=apt.AptDateTime.ToShortDateString();
 					}
 				}
-				if(!_isQuickAdd && !Security.IsAuthorized(Permissions.ProcComplCreate,PIn.Date(textDate.Text))){//use the new date
+				if(!_isQuickAdd && !Security.IsAuthorized(Permissions.CreateCompletedProcedure,PIn.Date(textDate.Text))){//use the new date
 					return false;
 				}
 			}
 			else if(!_isQuickAdd && IsNew && _procCur.ProcStatus==ProcStat.C) {//if new procedure is complete
-				if(!Security.IsAuthorized(Permissions.ProcComplCreate,PIn.Date(textDate.Text),_procCur.CodeNum,PIn.Double(textProcFee.Text))){
+				if(!Security.IsAuthorized(Permissions.CreateCompletedProcedure,PIn.Date(textDate.Text),_procCur.CodeNum,PIn.Double(textProcFee.Text))){
 					return false;
 				}
 			}
@@ -3255,9 +3255,9 @@ namespace OpenDental {
 				}
 			}
 			//Autocodes----------------------------------------------------------------------------------------------------------------------------------------
-			Permissions perm=Permissions.ProcComplEdit;
+			Permissions perm=Permissions.EditCompletedProcedure;
 			if(_procCur.ProcStatus.In(ProcStat.EC,ProcStat.EO)) {
-				perm=Permissions.ProcExistingEdit;
+				perm=Permissions.EditProcedure;
 			}
 			if(!_procOld.ProcStatus.In(ProcStat.C,ProcStat.EO,ProcStat.EC)
 				|| Security.IsAuthorized(perm,_procCur.ProcDate,true)) {

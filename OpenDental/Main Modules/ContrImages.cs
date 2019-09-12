@@ -478,7 +478,7 @@ namespace OpenDental
             PatFolder = ImageStore.GetPatientFolder(PatCur);//This is where the pat folder gets created if it does not yet exist.
             if (_patNumLast != patNum)
             {
-                SecurityLogs.MakeLogEntry(Permissions.ImagesModule, patNum, "");
+                SecurityLogs.MakeLogEntry(Permissions.ModuleImages, patNum, "");
                 _patNumLast = patNum;
             }
 

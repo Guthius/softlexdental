@@ -9392,7 +9392,7 @@ namespace OpenDental
                     ProcCur.MedicalCode, listFees: listFees);
             }
             if (newStatus == ProcStat.C
-                && !Security.IsAuthorized(Permissions.ProcComplCreate, ProcCur.ProcDate, ProcCur.CodeNum, ProcCur.ProcFee))
+                && !Security.IsAuthorized(Permissions.CreateCompletedProcedure, ProcCur.ProcDate, ProcCur.CodeNum, ProcCur.ProcFee))
             {
                 return false;
             }
@@ -9498,7 +9498,7 @@ namespace OpenDental
                     return;
                 }
                 //We will call Security.IsAuthorized again once we know the ProcCode and the ProcFee.
-                if (!ProcedureCodes.DoAnyBypassLockDate() && !Security.IsAuthorized(Permissions.ProcComplCreate, PIn.Date(textDate.Text)))
+                if (!ProcedureCodes.DoAnyBypassLockDate() && !Security.IsAuthorized(Permissions.CreateCompletedProcedure, PIn.Date(textDate.Text)))
                 {
                     return;
                 }
@@ -9869,7 +9869,7 @@ namespace OpenDental
                         + "If you want to be able to set procedures complete, you must turn on that option in Setup | Chart | Chart Preferences.");
                     return;
                 }
-                if (!Security.IsAuthorized(Permissions.ProcComplCreate, PIn.Date(textDate.Text)))
+                if (!Security.IsAuthorized(Permissions.CreateCompletedProcedure, PIn.Date(textDate.Text)))
                 {
                     return;
                 }
@@ -9893,7 +9893,7 @@ namespace OpenDental
                         + "If you want to be able to set procedures complete, you must turn on that option in Setup | Chart | Chart Preferences.");
                     return;
                 }
-                if (!Security.IsAuthorized(Permissions.ProcComplCreate, PIn.Date(textDate.Text)))
+                if (!Security.IsAuthorized(Permissions.CreateCompletedProcedure, PIn.Date(textDate.Text)))
                 {
                     return;
                 }
@@ -10359,7 +10359,7 @@ namespace OpenDental
                     return;
                 }
                 //We will call this method again with the real ProcFee once we know it.
-                if (!Security.IsAuthorized(Permissions.ProcComplCreate, PIn.Date(textDate.Text), ProcedureCodes.GetCodeNum(textProcCode.Text), 0))
+                if (!Security.IsAuthorized(Permissions.CreateCompletedProcedure, PIn.Date(textDate.Text), ProcedureCodes.GetCodeNum(textProcCode.Text), 0))
                 {
                     return;
                 }
@@ -12533,13 +12533,13 @@ namespace OpenDental
                     List<Procedure> listProcs = Procedures.GetProcsMultApts(new List<long> { apt.AptNum });
                     foreach (Procedure proc in listProcs)
                     {
-                        if (!Security.IsAuthorized(Permissions.ProcComplCreate, apt.AptDateTime, proc.CodeNum, proc.ProcFee))
+                        if (!Security.IsAuthorized(Permissions.CreateCompletedProcedure, apt.AptDateTime, proc.CodeNum, proc.ProcFee))
                         {
                             return;
                         }
                     }
                 }
-                else if (!Security.IsAuthorized(Permissions.ProcComplCreate, apt.AptDateTime))
+                else if (!Security.IsAuthorized(Permissions.CreateCompletedProcedure, apt.AptDateTime))
                 {
                     return;
                 }
@@ -12751,12 +12751,12 @@ namespace OpenDental
                     }
                     if (appt != null)
                     {
-                        if (!Security.IsAuthorized(Permissions.ProcComplCreate, appt.AptDateTime, procCur.CodeNum, procCur.ProcFee))
+                        if (!Security.IsAuthorized(Permissions.CreateCompletedProcedure, appt.AptDateTime, procCur.CodeNum, procCur.ProcFee))
                         {
                             return;
                         }
                     }
-                    else if (!Security.IsAuthorized(Permissions.ProcComplCreate, procDate, procCur.CodeNum, procCur.ProcFee))
+                    else if (!Security.IsAuthorized(Permissions.CreateCompletedProcedure, procDate, procCur.CodeNum, procCur.ProcFee))
                     {
                         return;
                     }

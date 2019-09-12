@@ -686,7 +686,7 @@ namespace OpenDentBusiness
         /// <summary>
         /// Makes log entry for documents. Supply beginning text, permission, document, and the DateTStamp that the document was previously last edited.
         /// </summary>
-        public static void LogDocument(string logMsgStart, Permissions perm, Document doc, DateTime secDatePrevious)
+        public static void LogDocument(string logMsgStart, string perm, Document doc, DateTime secDatePrevious)
         {
             string logMsg = logMsgStart + doc.FileName;
 

@@ -79,10 +79,7 @@ namespace OpenDentBusiness
         /// </summary>
         public static bool IsAdminGroup(List<long> userGroupIdList)
         {
-            // TODO: Fix me
-
-            var groupPermissionList = GroupPermissions.GetWhere(p => p.PermType == Permissions.SecurityAdmin);
-            if (userGroupIdList.Any(userGroupId => groupPermissionList.Select(groupPermission => groupPermission.UserGroupNum).Contains(userGroupId)))
+            if (userGroupIdList.Any(userGroupId => GroupPermission.HasPermission(userGroupId, Permissions.SecurityAdmin, null)))
             {
                 return true;
             }

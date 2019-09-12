@@ -486,7 +486,7 @@ namespace OpenDental{
 			if(gridMain.SelectedIndices.Length!=1) {
 				return;
 			}
-			if(!Security.IsAuthorized(Permissions.ChartModule)) {
+			if(!Security.IsAuthorized(Permissions.ModuleChart)) {
 				return;
 			}
 			long goToPatNum=PIn.Long(gridMain.Rows[e.Row].Tag.ToString());
@@ -499,7 +499,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please select a patient first.");
 				return;
 			}
-			if(!Security.IsAuthorized(Permissions.ChartModule)) {
+			if(!Security.IsAuthorized(Permissions.ModuleChart)) {
 				return;
 			}
 			long patNum=PIn.Long(gridMain.Rows[gridMain.SelectedIndices[0]].Tag.ToString());

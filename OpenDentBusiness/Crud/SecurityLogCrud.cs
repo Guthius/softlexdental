@@ -43,7 +43,7 @@ namespace OpenDentBusiness.Crud{
 			foreach(DataRow row in table.Rows) {
 				securityLog=new SecurityLog();
 				securityLog.SecurityLogNum= PIn.Long  (row["SecurityLogNum"].ToString());
-				securityLog.PermType      = (OpenDentBusiness.Permissions)PIn.Int(row["PermType"].ToString());
+				securityLog.PermType      = PIn.String(row["PermType"].ToString());
 				securityLog.UserNum       = PIn.Long  (row["UserNum"].ToString());
 				securityLog.LogDateTime   = PIn.DateT (row["LogDateTime"].ToString());
 				securityLog.LogText       = PIn.String(row["LogText"].ToString());
@@ -80,7 +80,7 @@ namespace OpenDentBusiness.Crud{
 			foreach(SecurityLog securityLog in listSecurityLogs) {
 				table.Rows.Add(new object[] {
 					POut.Long  (securityLog.SecurityLogNum),
-					POut.Int   ((int)securityLog.PermType),
+					POut.String(securityLog.PermType),
 					POut.Long  (securityLog.UserNum),
 					POut.DateT (securityLog.LogDateTime,false),
 					            securityLog.LogText,
@@ -115,7 +115,7 @@ namespace OpenDentBusiness.Crud{
 				command+=POut.Long(securityLog.SecurityLogNum)+",";
 			}
 			command+=
-				     POut.Int   ((int)securityLog.PermType)+","
+				     POut.String(securityLog.PermType)+","
 				+    POut.Long  (securityLog.UserNum)+","
 				+    DbHelper.Now()+","
 				+    DbHelper.ParamChar+"paramLogText,"
@@ -159,7 +159,7 @@ namespace OpenDentBusiness.Crud{
 				command+=POut.Long(securityLog.SecurityLogNum)+",";
 			}
 			command+=
-				     POut.Int   ((int)securityLog.PermType)+","
+				     POut.String(securityLog.PermType)+","
 				+    POut.Long  (securityLog.UserNum)+","
 				+    DbHelper.Now()+","
 				+    DbHelper.ParamChar+"paramLogText,"
@@ -186,7 +186,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Updates one SecurityLog in the database.</summary>
 		public static void Update(SecurityLog securityLog) {
 			string command="UPDATE securitylog SET "
-				+"PermType      =  "+POut.Int   ((int)securityLog.PermType)+", "
+				+"PermType      =  "+POut.String(securityLog.PermType)+", "
 				+"UserNum       =  "+POut.Long  (securityLog.UserNum)+", "
 				//LogDateTime not allowed to change
 				+"LogText       =  "+DbHelper.ParamChar+"paramLogText, "
@@ -210,7 +210,7 @@ namespace OpenDentBusiness.Crud{
 			string command="";
 			if(securityLog.PermType != oldSecurityLog.PermType) {
 				if(command!="") { command+=",";}
-				command+="PermType = "+POut.Int   ((int)securityLog.PermType)+"";
+				command+="PermType = "+POut.String(securityLog.PermType)+"";
 			}
 			if(securityLog.UserNum != oldSecurityLog.UserNum) {
 				if(command!="") { command+=",";}

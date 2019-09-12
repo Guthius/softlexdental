@@ -3605,7 +3605,7 @@ namespace OpenDental
                 return;
             }
             //Main QuickCharge button was clicked.  Create a textbox that can be entered so users can insert manually entered proc codes.
-            if (!Security.IsAuthorized(Permissions.ProcComplCreate, true))
+            if (!Security.IsAuthorized(Permissions.CreateCompletedProcedure, true))
             {//Button doesn't show up unless they have AccountQuickCharge permission. 
              //user can still use dropdown, just not type in codes.
                 contextMenuQuickProcs.Show(this, new Point(_butQuickProcs.Bounds.X, _butQuickProcs.Bounds.Y + _butQuickProcs.Bounds.Height));

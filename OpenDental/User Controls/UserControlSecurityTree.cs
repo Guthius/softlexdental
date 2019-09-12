@@ -94,7 +94,7 @@ namespace OpenDental {
 				#endregion
 				#region Lists
 				node2=SetNode("Lists");
-					node3=SetNode(Permissions.ProcCodeEdit);
+					node3=SetNode(Permissions.EditProcedureCode);
 					node2.Nodes.Add(node3);
 					node3=SetNode(Permissions.FeeSchedEdit);
 					node2.Nodes.Add(node3);
@@ -199,7 +199,7 @@ namespace OpenDental {
 			treePermissions.Nodes.Add(node);
 			#endregion
 			#region Appts Module
-			node=SetNode(Permissions.AppointmentsModule);
+			node=SetNode(Permissions.ModuleAppointments);
 				node2=SetNode(Permissions.AppointmentCreate);
 				node.Nodes.Add(node2);
 				node2=SetNode(Permissions.AppointmentMove);
@@ -219,7 +219,7 @@ namespace OpenDental {
 			treePermissions.Nodes.Add(node);
 			#endregion
 			#region Family Module
-			node=SetNode(Permissions.FamilyModule);
+			node=SetNode(Permissions.ModuleFamily);
 				node2=SetNode(Permissions.InsPlanEdit);
 				node.Nodes.Add(node2);
 					node3=SetNode(Permissions.InsPlanPickListExisting);
@@ -245,7 +245,7 @@ namespace OpenDental {
 			treePermissions.Nodes.Add(node);
 			#endregion
 			#region Account Module
-			node=SetNode(Permissions.AccountModule);
+			node=SetNode(Permissions.ModuleAccount);
 				node2=SetNode("Claim");
 					node3=SetNode(Permissions.ClaimSend);
 					node2.Nodes.Add(node3);
@@ -299,7 +299,7 @@ namespace OpenDental {
 			treePermissions.Nodes.Add(node);
 			#endregion
 			#region Treat Plan Module
-			node=SetNode(Permissions.TPModule);
+			node=SetNode(Permissions.ModuleTreatmentPlan);
 				node2=SetNode(Permissions.TreatPlanEdit);
 				node.Nodes.Add(node2);
 				node2=SetNode(Permissions.TreatPlanPresenterEdit);
@@ -309,15 +309,15 @@ namespace OpenDental {
 			treePermissions.Nodes.Add(node);
 			#endregion
 			#region Chart Module
-			node=SetNode(Permissions.ChartModule);
+			node=SetNode(Permissions.ModuleChart);
 				node2=SetNode("Procedure");
-					node3=SetNode(Permissions.ProcComplCreate);
+					node3=SetNode(Permissions.CreateCompletedProcedure);
 					node2.Nodes.Add(node3);
-					node3=SetNode(Permissions.ProcComplEdit);
+					node3=SetNode(Permissions.EditCompletedProcedure);
 					node2.Nodes.Add(node3);
 					node3=SetNode(Permissions.ProcComplEditLimited);
 					node2.Nodes.Add(node3);
-					node3=SetNode(Permissions.ProcExistingEdit);
+					node3=SetNode(Permissions.EditProcedure);
 					node2.Nodes.Add(node3);
 					node3=SetNode(Permissions.ProcEditShowFee);
 					node2.Nodes.Add(node3);
@@ -353,13 +353,13 @@ namespace OpenDental {
 			treePermissions.Nodes.Add(node);
 			#endregion
 			#region Images Module
-			node=SetNode(Permissions.ImagesModule);
+			node=SetNode(Permissions.ModuleImages);
 				node2=SetNode(Permissions.ImageDelete);
 				node.Nodes.Add(node2);
 			treePermissions.Nodes.Add(node);
 			#endregion
 			#region Manage Module
-			node=SetNode(Permissions.ManageModule);
+			node=SetNode(Permissions.ModuleManagement);
 				node2=SetNode(Permissions.Accounting);
 					node3=SetNode(Permissions.AccountingCreate);
 					node2.Nodes.Add(node3);
@@ -449,10 +449,10 @@ namespace OpenDental {
 			node.Text=GroupPermissions.GetDesc((Permissions)node.Tag);
 			//get all grouppermissions for the passed-in usergroups
 			List<GroupPermission> listGroupPerms = GroupPermissions.GetForUserGroups(listUserGroupNums);
-			List<GroupPermission> listBaseReportingPerms = listGroupPerms.Where(x => x.PermType == Permissions.Reports && x.FKey == 0).ToList();
-			List<GroupPermission> listDisplayReportingPerms = listGroupPerms.Where(x => x.PermType == Permissions.Reports && x.FKey != 0).ToList();
+			List<GroupPermission> listBaseReportingPerms = listGroupPerms.Where(x => x.Permission == Permissions.Reports && x.ExternalId == 0).ToList();
+			List<GroupPermission> listDisplayReportingPerms = listGroupPerms.Where(x => x.Permission == Permissions.Reports && x.ExternalId != 0).ToList();
 			//group by permtype, preferring newerdays/newerdate that are further back in the past.
-			listGroupPerms=listGroupPerms.GroupBy(x => x.PermType)
+			listGroupPerms=listGroupPerms.GroupBy(x => x.Permission)
 				.Select(x => x
 					.OrderBy((GroupPermission y) => {
 						if(y.NewerDays==0 && y.NewerDate == DateTime.MinValue) {
@@ -466,8 +466,8 @@ namespace OpenDental {
 				.ToList();
 			//display the correct newerdays/newerdate that was found for each permission.
 			for(int i = 0;i<listGroupPerms.Count;i++) {
-				if(listUserGroupNums.Contains(listGroupPerms[i].UserGroupNum)
-					&& listGroupPerms[i].PermType==(Permissions)node.Tag) 
+				if(listUserGroupNums.Contains(listGroupPerms[i].UserGroupId)
+					&& listGroupPerms[i].Permission==(Permissions)node.Tag) 
 				{
 					node.ImageIndex=2;
 					if(listGroupPerms[i].NewerDate.Year>1880) {
@@ -481,8 +481,8 @@ namespace OpenDental {
 			//Special case for Reports permission.  
 			//Get a list of all report permissions from usergroups that this user is associated to IF the usergroup has the "base" (FKey = 0) report permission.
 			if((Permissions)node.Tag == Permissions.Reports) {
-				List<GroupPermission> listReportPermsForUser = listDisplayReportingPerms.FindAll(x => listUserGroupNums.Contains(x.UserGroupNum)).ToList();
-				listReportPermsForUser.RemoveAll(x => !listBaseReportingPerms.Select(y => y.UserGroupNum).Contains(x.UserGroupNum));
+				List<GroupPermission> listReportPermsForUser = listDisplayReportingPerms.FindAll(x => listUserGroupNums.Contains(x.UserGroupId)).ToList();
+				listReportPermsForUser.RemoveAll(x => !listBaseReportingPerms.Select(y => y.UserGroupId).Contains(x.UserGroupId));
 				int state = DisplayReports.GetReportState(listReportPermsForUser);
 				if(state==1) {
 					node.ImageIndex=2;//Checked
@@ -513,8 +513,8 @@ namespace OpenDental {
 				perm=GroupPermissions.GetPerm(_listUserGroupNums.First(),(Permissions)i);
 				if(perm==null) {
 					perm=new GroupPermission();
-					perm.PermType=(Permissions)i;
-					perm.UserGroupNum=_listUserGroupNums.First();
+					perm.Permission=(Permissions)i;
+					perm.UserGroupId=_listUserGroupNums.First();
 					try {
 						GroupPermissions.Insert(perm);
 					}
@@ -532,9 +532,9 @@ namespace OpenDental {
 				perm=new GroupPermission();
 				perm.NewerDate=DateTime.MinValue;
 				perm.NewerDays=0;
-				perm.PermType=Permissions.Reports;
-				perm.UserGroupNum=_listUserGroupNums.First();
-				perm.FKey=report.DisplayReportNum;
+				perm.Permission=Permissions.Reports;
+				perm.UserGroupId=_listUserGroupNums.First();
+				perm.ExternalId=report.DisplayReportNum;
 				try {
 					GroupPermissions.Insert(perm);
 				}
@@ -586,9 +586,9 @@ namespace OpenDental {
 			//User clicked on a check box.  Do stuff.
 			if(_clickedPermNode.ImageIndex==1) {//unchecked, so need to add a permission
 				GroupPermission perm = new GroupPermission();
-				perm.PermType=(Permissions)_clickedPermNode.Tag;
-				perm.UserGroupNum=_listUserGroupNums.First();
-				if(GroupPermissions.PermTakesDates(perm.PermType)) {
+				perm.Permission=(Permissions)_clickedPermNode.Tag;
+				perm.UserGroupId=_listUserGroupNums.First();
+				if(GroupPermissions.PermTakesDates(perm.Permission)) {
 					perm.IsNew=true;
 					//Call an event that bubbles back up to the calling Form. The event returns a dialog result so we know how to continue here.
 					DialogResult result = GroupPermissionChecked?.Invoke(sender,new SecurityEventArgs(perm))??DialogResult.Cancel;
@@ -597,7 +597,7 @@ namespace OpenDental {
 						return;
 					}
 				}
-				else if(perm.PermType==Permissions.Reports) {//Reports permission is being checked.  
+				else if(perm.Permission==Permissions.Reports) {//Reports permission is being checked.  
 					//Call an event that bubbles back up to the calling Form. The event returns a dialog result so we know how to continue here.
 					DialogResult result = ReportPermissionChecked?.Invoke(sender,new SecurityEventArgs(perm))??DialogResult.Cancel;
 					if(result==DialogResult.Cancel) {
@@ -608,30 +608,30 @@ namespace OpenDental {
 				else {
 					try {
 						GroupPermissions.Insert(perm);
-						SecurityLogs.MakeLogEntry(Permissions.SecurityAdmin,0,"Permission '"+perm.PermType+"' granted to '"
-							+UserGroup.GetById(perm.UserGroupNum).Description+"'");
+						SecurityLogs.MakeLogEntry(Permissions.SecurityAdmin,0,"Permission '"+perm.Permission+"' granted to '"
+							+UserGroup.GetById(perm.UserGroupId).Description+"'");
 					}
 					catch(Exception ex) {
 						MessageBox.Show(ex.Message);
 						return;
 					}
 				}
-				if(perm.PermType.In(Permissions.ProcComplEdit,Permissions.ProcExistingEdit)) {
+				if(perm.Permission.In(Permissions.EditCompletedProcedure,Permissions.EditProcedure)) {
 					//Adding ProcComplEdit full, so add ProcComplEditlimited too.
 					//Do the same for EO and EC procs
 					GroupPermission permLimited = GroupPermissions.GetPerm(_listUserGroupNums.First(),Permissions.ProcComplEditLimited);
 					if(permLimited==null) {
 						GroupPermissions.RefreshCache();//refresh NewerDays/Date to add the same for ProcComplEditLimited
-						perm=GroupPermissions.GetPerm(_listUserGroupNums.First(),perm.PermType);
+						perm=GroupPermissions.GetPerm(_listUserGroupNums.First(),perm.Permission);
 						permLimited=new GroupPermission();
 						permLimited.NewerDate=perm.NewerDate;
 						permLimited.NewerDays=perm.NewerDays;
-						permLimited.UserGroupNum=perm.UserGroupNum;
-						permLimited.PermType=Permissions.ProcComplEditLimited;
+						permLimited.UserGroupId=perm.UserGroupId;
+						permLimited.Permission=Permissions.ProcComplEditLimited;
 						try {
 							GroupPermissions.Insert(permLimited);
-							SecurityLogs.MakeLogEntry(Permissions.SecurityAdmin,0,"Permission '"+perm.PermType+"' granted to '"
-								+UserGroup.GetById(perm.UserGroupNum).Description+"'");
+							SecurityLogs.MakeLogEntry(Permissions.SecurityAdmin,0,"Permission '"+perm.Permission+"' granted to '"
+								+UserGroup.GetById(perm.UserGroupId).Description+"'");
 						}
 						catch(Exception ex) {
 							MessageBox.Show(ex.Message);
@@ -653,11 +653,11 @@ namespace OpenDental {
 				if((Permissions)_clickedPermNode.Tag==Permissions.ProcComplEditLimited) {
 					//Deselecting ProcComplEditLimted, deselect ProcComplEdit and ProcExistingEdit permissions if present.
 					List<Permissions> listPermissions=new List<Permissions>();
-					if(GroupPermissions.HasPermission(_listUserGroupNums.First(),Permissions.ProcComplEdit,0)) {
-						listPermissions.Add(Permissions.ProcComplEdit);
+					if(GroupPermissions.HasPermission(_listUserGroupNums.First(),Permissions.EditCompletedProcedure,0)) {
+						listPermissions.Add(Permissions.EditCompletedProcedure);
 					}
-					if(GroupPermissions.HasPermission(_listUserGroupNums.First(),Permissions.ProcExistingEdit,0)) {
-						listPermissions.Add(Permissions.ProcExistingEdit);
+					if(GroupPermissions.HasPermission(_listUserGroupNums.First(),Permissions.EditProcedure,0)) {
+						listPermissions.Add(Permissions.EditProcedure);
 					}
 					listPermissions.ForEach(x => {
 						try {

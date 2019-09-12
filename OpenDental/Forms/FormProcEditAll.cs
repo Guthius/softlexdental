@@ -93,14 +93,14 @@ namespace OpenDental {
 			bool isAuthorized=true;
 			if(_hasCompletedProc || _hasExistingProc){
 				if(_canAllBypass) {
-					if((_hasCompletedProc && !Security.IsAuthorized(Permissions.ProcComplEdit,date,ProcList[0].CodeNum,0))
-						|| (_hasExistingProc && !Security.IsAuthorized(Permissions.ProcExistingEdit,date,ProcList[0].CodeNum,0)))
+					if((_hasCompletedProc && !Security.IsAuthorized(Permissions.EditCompletedProcedure,date,ProcList[0].CodeNum,0))
+						|| (_hasExistingProc && !Security.IsAuthorized(Permissions.EditProcedure,date,ProcList[0].CodeNum,0)))
 					{
 						isAuthorized=false;
 					}
 				}
-				else if((_hasCompletedProc && !Security.IsAuthorized(Permissions.ProcComplEdit,date))
-					|| (_hasExistingProc && !Security.IsAuthorized(Permissions.ProcExistingEdit,date)))
+				else if((_hasCompletedProc && !Security.IsAuthorized(Permissions.EditCompletedProcedure,date))
+					|| (_hasExistingProc && !Security.IsAuthorized(Permissions.EditProcedure,date)))
 				{
 					isAuthorized=false;
 				}
@@ -392,10 +392,10 @@ namespace OpenDental {
 					}
 				}
 				if(logTextProcComplete!="") {
-					SecurityLogs.MakeLogEntry(Permissions.ProcComplEdit,patNum,logTextProcComplete);
+					SecurityLogs.MakeLogEntry(Permissions.EditCompletedProcedure,patNum,logTextProcComplete);
 				}
 				if(logTextProcExisting!="") {
-					SecurityLogs.MakeLogEntry(Permissions.ProcExistingEdit,patNum,logTextProcExisting);
+					SecurityLogs.MakeLogEntry(Permissions.EditProcedure,patNum,logTextProcExisting);
 				}
 				if(logTextProcOther!="") {
 					SecurityLogs.MakeLogEntry(Permissions.ProcEdit,patNum,logTextProcOther);

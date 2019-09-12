@@ -87,7 +87,7 @@ namespace OpenDental {
 		}
 
 		private void butGotoFamily_Click(object sender,EventArgs e) {
-			if(!Security.IsAuthorized(Permissions.FamilyModule)) {
+			if(!Security.IsAuthorized(Permissions.ModuleFamily)) {
 				return;
 			}
 			if(gridMain.SelectedIndices.Length==0) {
@@ -99,7 +99,7 @@ namespace OpenDental {
 		}
 
 		private void butGotoChart_Click(object sender,EventArgs e) {
-			if(!Security.IsAuthorized(Permissions.ChartModule)) {
+			if(!Security.IsAuthorized(Permissions.ModuleChart)) {
 				return;
 			}
 			if(gridMain.SelectedIndices.Length==0) {

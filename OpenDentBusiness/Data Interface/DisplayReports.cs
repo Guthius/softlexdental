@@ -120,11 +120,14 @@ namespace OpenDentBusiness
             List<DisplayReport> listDisplayReports = GetAll(false);
             listGroupPerms.RemoveAll(x =>
             {
-                string reportInternalName = DisplayReports.GetInternalName(x.FKey, listDisplayReports);
+                if (!x.ExternalId.HasValue) return true;
+
+                string reportInternalName = DisplayReports.GetInternalName(x.ExternalId.Value, listDisplayReports);
                 if (reportInternalName == "ODDentalSealantMeasure" || reportInternalName == "ODEligibilityFile" || reportInternalName == "ODEncounterFile")
                 {
                     return true;
                 }
+
                 return false;
             });
             if (listGroupPerms == null || listGroupPerms.Count == 0)
@@ -137,7 +140,7 @@ namespace OpenDentBusiness
                 {
                     continue;//We don't care about UDS reports or Arizona Primary Care reports.
                 }
-                if (!listGroupPerms.Exists(x => x.FKey == report.DisplayReportNum))
+                if (!listGroupPerms.Exists(x => x.ExternalId == report.DisplayReportNum))
                 {
                     return 0;//Has incomplete permissions
                 }

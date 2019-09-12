@@ -156,7 +156,7 @@ namespace OpenDentBusiness
             }
             if (doMakeSecLog)
             {
-                SecurityLogs.MakeLogEntry(Permissions.ChartModule, patNum, "");
+                SecurityLogs.MakeLogEntry(Permissions.ModuleChart, patNum, "");
             }
             return data;
         }

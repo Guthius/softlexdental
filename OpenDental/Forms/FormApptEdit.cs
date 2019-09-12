@@ -1248,10 +1248,10 @@ namespace OpenDental
                     isProcDeleted = true;
                     if (proc.ProcStatus.In(ProcStat.C, ProcStat.EO, ProcStat.EC))
                     {
-                        Permissions perm = Permissions.ProcComplEdit;
+                        Permissions perm = Permissions.EditCompletedProcedure;
                         if (proc.ProcStatus.In(ProcStat.EO, ProcStat.EC))
                         {
-                            perm = Permissions.ProcExistingEdit;
+                            perm = Permissions.EditProcedure;
                         }
                         SecurityLogs.MakeLogEntry(perm, AptCur.PatNum, ProcedureCodes.GetProcCode(proc.CodeNum).ProcCode + " (" + proc.ProcStatus + "), " + proc.ProcFee.ToString("c") + ", Deleted");
                     }
@@ -1446,7 +1446,7 @@ namespace OpenDental
             // procedures as complete, don't let them add procedures to this appointment.
             if (AptCur.AptStatus == ApptStatus.Complete)
             {
-                if (!Security.IsAuthorized(Permissions.ProcComplCreate))
+                if (!Security.IsAuthorized(Permissions.CreateCompletedProcedure))
                 {
                     return;
                 }
@@ -1728,7 +1728,7 @@ namespace OpenDental
                 listSelectedProcs.RemoveAll(x => x.ProcStatus == ProcStat.C);//only care about the procs that are not already complete (new attaching procs)
                 foreach (Procedure proc in listSelectedProcs)
                 {
-                    if (!Security.IsAuthorized(Permissions.ProcComplCreate, AptCur.AptDateTime, proc.CodeNum, proc.ProcFee))
+                    if (!Security.IsAuthorized(Permissions.CreateCompletedProcedure, AptCur.AptDateTime, proc.CodeNum, proc.ProcFee))
                     {
                         return false;
                     }
@@ -1948,7 +1948,7 @@ namespace OpenDental
             if (AptCur.AptStatus != ApptStatus.Complete//was not originally complete
                 && _selectedApptStatus == ApptStatus.Complete //trying to make it complete
                 && hasProcsAttached
-                && !Security.IsAuthorized(Permissions.ProcComplCreate, AptCur.AptDateTime))//aren't authorized to complete procedures
+                && !Security.IsAuthorized(Permissions.CreateCompletedProcedure, AptCur.AptDateTime))//aren't authorized to complete procedures
             {
                 return false;
             }

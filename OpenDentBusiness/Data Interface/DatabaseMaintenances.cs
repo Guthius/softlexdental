@@ -724,26 +724,26 @@ namespace OpenDentBusiness
                         }
                         if (listAptNums.Count > 0)
                         {
-                            List<Permissions> listPerms = GroupPermissions.GetPermsFromCrudAuditPerm(ODTableAttribute.GetCrudAuditPermForClass(typeof(Appointment)));
-                            List<SecurityLog> listSecurityLogs = SecurityLogs.GetFromFKeysAndType(listAptNums, listPerms);
-                            Appointments.ClearFkey(listAptNums);//Zero securitylog FKey column for rows to be deleted.
-                                                                //Add securitylog changes to listDbmLogs
-                            listSecurityLogs.ForEach(x => listDbmLogs.Add(new DbmLog(Security.CurrentUser.Id, x.SecurityLogNum, DbmLogFKeyType.Securitylog,
-                                DbmLogActionType.Delete, methodName, "Updated FKey from " + x.FKey + " to 0.")));
-                            listAptNums.ForEach(x => listDbmLogs.Add(new DbmLog(Security.CurrentUser.Id, x, DbmLogFKeyType.Appointment,
-                                DbmLogActionType.Delete, methodName, "Deleted appointment with no pattern")));
-                            command = "SELECT * FROM appointment WHERE AptNum IN(" + String.Join(",", listAptNums) + ")";
-                            List<Appointment> listApts = Crud.AppointmentCrud.SelectMany(command);
-                            foreach (Appointment apt in listApts)
-                            {
-                                HistAppointment hist = HistAppointments.CreateHistoryEntry(apt, HistAppointmentAction.Deleted);
-                                if (hist == null)
-                                {
-                                    continue;
-                                }
-                                listDbmLogs.Add(new DbmLog(Security.CurrentUser.Id, hist.HistApptNum, DbmLogFKeyType.HistAppointment, DbmLogActionType.Insert,
-                                    methodName, "Inserted hist appointment."));
-                            }
+                            //List<Permissions> listPerms = GroupPermissions.GetPermsFromCrudAuditPerm(ODTableAttribute.GetCrudAuditPermForClass(typeof(Appointment)));
+                            //List<SecurityLog> listSecurityLogs = SecurityLogs.GetFromFKeysAndType(listAptNums, listPerms);
+                            //Appointments.ClearFkey(listAptNums);//Zero securitylog FKey column for rows to be deleted.
+                            //                                    //Add securitylog changes to listDbmLogs
+                            //listSecurityLogs.ForEach(x => listDbmLogs.Add(new DbmLog(Security.CurrentUser.Id, x.SecurityLogNum, DbmLogFKeyType.Securitylog,
+                            //    DbmLogActionType.Delete, methodName, "Updated FKey from " + x.FKey + " to 0.")));
+                            //listAptNums.ForEach(x => listDbmLogs.Add(new DbmLog(Security.CurrentUser.Id, x, DbmLogFKeyType.Appointment,
+                            //    DbmLogActionType.Delete, methodName, "Deleted appointment with no pattern")));
+                            //command = "SELECT * FROM appointment WHERE AptNum IN(" + String.Join(",", listAptNums) + ")";
+                            //List<Appointment> listApts = Crud.AppointmentCrud.SelectMany(command);
+                            //foreach (Appointment apt in listApts)
+                            //{
+                            //    HistAppointment hist = HistAppointments.CreateHistoryEntry(apt, HistAppointmentAction.Deleted);
+                            //    if (hist == null)
+                            //    {
+                            //        continue;
+                            //    }
+                            //    listDbmLogs.Add(new DbmLog(Security.CurrentUser.Id, hist.HistApptNum, DbmLogFKeyType.HistAppointment, DbmLogActionType.Insert,
+                            //        methodName, "Inserted hist appointment."));
+                            //}
                         }
                         command = "DELETE FROM appointment WHERE Pattern=''";
                         Db.NonQ(command);
@@ -792,26 +792,26 @@ namespace OpenDentBusiness
                     }
                     if (listAptNums.Count > 0)
                     {
-                        List<Permissions> listPerms = GroupPermissions.GetPermsFromCrudAuditPerm(ODTableAttribute.GetCrudAuditPermForClass(typeof(Appointment)));
-                        List<SecurityLog> listSecurityLogs = SecurityLogs.GetFromFKeysAndType(listAptNums, listPerms);
-                        Appointments.ClearFkey(listAptNums);//Zero securitylog FKey column for rows to be deleted.
-                                                            //Add changes to listDbmLogs
-                        listAptNums.ForEach(x => listDbmLogs.Add(new DbmLog(Security.CurrentUser.Id, x, DbmLogFKeyType.Appointment,
-                                DbmLogActionType.Delete, methodName, "Deleted appointment from AppointmentsNoDateOrProcs.")));
-                        listSecurityLogs.ForEach(x => listDbmLogs.Add(new DbmLog(Security.CurrentUser.Id, x.SecurityLogNum, DbmLogFKeyType.Securitylog,
-                                 DbmLogActionType.Update, methodName, "Cleared securitylog FKey column.")));
-                        command = "SELECT * FROM appointment WHERE AptNum IN(" + String.Join(",", listAptNums) + ")";
-                        List<Appointment> listApts = Crud.AppointmentCrud.SelectMany(command);
-                        foreach (Appointment apt in listApts)
-                        {
-                            HistAppointment hist = HistAppointments.CreateHistoryEntry(apt, HistAppointmentAction.Deleted);
-                            if (hist == null)
-                            {
-                                continue;
-                            }
-                            listDbmLogs.Add(new DbmLog(Security.CurrentUser.Id, hist.HistApptNum, DbmLogFKeyType.HistAppointment, DbmLogActionType.Insert,
-                                methodName, "Inserted hist appointment."));
-                        }
+                        //List<Permissions> listPerms = GroupPermissions.GetPermsFromCrudAuditPerm(ODTableAttribute.GetCrudAuditPermForClass(typeof(Appointment)));
+                        //List<SecurityLog> listSecurityLogs = SecurityLogs.GetFromFKeysAndType(listAptNums, listPerms);
+                        //Appointments.ClearFkey(listAptNums);//Zero securitylog FKey column for rows to be deleted.
+                        //                                    //Add changes to listDbmLogs
+                        //listAptNums.ForEach(x => listDbmLogs.Add(new DbmLog(Security.CurrentUser.Id, x, DbmLogFKeyType.Appointment,
+                        //        DbmLogActionType.Delete, methodName, "Deleted appointment from AppointmentsNoDateOrProcs.")));
+                        //listSecurityLogs.ForEach(x => listDbmLogs.Add(new DbmLog(Security.CurrentUser.Id, x.SecurityLogNum, DbmLogFKeyType.Securitylog,
+                        //         DbmLogActionType.Update, methodName, "Cleared securitylog FKey column.")));
+                        //command = "SELECT * FROM appointment WHERE AptNum IN(" + String.Join(",", listAptNums) + ")";
+                        //List<Appointment> listApts = Crud.AppointmentCrud.SelectMany(command);
+                        //foreach (Appointment apt in listApts)
+                        //{
+                        //    HistAppointment hist = HistAppointments.CreateHistoryEntry(apt, HistAppointmentAction.Deleted);
+                        //    if (hist == null)
+                        //    {
+                        //        continue;
+                        //    }
+                        //    listDbmLogs.Add(new DbmLog(Security.CurrentUser.Id, hist.HistApptNum, DbmLogFKeyType.HistAppointment, DbmLogActionType.Insert,
+                        //        methodName, "Inserted hist appointment."));
+                        //}
                     }
                     command = "DELETE FROM appointment "
                         + "WHERE AptStatus=" + POut.Int((int)ApptStatus.Scheduled) + " "
@@ -1014,14 +1014,14 @@ namespace OpenDentBusiness
                 + "INNER JOIN ("
                     + "SELECT PatNum,FKey,MAX(LogDateTime) LogDateTime "
                     + "FROM securitylog "
-                    + "WHERE PermType=" + POut.Int((int)Permissions.AppointmentCreate) + " "
+                    + "WHERE PermType=" + POut.String(Permissions.AppointmentCreate) + " "
                     + "AND FKey>0 "
                     + "GROUP BY PatNum,FKey "
                     + "HAVING COUNT(*)>1"
                 + ") sl ON sl.PatNum=securitylog.PatNum "
                 + "AND sl.FKey=securitylog.FKey "
                 + "AND sl.LogDateTime!=securitylog.LogDateTime "
-                + "AND securitylog.PermType=" + POut.Int((int)Permissions.AppointmentCreate) + " "
+                + "AND securitylog.PermType=" + POut.String(Permissions.AppointmentCreate) + " "
                 + "GROUP BY securitylog.PatNum,securitylog.FKey";
             List<SecurityLog> listDupApptCreates = Crud.SecurityLogCrud.SelectMany(command);
             string log = "";
@@ -1656,12 +1656,12 @@ namespace OpenDentBusiness
                     }
                     if (listClaimNums.Count > 0)
                     {
-                        List<Permissions> listPerms = GroupPermissions.GetPermsFromCrudAuditPerm(ODTableAttribute.GetCrudAuditPermForClass(typeof(Claim)));
-                        List<SecurityLog> listSecurityLogs = SecurityLogs.GetFromFKeysAndType(listClaimNums, listPerms);
-                        Claims.ClearFkey(listClaimNums);//Zero securitylog FKey column for rows to be deleted.
-                                                        //Insert changes to DbmLogs
-                        listSecurityLogs.ForEach(x => listDbmLogs.Add(new DbmLog(Security.CurrentUser.Id, x.SecurityLogNum, DbmLogFKeyType.Securitylog,
-                            DbmLogActionType.Update, methodName, "Updated FKey from " + x.FKey + " to 0 from ClaimDeleteWithNoClaimProcs.")));
+                        //List<Permissions> listPerms = GroupPermissions.GetPermsFromCrudAuditPerm(ODTableAttribute.GetCrudAuditPermForClass(typeof(Claim)));
+                        //List<SecurityLog> listSecurityLogs = SecurityLogs.GetFromFKeysAndType(listClaimNums, listPerms);
+                        //Claims.ClearFkey(listClaimNums);//Zero securitylog FKey column for rows to be deleted.
+                        //                                //Insert changes to DbmLogs
+                        //listSecurityLogs.ForEach(x => listDbmLogs.Add(new DbmLog(Security.CurrentUser.Id, x.SecurityLogNum, DbmLogFKeyType.Securitylog,
+                        //    DbmLogActionType.Update, methodName, "Updated FKey from " + x.FKey + " to 0 from ClaimDeleteWithNoClaimProcs.")));
                     }
                     //Orphaned claims do not show in the account module (tested) so we need to delete them because no other way.
                     command = @"DELETE FROM claim WHERE NOT EXISTS(
@@ -3847,7 +3847,7 @@ namespace OpenDentBusiness
             switch (modeCur)
             {
                 case DatabaseMaintenanceMode.Check:
-                    command = $"SELECT COUNT(GroupPermNum) FROM grouppermission WHERE NewerDays<0 OR NewerDays>{GroupPermissions.NewerDaysMax}";
+                    command = $"SELECT COUNT(GroupPermNum) FROM grouppermission WHERE NewerDays<0 OR NewerDays>{GroupPermission.NewerDaysMax}";
                     int numFound = PIn.Int(Db.GetCount(command));
                     if (numFound > 0 || verbose)
                     {
@@ -3857,8 +3857,8 @@ namespace OpenDentBusiness
                 case DatabaseMaintenanceMode.Fix:
                     string methodName = MethodBase.GetCurrentMethod().Name;
                     command = $@"UPDATE grouppermission 
-						SET NewerDays=(CASE WHEN NewerDays<0 THEN 0 ELSE {GroupPermissions.NewerDaysMax} END) 
-						WHERE NewerDays<0 OR NewerDays>{GroupPermissions.NewerDaysMax}";
+						SET NewerDays=(CASE WHEN NewerDays<0 THEN 0 ELSE {GroupPermission.NewerDaysMax} END) 
+						WHERE NewerDays<0 OR NewerDays>{GroupPermission.NewerDaysMax}";
                     long numfixed = Db.NonQ(command);
                     if (numfixed > 0 || verbose)
                     {
@@ -4279,31 +4279,31 @@ namespace OpenDentBusiness
                         countUsed += PIn.Int(Db.GetCount(command));
                         if (countUsed == 0)
                         {
-                            where = "WHERE InsSubNum=" + POut.Long(insSubNum) + " AND ClaimNum=0 AND (Status=6 OR Status=3)";
-                            command = "SELECT * FROM claimproc " + where;
-                            List<ClaimProc> listClaimProc = Crud.ClaimProcCrud.SelectMany(command);
-                            command = "DELETE FROM claimproc " + where;//ok to delete because no claim and just an estimate or adjustment
-                            Db.NonQ(command);
-                            listClaimProc.ForEach(x => listDbmLogs.Add(new DbmLog(Security.CurrentUser.Id, x.ClaimProcNum, DbmLogFKeyType.ClaimProc,
-                                DbmLogActionType.Delete, methodName, "Deleted claimproc from InsPlanInvalidNum.")));
-                            List<Permissions> listPerms = GroupPermissions.GetPermsFromCrudAuditPerm(ODTableAttribute.GetCrudAuditPermForClass(typeof(InsSub)));
-                            listSecurityLogs = SecurityLogs.GetFromFKeysAndType(new List<long> { insSubNum }, listPerms);
-                            InsSubs.ClearFkey(insSubNum);
-                            listSecurityLogs.ForEach(x => listDbmLogs.Add(new DbmLog(Security.CurrentUser.Id, x.SecurityLogNum, DbmLogFKeyType.Securitylog,
-                                DbmLogActionType.Update, methodName, "Updated securitylog by setting FKey to 0 from InsPlanInvalidNum.")));
-                            command = "SELECT * FROM inssub WHERE InsSubNum=" + POut.Long(insSubNum);
-                            listInsSubs = Crud.InsSubCrud.SelectMany(command);
-                            command = "DELETE FROM inssub WHERE InsSubNum=" + POut.Long(insSubNum);
-                            Db.NonQ(command);
-                            listInsSubs.ForEach(x => listDbmLogs.Add(new DbmLog(Security.CurrentUser.Id, x.InsSubNum, DbmLogFKeyType.InsSub,
-                                DbmLogActionType.Delete, methodName, "Deleted inssub from InsPlanInvalidNum.")));
-                            command = "SELECT * FROM patplan WHERE InsSubNum=" + POut.Long(insSubNum);
-                            List<PatPlan> listPatPlans = Crud.PatPlanCrud.SelectMany(command);
-                            command = "DELETE FROM patplan WHERE InsSubNum=" + POut.Long(insSubNum);//It's very safe to "drop coverage" for a patient.
-                            Db.NonQ(command);
-                            listPatPlans.ForEach(x => listDbmLogs.Add(new DbmLog(Security.CurrentUser.Id, x.PatPlanNum, DbmLogFKeyType.PatPlan,
-                                DbmLogActionType.Delete, methodName, "Deleted patplan from InsPlanInvalidNum.")));
-                            numFixed++;
+                            //where = "WHERE InsSubNum=" + POut.Long(insSubNum) + " AND ClaimNum=0 AND (Status=6 OR Status=3)";
+                            //command = "SELECT * FROM claimproc " + where;
+                            //List<ClaimProc> listClaimProc = Crud.ClaimProcCrud.SelectMany(command);
+                            //command = "DELETE FROM claimproc " + where;//ok to delete because no claim and just an estimate or adjustment
+                            //Db.NonQ(command);
+                            //listClaimProc.ForEach(x => listDbmLogs.Add(new DbmLog(Security.CurrentUser.Id, x.ClaimProcNum, DbmLogFKeyType.ClaimProc,
+                            //    DbmLogActionType.Delete, methodName, "Deleted claimproc from InsPlanInvalidNum.")));
+                            //List<Permissions> listPerms = GroupPermissions.GetPermsFromCrudAuditPerm(ODTableAttribute.GetCrudAuditPermForClass(typeof(InsSub)));
+                            //listSecurityLogs = SecurityLogs.GetFromFKeysAndType(new List<long> { insSubNum }, listPerms);
+                            //InsSubs.ClearFkey(insSubNum);
+                            //listSecurityLogs.ForEach(x => listDbmLogs.Add(new DbmLog(Security.CurrentUser.Id, x.SecurityLogNum, DbmLogFKeyType.Securitylog,
+                            //    DbmLogActionType.Update, methodName, "Updated securitylog by setting FKey to 0 from InsPlanInvalidNum.")));
+                            //command = "SELECT * FROM inssub WHERE InsSubNum=" + POut.Long(insSubNum);
+                            //listInsSubs = Crud.InsSubCrud.SelectMany(command);
+                            //command = "DELETE FROM inssub WHERE InsSubNum=" + POut.Long(insSubNum);
+                            //Db.NonQ(command);
+                            //listInsSubs.ForEach(x => listDbmLogs.Add(new DbmLog(Security.CurrentUser.Id, x.InsSubNum, DbmLogFKeyType.InsSub,
+                            //    DbmLogActionType.Delete, methodName, "Deleted inssub from InsPlanInvalidNum.")));
+                            //command = "SELECT * FROM patplan WHERE InsSubNum=" + POut.Long(insSubNum);
+                            //List<PatPlan> listPatPlans = Crud.PatPlanCrud.SelectMany(command);
+                            //command = "DELETE FROM patplan WHERE InsSubNum=" + POut.Long(insSubNum);//It's very safe to "drop coverage" for a patient.
+                            //Db.NonQ(command);
+                            //listPatPlans.ForEach(x => listDbmLogs.Add(new DbmLog(Security.CurrentUser.Id, x.PatPlanNum, DbmLogFKeyType.PatPlan,
+                            //    DbmLogActionType.Delete, methodName, "Deleted patplan from InsPlanInvalidNum.")));
+                            //numFixed++;
                             continue;
                         }
                     }
@@ -4335,18 +4335,18 @@ namespace OpenDentBusiness
                         countUsed += PIn.Int(Db.GetCount(command));
                         if (countUsed == 0)
                         {//There are no other pointers to this invalid plannum or this inssub, delete this inssub
-                            List<Permissions> listPerms = GroupPermissions.GetPermsFromCrudAuditPerm(ODTableAttribute.GetCrudAuditPermForClass(typeof(InsSub)));
-                            listSecurityLogs = SecurityLogs.GetFromFKeysAndType(new List<long> { insSubNum }, listPerms);
-                            InsSubs.ClearFkey(insSubNum);
-                            listSecurityLogs.ForEach(x => listDbmLogs.Add(new DbmLog(Security.CurrentUser.Id, x.SecurityLogNum, DbmLogFKeyType.Securitylog,
-                                DbmLogActionType.Update, methodName, "Updated securitylog by setting FKey to 0 from InsPlanInvalidNum.")));
-                            command = "SELECT * FROM inssub WHERE InsSubNum=" + POut.Long(insSubNum);
-                            listInsSubs = Crud.InsSubCrud.SelectMany(command);
-                            command = "DELETE FROM inssub WHERE InsSubNum=" + POut.Long(insSubNum);
-                            Db.NonQ(command);
-                            listInsSubs.ForEach(x => listDbmLogs.Add(new DbmLog(Security.CurrentUser.Id, x.InsSubNum, DbmLogFKeyType.InsSub,
-                                DbmLogActionType.Delete, methodName, "Deleted inssub from InsPlanInvalidNum.")));
-                            numFixed++;
+                            //List<string> listPerms = GroupPermission.GetPermsFromCrudAuditPerm(ODTableAttribute.GetCrudAuditPermForClass(typeof(InsSub)));
+                            //listSecurityLogs = SecurityLogs.GetFromFKeysAndType(new List<long> { insSubNum }, listPerms);
+                            //InsSubs.ClearFkey(insSubNum);
+                            //listSecurityLogs.ForEach(x => listDbmLogs.Add(new DbmLog(Security.CurrentUser.Id, x.SecurityLogNum, DbmLogFKeyType.Securitylog,
+                            //    DbmLogActionType.Update, methodName, "Updated securitylog by setting FKey to 0 from InsPlanInvalidNum.")));
+                            //command = "SELECT * FROM inssub WHERE InsSubNum=" + POut.Long(insSubNum);
+                            //listInsSubs = Crud.InsSubCrud.SelectMany(command);
+                            //command = "DELETE FROM inssub WHERE InsSubNum=" + POut.Long(insSubNum);
+                            //Db.NonQ(command);
+                            //listInsSubs.ForEach(x => listDbmLogs.Add(new DbmLog(Security.CurrentUser.Id, x.InsSubNum, DbmLogFKeyType.InsSub,
+                            //    DbmLogActionType.Delete, methodName, "Deleted inssub from InsPlanInvalidNum.")));
+                            //numFixed++;
                             continue;
                         }
                         else
@@ -4703,11 +4703,11 @@ namespace OpenDentBusiness
                     }
                     if (listClaimNums.Count > 0)
                     {
-                        List<Permissions> listPerms = GroupPermissions.GetPermsFromCrudAuditPerm(ODTableAttribute.GetCrudAuditPermForClass(typeof(Claim)));
-                        List<SecurityLog> listSecurityLogs = SecurityLogs.GetFromFKeysAndType(listClaimNums, listPerms);
-                        Claims.ClearFkey(listClaimNums);//Zero securitylog FKey column for rows to be deleted.
-                        listSecurityLogs.ForEach(x => listDbmLogs.Add(new DbmLog(Security.CurrentUser.Id, x.SecurityLogNum, DbmLogFKeyType.Securitylog,
-                            DbmLogActionType.Update, methodName, "Set FKey to 0 from InsSubNumMismatchPlanNum.")));
+                        //List<Permissions> listPerms = GroupPermissions.GetPermsFromCrudAuditPerm(ODTableAttribute.GetCrudAuditPermForClass(typeof(Claim)));
+                        //List<SecurityLog> listSecurityLogs = SecurityLogs.GetFromFKeysAndType(listClaimNums, listPerms);
+                        //Claims.ClearFkey(listClaimNums);//Zero securitylog FKey column for rows to be deleted.
+                        //listSecurityLogs.ForEach(x => listDbmLogs.Add(new DbmLog(Security.CurrentUser.Id, x.SecurityLogNum, DbmLogFKeyType.Securitylog,
+                        //    DbmLogActionType.Update, methodName, "Set FKey to 0 from InsSubNumMismatchPlanNum.")));
                     }
                     where = "WHERE PlanNum=0 AND ClaimStatus IN('PreAuth','W','U') AND NOT EXISTS(SELECT * FROM inssub WHERE inssub.InsSubNum=claim.InsSubNum)";
                     command = "SELECT ClaimNum FROM claim " + where;

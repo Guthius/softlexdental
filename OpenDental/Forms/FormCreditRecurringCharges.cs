@@ -269,7 +269,7 @@ namespace OpenDental {
 		}
 		
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			if(!Security.IsAuthorized(Permissions.AccountModule)) {
+			if(!Security.IsAuthorized(Permissions.ModuleAccount)) {
 				return;
 			}
 			if(e.Row<0) {

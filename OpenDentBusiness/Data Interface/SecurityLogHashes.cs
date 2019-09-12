@@ -89,7 +89,7 @@ namespace OpenDentBusiness
             //Build string to hash
             string logString = "";
             //logString+=securityLog.SecurityLogNum;
-            logString += ((int)securityLog.PermType).ToString();
+            logString += securityLog.PermType;
             logString += securityLog.UserNum;
             logString += POut.DateT(securityLog.LogDateTime, false);
             logString += securityLog.LogText;

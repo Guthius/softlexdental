@@ -1201,7 +1201,7 @@ namespace OpenDentBusiness
         ///<summary>Makes audit trail entry for the task passed in.
         ///If this task has an object type set, the log will show up under the corresponding patient for the selected object type.
         ///Used for both TaskEdit and TaskNoteEdit permissions.</summary>
-        public static void TaskEditCreateLog(Permissions perm, string logText, Task task)
+        public static void TaskEditCreateLog(string perm, string logText, Task task)
         {
             if (task == null)
             {  //Something went wrong before calling this function, and somehow task wasn't passed in

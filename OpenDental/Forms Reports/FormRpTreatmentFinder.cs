@@ -913,7 +913,7 @@ namespace OpenDental{
 		}
 
 		private void menuItemFamily_Click(object sender,EventArgs e) {
-			if(!Security.IsAuthorized(Permissions.FamilyModule)) {
+			if(!Security.IsAuthorized(Permissions.ModuleFamily)) {
 				return;
 			}
 			if(gridMain.SelectedIndices.Length==0) {
@@ -925,7 +925,7 @@ namespace OpenDental{
 		}
 
 		private void menuItemAccount_Click(object sender,EventArgs e) {
-			if(!Security.IsAuthorized(Permissions.AccountModule)) {
+			if(!Security.IsAuthorized(Permissions.ModuleAccount)) {
 				return;
 			}
 			if(gridMain.SelectedIndices.Length==0) {
@@ -937,7 +937,7 @@ namespace OpenDental{
 		}
 
 		private void butGotoFamily_Click(object sender,EventArgs e) {
-			if(!Security.IsAuthorized(Permissions.FamilyModule)) {
+			if(!Security.IsAuthorized(Permissions.ModuleFamily)) {
 				return;
 			}
 			if(gridMain.SelectedIndices.Length==0) {
@@ -950,7 +950,7 @@ namespace OpenDental{
 		}
 
 		private void butGotoAccount_Click(object sender,EventArgs e) {
-			if(!Security.IsAuthorized(Permissions.AccountModule)) {
+			if(!Security.IsAuthorized(Permissions.ModuleAccount)) {
 				return;
 			}
 			if(gridMain.SelectedIndices.Length==0) {

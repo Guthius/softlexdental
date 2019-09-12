@@ -1758,7 +1758,7 @@ namespace OpenDentBusiness
                 + "FROM patient "
                 + "INNER JOIN appointment ON appointment.PatNum=patient.PatNum "
                 + "INNER JOIN patient guar ON guar.PatNum=patient.Guarantor "
-                + "LEFT JOIN securitylog ON securitylog.PatNum=appointment.PatNum AND securitylog.PermType=" + POut.Int((int)Permissions.AppointmentCreate) + " "
+                + "LEFT JOIN securitylog ON securitylog.PatNum=appointment.PatNum AND securitylog.PermType=" + POut.String(Permissions.AppointmentCreate) + " "
                     + "AND securitylog.FKey=appointment.AptNum "
                 + "WHERE AptDateTime > " + POut.Date(dateFrom) + " "
                 //Example: AptDateTime="2014-11-26 13:00".  Filter is 11-26, giving "2014-11-27 00:00" to compare against.  This captures all times.

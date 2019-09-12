@@ -56,7 +56,7 @@ namespace OpenDentBusiness
 
         ///<summary>Used when viewing securityLog from the security admin window.  PermTypes can be length 0 to get all types.
         ///Throws exceptions.</summary>
-        public static SecurityLog[] Refresh(DateTime dateFrom, DateTime dateTo, Permissions permType, long patNum, long userNum,
+        public static SecurityLog[] Refresh(DateTime dateFrom, DateTime dateTo, string permType, long patNum, long userNum,
             DateTime datePreviousFrom, DateTime datePreviousTo, bool includeArchived, int limit = 0)
         {
             string command = "SELECT securitylog.*,LName,FName,Preferred,MiddleI,LogHash FROM securitylog "
@@ -71,9 +71,9 @@ namespace OpenDentBusiness
                 command += " AND securitylog.PatNum IN (" + string.Join(",",
                     PatientLinks.GetPatNumsLinkedToRecursive(patNum, PatientLinkType.Merge).Select(x => POut.Long(x))) + ")";
             }
-            if (permType != Permissions.None)
+            if (permType != "")
             {
-                command += " AND PermType=" + POut.Long((int)permType);
+                command += " AND PermType=" + POut.String(permType);
             }
             if (userNum != 0)
             {
@@ -114,7 +114,7 @@ namespace OpenDentBusiness
         //there are no methods for deleting or changing log entries because that will never be allowed.
 
         ///<summary>Used when viewing various audit trails of specific types.  Only implemented Appointments,ProcFeeEdit,InsPlanChangeCarrierName so far. patNum only used for Appointments.  The other two are zero.</summary>
-        public static SecurityLog[] Refresh(long patNum, List<Permissions> permTypes, long fKey, bool includeArchived)
+        public static SecurityLog[] Refresh(long patNum, List<string> permTypes, long fKey, bool includeArchived)
         {
             //No need to check RemotingRole; no call to db.
             return Refresh(patNum, permTypes, new List<long>() { fKey }, includeArchived);
@@ -126,7 +126,7 @@ namespace OpenDentBusiness
         ///Thus, to get the full experience of a specific type audit trail window, we need to get security logs for multiple objects (FKs) that
         ///comprise the larger object (what the user sees).  Only implemented with ortho chart so far.  FKeys can be null.
         ///Throws exceptions.</summary>
-        public static SecurityLog[] Refresh(long patNum, List<Permissions> permTypes, List<long> fKeys, bool includeArchived)
+        public static SecurityLog[] Refresh(long patNum, List<string> permTypes, List<long> fKeys, bool includeArchived)
         {
             string types = "";
             for (int i = 0; i < permTypes.Count; i++)
@@ -135,7 +135,7 @@ namespace OpenDentBusiness
                 {
                     types += " OR";
                 }
-                types += " PermType=" + POut.Long((int)permTypes[i]);
+                types += " PermType=" + POut.String(permTypes[i]);
             }
             string command = "SELECT * FROM securitylog "
                 + "WHERE (" + types + ") ";
@@ -154,14 +154,14 @@ namespace OpenDentBusiness
         }
 
         ///<summary>Gets all security logs for the given foreign keys and permissions.</summary>
-        public static List<SecurityLog> GetFromFKeysAndType(List<long> listFKeys, List<Permissions> permTypes)
+        public static List<SecurityLog> GetFromFKeysAndType(List<long> listFKeys, List<string> permTypes)
         {
             if (listFKeys == null || listFKeys.FindAll(x => x != 0).Count == 0)
             {
                 return new List<SecurityLog>();
             }
             string command = "SELECT * FROM securitylog WHERE FKey IN(" + string.Join(",", listFKeys.FindAll(x => x != 0)) + ") AND PermType IN" +
-                "(" + string.Join(",", permTypes.Select(x => POut.Int((int)x))) + ")";
+                "(" + string.Join(",", permTypes.Select(x => POut.String(x))) + ")";
             return Crud.SecurityLogCrud.SelectMany(command);
         }
 
@@ -169,7 +169,7 @@ namespace OpenDentBusiness
         ///<param name="permType">The type of permission to be logged in the security log.</param>
         ///<param name="patNum">The PatNum for the patient associated to the security log. Can be 0.</param>
         ///<param name="listSecurityLogs">A list of the security log text that should be inserted.</param>
-        public static void MakeLogEntries(Permissions permType, long patNum, List<string> listSecurityLogs)
+        public static void MakeLogEntries(string permType, long patNum, List<string> listSecurityLogs)
         {
             if (listSecurityLogs == null || listSecurityLogs.Count == 0)
             {
@@ -182,34 +182,34 @@ namespace OpenDentBusiness
         }
 
         ///<summary>PatNum can be 0.</summary>
-        public static void MakeLogEntry(Permissions permType, long patNum, string logText)
+        public static void MakeLogEntry(string permType, long patNum, string logText)
         {
             //No need to check RemotingRole; no call to db.
             MakeLogEntry(permType, patNum, logText, 0, LogSource, DateTime.MinValue);
         }
 
         ///<summary>Used when the security log needs to be identified by a particular source.  PatNum can be 0.</summary>
-        public static void MakeLogEntry(Permissions permType, long patNum, string logText, LogSources logSource)
+        public static void MakeLogEntry(string permType, long patNum, string logText, LogSources logSource)
         {
             //No need to check RemotingRole; no call to db.
             MakeLogEntry(permType, patNum, logText, 0, logSource, DateTime.MinValue);
         }
 
         ///<summary>Takes a foreign key to a table associated with that PermType.  PatNum can be 0.</summary>
-        public static void MakeLogEntry(Permissions permType, long patNum, string logText, long fKey, DateTime DateTPrevious)
+        public static void MakeLogEntry(string permType, long patNum, string logText, long fKey, DateTime DateTPrevious)
         {
             //No need to check RemotingRole; no call to db.
             MakeLogEntry(permType, patNum, logText, fKey, LogSource, DateTPrevious);
         }
 
         ///<summary>Takes a foreign key to a table associated with that PermType.  PatNum can be 0.</summary>
-        public static void MakeLogEntry(Permissions permType, long patNum, string logText, long fKey, LogSources logSource, DateTime DateTPrevious)
+        public static void MakeLogEntry(string permType, long patNum, string logText, long fKey, LogSources logSource, DateTime DateTPrevious)
         {
             MakeLogEntry(permType, patNum, logText, fKey, logSource, 0, 0, DateTPrevious);
         }
 
         ///<summary>Takes a foreign key to a table associated with that PermType.  PatNum can be 0.</summary>
-        public static void MakeLogEntry(Permissions permType, long patNum, string logText, long fKey, LogSources logSource, long defNum, long defNumError,
+        public static void MakeLogEntry(string permType, long patNum, string logText, long fKey, LogSources logSource, long defNum, long defNumError,
             DateTime DateTPrevious)
         {
             //No need to check RemotingRole; no call to db.
@@ -229,7 +229,7 @@ namespace OpenDentBusiness
         }
 
         ///<summary>Creates security log entries for all that PatNums passed in.</summary>
-        public static void MakeLogEntry(Permissions permType, List<long> listPatNums, string logText)
+        public static void MakeLogEntry(string permType, List<long> listPatNums, string logText)
         {
             List<SecurityLog> listSecLogs = new List<SecurityLog>();
             foreach (long patNum in listPatNums)
@@ -258,7 +258,7 @@ namespace OpenDentBusiness
         }
 
         ///<summary>Takes a foreign key to a table associated with that PermType.  PatNum can be 0.  Returns the created SecurityLog object.  Does not perform an insert.</summary>
-        public static SecurityLog MakeLogEntryNoInsert(Permissions permType, long patNum, string logText, long fKey, LogSources logSource, long defNum = 0,
+        public static SecurityLog MakeLogEntryNoInsert(string permType, long patNum, string logText, long fKey, LogSources logSource, long defNum = 0,
             long defNumError = 0, DateTime DateTPrevious = default(DateTime))
         {
             //No need to check RemotingRole; no call to db.
@@ -277,13 +277,13 @@ namespace OpenDentBusiness
         }
 
         ///<summary>Used when making a security log from a remote server, possibly with multithreaded connections.</summary>
-        public static void MakeLogEntryNoCache(Permissions permType, long patnum, string logText)
+        public static void MakeLogEntryNoCache(string permType, long patnum, string logText)
         {
             MakeLogEntryNoCache(permType, patnum, logText, 0, LogSource);
         }
 
         ///<summary>Used when making a security log from a remote server, possibly with multithreaded connections.</summary>
-        public static void MakeLogEntryNoCache(Permissions permType, long patnum, string logText, long userNum, LogSources source)
+        public static void MakeLogEntryNoCache(string permType, long patnum, string logText, long userNum, LogSources source)
         {
             SecurityLog securityLog = new SecurityLog();
             securityLog.PermType = permType;

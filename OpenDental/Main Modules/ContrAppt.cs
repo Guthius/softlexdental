@@ -5537,13 +5537,13 @@ namespace OpenDental
             {
                 foreach (Procedure proc in listProcs)
                 {
-                    if (!Security.IsAuthorized(Permissions.ProcComplCreate, apt.AptDateTime, proc.CodeNum, proc.ProcFee))
+                    if (!Security.IsAuthorized(Permissions.CreateCompletedProcedure, apt.AptDateTime, proc.CodeNum, proc.ProcFee))
                     {
                         return;
                     }
                 }
             }
-            else if (!Security.IsAuthorized(Permissions.ProcComplCreate, apt.AptDateTime))
+            else if (!Security.IsAuthorized(Permissions.CreateCompletedProcedure, apt.AptDateTime))
             {
                 return;
             }

@@ -1423,7 +1423,7 @@ namespace OpenDental{
 		private void butGotoFamily_Click(object sender,EventArgs e) {
 			//button does not show when Recently Contacted tab is selected.
 			if(IsOneRowSelected()) {
-				if(!Security.IsAuthorized(Permissions.FamilyModule)) {
+				if(!Security.IsAuthorized(Permissions.ModuleFamily)) {
 					return;
 				}
 				WindowState=FormWindowState.Minimized;
@@ -1435,7 +1435,7 @@ namespace OpenDental{
 		private void butGotoAccount_Click(object sender,EventArgs e) {
 			//button does not show when Recently Contacted tab is selected.
 			if(IsOneRowSelected()) {
-				if(!Security.IsAuthorized(Permissions.AccountModule)) {
+				if(!Security.IsAuthorized(Permissions.ModuleAccount)) {
 					return;
 				}
 				WindowState=FormWindowState.Minimized;

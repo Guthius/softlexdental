@@ -200,7 +200,7 @@ namespace OpenDental
 
         void TransactionsGrid_CellDoubleClick(object sender, ODGridClickEventArgs e)
         {
-            if (e.Row < 0 || !Security.IsAuthorized(Permissions.AccountModule))
+            if (e.Row < 0 || !Security.IsAuthorized(Permissions.ModuleAccount))
             {
                 return;
             }
@@ -210,7 +210,7 @@ namespace OpenDental
 
         void GoToMenuItem_Click(object sender, EventArgs e)
         {
-            if (transactionsGrid.SelectedIndices.Length < 1 || !Security.IsAuthorized(Permissions.AccountModule))
+            if (transactionsGrid.SelectedIndices.Length < 1 || !Security.IsAuthorized(Permissions.ModuleAccount))
             {
                 return;
             }

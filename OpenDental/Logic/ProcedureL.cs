@@ -116,9 +116,9 @@ namespace OpenDental {
 				return true;//paysplits exist on one of the completed procedures. Per Nathan, don't change the provider. User will need to change manually.
 			}
 			foreach(Procedure proc in listCompletedProcWithDifferentProv) {
-				Permissions perm=Permissions.ProcComplEdit;
+				Permissions perm=Permissions.EditCompletedProcedure;
 				if(proc.ProcStatus.In(ProcStat.EC,ProcStat.EO)) {
-					perm=Permissions.ProcExistingEdit;
+					perm=Permissions.EditProcedure;
 				}
 				if(Security.IsGlobalDateLock(perm,proc.ProcDate)) {
 					return true;
@@ -274,9 +274,9 @@ namespace OpenDental {
 					|| !procOld.ProcFee.IsEqual(procFee) //If user changed the procedure fee
 					|| procOld.CodeNum != procNew.CodeNum) //If user changed the procedure code
 				{
-					Permissions perm=Permissions.ProcComplEdit;
+					Permissions perm=Permissions.EditCompletedProcedure;
 					if(procNew.ProcStatus.In(ProcStat.EO,ProcStat.EC)) {
-						perm=Permissions.ProcExistingEdit;
+						perm=Permissions.EditProcedure;
 					}
 					if(!Security.IsAuthorized(perm,procDate,procNew.CodeNum,procFee)) {
 						return false;

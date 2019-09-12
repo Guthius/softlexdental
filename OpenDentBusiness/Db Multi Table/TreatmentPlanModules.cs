@@ -36,7 +36,7 @@ namespace OpenDentBusiness
             tpData.ArrProcTPs = ProcTPs.Refresh(patNum);
             if (doMakeSecLog)
             {
-                SecurityLogs.MakeLogEntry(Permissions.TPModule, patNum, "");
+                SecurityLogs.MakeLogEntry(Permissions.ModuleTreatmentPlan, patNum, "");
             }
             return tpData;
         }
