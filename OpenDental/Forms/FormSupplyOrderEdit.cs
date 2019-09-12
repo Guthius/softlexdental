@@ -28,7 +28,7 @@ namespace OpenDental
             if (Order.DatePlaced.Year > 2200)
             {
                 datePlacedTextBox.Text = DateTime.Today.ToShortDateString();
-                Order.UserNum = Security.CurUser.Id;
+                Order.UserNum = Security.CurrentUser.Id;
             }
             else
             {

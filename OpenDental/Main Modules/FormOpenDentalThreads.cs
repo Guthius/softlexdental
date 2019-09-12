@@ -169,7 +169,7 @@ namespace OpenDental
                 return;
             }
             long clinicNumCur = Clinics.ClinicNum;
-            long userNumCur = Security.CurUser.Id;
+            long userNumCur = Security.CurrentUser.Id;
             ODThread.WorkerDelegate getAlerts = new ODThread.WorkerDelegate((o) =>
             {
                 // TODO: Fix this...
@@ -403,7 +403,7 @@ namespace OpenDental
                 return;
             }
             //If the user currently logged in has permission to view eService settings, turn on the listener monitor.
-            if (Security.CurUser == null || !Security.IsAuthorized(Permissions.EServicesSetup, true))
+            if (Security.CurrentUser == null || !Security.IsAuthorized(Permissions.EServicesSetup, true))
             {
                 return;//Do not start the listener service monitor for users without permission.
             }
@@ -553,7 +553,7 @@ namespace OpenDental
             {
                 return;
             }
-            if (Security.CurUser == null)
+            if (Security.CurrentUser == null)
             {//nobody logged on
                 return;
             }
@@ -638,7 +638,7 @@ namespace OpenDental
             ODThread odThread = new ODThread((o) =>
             {
                 RefreshMenuDashboards();
-                InitDashboards(Security.CurUser.Id, CurPatNum);
+                InitDashboards(Security.CurrentUser.Id, CurPatNum);
             });
             //If the thread that attempts to start Open Dental dashboard fails for any reason, silently fail.
             odThread.GroupName = FormODThreadNames.Dashboard.GetDescription();
@@ -856,7 +856,7 @@ namespace OpenDental
                 List<TaskNote> listRefreshedTaskNotes = null;
                 List<UserPreference> listBlockedTaskLists = null;
                 //JM: Bug fix, but we do not know what would cause Security.CurUser to be null. Worst case task wont show till next signal tick.
-                long userNumCur = Security.CurUser?.Id ?? 0;
+                long userNumCur = Security.CurrentUser?.Id ?? 0;
                 List<OpenDentBusiness.Task> listRefreshedTasks = Tasks.GetNewTasksThisUser(userNumCur, Clinics.ClinicNum, listEditedTaskNums);
                 if (listRefreshedTasks.Count > 0)
                 {

@@ -5687,7 +5687,7 @@ namespace OpenDental
             CommlogCur.CommType = Commlogs.GetTypeAuto(CommItemTypeAuto.MISC);
             CommlogCur.Mode_ = CommItemMode.Phone;
             CommlogCur.SentOrReceived = CommSentOrReceived.Received;
-            CommlogCur.UserNum = Security.CurUser.Id;
+            CommlogCur.UserNum = Security.CurrentUser.Id;
             FormCommItem FormCI = new FormCommItem(CommlogCur);
             FormCI.IsNew = true;
         }
@@ -9427,7 +9427,7 @@ namespace OpenDental
             ProcCur.RevCode = procCodeCur.RevenueCodeDefault;
             ProcCur.DiagnosticCode = Preference.GetString(PreferenceName.ICD9DefaultForNewProcs);
             ProcCur.PlaceService = (PlaceOfService)Preference.GetInt(PreferenceName.DefaultProcedurePlaceService);//Default Proc Place of Service for the Practice is used. 
-            if (Userods.IsUserCpoe(Security.CurUser))
+            if (Userods.IsUserCpoe(Security.CurrentUser))
             {
                 //This procedure is considered CPOE because the provider is the one that has added it.
                 ProcCur.IsCpoe = true;
@@ -12638,7 +12638,7 @@ namespace OpenDental
                     TaskUnreads.DeleteForTask(taskCur);//clear out taskunreads. We have too many tasks to read the done ones.
                     Tasks.Update(taskCur, taskOld);
                     TaskHist taskHist = new TaskHist(taskOld);
-                    taskHist.UserNumHist = Security.CurUser.Id;
+                    taskHist.UserNumHist = Security.CurrentUser.Id;
                     TaskHists.Insert(taskHist);
                     long signalNum = Signalods.SetInvalid(InvalidType.Task, KeyType.Task, taskCur.TaskNum);
                     UserControlTasks.RefillLocalTaskGrids(taskCur, TaskNotes.GetForTask(taskCur.TaskNum), new List<long>() { signalNum });
@@ -12831,7 +12831,7 @@ namespace OpenDental
                 {
                     procNew.DiagnosticCode = "";
                 }
-                if (Userods.IsUserCpoe(Security.CurUser))
+                if (Userods.IsUserCpoe(Security.CurrentUser))
                 {
                     //Only change the status of IsCpoe to true.  Never set it back to false for any reason.  Once true, always true.
                     procNew.IsCpoe = true;

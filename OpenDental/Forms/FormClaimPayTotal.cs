@@ -615,7 +615,7 @@ namespace OpenDental {
 					ClaimSnapshots.CreateClaimSnapshot(_listClaimProcsOld,ClaimSnapshotTrigger.InsPayment,claimCur.ClaimType);
 				}
 			}
-			ClaimTrackings.InsertClaimProcReceived(ClaimProcsToEdit[0].ClaimNum,Security.CurUser.Id);
+			ClaimTrackings.InsertClaimProcReceived(ClaimProcsToEdit[0].ClaimNum,Security.CurrentUser.Id);
 			DialogResult=DialogResult.OK;
 		}
 

@@ -272,7 +272,7 @@ namespace OpenDental{
 			date2.SelectionStart=DateTime.Today;
 			if(!Security.IsAuthorized(Permissions.ReportDailyAllProviders,true)) {
 				//They either have permission or have a provider at this point.  If they don't have permission they must have a provider.
-				_listProviders=_listProviders.FindAll(x => x.ProvNum==Security.CurUser.ProviderId);
+				_listProviders=_listProviders.FindAll(x => x.ProvNum==Security.CurrentUser.ProviderId);
 				checkAllProv.Checked=false;
 				checkAllProv.Enabled=false;
 			}
@@ -288,8 +288,8 @@ namespace OpenDental{
 				checkAllClin.Visible=false;
 			}
 			else {
-				_listClinics=Clinics.GetForUserod(Security.CurUser);
-				if(!Security.CurUser.ClinicRestricted) {
+				_listClinics=Clinics.GetForUserod(Security.CurrentUser);
+				if(!Security.CurrentUser.ClinicRestricted) {
 					listClin.Items.Add(Lan.g(this,"Unassigned"));
 					listClin.SetSelected(0,true);
 				}
@@ -358,7 +358,7 @@ namespace OpenDental{
 			}
 			if(Preferences.HasClinicsEnabled) {
 				for(int i=0;i<listClin.SelectedIndices.Count;i++) {
-					if(Security.CurUser.ClinicRestricted) {
+					if(Security.CurrentUser.ClinicRestricted) {
 						_listClinicNums.Add(_listClinics[listClin.SelectedIndices[i]].ClinicNum);//we know that the list is a 1:1 to _listClinics
 					}
 					else {
@@ -505,7 +505,7 @@ namespace OpenDental{
 				if(i>0) {
 					subtitleClinics+=", ";
 				}
-				if(Security.CurUser.ClinicRestricted) {
+				if(Security.CurrentUser.ClinicRestricted) {
 					subtitleClinics+=_listClinics[listClin.SelectedIndices[i]].Abbr;
 				}
 				else {
@@ -524,7 +524,7 @@ namespace OpenDental{
 			if(!Preferences.HasClinicsEnabled) {
 				return Clinics.IsMedicalPracticeOrClinic(0);//Check if the practice is medical
 			}
-			if(Security.CurUser.ClinicRestricted) {//User can only view one clinic
+			if(Security.CurrentUser.ClinicRestricted) {//User can only view one clinic
 				return Clinics.IsMedicalPracticeOrClinic(Clinics.ClinicNum);
 			}
 			for(int i=0;i<listClin.SelectedIndices.Count;i++) {

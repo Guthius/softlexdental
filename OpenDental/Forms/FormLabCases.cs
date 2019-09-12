@@ -272,7 +272,7 @@ namespace OpenDental{
 				comboClinic.Visible=true;
 				comboClinic.Items.Add(Lan.g(this,"All"));//"All", or "All" of the clinics the user can access if user is clinic restricted.
 				comboClinic.SelectedIndex=0;
-				_listClinics=Clinics.GetForUserod(Security.CurUser);
+				_listClinics=Clinics.GetForUserod(Security.CurrentUser);
 				for(int i = 0;i<_listClinics.Count;i++) {
 					comboClinic.Items.Add(_listClinics[i].Abbr);
 					if(_listClinics[i].ClinicNum==Clinics.ClinicNum) {
@@ -320,7 +320,7 @@ namespace OpenDental{
 			ODGridRow row;
 			List<long> operatoryNums = new List<long>();
 			if(Preferences.HasClinicsEnabled) {
-				if(comboClinic.SelectedIndex==0 && !Security.CurUser.ClinicRestricted) {//"All"
+				if(comboClinic.SelectedIndex==0 && !Security.CurrentUser.ClinicRestricted) {//"All"
 					operatoryNums=null;
 				}
 				else if(comboClinic.SelectedIndex==0) {//"All" that the user has access to.

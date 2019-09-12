@@ -421,8 +421,8 @@ namespace OpenDental{
 			//We want to help EHR users meet their measures.  Therefore, we are going to make an educated guess as to who is making this referral.
 			//We are doing this for non-EHR users as well because we think it might be nice automation.
 			long provNumLastAppt=Appointments.GetProvNumFromLastApptForPat(PatNum);
-			if(Security.CurUser.ProviderId!=0) {
-				refattach.ProvNum=Security.CurUser.ProviderId;
+			if(Security.CurrentUser.ProviderId!=0) {
+				refattach.ProvNum=Security.CurrentUser.ProviderId;
 			}
 			else if(provNumLastAppt!=0) {
 				refattach.ProvNum=provNumLastAppt;
@@ -453,8 +453,8 @@ namespace OpenDental{
 							throw new Exception();
 						}
 						Provider prov=null;
-						if(Security.CurUser.ProviderId!=0) {
-							prov=Providers.GetProv(Security.CurUser.ProviderId);
+						if(Security.CurrentUser.ProviderId!=0) {
+							prov=Providers.GetProv(Security.CurrentUser.ProviderId);
 						}
 						else {
 							prov=Providers.GetProv(PatCur.PriProv);

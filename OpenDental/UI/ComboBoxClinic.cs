@@ -243,7 +243,7 @@ namespace OpenDental.UI
                     return;
                 }
                 Items.Clear();
-                List<Clinic> listClinics = Clinics.GetForUserod(Security.CurUser, true, Lan.g("ComboBoxClinic", HqDescription));
+                List<Clinic> listClinics = Clinics.GetForUserod(Security.CurrentUser, true, Lan.g("ComboBoxClinic", HqDescription));
                 if (!DoIncludeUnassigned)
                 {
                     listClinics.RemoveAll(x => x.ClinicNum == CLINIC_NUM_UNASSIGNED);

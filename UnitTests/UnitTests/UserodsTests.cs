@@ -16,7 +16,7 @@ namespace UnitTests
         public void Cleanup()
         {
             CredentialsFailedAfterLoginEvent.Fired -= CredentialsFailedAfterLoginEvent_Fired1;
-            Security.CurUser = Userods.GetFirstOrDefault(x => x.UserName == UnitTestUserName);
+            Security.CurrentUser = Userods.GetFirstOrDefault(x => x.UserName == UnitTestUserName);
             Security.PasswordTyped = UnitTestPassword;
         }
 
@@ -27,7 +27,7 @@ namespace UnitTests
             //This test is intended to be tested on middle tier. 
             long group1 = UserGroupT.CreateUserGroup("usergroup1");
             User myUser = UserodT.CreateUser(MethodBase.GetCurrentMethod().Name + DateTime.Now.Ticks, "reallystrongpassword", userGroupNumbers: new List<long>() { group1 });
-            Security.CurUser = myUser;
+            Security.CurrentUser = myUser;
             Security.PasswordTyped = "passwordguess#1";
             CredentialsFailedAfterLoginEvent.Fired += CredentialsFailedAfterLoginEvent_Fired1;
             //make a single bad password attempt.
@@ -89,7 +89,7 @@ namespace UnitTests
             //First, setup the test scenario.
             long group1 = UserGroupT.CreateUserGroup("usergroup1");
             User myUser = UserodT.CreateUser(MethodBase.GetCurrentMethod().Name + DateTime.Now.Ticks, "reallystrongpassword", userGroupNumbers: new List<long>() { group1 });
-            Security.CurUser = myUser;
+            Security.CurrentUser = myUser;
             Security.PasswordTyped = "passwordguess#1";
             CredentialsFailedAfterLoginEvent.Fired += CredentialsFailedAfterLoginEvent_Fired1;
 
@@ -123,7 +123,7 @@ namespace UnitTests
             long group1 = UserGroupT.CreateUserGroup("usergroup1");
             User myUser = UserodT.CreateUser(MethodBase.GetCurrentMethod().Name + DateTime.Now.Ticks, "reallystrongpassword", userGroupNumbers: new List<long>() { group1 });
             CredentialsFailedAfterLoginEvent.Fired += CredentialsFailedAfterLoginEvent_Fired1;
-            Security.CurUser = myUser;
+            Security.CurrentUser = myUser;
             Security.PasswordTyped = "passwordguess#1";
 
             //try with 5 incorrect passwords. Failed attempt should get incremented to 5. 

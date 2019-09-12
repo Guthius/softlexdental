@@ -112,7 +112,7 @@ namespace OpenDental
                     return;
                 }
             }
-            else if (!IsInSecurityWindow && !Authentication.CheckPassword(Security.CurUser, currentPasswordTextBox.Text))
+            else if (!IsInSecurityWindow && !Authentication.CheckPassword(Security.CurrentUser, currentPasswordTextBox.Text))
             {
                 MessageBox.Show(
                     Translation.Language.CurrentPasswordIncorrect,

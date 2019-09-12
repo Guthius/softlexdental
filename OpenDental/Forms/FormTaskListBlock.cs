@@ -25,7 +25,7 @@ namespace OpenDental {
 
 		private void FormTaskListBlock_Load(object sender,EventArgs e) {
 			_listAllTaskLists=TaskLists.GetAll().ToDictionary(x => x.TaskListNum);	//Used so we don't need to acces the database multiple times
-			_listUserOdPrefTaskListBlocks=UserOdPrefs.GetByUserAndFkeyType(Security.CurUser.Id,UserPreferenceName.TaskListBlock);
+			_listUserOdPrefTaskListBlocks=UserOdPrefs.GetByUserAndFkeyType(Security.CurrentUser.Id,UserPreferenceName.TaskListBlock);
 			//We pull the list then save it so the sync moethod is able to run correctly.  
 			//This correctly fixes users having duplicate task list preferences in the databse.
 			_listUserDBPrefs=_listUserOdPrefTaskListBlocks.Select(x => x.Clone()).ToList();
@@ -36,7 +36,7 @@ namespace OpenDental {
 		///<summary>Fetches the subscriptions that the user is currently subscribed too ad adds them to the treeview.</summary>
 		private void InitializeTree() {
 			treeSubscriptions.Nodes.Clear();
-			List<TaskList> listTaskListSubs=TaskLists.RefreshUserTrunk(Security.CurUser.Id);
+			List<TaskList> listTaskListSubs=TaskLists.RefreshUserTrunk(Security.CurrentUser.Id);
 			BuildTaskListTree(listTaskListSubs);
 			treeSubscriptions.ExpandAll();
 		}
@@ -49,7 +49,7 @@ namespace OpenDental {
 		/// </summary>
 		private void BuildTaskListTree(List<TaskList> listTaskListSubs) {
 			//Add users inbox to the task list.
-			long inboxNum=Security.CurUser.TaskListId;
+			long inboxNum=Security.CurrentUser.TaskListId;
 			if(inboxNum!=0) {
 				listTaskListSubs.Add(_listAllTaskLists[inboxNum]);
 			}
@@ -68,7 +68,7 @@ namespace OpenDental {
 
 		///<summary>Recursively returns a list of all leaf nodes down stream from the given parent taskListNode.</summary>
 		private List<TaskList> GetLeafSubsFromTask(TaskList taskListNode,List<TaskList> listTaskListSubs) {
-			List<TaskList> children=TaskLists.RefreshChildren(taskListNode.TaskListNum,Security.CurUser.Id,Security.CurUser.TaskListId,TaskType.All);
+			List<TaskList> children=TaskLists.RefreshChildren(taskListNode.TaskListNum,Security.CurrentUser.Id,Security.CurrentUser.TaskListId,TaskType.All);
 			if(children.Count==0) {//base case: is a leaf
 				return new List<TaskList>() { taskListNode };
 			}
@@ -231,7 +231,7 @@ namespace OpenDental {
 			UserPreference pref=new UserPreference();
 			pref.Fkey=(long)node.Tag;
 			pref.FkeyType=UserPreferenceName.TaskListBlock;
-			pref.UserId=Security.CurUser.Id;
+			pref.UserId=Security.CurrentUser.Id;
 			pref.Value=POut.Bool(node.Checked);
 			//Add preference to dictionary of preferences
 			_dictBlockedTaskPrefs[(long)node.Tag]=pref;

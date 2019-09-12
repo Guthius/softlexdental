@@ -28,9 +28,9 @@ namespace OpenDental.Bridges {
 				if(!clientUrl.StartsWith("http")) {
 					clientUrl="https://"+clientUrl;
 				}
-				UserPreference userNamePref=UserOdPrefs.GetByUserFkeyAndFkeyType(Security.CurUser.Id,progOryx.ProgramNum,UserPreferenceName.ProgramUserName)
+				UserPreference userNamePref=UserOdPrefs.GetByUserFkeyAndFkeyType(Security.CurrentUser.Id,progOryx.ProgramNum,UserPreferenceName.ProgramUserName)
 					.FirstOrDefault();
-				UserPreference passwordPref=UserOdPrefs.GetByUserFkeyAndFkeyType(Security.CurUser.Id,progOryx.ProgramNum,UserPreferenceName.ProgramPassword)
+				UserPreference passwordPref=UserOdPrefs.GetByUserFkeyAndFkeyType(Security.CurrentUser.Id,progOryx.ProgramNum,UserPreferenceName.ProgramPassword)
 					.FirstOrDefault();
 				if((userNamePref==null || userNamePref.Value=="") && (passwordPref==null || passwordPref.Value=="")) {
 					//User hasn't entered credentials yet. Launch the office's Oryx page where the user can then log in.

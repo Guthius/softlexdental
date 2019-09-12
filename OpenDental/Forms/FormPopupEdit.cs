@@ -323,7 +323,7 @@ namespace OpenDental{
 			textPatient.Text=Pat.GetNameLF();
 			if(PopupCur.IsNew) {//If popup is new User is the logged-in user and create date is now.
 				butAudit.Visible=false;
-				textUser.Text=Security.CurUser.UserName;
+				textUser.Text=Security.CurrentUser.UserName;
 				textCreateDate.Text=DateTime.Now.ToShortDateString()+" "+DateTime.Now.ToShortTimeString();
 			}
 			else {
@@ -362,7 +362,7 @@ namespace OpenDental{
 			comboPopupLevel.SelectedIndex=(int)PopupCur.PopupLevel;
 			checkIsDisabled.Checked=PopupCur.IsDisabled;
 			textDescription.Text=PopupCur.Description;
-			if(!PopupCur.IsNew && PopupCur.UserNum != Security.CurUser.Id 
+			if(!PopupCur.IsNew && PopupCur.UserNum != Security.CurrentUser.Id 
 				&& !Security.IsAuthorized(Permissions.PopupEdit,true)) 
 			{
 				butDelete.Enabled=false;
@@ -414,7 +414,7 @@ namespace OpenDental{
 				PopupCur.PopupLevel=(EnumPopupLevel)comboPopupLevel.SelectedIndex;
 				PopupCur.IsDisabled=checkIsDisabled.Checked;
 				PopupCur.Description=textDescription.Text;
-				PopupCur.UserNum=Security.CurUser.Id;
+				PopupCur.UserNum=Security.CurrentUser.Id;
 				Popups.Insert(PopupCur);
 			}
 			else {
@@ -424,7 +424,7 @@ namespace OpenDental{
 					popupArchive.PopupNumArchive=PopupCur.PopupNum;
 					Popups.Insert(popupArchive);
 					PopupCur.Description=textDescription.Text;
-					PopupCur.UserNum=Security.CurUser.Id;
+					PopupCur.UserNum=Security.CurrentUser.Id;
 				}//No need to make an archive entry for changes to PopupLevel or IsDisabled so they get set on every OK Click.
 				PopupCur.PopupLevel=(EnumPopupLevel)comboPopupLevel.SelectedIndex;
 				PopupCur.IsDisabled=checkIsDisabled.Checked;

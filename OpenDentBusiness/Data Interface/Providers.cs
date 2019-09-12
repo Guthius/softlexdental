@@ -533,7 +533,7 @@ namespace OpenDentBusiness
         {
             if (Programs.UsingOrion)
             {
-                var user = Security.CurUser;
+                var user = Security.CurrentUser;
                 if (user != null && user.ProviderId.HasValue)
                 {
                     var provider = Providers.GetProv(user.ProviderId.Value);

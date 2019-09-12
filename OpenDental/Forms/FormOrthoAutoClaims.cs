@@ -27,16 +27,16 @@ namespace OpenDental {
 				comboClinics.Visible=false;
 			}
 			else {
-				if(!Security.CurUser.ClinicRestricted) {
+				if(!Security.CurrentUser.ClinicRestricted) {
 					comboClinics.Items.Add(Lan.g(this,"All"));
 					comboClinics.SelectedIndex=0;
 				}
-				_listClinics=Clinics.GetForUserod(Security.CurUser);
+				_listClinics=Clinics.GetForUserod(Security.CurrentUser);
 				for(int i=0;i<_listClinics.Count;i++) {
 					comboClinics.Items.Add(_listClinics[i].Abbr);
 					if(_listClinics[i].ClinicNum==Clinics.ClinicNum) {
 						comboClinics.SelectedIndex=i;
-						if(!Security.CurUser.ClinicRestricted) {
+						if(!Security.CurrentUser.ClinicRestricted) {
 							comboClinics.SelectedIndex++;//add 1 for "All"
 						}
 					}
@@ -48,7 +48,7 @@ namespace OpenDental {
 		private void FillGrid() {
 			long clinicNum = 0;
 			//if clinics are not enabled, comboClinic.SelectedIndex will be -1, so clinicNum will be 0 and list will not be filtered by clinic
-			if(Security.CurUser.ClinicRestricted && comboClinics.SelectedIndex>-1) {
+			if(Security.CurrentUser.ClinicRestricted && comboClinics.SelectedIndex>-1) {
 				clinicNum=_listClinics[comboClinics.SelectedIndex].ClinicNum;
 			}
 			else if(comboClinics.SelectedIndex > 0) {//if user is not restricted, clinicNum will be 0 and the query will get all clinic data
@@ -88,7 +88,7 @@ namespace OpenDental {
 			foreach(DataRow rowCur in _tableOutstandingAutoClaims.Rows) {
 				//need a check for if clinics is on here
 				if(Preferences.HasClinicsEnabled //Clinics are enabled
-					&& (Security.CurUser.ClinicRestricted || comboClinics.SelectedIndex!=0) //"All" is not selected
+					&& (Security.CurrentUser.ClinicRestricted || comboClinics.SelectedIndex!=0) //"All" is not selected
 					&& clinicNum!=PIn.Long(rowCur["ClinicNum"].ToString()))   //currently selected clinic doesn't match the row's clinic
 				{
 					continue;

@@ -1265,7 +1265,7 @@ namespace OpenDental{
 			}
 			else {
 				_listClinics=new List<Clinic>() { new Clinic() { Abbr=Lan.g(this,"None") } }; //Seed with "None"
-				Clinics.GetForUserod(Security.CurUser).ForEach(x => _listClinics.Add(x));//do not re-organize from cache. They could either be alphabetizeded or sorted by item order.
+				Clinics.GetForUserod(Security.CurrentUser).ForEach(x => _listClinics.Add(x));//do not re-organize from cache. They could either be alphabetizeded or sorted by item order.
 				_listClinics.ForEach(x => comboClinic.Items.Add(x.Abbr));
 				if(IsNew) {
 					_selectedClinicNum=PatCur.ClinicNum;
@@ -2483,7 +2483,7 @@ namespace OpenDental{
 				adj.PatNum=PatCur.PatNum;
 				adj.ProvNum=_selectedProvNum;
 				adj.AdjNote=Lan.g(this,"Payment plan adjustment");
-				adj.SecUserNumEntry=Security.CurUser.Id;
+				adj.SecUserNumEntry=Security.CurrentUser.Id;
 				adj.SecDateTEdit=DateTime.Now;
 				if(Defs.GetDef(DefinitionCategory.AdjTypes,Preference.GetLong(PreferenceName.PayPlanAdjType))!=null) {
 					adj.AdjType=Defs.GetDef(DefinitionCategory.AdjTypes,Preference.GetLong(PreferenceName.PayPlanAdjType)).Id;

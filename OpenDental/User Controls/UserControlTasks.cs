@@ -123,11 +123,11 @@ namespace OpenDental {
 
 		///<summary>And resets the tabs if the user changes.</summary>
 		public void InitializeOnStartup(){
-			if(Security.CurUser==null) {
+			if(Security.CurrentUser==null) {
 				return;
 			}
-			tabUser.Text=Lan.g(this,"for ")+Security.CurUser.UserName;
-			tabNew.Text=Lan.g(this,"New for ")+Security.CurUser.UserName;
+			tabUser.Text=Lan.g(this,"for ")+Security.CurrentUser.UserName;
+			tabNew.Text=Lan.g(this,"New for ")+Security.CurrentUser.UserName;
 			if(Preference.GetBool(PreferenceName.TasksShowOpenTickets)) {
 				if(!tabContr.TabPages.Contains(tabOpenTickets)) {
 					tabContr.TabPages.Insert(2,tabOpenTickets);
@@ -172,7 +172,7 @@ namespace OpenDental {
 				cal.SelectionStart=Tasks.LastOpenDate;
 			}
 			_isTaskSortApptDateTime=Preference.GetBool(PreferenceName.TaskSortApptDateTime);//This sets it for use and also for the task options default value.
-			List<UserPreference> listPrefsForCollapsing=UserOdPrefs.GetByUserAndFkeyType(Security.CurUser.Id,UserPreferenceName.TaskCollapse);
+			List<UserPreference> listPrefsForCollapsing=UserOdPrefs.GetByUserAndFkeyType(Security.CurrentUser.Id,UserPreferenceName.TaskCollapse);
 			_isCollapsedByDefault=listPrefsForCollapsing.Count==0 ? false : PIn.Bool(listPrefsForCollapsing[0].Value);
 			_hasListSwitched=true;
 			_taskCollapsedState=_isCollapsedByDefault ? 1 : 0;
@@ -267,7 +267,7 @@ namespace OpenDental {
 				return;
 			}
 			if(countSet==-1) {
-				countSet=Tasks.GetCountOpenTickets(Security.CurUser.Id);
+				countSet=Tasks.GetCountOpenTickets(Security.CurrentUser.Id);
 			}
 			tabOpenTickets.Text=Lan.g(this,"Open Tasks")+" ("+countSet.ToString()+")";
 		}
@@ -326,7 +326,7 @@ namespace OpenDental {
 			button.Text=Lan.g(this,"Manage Blocks");
 			button.ToolTipText=Lan.g(this,"Manage which task lists will have popups blocked even when subscribed.");
 			button.Tag="BlockSubsc";
-			button.Pushed=Security.CurUser.DefaultHidePopups;
+			button.Pushed=Security.CurrentUser.DefaultHidePopups;
 			ToolBarMain.Buttons.Add(button);
 			//Filtering only works if Clinics are enabled and preference turned on.
 			if(Preferences.HasClinicsEnabled && (GlobalTaskFilterType)Preference.GetInt(PreferenceName.TasksGlobalFilterType)!=GlobalTaskFilterType.Disabled) {
@@ -486,7 +486,7 @@ namespace OpenDental {
 				new ODGridColumn(Lan.g(this,"Description"),0,HorizontalAlignment.Left)
 			};
 			List<ODGridRow> listGridRows=new List<ODGridRow>();
-			Clinics.GetAllForUserod(Security.CurUser).ForEach(x => {//Only Clinics the user has access to.
+			Clinics.GetAllForUserod(Security.CurrentUser).ForEach(x => {//Only Clinics the user has access to.
 				ODGridRow row=new ODGridRow(x.Abbr,x.Description);
 				row.Tag=x.ClinicNum;
 				listGridRows.Add(row);
@@ -506,7 +506,7 @@ namespace OpenDental {
 			};
 			List<ODGridRow> listGridRows=new List<ODGridRow>();
 			//Regions associated to clinics that the user has access to (unrestricted).
-			List<long> listRegionDefNums=Clinics.GetAllForUserod(Security.CurUser).FindAll(x => x.Region!=0).Select(x => x.Region).ToList();
+			List<long> listRegionDefNums=Clinics.GetAllForUserod(Security.CurrentUser).FindAll(x => x.Region!=0).Select(x => x.Region).ToList();
 			listRegionDefNums.Distinct().ForEach(x => {
 				Definition regionDef=Defs.GetDef(DefinitionCategory.Regions,x);
 				ODGridRow row=new ODGridRow(regionDef.Description);
@@ -547,7 +547,7 @@ namespace OpenDental {
 				}
 				else if(canKeepTask && (task.TaskListNum==parent//Task is in the currently displayed TaskList.
 					|| (control.tabContr.SelectedTab==control.tabNew && control.IsInNewTab(task))//Task should display in 'New for User' tab.
-					|| (control.tabContr.SelectedTab==control.tabOpenTickets && task.UserNum==Security.CurUser.Id 
+					|| (control.tabContr.SelectedTab==control.tabOpenTickets && task.UserNum==Security.CurrentUser.Id 
 						&& task.ObjectType==TaskObjectType.Patient)//Open Tab
 					|| (control.tabContr.SelectedTab==control.tabPatientTickets && task.KeyNum==FormOpenDental.CurPatNum)))//Patient tab
 				{
@@ -686,7 +686,7 @@ namespace OpenDental {
 		///Otherwise, a full refresh will only be run when certain types of signals corresonding to the current selected tabs are found in listSignals.
 		///</summary>
 		private void FillGrid(List<Signalod> listSignals=null){
-			if(Security.CurUser==null) 
+			if(Security.CurrentUser==null) 
 			{
 				gridMain.BeginUpdate();
 				gridMain.Rows.Clear();
@@ -723,7 +723,7 @@ namespace OpenDental {
 					RefreshMainLists(parent,date);
 				}
 				//User is observing the Open Tasks tab and a TaskAuthor signal is received with the current user specified in the FKey.
-				else if(tabContr.SelectedTab==tabOpenTickets && listSignals.Exists(x => x.IType==InvalidType.TaskAuthor && x.FKey==Security.CurUser.Id)) {
+				else if(tabContr.SelectedTab==tabOpenTickets && listSignals.Exists(x => x.IType==InvalidType.TaskAuthor && x.FKey==Security.CurrentUser.Id)) {
 					RefreshMainLists(parent,date);
 				}
 				//User is observing the Patient Tasks tab and a TaskPatient signal is received for the patient the user currently has selected.
@@ -777,19 +777,19 @@ namespace OpenDental {
 				List<TaskList> repeatingLists=new List<TaskList>();
 				List<Task> repeatingTasks=new List<Task>();
 				if(tabContr.SelectedTab==tabDate){
-					repeatingLists=TaskLists.RefreshRepeating(TaskDateType.Day,Security.CurUser.Id,Clinics.ClinicNum
+					repeatingLists=TaskLists.RefreshRepeating(TaskDateType.Day,Security.CurrentUser.Id,Clinics.ClinicNum
 					,Clinics.GetClinic(Clinics.ClinicNum)?.Region??0);
-					repeatingTasks=Tasks.RefreshRepeating(TaskDateType.Day,Security.CurUser.Id,_globalFilterType,_filterFkey);
+					repeatingTasks=Tasks.RefreshRepeating(TaskDateType.Day,Security.CurrentUser.Id,_globalFilterType,_filterFkey);
 				}
 				if(tabContr.SelectedTab==tabWeek){
-					repeatingLists=TaskLists.RefreshRepeating(TaskDateType.Week,Security.CurUser.Id,Clinics.ClinicNum
+					repeatingLists=TaskLists.RefreshRepeating(TaskDateType.Week,Security.CurrentUser.Id,Clinics.ClinicNum
 					,Clinics.GetClinic(Clinics.ClinicNum)?.Region??0);
-					repeatingTasks=Tasks.RefreshRepeating(TaskDateType.Week,Security.CurUser.Id,_globalFilterType,_filterFkey);
+					repeatingTasks=Tasks.RefreshRepeating(TaskDateType.Week,Security.CurrentUser.Id,_globalFilterType,_filterFkey);
 				}
 				if(tabContr.SelectedTab==tabMonth) {
-					repeatingLists=TaskLists.RefreshRepeating(TaskDateType.Month,Security.CurUser.Id,Clinics.ClinicNum
+					repeatingLists=TaskLists.RefreshRepeating(TaskDateType.Month,Security.CurrentUser.Id,Clinics.ClinicNum
 					,Clinics.GetClinic(Clinics.ClinicNum)?.Region??0);
-					repeatingTasks=Tasks.RefreshRepeating(TaskDateType.Month,Security.CurUser.Id,_globalFilterType,_filterFkey);
+					repeatingTasks=Tasks.RefreshRepeating(TaskDateType.Month,Security.CurrentUser.Id,_globalFilterType,_filterFkey);
 				}
 				//loop through list and add back any that meet criteria.
 				changeMade=false;
@@ -1091,7 +1091,7 @@ namespace OpenDental {
 			}
 			string taskListDescript="";
 			if(tabContr.SelectedTab==tabNew) {//Special case tab. All grid rows are guaranteed to be task so we manually set values.
-				taskListDescript=Lan.g(this,"New for")+" "+Security.CurUser.UserName;
+				taskListDescript=Lan.g(this,"New for")+" "+Security.CurrentUser.UserName;
 			}
 			else if(_listTaskListTreeHistory.Count>0){//Not in main trunk
 				taskListDescript=_listTaskListTreeHistory[_listTaskListTreeHistory.Count-1].Descript;
@@ -1110,8 +1110,8 @@ namespace OpenDental {
 		///<summary>A recursive function that checks every child in a list IsFromRepeating.  If any are marked complete, then it returns true, signifying that this list should be immune from being deleted since it's already in use.</summary>
 		private bool AnyAreMarkedComplete(TaskList list) {
 			//get all children:
-			List<TaskList> childLists=TaskLists.RefreshChildren(list.TaskListNum,Security.CurUser.Id,0,TaskType.Normal);
-			List<Task> childTasks=Tasks.RefreshChildren(list.TaskListNum,true,DateTime.MinValue,Security.CurUser.Id,0,TaskType.Normal);
+			List<TaskList> childLists=TaskLists.RefreshChildren(list.TaskListNum,Security.CurrentUser.Id,0,TaskType.Normal);
+			List<Task> childTasks=Tasks.RefreshChildren(list.TaskListNum,true,DateTime.MinValue,Security.CurrentUser.Id,0,TaskType.Normal);
 			for(int i=0;i<childLists.Count;i++) {
 				if(AnyAreMarkedComplete(childLists[i])) {
 					return true;
@@ -1141,66 +1141,66 @@ namespace OpenDental {
 			if(parent!=0){//not a trunk
 				//if(TreeHistory.Count>0//we already know this is true
 				long userNumInbox=TaskLists.GetMailboxUserNum(_listTaskListTreeHistory[0].TaskListNum);
-				_listTaskLists=TaskLists.RefreshChildren(parent,Security.CurUser.Id,userNumInbox,taskType,Clinics.ClinicNum
+				_listTaskLists=TaskLists.RefreshChildren(parent,Security.CurrentUser.Id,userNumInbox,taskType,Clinics.ClinicNum
 					,Clinics.GetClinic(Clinics.ClinicNum)?.Region??0);
-				_listTasks=Tasks.RefreshChildren(parent,_isShowFinishedTasks,_dateTimeStartShowFinished,Security.CurUser.Id,userNumInbox,taskType,
+				_listTasks=Tasks.RefreshChildren(parent,_isShowFinishedTasks,_dateTimeStartShowFinished,Security.CurrentUser.Id,userNumInbox,taskType,
 					_isTaskSortApptDateTime,_globalFilterType,_filterFkey);
 			}
 			else if(tabContr.SelectedTab==tabUser) {
 				//If HQ clinic or clinics disabled, default to "0" Region.
-				_listTaskLists=TaskLists.RefreshUserTrunk(Security.CurUser.Id,Clinics.ClinicNum,Clinics.GetClinic(Clinics.ClinicNum)?.Region??0);
+				_listTaskLists=TaskLists.RefreshUserTrunk(Security.CurrentUser.Id,Clinics.ClinicNum,Clinics.GetClinic(Clinics.ClinicNum)?.Region??0);
 				_listTasks=new List<Task>();//no tasks in the user trunk
 			}
 			else if(tabContr.SelectedTab==tabNew) {
 				_listTaskLists=new List<TaskList>();//no task lists in new tab
-				_listTasks=Tasks.RefreshUserNew(Security.CurUser.Id,_globalFilterType,_filterFkey);
+				_listTasks=Tasks.RefreshUserNew(Security.CurrentUser.Id,_globalFilterType,_filterFkey);
 				lock(_listSubscribedTaskListNums) {
-					_listSubscribedTaskListNums=GetSubscribedTaskLists(Security.CurUser.Id).Select(x => x.TaskListNum).ToList();
+					_listSubscribedTaskListNums=GetSubscribedTaskLists(Security.CurrentUser.Id).Select(x => x.TaskListNum).ToList();
 				}
 			}
 			else if(tabContr.SelectedTab==tabOpenTickets) {
 				_listTaskLists=new List<TaskList>();//no task lists in new tab
-				_listTasks=Tasks.RefreshOpenTickets(Security.CurUser.Id,_globalFilterType,_filterFkey);
+				_listTasks=Tasks.RefreshOpenTickets(Security.CurrentUser.Id,_globalFilterType,_filterFkey);
 			}
 			else if(tabContr.SelectedTab==tabPatientTickets) {
 				_listTaskLists=new List<TaskList>();
 				_listTasks=new List<Task>();
 				if(FormOpenDental.CurPatNum!=0) {
-					_listTasks=Tasks.RefreshPatientTickets(FormOpenDental.CurPatNum,Security.CurUser.Id,_globalFilterType,_filterFkey);
+					_listTasks=Tasks.RefreshPatientTickets(FormOpenDental.CurPatNum,Security.CurrentUser.Id,_globalFilterType,_filterFkey);
 				}
 			}
 			else if(tabContr.SelectedTab==tabMain) {
-				_listTaskLists=TaskLists.RefreshMainTrunk(Security.CurUser.Id,TaskType.Normal,Clinics.ClinicNum
+				_listTaskLists=TaskLists.RefreshMainTrunk(Security.CurrentUser.Id,TaskType.Normal,Clinics.ClinicNum
 					,Clinics.GetClinic(Clinics.ClinicNum)?.Region??0);
-				_listTasks=Tasks.RefreshMainTrunk(_isShowFinishedTasks,_dateTimeStartShowFinished,Security.CurUser.Id,TaskType.Normal,_globalFilterType
+				_listTasks=Tasks.RefreshMainTrunk(_isShowFinishedTasks,_dateTimeStartShowFinished,Security.CurrentUser.Id,TaskType.Normal,_globalFilterType
 					,_filterFkey);
 			}
 			else if(tabContr.SelectedTab==tabReminders) {
-				_listTaskLists=TaskLists.RefreshMainTrunk(Security.CurUser.Id,TaskType.Reminder,Clinics.ClinicNum
+				_listTaskLists=TaskLists.RefreshMainTrunk(Security.CurrentUser.Id,TaskType.Reminder,Clinics.ClinicNum
 					,Clinics.GetClinic(Clinics.ClinicNum)?.Region??0);
-				_listTasks=Tasks.RefreshMainTrunk(_isShowFinishedTasks,_dateTimeStartShowFinished,Security.CurUser.Id,TaskType.Reminder
+				_listTasks=Tasks.RefreshMainTrunk(_isShowFinishedTasks,_dateTimeStartShowFinished,Security.CurrentUser.Id,TaskType.Reminder
 					,_globalFilterType,_filterFkey);
 			}
 			else if(tabContr.SelectedTab==tabRepeating) {
-				_listTaskLists=TaskLists.RefreshRepeatingTrunk(Security.CurUser.Id,Clinics.ClinicNum,Clinics.GetClinic(Clinics.ClinicNum)?.Region??0);
-				_listTasks=Tasks.RefreshRepeatingTrunk(Security.CurUser.Id,_globalFilterType,_filterFkey);
+				_listTaskLists=TaskLists.RefreshRepeatingTrunk(Security.CurrentUser.Id,Clinics.ClinicNum,Clinics.GetClinic(Clinics.ClinicNum)?.Region??0);
+				_listTasks=Tasks.RefreshRepeatingTrunk(Security.CurrentUser.Id,_globalFilterType,_filterFkey);
 			}
 			else if(tabContr.SelectedTab==tabDate) {
-				_listTaskLists=TaskLists.RefreshDatedTrunk(date,TaskDateType.Day,Security.CurUser.Id,Clinics.ClinicNum
+				_listTaskLists=TaskLists.RefreshDatedTrunk(date,TaskDateType.Day,Security.CurrentUser.Id,Clinics.ClinicNum
 					,Clinics.GetClinic(Clinics.ClinicNum)?.Region??0);
-				_listTasks=Tasks.RefreshDatedTrunk(date,TaskDateType.Day,_isShowFinishedTasks,_dateTimeStartShowFinished,Security.CurUser.Id
+				_listTasks=Tasks.RefreshDatedTrunk(date,TaskDateType.Day,_isShowFinishedTasks,_dateTimeStartShowFinished,Security.CurrentUser.Id
 					,_globalFilterType,_filterFkey);
 			}
 			else if(tabContr.SelectedTab==tabWeek) {
-				_listTaskLists=TaskLists.RefreshDatedTrunk(date,TaskDateType.Week,Security.CurUser.Id,Clinics.ClinicNum
+				_listTaskLists=TaskLists.RefreshDatedTrunk(date,TaskDateType.Week,Security.CurrentUser.Id,Clinics.ClinicNum
 					,Clinics.GetClinic(Clinics.ClinicNum)?.Region??0);
-				_listTasks=Tasks.RefreshDatedTrunk(date,TaskDateType.Week,_isShowFinishedTasks,_dateTimeStartShowFinished,Security.CurUser.Id
+				_listTasks=Tasks.RefreshDatedTrunk(date,TaskDateType.Week,_isShowFinishedTasks,_dateTimeStartShowFinished,Security.CurrentUser.Id
 					,_globalFilterType,_filterFkey);
 			}
 			else if(tabContr.SelectedTab==tabMonth) {
-				_listTaskLists=TaskLists.RefreshDatedTrunk(date,TaskDateType.Month,Security.CurUser.Id,Clinics.ClinicNum
+				_listTaskLists=TaskLists.RefreshDatedTrunk(date,TaskDateType.Month,Security.CurrentUser.Id,Clinics.ClinicNum
 					,Clinics.GetClinic(Clinics.ClinicNum)?.Region??0);
-				_listTasks=Tasks.RefreshDatedTrunk(date,TaskDateType.Month,_isShowFinishedTasks,_dateTimeStartShowFinished,Security.CurUser.Id
+				_listTasks=Tasks.RefreshDatedTrunk(date,TaskDateType.Month,_isShowFinishedTasks,_dateTimeStartShowFinished,Security.CurrentUser.Id
 					,_globalFilterType,_filterFkey);
 			}
 			//notes
@@ -1310,7 +1310,7 @@ namespace OpenDental {
 			_isShowFinishedTasks=FormTO.IsShowFinishedTasks;
 			_dateTimeStartShowFinished=FormTO.DateTimeStartShowFinished;
 			_isTaskSortApptDateTime=FormTO.IsSortApptDateTime;
-			_isCollapsedByDefault=PIn.Bool(UserOdPrefs.GetByUserAndFkeyType(Security.CurUser.Id,UserPreferenceName.TaskCollapse)[0].Value);
+			_isCollapsedByDefault=PIn.Bool(UserOdPrefs.GetByUserAndFkeyType(Security.CurrentUser.Id,UserPreferenceName.TaskCollapse)[0].Value);
 			_hasListSwitched=true;//To display tasks in correctly collapsed/expanded state
 			FillGrid();
 		}
@@ -1406,7 +1406,7 @@ namespace OpenDental {
 			if(tabContr.SelectedTab==tabRepeating) {
 				task.IsRepeating=true;
 			}
-			task.UserNum=Security.CurUser.Id;
+			task.UserNum=Security.CurrentUser.Id;
 			if(isReminder) {
 				task.ReminderType=TaskReminderType.Once;
 			}
@@ -1475,7 +1475,7 @@ namespace OpenDental {
 			}
 			TaskUnreads.DeleteForTask(task);
 			TaskHist taskHist=new TaskHist(oldTask);
-			taskHist.UserNumHist=Security.CurUser.Id;
+			taskHist.UserNumHist=Security.CurrentUser.Id;
 			TaskHists.Insert(taskHist);
 			long signalNum=Signalods.SetInvalid(InvalidType.Task,KeyType.Task,task.TaskNum);//Only needs to send signal for the one task.
 			RefillLocalTaskGrids(task,_listTaskNotes.FindAll(x => x.TaskNum==task.TaskNum),new List<long>() { signalNum });//No db call.
@@ -1734,10 +1734,10 @@ namespace OpenDental {
 				}
 				TaskHist hist=new TaskHist(newT);
 				hist.Descript=histDescript;
-				hist.UserNum=Security.CurUser.Id;
+				hist.UserNum=Security.CurrentUser.Id;
 				TaskHists.Insert(hist);
 				Signalods.SetInvalid(InvalidType.TaskPopup,KeyType.Task,newT.TaskNum);//Popup
-				TaskUnreads.AddUnreads(newT,Security.CurUser.Id);//we also need to tell the database about all the users with unread tasks
+				TaskUnreads.AddUnreads(newT,Security.CurrentUser.Id);//we also need to tell the database about all the users with unread tasks
 				listSignalNums.Add(Signalods.SetInvalid(InvalidType.TaskList,KeyType.Undefined,newT.TaskListNum));//Signal for destination tasklist.
 				RefillLocalTaskGrids(newT,noteList,listSignalNums);//No db call.
 			}
@@ -1747,13 +1747,13 @@ namespace OpenDental {
 
 		/// <summary>Return the FormTaskEdit that was created from showing the task.  Can return null.</summary>
 		private FormTaskEdit SendToMe_Clicked(bool doOpenTask=true) {
-			if(Security.CurUser.TaskListId==0) {
+			if(Security.CurrentUser.TaskListId==0) {
 				MsgBox.Show(this,"You do not have an inbox.");
 				return null;
 			}
 			Task task=_clickedTask;
 			Task oldTask=task.Copy();
-			task.TaskListNum=Security.CurUser.TaskListId;
+			task.TaskListNum=Security.CurrentUser.TaskListId;
 			Cursor=Cursors.WaitCursor;
 			List<long> listSignalNums=new List<long>();
 			try {
@@ -1761,7 +1761,7 @@ namespace OpenDental {
 				//At HQ the refresh interval wasn't quick enough for the task to pop up.
 				//We will immediately show the task instead of waiting for the refresh interval.
 				TaskHist taskHist=new TaskHist(oldTask);
-				taskHist.UserNumHist=Security.CurUser.Id;
+				taskHist.UserNumHist=Security.CurrentUser.Id;
 				TaskHists.Insert(taskHist);
 				listSignalNums.Add(Signalods.SetInvalid(InvalidType.TaskList,KeyType.Undefined,oldTask.TaskListNum));//Signal for old TaskList containing this Task.
 				listSignalNums.Add(Signalods.SetInvalid(InvalidType.TaskList,KeyType.Undefined,task.TaskListNum));//Signal for new tasklist.
@@ -1813,7 +1813,7 @@ namespace OpenDental {
 				MsgBox.Show(this,"Please select a valid task.");
 				return;
 			}
-			markedTask.IsUnread=TaskUnreads.IsUnread(Security.CurUser.Id,markedTask);
+			markedTask.IsUnread=TaskUnreads.IsUnread(Security.CurrentUser.Id,markedTask);
 			if(Preference.GetBool(PreferenceName.TasksNewTrackedByUser)) {
 				if(tabContr.SelectedTab==tabNew){
 					//these are never in someone else's inbox, so don't block.
@@ -1837,7 +1837,7 @@ namespace OpenDental {
 							return;
 						}
 					}
-					if(userNumInbox != 0 && userNumInbox != Security.CurUser.Id) {
+					if(userNumInbox != 0 && userNumInbox != Security.CurrentUser.Id) {
 						MsgBox.Show(this,"Not allowed to mark off tasks in someone else's inbox.");
 						return;
 					}
@@ -1847,7 +1847,7 @@ namespace OpenDental {
 						MsgBox.Show(this,"Not allowed to mark future Reminders as read.");
 					}
 					else{
-						TaskUnreads.SetRead(Security.CurUser.Id,markedTask);//Takes care of Db.
+						TaskUnreads.SetRead(Security.CurrentUser.Id,markedTask);//Takes care of Db.
 					}
 				}
 				long signalNum=Signalods.SetInvalid(InvalidType.Task,KeyType.Task,markedTask.TaskNum);//Signal for markedTask.
@@ -1875,7 +1875,7 @@ namespace OpenDental {
 
 		private void MoveListIntoAncestor(TaskList newList,long oldListParent) {
 			if(_wasCut) {//If the TaskList was cut, move direct children of the list "up" one in the hierarchy and then update
-				List<TaskList> childLists=TaskLists.RefreshChildren(newList.TaskListNum,Security.CurUser.Id,0,TaskType.All);
+				List<TaskList> childLists=TaskLists.RefreshChildren(newList.TaskListNum,Security.CurrentUser.Id,0,TaskType.All);
 				for(int i=0;i<childLists.Count;i++) {
 					childLists[i].Parent=oldListParent;
 					TaskLists.Update(childLists[i]);
@@ -1890,8 +1890,8 @@ namespace OpenDental {
 		///<summary>Assign new parent FKey for existing tasklist, and update TaskAncestors.  Used when cutting and pasting a tasklist.
 		///Does not create new task or tasklist entries.</summary>
 		private void MoveTaskList(TaskList newList,bool isInMainOrUser) {
-			List<TaskList> childLists=TaskLists.RefreshChildren(newList.TaskListNum,Security.CurUser.Id,0,TaskType.All);
-			List<Task> childTasks=Tasks.RefreshChildren(newList.TaskListNum,true,DateTime.MinValue,Security.CurUser.Id,0,TaskType.All
+			List<TaskList> childLists=TaskLists.RefreshChildren(newList.TaskListNum,Security.CurrentUser.Id,0,TaskType.All);
+			List<Task> childTasks=Tasks.RefreshChildren(newList.TaskListNum,true,DateTime.MinValue,Security.CurrentUser.Id,0,TaskType.All
 				,GlobalTaskFilterType.None);//No filtering, because all child tasks should move regardless of filtration.
 			TaskLists.Update(newList);//Not making a new TaskList, just moving an old one
 			for(int i=0;i<childLists.Count;i++) { //updates all the child tasklists and recursively calls this method for each of their children lists.
@@ -1921,8 +1921,8 @@ namespace OpenDental {
 		///The taskListNum will always change, because we are inserting new record into database. </summary>
 		private void DuplicateExistingList(TaskList newList,bool isInMainOrUser) {
 			//get all children:
-			List<TaskList> childLists=TaskLists.RefreshChildren(newList.TaskListNum,Security.CurUser.Id,0,TaskType.All);
-			List<Task> childTasks=Tasks.RefreshChildren(newList.TaskListNum,true,DateTime.MinValue,Security.CurUser.Id,0,TaskType.All,
+			List<TaskList> childLists=TaskLists.RefreshChildren(newList.TaskListNum,Security.CurrentUser.Id,0,TaskType.All);
+			List<Task> childTasks=Tasks.RefreshChildren(newList.TaskListNum,true,DateTime.MinValue,Security.CurrentUser.Id,0,TaskType.All,
 				GlobalTaskFilterType.None);//No filtering, because all child tasks should duplicate regardless of filtration.
 			if(_wasCut) { //Not making a new TaskList, just moving an old one
 				TaskLists.Update(newList);
@@ -1985,9 +1985,9 @@ namespace OpenDental {
 			if(_clickedI < _listTaskLists.Count) {//is list
 				TaskList taskListToDelete=_listTaskLists[_clickedI];
 				//check to make sure the list is empty.  Do not filter tasks so we don't try to delete a list that still has tasks.
-				List<Task> tsks=Tasks.RefreshChildren(taskListToDelete.TaskListNum,true,DateTime.MinValue,Security.CurUser.Id,0,TaskType.All,
+				List<Task> tsks=Tasks.RefreshChildren(taskListToDelete.TaskListNum,true,DateTime.MinValue,Security.CurrentUser.Id,0,TaskType.All,
 					GlobalTaskFilterType.None);
-				List<TaskList> tsklsts=TaskLists.RefreshChildren(taskListToDelete.TaskListNum,Security.CurUser.Id,0,TaskType.All);
+				List<TaskList> tsklsts=TaskLists.RefreshChildren(taskListToDelete.TaskListNum,Security.CurrentUser.Id,0,TaskType.All);
 				int countHiddenTasks=tsklsts.Sum(x => x.NewTaskCount)+tsks.Count-taskListToDelete.NewTaskCount;
 				if(tsks.Count>0 || tsklsts.Count>0){
 					MessageBox.Show(Lan.g(this,"Not allowed to delete a list unless it's empty.  This task list contains:")+"\r\n"
@@ -2012,16 +2012,16 @@ namespace OpenDental {
 			else {//Is task
 				//This security logic should match FormTaskEdit for when we enable the delete button.
 				bool isTaskForCurUser = true;
-				if(_clickedTask.UserNum!=Security.CurUser.Id) {//current user didn't write this task, so block them.
+				if(_clickedTask.UserNum!=Security.CurrentUser.Id) {//current user didn't write this task, so block them.
 					isTaskForCurUser=false;//Delete will only be enabled if the user has the TaskEdit and TaskNoteEdit permissions.
 				}
-				if(_clickedTask.TaskListNum!=Security.CurUser.TaskListId) {//the task is not in the logged-in user's inbox
+				if(_clickedTask.TaskListNum!=Security.CurrentUser.TaskListId) {//the task is not in the logged-in user's inbox
 					isTaskForCurUser=false;//Delete will only be enabled if the user has the TaskEdit and TaskNoteEdit permissions.
 				}
 				if(isTaskForCurUser) {
 					List<TaskNote> listTaskNotes=TaskNotes.GetForTask(_clickedTask.TaskNum);//so we can check so see if other users have added notes
 					for(int i = 0;i<listTaskNotes.Count;i++) {
-						if(Security.CurUser.Id!=listTaskNotes[i].UserNum) {
+						if(Security.CurrentUser.Id!=listTaskNotes[i].UserNum) {
 							isTaskForCurUser=false;
 							break;
 						}
@@ -2061,7 +2061,7 @@ namespace OpenDental {
 				RefillLocalTaskGrids(_clickedTask,_listTaskNotes.FindAll(x => x.TaskNum==_clickedTask.TaskNum),listSignalNums,false);
 				TaskHist taskHistory = new TaskHist(_clickedTask);
 				taskHistory.IsNoteChange=false;
-				taskHistory.UserNum=Security.CurUser.Id;
+				taskHistory.UserNum=Security.CurrentUser.Id;
 				TaskHists.Insert(taskHistory);
 				SecurityLogs.MakeLogEntry(Permissions.TaskEdit,0,"Task "+POut.Long(_clickedTask.TaskNum)+" deleted",0);
 			}
@@ -2070,8 +2070,8 @@ namespace OpenDental {
 		///<summary>A recursive function that deletes the specified list and all children.</summary>
 		private void DeleteEntireList(TaskList list) {
 			//get all children:
-			List<TaskList> childLists=TaskLists.RefreshChildren(list.TaskListNum,Security.CurUser.Id,0,TaskType.All);
-			List<Task> childTasks=Tasks.RefreshChildren(list.TaskListNum,true,DateTime.MinValue,Security.CurUser.Id,0,TaskType.All);
+			List<TaskList> childLists=TaskLists.RefreshChildren(list.TaskListNum,Security.CurrentUser.Id,0,TaskType.All);
+			List<Task> childTasks=Tasks.RefreshChildren(list.TaskListNum,true,DateTime.MinValue,Security.CurrentUser.Id,0,TaskType.All);
 			for(int i=0;i<childLists.Count;i++) {
 				DeleteEntireList(childLists[i]);
 			}
@@ -2141,7 +2141,7 @@ namespace OpenDental {
 			_taskCollapsedState=-1;
 			if(tabContr.SelectedTab==tabNew && !Preference.GetBool(PreferenceName.TasksNewTrackedByUser)){//There's an extra column
 				if(clickedCol==1) {
-					TaskUnreads.SetRead(Security.CurUser.Id,_listTasks[_clickedI-_listTaskLists.Count]);
+					TaskUnreads.SetRead(Security.CurrentUser.Id,_listTasks[_clickedI-_listTaskLists.Count]);
 					FillGrid();
 				}
 				if(clickedCol==3) {//Expand column
@@ -2339,9 +2339,9 @@ namespace OpenDental {
 
 		private void OnSubscribe_Click(){
 			//Won't even get to this point unless it is a list.  TaskListNum will never be 0.
-			if(TaskSubscriptions.TrySubscList(_listTaskLists[_clickedI].TaskListNum,Security.CurUser.Id,_listSubscribedTaskListNums)) {
+			if(TaskSubscriptions.TrySubscList(_listTaskLists[_clickedI].TaskListNum,Security.CurrentUser.Id,_listSubscribedTaskListNums)) {
 				lock(_listSubscribedTaskListNums) {
-					_listSubscribedTaskListNums=GetSubscribedTaskLists(Security.CurUser.Id).Select(x => x.TaskListNum).ToList();
+					_listSubscribedTaskListNums=GetSubscribedTaskLists(Security.CurrentUser.Id).Select(x => x.TaskListNum).ToList();
 				}
 			}
 			else { //already subscribed.
@@ -2353,9 +2353,9 @@ namespace OpenDental {
 		}
 
 		private void OnUnsubscribe_Click() {
-			TaskSubscriptions.UnsubscList(_listTaskLists[_clickedI].TaskListNum,Security.CurUser.Id);
+			TaskSubscriptions.UnsubscList(_listTaskLists[_clickedI].TaskListNum,Security.CurrentUser.Id);
 			lock(_listSubscribedTaskListNums) {
-				_listSubscribedTaskListNums=GetSubscribedTaskLists(Security.CurUser.Id).Select(x => x.TaskListNum).ToList();
+				_listSubscribedTaskListNums=GetSubscribedTaskLists(Security.CurrentUser.Id).Select(x => x.TaskListNum).ToList();
 			};
 			RefillLocalTaskGrids(_listTaskLists[_clickedI],null);
 		}
@@ -2414,7 +2414,7 @@ namespace OpenDental {
 			try {
 				Tasks.Update(taskNew,task);
 				TaskHist taskHist=new TaskHist(task);
-				taskHist.UserNumHist=Security.CurUser.Id;
+				taskHist.UserNumHist=Security.CurrentUser.Id;
 				TaskHists.Insert(taskHist);
 				long signalNum=Signalods.SetInvalid(InvalidType.Task,KeyType.Task,taskNew.TaskNum);
 				RefillLocalTaskGrids(taskNew,_listTaskNotes.FindAll(x => x.TaskNum==taskNew.TaskNum),new List<long>() { signalNum });

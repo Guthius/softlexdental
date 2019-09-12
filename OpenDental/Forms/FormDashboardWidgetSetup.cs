@@ -20,7 +20,7 @@ namespace OpenDental {
 		public FormDashboardWidgetSetup() {
 			InitializeComponent();
 			
-			_userGroupNum=UserGroup.GetByUser(Security.CurUser.Id).FirstOrDefault().Id;
+			_userGroupNum=UserGroup.GetByUser(Security.CurrentUser.Id).FirstOrDefault().Id;
 		}
 		
 		private void FormDashboardSetup_Load(object sender,EventArgs e) {

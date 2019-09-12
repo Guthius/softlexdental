@@ -33,8 +33,8 @@ namespace OpenDental {
 				_listClinics=new List<Clinic>();//Just in case.
 				return;
 			}
-			_listClinics=Clinics.GetForUserod(Security.CurUser);
-			if(!Security.CurUser.ClinicRestricted) {
+			_listClinics=Clinics.GetForUserod(Security.CurrentUser);
+			if(!Security.CurrentUser.ClinicRestricted) {
 				_listClinics.Insert(0,new Clinic() { ClinicNum = 0,Abbr = "Unassigned",Description = "Unassigned" });
 			}
 			labelClinic.Visible=true;

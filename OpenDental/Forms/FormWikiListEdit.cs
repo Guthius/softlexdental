@@ -55,7 +55,7 @@ namespace OpenDental
 
 
             _listColumnHeaders = WikiListHeaderWidths.GetForList(WikiListCurName);
-            _wikiListOld = WikiListHists.GenerateFromName(WikiListCurName, Security.CurUser.Id);
+            _wikiListOld = WikiListHists.GenerateFromName(WikiListCurName, Security.CurrentUser.Id);
             if (_wikiListOld == null)
             {
                 _wikiListOld = new WikiListHist();
@@ -385,7 +385,7 @@ namespace OpenDental
             }
 
             //Reversion has already saved a copy of the current revision.
-            _wikiListOld = WikiListHists.GenerateFromName(WikiListCurName, Security.CurUser.Id);
+            _wikiListOld = WikiListHists.GenerateFromName(WikiListCurName, Security.CurrentUser.Id);
             listDataTable = WikiLists.GetByName(WikiListCurName);
             _listColumnHeaders = WikiListHeaderWidths.GetForList(WikiListCurName);
             FillGrid();

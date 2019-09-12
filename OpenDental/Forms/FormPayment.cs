@@ -1562,7 +1562,7 @@ namespace OpenDental {
 			}
 			if(Preferences.HasClinicsEnabled) {
 				_listUserClinicNums=new List<long>();
-				List<Clinic> listClinics=Clinics.GetForUserod(Security.CurUser);
+				List<Clinic> listClinics=Clinics.GetForUserod(Security.CurrentUser);
 				comboClinic.Items.Clear();
 				comboClinic.Items.Add(Lan.g(this,"None"));
 				_listUserClinicNums.Add(0);//this way both lists have the same number of items in it
@@ -2661,7 +2661,7 @@ namespace OpenDental {
 			else {
 				info.Arguments+="/RECEIPT:PREPAID ";//aka invoice#
 			}
-			info.Arguments+="\"/CLERK:"+Security.CurUser.UserName+"\" /LOCKCLERK ";
+			info.Arguments+="\"/CLERK:"+Security.CurrentUser.UserName+"\" /LOCKCLERK ";
 			info.Arguments+="/RESULTFILE:\""+resultfile+"\" ";
 			info.Arguments+="/USERID:"+ProgramProperties.GetPropVal(_xProg.ProgramNum,"Username",_paymentCur.ClinicNum)+" ";
 			info.Arguments+="/PASSWORD:"+CodeBase.MiscUtils.Decrypt(ProgramProperties.GetPropVal(_xProg.ProgramNum,"Password",_paymentCur.ClinicNum))+" ";
@@ -2979,7 +2979,7 @@ namespace OpenDental {
 			info.Arguments+="/XCTRANSACTIONID:"+transID+" /LOCKXCTRANSACTIONID ";
 			info.Arguments+="/AMOUNT:"+amount+" /LOCKAMOUNT ";
 			info.Arguments+="/RECEIPT:Pat"+_paymentCur.PatNum.ToString()+" ";//aka invoice#
-			info.Arguments+="\"/CLERK:"+Security.CurUser.UserName+"\" /LOCKCLERK ";
+			info.Arguments+="\"/CLERK:"+Security.CurrentUser.UserName+"\" /LOCKCLERK ";
 			info.Arguments+="/RESULTFILE:\""+resultfile+"\" ";
 			info.Arguments+="/USERID:"+ProgramProperties.GetPropVal(_xProg.ProgramNum,"Username",_paymentCur.ClinicNum)+" ";
 			info.Arguments+="/PASSWORD:"+CodeBase.MiscUtils.Decrypt(ProgramProperties.GetPropVal(_xProg.ProgramNum,"Password",_paymentCur.ClinicNum))+" ";

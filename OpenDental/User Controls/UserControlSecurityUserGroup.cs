@@ -287,7 +287,7 @@ namespace OpenDental {
 				UserGroupAttaches.RefreshCache();//only refreshes local cache. 
 			}
 			string logText="User group(s) for "+SelectedUser.UserName+" changed To: "+string.Join(", ",listDescriptions.ToArray())+" From: "
-				+string.Join(", ",listDescriptionsOld.ToArray())+" by: "+Security.CurUser.UserName;
+				+string.Join(", ",listDescriptionsOld.ToArray())+" by: "+Security.CurrentUser.UserName;
 			SecurityLogs.MakeLogEntry(Permissions.SecurityAdmin,0,logText);
 			RefreshUserTree();
 		}

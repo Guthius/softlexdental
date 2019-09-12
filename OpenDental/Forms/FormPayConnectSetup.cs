@@ -59,7 +59,7 @@ namespace OpenDental
                 _listUserClinicNums = new List<long>();
                 comboClinic.Items.Clear();
                 //if PayConnect is enabled and the user is restricted to a clinic, don't allow the user to disable for all clinics
-                if (Security.CurUser.ClinicRestricted)
+                if (Security.CurrentUser.ClinicRestricted)
                 {
                     if (enabledCheckBox.Checked)
                     {
@@ -73,7 +73,7 @@ namespace OpenDental
                     _listUserClinicNums.Add(0);
                     comboClinic.SelectedIndex = 0;
                 }
-                List<Clinic> listClinics = Clinics.GetForUserod(Security.CurUser);
+                List<Clinic> listClinics = Clinics.GetForUserod(Security.CurrentUser);
                 for (int i = 0; i < listClinics.Count; i++)
                 {
                     comboClinic.Items.Add(listClinics[i].Abbr);
@@ -81,7 +81,7 @@ namespace OpenDental
                     if (Clinics.ClinicNum == listClinics[i].ClinicNum)
                     {
                         comboClinic.SelectedIndex = i;
-                        if (!Security.CurUser.ClinicRestricted)
+                        if (!Security.CurrentUser.ClinicRestricted)
                         {
                             comboClinic.SelectedIndex++;//increment the SelectedIndex to account for 'Headquarters' in the list at position 0 if the user is not restricted.
                         }

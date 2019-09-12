@@ -966,7 +966,7 @@ namespace OpenDental {
 		}
 
 		private void FillClinics() {
-			List<Clinic> listUserClinics=Clinics.GetForUserod(Security.CurUser,true,"Unassigned");
+			List<Clinic> listUserClinics=Clinics.GetForUserod(Security.CurrentUser,true,"Unassigned");
 			comboBoxMultiClinics.Items.Clear();
 			comboBoxMultiClinics.Items.Add(new ODBoxItem<Clinic>("All"));//tag=null
 			foreach(Clinic clinic in listUserClinics) {
@@ -1243,7 +1243,7 @@ namespace OpenDental {
 					GotoModule.GotoAccount(((RpOutstandingIns.OutstandingInsClaim)gridMain.Rows[index].Tag).PatNum);
 				break;
 				case 1://Assign to Me
-					AssignUserHelper(Security.CurUser.Id);
+					AssignUserHelper(Security.CurrentUser.Id);
 				break;
 				case 2://Assign to User
 					AssignUserHelper(_listClaimSentEditUsers[((MenuItem)sender).Index].Id);
@@ -1442,7 +1442,7 @@ namespace OpenDental {
 
 		private void butMine_Click(object sender,EventArgs e) {
 			FillClinics();
-			ComboUserPickHelper(Security.CurUser.Id);
+			ComboUserPickHelper(Security.CurrentUser.Id);
 		}
 
 		private void comboDateFilterBy_SelectedIndexChanged(object sender,EventArgs e) {

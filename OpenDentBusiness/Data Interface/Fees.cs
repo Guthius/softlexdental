@@ -517,14 +517,14 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static long Insert(Fee fee) {
 			//Security.CurUser.UserNum gets set on MT by the DtoProcessor so it matches the user from the client WS.
-			fee.SecUserNumEntry=Security.CurUser.Id;
+			fee.SecUserNumEntry=Security.CurrentUser.Id;
 			return Crud.FeeCrud.Insert(fee);
 		}
 
 		/// <summary>Bulk Insert</summary>
 		public static void InsertMany(List<Fee> listFees) {
 			//Security.CurUser.UserNum gets set on MT by the DtoProcessor so it matches the user from the client WS.
-			listFees.ForEach(x => x.SecUserNumEntry=Security.CurUser.Id);
+			listFees.ForEach(x => x.SecUserNumEntry=Security.CurrentUser.Id);
 			Crud.FeeCrud.InsertMany(listFees);
 		}
 		#endregion Insert
@@ -783,7 +783,7 @@ namespace OpenDentBusiness{
 				return false;
 			}
 			//Make sure the user has permission to edit the clinic of the fee schedule being edited.
-			if(Security.CurUser.ClinicRestricted && clinicNum!=Clinics.ClinicNum) {
+			if(Security.CurrentUser.ClinicRestricted && clinicNum!=Clinics.ClinicNum) {
 				if(clinicNum==0 && feeSched!=null && feeSched.IsGlobal) {
 					//Allow restricted users to edit the default Fee when the FeeSched is global.
 					//Intentionally blank so logic in more readable, will return true below.

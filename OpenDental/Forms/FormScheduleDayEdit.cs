@@ -579,11 +579,11 @@ namespace OpenDental{
 			SetFilterControlsAndAction(() => FillGrid(),textSearch);
 			butOkSchedule.Visible=ShowOkSchedule;
 			_listClinics=new List<Clinic>();
-			if(!Security.CurUser.ClinicRestricted) {
+			if(!Security.CurrentUser.ClinicRestricted) {
 				_listClinics.Add(new Clinic() { Abbr=Lan.g(this,"Headquarters") }); //Seed with "Headquarters"
 			}
 			//do not re-organize from cache. They could either be alphabetizeded or sorted by item order.
-			Clinics.GetForUserod(Security.CurUser).ForEach(x => _listClinics.Add(x));
+			Clinics.GetForUserod(Security.CurrentUser).ForEach(x => _listClinics.Add(x));
 			_listClinics.ForEach(x => comboClinic.Items.Add(x.Abbr));
 			comboClinic.IndexSelectOrSetText(_listClinics.FindIndex(x => x.ClinicNum==_selectedClinicNum)
 				,() => { return Clinics.GetAbbr(_selectedClinicNum); });

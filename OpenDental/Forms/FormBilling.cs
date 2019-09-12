@@ -575,7 +575,7 @@ namespace OpenDental{
 				comboClinic.Visible=true;
 				comboClinic.Items.Add(Lan.g(this,"All"));
 				comboClinic.SelectedIndex=0;
-				ListClinics=Clinics.GetForUserod(Security.CurUser);
+				ListClinics=Clinics.GetForUserod(Security.CurrentUser);
 				for(int i=0;i<ListClinics.Count;i++) {
 					comboClinic.Items.Add(ListClinics[i].Abbr);
 					if(ClinicNum==ListClinics[i].ClinicNum) {
@@ -710,7 +710,7 @@ namespace OpenDental{
 				comboEmailFrom.Items.Add(_listEmailAddresses[i].SmtpUsername);
 			}
 			//Add user specific email address if present.
-			EmailAddress emailAddressMe=EmailAddress.GetByUser(Security.CurUser.Id);//can be null
+			EmailAddress emailAddressMe=EmailAddress.GetByUser(Security.CurrentUser.Id);//can be null
 			if(emailAddressMe!=null) {
 				_listEmailAddresses.Insert(0,emailAddressMe);
 				comboEmailFrom.Items.Insert(1,Lan.g(this,"Me")+" <"+emailAddressMe.SmtpUsername+">");//Just below Practice/Clinic
@@ -1666,7 +1666,7 @@ namespace OpenDental{
 			try {
 				_progExtended.Fire(new ODEventArgs(ODEventType.Billing,new ProgressBarHelper(Lan.g(this,"Sending text messages")+"..."
 					,progressBarEventType: ProgBarEventType.TextMsg)));
-				SmsToMobiles.SendSmsMany(listTextsToSend,user: Security.CurUser);
+				SmsToMobiles.SendSmsMany(listTextsToSend,user: Security.CurrentUser);
 				Statements.UpdateSmsSendStatus(listStmtNumsToUpdate,AutoCommStatus.SendSuccessful);
 				texted+=listTextsToSend.Count;
 				labelTexted.Text=Lan.g(this,"Texted=")+texted;

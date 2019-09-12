@@ -91,14 +91,14 @@ namespace OpenDental
                 clinicComboBox.Visible = true;
                 clinicComboBox.Items.Clear();
 
-                if (!Security.CurUser.ClinicRestricted)
+                if (!Security.CurrentUser.ClinicRestricted)
                 {
                     clinicComboBox.Items.Add("All");
                     clinicComboBox.Items.Add("Headquarters");
                     clinicComboBox.SelectedIndex = 1;
                 }
 
-                var clinics = Clinics.GetForUserod(Security.CurUser);
+                var clinics = Clinics.GetForUserod(Security.CurrentUser);
                 foreach (var clinic in clinics)
                 {
                     int curIndex = clinicComboBox.Items.Add(clinic);
@@ -123,7 +123,7 @@ namespace OpenDental
 
             if (Preferences.HasClinicsEnabled)
             {
-                if (Security.CurUser.ClinicRestricted)
+                if (Security.CurrentUser.ClinicRestricted)
                 {
                     clinicId = clinics[clinicComboBox.SelectedIndex].ClinicNum;
                 }
@@ -1095,7 +1095,7 @@ namespace OpenDental
                 if (Preferences.HasClinicsEnabled)
                 {
                     text += "\r\nClinic: ";
-                    if (Security.CurUser.ClinicRestricted)
+                    if (Security.CurrentUser.ClinicRestricted)
                     {
                         text += Clinics.GetAbbr(clinics[clinicComboBox.SelectedIndex].ClinicNum);
                     }

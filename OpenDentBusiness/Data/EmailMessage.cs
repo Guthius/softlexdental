@@ -445,7 +445,7 @@ namespace OpenDentBusiness
         {
             if (!Security.IsAuthorized(Permissions.EmailSend, true)) return;
 
-            emailMessage.UserId = Security.CurUser.Id;
+            emailMessage.UserId = Security.CurrentUser.Id;
 
             Send(
                 emailAddress,

@@ -69,12 +69,12 @@ namespace OpenDentBusiness
         ///<summary>When appt is null you must provide aptNum and HistApptAction will be set to deleted.</summary>
         public static HistAppointment CreateHistoryEntry(Appointment appt, HistAppointmentAction action, long aptNum = 0)
         {
-            if (Security.CurUser == null)
+            if (Security.CurrentUser == null)
             {
                 return null;//There is no user currently logged on so do not create a HistAppointment.
             }
             HistAppointment hist = new HistAppointment();
-            hist.HistUserNum = Security.CurUser.Id;
+            hist.HistUserNum = Security.CurrentUser.Id;
             hist.ApptSource = 0;
             hist.HistApptAction = action;
             if (appt != null)

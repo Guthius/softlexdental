@@ -75,8 +75,8 @@ namespace OpenDental{
 		///<summary>If true, the current employee cannot edit their own time card.</summary>
 		private bool _cannotEdit {
 			get {
-				return Security.CurUser!=null &&
-					Security.CurUser.EmployeeId==EmployeeCur.Id &&
+				return Security.CurrentUser!=null &&
+					Security.CurrentUser.EmployeeId==EmployeeCur.Id &&
 					Preference.GetBool(PreferenceName.TimecardSecurityEnabled) &&
 					Preference.GetBool(PreferenceName.TimecardUsersDontEditOwnCard);
 			}

@@ -30,7 +30,7 @@ namespace OpenDental {
 				labelClinic.Visible=true;
 				comboClinicDefault.Visible=true;
 				FillClinicsComboBox();
-				listClinicNums=Clinics.GetForUserod(Security.CurUser).Select(x => x.ClinicNum).ToList();
+				listClinicNums=Clinics.GetForUserod(Security.CurrentUser).Select(x => x.ClinicNum).ToList();
 			}
 			FillSheetDefComboBoxes();
 			_dictSheetsOld=SheetDefs.GetAllSheetDefDefaults(listClinicNums);
@@ -106,11 +106,11 @@ namespace OpenDental {
 		}
 
 		private void FillClinicsComboBox() {
-			List<Clinic> listClinics=Clinics.GetForUserod(Security.CurUser);
+			List<Clinic> listClinics=Clinics.GetForUserod(Security.CurrentUser);
 			comboClinicDefault.Items.Clear();
 			comboClinicDefault.DisplayMember="Abbr";
 			comboClinicDefault.ValueMember="Clinic";
-			if(!Security.CurUser.ClinicRestricted) {
+			if(!Security.CurrentUser.ClinicRestricted) {
 				comboClinicDefault.Items.Add(new ClinicWrapper(Lan.g(this,"Defaults")));
 			}
 			for(int i=0;i<listClinics.Count;i++) {

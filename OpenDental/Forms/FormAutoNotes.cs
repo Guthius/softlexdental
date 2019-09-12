@@ -175,7 +175,7 @@ namespace OpenDental {
 				butAdd.Visible=false;
 				labelSelection.Visible=true;
 			}
-			_userOdCurPref=UserOdPrefs.GetByUserAndFkeyType(Security.CurUser.Id,UserPreferenceName.AutoNoteExpandedCats).FirstOrDefault();
+			_userOdCurPref=UserOdPrefs.GetByUserAndFkeyType(Security.CurrentUser.Id,UserPreferenceName.AutoNoteExpandedCats).FirstOrDefault();
 			FillListTree();
 		}
 
@@ -484,7 +484,7 @@ namespace OpenDental {
 				.Where(x => x>0).ToList();
 			if(_userOdCurPref==null) {
 				UserOdPrefs.Insert(new UserPreference() {
-					UserId=Security.CurUser.Id,
+					UserId=Security.CurrentUser.Id,
 					FkeyType=UserPreferenceName.AutoNoteExpandedCats,
 					Value=string.Join(",",listExpandedDefNums)
 				});

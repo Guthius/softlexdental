@@ -46,11 +46,11 @@ namespace OpenDental
         /// </summary>
         void RefreshUserPreferences()
         {
-            if (Security.CurUser == null || Security.CurUser.Id < 1) return;
+            if (Security.CurrentUser == null || Security.CurrentUser.Id < 1) return;
             
-            userOdPrefClearNote             = UserOdPrefs.GetByUserAndFkeyType(Security.CurUser.Id, UserPreferenceName.CommlogPersistClearNote).FirstOrDefault();
-            userOdPrefEndDate               = UserOdPrefs.GetByUserAndFkeyType(Security.CurUser.Id, UserPreferenceName.CommlogPersistClearEndDate).FirstOrDefault();
-            userOdPrefUpdateDateTimeNewPat  = UserOdPrefs.GetByUserAndFkeyType(Security.CurUser.Id, UserPreferenceName.CommlogPersistUpdateDateTimeWithNewPatient).FirstOrDefault();
+            userOdPrefClearNote             = UserOdPrefs.GetByUserAndFkeyType(Security.CurrentUser.Id, UserPreferenceName.CommlogPersistClearNote).FirstOrDefault();
+            userOdPrefEndDate               = UserOdPrefs.GetByUserAndFkeyType(Security.CurrentUser.Id, UserPreferenceName.CommlogPersistClearEndDate).FirstOrDefault();
+            userOdPrefUpdateDateTimeNewPat  = UserOdPrefs.GetByUserAndFkeyType(Security.CurrentUser.Id, UserPreferenceName.CommlogPersistUpdateDateTimeWithNewPatient).FirstOrDefault();
         }
 
         /// <summary>
@@ -131,7 +131,7 @@ namespace OpenDental
 
         public void SetUserNum(long userNum)
         {
-            CommlogCur.UserNum = Security.CurUser.Id;
+            CommlogCur.UserNum = Security.CurrentUser.Id;
             userTextBox.Text = GetUserodName(CommlogCur.UserNum);
         }
 
@@ -148,7 +148,7 @@ namespace OpenDental
 
         void signatureBoxWrapper_SignatureChanged(object sender, EventArgs e)
         {
-            SetUserNum(Security.CurUser.Id);
+            SetUserNum(Security.CurrentUser.Id);
         }
 
         void PatientChangedEvent_Fired(ODEventArgs e)

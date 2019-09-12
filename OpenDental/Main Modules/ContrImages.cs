@@ -1164,7 +1164,7 @@ namespace OpenDental
             else
             {//Document tree folders persistent expand/collapse per user
                 hasTreePrefsEnabled = true;//Initialize flag so that we don't run into duplication of the UserOdPref overrides rows.
-                if (UserNumPrev == Security.CurUser.Id)
+                if (UserNumPrev == Security.CurrentUser.Id)
                 {//User has not changed.  Maintain expanded nodes.
                     TreeNode selectedNode = treeDocuments.SelectedNode;//Save the selection so we can reselect after collapsing.
                     treeDocuments.CollapseAll();//Invalidates tree and clears selection too.
@@ -1185,7 +1185,7 @@ namespace OpenDental
                 else
                 {//User has changed.  Expand image categories based on user preference.
                     _listExpandedCats.Clear();
-                    listUserOdPrefImageCats = UserOdPrefs.GetByUserAndFkeyType(Security.CurUser.Id, UserPreferenceName.Definition);//Update override list.
+                    listUserOdPrefImageCats = UserOdPrefs.GetByUserAndFkeyType(Security.CurrentUser.Id, UserPreferenceName.Definition);//Update override list.
                     foreach (Definition curDef in listImageCatDefs)
                     {
                         //Should only be one value with associated Fkey.
@@ -1224,7 +1224,7 @@ namespace OpenDental
                         }
                     }
                 }
-                UserNumPrev = Security.CurUser.Id;//Update the Previous user num.
+                UserNumPrev = Security.CurrentUser.Id;//Update the Previous user num.
                 hasTreePrefsEnabled = false;//Disable flag
             }
             if (XVWeb.IsDisplayingImagesInProgram && !_isFillingXVWebFromThread)
@@ -2996,11 +2996,11 @@ namespace OpenDental
                 curValue = curValue.Replace("E", "");//If it is, remove expanded flag.
             }
             //Always delete to remove previous value (prevents duplicates).
-            UserOdPrefs.DeleteForFkey(Security.CurUser.Id, UserPreferenceName.Definition, defImageCatCur.Id);
+            UserOdPrefs.DeleteForFkey(Security.CurrentUser.Id, UserPreferenceName.Definition, defImageCatCur.Id);
             if (defaultValue != curValue)
             {//Insert an override in the UserOdPref table, only if the chosen value is different than the default.
                 UserPreference userPrefCur = new UserPreference();//Preference to be inserted to override.
-                userPrefCur.UserId = Security.CurUser.Id;
+                userPrefCur.UserId = Security.CurrentUser.Id;
                 userPrefCur.Fkey = defImageCatCur.Id;
                 userPrefCur.FkeyType = UserPreferenceName.Definition;
                 userPrefCur.Value = curValue;

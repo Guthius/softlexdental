@@ -104,7 +104,7 @@ namespace OpenDental
             if (_emailMessage.Status == EmailMessageStatus.Unknown)
             {//Composing a message
 
-                _emailMessage.UserId = Security.CurUser.Id;//UserNum is also updated when sent. Setting here to display when composing.
+                _emailMessage.UserId = Security.CurrentUser.Id;//UserNum is also updated when sent. Setting here to display when composing.
             }
             else
             {//sent or received (not composing)
@@ -160,7 +160,7 @@ namespace OpenDental
             //3. All other email addresses not tied to a user
             _listEmailAddresses = new List<EmailAddress>();
             EmailAddress emailAddressDefault = EmailAddress.GetByClinic(clinicNum);
-            EmailAddress emailAddressMe = EmailAddress.GetByUser(Security.CurUser.Id);
+            EmailAddress emailAddressMe = EmailAddress.GetByUser(Security.CurrentUser.Id);
             if (emailAddressDefault != null)
             {
                 _listEmailAddresses.Add(emailAddressDefault);
@@ -413,7 +413,7 @@ namespace OpenDental
             //Next Scheduled Appointment Information
             templateText = Appointments.ReplaceAppointment(templateText, aptNext); //handles null nextApts.
                                                                                    //Currently Logged in User Information
-            templateText = FormMessageReplacements.ReplaceUser(templateText, Security.CurUser);
+            templateText = FormMessageReplacements.ReplaceUser(templateText, Security.CurrentUser);
             //Clinic Information
             templateText = Clinics.ReplaceOffice(templateText, clinic);
             //Misc Information

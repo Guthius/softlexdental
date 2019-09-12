@@ -678,11 +678,11 @@ namespace OpenDental{
 				butView.Visible=false;
 				labelView.Visible=false;
 				sheet=null;
-				if(Preference.GetBool(PreferenceName.ShowFeatureEhr) && Security.CurUser.ProviderId!=0) {//Is CPOE
+				if(Preference.GetBool(PreferenceName.ShowFeatureEhr) && Security.CurrentUser.ProviderId!=0) {//Is CPOE
 					labelCPOE.Visible=true;
 					comboProvNum.Enabled=false;
 					butPickProv.Enabled=false;
-					RxPatCur.ProvNum=Security.CurUser.ProviderId;
+					RxPatCur.ProvNum=Security.CurrentUser.ProviderId;
 				}
 			}
 			else{

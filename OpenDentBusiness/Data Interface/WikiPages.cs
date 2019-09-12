@@ -282,7 +282,7 @@ namespace OpenDentBusiness
         public static void Rename(WikiPage wikiPage, string newPageTitle)
         {
             //Security.CurUser.UserNum gets set on MT by the DtoProcessor so it matches the user from the client WS.
-            wikiPage.UserNum = Security.CurUser.Id;
+            wikiPage.UserNum = Security.CurrentUser.Id;
             //a later improvement would be to validate again here in the business layer.
             InsertAndArchive(wikiPage);
             //Rename all pages in both tables: wikiPage and wikiPageHist.

@@ -162,7 +162,7 @@ namespace OpenDental
             {
                 var wikiPage = WikiPageHists.RevertFrom(wikiPageHist);
 
-                wikiPage.UserNum = Security.CurUser.Id;
+                wikiPage.UserNum = Security.CurrentUser.Id;
 
                 WikiPages.InsertAndArchive(wikiPage);
                 LoadPageList();

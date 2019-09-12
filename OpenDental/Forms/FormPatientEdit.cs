@@ -404,7 +404,7 @@ namespace OpenDental{
 			}
 			else {
 				//do not re-organize from cache. They could either be alphabetized or sorted by item order.
-				Clinics.GetForUserod(Security.CurUser).ForEach(x => _listClinics.Add(x));
+				Clinics.GetForUserod(Security.CurrentUser).ForEach(x => _listClinics.Add(x));
 			}
 			_listClinics.ForEach(x => comboClinic.Items.Add(x.Abbr));
 			//Set Selected Nums
@@ -2961,7 +2961,7 @@ namespace OpenDental{
 			if(PatCur.Birthdate!=PatOld.Birthdate || PatCur.Gender!=PatOld.Gender) {
 				CDSinterventionCheckRequired=true;
 			}
-			if(CDSinterventionCheckRequired && CDSPermissions.GetForUser(Security.CurUser.Id).ShowCDS && CDSPermissions.GetForUser(Security.CurUser.Id).LabTestCDS) {
+			if(CDSinterventionCheckRequired && CDSPermissions.GetForUser(Security.CurrentUser.Id).ShowCDS && CDSPermissions.GetForUser(Security.CurrentUser.Id).LabTestCDS) {
 				FormCDSIntervention FormCDSI=new FormCDSIntervention();
 				FormCDSI.ListCDSI=EhrTriggers.TriggerMatch(PatCur,PatCur);//both should be patCur.
 				FormCDSI.ShowIfRequired(false);

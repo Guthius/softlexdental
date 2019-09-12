@@ -30,7 +30,7 @@ namespace OpenDental {
 			if(Preference.GetString(PreferenceName.SoftwareName)!="") {
 				this.Text+=" - "+Preference.GetString(PreferenceName.SoftwareName);
 			}
-			if(!CDSPermissions.GetForUser(Security.CurUser.Id).EditBibliography) {
+			if(!CDSPermissions.GetForUser(Security.CurrentUser.Id).EditBibliography) {
 				textBibliography.Enabled=false;
 				textInstruction.Enabled=false;
 			}

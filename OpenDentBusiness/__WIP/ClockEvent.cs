@@ -36,12 +36,7 @@ namespace OpenDentBusiness
         DateTime GetDateTime();
     }
 
-    public enum ClockEventStatus
-    {
-        Home,
-        Lunch,
-        Break
-    }
+
 
     /// <summary>
     /// One clock-in / clock-out pair.  Or, if the pair is a break, then it's an out/in pair. With 
@@ -73,50 +68,42 @@ namespace OpenDentBusiness
 
         /// <summary>
         /// The user can never edit this, but the program has to be able to edit this when user clocks out.
-        /// Can be 01-01-0001 if not clocked out yet.
+        /// Null if not clocked out yet.
         /// </summary>
         public DateTime? Date2Entered;
 
         /// <summary>
-        /// User can edit. Can be 01-01-0001 if not clocked out yet.
+        /// User editable clock out date. Null if not clocked out yet.
         /// </summary>
         public DateTime? Date2Displayed;
 
         /// <summary>
-        /// This is a manual override for OTimeAuto. 
-        /// Typically -1 hour (-01:00:00) to indicate no override. 
-        /// When used as override, allowed values are zero or positive. 
-        /// This is an alternative to using a TimeAdjust row.
+        /// This is a manual override for <see cref="OvertimeAuto"/>. 
         /// </summary>
         public TimeSpan? Overtime;
 
         /// <summary>
-        /// Automatically calculated OT.  Will be zero if none.
+        /// Automatically calculated overtime. Will be <see cref="TimeSpan.Zero"/> if none.
         /// </summary>
         public TimeSpan OvertimeAuto;
         
         /// <summary>
-        /// This is a manual override of AdjustAuto.
+        /// This is a manual override of <see cref="AdjustAuto"/>.
         /// </summary>
         public TimeSpan? Adjust;
-        
+
         /// <summary>
-        /// Automatically calculated Adjust. Will be zero if none.
+        /// Automatically calculated Adjust. Will be <see cref="TimeSpan.Zero"/> if none.
         /// </summary>
         public TimeSpan AdjustAuto;
         
         /// <summary>
-        /// This is a manual override for Rate2Auto.
-        /// Typically -1 hour (-01:00:00) to indicate no override. 
-        /// When used as override, allowed values are zero or positive. 
-        /// This is the portion of the hours worked which are at Rate2, so it's not in addition to the hours worked. 
-        /// Also used to calculate the Rate2 OT.
+        /// This is a manual override for <see cref="Rate2Auto"/>.
         /// </summary>
         public TimeSpan? Rate2;
         
         /// <summary>
-        /// Automatically calculated rate2 pay.
-        /// Will be zero if none.
+        /// Automatically calculated rate2 pay. Will be <see cref="TimeSpan.Zero"/> if none.
         /// </summary>
         public TimeSpan Rate2Auto;
 

@@ -232,7 +232,7 @@ namespace OpenDentBusiness
                 long userNum = 0;
                 if (!isAutomatic)
                 {
-                    userNum = Security.CurUser.Id;
+                    userNum = Security.CurrentUser.Id;
                 }
                 Carriers.Update(odCarrier, odCarrierOld, userNum);
             }

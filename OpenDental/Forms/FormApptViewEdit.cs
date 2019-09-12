@@ -672,9 +672,9 @@ namespace OpenDental{
 			else {//Using clinics
 				Clinics.RefreshCache();
 				_listUserClinicNums=new List<long>();
-				List<Clinic> listClinics=Clinics.GetForUserod(Security.CurUser);
+				List<Clinic> listClinics=Clinics.GetForUserod(Security.CurrentUser);
 				comboClinic.Items.Clear();
-				if(!Security.CurUser.ClinicRestricted) {
+				if(!Security.CurrentUser.ClinicRestricted) {
 					comboClinic.Items.Add(Lan.g(this,"All"));
 					_listUserClinicNums.Add(0);//this way both lists have the same number of items in it and if 'All' is selected the view, ClinicNum will be set to 0
 					comboClinic.SelectedIndex=0;
@@ -683,7 +683,7 @@ namespace OpenDental{
 					comboClinic.Items.Add(listClinics[i].Abbr);
 					_listUserClinicNums.Add(listClinics[i].ClinicNum);
 					if(ClinicNum==listClinics[i].ClinicNum) {
-						if(Security.CurUser.ClinicRestricted) {
+						if(Security.CurrentUser.ClinicRestricted) {
 							comboClinic.SelectedIndex=i;
 						}
 						else {

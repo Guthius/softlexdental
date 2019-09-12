@@ -389,7 +389,7 @@ namespace OpenDental {
 		private void FormClinics_Load(object sender, System.EventArgs e) {
 			checkOrderAlphabetical.Checked=Preference.GetBool(PreferenceName.ClinicListIsAlphabetical);
 			if(ListClinics==null) {
-				ListClinics=Clinics.GetAllForUserod(Security.CurUser);
+				ListClinics=Clinics.GetAllForUserod(Security.CurrentUser);
 				if(IncludeHQInList) {
 					ListClinics.Insert(0,new Clinic() { ClinicNum=0,Description=Lan.g(this,"Headquarters"),Abbr=Lan.g(this,"HQ") });
 				}

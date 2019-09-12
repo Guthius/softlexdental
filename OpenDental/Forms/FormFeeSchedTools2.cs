@@ -831,7 +831,7 @@ namespace OpenDental {
 			else {
 				comboClinic.Items.Add(Lan.g(this,"Default"));
 				comboClinicTo.Items.Add(new ODBoxItem<Clinic>(Lan.g(this,"Default"),new Clinic { Abbr="Default" }));
-				if(!Security.CurUser.ClinicRestricted) {
+				if(!Security.CurrentUser.ClinicRestricted) {
 					comboGlobalUpdateClinics.Items.Add(new ODBoxItem<Clinic>(Lan.g(this,"All"),new Clinic { ClinicNum=-1,Abbr="All" }));
 					comboGlobalUpdateClinics.Items.Add(new ODBoxItem<Clinic>(Lan.g(this,"Unassigned"),new Clinic { ClinicNum=0,Abbr="Unassigned" }));
 				}
@@ -1455,7 +1455,7 @@ namespace OpenDental {
 			listWriteoffClinics=listWriteoffClinics.OrderBy(x => x.ClinicNum).ToList();
 			int indexPrevClinic=-1;
 			if(Preferences.HasClinicsEnabled
-				&& !Security.CurUser.ClinicRestricted
+				&& !Security.CurrentUser.ClinicRestricted
 				&& _listSelectedClinicsGlobalUpdates.Any(x => x.ClinicNum==-1) //user selected 'All'
 				&& !string.IsNullOrEmpty(Preference.GetString(PreferenceName.GlobalUpdateWriteOffLastClinicCompleted)))//previous 'All' run was interrupted, resume
 			{
@@ -1572,7 +1572,7 @@ namespace OpenDental {
 			FormC.IsSelectionMode=true;
 			FormC.IsMultiSelect=true;
 			FormC.ListClinics=_listClinics.Select(x => x.Copy()).ToList();
-			if(!Security.CurUser.ClinicRestricted) {
+			if(!Security.CurrentUser.ClinicRestricted) {
 				FormC.ListClinics.Insert(0,new Clinic { ClinicNum=0,Description=Lan.g(this,"Headquarters"),Abbr=Lan.g(this,"HQ") });
 				FormC.IncludeHQInList=true;
 			}
@@ -1582,7 +1582,7 @@ namespace OpenDental {
 				return;
 			}
 			_listSelectedClinicsGlobalUpdates=_listClinics.FindAll(x => FormC.ListSelectedClinicNums.Contains(x.ClinicNum)).Select(x => x.Copy()).ToList();
-			if(!Security.CurUser.ClinicRestricted && FormC.ListSelectedClinicNums.Contains(0)) {
+			if(!Security.CurrentUser.ClinicRestricted && FormC.ListSelectedClinicNums.Contains(0)) {
 				_listSelectedClinicsGlobalUpdates.Insert(0,new Clinic { ClinicNum=0,Description=Lan.g(this,"Headquarters"),Abbr=Lan.g(this,"HQ") });
 			}
 			if(_listSelectedClinicsGlobalUpdates.Count>1) {
@@ -1596,7 +1596,7 @@ namespace OpenDental {
 			}
 			else {//if count==0
 				comboGlobalUpdateClinics.DropDownStyle=ComboBoxStyle.DropDownList;
-				comboGlobalUpdateClinics.SelectedIndex=(Security.CurUser.ClinicRestricted?0:1);//'All' unless not restricted, then Unassigned (HQ)
+				comboGlobalUpdateClinics.SelectedIndex=(Security.CurrentUser.ClinicRestricted?0:1);//'All' unless not restricted, then Unassigned (HQ)
 				_listSelectedClinicsGlobalUpdates.Add(comboGlobalUpdateClinics.SelectedTag<Clinic>());
 			}
 		}

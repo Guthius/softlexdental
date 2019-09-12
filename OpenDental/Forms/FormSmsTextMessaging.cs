@@ -174,7 +174,7 @@ namespace OpenDental {
 			checkSent.Checked=isSent;
 			checkRead.Checked=isReceived;
 			_smsNotifier=smsNotifier;
-			_groupByPref=UserOdPrefs.GetFirstOrNewByUserAndFkeyType(Security.CurUser.Id,UserPreferenceName.SmsGroupBy);
+			_groupByPref=UserOdPrefs.GetFirstOrNewByUserAndFkeyType(Security.CurrentUser.Id,UserPreferenceName.SmsGroupBy);
 			if(_groupByPref.Value=="1") {
 				radioGroupByPatient.Checked=true;
 			}
@@ -192,8 +192,8 @@ namespace OpenDental {
 				labelClinic.Visible=true;
 				comboClinic.Visible=true;
 				comboClinic.Items.Clear();
-				_listClinics=Clinics.GetForUserod(Security.CurUser);
-				if(!Security.CurUser.ClinicRestricted || Security.CurUser.ClinicId==0) {
+				_listClinics=Clinics.GetForUserod(Security.CurrentUser);
+				if(!Security.CurrentUser.ClinicRestricted || Security.CurrentUser.ClinicId==0) {
 					Clinic hqClinic=Clinics.GetPracticeAsClinicZero();
 					hqClinic.Abbr=(Preference.GetString(PreferenceName.PracticeTitle)+" ("+Lan.g(this,"Practice")+")");
 					_listClinics.Insert(0,hqClinic);//Add HQ
@@ -933,7 +933,7 @@ namespace OpenDental {
                     goto HookSkipSmsCall;
                 }
 
-				SmsToMobiles.SendSmsSingle(_selectedPatNum,_selectedMobileNumber,textReply.Text,clinicNum,SmsMessageSource.DirectSms,user: Security.CurUser);
+				SmsToMobiles.SendSmsSingle(_selectedPatNum,_selectedMobileNumber,textReply.Text,clinicNum,SmsMessageSource.DirectSms,user: Security.CurrentUser);
 			}
 			catch(Exception ex) {
 				MsgBox.Show(this,ex.Message);

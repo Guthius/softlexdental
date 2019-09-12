@@ -135,7 +135,7 @@ namespace OpenDental {
 			FormClinics FormC=new FormClinics();
 			FormC.IsSelectionMode=true;
 			FormC.IsMultiSelect=true;
-			FormC.ListClinics=Clinics.GetForUserod(Security.CurUser,true,Lan.g(this,"Unassigned"));
+			FormC.ListClinics=Clinics.GetForUserod(Security.CurrentUser,true,Lan.g(this,"Unassigned"));
 			FormC.ShowDialog();
 			if(FormC.DialogResult!=DialogResult.OK) {
 				return;

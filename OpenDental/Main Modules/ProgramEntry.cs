@@ -23,7 +23,7 @@ namespace OpenDental
 
                 ODInitialize.Initialize();
 
-                Security.CurComputerName = Environment.MachineName;
+                Security.CurrentComputerName = Environment.MachineName;
             }
             catch (Exception exception)
             {

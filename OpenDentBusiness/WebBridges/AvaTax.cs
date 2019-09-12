@@ -474,7 +474,7 @@ namespace OpenDentBusiness
                 "US"//US only.  Otherwise, in future we might use patient.Country
             );
             //Record the user who was logged in when this transaction occurred for later reference
-            builder.WithSalespersonCode(Security.CurUser.UserName);
+            builder.WithSalespersonCode(Security.CurrentUser.UserName);
             return builder;
         }
 

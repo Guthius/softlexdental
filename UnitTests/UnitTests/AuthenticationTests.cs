@@ -18,7 +18,7 @@ namespace UnitTests {
 
 		[TestMethod]
 		public void Authentication_CheckUserodPassword() {
-			User user=Security.CurUser;
+			User user=Security.CurrentUser;
 			user.Password=Authentication.GenerateLoginDetails("awesomePassword",HashTypes.SHA3_512);
 			bool result=Authentication.CheckPassword(user,"awesomePassword");
 			Assert.IsTrue(result);
@@ -36,7 +36,7 @@ namespace UnitTests {
 			//Reset typed password
 			Security.PasswordTyped=UnitTestPassword;
 			Userods.RefreshCache();
-			Security.CurUser=Userods.GetUser(user.Id);
+			Security.CurrentUser=Userods.GetUser(user.Id);
 		}
 
 		[TestMethod]
@@ -72,7 +72,7 @@ namespace UnitTests {
 
 		[TestMethod]
 		public void Authentication_UpdatePasswordSchema() {
-            User user =Security.CurUser;
+            User user =Security.CurrentUser;
 			bool result=Authentication.UpdatePassword(user,"brandSpankinNewPassword",HashTypes.SHA3_512);
 			//If this is middletier, we need the password to match in our current user object to refill the cache
 			Security.PasswordTyped="brandSpankinNewPassword";
@@ -86,7 +86,7 @@ namespace UnitTests {
 			//Reset typed password
 			Security.PasswordTyped=UnitTestPassword;
 			Userods.RefreshCache();
-			Security.CurUser=Userods.GetUser(user.Id);
+			Security.CurrentUser=Userods.GetUser(user.Id);
 		}
 
 		[TestMethod]

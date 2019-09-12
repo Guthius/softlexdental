@@ -245,8 +245,8 @@ namespace OpenDental{
 				if(_isHolidayOrNote && SchedCur.SchedType==ScheduleType.Practice) {
 					comboClinic.Visible=true;//only visible for holidays and practice notes and only if clinics are enabled
 					labelClinic.Visible=true;
-					_listClinics=Clinics.GetForUserod(Security.CurUser);
-					if(!Security.CurUser.ClinicRestricted) {
+					_listClinics=Clinics.GetForUserod(Security.CurrentUser);
+					if(!Security.CurrentUser.ClinicRestricted) {
 						comboClinic.Items.Add(Lan.g(this,"Headquarters"));
 						if(SchedCur.ClinicNum==0) {//new sched and HQ selected or opened one from db for HQ
 							comboClinic.SelectedIndex=0;
@@ -259,7 +259,7 @@ namespace OpenDental{
 						}
 					}
 					if(comboClinic.SelectedIndex<0) {//current sched's clinic not found or set to 0 and user is restricted, default to clinic sent in
-						comboClinic.SelectedIndex=_listClinics.FindIndex(x => x.ClinicNum==ClinicNum)+(Security.CurUser.ClinicRestricted?0:1);//add one for HQ if not restricted
+						comboClinic.SelectedIndex=_listClinics.FindIndex(x => x.ClinicNum==ClinicNum)+(Security.CurrentUser.ClinicRestricted?0:1);//add one for HQ if not restricted
 					}
 				}
 			}
@@ -352,7 +352,7 @@ namespace OpenDental{
 			long clinicNum=0;
 			if(_isHolidayOrNote && SchedCur.SchedType==ScheduleType.Practice && Preferences.HasClinicsEnabled) {//prov notes do not have a clinic
 				int indexCur=comboClinic.SelectedIndex;
-				if(!Security.CurUser.ClinicRestricted) {//user isn't restricted, -1 for HQ
+				if(!Security.CurrentUser.ClinicRestricted) {//user isn't restricted, -1 for HQ
 					indexCur--;
 				}
 				if(indexCur>-1) {//will be -1 if HQ is selected, leave clinicNum=0

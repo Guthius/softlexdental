@@ -19,7 +19,7 @@ namespace OpenDental
         /// </summary>
         void FormUserSetting_Load(object sender, EventArgs e)
         {
-            suppressLogOffMessage = UserOdPrefs.GetByUserAndFkeyType(Security.CurUser.Id, UserPreferenceName.SuppressLogOffMessage).FirstOrDefault();
+            suppressLogOffMessage = UserOdPrefs.GetByUserAndFkeyType(Security.CurrentUser.Id, UserPreferenceName.SuppressLogOffMessage).FirstOrDefault();
             if (suppressLogOffMessage != null)
             {
                 suppressMessageCheckBox.Checked = true;
@@ -35,7 +35,7 @@ namespace OpenDental
             {
                 UserOdPrefs.Insert(new UserPreference()
                 {
-                    UserId = Security.CurUser.Id,
+                    UserId = Security.CurrentUser.Id,
                     FkeyType = UserPreferenceName.SuppressLogOffMessage
                 });
             }

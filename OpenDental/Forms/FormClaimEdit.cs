@@ -276,7 +276,7 @@ namespace OpenDental{
 			ClaimCondCodeLogCur=_loadData.ClaimCondCodeLogCur;
 			//Fill Clinics
 			_listClinics=new List<Clinic>() { new Clinic() { Abbr=Lan.g(this,"None") } }; //Seed with "None"
-			List<Clinic> listUserClinics=Clinics.GetForUserod(Security.CurUser);
+			List<Clinic> listUserClinics=Clinics.GetForUserod(Security.CurrentUser);
 			listUserClinics.ForEach(x => _listClinics.Add(x));//do not re-organize from cache. They could either be alphabetizeded or sorted by item order.
 			//If current user is restricted to specific clinics, we need to make sure and add the claim clinic to our list.
 			if(_listClinics.All(x =>x.ClinicNum!=ClaimCur.ClinicNum)) {//Does not contain ClaimCur clinic.
@@ -332,7 +332,7 @@ namespace OpenDental{
 			}
 			FillCanadian();
 			if(Preferences.HasClinicsEnabled//Clinics enabled.
-					&& Security.CurUser.ClinicRestricted//User is restricted.
+					&& Security.CurrentUser.ClinicRestricted//User is restricted.
 					&& !listUserClinics.Any(x => x.ClinicNum==ClaimCur.ClinicNum))//User does not have access to clinic associated to claim.
 			{
 				SetFormReadOnly(this);
@@ -2351,7 +2351,7 @@ namespace OpenDental{
 			}
 			if(!notAuthorized) {//if already sent, we want to block users from changing sent date without permission.
 				//also changes claimstatus to sent, and date:
-				Etranss.SetClaimSentOrPrinted(ClaimCur.ClaimNum,ClaimCur.PatNum,0,EtransType.ClaimPrinted,0,Security.CurUser.Id);
+				Etranss.SetClaimSentOrPrinted(ClaimCur.ClaimNum,ClaimCur.PatNum,0,EtransType.ClaimPrinted,0,Security.CurrentUser.Id);
 			}
 			//ClaimCur.ClaimStatus="S";
 			//ClaimCur.DateSent=DateTime.Today;

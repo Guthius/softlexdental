@@ -745,7 +745,7 @@ namespace OpenDental{
 				comboClinic.Items.Clear();
 				comboClinic.Items.Add(Lan.g(this,"All"));
 				comboClinic.SelectedIndex=0;
-				_listClinics=Clinics.GetForUserod(Security.CurUser);
+				_listClinics=Clinics.GetForUserod(Security.CurrentUser);
 				for(int i=0;i<_listClinics.Count;i++) {
 					comboClinic.Items.Add(_listClinics[i].Abbr);
 					if(_listClinics[i].ClinicNum==Clinics.ClinicNum) {
@@ -1433,7 +1433,7 @@ namespace OpenDental{
 					//create a transaction here
 					Transaction trans=new Transaction();
 					trans.DepositNum=_depositCur.DepositNum;
-					trans.UserNum=Security.CurUser.Id;
+					trans.UserNum=Security.CurrentUser.Id;
 					Transactions.Insert(trans);
 					//first the deposit entry
 					JournalEntry je=new JournalEntry();

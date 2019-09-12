@@ -15,7 +15,7 @@ namespace OpenDental {
 
 		private void FormLoginFailed_Load(object sender,EventArgs e) {
 			labelErrMsg.Text=_errorMsg;
-			textUser.Text=Security.CurUser.UserName;//CurUser verified to not be null in FormOpenDental before loading this form
+			textUser.Text=Security.CurrentUser.UserName;//CurUser verified to not be null in FormOpenDental before loading this form
 			textPassword.Focus();
 		}
 
@@ -29,8 +29,8 @@ namespace OpenDental {
 				if(useEcwAlgorithm) {
 					//It doesn't matter what Security.CurUser is when it is null because we are technically trying to set it for the first time.
 					//It cannot be null before invoking HashPassword because middle needs it to NOT be null when creating the credentials for DtoGetString.
-					if(Security.CurUser==null) {
-						Security.CurUser=new User();
+					if(Security.CurrentUser==null) {
+						Security.CurrentUser=new User();
 					}
 					password=Authentication.HashPasswordMD5(password);
 				}
@@ -50,7 +50,7 @@ namespace OpenDental {
 				return;
 			}
 			//successful login.
-			Security.CurUser=userEntered;
+			Security.CurrentUser=userEntered;
 			Security.IsUserLoggedIn=true;
 
 			if(Preference.GetBool(PreferenceName.PasswordsMustBeStrong)
@@ -62,7 +62,7 @@ namespace OpenDental {
 					return;
 				}
 			}
-			SecurityLogs.MakeLogEntry(Permissions.UserLogOnOff,0,"User: "+Security.CurUser.Id+" has logged on.");
+			SecurityLogs.MakeLogEntry(Permissions.UserLogOnOff,0,"User: "+Security.CurrentUser.Id+" has logged on.");
 			DialogResult=DialogResult.OK;
 		}
 

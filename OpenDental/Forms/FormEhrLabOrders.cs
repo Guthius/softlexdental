@@ -128,8 +128,8 @@ namespace OpenDental
                     //It would be better to check for updated results, unfortunately results have no unique identifiers.
                 }
 
-                var provider = Providers.GetProv(Security.CurUser.ProviderId);
-                if (Security.CurUser.ProviderId != 0 && EhrProvKeys.GetKeysByFLName(provider.LName, provider.FName).Count > 0)
+                var provider = Providers.GetProv(Security.CurrentUser.ProviderId);
+                if (Security.CurrentUser.ProviderId != 0 && EhrProvKeys.GetKeysByFLName(provider.LName, provider.FName).Count > 0)
                 {
                     // The user who is currently logged in is a provider and has a valid EHR key.
                     erhLab.IsCpoe = true;
@@ -139,7 +139,7 @@ namespace OpenDental
 
                 foreach (var erhLabResult in erhLabTemp.ListEhrLabResults) //EHR TRIGGER
                 {
-                    if (CDSPermissions.GetForUser(Security.CurUser.Id).ShowCDS && CDSPermissions.GetForUser(Security.CurUser.Id).LabTestCDS)
+                    if (CDSPermissions.GetForUser(Security.CurrentUser.Id).ShowCDS && CDSPermissions.GetForUser(Security.CurrentUser.Id).LabTestCDS)
                     {
                         using (var formCDSIntervention = new FormCDSIntervention())
                         {
@@ -184,7 +184,7 @@ namespace OpenDental
 
                 foreach (var erhLabResult in formEhrLabOrderEdit2014.EhrLabCur.ListEhrLabResults)
                 {
-                    if (CDSPermissions.GetForUser(Security.CurUser.Id).ShowCDS && CDSPermissions.GetForUser(Security.CurUser.Id).LabTestCDS)
+                    if (CDSPermissions.GetForUser(Security.CurrentUser.Id).ShowCDS && CDSPermissions.GetForUser(Security.CurrentUser.Id).LabTestCDS)
                     {
                         using (var formCDSIntervention = new FormCDSIntervention())
                         {

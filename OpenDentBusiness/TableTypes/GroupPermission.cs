@@ -3,36 +3,31 @@ using System.ComponentModel;
 
 namespace OpenDentBusiness
 {
-
-    /// <summary>
-    /// Every user group has certain permissions.
-    /// This defines a permission for a group.
-    /// The absense of permission would cause that row to be deleted from this table.
-    /// </summary>
     public class GroupPermission : ODTable
     {
         public long GroupPermNum;
-        
-        /// <summary>
-        /// Only granted permission if newer than this date.  Can be Minimum (01-01-0001) to always grant permission.
-        /// </summary>
-        public DateTime NewerDate;
-       
-        /// <summary>
-        /// Can be 0 to always grant permission.  Otherwise, only granted permission if item is newer than the given number of days.  1 would mean only if entered today.
-        /// </summary>
-        public int NewerDays;
-       
+
         /// <summary>
         /// FK to usergroup.UserGroupNum.  The user group for which this permission is granted.  If not authorized, then this groupPermission will have been deleted.
         /// </summary>
         public long UserGroupNum;
-        
+
         /// <summary>
         /// Enum:Permissions
         /// </summary>
         public Permissions PermType;
-        
+
+
+        /// <summary>
+        /// Only granted permission if newer than this date.  Can be Minimum (01-01-0001) to always grant permission.
+        /// </summary>
+        public DateTime NewerDate;
+
+        /// <summary>
+        /// Can be 0 to always grant permission.  Otherwise, only granted permission if item is newer than the given number of days.  1 would mean only if entered today.
+        /// </summary>
+        public int NewerDays;
+
         /// <summary>
         /// Generic foreign key to any other table.  Typically used in combination with PermType to give permission to specific things.
         /// </summary>
@@ -44,8 +39,9 @@ namespace OpenDentBusiness
         }
     }
 
-    ///<summary>A hard-coded list of permissions which may be granted to usergroups.</summary>
-    public enum Permissions {
+
+    public enum Permissions
+    {
         ///<summary>0</summary>
         [Description("")]
         None,
@@ -559,44 +555,29 @@ namespace OpenDentBusiness
         ///<summary>167 - Logs when a phone number has had its ownership verified. For OD HQ only.</summary>
         [Description("Phone Ownership Verified")]
         [Obsolete("OD HQ BS")] VerifyPhoneOwnership,
-		///<summary>168 - HQ only. Allows users to make changes to Sales Tax type adjustments.</summary>
-		[Description("Edit Sales Tax Adjustments")]
-		SalesTaxAdjEdit,
-		///<summary>169 - Allows user to set last verified dates for insurance benefits. Also allows access to FormInsVerificationList.</summary>
-		[Description("Insurance Verification")]
-		InsuranceVerification,
-		///<summary>170 - Logs when a credit card is moved from one patient to another.  Makes a log for both patients.  Audit Trail Permission Only.</summary>
-		[Description("Credit Card Moved")]
-		CreditCardMove,
-		///<summary>171 - Logs when aging is being ran and from where.</summary>
-		[Description("Aging Ran")]
-		AgingRan,
-		///<summary>172 - HQ only. Allows user to add, edit, and delete Headmaster services and devices.</summary>
-		[Description("Headmaster Setup")]
+        ///<summary>168 - HQ only. Allows users to make changes to Sales Tax type adjustments.</summary>
+        [Description("Edit Sales Tax Adjustments")]
+        SalesTaxAdjEdit,
+        ///<summary>169 - Allows user to set last verified dates for insurance benefits. Also allows access to FormInsVerificationList.</summary>
+        [Description("Insurance Verification")]
+        InsuranceVerification,
+        ///<summary>170 - Logs when a credit card is moved from one patient to another.  Makes a log for both patients.  Audit Trail Permission Only.</summary>
+        [Description("Credit Card Moved")]
+        CreditCardMove,
+        ///<summary>171 - Logs when aging is being ran and from where.</summary>
+        [Description("Aging Ran")]
+        AgingRan,
+        ///<summary>172 - HQ only. Allows user to add, edit, and delete Headmaster services and devices.</summary>
+        [Description("Headmaster Setup")]
         [Obsolete("OD HQ BS")] HeadmasterSetup,
-		///<summary>173 - Allows user to view a specific Dashboard Widget. Uses FKey for SheetDef.SheetDefNum.</summary>
-		[Description("Dashboard Widget")]
-		DashboardWidget,
-		///<summary>174 - Prevent users from creating bulk claims from the Procs Not Billed Report if past the lock date.</summary>
-		[Description("Procedures Not Billed to Insurance, New Claims button")]
-		NewClaimsProcNotBilled,
-		///<summary>175 - Logging into patient portal. Used for audit trail only.</summary>
-		[Description("Patient Portal Login")]
-		PatientPortalLogin,
-	}
-
-	
+        ///<summary>173 - Allows user to view a specific Dashboard Widget. Uses FKey for SheetDef.SheetDefNum.</summary>
+        [Description("Dashboard Widget")]
+        DashboardWidget,
+        ///<summary>174 - Prevent users from creating bulk claims from the Procs Not Billed Report if past the lock date.</summary>
+        [Description("Procedures Not Billed to Insurance, New Claims button")]
+        NewClaimsProcNotBilled,
+        ///<summary>175 - Logging into patient portal. Used for audit trail only.</summary>
+        [Description("Patient Portal Login")]
+        PatientPortalLogin,
+    }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

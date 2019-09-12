@@ -430,8 +430,8 @@ namespace OpenDental
 
             if (Preferences.HasClinicsEnabled)
             {
-                listClinicNums = Clinics.GetAllForUserod(Security.CurUser).Select(x => x.ClinicNum).ToList();
-                if (!Security.CurUser.ClinicRestricted)
+                listClinicNums = Clinics.GetAllForUserod(Security.CurrentUser).Select(x => x.ClinicNum).ToList();
+                if (!Security.CurrentUser.ClinicRestricted)
                 {
                     listClinicNums.Add(0);
                 }
@@ -567,7 +567,7 @@ namespace OpenDental
 
             for (int i = 0; i < _listEmployees.Count; i++)
             {
-                if (_listEmployees[i].Id == Security.CurUser.EmployeeId)
+                if (_listEmployees[i].Id == Security.CurrentUser.EmployeeId)
                 {
                     SelectEmployee(i);
                     return;
@@ -674,7 +674,7 @@ namespace OpenDental
 
             if (Preference.GetBool(PreferenceName.TimecardSecurityEnabled))
             {
-                if (Security.CurUser.EmployeeId != _listEmployees[e.Row].Id)
+                if (Security.CurrentUser.EmployeeId != _listEmployees[e.Row].Id)
                 {
                     if (!Security.IsAuthorized(Permissions.TimecardsEditAll, true))
                     {

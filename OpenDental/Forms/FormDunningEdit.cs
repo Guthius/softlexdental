@@ -511,8 +511,8 @@ namespace OpenDental{
 				labelClinic.Visible=true;
 				comboClinics.Visible=true;
 				butPickClinic.Visible=true;
-				_listClinics=Clinics.GetForUserod(Security.CurUser);
-				if(!Security.CurUser.ClinicRestricted || _dunningCur.ClinicNum==0) {
+				_listClinics=Clinics.GetForUserod(Security.CurrentUser);
+				if(!Security.CurrentUser.ClinicRestricted || _dunningCur.ClinicNum==0) {
 					_listClinics.Insert(0,new Clinic() { ClinicNum=0,Abbr="Unassigned",Description="Unassigned" });
 				}
 				for(int i=0;i<_listClinics.Count;i++) {

@@ -9,7 +9,7 @@ namespace UnitTests
     {
         public static string FreshFromDump(string serverAddr, string port, string userName, string password, bool isOracle)
         {
-            Security.CurUser = Security.CurUser ?? new User();
+            Security.CurrentUser = Security.CurrentUser ?? new User();
             if (!isOracle)
             {
                 string command = ;

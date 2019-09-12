@@ -372,7 +372,7 @@ namespace OpenDental{
 				butNextUnsent.Visible=false;
 			}
 			else {
-				_listClinics=Clinics.GetForUserod(Security.CurUser);
+				_listClinics=Clinics.GetForUserod(Security.CurrentUser);
 			}
 			comboCustomTracking.Items.Add(Lan.g(this,"all"));
 			comboCustomTracking.SelectedIndex=0;
@@ -445,7 +445,7 @@ namespace OpenDental{
 			}
 			comboClinic.Items.Clear();
 			_listNumberOfClaims.Clear();
-			if(!Security.CurUser.ClinicRestricted) {
+			if(!Security.CurrentUser.ClinicRestricted) {
 				comboClinic.Items.Add(Lan.g(this,"Unassigned/Default"));
 				comboClinic.SelectedIndex=0;
 			}
@@ -652,7 +652,7 @@ namespace OpenDental{
 			long clinicNum=0;
 			long customTracking=0;
 			if(Preferences.HasClinicsEnabled) {
-				if(Security.CurUser.ClinicRestricted) {//If the user is restricted to specific clinics (has no Unassigned/Default option)
+				if(Security.CurrentUser.ClinicRestricted) {//If the user is restricted to specific clinics (has no Unassigned/Default option)
 					clinicNum=_listClinics[comboClinic.SelectedIndex].ClinicNum;
 				}
 				else if(comboClinic.SelectedIndex!=0) {//If not restricted to specific clinics and not selecting Unassigned/Default
@@ -797,7 +797,7 @@ namespace OpenDental{
 				if(!FormCP.PrintImmediate(Lan.g(this,"Multiple claims printed"),PrintSituation.Claim,0)) {
 					return;
 				}
-				Etranss.SetClaimSentOrPrinted(_arrayQueueFiltered[gridMain.SelectedIndices[i]].ClaimNum,_arrayQueueFiltered[gridMain.SelectedIndices[i]].PatNum,0,EtransType.ClaimPrinted,0,Security.CurUser.Id);
+				Etranss.SetClaimSentOrPrinted(_arrayQueueFiltered[gridMain.SelectedIndices[i]].ClaimNum,_arrayQueueFiltered[gridMain.SelectedIndices[i]].PatNum,0,EtransType.ClaimPrinted,0,Security.CurrentUser.Id);
 			}
 			FillGrid();
 			FillHistory();
@@ -1088,7 +1088,7 @@ namespace OpenDental{
 
 		private void butNextUnsent_Click(object sender,EventArgs e) {
 			int clinicSelectedAdjust=0;
-			if(!Security.CurUser.ClinicRestricted && comboClinic.SelectedIndex!=0) {
+			if(!Security.CurrentUser.ClinicRestricted && comboClinic.SelectedIndex!=0) {
 				clinicSelectedAdjust=1;
 			}
 			int newClinicSelected=-1;

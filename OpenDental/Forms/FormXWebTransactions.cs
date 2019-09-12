@@ -36,12 +36,12 @@ namespace OpenDental
 
         void LoadClinics()
         {
-            clinicsList = Clinics.GetForUserod(Security.CurUser);
+            clinicsList = Clinics.GetForUserod(Security.CurrentUser);
             clinicComboBox.Items.Add("All");
             clinicComboBox.SelectedIndex = 0;
 
             int offset = 1;
-            if (!Security.CurUser.ClinicRestricted)
+            if (!Security.CurrentUser.ClinicRestricted)
             {
                 clinicComboBox.Items.Add("Unassigned");
                 offset++;
@@ -60,7 +60,7 @@ namespace OpenDental
             var clinicNumsList = new List<long>();
             if (Preferences.HasClinicsEnabled && clinicComboBox.SelectedIndex != 0) //Not 'All' selected
             {
-                if (Security.CurUser.ClinicRestricted)
+                if (Security.CurrentUser.ClinicRestricted)
                 {
                     clinicNumsList.Add(clinicsList[clinicComboBox.SelectedIndex - 1].ClinicNum);
                 }

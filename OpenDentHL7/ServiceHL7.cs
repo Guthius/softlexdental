@@ -84,7 +84,7 @@ namespace OpenDentHL7
 
             //connected to the database, set the current user
             //Security.CurUser=Userods.GetUser(PrefC.GetLong(PrefName.ODServiceSecUserNum));
-            Security.CurUser = new User() { UserName = "ODServiceSecUser" };
+            Security.CurrentUser = new User() { UserName = "ODServiceSecUser" };
 
             #region MedLab HL7
             _medLabHL7DefEnabled = HL7Defs.GetOneDeepEnabled(true);

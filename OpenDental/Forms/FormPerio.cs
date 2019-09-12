@@ -1273,7 +1273,7 @@ namespace OpenDental
                 RefreshListPlaque();
             }
             listExams.SelectedIndex = PerioExams.ListExams.Count - 1;//this works even if no items.
-            _userPrefCurrentOnly = UserOdPrefs.GetByUserAndFkeyType(Security.CurUser.Id, UserPreferenceName.PerioCurrentExamOnly).FirstOrDefault();
+            _userPrefCurrentOnly = UserOdPrefs.GetByUserAndFkeyType(Security.CurrentUser.Id, UserPreferenceName.PerioCurrentExamOnly).FirstOrDefault();
             if (_userPrefCurrentOnly != null && PIn.Bool(_userPrefCurrentOnly.Value))
             {
                 checkShowCurrent.Checked = true;
@@ -2523,7 +2523,7 @@ namespace OpenDental
             {
                 UserOdPrefs.Insert(new UserPreference()
                 {
-                    UserId = Security.CurUser.Id,
+                    UserId = Security.CurrentUser.Id,
                     FkeyType = UserPreferenceName.PerioCurrentExamOnly,
                     Value = POut.Bool(checkShowCurrent.Checked)
                 });

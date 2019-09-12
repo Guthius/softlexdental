@@ -583,11 +583,11 @@ namespace OpenDental{
 				return;
 			}
 			List<Clinic> listClinics=new List<Clinic>();
-			if(!Security.CurUser.ClinicRestricted) {
+			if(!Security.CurrentUser.ClinicRestricted) {
 				listClinics.Add(new Clinic() { Abbr=Lan.g(this,"Headquarters") }); //Seed with "Headquarters"
 			}
 			//Do not re-organize from cache. They could either be alphabetized or sorted by item order.
-			listClinics.AddRange(Clinics.GetForUserod(Security.CurUser));
+			listClinics.AddRange(Clinics.GetForUserod(Security.CurrentUser));
 			foreach(Clinic clinic in listClinics) {
 				comboClinic.Items.Add(new ODBoxItem<Clinic>(clinic.Abbr,clinic));
 				if(clinic.ClinicNum==Clinics.ClinicNum) {
@@ -890,7 +890,7 @@ namespace OpenDental{
 
 		private void comboClinic_SelectionChangeCommitted(object sender,EventArgs e) {
 			comboClinic.Text=Lan.g(this,"Show Practice Notes");
-			if(!Security.CurUser.ClinicRestricted && comboClinic.SelectedIndex>0) {
+			if(!Security.CurrentUser.ClinicRestricted && comboClinic.SelectedIndex>0) {
 				comboClinic.Text=Lan.g(this,"Show Practice and Clinic Notes");
 			}
 			FillEmployeesAndProviders();

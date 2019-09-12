@@ -20,7 +20,7 @@ namespace OpenDental {
 		}
 
 		private void FormDoseSpotAssignUserId_Load(object sender,EventArgs e) {
-      _listClinicsInComboBox=Clinics.GetForUserod(Security.CurUser,true,"Headquarters");
+      _listClinicsInComboBox=Clinics.GetForUserod(Security.CurrentUser,true,"Headquarters");
       List<ProgramProperty> listProgramProperties=ProgramProperties.GetForProgram(Programs.GetCur(ProgramName.eRx).ProgramNum);
       _listClinicIDs=listProgramProperties.FindAll(x => x.PropertyDesc==Erx.PropertyDescs.ClinicID);
       _listClinicKeys=listProgramProperties.FindAll(x => x.PropertyDesc==Erx.PropertyDescs.ClinicKey);

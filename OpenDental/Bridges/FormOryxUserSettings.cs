@@ -23,9 +23,9 @@ namespace OpenDental
         private void FormUserSetting_Load(object sender, EventArgs e)
         {
             _progOryx = Programs.GetCur(ProgramName.Oryx);
-            _userNamePref = UserOdPrefs.GetByUserFkeyAndFkeyType(Security.CurUser.Id, _progOryx.ProgramNum, UserPreferenceName.ProgramUserName)
+            _userNamePref = UserOdPrefs.GetByUserFkeyAndFkeyType(Security.CurrentUser.Id, _progOryx.ProgramNum, UserPreferenceName.ProgramUserName)
                 .FirstOrDefault();
-            _passwordPref = UserOdPrefs.GetByUserFkeyAndFkeyType(Security.CurUser.Id, _progOryx.ProgramNum, UserPreferenceName.ProgramPassword)
+            _passwordPref = UserOdPrefs.GetByUserFkeyAndFkeyType(Security.CurrentUser.Id, _progOryx.ProgramNum, UserPreferenceName.ProgramPassword)
                 .FirstOrDefault();
             if (_userNamePref != null)
             {
@@ -45,13 +45,13 @@ namespace OpenDental
             {
                 Fkey = _progOryx.ProgramNum,
                 FkeyType = UserPreferenceName.ProgramUserName,
-                UserId = Security.CurUser.Id,
+                UserId = Security.CurrentUser.Id,
             };
             _passwordPref = _passwordPref ?? new UserPreference
             {
                 Fkey = _progOryx.ProgramNum,
                 FkeyType = UserPreferenceName.ProgramPassword,
-                UserId = Security.CurUser.Id,
+                UserId = Security.CurrentUser.Id,
             };
             _userNamePref.Value = textUsername.Text;
             Encryption.TryEncrypt(textPassword.Text, out _passwordPref.Value);

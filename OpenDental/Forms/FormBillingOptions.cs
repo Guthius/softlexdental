@@ -776,8 +776,8 @@ namespace OpenDental{
 				//ClinicNum: -1 for All
 				comboClinic.Items.Add(new ODBoxItem<Clinic>(Lan.g(this,"All"),new Clinic() {ClinicNum = -1,Abbr = "All",Description = "All"}));
 				comboClinic.SetSelected(0,true); //select 'All' by default
-				_listClinics=Clinics.GetForUserod(Security.CurUser);
-				if(!Security.CurUser.ClinicRestricted) {
+				_listClinics=Clinics.GetForUserod(Security.CurrentUser);
+				if(!Security.CurrentUser.ClinicRestricted) {
 					_listClinics.Insert(0,new Clinic() { ClinicNum = 0,Abbr = "Unassigned",Description = "Unassigned" });
 				}
 				foreach(Clinic clinic in _listClinics) {

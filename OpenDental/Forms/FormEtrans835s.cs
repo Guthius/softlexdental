@@ -45,7 +45,7 @@ namespace OpenDental {
 				comboClinics.Items.Clear();
 				comboClinics.Items.Add(Lan.g(this,"All"));
 				comboClinics.Items.Add(Lan.g(this,"Unassigned"));
-				_listUserClinics=Clinics.GetForUserod(Security.CurUser);
+				_listUserClinics=Clinics.GetForUserod(Security.CurrentUser);
 				_listUserClinics.ForEach(x => comboClinics.Items.Add(x.Abbr));
 				comboClinics.SetSelected(0,true);//Defaults to 'All' so that 835s with missing clinic will show.
 			}
@@ -82,7 +82,7 @@ namespace OpenDental {
 					etrans.Note=row["Note"].ToString();
 					etrans.EtransMessageTextNum=PIn.Long(row["EtransMessageTextNum"].ToString());
 					etrans.TranSetId835=row["TranSetId835"].ToString();
-					etrans.UserNum=Security.CurUser.Id;
+					etrans.UserNum=Security.CurrentUser.Id;
 					etrans.DateTimeTrans=PIn.DateT(row["dateTimeTrans"].ToString());
 					_listAllEtrans.Add(etrans);
 				}

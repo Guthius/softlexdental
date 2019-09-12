@@ -2735,7 +2735,7 @@ namespace OpenDentBusiness
                 procCur.BaseUnits = procCodeCur.BaseUnits;
                 procCur.DiagnosticCode = Preference.GetString(PreferenceName.ICD9DefaultForNewProcs);
                 procCur.PlaceService = (PlaceOfService)Preference.GetInt(PreferenceName.DefaultProcedurePlaceService);//Default Proc Place of Service for the Practice is used.
-                if (User.IsUserCPOE(Security.CurUser))
+                if (User.IsUserCPOE(Security.CurrentUser))
                 {
                     //This procedure is considered CPOE because the provider is the one that has added it.
                     procCur.IsCpoe = true;
@@ -2771,7 +2771,7 @@ namespace OpenDentBusiness
             }
             else
             {//Security.CurUser.UserNum gets set on MT by the DtoProcessor so it matches the user from the client WS.
-                appt.SecUserNumEntry = Security.CurUser.Id;
+                appt.SecUserNumEntry = Security.CurrentUser.Id;
             }
             //make sure all fields are properly filled:
             if (appt.Confirmed == 0)
@@ -3327,7 +3327,7 @@ namespace OpenDentBusiness
         public static bool Sync(List<Appointment> listNew, List<Appointment> listOld, long patNum, long userNum = 0, bool isOpMerge = false)
         {
             //Security.CurUser.UserNum gets set on MT by the DtoProcessor so it matches the user from the client WS.
-            userNum = Security.CurUser.Id;
+            userNum = Security.CurrentUser.Id;
             bool isChanged = Crud.AppointmentCrud.Sync(listNew, listOld, userNum);
             if (isChanged)
             {
@@ -4433,7 +4433,7 @@ namespace OpenDentBusiness
                     FKey = appt.AptNum,
                     LogSource = LogSources.MobileWeb,
                     DateTPrevious = appt.SecDateEntry,
-                    CompName = Security.CurComputerName
+                    CompName = Security.CurrentComputerName
                 });
             }
             else
@@ -4449,7 +4449,7 @@ namespace OpenDentBusiness
                     FKey = appt.AptNum,
                     LogSource = LogSources.MobileWeb,
                     DateTPrevious = appt.SecDateEntry,
-                    CompName = Security.CurComputerName,
+                    CompName = Security.CurrentComputerName,
                 });
             }
             #endregion

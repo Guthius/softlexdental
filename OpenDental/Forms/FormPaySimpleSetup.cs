@@ -50,7 +50,7 @@ namespace OpenDental {
 				_listUserClinicNums=new List<long>();
 				comboClinic.Items.Clear();
 				//if PaySimple is enabled and the user is restricted to a clinic, don't allow the user to disable for all clinics
-				if(Security.CurUser.ClinicRestricted) {
+				if(Security.CurrentUser.ClinicRestricted) {
 					if(checkEnabled.Checked) {
 						checkEnabled.Enabled=false;
 					}
@@ -61,13 +61,13 @@ namespace OpenDental {
 					_listUserClinicNums.Add(0);
 					comboClinic.SelectedIndex=0;
 				}
-				List<Clinic> listClinics=Clinics.GetForUserod(Security.CurUser);
+				List<Clinic> listClinics=Clinics.GetForUserod(Security.CurrentUser);
 				for(int i=0;i<listClinics.Count;i++) {
 					comboClinic.Items.Add(listClinics[i].Abbr);
 					_listUserClinicNums.Add(listClinics[i].ClinicNum);
 					if(Clinics.ClinicNum==listClinics[i].ClinicNum) {
 						comboClinic.SelectedIndex=i;
-						if(!Security.CurUser.ClinicRestricted) {
+						if(!Security.CurrentUser.ClinicRestricted) {
 							comboClinic.SelectedIndex++;//increment the SelectedIndex to account for 'Headquarters' in the list at position 0 if the user is not restricted.
 						}
 					}
@@ -76,7 +76,7 @@ namespace OpenDental {
 			}
 			_listProgProps=ProgramProperties.GetForProgram(_progCur.ProgramNum);
 			if(Preferences.HasClinicsEnabled) {
-				foreach(Clinic clinicCur in Clinics.GetForUserod(Security.CurUser)) {
+				foreach(Clinic clinicCur in Clinics.GetForUserod(Security.CurrentUser)) {
 					AddNeededProgramProperties(clinicCur.ClinicNum);
 				}
 			}

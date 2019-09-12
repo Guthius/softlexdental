@@ -466,7 +466,7 @@ namespace OpenDental
             }
             //Fill Clinics
             _listClinics = new List<Clinic>() { new Clinic() { Abbr = Lan.g(this, "None") } }; //Seed with "None"
-            Clinics.GetForUserod(Security.CurUser).ForEach(x => _listClinics.Add(x));//do not re-organize from cache. They could either be alphabetizeded or sorted by item order.
+            Clinics.GetForUserod(Security.CurrentUser).ForEach(x => _listClinics.Add(x));//do not re-organize from cache. They could either be alphabetizeded or sorted by item order.
             _listClinics.ForEach(x => comboClinic.Items.Add(x.Abbr));
             //Set Selected Nums
             _selectedClinicNum = AptCur.ClinicNum;
@@ -1095,7 +1095,7 @@ namespace OpenDental
             CommlogCur.PatNum = AptCur.PatNum;
             CommlogCur.CommDateTime = DateTime.Now;
             CommlogCur.CommType = Commlogs.GetTypeAuto(CommItemTypeAuto.APPT);
-            CommlogCur.UserNum = Security.CurUser.Id;
+            CommlogCur.UserNum = Security.CurrentUser.Id;
             FormCommItem FormCI = new FormCommItem(CommlogCur);
             FormCI.IsNew = true;
             FormCI.ShowDialog();
@@ -2548,7 +2548,7 @@ namespace OpenDental
                 task.KeyNum = AptCur.AptNum;
                 task.ObjectType = TaskObjectType.Appointment;
                 task.TaskListNum = formTaskListSelect.ListSelectedLists[0];
-                task.UserNum = Security.CurUser.Id;
+                task.UserNum = Security.CurrentUser.Id;
 
                 using (var formTaskEdit = new FormTaskEdit(task, taskOld))
                 {
@@ -2797,7 +2797,7 @@ namespace OpenDental
                         CommlogCur.CommType = Commlogs.GetTypeAuto(CommItemTypeAuto.APPT);
                         CommlogCur.Note = "Deleted Pt NOTE from schedule, saved copy: ";
                         CommlogCur.Note += appointmentNoteTextBox.Text;
-                        CommlogCur.UserNum = Security.CurUser.Id;
+                        CommlogCur.UserNum = Security.CurrentUser.Id;
                         //there is no dialog here because it is just a simple entry
                         Commlogs.Insert(CommlogCur);
                     }
@@ -2823,7 +2823,7 @@ namespace OpenDental
                             CommlogCur.Note += AptCur.ProcDescript + ": ";
                         }
                         CommlogCur.Note += appointmentNoteTextBox.Text;
-                        CommlogCur.UserNum = Security.CurUser.Id;
+                        CommlogCur.UserNum = Security.CurrentUser.Id;
                         //there is no dialog here because it is just a simple entry
                         Commlogs.Insert(CommlogCur);
                     }

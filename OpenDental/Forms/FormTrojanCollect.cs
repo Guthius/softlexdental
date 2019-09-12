@@ -638,7 +638,7 @@ namespace OpenDental{
 			str.Append(amtDebt.ToString("F2")+"*");//validated
 			str.Append(dateDelinquency.ToString("MM/dd/yyyy")+"*");//validated
 			str.Append(textPassword.Text+"*");//validated
-			str.Append(Clip(Security.CurUser.UserName,25)+"\r\n");//There is always a logged in user
+			str.Append(Clip(Security.CurrentUser.UserName,25)+"\r\n");//There is always a logged in user
 			int thisNum=TrojanQueries.GetUniqueFileNum();
 			string outputFile="CT"+thisNum.ToString().PadLeft(6,'0')+".TRO";
 			File.AppendAllText(folderPath+outputFile,str.ToString());

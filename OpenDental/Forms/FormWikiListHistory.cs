@@ -192,7 +192,7 @@ namespace OpenDental
 
             try
             {
-                WikiListHists.RevertFrom(_listWikiListHists[gridMain.GetSelectedIndex()], Security.CurUser.Id);
+                WikiListHists.RevertFrom(_listWikiListHists[gridMain.GetSelectedIndex()], Security.CurrentUser.Id);
             }
             catch 
             {

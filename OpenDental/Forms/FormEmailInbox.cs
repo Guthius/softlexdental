@@ -339,7 +339,7 @@ namespace OpenDental
                     emailAddressList.RemoveAll(emailAddress => emailAddress.Id == clinic.EmailAddressNum);
                 }
 
-                var clinicListForUser = Clinics.GetForUserod(Security.CurUser);
+                var clinicListForUser = Clinics.GetForUserod(Security.CurrentUser);
                 foreach (var clinic in clinicListForUser)
                 {
                     var emailAddress = EmailAddress.GetByClinic(clinic.EmailAddressNum);

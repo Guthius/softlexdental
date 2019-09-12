@@ -198,7 +198,7 @@ namespace OpenDentBusiness
                 if (_clinicNum != value)
                 {
                     _clinicNum = value;
-                    if (Security.CurUser == null)
+                    if (Security.CurrentUser == null)
                     {
                         return;
                     }
@@ -208,7 +208,7 @@ namespace OpenDentBusiness
                         return;
                     }
 
-                    UserPreference.Update(Security.CurUser.Id, UserPreferenceName.LastSelectedClinic, value);
+                    UserPreference.Update(Security.CurrentUser.Id, UserPreferenceName.LastSelectedClinic, value);
                 }
             }
         }
@@ -217,15 +217,15 @@ namespace OpenDentBusiness
         public static void LoadClinicNumForUser()
         {
             _clinicNum = 0;//aka headquarters clinic when clinics are enabled.
-            if (!Preferences.HasClinicsEnabled || Security.CurUser == null)
+            if (!Preferences.HasClinicsEnabled || Security.CurrentUser == null)
             {
                 return;
             }
-            List<Clinic> listClinics = GetForUserod(Security.CurUser);
+            List<Clinic> listClinics = GetForUserod(Security.CurrentUser);
             switch (Preference.GetString(PreferenceName.ClinicTrackLast))
             {
                 case "Workstation":
-                    if (Security.CurUser.ClinicRestricted && Security.CurUser.ClinicId != ComputerPrefs.LocalComputer.ClinicNum)
+                    if (Security.CurrentUser.ClinicRestricted && Security.CurrentUser.ClinicId != ComputerPrefs.LocalComputer.ClinicNum)
                     {//The user is restricted and it's not the clinic this computer has by default
                      //User's default clinic isn't the LocalComputer's clinic, see if they have access to the Localcomputer's clinic, if so, use it.
                         Clinic clinic = listClinics.Find(x => x.ClinicNum == ComputerPrefs.LocalComputer.ClinicNum);
@@ -235,7 +235,7 @@ namespace OpenDentBusiness
                         }
                         else
                         {
-                            _clinicNum = Security.CurUser.ClinicId;//Use the user's default clinic if they don't have access to LocalComputer's clinic.
+                            _clinicNum = Security.CurrentUser.ClinicId;//Use the user's default clinic if they don't have access to LocalComputer's clinic.
                         }
                     }
                     else
@@ -244,7 +244,7 @@ namespace OpenDentBusiness
                     }
                     return;//Error
                 case "User":
-                    var id = UserPreference.GetLong(Security.CurUser.Id, UserPreferenceName.LastSelectedClinic);
+                    var id = UserPreference.GetLong(Security.CurrentUser.Id, UserPreferenceName.LastSelectedClinic);
                     if (id > 0 && listClinics.Any(c => c.ClinicNum == id))
                     {
                         _clinicNum = id;
@@ -252,9 +252,9 @@ namespace OpenDentBusiness
                     return;
                 case "None":
                 default:
-                    if (listClinics.Any(x => x.ClinicNum == Security.CurUser.ClinicId))
+                    if (listClinics.Any(x => x.ClinicNum == Security.CurrentUser.ClinicId))
                     {
-                        _clinicNum = Security.CurUser.ClinicId;
+                        _clinicNum = Security.CurrentUser.ClinicId;
                     }
                     break;
             }
@@ -280,7 +280,7 @@ namespace OpenDentBusiness
                     break;
             }
 
-            UserPreference.Update(Security.CurUser.Id, UserPreferenceName.LastSelectedClinic, ClinicNum);
+            UserPreference.Update(Security.CurrentUser.Id, UserPreferenceName.LastSelectedClinic, ClinicNum);
         }
 
         ///<summary></summary>

@@ -51,9 +51,9 @@ namespace OpenDental
             {
                 userNameAutoSelect = Userods.GetUserNameNoCache(userNumSelected);
             }
-            else if (Security.CurUser != null)
+            else if (Security.CurrentUser != null)
             {
-                userNameAutoSelect = Security.CurUser.UserName;
+                userNameAutoSelect = Security.CurrentUser.UserName;
             }
 
             this.doRefreshSecurityCache = doRefreshSecurityCache;
@@ -178,7 +178,7 @@ namespace OpenDental
             else
             {
                 // Not a temporary login.
-                Security.CurUser = userCur; // Need to set for SecurityL.ChangePassword and calls.
+                Security.CurrentUser = userCur; // Need to set for SecurityL.ChangePassword and calls.
                 if (Preference.GetBool(PreferenceName.PasswordsMustBeStrong) && Preference.GetBool(PreferenceName.PasswordsWeakChangeToStrong))
                 {
                     // Check whether the password is strong enough.
@@ -200,7 +200,7 @@ namespace OpenDental
                 // Jason approved always storing the cleartext password that the user typed in 
                 // since this is necessary for Reporting Servers over middle tier and was already happening when a user logged in over middle tier.
                 Security.PasswordTyped = passwordTyped;
-                SecurityLogs.MakeLogEntry(Permissions.UserLogOnOff, 0, string.Format(Translation.Language.lang_user_has_logged_on, Security.CurUser.UserName));
+                SecurityLogs.MakeLogEntry(Permissions.UserLogOnOff, 0, string.Format(Translation.Language.lang_user_has_logged_on, Security.CurrentUser.UserName));
             }
             Plugin.Trigger(this, "FormLogOn_OK");
 

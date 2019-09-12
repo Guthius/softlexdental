@@ -145,7 +145,7 @@ namespace OpenDental
                 }
                 else
                 {//only authorized to search restricted clinics.
-                    _listClinics = Clinics.GetAllForUserod(Security.CurUser);//could be only one if the user is restricted
+                    _listClinics = Clinics.GetAllForUserod(Security.CurrentUser);//could be only one if the user is restricted
                 }
                 for (int i = 0; i < _listClinics.Count; i++)
                 {

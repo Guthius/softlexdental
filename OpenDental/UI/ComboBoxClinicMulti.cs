@@ -126,12 +126,12 @@ namespace OpenDental.UI {
 					return;
 				}
 				Items.Clear();
-				List<Clinic> listClinics=Clinics.GetForUserod(Security.CurUser);
-				if(!Security.CurUser.ClinicRestricted || listClinics.Count > 1) {
+				List<Clinic> listClinics=Clinics.GetForUserod(Security.CurrentUser);
+				if(!Security.CurrentUser.ClinicRestricted || listClinics.Count > 1) {
 					Items.Add(new ODBoxItem<Clinic>("All",new Clinic { Abbr="All",
 						Description="All",ClinicNum=CLINIC_NUM_ALL }));
 				}
-				if(!Security.CurUser.ClinicRestricted) {
+				if(!Security.CurrentUser.ClinicRestricted) {
 					Items.Add(new ODBoxItem<Clinic>(HqDescription,new Clinic { Abbr=HqDescription,
 						Description=HqDescription,ClinicNum=CLINIC_NUM_UNASSIGNED }));
 				}

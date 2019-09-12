@@ -84,7 +84,7 @@ namespace OpenDental{
 		private UI.Button butChangeUser;
 		private DataTable TablePlanned;
 		///<summary>Users can temporarily log in on this form.  Defaults to Security.CurUser.</summary>
-		private User _curUser=Security.CurUser;
+		private User _curUser=Security.CurrentUser;
 		///<summary>True if the user clicked the Change User button.</summary>
 		private bool _hasUserChanged;
 		private Label labelPermAlert;
@@ -847,7 +847,7 @@ namespace OpenDental{
 			string keyData=GetSignatureKey();
 			signatureBoxWrapper.FillSignature(GroupCur.SigIsTopaz,keyData,GroupCur.Signature);
 			signatureBoxWrapper.BringToFront();
-			if(!(Security.IsAuthorized(Permissions.GroupNoteEditSigned,true) || signatureBoxWrapper.SigIsBlank || GroupCur.UserNum==Security.CurUser.Id)) {
+			if(!(Security.IsAuthorized(Permissions.GroupNoteEditSigned,true) || signatureBoxWrapper.SigIsBlank || GroupCur.UserNum==Security.CurrentUser.Id)) {
 				//User does not have permission and this note was signed by someone else.
 				textNotes.ReadOnly=true;
 				signatureBoxWrapper.Enabled=false;

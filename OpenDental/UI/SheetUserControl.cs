@@ -67,7 +67,7 @@ namespace OpenDental {
 			SheetDef layoutSheetDef;
 			if(_dynamicLayoutCur==null) {//Initial load.
 				layoutSheetDef=GetDefaultLayout();
-				_userNumCur=Security.CurUser.Id;
+				_userNumCur=Security.CurrentUser.Id;
 			}
 			else if(_dynamicLayoutCur.SheetDefNum==0 && countPreviousTotal!=ListLayoutSheetDefs.Count) {
 				//Current layout is associated to the internal sheetdef and there is a new sheetdef that should now be used.
@@ -77,9 +77,9 @@ namespace OpenDental {
 				//Either a new user logged in or the current user navigated to FormLayoutSheetDefs.
 				//If new user logged in then get the user's default layout.  Otherwise same user so the matching logic will work below, unless it was 
 				//deleted. If matching works then we still force re-draw below.
-				if(_userNumCur!=Security.CurUser.Id) {//Logged in user has changed.
+				if(_userNumCur!=Security.CurrentUser.Id) {//Logged in user has changed.
 					layoutSheetDef=GetDefaultLayout();
-					_userNumCur=Security.CurUser.Id;
+					_userNumCur=Security.CurrentUser.Id;
 				}
 				else {
 					layoutSheetDef=ListLayoutSheetDefs.FirstOrDefault(x => x.SheetDefNum==_dynamicLayoutCur.SheetDefNum);//Try and reselect the same layout.
@@ -94,7 +94,7 @@ namespace OpenDental {
 		///<summary>Attempts to find a UserOdPref indicating to the the most recently loaded layout for user, defaulting to the practice default if not 
 		///found, then defaulting to the first SheetDef in listLayoutSheetDefs.  Returns null if listLayoutSheetDefs is null or empty.</summary>
 		private SheetDef GetDefaultLayout() {
-			List<UserPreference> listPrefs=UserOdPrefs.GetByUserAndFkeyType(Security.CurUser.Id,UserPreferenceName.DynamicChartLayout);
+			List<UserPreference> listPrefs=UserOdPrefs.GetByUserAndFkeyType(Security.CurrentUser.Id,UserPreferenceName.DynamicChartLayout);
 			UserPreference userPref=listPrefs.FirstOrDefault();//There is only at most a single link per user.
 			if(userPref!=null && ListLayoutSheetDefs.Any(x => x.SheetDefNum==userPref.Fkey)) {
 				return ListLayoutSheetDefs.FirstOrDefault(x => x.SheetDefNum==userPref.Fkey);//Use the layout from the user pref.
@@ -148,7 +148,7 @@ namespace OpenDental {
 
 		///<summary>Updates, if necessary, the user's preference dictating which Dynamic Chart Layout will load by default.</summary>
 		private void UpdateChartLayoutUserPref() {
-			UserPreference userPref=UserOdPrefs.GetFirstOrNewByUserAndFkeyType(Security.CurUser.Id,UserPreferenceName.DynamicChartLayout);
+			UserPreference userPref=UserOdPrefs.GetFirstOrNewByUserAndFkeyType(Security.CurrentUser.Id,UserPreferenceName.DynamicChartLayout);
 			if(!userPref.IsNew && userPref.Fkey==_dynamicLayoutCur.SheetDefNum) {//Existing user pref points to the current layout already
 				return;
 			}

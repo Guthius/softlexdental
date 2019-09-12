@@ -132,7 +132,7 @@ namespace OpenDental {
 				trackCur.Note=textNotes.Text;
 				trackCur.TrackingDefNum=customTrackingDef.Id;
 				trackCur.TrackingErrorDefNum=errorCodeDef.Id;
-				trackCur.UserNum=Security.CurUser.Id;
+				trackCur.UserNum=Security.CurrentUser.Id;
 				if(trackCur.ClaimTrackingNum==0) { //new claim tracking status.
 					ClaimTrackings.Insert(trackCur);
 				}

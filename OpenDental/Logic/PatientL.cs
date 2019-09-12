@@ -151,9 +151,9 @@ namespace OpenDental
                     retVal += Clinics.GetDesc(clinicNum);
                 }
             }
-            if (Security.CurUser != null)
+            if (Security.CurrentUser != null)
             {
-                retVal += " {" + Security.CurUser.UserName + "}";
+                retVal += " {" + Security.CurrentUser.UserName + "}";
             }
             if (pat == null || pat.PatNum == 0 || pat.PatNum == -1)
             {
@@ -216,9 +216,9 @@ namespace OpenDental
                     retVal += Clinics.GetDesc(_clinSelectedCur);
                 }
             }
-            if (Security.CurUser != null)
+            if (Security.CurrentUser != null)
             {
-                retVal += " {" + Security.CurUser.UserName + "}";
+                retVal += " {" + Security.CurrentUser.UserName + "}";
             }
             if (_patSelectedCur == null || _patSelectedCur.PatNum == 0 || _patSelectedCur.PatNum == -1)
             {

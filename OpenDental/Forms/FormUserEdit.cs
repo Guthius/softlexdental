@@ -857,8 +857,8 @@ namespace OpenDental{
 					List<UserGroup> listOldUserGroups=UserCur.GetGroups();
 					Userods.Update(UserCur,listNewUserGroups.Select(x => x.Id).ToList());
 					//if this is the current user, update the user, credentials, etc.
-					if(UserCur.Id==Security.CurUser.Id) {
-						Security.CurUser=UserCur.Copy();
+					if(UserCur.Id==Security.CurrentUser.Id) {
+						Security.CurrentUser=UserCur.Copy();
 						if(_passwordTyped!=null) {
 							Security.PasswordTyped=_passwordTyped; //update the password typed for middle tier refresh
 						}
@@ -878,11 +878,11 @@ namespace OpenDental{
 					List<UserGroup> listAddedGroups=funcGetMissing(listNewUserGroups,listOldUserGroups);
 					if(listRemovedGroups.Count>0) {//Only log if there are items in the list
 						SecurityLogs.MakeLogEntry(Permissions.SecurityAdmin,0,"User "+UserCur.UserName+
-							" removed from User group(s): "+string.Join(", ",listRemovedGroups.Select(x => x.Description).ToArray())+" by: "+Security.CurUser.UserName);
+							" removed from User group(s): "+string.Join(", ",listRemovedGroups.Select(x => x.Description).ToArray())+" by: "+Security.CurrentUser.UserName);
 					}
 					if(listAddedGroups.Count>0) {//Only log if there are items in the list.
 						SecurityLogs.MakeLogEntry(Permissions.SecurityAdmin,0,"User "+UserCur.UserName+
-							" added to User group(s): "+string.Join(", ",listAddedGroups.Select(x => x.Description).ToArray())+" by: "+Security.CurUser.UserName);
+							" added to User group(s): "+string.Join(", ",listAddedGroups.Select(x => x.Description).ToArray())+" by: "+Security.CurrentUser.UserName);
 					}
 				}
 			}

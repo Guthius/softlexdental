@@ -92,10 +92,10 @@ namespace OpenDental {
 			_isSelecting=true;
 			_listUserClinics=new List<Clinic>();
 			if(Preferences.HasClinicsEnabled) {
-				if(!Security.CurUser.ClinicRestricted) {
+				if(!Security.CurrentUser.ClinicRestricted) {
 					_listUserClinics.Add(new Clinic() { Description=Lan.g(this,"Unassigned") });
 				}
-				Clinics.GetForUserod(Security.CurUser).ForEach(x => _listUserClinics.Add(x));
+				Clinics.GetForUserod(Security.CurrentUser).ForEach(x => _listUserClinics.Add(x));
 				for(int i=0;i<_listUserClinics.Count;i++) {
 					listClinics.Items.Add(_listUserClinics[i].Description);
 					listClinics.SetSelected(i,true);

@@ -32,10 +32,10 @@ namespace UnitTests.IntegrationTests
 			_taskListChild=TaskListT.CreateTaskList(descript:"TaskListChild",parent:_taskListParent.TaskListNum,parentDesc:_taskListParent.Descript);
 			_taskListGrandchild=TaskListT.CreateTaskList(descript:"TaskListGrandchild",parent:_taskListChild.TaskListNum,
 				parentDesc:_taskListChild.Descript);
-			_task=TaskT.CreateTask(_taskListGrandchild.TaskListNum,descript:"Test Task",fromNum:Security.CurUser.Id);//Starts in _taskListGrandchild
-			Security.CurUser.TaskListId=_taskListParent.TaskListNum;//Set inbox for current user to _taskListParent.
+			_task=TaskT.CreateTask(_taskListGrandchild.TaskListNum,descript:"Test Task",fromNum:Security.CurrentUser.Id);//Starts in _taskListGrandchild
+			Security.CurrentUser.TaskListId=_taskListParent.TaskListNum;//Set inbox for current user to _taskListParent.
 			try {
-				Userods.Update(Security.CurUser);
+				Userods.Update(Security.CurrentUser);
 			}
 			catch {
 				Assert.Fail("Failed to update current user task list inbox.");//Error updating user.
@@ -158,7 +158,7 @@ namespace UnitTests.IntegrationTests
 		///<summary>Context menu right-click and select the "Mark Read" with TaskNewTrackedByUser preference turned on.</summary>
 		public void UserControlTasks_MarkRead_TasksNewTrackedByUser() {
             Preference.Update(PreferenceName.TasksNewTrackedByUser,true);//TaskNewTrackedByUser=true;
-			TaskUnreads.SetUnread(Security.CurUser.Id,_task);//Set the task to unread for our user.
+			TaskUnreads.SetUnread(Security.CurrentUser.Id,_task);//Set the task to unread for our user.
 			_userControlTasksAccessor.Invoke("MarkRead",_task);//TaskNewTrackedByUser=false;
 			List<Signalod> listSignals=SignalodT.GetAllSignalods();
 			Assert.AreEqual(1,listSignals.Count);
@@ -184,8 +184,8 @@ namespace UnitTests.IntegrationTests
 		///<summary>Correct TaskLists are returned when a parent TaskList is subscribed to in a parent->child->grandchild TaskList hierarchy.</summary>
 		public void UserControlTasks_GetSubscribedTaskLists() {
 			//Subscribe to _taskListParent. This will result in a subscription list of _taskListParent,_taskListChild,_taskListGrandchild
-			TaskSubscriptionT.CreateTaskSubscription(Security.CurUser.Id,_taskListParent.TaskListNum);
-			List<TaskList> listSubscribedTaskLists=UserControlTasks.GetSubscribedTaskLists(Security.CurUser.Id);
+			TaskSubscriptionT.CreateTaskSubscription(Security.CurrentUser.Id,_taskListParent.TaskListNum);
+			List<TaskList> listSubscribedTaskLists=UserControlTasks.GetSubscribedTaskLists(Security.CurrentUser.Id);
 			List<TaskList> listExpectedSubscribedTaskLists=new List<TaskList>() { _taskListParent,_taskListChild,_taskListGrandchild };
 			Assert.AreEqual(listExpectedSubscribedTaskLists.Count,listSubscribedTaskLists.Count);//Same number of subscriptions.
 			foreach(TaskList taskListSubscribed in listSubscribedTaskLists) {

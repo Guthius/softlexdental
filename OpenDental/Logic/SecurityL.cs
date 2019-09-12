@@ -8,14 +8,14 @@ namespace OpenDental
     public class SecurityL
     {
         /// <summary>
-        /// Called to change the password for <see cref="Security.CurUser"/>.
+        /// Called to change the password for <see cref="Security.CurrentUser"/>.
         /// </summary>
         /// <param name="forceLogOff">A value indicating whether to force a log off if the user cancels out the change password dialog.</param>
         /// <param name="refreshSecurityCache"></param>
         /// <returns>True if the password was changed succesfully; otherwise, false.</returns>
         public static bool ChangePassword(bool forceLogOff, bool refreshSecurityCache = true)
         {
-            using (var formUserPassword = new FormUserPassword(false, Security.CurUser.UserName))
+            using (var formUserPassword = new FormUserPassword(false, Security.CurrentUser.UserName))
             {
                 if (formUserPassword.ShowDialog() == DialogResult.Cancel)
                 {
@@ -37,7 +37,7 @@ namespace OpenDental
                 try
                 {
                     Userods.UpdatePassword(
-                        Security.CurUser, 
+                        Security.CurrentUser, 
                         formUserPassword.LoginDetails, 
                         formUserPassword.PasswordIsStrong);
                 }
@@ -52,8 +52,8 @@ namespace OpenDental
                     return false;
                 }
 
-                Security.CurUser.PasswordIsStrong = formUserPassword.PasswordIsStrong;
-                Security.CurUser.Password = formUserPassword.LoginDetails;
+                Security.CurrentUser.PasswordIsStrong = formUserPassword.PasswordIsStrong;
+                Security.CurrentUser.Password = formUserPassword.LoginDetails;
                 Security.PasswordTyped = formUserPassword.Password;
             }
 

@@ -33,7 +33,7 @@ namespace OpenDental {
 			_listClinics=new List<Clinic>();
 			if(Preferences.HasClinicsEnabled) {
 				_listClinics.AddRange(
-					Clinics.GetForUserod(Security.CurUser,true,Lan.g(this,"Unassigned")).OrderBy(x => x.ClinicNum!=0).ThenBy(x => x.ItemOrder)
+					Clinics.GetForUserod(Security.CurrentUser,true,Lan.g(this,"Unassigned")).OrderBy(x => x.ClinicNum!=0).ThenBy(x => x.ItemOrder)
 				);
 				comboBoxMultiClinics.Visible=true;
 				labelClinics.Visible=true;

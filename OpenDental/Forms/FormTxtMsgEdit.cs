@@ -87,7 +87,7 @@ namespace OpenDental {
 			}
 			if(SmsPhones.IsIntegratedTextingEnabled()) {
 				try {
-					return SmsToMobiles.SendSmsSingle(patNum,wirelessPhone,message,clinicNum,smsMessageSource,user:Security.CurUser);  //Can pass in 0 as PatNum if no patient selected.
+					return SmsToMobiles.SendSmsSingle(patNum,wirelessPhone,message,clinicNum,smsMessageSource,user:Security.CurrentUser);  //Can pass in 0 as PatNum if no patient selected.
 				}
 				catch(Exception ex) {
 					//ProcessSendSmsException handles the spending limit has been reached error, or returns false if the exception is different.

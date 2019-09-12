@@ -106,9 +106,9 @@ namespace OpenDental{
 
 		private void FillClinics() {
 			List <int> listSelectedItems=new List<int>();
-			_listClinics=Clinics.GetForUserod(Security.CurUser);
+			_listClinics=Clinics.GetForUserod(Security.CurrentUser);
 			comboBoxMultiClinics.Items.Add(Lan.g(this,"All"));
-			if(!Security.CurUser.ClinicRestricted) {
+			if(!Security.CurrentUser.ClinicRestricted) {
 				comboBoxMultiClinics.Items.Add(Lan.g(this,"Unassigned"));
 				listSelectedItems.Add(1);
 			}
@@ -136,13 +136,13 @@ namespace OpenDental{
 					for(int j=0;j<_listClinics.Count;j++) {
 						listClinicNums.Add(_listClinics[j].ClinicNum);//Add all clinics this person has access to.
 					}
-					if(!Security.CurUser.ClinicRestricted) {
+					if(!Security.CurrentUser.ClinicRestricted) {
 						listClinicNums.Add(0);//Unassigned
 					}
 				}
 				else {//All option not selected
 					for(int i=0;i<comboBoxMultiClinics.ListSelectedIndices.Count;i++) {
-						if(Security.CurUser.ClinicRestricted) {
+						if(Security.CurrentUser.ClinicRestricted) {
 							listClinicNums.Add(_listClinics[comboBoxMultiClinics.ListSelectedIndices[i]-1].ClinicNum);//Minus 1 to skip over the All.
 						}
 						else if(comboBoxMultiClinics.ListSelectedIndices[i]==1) {//Not restricted and user selected Unassigned.
@@ -169,7 +169,7 @@ namespace OpenDental{
 						if(i>0) {
 							subtitleClinics+=", ";
 						}
-						if(Security.CurUser.ClinicRestricted) {
+						if(Security.CurrentUser.ClinicRestricted) {
 							subtitleClinics+=_listClinics[comboBoxMultiClinics.ListSelectedIndices[i]-1].Abbr;//Minus 1 for All.
 						}
 						else {//Not restricted
@@ -266,7 +266,7 @@ namespace OpenDental{
 			List<ClaimProc> listCurClaimProcs=new List<ClaimProc>();
 			//find the date user is restricted by for this permission so it doesn't get called in a loop. General permission was already checked.
 			DateTime dateRestricted=GroupPermissions.GetDateRestrictedForPermission(Permissions.NewClaimsProcNotBilled,
-				Security.CurUser.GetGroups().Select(x => x.Id).ToList());
+				Security.CurrentUser.GetGroups().Select(x => x.Id).ToList());
 			//Table rows need to be 1:1 with gridMain rows due to logic in ContrAccount.toolBarButIns_Click(...).
 			DataTable table=new DataTable();
 			//Required columns as mentioned by ContrAccount.toolBarButIns_Click().

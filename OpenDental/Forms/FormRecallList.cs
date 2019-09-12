@@ -235,7 +235,7 @@ namespace OpenDental{
 				comboReactEmailFrom.Items.Add(_listEmailAddresses[i].SmtpUsername);
 			}
 			//Add user specific email address if present.
-			EmailAddress emailAddressMe=EmailAddress.GetByUser(Security.CurUser.Id);//can be null
+			EmailAddress emailAddressMe=EmailAddress.GetByUser(Security.CurrentUser.Id);//can be null
 			if(emailAddressMe!=null) {
 				_listEmailAddresses.Insert(0,emailAddressMe);
 				comboEmailFrom.Items.Insert(1,Lan.g(this,"Me")+" <"+emailAddressMe.SmtpUsername+">");//Just below Practice/Clinic
@@ -496,7 +496,7 @@ namespace OpenDental{
 						CommlogCur.Note+=FormR.RecallCur.Note;
 					}
 					CommlogCur.Note+=".  ";
-					CommlogCur.UserNum=Security.CurUser.Id;
+					CommlogCur.UserNum=Security.CurrentUser.Id;
 					FormCommItem FormCI=new FormCommItem(CommlogCur);
                     FormCI.IsNew = true;
                     FormCI.ShowDialog();
@@ -1459,7 +1459,7 @@ namespace OpenDental{
 				CommlogCur.SentOrReceived=CommSentOrReceived.Sent;
 				CommlogCur.Mode_=CommItemMode.Phone;//user can change this, of course.
 				CommlogCur.CommType=Commlogs.GetTypeAuto(commType);
-				CommlogCur.UserNum=Security.CurUser.Id;
+				CommlogCur.UserNum=Security.CurrentUser.Id;
 				if(doIncludeNote) {
 					CommlogCur.Note=Lan.g(this,(commType==CommItemTypeAuto.RECALL?"Recall ":"Reactivation ")+" reminder.");
 					if(commType==CommItemTypeAuto.RECALL && comboStatus.SelectedIndex>0) {

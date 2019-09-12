@@ -593,13 +593,13 @@ namespace OpenDental{
 			if(Preferences.HasClinicsEnabled) {
 				if(comboBoxMultiClinics.ListSelectedIndices.Contains(0)) {//'All' is selected.
 					listClinicNums=_listClinics.Select(x => x.ClinicNum).ToList();//Add all clinics this person has access to.
-					if(!Security.CurUser.ClinicRestricted) {
+					if(!Security.CurrentUser.ClinicRestricted) {
 						listClinicNums.Add(0);
 					}
 				}
 				else {
 					for(int i=0;i<comboBoxMultiClinics.ListSelectedIndices.Count;i++) {
-						if(Security.CurUser.ClinicRestricted) {
+						if(Security.CurrentUser.ClinicRestricted) {
 							listClinicNums.Add(_listClinics[comboBoxMultiClinics.ListSelectedIndices[i]-1].ClinicNum);
 						}
 						else if(comboBoxMultiClinics.ListSelectedIndices[i]==1) {//'Unassigned' is selected.
@@ -750,10 +750,10 @@ namespace OpenDental{
 		private void FillClinics() {
 			comboBoxMultiClinics.Items.Clear();
 			if(_listClinics==null) {//Not initialized yet
-				_listClinics=Clinics.GetForUserod(Security.CurUser);
+				_listClinics=Clinics.GetForUserod(Security.CurrentUser);
 			}
 			comboBoxMultiClinics.Items.Add(Lan.g(this,"All"));
-			if(!Security.CurUser.ClinicRestricted) {
+			if(!Security.CurrentUser.ClinicRestricted) {
 				int idx=comboBoxMultiClinics.Items.Add(Lan.g(this,"Unassigned"));			
 				if(Clinics.ClinicNum==0) {	
 					comboBoxMultiClinics.SetSelected(idx,true);

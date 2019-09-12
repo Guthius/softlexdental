@@ -58,7 +58,7 @@ namespace UnitTests
 #endif
             CreateUnitTestUser();
             //Get the Admin user, should always exist
-            Security.CurUser = Userods.GetUserByName(UnitTestUserName, false);
+            Security.CurrentUser = Userods.GetUserByName(UnitTestUserName, false);
             Security.PasswordTyped = UnitTestPassword;//For middle tier unit tests.
         }
 
