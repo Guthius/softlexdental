@@ -1017,14 +1017,14 @@ namespace OpenDental
 
         private void butAuthorize_Click(object sender, EventArgs e)
         {
-            FormDropboxAuthorize FormDA = new FormDropboxAuthorize();
-            FormDA.ProgramPropertyAccessToken = _ppDropboxAccessToken;
-            FormDA.ShowDialog();
-            if (FormDA.DialogResult == DialogResult.OK)
-            {
-                _ppDropboxAccessToken = FormDA.ProgramPropertyAccessToken.Copy();
-                textAccessToken.Text = FormDA.ProgramPropertyAccessToken.PropertyValue;
-            }
+            //FormDropboxAuthorize FormDA = new FormDropboxAuthorize();
+            //FormDA.ProgramPropertyAccessToken = _ppDropboxAccessToken;
+            //FormDA.ShowDialog();
+            //if (FormDA.DialogResult == DialogResult.OK)
+            //{
+            //    _ppDropboxAccessToken = FormDA.ProgramPropertyAccessToken.Copy();
+            //    textAccessToken.Text = FormDA.ProgramPropertyAccessToken.Value;
+            //}
         }
 
         private void radioDropboxStorage_Click(object sender, EventArgs e)
@@ -1057,14 +1057,14 @@ namespace OpenDental
             try
             {
                 List<ProgramProperty> listProperties = ProgramProperties.GetForProgram(_progCur.ProgramNum);
-                _ppSftpPathAtoZ = listProperties.FirstOrDefault(x => x.PropertyDesc == ODSftp.PropertyDescs.AtoZPath);
-                _ppSftpHostname = listProperties.FirstOrDefault(x => x.PropertyDesc == ODSftp.PropertyDescs.SftpHostname);
-                _ppSftpUsername = listProperties.FirstOrDefault(x => x.PropertyDesc == ODSftp.PropertyDescs.UserName);
-                _ppSftpPassword = listProperties.FirstOrDefault(x => x.PropertyDesc == ODSftp.PropertyDescs.Password);
-                textSftpAtoZ.Text = _ppSftpPathAtoZ.PropertyValue;
-                textSftpHostname.Text = _ppSftpHostname.PropertyValue;
-                textSftpUsername.Text = _ppSftpUsername.PropertyValue;
-                textSftpPassword.Text = _ppSftpPassword.PropertyValue;
+                _ppSftpPathAtoZ = listProperties.FirstOrDefault(x => x.Key == ODSftp.PropertyDescs.AtoZPath);
+                _ppSftpHostname = listProperties.FirstOrDefault(x => x.Key == ODSftp.PropertyDescs.SftpHostname);
+                _ppSftpUsername = listProperties.FirstOrDefault(x => x.Key == ODSftp.PropertyDescs.UserName);
+                _ppSftpPassword = listProperties.FirstOrDefault(x => x.Key == ODSftp.PropertyDescs.Password);
+                textSftpAtoZ.Text = _ppSftpPathAtoZ.Value;
+                textSftpHostname.Text = _ppSftpHostname.Value;
+                textSftpUsername.Text = _ppSftpUsername.Value;
+                textSftpPassword.Text = _ppSftpPassword.Value;
                 if (textSftpPassword.Text.Length > 0)
                 {
                     textSftpPassword.UseSystemPasswordChar = true;
@@ -1146,10 +1146,10 @@ namespace OpenDental
             //	return;
             //}
             Cursor = Cursors.Default;
-            if (radioDropboxStorage.Checked && ProgramProperties.UpdateProgramPropertyWithValue(_ppDropboxPathAtoZ, textAtoZPath.Text))
-            {
-                DataValid.SetInvalid(InvalidType.Programs);
-            }
+            //if (radioDropboxStorage.Checked && ProgramProperties.UpdateProgramPropertyWithValue(_ppDropboxPathAtoZ, textAtoZPath.Text))
+            //{
+            //    DataValid.SetInvalid(InvalidType.Programs);
+            //}
             Cursor = Cursors.WaitCursor;
             if (radioSftp.Checked)
             {
@@ -1180,13 +1180,13 @@ namespace OpenDental
             {
                 return;
             }
-            if (radioSftp.Checked && (ProgramProperties.UpdateProgramPropertyWithValue(_ppSftpPathAtoZ, textSftpAtoZ.Text)
-                    | ProgramProperties.UpdateProgramPropertyWithValue(_ppSftpHostname, textSftpHostname.Text)
-                    | ProgramProperties.UpdateProgramPropertyWithValue(_ppSftpUsername, textSftpUsername.Text)
-                    | ProgramProperties.UpdateProgramPropertyWithValue(_ppSftpPassword, textSftpPassword.Text)))
-            {
-                DataValid.SetInvalid(InvalidType.Programs);
-            }
+            //if (radioSftp.Checked && (ProgramProperties.UpdateProgramPropertyWithValue(_ppSftpPathAtoZ, textSftpAtoZ.Text)
+            //        | ProgramProperties.UpdateProgramPropertyWithValue(_ppSftpHostname, textSftpHostname.Text)
+            //        | ProgramProperties.UpdateProgramPropertyWithValue(_ppSftpUsername, textSftpUsername.Text)
+            //        | ProgramProperties.UpdateProgramPropertyWithValue(_ppSftpPassword, textSftpPassword.Text)))
+            //{
+            //    DataValid.SetInvalid(InvalidType.Programs);
+            //}
             if (Preference.Update(PreferenceName.AtoZfolderUsed, (int)_storageType)
                 | Preference.Update(PreferenceName.DocPath, textDocPath.Text)
                 | Preference.Update(PreferenceName.ExportPath, textExportPath.Text)

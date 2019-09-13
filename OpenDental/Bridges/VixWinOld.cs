@@ -20,7 +20,7 @@ namespace OpenDental.Bridges{
 		public static void SendData(Program ProgramCur, Patient pat){
 			List<ProgramProperty> ForProgram =ProgramProperties.GetForProgram(ProgramCur.ProgramNum);
 			ProgramProperty PPCur=ProgramProperties.GetCur(ForProgram, "QuikLink directory.");
-			string quikLinkDir=PPCur.PropertyValue;
+			string quikLinkDir=PPCur.Value;
 			if(pat==null){
 				return;
 			}
@@ -31,7 +31,7 @@ namespace OpenDental.Bridges{
 			try{
 				string patID;
 				PPCur=ProgramProperties.GetCur(ForProgram, "Enter 0 to use PatientNum, or 1 to use ChartNum");;
-				if(PPCur.PropertyValue=="0"){
+				if(PPCur.Value=="0"){
 					patID=pat.PatNum.ToString().PadLeft(6,'0');
 				}
 				else{

@@ -292,14 +292,14 @@ namespace OpenDental {
 			//	}
 			//}
 			#endregion Validation
-			#region Save
-			if(_progCur.Enabled!=checkEnabled.Checked) {//only update the program if the IsEnabled flag has changed
-				_progCur.Enabled=checkEnabled.Checked;
-				Programs.Update(_progCur);
-			}
-			ProgramProperties.Sync(_listProgProps,_progCur.ProgramNum);
-			#endregion Save
-			DataValid.SetInvalid(InvalidType.Programs);
+			//#region Save
+			//if(_progCur.Enabled!=checkEnabled.Checked) {//only update the program if the IsEnabled flag has changed
+			//	_progCur.Enabled=checkEnabled.Checked;
+			//	Programs.Update(_progCur);
+			//}
+			//ProgramProperties.Sync(_listProgProps,_progCur.ProgramNum);
+			//#endregion Save
+			//DataValid.SetInvalid(InvalidType.Programs);
 			DialogResult=DialogResult.OK;
 		}
 

@@ -72,7 +72,7 @@ namespace OpenDental.Bridges {
 						line.Append(nTerm);
 						//Patient id:
 						ProgramProperty PPCur=ProgramProperties.GetCur(listProgramProperties, "Enter 0 to use PatientNum, or 1 to use ChartNum");;
-						if(PPCur.PropertyValue=="0"){
+						if(PPCur.Value=="0"){
 							line.Append(pat.PatNum.ToString());
 						}
 						else{
@@ -106,7 +106,7 @@ namespace OpenDental.Bridges {
 						line.Append(pat.Birthdate.ToString("dd.MM.yyyy"));
 						line.Append(nTerm);
 						//Patient id:
-						if(PPCur.PropertyValue=="0"){
+						if(PPCur.Value=="0"){
 							line.Append(pat.PatNum.ToString());
 						}
 						else{
@@ -138,7 +138,7 @@ namespace OpenDental.Bridges {
 						line.Append(nTerm);
 						line.Append(pat.Birthdate.ToString("dd.MM.yyyy"));
 						line.Append(nTerm);
-						if(PPCur.PropertyValue=="0"){
+						if(PPCur.Value=="0"){
 							line.Append(pat.PatNum.ToString());
 						}
 						else{

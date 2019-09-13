@@ -476,27 +476,27 @@ namespace OpenDental{
 		#endregion
 
 		private void FormProgramLinkEdit_Load(object sender, System.EventArgs e) {
-			_isLoading=true;
-			if(ProgramCur.ProgName!=""){
-				//user not allowed to delete program links that we include, only their own.
-				butDelete.Enabled=false;
-			}
-			pathOverrideOld=ProgramProperties.GetLocalPathOverrideForProgram(ProgramCur.ProgramNum);
-			textOverride.Text=pathOverrideOld;
-			FillForm();
-			SetAdvertising();
-			_isLoading=false;
+			//_isLoading=true;
+			//if(ProgramCur.ProgName!=""){
+			//	//user not allowed to delete program links that we include, only their own.
+			//	butDelete.Enabled=false;
+			//}
+			//pathOverrideOld=ProgramProperties.GetLocalPathOverrideForProgram(ProgramCur.ProgramNum);
+			//textOverride.Text=pathOverrideOld;
+			//FillForm();
+			//SetAdvertising();
+			//_isLoading=false;
 		}
 
 		///<summary>Handles both visibility and checking of checkHideButtons.</summary>
 		private void SetAdvertising() {
 			checkHideButtons.Visible=true;
-			ProgramProperty prop = ProgramProperties.GetForProgram(ProgramCur.ProgramNum).FirstOrDefault(x => x.PropertyDesc=="Disable Advertising");
+			ProgramProperty prop = ProgramProperties.GetForProgram(ProgramCur.ProgramNum).FirstOrDefault(x => x.Key=="Disable Advertising");
 			if(checkEnabled.Checked || prop==null) {
 				checkHideButtons.Visible=false;
 			}
 			if(prop!=null) {
-				checkHideButtons.Checked=(prop.PropertyValue=="1");
+				checkHideButtons.Checked=(prop.Value=="1");
 			}
 		}
 
@@ -508,7 +508,9 @@ namespace OpenDental{
 			//this is not refined enough to be called more than once on the form because it will not
 			//remember the toolbars that were selected.
 			ToolButItems.RefreshCache();
-			ProgramProperties.RefreshCache();
+
+            CacheManager.Invalidate<ProgramProperty>();
+
 			textProgName.Text=ProgramCur.ProgName;
 			textProgDesc.Text=ProgramCur.ProgDesc;
 			checkEnabled.Checked=ProgramCur.Enabled;
@@ -547,18 +549,18 @@ namespace OpenDental{
 			gridMain.Rows.Clear();
 			ODGridRow row;
 			foreach(ProgramProperty property in ProgramPropertiesForProgram) { 
-				if(property.PropertyDesc=="Disable Advertising") {
+				if(property.Key=="Disable Advertising") {
 					continue;
 				}
 				row=new ODGridRow();
-				row.Cells.Add(property.PropertyDesc);
-				if(ProgramCur.ProgName==ProgramName.XVWeb.ToString() && property.PropertyDesc==XVWeb.ProgramProps.Password) {
+				row.Cells.Add(property.Key);
+				if(ProgramCur.ProgName==ProgramName.XVWeb.ToString() && property.Key==XVWeb.ProgramProps.Password) {
 					string decrypted;
-                    Encryption.TryDecrypt(property.PropertyValue,out decrypted);
+                    Encryption.TryDecrypt(property.Value,out decrypted);
 					row.Cells.Add(new string('*',decrypted.Length));//Show the password as '*'
 				}
-				else if(ProgramCur.ProgName==ProgramName.XVWeb.ToString() && property.PropertyDesc==XVWeb.ProgramProps.ImageCategory) {
-					Definition imageCat=Definition.GetByCategory(DefinitionCategory.ImageCats).FirstOrDefault(x => x.Id==PIn.Long(property.PropertyValue));
+				else if(ProgramCur.ProgName==ProgramName.XVWeb.ToString() && property.Key==XVWeb.ProgramProps.ImageCategory) {
+					Definition imageCat=Definition.GetByCategory(DefinitionCategory.ImageCats).FirstOrDefault(x => x.Id==PIn.Long(property.Value));
 					if(imageCat==null) {
 						row.Cells.Add("");
 					}
@@ -570,7 +572,7 @@ namespace OpenDental{
 					}
 				}
 				else {
-					row.Cells.Add(property.PropertyValue);
+					row.Cells.Add(property.Value);
 				}
 				row.Tag=property;
 				gridMain.Rows.Add(row);
@@ -614,45 +616,45 @@ namespace OpenDental{
 		}
 
 		private void checkHideButtons_CheckedChanged(object sender,EventArgs e) {
-			if(_isLoading) {
-				return;
-			}
-			ProgramProperty property = ProgramProperties.GetForProgram(ProgramCur.ProgramNum).FirstOrDefault(x => x.PropertyDesc=="Disable Advertising");
-			if(property==null) {
-				return;//should never happen.
-			}
-			if(checkHideButtons.Checked) {
-				property.PropertyValue="1";
-			}
-			else {
-				property.PropertyValue="0";
-			}
-			ProgramProperties.Update(property);
+			//if(_isLoading) {
+			//	return;
+			//}
+			//ProgramProperty property = ProgramProperties.GetForProgram(ProgramCur.ProgramNum).FirstOrDefault(x => x.Key=="Disable Advertising");
+			//if(property==null) {
+			//	return;//should never happen.
+			//}
+			//if(checkHideButtons.Checked) {
+			//	property.Value="1";
+			//}
+			//else {
+			//	property.Value="0";
+			//}
+			//ProgramProperties.Update(property);
 		}
 
 		///<summary>Opens the appropriate form to edit the program property.</summary>
 		private void PropertyTypeDirector(ProgramProperty prop) {
-			if(ProgramCur.ProgName==ProgramName.XVWeb.ToString() && prop.PropertyDesc==XVWeb.ProgramProps.ImageCategory){ //imageCategory
-				List<Definition> listDefs=Definition.GetByCategory(DefinitionCategory.ImageCats);
-				int idxDef=listDefs.FindIndex(x => x.Id==PIn.Long(prop.PropertyValue));
-				InputBox inputBox = new InputBox("Choose an Image Category",listDefs.Select(x => x.Description).ToList(),idxDef);
-				inputBox.ShowDialog();
-				if(inputBox.DialogResult!=DialogResult.OK || inputBox.SelectedIndex==-1) {
-					return;
-				}
-				prop.PropertyValue=POut.Long(listDefs[inputBox.SelectedIndex].Id);
-				ProgramProperties.Update(prop);
-			}
-			else {
-				bool propIsPassword=ProgramCur.ProgName==ProgramName.XVWeb.ToString() && prop.PropertyDesc==XVWeb.ProgramProps.Password;
-				FormProgramProperty FormPP=new FormProgramProperty(propIsPassword);
-				FormPP.ProgramPropertyCur=prop;
-				FormPP.ShowDialog();
-				if(FormPP.DialogResult!=DialogResult.OK) {
-					return;
-				}
-			}
-			ProgramProperties.RefreshCache();
+			//if(ProgramCur.ProgName==ProgramName.XVWeb.ToString() && prop.Key==XVWeb.ProgramProps.ImageCategory){ //imageCategory
+			//	List<Definition> listDefs=Definition.GetByCategory(DefinitionCategory.ImageCats);
+			//	int idxDef=listDefs.FindIndex(x => x.Id==PIn.Long(prop.Value));
+			//	InputBox inputBox = new InputBox("Choose an Image Category",listDefs.Select(x => x.Description).ToList(),idxDef);
+			//	inputBox.ShowDialog();
+			//	if(inputBox.DialogResult!=DialogResult.OK || inputBox.SelectedIndex==-1) {
+			//		return;
+			//	}
+			//	prop.Value=POut.Long(listDefs[inputBox.SelectedIndex].Id);
+			//	ProgramProperties.Update(prop);
+			//}
+			//else {
+			//	bool propIsPassword=ProgramCur.ProgName==ProgramName.XVWeb.ToString() && prop.Key==XVWeb.ProgramProps.Password;
+			//	FormProgramProperty FormPP=new FormProgramProperty(propIsPassword);
+			//	FormPP.ProgramPropertyCur=prop;
+			//	FormPP.ShowDialog();
+			//	if(FormPP.DialogResult!=DialogResult.OK) {
+			//		return;
+			//	}
+			//}
+			//ProgramProperties.RefreshCache();
 			FillGrid();
 		}
 
@@ -672,50 +674,50 @@ namespace OpenDental{
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
-			if(checkEnabled.Checked && textPluginDllName.Text!=""){
-				string dllPath= Path.Combine(Application.StartupPath,textPluginDllName.Text);
-				if(dllPath.Contains("[VersionMajMin]")) {
-					Version vers = new Version(Application.ProductVersion);
-					dllPath = dllPath.Replace("[VersionMajMin]","");//now stripped clean
-				}
-				if(!File.Exists(dllPath)) {
-					MessageBox.Show(Lan.g(this,"Dll file not found:")+" "+dllPath);
-					return;
-				}
-			}
-			if(textPluginDllName.Text!="" && textPath.Text!="") {
-				if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"If both a path and a plug-in are specified, the path will be ignored.  Continue anyway?")) {
-					return;
-				}
-			}
-			ProgramCur.ProgName=textProgName.Text;
-			ProgramCur.ProgDesc=textProgDesc.Text;
-			ProgramCur.Enabled=checkEnabled.Checked;
-			ProgramCur.Path=textPath.Text;
-			if(pathOverrideOld!=textOverride.Text) {
-				ProgramProperties.InsertOrUpdateLocalOverridePath(ProgramCur.ProgramNum,textOverride.Text);
-				ProgramProperties.RefreshCache();
-			}
-			ProgramCur.CommandLine=textCommandLine.Text;
-			ProgramCur.PluginDllName=textPluginDllName.Text;
-			ProgramCur.Note=textNote.Text;
-			ProgramCur.ButtonImage=POut.Bitmap((Bitmap)pictureBox.Image,System.Drawing.Imaging.ImageFormat.Png);
-			if(IsNew){
-				Programs.Insert(ProgramCur);
-			}
-			else{
-				Programs.Update(ProgramCur);
-			}
-			ToolButItems.DeleteAllForProgram(ProgramCur.ProgramNum);
-			//then add one toolButItem for each highlighted row in listbox
-			ToolButItem ToolButItemCur;
-			for(int i=0;i<listToolBars.SelectedIndices.Count;i++){
-				ToolButItemCur=new ToolButItem();
-				ToolButItemCur.ProgramNum=ProgramCur.ProgramNum;
-				ToolButItemCur.ButtonText=textButtonText.Text;
-				ToolButItemCur.ToolBar=(ToolBarsAvail)listToolBars.SelectedIndices[i];
-				ToolButItems.Insert(ToolButItemCur);
-			}
+			//if(checkEnabled.Checked && textPluginDllName.Text!=""){
+			//	string dllPath= Path.Combine(Application.StartupPath,textPluginDllName.Text);
+			//	if(dllPath.Contains("[VersionMajMin]")) {
+			//		Version vers = new Version(Application.ProductVersion);
+			//		dllPath = dllPath.Replace("[VersionMajMin]","");//now stripped clean
+			//	}
+			//	if(!File.Exists(dllPath)) {
+			//		MessageBox.Show(Lan.g(this,"Dll file not found:")+" "+dllPath);
+			//		return;
+			//	}
+			//}
+			//if(textPluginDllName.Text!="" && textPath.Text!="") {
+			//	if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"If both a path and a plug-in are specified, the path will be ignored.  Continue anyway?")) {
+			//		return;
+			//	}
+			//}
+			//ProgramCur.ProgName=textProgName.Text;
+			//ProgramCur.ProgDesc=textProgDesc.Text;
+			//ProgramCur.Enabled=checkEnabled.Checked;
+			//ProgramCur.Path=textPath.Text;
+			//if(pathOverrideOld!=textOverride.Text) {
+			//	ProgramProperties.InsertOrUpdateLocalOverridePath(ProgramCur.ProgramNum,textOverride.Text);
+			//	ProgramProperties.RefreshCache();
+			//}
+			//ProgramCur.CommandLine=textCommandLine.Text;
+			//ProgramCur.PluginDllName=textPluginDllName.Text;
+			//ProgramCur.Note=textNote.Text;
+			//ProgramCur.ButtonImage=POut.Bitmap((Bitmap)pictureBox.Image,System.Drawing.Imaging.ImageFormat.Png);
+			//if(IsNew){
+			//	Programs.Insert(ProgramCur);
+			//}
+			//else{
+			//	Programs.Update(ProgramCur);
+			//}
+			//ToolButItems.DeleteAllForProgram(ProgramCur.ProgramNum);
+			////then add one toolButItem for each highlighted row in listbox
+			//ToolButItem ToolButItemCur;
+			//for(int i=0;i<listToolBars.SelectedIndices.Count;i++){
+			//	ToolButItemCur=new ToolButItem();
+			//	ToolButItemCur.ProgramNum=ProgramCur.ProgramNum;
+			//	ToolButItemCur.ButtonText=textButtonText.Text;
+			//	ToolButItemCur.ToolBar=(ToolBarsAvail)listToolBars.SelectedIndices[i];
+			//	ToolButItems.Insert(ToolButItemCur);
+			//}
 			DialogResult=DialogResult.OK;
 		}
 

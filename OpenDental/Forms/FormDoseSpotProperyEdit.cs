@@ -34,14 +34,14 @@ namespace OpenDental {
 			}
 			Program programErx=Programs.GetCur(ProgramName.eRx);
 			ProgramProperty ppClinicID=ListProperties
-					.FirstOrDefault(x => x.ClinicNum!=_clinicCur.ClinicNum && x.PropertyDesc==Erx.PropertyDescs.ClinicID && x.PropertyValue!="");
+					.FirstOrDefault(x => x.ClinicId!=_clinicCur.ClinicNum && x.Key==Erx.PropertyDescs.ClinicID && x.Value!="");
 			ProgramProperty ppClinicKey=null;
 			if(ppClinicID!=null) {
 				ppClinicKey=ListProperties
-					.FirstOrDefault(x => x.ClinicNum==ppClinicID.ClinicNum && x.PropertyDesc==Erx.PropertyDescs.ClinicKey && x.PropertyValue!="");
+					.FirstOrDefault(x => x.ClinicId==ppClinicID.ClinicId && x.Key==Erx.PropertyDescs.ClinicKey && x.Value!="");
 			}
-			if(ppClinicID==null || string.IsNullOrWhiteSpace(ppClinicID.PropertyValue)
-				|| ppClinicKey==null || string.IsNullOrWhiteSpace(ppClinicKey.PropertyValue))
+			if(ppClinicID==null || string.IsNullOrWhiteSpace(ppClinicID.Value)
+				|| ppClinicKey==null || string.IsNullOrWhiteSpace(ppClinicKey.Value))
 			{
 				//No clinicID/clinicKey found.  This would be the first clinic to register
 				//Allow the first clinic to register the ability to modify the clinicID/clinicKey textboxes.

@@ -128,7 +128,7 @@ namespace OpenDentBusiness
         public static List<ToolButItem> GetForToolBar(ToolBarsAvail toolbar)
         {
             //No need to check RemotingRole; no call to db.
-            return GetWhere(x => x.ToolBar == toolbar && (Programs.IsEnabled(x.ProgramNum) || ProgramProperties.IsAdvertisingBridge(x.ProgramNum)));
+            return GetWhere(x => x.ToolBar == toolbar && Programs.IsEnabled(x.ProgramNum));
         }
     }
 }

@@ -25,8 +25,8 @@ namespace OpenDental.Bridges{
 			string info="";
 			//Patient id can be any string format
 			ProgramProperty PPCur=ProgramProperties.GetCur(ForProgram, "Enter 0 to use PatientNum, or 1 to use ChartNum");
-			string bDayFormat=ProgramProperties.GetCur(ForProgram,"Birthdate format (usually dd/MM/yyyy or MM/dd/yyyy)").PropertyValue;
-			if(PPCur.PropertyValue=="0"){
+			string bDayFormat=ProgramProperties.GetCur(ForProgram,"Birthdate format (usually dd/MM/yyyy or MM/dd/yyyy)").Value;
+			if(PPCur.Value=="0"){
 				info+="\""+pat.PatNum.ToString()+"\" ";
 			}
 			else{

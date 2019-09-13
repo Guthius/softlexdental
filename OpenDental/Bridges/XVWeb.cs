@@ -76,7 +76,7 @@ namespace OpenDental.Bridges {
 			}
 			if(pat.Birthdate.Year>1880) {
 				List<ProgramProperty> listProgramProperties=ProgramProperties.GetForProgram(ProgramCur.ProgramNum);
-				string bDayFormat=ProgramProperties.GetCur(listProgramProperties,"Birthdate format (default MM/dd/yyyy)").PropertyValue;
+				string bDayFormat=ProgramProperties.GetCur(listProgramProperties,"Birthdate format (default MM/dd/yyyy)").Value;
 				urlcomm+="&birthdate="+pat.Birthdate.ToString(bDayFormat);
 			}
 			try {

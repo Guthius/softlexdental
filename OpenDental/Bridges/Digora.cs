@@ -44,7 +44,7 @@ namespace OpenDental.Bridges{
 			List<ProgramProperty> ForProgram =ProgramProperties.GetForProgram(ProgramCur.ProgramNum);
 			string info="$$DFWIN$$ OPEN -n\""+Tidy(pat.LName)+", "+Tidy(pat.FName)+"\" -c\"";
 			ProgramProperty PPCur=ProgramProperties.GetCur(ForProgram, "Enter 0 to use PatientNum, or 1 to use ChartNum");;
-			if(PPCur.PropertyValue=="0"){
+			if(PPCur.Value=="0"){
 				info+=pat.PatNum.ToString();
 			}
 			else{

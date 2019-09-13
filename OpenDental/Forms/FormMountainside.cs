@@ -227,7 +227,7 @@ namespace OpenDental{
 		}
 
 		private void FillForm(){
-			ProgramProperties.RefreshCache();
+            CacheManager.Invalidate<ProgramProperty>();
 			PropertyList=ProgramProperties.GetForProgram(ProgramCur.ProgramNum);
 			textProgName.Text=ProgramCur.ProgName;
 			textProgDesc.Text=ProgramCur.ProgDesc;

@@ -105,7 +105,7 @@ namespace OpenDental
                 importInsPlansButton.Visible = false; // Import Ins Plans button is only visible when Public Health feature is enabled.
             }
 
-            collectionsButton.Visible = !ProgramProperties.IsAdvertisingDisabled(ProgramName.Transworld);
+            //collectionsButton.Visible = !ProgramProperties.IsAdvertisingDisabled(ProgramName.Transworld);
         }
 
         #region Daily
@@ -445,20 +445,20 @@ namespace OpenDental
             foreach (long clinicNum in listClinicNums)
             {
                 List<ProgramProperty> listPropsForClinic = new List<ProgramProperty>();
-                if (listProperties.All(x => x.ClinicNum != clinicNum))
+                if (listProperties.All(x => x.ClinicId != clinicNum))
                 {//if no prog props exist for the clinic, continue, clinicNum 0 will be tested once as well
                     continue;
                 }
-                listPropsForClinic = listProperties.FindAll(x => x.ClinicNum == clinicNum);
-                string sftpAddress = listPropsForClinic.Find(x => x.PropertyDesc == "SftpServerAddress")?.PropertyValue ?? "";
+                listPropsForClinic = listProperties.FindAll(x => x.ClinicId == clinicNum);
+                string sftpAddress = listPropsForClinic.Find(x => x.Key == "SftpServerAddress")?.Value ?? "";
                 int sftpPort;
-                if (!int.TryParse(listPropsForClinic.Find(x => x.PropertyDesc == "SftpServerPort")?.PropertyValue ?? "", out sftpPort))
+                if (!int.TryParse(listPropsForClinic.Find(x => x.Key == "SftpServerPort")?.Value ?? "", out sftpPort))
                 {
                     sftpPort = 22;//default to port 22
                 }
 
-                string userName = listPropsForClinic.Find(x => x.PropertyDesc == "SftpUsername")?.PropertyValue ?? "";
-                string userPassword = listPropsForClinic.Find(x => x.PropertyDesc == "SftpPassword")?.PropertyValue ?? "";
+                string userName = listPropsForClinic.Find(x => x.Key == "SftpUsername")?.Value ?? "";
+                string userPassword = listPropsForClinic.Find(x => x.Key == "SftpPassword")?.Value ?? "";
 
                 // TODO: Fix me
                 //if (Sftp.IsConnectionValid(sftpAddress, userName, userPassword, sftpPort))

@@ -27,7 +27,7 @@ namespace OpenDental.Bridges{
 			}
 			string info="\"";
 			ProgramProperty PPCur=ProgramProperties.GetCur(ForProgram, "Enter 0 to use PatientNum, or 1 to use ChartNum");;
-			if(PPCur.PropertyValue=="0") {
+			if(PPCur.Value=="0") {
 				info+=pat.PatNum.ToString();
 			}
 			else {

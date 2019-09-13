@@ -52,7 +52,7 @@ namespace OpenDental.Bridges {
 					//Patient id:
 					string patId="";
 					ProgramProperty propertyCur=ProgramProperties.GetCur(listProgProperties, "Enter 0 to use PatientNum, or 1 to use ChartNum");;
-					if(propertyCur.PropertyValue=="0"){
+					if(propertyCur.Value=="0"){
 						patId=POut.Long(pat.PatNum);
 					}
 					else {

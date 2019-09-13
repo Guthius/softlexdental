@@ -59,11 +59,11 @@ namespace OpenDental {
 			comboBoxMultiClientIDs.Items.Add(Lan.g(this,"All"));
 			comboBoxMultiClientIDs.SetSelected(0,true);
 			_listClientIDs=new List<string>();
-			long progNum=Programs.GetProgramNum(ProgramName.Transworld);
-			if(progNum>0) {
-				_listClientIDs=ProgramProperties.GetWhere(x => x.ProgramNum==progNum && x.PropertyDesc.In("ClientIdAccelerator","ClientIdCollection"))
-					.Select(x => x.PropertyValue).Distinct().ToList();
-			}
+			//long progNum=Programs.GetProgramNum(ProgramName.Transworld);
+			//if(progNum>0) {
+			//	_listClientIDs=ProgramProperties.GetWhere(x => x.ProgramId==progNum && x.Key.In("ClientIdAccelerator","ClientIdCollection"))
+			//		.Select(x => x.Value).Distinct().ToList();
+			//}
 			_listClientIDs.ForEach(x => comboBoxMultiClientIDs.Items.Add(x));
 			#endregion Fill Client IDs
 			#region Fill Trans Types

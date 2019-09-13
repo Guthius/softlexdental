@@ -24,10 +24,10 @@ namespace OpenDental.Bridges{
 			List<ProgramProperty> ForProgram =ProgramProperties.GetForProgram(ProgramCur.ProgramNum);;
 			if(pat!=null){
 				ProgramProperty PPCur=ProgramProperties.GetCur(ForProgram, "Storage Path");
-				string comline="-P"+PPCur.PropertyValue+@"\";
+				string comline="-P"+PPCur.Value+@"\";
 				//Patient id can be any string format
 				PPCur=ProgramProperties.GetCur(ForProgram, "Enter 0 to use PatientNum, or 1 to use ChartNum");;
-				if(PPCur.PropertyValue=="0"){
+				if(PPCur.Value=="0"){
 					comline+=pat.PatNum.ToString();
 				}
 				else{

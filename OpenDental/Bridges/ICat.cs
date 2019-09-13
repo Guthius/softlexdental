@@ -31,13 +31,13 @@ namespace OpenDental.Bridges{
 			}
 			List<ProgramProperty> ForProgram =ProgramProperties.GetForProgram(ProgramCur.ProgramNum);
 			ProgramProperty PPCur=ProgramProperties.GetCur(ForProgram,"Enter 0 to use PatientNum, or 1 to use ChartNum");
-			if(PPCur.PropertyValue=="1" && pat.ChartNumber=="") {
+			if(PPCur.Value=="1" && pat.ChartNumber=="") {
 				MessageBox.Show("This patient must have a ChartNumber entered first.");
 				return;
 			}
 			PPCur=ProgramProperties.GetCur(ForProgram,"Acquisition computer name");
 			try {
-				if(Environment.MachineName.ToUpper()==PPCur.PropertyValue.ToUpper()) {
+				if(Environment.MachineName.ToUpper()==PPCur.Value.ToUpper()) {
 					SendDataServer(ProgramCur,ForProgram,pat);
 				}
 				else {
@@ -53,14 +53,14 @@ namespace OpenDental.Bridges{
 		private static void SendDataServer(Program ProgramCur,List<ProgramProperty> ForProgram,Patient pat) {
 			ProgramProperty PPCur=ProgramProperties.GetCur(ForProgram,"Enter 0 to use PatientNum, or 1 to use ChartNum");
 			string id="";
-			if(PPCur.PropertyValue=="0") {
+			if(PPCur.Value=="0") {
 				id=pat.PatNum.ToString();
 			}
 			else {
 				id=pat.ChartNumber;
 			}
 			PPCur=ProgramProperties.GetCur(ForProgram,"XML output file path");
-			string xmlOutputFile=PPCur.PropertyValue;
+			string xmlOutputFile=PPCur.Value;
 			XmlDocument doc=new XmlDocument();
 			if(File.Exists(xmlOutputFile)) {
 				try {
@@ -132,7 +132,7 @@ namespace OpenDental.Bridges{
 			//ReturnPath
 			el=doc.CreateElement("ReturnPath");
 			PPCur=ProgramProperties.GetCur(ForProgram,"Return folder path");
-			string returnFolder=PPCur.PropertyValue;
+			string returnFolder=PPCur.Value;
 			if(!Directory.Exists(returnFolder)) {
 				Directory.CreateDirectory(returnFolder);
 			}
@@ -162,7 +162,7 @@ namespace OpenDental.Bridges{
 			string path=Programs.GetProgramPath(ProgramCur);
 			ProgramProperty PPCur=ProgramProperties.GetCur(ForProgram,"Enter 0 to use PatientNum, or 1 to use ChartNum");
 			string id="";
-			if(PPCur.PropertyValue=="0") {
+			if(PPCur.Value=="0") {
 				id=pat.PatNum.ToString();
 			} 
 			else {
@@ -180,7 +180,7 @@ namespace OpenDental.Bridges{
 			}
 			List<ProgramProperty> ForProgram =ProgramProperties.GetForProgram(Programs.GetProgramNum(ProgramName.iCat));
 			ProgramProperty PPCur=ProgramProperties.GetCur(ForProgram,"Return folder path");
-			string returnFolder=PPCur.PropertyValue;
+			string returnFolder=PPCur.Value;
 			if(!Directory.Exists(returnFolder)) {
 				return;
 			}
@@ -223,7 +223,7 @@ namespace OpenDental.Bridges{
 			string filename=Path.GetFileName(fullPath);
 			List<ProgramProperty> ForProgram =ProgramProperties.GetForProgram(Programs.GetProgramNum(ProgramName.iCat));
 			ProgramProperty PPCur=ProgramProperties.GetCur(ForProgram,"XML output file path");
-			string xmlOutputFile=PPCur.PropertyValue;
+			string xmlOutputFile=PPCur.Value;
 			if(!File.Exists(xmlOutputFile)){
 				//No xml file, so nothing to process.
 				return;

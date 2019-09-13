@@ -638,8 +638,8 @@ namespace OpenDental{
 		}
 
 		private void FillForm(){
-			ProgramProperties.RefreshCache();
-			PropertyList=ProgramProperties.GetForProgram(ProgramCur.ProgramNum);
+            CacheManager.Invalidate<ProgramProperty>();
+            PropertyList =ProgramProperties.GetForProgram(ProgramCur.ProgramNum);
 			textProgName.Text=ProgramCur.ProgName;
 			textProgDesc.Text=ProgramCur.ProgDesc;
 			checkEnabled.Checked=ProgramCur.Enabled;
@@ -697,8 +697,8 @@ namespace OpenDental{
 
 		private string GetProp(string desc){
 			for(int i=0;i<PropertyList.Count;i++){
-				if(PropertyList[i].PropertyDesc==desc){
-					return PropertyList[i].PropertyValue;
+				if(PropertyList[i].Key==desc){
+					return PropertyList[i].Value;
 				}
 			}
 			throw new ApplicationException("Property not found: "+desc);

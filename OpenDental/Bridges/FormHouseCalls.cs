@@ -249,9 +249,9 @@ namespace OpenDental{
 			//Create the file and first row--------------------------------------------------------
 			List<ProgramProperty> ForProgram =ProgramProperties.GetForProgram(ProgramCur.ProgramNum);
 			ProgramProperty PPCur=ProgramProperties.GetCur(ForProgram, "Export Path");
-			string fileName=PPCur.PropertyValue+"Appt.txt";
-			if(!Directory.Exists(PPCur.PropertyValue)){
-				Directory.CreateDirectory(PPCur.PropertyValue);
+			string fileName=PPCur.Value+"Appt.txt";
+			if(!Directory.Exists(PPCur.Value)){
+				Directory.CreateDirectory(PPCur.Value);
 			}
 			StreamWriter sr=File.CreateText(fileName);
 			sr.WriteLine("\"LastName\",\"FirstName\",\"PatientNumber\",\"HomePhone\",\"WorkNumber\","
@@ -260,7 +260,7 @@ namespace OpenDental{
 			DataTable table=HouseCallsQueries.GetHouseCalls(FromDate,ToDate);
 			bool usePatNum=false;
 			PPCur=ProgramProperties.GetCur(ForProgram, "Enter 0 to use PatientNum, or 1 to use ChartNum");;
-			if(PPCur.PropertyValue=="0"){
+			if(PPCur.Value=="0"){
 				usePatNum=true;
 			}
 			DateTime aptDT;

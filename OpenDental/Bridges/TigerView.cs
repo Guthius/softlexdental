@@ -130,8 +130,8 @@ namespace OpenDental.Bridges {
 			string path=Programs.GetProgramPath(ProgramCur);
 			List<ProgramProperty> ForProgram =ProgramProperties.GetForProgram(ProgramCur.ProgramNum);
 			ProgramProperty PPCur=ProgramProperties.GetCur(ForProgram,"Tiger1.ini path");
-			string bDayFormat=ProgramProperties.GetCur(ForProgram,"Birthdate format (default MM/dd/yy)").PropertyValue;
-			iniFile=PPCur.PropertyValue;
+			string bDayFormat=ProgramProperties.GetCur(ForProgram,"Birthdate format (default MM/dd/yy)").Value;
+			iniFile=PPCur.Value;
 			System.Collections.Hashtable htKeyVals=new Hashtable();
 			if(pat!=null) {
 				if(!File.Exists(iniFile)) {
@@ -142,7 +142,7 @@ namespace OpenDental.Bridges {
 				htKeyVals["FirstName"]=pat.FName;
 				//Patient Id can be any string format.
 				PPCur=ProgramProperties.GetCur(ForProgram,"Enter 0 to use PatientNum, or 1 to use ChartNum");
-				if(PPCur.PropertyValue=="0") {
+				if(PPCur.Value=="0") {
 					htKeyVals["PatientID"]=pat.PatNum.ToString();
 				}
 				else {
@@ -203,7 +203,7 @@ namespace OpenDental.Bridges {
 			}
 			List<ProgramProperty> propertiesForProgram =ProgramProperties.GetForProgram(prog.ProgramNum);
 			ProgramProperty programProperty=ProgramProperties.GetCur(propertiesForProgram,"TigerView EMR folder path");
-			string returnFolder=programProperty.PropertyValue;
+			string returnFolder=programProperty.Value;
 			if(!Directory.Exists(returnFolder)) {
 				//Do not show a message that the directory was not found because not every workstation in the office will be running this service.
 				return;
@@ -245,7 +245,7 @@ namespace OpenDental.Bridges {
 			if(!useChartNum) { //If it could be a valid patnum, check program pref
 				List<ProgramProperty> propertiesForProgram =ProgramProperties.GetForProgram(Programs.GetProgramNum(ProgramName.TigerView));
 				ProgramProperty programProperty=ProgramProperties.GetCur(propertiesForProgram,"Enter 0 to use PatientNum, or 1 to use ChartNum");
-				if(programProperty.PropertyValue=="1") {//ChartNum
+				if(programProperty.Value=="1") {//ChartNum
 					useChartNum=true;
 				}
 			}

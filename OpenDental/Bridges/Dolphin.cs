@@ -36,11 +36,11 @@ namespace OpenDental.Bridges{
 			}
 			ProgramProperty PPCur=ProgramProperties.GetCur(ForProgram, "Enter 0 to use PatientNum, or 1 to use ChartNum");
 			string patientId=pat.PatNum.ToString();
-			if(PPCur.PropertyValue=="1"){
+			if(PPCur.Value=="1"){
 				patientId=pat.ChartNumber;
 			}
 			PPCur=ProgramProperties.GetCur(ForProgram,"Filename");
-			string filename=PPCur.PropertyValue;
+			string filename=PPCur.Value;
 			StringBuilder txt=new StringBuilder();
 			txt.Append("[Patient Info]\r\n");
 			txt.Append("PatientID="+Tidy(patientId,10)+"\r\n");

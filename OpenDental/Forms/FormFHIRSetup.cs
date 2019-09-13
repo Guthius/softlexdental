@@ -333,73 +333,34 @@ namespace OpenDental
 			return true;
 		}
 
-		///<summary>Writes the list of API keys in the proper manner.</summary>
-		private void WriteListAPIKeys(XmlWriter writer,List<APIKey> listApiKeys) {
-			foreach(APIKey apiKey in listApiKeys) {
-				writer.WriteStartElement("APIKey");
-				writer.WriteStartElement("APIKeyValue");
-				writer.WriteString(apiKey.Key);
-				writer.WriteEndElement();
-				writer.WriteStartElement("FHIRAPIKeyNum");
-				writer.WriteString(POut.Long(apiKey.FHIRAPIKeyNum));
-				writer.WriteEndElement();
-				writer.WriteStartElement("DateDisabled");
-				writer.WriteString(apiKey.DateDisabled.ToString());
-				writer.WriteEndElement();
-				writer.WriteStartElement("KeyStatus");
-				writer.WriteString(apiKey.KeyStatus.ToString());
-				writer.WriteEndElement();
-				writer.WriteStartElement("DeveloperName");
-				writer.WriteString(apiKey.DeveloperName);
-				writer.WriteEndElement();
-				writer.WriteStartElement("DeveloperEmail");
-				writer.WriteString(apiKey.DeveloperEmail);
-				writer.WriteEndElement();
-				writer.WriteStartElement("DeveloperPhone");
-				writer.WriteString(apiKey.DeveloperPhone);
-				writer.WriteEndElement();
-				writer.WriteStartElement("FHIRDeveloperNum");
-				writer.WriteString(POut.Long(apiKey.FHIRDeveloperNum));
-				writer.WriteEndElement();
-				writer.WriteStartElement("ListAPIPermissions");
-				foreach(APIPermission perm in apiKey.ListPermissions) {
-					writer.WriteStartElement("APIPermission");
-					writer.WriteString(perm.ToString());
-					writer.WriteEndElement();
-				}
-				writer.WriteEndElement();
-				writer.WriteEndElement();
-			}
-		}
-
 		private void butClose_Click(object sender,EventArgs e) {
-			if(textSubInterval.errorProvider1.GetError(textSubInterval)!="") {
-				MsgBox.Show(this,"Please fix data entry errors first.");
-				return;
-			}
-			bool changed=false;
-			foreach(APIKey apiKeyHQ in _listApiKeysHQ) {
-				APIKey apiKeyLocal=_listApiKeysLocal.FirstOrDefault(x => x.Key==apiKeyHQ.Key);
-				if(apiKeyLocal==null //A new key was generated but then Cancel was clicked on FormFHIRAPIKeyEdit.
-					|| apiKeyLocal.DeveloperName!=apiKeyHQ.DeveloperName
-					|| apiKeyLocal.DeveloperEmail!=apiKeyHQ.DeveloperEmail
-					|| apiKeyLocal.DeveloperPhone!=apiKeyHQ.DeveloperPhone
-					|| apiKeyLocal.ListPermissions.Any(x => !apiKeyHQ.ListPermissions.Contains(x))
-					|| apiKeyHQ.ListPermissions.Any(x => !apiKeyLocal.ListPermissions.Contains(x)))
-				{
-					changed=true;
-					break;
-				}
-			}
-			if(changed && !UpdateKeysForOffice(_listApiKeysLocal)) {
-				return;
-			}
-			Program prog=Programs.GetCur(ProgramName.FHIR);
-			prog.Enabled=checkEnabled.Checked;
-			Programs.Update(prog);
-			ProgramProperty progProp=ProgramProperties.GetPropByDesc("SubscriptionProcessingFrequency",ProgramProperties.GetForProgram(prog.ProgramNum));
-			ProgramProperties.UpdateProgramPropertyWithValue(progProp,textSubInterval.Text);
-			DataValid.SetInvalid(InvalidType.Programs);
+			//if(textSubInterval.errorProvider1.GetError(textSubInterval)!="") {
+			//	MsgBox.Show(this,"Please fix data entry errors first.");
+			//	return;
+			//}
+			//bool changed=false;
+			//foreach(APIKey apiKeyHQ in _listApiKeysHQ) {
+			//	APIKey apiKeyLocal=_listApiKeysLocal.FirstOrDefault(x => x.Key==apiKeyHQ.Key);
+			//	if(apiKeyLocal==null //A new key was generated but then Cancel was clicked on FormFHIRAPIKeyEdit.
+			//		|| apiKeyLocal.DeveloperName!=apiKeyHQ.DeveloperName
+			//		|| apiKeyLocal.DeveloperEmail!=apiKeyHQ.DeveloperEmail
+			//		|| apiKeyLocal.DeveloperPhone!=apiKeyHQ.DeveloperPhone
+			//		|| apiKeyLocal.ListPermissions.Any(x => !apiKeyHQ.ListPermissions.Contains(x))
+			//		|| apiKeyHQ.ListPermissions.Any(x => !apiKeyLocal.ListPermissions.Contains(x)))
+			//	{
+			//		changed=true;
+			//		break;
+			//	}
+			//}
+			//if(changed && !UpdateKeysForOffice(_listApiKeysLocal)) {
+			//	return;
+			//}
+			//Program prog=Programs.GetCur(ProgramName.FHIR);
+			//prog.Enabled=checkEnabled.Checked;
+			//Programs.Update(prog);
+			//ProgramProperty progProp=ProgramProperties.GetPropByDesc("SubscriptionProcessingFrequency",ProgramProperties.GetForProgram(prog.ProgramNum));
+			//ProgramProperties.UpdateProgramPropertyWithValue(progProp,textSubInterval.Text);
+			//DataValid.SetInvalid(InvalidType.Programs);
 			Close();
 		}
 

@@ -43,7 +43,7 @@ namespace OpenDental.Bridges
             //command="[Add][PatNum][Fname][Lname][Address|Address2|City, ST Zip][phone1][phone2][mobile phone][email][sex(M/F)][birthdate (YYYY-MM-DD)]"
             ProgramProperty PPCur = ProgramProperties.GetCur(ForProgram, "Enter 0 to use PatientNum, or 1 to use ChartNum"); ;
             string patID;
-            if (PPCur.PropertyValue == "0")
+            if (PPCur.Value == "0")
             {
                 patID = pat.PatNum.ToString();
             }

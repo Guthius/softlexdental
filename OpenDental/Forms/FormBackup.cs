@@ -671,9 +671,9 @@ namespace OpenDental {
 			//usesInternalImages=(PrefC.GetString(PrefName.ImageStore)=="OpenDental.Imaging.SqlStore");
 			textBackupRestoreAtoZToPath.Enabled=ShouldUseAtoZFolder();
 			butBrowseRestoreAtoZTo.Enabled=ShouldUseAtoZFolder();
-			if(ProgramProperties.IsAdvertisingDisabled(ProgramName.CentralDataStorage)) {
-				groupManagedBackups.Visible=false;
-			}
+			//if(ProgramProperties.IsAdvertisingDisabled(ProgramName.CentralDataStorage)) {
+			//	groupManagedBackups.Visible=false;
+			//}
 			#endregion
 			#region Archive Tab
 			string decryptedPass;

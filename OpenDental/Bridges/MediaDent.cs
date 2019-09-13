@@ -86,9 +86,9 @@ namespace OpenDental.Bridges {
 			info+=" /D"+prov.FName+" "+prov.LName
 				+" /L1 /F";
 			ProgramProperty PPCur=ProgramProperties.GetCur(ForProgram,ProgramProperties.PropertyDescs.ImageFolder);
-			info+=PPCur.PropertyValue;
+			info+=PPCur.Value;
 			PPCur=ProgramProperties.GetCur(ForProgram,ProgramProperties.PropertyDescs.PatOrChartNum); ;
-			if(PPCur.PropertyValue=="0") {
+			if(PPCur.Value=="0") {
 				info+=pat.PatNum.ToString();
 			}
 			else {

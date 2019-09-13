@@ -21,7 +21,7 @@ namespace OpenDental.Bridges{
 			string path=Programs.GetProgramPath(ProgramCur);
 			List<ProgramProperty> ForProgram =ProgramProperties.GetForProgram(ProgramCur.ProgramNum);
 			ProgramProperty PPCur=ProgramProperties.GetCur(ForProgram,"InfoFile path");
-			string infoFile=PPCur.PropertyValue;
+			string infoFile=PPCur.Value;
 			if(infoFile.Trim()=="") {
 				infoFile= Path.Combine(Preferences.GetTempPath(),"infofile.txt");
 			}
@@ -32,7 +32,7 @@ namespace OpenDental.Bridges{
 					//There is no validation to ensure that length is 8 char or less.
 					PPCur=ProgramProperties.GetCur(ForProgram,"Enter 0 to use PatientNum, or 1 to use ChartNum");
 					string id="";
-					if(PPCur.PropertyValue=="0") {
+					if(PPCur.Value=="0") {
 						id=pat.PatNum.ToString();
 					} else {
 						id=pat.ChartNumber;

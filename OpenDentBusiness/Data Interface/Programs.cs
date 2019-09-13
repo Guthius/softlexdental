@@ -207,11 +207,11 @@ namespace OpenDentBusiness
         public static string GetProgramPath(Program program)
         {
             //No need to check RemotingRole; no call to db.
-            string overridePath = ProgramProperties.GetLocalPathOverrideForProgram(program.ProgramNum);
-            if (overridePath != "")
-            {
-                return overridePath;
-            }
+            //string overridePath = ProgramProperties.GetLocalPathOverrideForProgram(program.ProgramNum);
+            //if (overridePath != "")
+            //{
+            //    return overridePath;
+            //}
             return program.Path;
         }
 

@@ -396,9 +396,9 @@ namespace OpenDental{
 			List<ToolButItem> toolButItems=ToolButItems.GetForToolBar(toolBarsAvail);
 			foreach(ToolButItem toolButItemCur in toolButItems) { 
 				Program programCur=Programs.GetProgram(toolButItemCur.ProgramNum);
-				if(ProgramProperties.IsAdvertisingDisabled(programCur)) {
-					continue;
-				}
+				//if(ProgramProperties.IsAdvertisingDisabled(programCur)) {
+				//	continue;
+				//}
                 Image image = null;
 				if(programCur.ButtonImage!="") {
 					image=PIn.Bitmap(programCur.ButtonImage);

@@ -49,7 +49,7 @@ namespace OpenDental.Bridges {
 						patientId=pat.ChartNumber;
 						patientId2=pat.PatNum.ToString();
 					}
-					string filename=propIniFileLocation.PropertyValue;
+					string filename=propIniFileLocation.Value;
 					StringBuilder txt=new StringBuilder();
 					txt.AppendLine("[Patient Info = 00]");
 					txt.AppendLine("PATIENT_APPLYNO="+MiscData.GetNowDateTimeWithMilli().ToString("yyyyMMddhhmmssfff").Right(16));

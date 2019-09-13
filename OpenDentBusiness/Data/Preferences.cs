@@ -128,7 +128,7 @@ namespace OpenDentBusiness
 
             var programPropertyList = ProgramProperties.GetForProgram(program.ProgramNum);
 
-            return programPropertyList.Any(x => x.PropertyDesc == "IsOnlinePaymentsEnabled" && x.PropertyValue == "1");
+            return programPropertyList.Any(x => x.Key == "IsOnlinePaymentsEnabled" && x.Value == "1");
         }
 
         /// <summary>

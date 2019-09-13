@@ -36,26 +36,26 @@ namespace OpenDental
 
 		private void FormArManager_Load(object sender,EventArgs e) {
 			#region Get Variables for Both Tabs
-			List<Definition> billTypeDefs=Definition.GetByCategory(DefinitionCategory.BillingTypes);
-			_collectionBillType=billTypeDefs.FirstOrDefault(x => x.Value.ToLower()=="c")?.Copy();
-			_listBillTypesNoColl=billTypeDefs.Where(x => x.Value.ToLower()!="c").Select(x => x.Copy()).ToList();
-			_listClinics=new List<Clinic>();
-			if(Preferences.HasClinicsEnabled) {
-				_listClinics.AddRange(Clinics.GetForUserod(Security.CurrentUser,true,Lan.g(this,"Unassigned")).OrderBy(x => x.ClinicNum!=0).ThenBy(x => x.ItemOrder));
-			}
-			else {//clinics disabled
-				_listClinics.Add(Clinics.GetPracticeAsClinicZero(Lan.g(this,"Unassigned")));
-			}
-			_listProviders=Providers.GetDeepCopy(true);
-			_tsiProg=Programs.GetCur(ProgramName.Transworld);
-			_dictClinicProgProps=new Dictionary<long,List<ProgramProperty>>();
-			if(_tsiProg!=null && _tsiProg.Enabled) {
-				_dictClinicProgProps=ProgramProperties.GetForProgram(_tsiProg.ProgramNum)
-					.FindAll(x => _listClinics.Any(y => y.ClinicNum==x.ClinicNum))//will contain the HQ "clinic" if clinics are disabled or user unrestricted
-					.GroupBy(x => x.ClinicNum).ToDictionary(x => x.Key,x => x.ToList());
-			}
-			_toolTipUnsentErrors=new ToolTip() { InitialDelay=1000,ReshowDelay=1000,ShowAlways=true };
-			_lastCursorPos=gridUnsent.PointToClient(Cursor.Position);
+			//List<Definition> billTypeDefs=Definition.GetByCategory(DefinitionCategory.BillingTypes);
+			//_collectionBillType=billTypeDefs.FirstOrDefault(x => x.Value.ToLower()=="c")?.Copy();
+			//_listBillTypesNoColl=billTypeDefs.Where(x => x.Value.ToLower()!="c").Select(x => x.Copy()).ToList();
+			//_listClinics=new List<Clinic>();
+			//if(Preferences.HasClinicsEnabled) {
+			//	_listClinics.AddRange(Clinics.GetForUserod(Security.CurrentUser,true,Lan.g(this,"Unassigned")).OrderBy(x => x.ClinicNum!=0).ThenBy(x => x.ItemOrder));
+			//}
+			//else {//clinics disabled
+			//	_listClinics.Add(Clinics.GetPracticeAsClinicZero(Lan.g(this,"Unassigned")));
+			//}
+			//_listProviders=Providers.GetDeepCopy(true);
+			//_tsiProg=Programs.GetCur(ProgramName.Transworld);
+			//_dictClinicProgProps=new Dictionary<long,List<ProgramProperty>>();
+			//if(_tsiProg!=null && _tsiProg.Enabled) {
+			//	_dictClinicProgProps=ProgramProperties.GetForProgram(_tsiProg.ProgramNum)
+			//		.FindAll(x => _listClinics.Any(y => y.ClinicNum==x.ClinicId))//will contain the HQ "clinic" if clinics are disabled or user unrestricted
+			//		.GroupBy(x => x.ClinicId).ToDictionary(x => x.Key,x => x.ToList());
+			//}
+			//_toolTipUnsentErrors=new ToolTip() { InitialDelay=1000,ReshowDelay=1000,ShowAlways=true };
+			//_lastCursorPos=gridUnsent.PointToClient(Cursor.Position);
 			#endregion Get Variables for Both Tabs
 			#region Fill Unsent Tab Filter ComboBoxes, CheckBoxes, and Fields
 			#region Unsent Tab Clinic Combo
@@ -539,46 +539,46 @@ namespace OpenDental
 
 		private bool ValidateSendUpdateData(List<long> listClinicNums,out List<long> listClinicsSkipped) {
 			listClinicsSkipped=new List<long>();
-			if(_tsiProg==null) {
-				MsgBox.Show(this,"The Transworld program link does not exist.  Please contact support.");
-				return false;
-			}
-			if(!_tsiProg.Enabled) {
-				MsgBox.Show(this,"The Transworld program link is not enabled.");
-				return false;
-			}
-			if(_dictClinicProgProps.Count==0) {
-				MsgBox.Show(this,"The Transworld program link is not setup.  Try again after entering the program link properties.");
-				return false;
-			}
-			Cursor=Cursors.WaitCursor;
-			List<long> listClinicsValidated=new List<long>();
-			foreach(long clinicNum in listClinicNums.Distinct()) {
-				if(!Preferences.HasClinicsEnabled && clinicNum>0) {
-					continue;//Only test the HQ clinic (ClinicNum=0) if clinics are not enabled
-				}
-				List<ProgramProperty> listProgProps;
-				if(!_dictClinicProgProps.TryGetValue(clinicNum,out listProgProps) //if the clinic doesn't have prog props, try to use the HQ prog props
-					&& (clinicNum==0 || !Preferences.HasClinicsEnabled || Security.CurrentUser.ClinicRestricted || !_dictClinicProgProps.TryGetValue(0,out listProgProps)))
-				{
-					listClinicsSkipped.Add(clinicNum);
-					continue;
-				}
-				if(listProgProps.Count==0 || (!listClinicsValidated.Contains(listProgProps[0].ClinicNum) && !TsiTransLogs.ValidateClinicSftpDetails(listProgProps))) {
-					listClinicsSkipped.Add(clinicNum);
-					continue;
-				}
-				listClinicsValidated.Add(listProgProps[0].ClinicNum);
-			}
-			if(Preferences.HasClinicsEnabled) {
-				if(listClinicsSkipped.Contains(0)) {
-					listClinicsSkipped.AddRange(_listClinics.FindAll(x => !_dictClinicProgProps.ContainsKey(x.ClinicNum)).Select(x => x.ClinicNum));
-				}
-				else if(!Security.CurrentUser.ClinicRestricted && _dictClinicProgProps.ContainsKey(0)) {
-					//if clinics are enabled and the user is not restricted, any clinic without prog props will use the HQ prog props for the sftp connection
-					_listClinics.FindAll(x => !_dictClinicProgProps.ContainsKey(x.ClinicNum)).ForEach(x => _dictClinicProgProps[x.ClinicNum]=_dictClinicProgProps[0]);
-				}
-			}
+			//if(_tsiProg==null) {
+			//	MsgBox.Show(this,"The Transworld program link does not exist.  Please contact support.");
+			//	return false;
+			//}
+			//if(!_tsiProg.Enabled) {
+			//	MsgBox.Show(this,"The Transworld program link is not enabled.");
+			//	return false;
+			//}
+			//if(_dictClinicProgProps.Count==0) {
+			//	MsgBox.Show(this,"The Transworld program link is not setup.  Try again after entering the program link properties.");
+			//	return false;
+			//}
+			//Cursor=Cursors.WaitCursor;
+			//List<long> listClinicsValidated=new List<long>();
+			//foreach(long clinicNum in listClinicNums.Distinct()) {
+			//	if(!Preferences.HasClinicsEnabled && clinicNum>0) {
+			//		continue;//Only test the HQ clinic (ClinicNum=0) if clinics are not enabled
+			//	}
+			//	List<ProgramProperty> listProgProps;
+			//	if(!_dictClinicProgProps.TryGetValue(clinicNum,out listProgProps) //if the clinic doesn't have prog props, try to use the HQ prog props
+			//		&& (clinicNum==0 || !Preferences.HasClinicsEnabled || Security.CurrentUser.ClinicRestricted || !_dictClinicProgProps.TryGetValue(0,out listProgProps)))
+			//	{
+			//		listClinicsSkipped.Add(clinicNum);
+			//		continue;
+			//	}
+			//	if(listProgProps.Count==0 || (!listClinicsValidated.Contains(listProgProps[0].ClinicId) && !TsiTransLogs.ValidateClinicSftpDetails(listProgProps))) {
+			//		listClinicsSkipped.Add(clinicNum);
+			//		continue;
+			//	}
+			//	listClinicsValidated.Add(listProgProps[0].ClinicId);
+			//}
+			//if(Preferences.HasClinicsEnabled) {
+			//	if(listClinicsSkipped.Contains(0)) {
+			//		listClinicsSkipped.AddRange(_listClinics.FindAll(x => !_dictClinicProgProps.ContainsKey(x.ClinicNum)).Select(x => x.ClinicNum));
+			//	}
+			//	else if(!Security.CurrentUser.ClinicRestricted && _dictClinicProgProps.ContainsKey(0)) {
+			//		//if clinics are enabled and the user is not restricted, any clinic without prog props will use the HQ prog props for the sftp connection
+			//		_listClinics.FindAll(x => !_dictClinicProgProps.ContainsKey(x.ClinicNum)).ForEach(x => _dictClinicProgProps[x.ClinicNum]=_dictClinicProgProps[0]);
+			//	}
+			//}
 			Cursor=Cursors.Default;
 			return true;
 		}
@@ -967,8 +967,8 @@ namespace OpenDental
 			}
 			comboDemandType.Items.Clear();
 			Dictionary<long,string[]> dictClinicSelectedServices=_dictClinicProgProps
-				.Where(x => x.Value.Any(y => y.PropertyDesc=="SelectedServices" && !string.IsNullOrEmpty(y.PropertyValue)))
-				.ToDictionary(x => x.Key,x => x.Value.Find(y => y.PropertyDesc=="SelectedServices").PropertyValue.Split(','));
+				.Where(x => x.Value.Any(y => y.Key=="SelectedServices" && !string.IsNullOrEmpty(y.Value)))
+				.ToDictionary(x => x.Key,x => x.Value.Find(y => y.Key=="SelectedServices").Value.Split(','));
 			if(listClinicNums.Any(x => dictClinicSelectedServices.ContainsKey(x) 
 				&& dictClinicSelectedServices[x].Contains(((int)TsiDemandType.Accelerator).ToString()))) 
 			{
@@ -1101,8 +1101,8 @@ namespace OpenDental
 			#endregion Get PatAgings and Age of Accounts Dictionary
 			#region Validate Selected Pats and Demand Type
 			Dictionary<long,string[]> dictClinicSelectedServices=_dictClinicProgProps
-				.Where(x => x.Value.Any(y => y.PropertyDesc=="SelectedServices" && !string.IsNullOrEmpty(y.PropertyValue)))
-				.ToDictionary(x => x.Key,x => x.Value.Find(y => y.PropertyDesc=="SelectedServices").PropertyValue.Split(','));
+				.Where(x => x.Value.Any(y => y.Key=="SelectedServices" && !string.IsNullOrEmpty(y.Value)))
+				.ToDictionary(x => x.Key,x => x.Value.Find(y => y.Key=="SelectedServices").Value.Split(','));
 			TsiDemandType demandType=comboDemandType.SelectedTag<TsiDemandType>();
 			List<long> listPatNumsToReselect=listPatAging.FindAll(x => !dictClinicSelectedServices.ContainsKey(Preferences.HasClinicsEnabled?x.ClinicNum:0)
 						|| !dictClinicSelectedServices[Preferences.HasClinicsEnabled?x.ClinicNum:0].Contains(((int)demandType).ToString())).Select(x => x.PatNum).ToList();
@@ -1222,10 +1222,10 @@ namespace OpenDental
 					continue;
 				}
 				if(demandType==TsiDemandType.Accelerator) {
-					clientID=listProgProps.Find(x => x.PropertyDesc=="ClientIdAccelerator")?.PropertyValue??"";
+					clientID=listProgProps.Find(x => x.Key=="ClientIdAccelerator")?.Value??"";
 				}
 				else {
-					clientID=listProgProps.Find(x => x.PropertyDesc=="ClientIdCollection")?.PropertyValue??"";
+					clientID=listProgProps.Find(x => x.Key=="ClientIdCollection")?.Value??"";
 				}
 				try {
 					//find most recent account change log less than 50 days ago and if it was a suspend trans send reinstate update msg instead of placement msg
@@ -1329,13 +1329,13 @@ namespace OpenDental
 					listFailedPatNums.AddRange(kvp.Value.Keys);
 					continue;
 				}
-				string sftpAddress=listProps.Find(x => x.PropertyDesc=="SftpServerAddress")?.PropertyValue??"";
+				string sftpAddress=listProps.Find(x => x.Key=="SftpServerAddress")?.Value??"";
 				int sftpPort;
-				if(!int.TryParse(listProps.Find(x => x.PropertyDesc=="SftpServerPort")?.PropertyValue??"",out sftpPort)) {
+				if(!int.TryParse(listProps.Find(x => x.Key=="SftpServerPort")?.Value??"",out sftpPort)) {
 					sftpPort=22;//default to port 22
 				}
-				string userName=listProps.Find(x => x.PropertyDesc=="SftpUsername")?.PropertyValue??"";
-				string userPassword=listProps.Find(x => x.PropertyDesc=="SftpPassword")?.PropertyValue??"";
+				string userName=listProps.Find(x => x.Key=="SftpUsername")?.Value??"";
+				string userPassword=listProps.Find(x => x.Key=="SftpPassword")?.Value??"";
 				byte[] fileContents=Encoding.ASCII.GetBytes(TsiMsgConstructor.GetPlacementFileHeader()+"\r\n"+string.Join("\r\n",kvp.Value.Values));
 				try {
                     // TODO: Fix me
@@ -1372,13 +1372,13 @@ namespace OpenDental
 					listFailedPatNums.AddRange(kvp.Value.Keys);
 					continue;
 				}
-				string sftpAddress=listProps.Find(x => x.PropertyDesc=="SftpServerAddress")?.PropertyValue??"";
+				string sftpAddress=listProps.Find(x => x.Key=="SftpServerAddress")?.Value??"";
 				int sftpPort;
-				if(!int.TryParse(listProps.Find(x => x.PropertyDesc=="SftpServerPort")?.PropertyValue??"",out sftpPort)) {
+				if(!int.TryParse(listProps.Find(x => x.Key=="SftpServerPort")?.Value??"",out sftpPort)) {
 					sftpPort=22;//default to port 22
 				}
-				string userName=listProps.Find(x => x.PropertyDesc=="SftpUsername")?.PropertyValue??"";
-				string userPassword=listProps.Find(x => x.PropertyDesc=="SftpPassword")?.PropertyValue??"";
+				string userName=listProps.Find(x => x.Key=="SftpUsername")?.Value??"";
+				string userPassword=listProps.Find(x => x.Key=="SftpPassword")?.Value??"";
 				byte[] fileContents=Encoding.ASCII.GetBytes(TsiMsgConstructor.GetUpdateFileHeader()+"\r\n"+string.Join("\r\n",kvp.Value.Values));
 				try {
                     // TODO: Fix me
@@ -1801,10 +1801,10 @@ namespace OpenDental
 					clientId=pAgingCur.ListTsiLogs[0].ClientId;
 				}
 				if(string.IsNullOrEmpty(clientId)) {
-					clientId=listProgProps.Find(x => x.PropertyDesc=="ClientIdAccelerator")?.PropertyValue;
+					clientId=listProgProps.Find(x => x.Key=="ClientIdAccelerator")?.Value;
 				}
 				if(string.IsNullOrEmpty(clientId)) {
-					clientId=listProgProps.Find(x => x.PropertyDesc=="ClientIdCollection")?.PropertyValue;
+					clientId=listProgProps.Find(x => x.Key=="ClientIdCollection")?.Value;
 				}
 				if(string.IsNullOrEmpty(clientId)) {
 					listFailedPatNums.Add(pAgingCur.PatNum);
@@ -1867,13 +1867,13 @@ namespace OpenDental
 					listFailedPatNums.AddRange(kvp.Value.Keys);
 					continue;
 				}
-				string sftpAddress=listProps.Find(x => x.PropertyDesc=="SftpServerAddress")?.PropertyValue??"";
+				string sftpAddress=listProps.Find(x => x.Key=="SftpServerAddress")?.Value??"";
 				int sftpPort;
-				if(!int.TryParse(listProps.Find(x => x.PropertyDesc=="SftpServerPort")?.PropertyValue??"",out sftpPort)) {
+				if(!int.TryParse(listProps.Find(x => x.Key=="SftpServerPort")?.Value??"",out sftpPort)) {
 					sftpPort=22;//default to port 22
 				}
-				string userName=listProps.Find(x => x.PropertyDesc=="SftpUsername")?.PropertyValue??"";
-				string userPassword=listProps.Find(x => x.PropertyDesc=="SftpPassword")?.PropertyValue??"";
+				string userName=listProps.Find(x => x.Key=="SftpUsername")?.Value??"";
+				string userPassword=listProps.Find(x => x.Key=="SftpPassword")?.Value??"";
 				byte[] fileContents=Encoding.ASCII.GetBytes(TsiMsgConstructor.GetUpdateFileHeader()+"\r\n"+string.Join("\r\n",kvp.Value.Values));
 				try {
                     // TODO: Fix me

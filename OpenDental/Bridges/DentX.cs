@@ -57,7 +57,7 @@ namespace OpenDental.Bridges{
 			string command="Xray,";
 			//PatientNo can be any string format up to 9 char
 			ProgramProperty PPCur=ProgramProperties.GetCur(ForProgram, "Enter 0 to use PatientNum, or 1 to use ChartNum");;
-			if(PPCur.PropertyValue=="0"){
+			if(PPCur.Value=="0"){
 				command+=pat.PatNum.ToString()+",";
 			}
 			else{

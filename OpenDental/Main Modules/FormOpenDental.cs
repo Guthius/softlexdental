@@ -926,41 +926,6 @@ namespace OpenDental
             }
         }
 
-        private bool SetAdvertising(ProgramName progName, XmlDocument doc)
-        {
-            ProgramProperty property = ProgramProperties.GetForProgram(Programs.GetCur(progName).ProgramNum).FirstOrDefault(x => x.PropertyDesc == "Disable Advertising HQ");
-            ProgramProperty propOld = null;
-            XmlNode node = doc.SelectSingleNode("//" + progName.ToString());
-            if (node == null)
-            {
-                return false;
-            }
-            if (property == null)
-            {
-                property = new ProgramProperty();
-                property.PropertyDesc = "Disable Advertising HQ";
-                property.ProgramNum = Programs.GetCur(progName).ProgramNum;
-            }
-            else
-            {
-                propOld = property.Copy();
-            }
-            //"true" from HQ == 0 for the property value.
-            //"false" from HQ == 1 for the property value.
-            //This is because the boolean from HQ is whether or not to show the advertisement, whereas in OD the boolean is whether or not to hide the advertisement
-            bool isDisabledByHQ = !(node.InnerText.ToLower() == "true");
-            property.PropertyValue = POut.Bool(isDisabledByHQ);
-            if (propOld == null)
-            {
-                ProgramProperties.Insert(property);
-                return true;
-            }
-            else
-            {
-                return ProgramProperties.Update(property, propOld);
-            }
-        }
-
         /// <summary>
         /// Loads and validates the preferences.
         /// </summary>

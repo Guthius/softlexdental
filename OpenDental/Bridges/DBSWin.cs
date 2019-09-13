@@ -24,7 +24,7 @@ namespace OpenDental.Bridges{
 			}
 			List<ProgramProperty> ForProgram =ProgramProperties.GetForProgram(ProgramCur.ProgramNum);
 			ProgramProperty PPCur=ProgramProperties.GetCur(ForProgram, "Text file path");
-			string infoFile=PPCur.PropertyValue;
+			string infoFile=PPCur.Value;
 			try{
 				using(StreamWriter sw=new StreamWriter(infoFile,false)){
 					//PATLASTNAME;PATFIRSTNAME;PATBIRTHDAY;PATCARDNUMBER;PATTOWN;PATSTREET;PATPHONENUMBER;PATTITLE;PATSEX;PATPOSTALCODE;
@@ -33,7 +33,7 @@ namespace OpenDental.Bridges{
 					sw.Write(Tidy(pat.FName)+";");
 					sw.Write(pat.Birthdate.ToString("d.M.yyyy")+";");
 					PPCur=ProgramProperties.GetCur(ForProgram, "Enter 0 to use PatientNum, or 1 to use ChartNum");;
-					if(PPCur.PropertyValue=="0"){
+					if(PPCur.Value=="0"){
 						sw.Write(pat.PatNum.ToString()+";");
 					}
 					else{

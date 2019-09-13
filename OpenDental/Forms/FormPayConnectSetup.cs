@@ -169,26 +169,26 @@ namespace OpenDental
                 payTypeCur = _listPaymentTypeDefs[comboPaymentType.SelectedIndex].Id.ToString();
             }
             //for each distinct ClinicNum in the prog property list for PayConnect except HQ
-            foreach (long clinicNum in _listProgProps.Select(x => x.ClinicNum).Where(x => x > 0).Distinct())
+            foreach (long clinicNum in _listProgProps.Select(x => x.ClinicId).Where(x => x > 0).Distinct())
             {
                 //if this clinic has a different username or password, skip it
-                if (!_listProgProps.Exists(x => x.ClinicNum == clinicNum && x.PropertyDesc == "Username" && x.PropertyValue == hqUsername)
-                    || !_listProgProps.Exists(x => x.ClinicNum == clinicNum && x.PropertyDesc == "Password" && x.PropertyValue == hqPassword))
+                if (!_listProgProps.Exists(x => x.ClinicId == clinicNum && x.Key == "Username" && x.Value == hqUsername)
+                    || !_listProgProps.Exists(x => x.ClinicId == clinicNum && x.Key == "Password" && x.Value == hqPassword))
                 {
                     continue;
                 }
                 //this clinic had a matching username and password, so update the username and password to keep it synched with HQ
-                _listProgProps.FindAll(x => x.ClinicNum == clinicNum && x.PropertyDesc == "Username")
-                    .ForEach(x => x.PropertyValue = textUsername.Text);//always 1 item; null safe
-                _listProgProps.FindAll(x => x.ClinicNum == clinicNum && x.PropertyDesc == "Password")
-                    .ForEach(x => x.PropertyValue = textPassword.Text);//always 1 item; null safe
+                _listProgProps.FindAll(x => x.ClinicId == clinicNum && x.Key == "Username")
+                    .ForEach(x => x.Value = textUsername.Text);//always 1 item; null safe
+                _listProgProps.FindAll(x => x.ClinicId == clinicNum && x.Key == "Password")
+                    .ForEach(x => x.Value = textPassword.Text);//always 1 item; null safe
                 if (string.IsNullOrEmpty(payTypeCur))
                 {
                     continue;
                 }
                 //update clinic payment type if it originally matched HQ's payment type and the selected payment type is valid
-                _listProgProps.FindAll(x => x.ClinicNum == clinicNum && x.PropertyDesc == "PaymentType" && x.PropertyValue == hqPayType)
-                    .ForEach(x => x.PropertyValue = payTypeCur);//always 1 item; null safe
+                _listProgProps.FindAll(x => x.ClinicId == clinicNum && x.Key == "PaymentType" && x.Value == hqPayType)
+                    .ForEach(x => x.Value = payTypeCur);//always 1 item; null safe
             }
         }
 
@@ -248,17 +248,18 @@ namespace OpenDental
                     portalPayEnabledCheckBox.Checked = false;
                     return;
                 }
-                //User wants to disable XWeb online payments and use PayConnect online payments
-                ProgramProperty ppOnlinePaymentEnabled = ProgramProperties.GetWhere(x =>
-                      x.ProgramNum == Programs.GetCur(ProgramName.Xcharge).ProgramNum
-                      && x.ClinicNum == clinicNum
-                      && x.PropertyDesc == "IsOnlinePaymentsEnabled")
-                    .FirstOrDefault();
-                if (ppOnlinePaymentEnabled == null)
-                {
-                    return;//Should never happen since we successfully found it in the GetXWebCreds method.
-                }
-                _listXWebWebPayProgProps.Add(ppOnlinePaymentEnabled);
+
+                ////User wants to disable XWeb online payments and use PayConnect online payments
+                //ProgramProperty ppOnlinePaymentEnabled = ProgramProperties.GetWhere(x =>
+                //      x.ProgramId == Programs.GetCur(ProgramName.Xcharge).ProgramNum
+                //      && x.ClinicId == clinicNum
+                //      && x.Key == "IsOnlinePaymentsEnabled")
+                //    .FirstOrDefault();
+                //if (ppOnlinePaymentEnabled == null)
+                //{
+                //    return;//Should never happen since we successfully found it in the GetXWebCreds method.
+                //}
+                //_listXWebWebPayProgProps.Add(ppOnlinePaymentEnabled);
             }
         }
 

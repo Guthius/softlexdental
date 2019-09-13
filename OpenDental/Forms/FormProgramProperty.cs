@@ -155,25 +155,25 @@ namespace OpenDental{
 		#endregion
 
 		private void FormProgramProperty_Load(object sender, System.EventArgs e) {
-			textProperty.Text=ProgramPropertyCur.PropertyDesc;
-			if(_isPassword && ProgramPropertyCur.PropertyValue!="") {
+			textProperty.Text=ProgramPropertyCur.Key;
+			if(_isPassword && ProgramPropertyCur.Value!="") {
 				string decryptedText;
-                Encryption.TryDecrypt(ProgramPropertyCur.PropertyValue,out decryptedText);
+                Encryption.TryDecrypt(ProgramPropertyCur.Value,out decryptedText);
 				textValue.Text=decryptedText;
 			}
 			else {
-				textValue.Text=ProgramPropertyCur.PropertyValue;
+				textValue.Text=ProgramPropertyCur.Value;
 			}
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
-			ProgramPropertyCur.PropertyValue=textValue.Text;
+			ProgramPropertyCur.Value=textValue.Text;
 			if(_isPassword) {
 				string encryptedText;
-                Encryption.TryEncrypt(ProgramPropertyCur.PropertyValue,out encryptedText);
-				ProgramPropertyCur.PropertyValue=encryptedText;
+                Encryption.TryEncrypt(ProgramPropertyCur.Value,out encryptedText);
+				ProgramPropertyCur.Value=encryptedText;
 			}
-			ProgramProperties.Update(ProgramPropertyCur);
+			//ProgramProperties.Update(ProgramPropertyCur);
 			DialogResult=DialogResult.OK;
 		}
 
