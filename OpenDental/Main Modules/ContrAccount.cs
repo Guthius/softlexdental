@@ -547,7 +547,7 @@ namespace OpenDental
             for (int i = 0; i < table.Rows.Count; i++)
             {
                 if (i != table.Rows.Count - 1 && PatientLinks.WasPatientMerged(PIn.Long(table.Rows[i]["PatNum"].ToString()), _loadData.ListMergeLinks)
-                    && FamCur.ListPats[i].PatNum != PatCur.PatNum && ((decimal)table.Rows[i]["balanceDouble"]) == 0)
+                    && FamCur.Members[i].PatNum != PatCur.PatNum && ((decimal)table.Rows[i]["balanceDouble"]) == 0)
                 {
                     //Hide merged patients so that new things don't get added to them. If the user really wants to find this patient, they will have to use 
                     //the Select Patient window.
@@ -611,7 +611,7 @@ namespace OpenDental
             }
             else
             {
-                textUrgFinNote.Text = FamCur.ListPats[0].FamFinUrgNote;
+                textUrgFinNote.Text = FamCur.Members[0].FamFinUrgNote;
                 textFinNote.Text = PatientNoteCur.FamFinancial;
                 if (!textFinNote.Focused)
                 {
@@ -665,14 +665,14 @@ namespace OpenDental
             //}
             if (PatCur != null)
             {
-                textOver90.Text = FamCur.ListPats[0].BalOver90.ToString("F");
-                text61_90.Text = FamCur.ListPats[0].Bal_61_90.ToString("F");
-                text31_60.Text = FamCur.ListPats[0].Bal_31_60.ToString("F");
-                text0_30.Text = FamCur.ListPats[0].Bal_0_30.ToString("F");
-                decimal total = (decimal)FamCur.ListPats[0].BalTotal;
+                textOver90.Text = FamCur.Members[0].BalOver90.ToString("F");
+                text61_90.Text = FamCur.Members[0].Bal_61_90.ToString("F");
+                text31_60.Text = FamCur.Members[0].Bal_31_60.ToString("F");
+                text0_30.Text = FamCur.Members[0].Bal_0_30.ToString("F");
+                decimal total = (decimal)FamCur.Members[0].BalTotal;
                 labelTotalAmt.Text = total.ToString("F");
-                labelInsEstAmt.Text = FamCur.ListPats[0].InsEst.ToString("F");
-                labelBalanceAmt.Text = (total - (decimal)FamCur.ListPats[0].InsEst).ToString("F");
+                labelInsEstAmt.Text = FamCur.Members[0].InsEst.ToString("F");
+                labelBalanceAmt.Text = (total - (decimal)FamCur.Members[0].InsEst).ToString("F");
                 labelPatEstBalAmt.Text = "";
                 DataTable tableMisc = DataSetMain.Tables["misc"];
                 if (!isSelectingFamily)
@@ -985,7 +985,7 @@ namespace OpenDental
             if (Preference.GetBool(PreferenceName.FuchsOptionsOn))
             {
                 panelTotalOwes.Top = 1;
-                labelTotalPtOwes.Text = (PPBalanceTotal + (decimal)FamCur.ListPats[0].BalTotal - (decimal)FamCur.ListPats[0].InsEst).ToString("F");
+                labelTotalPtOwes.Text = (PPBalanceTotal + (decimal)FamCur.Members[0].BalTotal - (decimal)FamCur.Members[0].InsEst).ToString("F");
             }
         }
 
@@ -1964,13 +1964,13 @@ namespace OpenDental
             }
             if (e.Row == gridAcctPat.Rows.Count - 1)
             {//last row
-                FormOpenDental.S_Contr_PatientSelected(FamCur.ListPats[0], false);
-                ModuleSelected(FamCur.ListPats[0].PatNum, true);
+                FormOpenDental.S_Contr_PatientSelected(FamCur.Members[0], false);
+                ModuleSelected(FamCur.Members[0].PatNum, true);
             }
             else
             {
                 long patNum = (long)gridAcctPat.Rows[e.Row].Tag;
-                Patient pat = FamCur.ListPats.First(x => x.PatNum == patNum);
+                Patient pat = FamCur.Members.First(x => x.PatNum == patNum);
                 if (pat == null)
                 {
                     return;
@@ -2000,7 +2000,7 @@ namespace OpenDental
                                 + "Yes - this payment is directly from the debtor/guarantor\r\n\r\n"
                                 + "No - this payment is from TSI"));
                         InputBox inputBox = new InputBox(new List<InputBoxParam>() { new InputBoxParam(InputBoxType.ValidDouble,Lan.g(this,"Please enter an amount: ")),
-                            FamCur.ListPats.Length>1 ? (new InputBoxParam(InputBoxType.CheckBox,"",Lan.g(this," - Prefer this patient"),new Size(120,20))) : null }
+                            FamCur.Members.Length>1 ? (new InputBoxParam(InputBoxType.CheckBox,"",Lan.g(this," - Prefer this patient"),new Size(120,20))) : null }
                             , new Func<string, bool>((text) =>
                             {
                                 if (text == "")
@@ -3435,9 +3435,9 @@ namespace OpenDental
                 return;
             if (UrgFinNoteChanged)
             {
-                Patient PatOld = FamCur.ListPats[0].Copy();
-                FamCur.ListPats[0].FamFinUrgNote = textUrgFinNote.Text;
-                Patients.Update(FamCur.ListPats[0], PatOld);
+                Patient PatOld = FamCur.Members[0].Copy();
+                FamCur.Members[0].FamFinUrgNote = textUrgFinNote.Text;
+                Patients.Update(FamCur.Members[0], PatOld);
                 UrgFinNoteChanged = false;
             }
         }

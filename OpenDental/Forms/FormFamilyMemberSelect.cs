@@ -139,9 +139,9 @@ namespace OpenDental{
 		#endregion
 
 		private void FormFamilyMemberSelect_Load(object sender, System.EventArgs e) {
-			for(int i=0;i<Fam.ListPats.Length;i++){
-				string patientStatus=" ("+Lan.g("enumPatientStatus",Fam.ListPats[i].PatStatus.GetDescription())+")";
-				listPats.Items.Add(new ODBoxItem<Patient>(Fam.ListPats[i].GetNameFL()+(_isPatientStatusVisible ? patientStatus : ""),Fam.ListPats[i]));
+			for(int i=0;i<Fam.Members.Length;i++){
+				string patientStatus=" ("+Lan.g("enumPatientStatus",Fam.Members[i].PatStatus.GetDescription())+")";
+				listPats.Items.Add(new ODBoxItem<Patient>(Fam.Members[i].GetNameFL()+(_isPatientStatusVisible ? patientStatus : ""),Fam.Members[i]));
 			}
 		}
 

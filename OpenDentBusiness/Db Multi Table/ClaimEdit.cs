@@ -1,17 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
 
 namespace OpenDentBusiness
 {
     public class ClaimEdit
     {
-
         public static LoadData GetLoadData(Patient pat, Family fam, Claim claim)
         {
             LoadData data = new LoadData();
@@ -29,16 +24,20 @@ namespace OpenDentBusiness
             return data;
         }
 
-        ///<summary>Updates the claim to the database.</summary>
-        public static UpdateData UpdateClaim(Claim ClaimCur, List<ClaimValCodeLog> listClaimValCodes, ClaimCondCodeLog claimCondCodeLog,
-            List<Procedure> listProcsToUpdatePlaceOfService, Patient pat, bool doMakeSecLog, string permissionToLog)
+        /// <summary>
+        /// Updates the claim to the database.
+        /// </summary>
+        public static UpdateData UpdateClaim(Claim ClaimCur, List<ClaimValCodeLog> listClaimValCodes, ClaimCondCodeLog claimCondCodeLog, List<Procedure> listProcsToUpdatePlaceOfService, Patient pat, bool doMakeSecLog, string permissionToLog)
         {
             UpdateData data = new UpdateData();
+
             Claims.Update(ClaimCur);
+
             if (listClaimValCodes != null)
             {
                 ClaimValCodeLogs.UpdateList(listClaimValCodes);
             }
+
             if (claimCondCodeLog != null)
             {
                 if (claimCondCodeLog.IsNew)
@@ -50,29 +49,37 @@ namespace OpenDentBusiness
                     ClaimCondCodeLogs.Update(claimCondCodeLog);
                 }
             }
+
             foreach (Procedure proc in listProcsToUpdatePlaceOfService)
             {
                 Procedure oldProc = proc.Copy();
                 proc.PlaceService = ClaimCur.PlaceService;
                 Procedures.Update(proc, oldProc);
             }
+
             if (doMakeSecLog)
             {
                 SecurityLogs.MakeLogEntry(permissionToLog, ClaimCur.PatNum,
                     pat.GetNameLF() + ", Date of service: " + ClaimCur.DateService.ToShortDateString());
             }
+
             data.ListSendQueueItems = Claims.GetQueueList(ClaimCur.ClaimNum, ClaimCur.ClinicNum, 0);
+
             return data;
         }
 
-        ///<summary>Most of the data needed when updating a claim.</summary>
+        /// <summary>
+        /// Most of the data needed when updating a claim.
+        /// </summary>
         [Serializable]
         public class UpdateData
         {
             public ClaimSendQueueItem[] ListSendQueueItems;
         }
 
-        ///<summary>Most of the data needed to load FormClaimEdit.</summary>
+        /// <summary>
+        /// Most of the data needed to load FormClaimEdit.
+        /// </summary>
         [Serializable]
         public class LoadData
         {

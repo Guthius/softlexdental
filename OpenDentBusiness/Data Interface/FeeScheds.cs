@@ -407,7 +407,7 @@ namespace OpenDentBusiness{
 				List<Procedure> listProcsCur;
 				//dict of key=GuarNum, value=dict of key=PatNum, value=tuple with item1=patient age, item2=list of TP procs for the pat (or empty list if none)
 				dictFamProcs=Patients.GetFamilies(dictPatProcs.Keys.ToList()).Where(x => x.Guarantor!=null)
-					.ToDictionary(x => x.Guarantor.PatNum,x => x.ListPats
+					.ToDictionary(x => x.Guarantor.PatNum,x => x.Members
 						.ToDictionary(y => y.PatNum,y => Tuple.Create(y.Age,(dictPatProcs.TryGetValue(y.PatNum,out listProcsCur)?listProcsCur:new List<Procedure>()))));
 				listInsSubs=InsSubs.GetListInsSubs(dictFamProcs.SelectMany(x => x.Value.Keys).ToList());
 				listInsPlans=InsPlans.RefreshForSubList(listInsSubs);

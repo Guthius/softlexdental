@@ -56,7 +56,7 @@ namespace OpenDental.Bridges{
 				Provider prov=Providers.GetProv(Patients.GetProvNum(pat));
 				string provName=prov.FName+" "+prov.MI+" "+prov.LName+" "+prov.Suffix;
 				Family fam=Patients.GetFamily(pat.PatNum);
-				Patient guar=fam.ListPats[0];
+				Patient guar=fam.Members[0];
 				string relat="";
 				if(guar.PatNum==pat.PatNum){
 					relat="Self";

@@ -2101,7 +2101,7 @@ namespace OpenDental
             //Carriers---------------------------------------------------------------------------------------
             Family fam = Patients.GetFamily(CurPatNum);
             //Received multiple bug submissions where CurPatNum==0, even though this toolbar button should not be enabled when no patient is selected.
-            if (fam.ListPats != null && fam.ListPats.Length > 0)
+            if (fam.Members != null && fam.Members.Length > 0)
             {
                 List<PatPlan> PatPlanList = PatPlans.Refresh(CurPatNum);
                 List<InsSub> subList = InsSubs.RefreshForFam(fam);

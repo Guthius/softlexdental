@@ -83,7 +83,7 @@ namespace OpenDental {
 			if(FormOpenDental.CurPatNum>0) {
 				Family fam=Patients.GetFamily(FormOpenDental.CurPatNum);
 				textPatient.Text=fam.GetNameInFamLF(FormOpenDental.CurPatNum);
-				_listSelectedFamPatNums=fam.ListPats.Select(x => x.PatNum).ToList();
+				_listSelectedFamPatNums=fam.Members.Select(x => x.PatNum).ToList();
 			}
 			#endregion Get Selected Family PatNums
 			#region Get All TsiTransLogs
@@ -476,7 +476,7 @@ namespace OpenDental {
 			}
 			Family fam=Patients.GetFamily(FormOpenDental.CurPatNum);
 			textPatient.Text=fam.GetNameInFamLF(FormOpenDental.CurPatNum);
-			_listSelectedFamPatNums=fam.ListPats.Select(x => x.PatNum).ToList();
+			_listSelectedFamPatNums=fam.Members.Select(x => x.PatNum).ToList();
 			FillGrid();
 		}
 
@@ -488,7 +488,7 @@ namespace OpenDental {
 			}
 			Family fam=Patients.GetFamily(FormPS.SelectedPatNum);
 			textPatient.Text=fam.GetNameInFamLF(FormPS.SelectedPatNum);
-			_listSelectedFamPatNums=fam.ListPats.Select(x => x.PatNum).ToList();
+			_listSelectedFamPatNums=fam.Members.Select(x => x.PatNum).ToList();
 			FillGrid();
 		}
 

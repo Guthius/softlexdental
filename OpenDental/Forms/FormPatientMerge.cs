@@ -89,7 +89,7 @@ namespace OpenDental {
             if (_patFrom.PatNum == _patFrom.Guarantor)
             {
                 Family fam = Patients.GetFamily(_patFrom.PatNum);
-                if (fam.ListPats.Length > 1)
+                if (fam.Members.Length > 1)
                 {
                     msgText = Lan.g(this, "The patient you have chosen to merge from is a guarantor.  Merging this patient into another account will cause all "
                         + "family members of the patient being merged from to be moved into the same family as the patient account being merged into.") + "\r\n"

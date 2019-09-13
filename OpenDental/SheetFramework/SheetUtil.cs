@@ -1659,7 +1659,7 @@ namespace OpenDental
 			Family famCur = Patients.GetFamily(stmt.PatNum);
 			Patient patGuar = Patients.GetPat(Patients.GetPat(stmt.PatNum).Guarantor);
 			//the paysplit information we need is not in the dataSet that we have access to.
-			DataTable tablePaySplits = AccountModules.GetPaymentsForInvoice(famCur.ListPats.Select(x => x.PatNum).ToList(),stmt.ListProcNums,stmt.DateSent);
+			DataTable tablePaySplits = AccountModules.GetPaymentsForInvoice(famCur.Members.Select(x => x.PatNum).ToList(),stmt.ListProcNums,stmt.DateSent);
 			DataRow row;
 			for(int i = 0; i < tablePaySplits.Rows.Count; i++) {
 				row=table.NewRow();

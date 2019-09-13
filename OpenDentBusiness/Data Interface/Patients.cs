@@ -1238,7 +1238,7 @@ namespace OpenDentBusiness
             foreach (KeyValuePair<long, List<Patient>> kvp in dictFamilyPatients)
             {
                 Family family = new Family();
-                family.ListPats = kvp.Value.ToArray();
+                family.Members = kvp.Value.ToArray();
                 listFamilies.Add(family);
             }
             return listFamilies;
@@ -2084,7 +2084,7 @@ namespace OpenDentBusiness
         {
             //Move famfinurgnote to current patient:
             string command = "UPDATE patient SET "
-                + "FamFinUrgNote = '" + POut.String(Fam.ListPats[0].FamFinUrgNote) + "' "
+                + "FamFinUrgNote = '" + POut.String(Fam.Members[0].FamFinUrgNote) + "' "
                 + "WHERE PatNum = " + POut.Long(Pat.PatNum);
             Db.NonQ(command);
             command = "UPDATE patient SET FamFinUrgNote = '' "
@@ -2119,7 +2119,7 @@ namespace OpenDentBusiness
                 "UPDATE patient SET "
                 //+"addrnote = '"+POut.PString(FamilyList[GuarIndex].FamAddrNote)
                 //									+POut.PString(cur.FamAddrNote)+"', "
-                + "famfinurgnote = '" + POut.String(Fam.ListPats[0].FamFinUrgNote)
+                + "famfinurgnote = '" + POut.String(Fam.Members[0].FamFinUrgNote)
                 + POut.String(Pat.FamFinUrgNote) + "' "
                 + "WHERE patnum = '" + Pat.Guarantor.ToString() + "'";
             Db.NonQ(command);

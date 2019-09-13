@@ -166,7 +166,7 @@ namespace OpenDentBusiness
             foreach (Patient patCur in listPats)
             {
                 Patient guarCur = listGuars.First(x => x.PatNum == patCur.Guarantor);
-                List<string> listPatNames = Patients.GetFamily(patCur.PatNum).ListPats.Select(pat => pat.FName).ToList();
+                List<string> listPatNames = Patients.GetFamily(patCur.PatNum).Members.Select(pat => pat.FName).ToList();
                 DataRow row = table.NewRow();
                 row["address"] = patCur.Address + (!string.IsNullOrWhiteSpace(patCur.Address2) ? Environment.NewLine + patCur.Address2 : "");
                 row["City"] = patCur.City;

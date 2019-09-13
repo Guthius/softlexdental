@@ -14,8 +14,8 @@ namespace OpenDentBusiness
         public static string GeneratePlacement(PatAging patAge, string clientID, TsiDemandType demandType)
         {
             Family fam = Patients.GetFamily(patAge.PatNum);
-            Patient pat = fam.ListPats.FirstOrDefault(x => x.PatNum == patAge.PatNum);
-            Patient guar = fam.ListPats[0];
+            Patient pat = fam.Members.FirstOrDefault(x => x.PatNum == patAge.PatNum);
+            Patient guar = fam.Members[0];
             if (pat == null || guar == null)
             {
                 throw new ApplicationException("Invalid PatNum.  Please contact support.");

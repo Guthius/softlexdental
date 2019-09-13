@@ -74,7 +74,7 @@ namespace OpenDental {
 		/// <summary>Get all splits for family. If show all is checked, find all that are positive prepayments even if already attached.</summary>
 		private void GetSplitsForPats(bool isShowAll) {
 			Family fam=Patients.GetFamily(_patNum);
-			_listPaySplits=PaySplits.GetForPats(fam.ListPats.Select(x => x.PatNum).ToList());
+			_listPaySplits=PaySplits.GetForPats(fam.Members.Select(x => x.PatNum).ToList());
 			if(isShowAll) {
 				_listPaySplits=_listPaySplits.FindAll(x => x.UnearnedType!=0 && x.SplitAmt>0);//don't show the automated negative offset
 			}

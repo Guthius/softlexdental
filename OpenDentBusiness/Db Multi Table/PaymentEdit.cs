@@ -28,13 +28,13 @@ namespace OpenDentBusiness
             }
             data.ListValidPayPlans = PayPlans.GetValidPlansNoIns(patCur.PatNum);
             //If this payment contains splits for other superfamily members, add the superfamily members to listPatNumsFamily (which we use later to generate charges)
-            if (data.SuperFam.ListPats.Length > 1)
+            if (data.SuperFam.Members.Length > 1)
             {//Always has current patient.
                 foreach (PaySplit split in data.ListSplits)
                 {
-                    if (!listPatNumsFamily.Contains(split.PatNum) && data.SuperFam.ListPats.Select(x => x.PatNum).Contains(split.PatNum))
+                    if (!listPatNumsFamily.Contains(split.PatNum) && data.SuperFam.Members.Select(x => x.PatNum).Contains(split.PatNum))
                     {
-                        listPatNumsFamily.AddRange(data.SuperFam.ListPats.Select(x => (long)x.PatNum));
+                        listPatNumsFamily.AddRange(data.SuperFam.Members.Select(x => (long)x.PatNum));
                         break;//This means that it is a historical payment and has splits for family members that are outside the current family.  Add the family members, no need to continue
                     }
                 }
@@ -66,10 +66,10 @@ namespace OpenDentBusiness
             initData.DictPats = dictPatients;
             //get patients who have this patient's guarantor as their payplan's guarantor
             List<Patient> listPatients = listPats;
-            listPatients.AddRange(fam.ListPats);
-            if (superFam.ListPats != null)
+            listPatients.AddRange(fam.Members);
+            if (superFam.Members != null)
             {
-                listPatients.AddRange(superFam.ListPats);
+                listPatients.AddRange(superFam.Members);
             }
             //Add patients with paysplits on this payment
             listPatients.AddRange(Patients.GetLimForPats(listSplitsCur.Select(x => x.PatNum).Where(x => listPatients.All(y => y.PatNum != x)).ToList()));

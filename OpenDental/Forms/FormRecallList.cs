@@ -534,14 +534,14 @@ namespace OpenDental{
 			Appointment apt;
 			List<long> pinAptNums=new List<long>();
 			int patsRestricted=0;
-			for(int i=0;i<fam.ListPats.Length;i++) {
-				if(PatRestrictionL.IsRestricted(fam.ListPats[i].PatNum,PatRestrict.ApptSchedule,true)) {
+			for(int i=0;i<fam.Members.Length;i++) {
+				if(PatRestrictionL.IsRestricted(fam.Members[i].PatNum,PatRestrict.ApptSchedule,true)) {
 					patsRestricted++;
 					continue;
 				}
 				try{
 					//Passes in -1 as the RecallNum. This will create an appointment for either a Perio or Prophy recall type only. 
-					apt=AppointmentL.CreateRecallApt(fam.ListPats[i],planList,-1,subList);
+					apt=AppointmentL.CreateRecallApt(fam.Members[i],planList,-1,subList);
 				}
 				catch {
 
@@ -1735,7 +1735,7 @@ namespace OpenDental{
 
 		public List<long> SchedFamReact(Family fam) {
 			List<long> listRet=new List<long>();
-			foreach(Patient pat in fam.ListPats) {
+			foreach(Patient pat in fam.Members) {
 				if(PatRestrictionL.IsRestricted(pat.PatNum,PatRestrict.ApptSchedule)) {
 					MsgBox.Show(Lan.g(this,$"Skipping family member {pat.GetNameFirstOrPrefL()} due to patient restriction")+" "+PatRestrictions.GetPatRestrictDesc(PatRestrict.ApptSchedule));
 					continue;

@@ -39,9 +39,9 @@ namespace OpenDentBusiness
             data.ListBenefits = Benefits.Refresh(data.ListPatPlans, data.ListSubs);
             data.HistList = ClaimProcs.GetHistList(pat.PatNum, data.ListBenefits, data.ListPatPlans, data.ListPlans, DateTime.Today, data.ListSubs);
             data.ListTreatPlans = TreatPlans.Refresh(pat.PatNum);
-            data.ListRecallsForFam = Recalls.GetList(fam.ListPats.Select(x => x.PatNum).ToList());
+            data.ListRecallsForFam = Recalls.GetList(fam.Members.Select(x => x.PatNum).ToList());
             data.ListAppts = Appointments.GetListForPat(pat.PatNum);
-            data.ListFutureApptsForFam = Appointments.GetFutureSchedApts(fam.ListPats.Select(x => x.PatNum).ToList());
+            data.ListFutureApptsForFam = Appointments.GetFutureSchedApts(fam.Members.Select(x => x.PatNum).ToList());
             data.ListDiseases = Diseases.Refresh(pat.PatNum, true);
             data.ListAllergies = Allergies.GetAll(pat.PatNum, false);
             data.ListMedicationPats = MedicationPats.Refresh(pat.PatNum, false);

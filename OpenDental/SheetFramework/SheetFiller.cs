@@ -752,7 +752,7 @@ namespace OpenDental{
 					if(listRecalls[i].DisableUntilDate>DateTime.Today) { //don't care about recalls that are disabled until the future
 						continue;
 					}
-					if(listRecalls[i].DisableUntilBalance>0 && listRecalls[i].DisableUntilBalance<(fam.ListPats[0].BalTotal-fam.ListPats[0].InsEst)) { 
+					if(listRecalls[i].DisableUntilBalance>0 && listRecalls[i].DisableUntilBalance<(fam.Members[0].BalTotal-fam.Members[0].InsEst)) { 
 						//don't care about recalls if they are disabled due to family balance
 						continue;
 					}
@@ -784,15 +784,15 @@ namespace OpenDental{
 						recallScheduledYN=Lan.g("All","Yes");
 					}
 				}
-				for(int i=0;i<fam.ListPats.Length;i++) {
-					recall=Recalls.GetRecallProphyOrPerio(fam.ListPats[i].PatNum,true,listRecalls: data.ListRecallsForFam);
+				for(int i=0;i<fam.Members.Length;i++) {
+					recall=Recalls.GetRecallProphyOrPerio(fam.Members[i].PatNum,true,listRecalls: data.ListRecallsForFam);
 					if(recall==null || recall.IsDisabled || recall.DateDue==DateTime.MinValue || recall.DateDue>=DateTime.Today) {
 						continue;
 					}
 					if(famRecallDue!="") {
 						famRecallDue+="\r\n";
 					}
-					famRecallDue+=fam.ListPats[i].FName+", "+recall.DateDue.ToShortDateString()+" "+RecallTypes.GetDescription(recall.RecallTypeNum);
+					famRecallDue+=fam.Members[i].FName+", "+recall.DateDue.ToShortDateString()+" "+RecallTypes.GetDescription(recall.RecallTypeNum);
 				}
 				#endregion
 				#region Appointments
@@ -821,10 +821,10 @@ namespace OpenDental{
 				for(int i=0;i<apptFutureList.Count;i++) {//cannot be combined in loop above because of the break in the loop.
 					apptsAllFuture+=apptFutureList[i].AptDateTime.ToShortDateString()+" "+apptFutureList[i].AptDateTime.ToShortTimeString()+" : "+apptFutureList[i].ProcDescript+"\r\n";
 				}
-				for(int i=0;i<fam.ListPats.Length;i++) {
-					List<Appointment> futAptsList=data.ListFutureApptsForFam.FindAll(x => x.PatNum==fam.ListPats[i].PatNum);
+				for(int i=0;i<fam.Members.Length;i++) {
+					List<Appointment> futAptsList=data.ListFutureApptsForFam.FindAll(x => x.PatNum==fam.Members[i].PatNum);
 					if(futAptsList.Count>0) {//just gets one future appt for each person
-						nextSchedApptsFam+=fam.ListPats[i].FName+": "+futAptsList[0].AptDateTime.ToShortDateString()+" "+futAptsList[0].AptDateTime.ToShortTimeString()+" : "+futAptsList[0].ProcDescript+"\r\n";
+						nextSchedApptsFam+=fam.Members[i].FName+": "+futAptsList[0].AptDateTime.ToShortDateString()+" "+futAptsList[0].AptDateTime.ToShortTimeString()+" : "+futAptsList[0].ProcDescript+"\r\n";
 					}
 				}
 				if(Sheets.ContainsStaticField(sheet,"plannedAppointmentInfo")) {
@@ -986,13 +986,13 @@ namespace OpenDental{
 					fldval=fldval.Replace("[apptsAllFuture]",apptsAllFuture.TrimEnd());
 					fldval=fldval.Replace("[apptModNote]",apptModNote);
 					fldval=fldval.Replace("[age]",Patients.AgeToString(pat.Age));
-					fldval=fldval.Replace("[balTotal]",fam.ListPats[0].BalTotal.ToString("c"));
-					fldval=fldval.Replace("[bal_0_30]",fam.ListPats[0].Bal_0_30.ToString("c"));
-					fldval=fldval.Replace("[bal_31_60]",fam.ListPats[0].Bal_31_60.ToString("c"));
-					fldval=fldval.Replace("[bal_61_90]",fam.ListPats[0].Bal_61_90.ToString("c"));
-					fldval=fldval.Replace("[balOver90]",fam.ListPats[0].BalOver90.ToString("c"));
-					fldval=fldval.Replace("[balInsEst]",fam.ListPats[0].InsEst.ToString("c"));
-					fldval=fldval.Replace("[balTotalMinusInsEst]",(fam.ListPats[0].BalTotal-fam.ListPats[0].InsEst).ToString("c"));
+					fldval=fldval.Replace("[balTotal]",fam.Members[0].BalTotal.ToString("c"));
+					fldval=fldval.Replace("[bal_0_30]",fam.Members[0].Bal_0_30.ToString("c"));
+					fldval=fldval.Replace("[bal_31_60]",fam.Members[0].Bal_31_60.ToString("c"));
+					fldval=fldval.Replace("[bal_61_90]",fam.Members[0].Bal_61_90.ToString("c"));
+					fldval=fldval.Replace("[balOver90]",fam.Members[0].BalOver90.ToString("c"));
+					fldval=fldval.Replace("[balInsEst]",fam.Members[0].InsEst.ToString("c"));
+					fldval=fldval.Replace("[balTotalMinusInsEst]",(fam.Members[0].BalTotal-fam.Members[0].InsEst).ToString("c"));
 					fldval=fldval.Replace("[BillingType]",Defs.GetName(DefinitionCategory.BillingTypes,pat.BillingType));
 					fldval=fldval.Replace("[Birthdate]",birthdate);
 					fldval=fldval.Replace("[carrierName]",carrierName);
@@ -1030,7 +1030,7 @@ namespace OpenDental{
 					fldval=fldval.Replace("[dueForPanoYN]",dueForPanoYN);
 					fldval=fldval.Replace("[Email]",pat.Email);
 					fldval=fldval.Replace("[famFinNote]",patNote.FamFinancial);
-					fldval=fldval.Replace("[famFinUrgNote]",fam.ListPats[0].FamFinUrgNote);
+					fldval=fldval.Replace("[famFinUrgNote]",fam.Members[0].FamFinUrgNote);
 					fldval=fldval.Replace("[famRecallDue]",famRecallDue);
 					fldval=fldval.Replace("[guarantorHmPhone]",guarantorHmPhone);
 					fldval=fldval.Replace("[guarantorNameF]",guarantorNameF);
@@ -2044,13 +2044,13 @@ namespace OpenDental{
 						break;
 					case "addressAndHmPhoneIsSameEntireFamily":
 						bool isSame=true;
-						for(int i=0;i<fam.ListPats.Length;i++){
-							if(pat.HmPhone!=fam.ListPats[i].HmPhone
-								|| pat.Address!=fam.ListPats[i].Address
-								|| pat.Address2!=fam.ListPats[i].Address2
-								|| pat.City!=fam.ListPats[i].City
-								|| pat.State!=fam.ListPats[i].State
-								|| pat.Zip!=fam.ListPats[i].Zip)
+						for(int i=0;i<fam.Members.Length;i++){
+							if(pat.HmPhone!=fam.Members[i].HmPhone
+								|| pat.Address!=fam.Members[i].Address
+								|| pat.Address2!=fam.Members[i].Address2
+								|| pat.City!=fam.Members[i].City
+								|| pat.State!=fam.Members[i].State
+								|| pat.Zip!=fam.Members[i].Zip)
 							{
 								isSame=false;
 								break;
@@ -2297,21 +2297,21 @@ namespace OpenDental{
 						break;
 					case "otherFamilyMembers":
 						str="";
-						for(int i=0;i<fam.ListPats.Length;i++) {
-							if(fam.ListPats[i].PatNum==pat.PatNum) {
+						for(int i=0;i<fam.Members.Length;i++) {
+							if(fam.Members[i].PatNum==pat.PatNum) {
 								continue;
 							}
-							if(fam.ListPats[i].PatStatus==PatientStatus.Archived
-								|| fam.ListPats[i].PatStatus==PatientStatus.Deceased) {
+							if(fam.Members[i].PatStatus==PatientStatus.Archived
+								|| fam.Members[i].PatStatus==PatientStatus.Deceased) {
 								//Prospective patients will show.
 								continue;
 							}
 							if(str!="") {
 								str+="\r\n";
 							}
-							str+=fam.ListPats[i].GetNameFL();
-							if(fam.ListPats[i].Age>0){
-								str+=",   "+fam.ListPats[i].Age.ToString();
+							str+=fam.Members[i].GetNameFL();
+							if(fam.Members[i].Age>0){
+								str+=",   "+fam.Members[i].Age.ToString();
 							}
 						}
 						field.FieldValue=str;

@@ -174,7 +174,7 @@ namespace OpenDental{
 			checkArriveEarlySame.Checked=true;
 			bool isAuthArchivedEdit=Security.IsAuthorized(Permissions.ArchivedPatientEdit,true);
 			if(PatCur!=null){
-				List<Patient> listFamPats=FamCur.ListPats.ToList();
+				List<Patient> listFamPats=FamCur.Members.ToList();
 				if(!isAuthArchivedEdit) {
 					//Exclude Archived pats if user does not have permission.  If user doesn't have the permission and all non-Archived patients pass the
 					//the conditions, but there is an Archived patient who does not, the check will still be true.  The Archived will not be updated on OK.
@@ -276,7 +276,7 @@ namespace OpenDental{
 				case PatientPosition.Widowed : listPosition.SelectedIndex=3; break;
 				case PatientPosition.Divorced : listPosition.SelectedIndex=4; break;}
 			FillGuardians();
-			_listGuardiansForFamOld=FamCur.ListPats.SelectMany(x => Guardians.Refresh(x.PatNum)).ToList();
+			_listGuardiansForFamOld=FamCur.Members.SelectMany(x => Guardians.Refresh(x.PatNum)).ToList();
 			if(PatCur.Birthdate.Year < 1880)
 				textBirthdate.Text="";
 			else
@@ -733,7 +733,7 @@ namespace OpenDental{
 
 		private void checkBillProvSame_Click(object sender,EventArgs e) {
 			if(checkBillProvSame.Checked //check box has been checked
-				&& FamCur.ListPats.Any(x => x.PatNum!=PatCur.PatNum && x.PriProv!=_selectedProvNum) //a family member has a different PriProv
+				&& FamCur.Members.Any(x => x.PatNum!=PatCur.PatNum && x.PriProv!=_selectedProvNum) //a family member has a different PriProv
 				&& !Security.IsAuthorized(Permissions.PatPriProvEdit)) //user is not authorized to change PriProv, warning message displays
 			{
 				checkBillProvSame.Checked=false;//uncheck the box
@@ -1712,9 +1712,9 @@ namespace OpenDental{
 			PatCur.FName=textFName.Text;
 			PatCur.MiddleI=textMiddleI.Text;
 			PatCur.Preferred=textPreferred.Text;
-			for(int i=0;i<FamCur.ListPats.Length;i++) {//update the Family object as well
-				if(FamCur.ListPats[i].PatNum==PatCur.PatNum) {
-					FamCur.ListPats[i]=PatCur.Copy();
+			for(int i=0;i<FamCur.Members.Length;i++) {//update the Family object as well
+				if(FamCur.Members[i].PatNum==PatCur.PatNum) {
+					FamCur.Members[i]=PatCur.Copy();
 					break;
 				}
 			}
@@ -2292,18 +2292,18 @@ namespace OpenDental{
 			List<Patient> listAdults=new List<Patient>();
 			List<Patient> listChildren=new List<Patient>();
 			PatientPosition pos;
-			for(int p=0;p<FamCur.ListPats.Length;p++){
-				if(FamCur.ListPats[p].PatNum==PatCur.PatNum) {
+			for(int p=0;p<FamCur.Members.Length;p++){
+				if(FamCur.Members[p].PatNum==PatCur.PatNum) {
 					pos=(PatientPosition)listPosition.SelectedIndex;
 				}
 				else {
-					pos=FamCur.ListPats[p].Position;
+					pos=FamCur.Members[p].Position;
 				}
 				if(pos==PatientPosition.Child){
-					listChildren.Add(FamCur.ListPats[p]);
+					listChildren.Add(FamCur.Members[p]);
 				}
 				else{
-					listAdults.Add(FamCur.ListPats[p]);
+					listAdults.Add(FamCur.Members[p]);
 				}
 			}
 			Patient eldestMaleAdult=null;
@@ -2979,7 +2979,7 @@ namespace OpenDental{
 				Patients.UpdateAddressForFam(PatCur,true,isAuthArchivedEdit);
 			}
 			if(checkBillProvSame.Checked) {
-				List<Patient> listPatsForPriProvEdit=FamCur.ListPats.ToList().FindAll(x => x.PatNum!=PatCur.PatNum && x.PriProv!=PatCur.PriProv);
+				List<Patient> listPatsForPriProvEdit=FamCur.Members.ToList().FindAll(x => x.PatNum!=PatCur.PatNum && x.PriProv!=PatCur.PriProv);
 				if(!isAuthArchivedEdit) {//Remove Archived patients if not allowed to edit so we don't create a log for them.
 					listPatsForPriProvEdit.RemoveAll(x => x.PatStatus==PatientStatus.Archived);
 				}
@@ -3086,7 +3086,7 @@ namespace OpenDental{
 			}
 			if(_hasGuardiansChanged) {  //If guardian information was changed, and user canceled.
 				//revert any changes to the guardian list for all family members
-				Guardians.RevertChanges(_listGuardiansForFamOld,FamCur.ListPats.Select(x => x.PatNum).ToList());
+				Guardians.RevertChanges(_listGuardiansForFamOld,FamCur.Members.Select(x => x.PatNum).ToList());
 			}
 		}
 

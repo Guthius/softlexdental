@@ -6870,18 +6870,18 @@ namespace OpenDental
             Appointment[] aptsOnePat;
             Family fam = Patients.GetFamily(PatCur.PatNum);
             Patient pat = fam.GetPatient(PatCur.PatNum);
-            for (int i = 0; i < fam.ListPats.Length; i++)
+            for (int i = 0; i < fam.Members.Length; i++)
             {
-                if (!cardPrintFamily && fam.ListPats[i].PatNum != pat.PatNum)
+                if (!cardPrintFamily && fam.Members[i].PatNum != pat.PatNum)
                 {
                     continue;
                 }
-                name = fam.ListPats[i].FName;
+                name = fam.Members[i].FName;
                 if (name.Length > 15)
                 {//trim name so it won't be too long
                     name = name.Substring(0, 15);
                 }
-                aptsOnePat = Appointments.GetForPat(fam.ListPats[i].PatNum);
+                aptsOnePat = Appointments.GetForPat(fam.Members[i].PatNum);
                 for (int a = 0; a < aptsOnePat.Length; a++)
                 {
                     if (aptsOnePat[a].AptDateTime.Date <= DateTime.Today)
@@ -6900,7 +6900,7 @@ namespace OpenDental
             Patient guar;
             if (cardPrintFamily)
             {
-                guar = fam.ListPats[0].Copy();
+                guar = fam.Members[0].Copy();
             }
             else
             {

@@ -941,13 +941,13 @@ namespace OpenDental{
 				textAddrNotes.Visible=true;
 			}
 			checkSame.Checked=true;
-			for(int i=0;i<FamCur.ListPats.Length;i++) {
-				if(PatCur.HmPhone!=FamCur.ListPats[i].HmPhone
-					|| PatCur.Address!=FamCur.ListPats[i].Address
-					|| PatCur.Address2!=FamCur.ListPats[i].Address2
-					|| PatCur.City!=FamCur.ListPats[i].City
-					|| PatCur.State!=FamCur.ListPats[i].State
-					|| PatCur.Zip!=FamCur.ListPats[i].Zip)
+			for(int i=0;i<FamCur.Members.Length;i++) {
+				if(PatCur.HmPhone!=FamCur.Members[i].HmPhone
+					|| PatCur.Address!=FamCur.Members[i].Address
+					|| PatCur.Address2!=FamCur.Members[i].Address2
+					|| PatCur.City!=FamCur.Members[i].City
+					|| PatCur.State!=FamCur.Members[i].State
+					|| PatCur.Zip!=FamCur.Members[i].Zip)
 				{
 					checkSame.Checked=false;
 				}

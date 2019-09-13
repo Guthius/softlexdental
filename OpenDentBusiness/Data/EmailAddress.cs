@@ -35,6 +35,8 @@ namespace OpenDentBusiness
         public string Pop3Server = "pop.gmail.com";
         public int Pop3Port = 110;
 
+        // TODO: POP3 username and password can differ from SMPT username and pass...
+
         /// <summary>
         /// Returns a string representation of the e-mail address.
         /// </summary>

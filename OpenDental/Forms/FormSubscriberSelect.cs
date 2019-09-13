@@ -151,18 +151,18 @@ namespace OpenDental{
 		#endregion
 
 		private void FormSubscriberSelect_Load(object sender, System.EventArgs e) {
-			_listMergeLinks=PatientLinks.GetLinks(FamCur.ListPats.Select(x => x.PatNum).ToList(),PatientLinkType.Merge);
+			_listMergeLinks=PatientLinks.GetLinks(FamCur.Members.Select(x => x.PatNum).ToList(),PatientLinkType.Merge);
 			FillList();
 		}
 
 		private void FillList() {
 			listPats.Items.Clear();
-			for(int i=0;i<FamCur.ListPats.Length;i++) {
-				if(PatientLinks.WasPatientMerged(FamCur.ListPats[i].PatNum,_listMergeLinks)) {
+			for(int i=0;i<FamCur.Members.Length;i++) {
+				if(PatientLinks.WasPatientMerged(FamCur.Members[i].PatNum,_listMergeLinks)) {
 					continue;//Don't show merged patients
 				}
-				listPats.Items.Add(new ODBoxItem<Patient>(FamCur.ListPats[i].GetNameFL()+" ("+Lan.g("enumPatientStatus",
-					FamCur.ListPats[i].PatStatus.GetDescription())+")",FamCur.ListPats[i]));
+				listPats.Items.Add(new ODBoxItem<Patient>(FamCur.Members[i].GetNameFL()+" ("+Lan.g("enumPatientStatus",
+					FamCur.Members[i].PatStatus.GetDescription())+")",FamCur.Members[i]));
 			}
 		}
 		

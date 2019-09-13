@@ -973,7 +973,7 @@ namespace OpenDental{
 				listStatements=listStatements.OrderBy(x => dictStatementsOrder[x.StatementNum]).ToList();
 			}
 			_dictFams=Patients.GetFamilies(listStatements.Select(x => x.PatNum).ToList())
-				.SelectMany(fam => fam.ListPats.Select(y => new { y.PatNum,fam }))
+				.SelectMany(fam => fam.Members.Select(y => new { y.PatNum,fam }))
 				.Distinct()
 				.ToDictionary(x => x.PatNum,x => x.fam);
 			AddInstallmentPlansToStatements(listStatements);
@@ -1258,7 +1258,7 @@ namespace OpenDental{
 					_progExtended.Fire(new ODEventArgs(ODEventType.Billing,new ProgressBarHelper(Lan.g(this,"Statement")+"\r\n"+curStmtIdx+" / "+gridBill.SelectedIndices.Length,"65%",65,100,ProgBarStyle.Blocks,"3")));
 					_progExtended.Fire(new ODEventArgs(ODEventType.Billing,new ProgressBarHelper(Lan.g(this,"Preparing E-Bills")+"...",
 						progressBarEventType:ProgBarEventType.TextMsg)));
-					Patient guar = fam.ListPats[0];
+					Patient guar = fam.Members[0];
 					if(guar.Address.Trim()=="" || guar.City.Trim()=="" || guar.State.Trim()=="" || guar.Zip.Trim()=="") {
 						listDictPatnumsSkipped[1][pat.PatNum]=Lan.g(this,"Error with patient address");
 						curStatementsProcessed++;
@@ -1272,7 +1272,7 @@ namespace OpenDental{
 					ebillStatement.statement=stmt;
 					long clinicNum = 0;//If clinics are disabled, then all bills will go into the same "bucket"
 					if(Preferences.HasClinicsEnabled) {
-						clinicNum=fam.ListPats[0].ClinicNum;
+						clinicNum=fam.Members[0].ClinicNum;
 					}
 					List<string> listElectErrors = new List<string>();
 					if(Preference.GetString(PreferenceName.BillingUseElectronic)=="1") {//EHG
@@ -1620,7 +1620,7 @@ namespace OpenDental{
 		{
 			List<SmsToMobile> listTextsToSend=new List<SmsToMobile>();
 			List<long> listStmtNumsToUpdate=new List<long>();
-			Dictionary<long,PatComm> dictPatComms=Patients.GetPatComms(_dictFams.Values.SelectMany(x => x.ListPats).DistinctBy(x => x.PatNum).ToList())
+			Dictionary<long,PatComm> dictPatComms=Patients.GetPatComms(_dictFams.Values.SelectMany(x => x.Members).DistinctBy(x => x.PatNum).ToList())
 				.ToDictionary(x => x.PatNum,y => y);
 			string guidBatch=null;
 			foreach(Statement stmt in dictStatementsForSend[numOfBatchesSent]) {

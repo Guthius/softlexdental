@@ -178,7 +178,7 @@ namespace OpenDentBusiness{
         public static string ComputeAgingForPaysplitsAllocatedToDiffPats(long patNum, List<PaySplit> listPaySplits)
         {
             //No need to check RemotingRole; no call to db.;
-            List<long> listFamPatNums = Patients.GetFamily(patNum).ListPats.Select(x => x.PatNum).ToList();
+            List<long> listFamPatNums = Patients.GetFamily(patNum).Members.Select(x => x.PatNum).ToList();
             //Get all PatNums not in the patient's family
             List<long> listPatNumsAssociatedToDiffFam = listPaySplits.Where(x => !x.PatNum.In(listFamPatNums)).Select(y => y.PatNum).Distinct().ToList();
             if (listPatNumsAssociatedToDiffFam.Count == 0)

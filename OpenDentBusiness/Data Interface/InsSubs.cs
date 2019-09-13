@@ -70,23 +70,23 @@ namespace OpenDentBusiness
                 "SELECT D.* FROM inssub D," +
                 "((SELECT A.InsSubNum FROM inssub A WHERE";
             //subscribers in family
-            for (int i = 0; i < Fam.ListPats.Length; i++)
+            for (int i = 0; i < Fam.Members.Length; i++)
             {
                 if (i > 0)
                 {
                     command += " OR";
                 }
-                command += " A.Subscriber=" + POut.Long(Fam.ListPats[i].PatNum);
+                command += " A.Subscriber=" + POut.Long(Fam.Members[i].PatNum);
             }
             //in union, distinct is implied
             command += ") UNION (SELECT B.InsSubNum FROM inssub B,patplan P WHERE B.InsSubNum=P.InsSubNum AND (";
-            for (int i = 0; i < Fam.ListPats.Length; i++)
+            for (int i = 0; i < Fam.Members.Length; i++)
             {
                 if (i > 0)
                 {
                     command += " OR";
                 }
-                command += " P.PatNum=" + POut.Long(Fam.ListPats[i].PatNum);
+                command += " P.PatNum=" + POut.Long(Fam.Members[i].PatNum);
             }
             command += "))) C "
                 + "WHERE D.InsSubNum=C.InsSubNum "
@@ -114,7 +114,7 @@ namespace OpenDentBusiness
             {
                 return dictFamilyInsSubs;
             }
-            List<long> listPatNums = listFamilies.SelectMany(x => x.ListPats).Select(x => x.PatNum).ToList();
+            List<long> listPatNums = listFamilies.SelectMany(x => x.Members).Select(x => x.PatNum).ToList();
             if (listPatNums == null || listPatNums.Count < 1)
             {
                 return dictFamilyInsSubs;
@@ -134,7 +134,7 @@ namespace OpenDentBusiness
             DataTable table = Db.GetTable(command);
             foreach (Family family in listFamilies)
             {
-                List<long> listOnBehalfOfs = family.ListPats.Select(x => x.PatNum).ToList();
+                List<long> listOnBehalfOfs = family.Members.Select(x => x.PatNum).ToList();
                 List<InsSub> listInsSubs = new List<InsSub>();
                 List<DataRow> listDataRows = table.Select().Where(x => listOnBehalfOfs.Exists(y => y == PIn.Long(x["OnBehalfOf"].ToString()))).ToList();
                 DataTable tableFamilyInsSubs = table.Clone();

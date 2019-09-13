@@ -7,22 +7,21 @@ using CodeBase;
 
 namespace OpenDentBusiness
 {
-
-    ///<summary>"S" stands for Scrub.  Converts strings coming in from user input into the appropriate type.</summary>
-    [Obsolete] public class SIn
+    [Obsolete("Use System.Convert instead.")]
+    public class SIn
     {
         ///<summary></summary>
         public static Bitmap Bitmap(string myString)
         {
             if (myString == null || myString.Length < 0x32)
-            {//Bitmaps require a minimum length for header info.
+            {
                 return null;
             }
             try
             {
                 byte[] rawData = Convert.FromBase64String(myString);
                 MemoryStream stream = new MemoryStream(rawData);
-                System.Drawing.Bitmap image = new System.Drawing.Bitmap(stream);
+                Bitmap image = new Bitmap(stream);
                 return image;
             }
             catch
@@ -31,17 +30,15 @@ namespace OpenDentBusiness
             }
         }
 
-        ///<summary></summary>
-        public static bool Bool(string myString)
+        public static bool Bool(string value)
         {
-            if (myString == "" || myString == "0" || myString.ToLower() == "false")
+            if (value == "" || value == "0" || value.ToLower() == "false")
             {
                 return false;
             }
             return true;
         }
 
-        ///<summary>Set has exceptions to false to supress exceptions and return 0 if the input string is not an byte.</summary>
         public static byte Byte(string myString, bool hasExceptions = true)
         {
             if (myString == "")
@@ -52,7 +49,7 @@ namespace OpenDentBusiness
             {
                 try
                 {
-                    return System.Convert.ToByte(myString);
+                    return Convert.ToByte(myString);
                 }
                 catch (Exception ex)
                 {
@@ -69,9 +66,9 @@ namespace OpenDentBusiness
         ///This method handles either way, making it work smoothly with different versions.</summary>
         public static string ByteArray(object obj)
         {
-            if (obj.GetType() == typeof(Byte[]))
+            if (obj.GetType() == typeof(byte[]))
             {
-                Byte[] bytes = (Byte[])obj;
+                byte[] bytes = (byte[])obj;
                 StringBuilder strbuild = new StringBuilder();
                 for (int i = 0; i < bytes.Length; i++)
                 {
@@ -85,16 +82,17 @@ namespace OpenDentBusiness
             }
         }
 
-        ///<summary>Processes dates incoming from db that look like "4/29/2013", and dates from textboxes where users entered and which have usually been validated.</summary>
-        public static DateTime Date(string myString)
+        /// <summary>
+        /// Processes dates incoming from db that look like "4/29/2013", and dates from textboxes 
+        /// where users entered and which have usually been validated.
+        /// </summary>
+        public static DateTime Date(string value)
         {
-            if (myString == "" || myString == null)
-            {
-                return DateTime.MinValue;
-            }
+            if (value == "" || value == null) return DateTime.MinValue;
+
             try
             {
-                return (DateTime.Parse(myString));//DateTimeKind.Unspecified, which prevents -7:00, for example, from being tacked onto the end during serialization.
+                return DateTime.Parse(value);//DateTimeKind.Unspecified, which prevents -7:00, for example, from being tacked onto the end during serialization.
                                                   //return DateTime.Parse(myString,CultureInfo.InvariantCulture);
             }
             catch 
@@ -103,14 +101,13 @@ namespace OpenDentBusiness
             }
         }
 
-        ///<summary></summary>
-        public static DateTime DateT(string myString)
+        public static DateTime DateT(string value)
         {
-            if (myString == "")
-                return DateTime.MinValue;
+            if (value == "" || value == null) return DateTime.MinValue;
+
             try
             {
-                return (DateTime.Parse(myString));
+                return DateTime.Parse(value);
             }
             catch
             {
@@ -118,18 +115,14 @@ namespace OpenDentBusiness
             }
         }
 
-        ///<summary>If blank or invalid, returns 0. Otherwise, parses.</summary>
-        public static decimal Decimal(string myString)
+        public static decimal Decimal(string value)
         {
-            if (myString == "")
-            {
-                return 0;
-            }
+            if (value == "") return 0;
             else
             {
                 try
                 {
-                    return System.Convert.ToDecimal(myString);
+                    return Convert.ToDecimal(value);
                 }
                 catch
                 {

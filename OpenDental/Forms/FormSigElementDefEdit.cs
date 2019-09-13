@@ -77,303 +77,305 @@ namespace OpenDental{
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormSigElementDefEdit));
-			this.label1 = new System.Windows.Forms.Label();
-			this.listType = new System.Windows.Forms.ListBox();
-			this.label2 = new System.Windows.Forms.Label();
-			this.textSigText = new System.Windows.Forms.TextBox();
-			this.label3 = new System.Windows.Forms.Label();
-			this.label5 = new System.Windows.Forms.Label();
-			this.label6 = new System.Windows.Forms.Label();
-			this.butColor = new System.Windows.Forms.Button();
-			this.label7 = new System.Windows.Forms.Label();
-			this.groupBox1 = new System.Windows.Forms.GroupBox();
-			this.butRecordNew = new OpenDental.UI.Button();
-			this.butDeleteSound = new OpenDental.UI.Button();
-			this.butRecord = new OpenDental.UI.Button();
-			this.butExport = new OpenDental.UI.Button();
-			this.butImport = new OpenDental.UI.Button();
-			this.butPlay = new OpenDental.UI.Button();
-			this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-			this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
-			this.butDelete = new OpenDental.UI.Button();
-			this.textLightRow = new OpenDental.ValidNum();
-			this.butOK = new OpenDental.UI.Button();
-			this.butCancel = new OpenDental.UI.Button();
-			this.groupBox1.SuspendLayout();
-			this.SuspendLayout();
-			// 
-			// label1
-			// 
-			this.label1.ImageAlign = System.Drawing.ContentAlignment.TopRight;
-			this.label1.Location = new System.Drawing.Point(63, 13);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(100, 20);
-			this.label1.TabIndex = 2;
-			this.label1.Text = "Type";
-			this.label1.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// listType
-			// 
-			this.listType.FormattingEnabled = true;
-			this.listType.Location = new System.Drawing.Point(168, 12);
-			this.listType.Name = "listType";
-			this.listType.Size = new System.Drawing.Size(106, 43);
-			this.listType.TabIndex = 3;
-			// 
-			// label2
-			// 
-			this.label2.ImageAlign = System.Drawing.ContentAlignment.TopRight;
-			this.label2.Location = new System.Drawing.Point(63, 70);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(100, 20);
-			this.label2.TabIndex = 4;
-			this.label2.Text = "Text";
-			this.label2.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// textSigText
-			// 
-			this.textSigText.Location = new System.Drawing.Point(169, 67);
-			this.textSigText.Name = "textSigText";
-			this.textSigText.Size = new System.Drawing.Size(105, 20);
-			this.textSigText.TabIndex = 0;
-			// 
-			// label3
-			// 
-			this.label3.ImageAlign = System.Drawing.ContentAlignment.TopRight;
-			this.label3.Location = new System.Drawing.Point(281, 56);
-			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(304, 40);
-			this.label3.TabIndex = 6;
-			this.label3.Text = "This is the text as it should show in the list or the username.  Typed messages a" +
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormSigElementDefEdit));
+            this.label1 = new System.Windows.Forms.Label();
+            this.listType = new System.Windows.Forms.ListBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.textSigText = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.butColor = new System.Windows.Forms.Button();
+            this.label7 = new System.Windows.Forms.Label();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.butRecordNew = new OpenDental.UI.Button();
+            this.butDeleteSound = new OpenDental.UI.Button();
+            this.butRecord = new OpenDental.UI.Button();
+            this.butExport = new OpenDental.UI.Button();
+            this.butImport = new OpenDental.UI.Button();
+            this.butPlay = new OpenDental.UI.Button();
+            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
+            this.butDelete = new OpenDental.UI.Button();
+            this.textLightRow = new OpenDental.ValidNum();
+            this.butOK = new OpenDental.UI.Button();
+            this.butCancel = new OpenDental.UI.Button();
+            this.groupBox1.SuspendLayout();
+            this.SuspendLayout();
+            // 
+            // label1
+            // 
+            this.label1.ImageAlign = System.Drawing.ContentAlignment.TopRight;
+            this.label1.Location = new System.Drawing.Point(76, 15);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(120, 23);
+            this.label1.TabIndex = 2;
+            this.label1.Text = "Type";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // listType
+            // 
+            this.listType.FormattingEnabled = true;
+            this.listType.ItemHeight = 16;
+            this.listType.Location = new System.Drawing.Point(202, 14);
+            this.listType.Name = "listType";
+            this.listType.Size = new System.Drawing.Size(127, 36);
+            this.listType.TabIndex = 3;
+            // 
+            // label2
+            // 
+            this.label2.ImageAlign = System.Drawing.ContentAlignment.TopRight;
+            this.label2.Location = new System.Drawing.Point(76, 81);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(120, 23);
+            this.label2.TabIndex = 4;
+            this.label2.Text = "Text";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // textSigText
+            // 
+            this.textSigText.Location = new System.Drawing.Point(203, 77);
+            this.textSigText.Name = "textSigText";
+            this.textSigText.Size = new System.Drawing.Size(126, 22);
+            this.textSigText.TabIndex = 0;
+            // 
+            // label3
+            // 
+            this.label3.ImageAlign = System.Drawing.ContentAlignment.TopRight;
+            this.label3.Location = new System.Drawing.Point(337, 65);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(365, 46);
+            this.label3.TabIndex = 6;
+            this.label3.Text = "This is the text as it should show in the list or the username.  Typed messages a" +
     "re handled separately.";
-			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// label5
-			// 
-			this.label5.ImageAlign = System.Drawing.ContentAlignment.TopRight;
-			this.label5.Location = new System.Drawing.Point(62, 253);
-			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(100, 20);
-			this.label5.TabIndex = 8;
-			this.label5.Text = "Light Row";
-			this.label5.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// label6
-			// 
-			this.label6.ImageAlign = System.Drawing.ContentAlignment.TopRight;
-			this.label6.Location = new System.Drawing.Point(62, 293);
-			this.label6.Name = "label6";
-			this.label6.Size = new System.Drawing.Size(100, 20);
-			this.label6.TabIndex = 9;
-			this.label6.Text = "Light Color";
-			this.label6.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// butColor
-			// 
-			this.butColor.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-			this.butColor.Location = new System.Drawing.Point(168, 289);
-			this.butColor.Name = "butColor";
-			this.butColor.Size = new System.Drawing.Size(30, 20);
-			this.butColor.TabIndex = 11;
-			this.butColor.Click += new System.EventHandler(this.butColor_Click);
-			// 
-			// label7
-			// 
-			this.label7.ImageAlign = System.Drawing.ContentAlignment.TopRight;
-			this.label7.Location = new System.Drawing.Point(281, 275);
-			this.label7.Name = "label7";
-			this.label7.Size = new System.Drawing.Size(278, 73);
-			this.label7.TabIndex = 12;
-			this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// groupBox1
-			// 
-			this.groupBox1.Controls.Add(this.butRecordNew);
-			this.groupBox1.Controls.Add(this.butDeleteSound);
-			this.groupBox1.Controls.Add(this.butRecord);
-			this.groupBox1.Controls.Add(this.butExport);
-			this.groupBox1.Controls.Add(this.butImport);
-			this.groupBox1.Controls.Add(this.butPlay);
-			this.groupBox1.Location = new System.Drawing.Point(121, 93);
-			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(464, 141);
-			this.groupBox1.TabIndex = 17;
-			this.groupBox1.TabStop = false;
-			this.groupBox1.Text = "Sound";
-			// 
-			// butRecordNew
-			// 
-			this.butRecordNew.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butRecordNew.Autosize = true;
-			this.butRecordNew.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
-			this.butRecordNew.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
-			this.butRecordNew.CornerRadius = 4F;
-			this.butRecordNew.Location = new System.Drawing.Point(142, 50);
-			this.butRecordNew.Name = "butRecordNew";
-			this.butRecordNew.Size = new System.Drawing.Size(105, 23);
-			this.butRecordNew.TabIndex = 20;
-			this.butRecordNew.Text = "Record New";
-			this.butRecordNew.Click += new System.EventHandler(this.butRecordNew_Click);
-			// 
-			// butDeleteSound
-			// 
-			this.butDeleteSound.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butDeleteSound.Autosize = true;
-			this.butDeleteSound.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
-			this.butDeleteSound.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
-			this.butDeleteSound.CornerRadius = 4F;
-			this.butDeleteSound.Location = new System.Drawing.Point(47, 49);
-			this.butDeleteSound.Name = "butDeleteSound";
-			this.butDeleteSound.Size = new System.Drawing.Size(55, 23);
-			this.butDeleteSound.TabIndex = 19;
-			this.butDeleteSound.Text = "Delete";
-			this.butDeleteSound.Click += new System.EventHandler(this.butDeleteSound_Click);
-			// 
-			// butRecord
-			// 
-			this.butRecord.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butRecord.Autosize = true;
-			this.butRecord.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
-			this.butRecord.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
-			this.butRecord.CornerRadius = 4F;
-			this.butRecord.Location = new System.Drawing.Point(142, 21);
-			this.butRecord.Name = "butRecord";
-			this.butRecord.Size = new System.Drawing.Size(105, 23);
-			this.butRecord.TabIndex = 18;
-			this.butRecord.Text = "Windows Recorder";
-			this.butRecord.Click += new System.EventHandler(this.butRecord_Click);
-			// 
-			// butExport
-			// 
-			this.butExport.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butExport.Autosize = true;
-			this.butExport.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
-			this.butExport.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
-			this.butExport.CornerRadius = 4F;
-			this.butExport.Location = new System.Drawing.Point(47, 107);
-			this.butExport.Name = "butExport";
-			this.butExport.Size = new System.Drawing.Size(55, 23);
-			this.butExport.TabIndex = 17;
-			this.butExport.Text = "Export";
-			this.butExport.Click += new System.EventHandler(this.butExport_Click);
-			// 
-			// butImport
-			// 
-			this.butImport.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butImport.Autosize = true;
-			this.butImport.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
-			this.butImport.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
-			this.butImport.CornerRadius = 4F;
-			this.butImport.Location = new System.Drawing.Point(47, 78);
-			this.butImport.Name = "butImport";
-			this.butImport.Size = new System.Drawing.Size(55, 23);
-			this.butImport.TabIndex = 16;
-			this.butImport.Text = "Import";
-			this.butImport.Click += new System.EventHandler(this.butImport_Click);
-			// 
-			// butPlay
-			// 
-			this.butPlay.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butPlay.Autosize = true;
-			this.butPlay.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
-			this.butPlay.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
-			this.butPlay.CornerRadius = 4F;
-			this.butPlay.Location = new System.Drawing.Point(47, 20);
-			this.butPlay.Name = "butPlay";
-			this.butPlay.Size = new System.Drawing.Size(55, 23);
-			this.butPlay.TabIndex = 15;
-			this.butPlay.Text = "Play";
-			this.butPlay.Click += new System.EventHandler(this.butPlay_Click);
-			// 
-			// openFileDialog1
-			// 
-			this.openFileDialog1.FileName = "openFileDialog1";
-			// 
-			// butDelete
-			// 
-			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butDelete.Autosize = true;
-			this.butDelete.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
-			this.butDelete.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
-			this.butDelete.CornerRadius = 4F;
-			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(46, 351);
-			this.butDelete.Name = "butDelete";
-			this.butDelete.Size = new System.Drawing.Size(82, 26);
-			this.butDelete.TabIndex = 14;
-			this.butDelete.Text = "&Delete";
-			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
-			// 
-			// textLightRow
-			// 
-			this.textLightRow.Location = new System.Drawing.Point(168, 250);
-			this.textLightRow.MaxVal = 255;
-			this.textLightRow.MinVal = 0;
-			this.textLightRow.Name = "textLightRow";
-			this.textLightRow.Size = new System.Drawing.Size(51, 20);
-			this.textLightRow.TabIndex = 1;
-			// 
-			// butOK
-			// 
-			this.butOK.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butOK.Autosize = true;
-			this.butOK.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
-			this.butOK.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
-			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(442, 351);
-			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75, 26);
-			this.butOK.TabIndex = 2;
-			this.butOK.Text = "&OK";
-			this.butOK.Click += new System.EventHandler(this.butOK_Click);
-			// 
-			// butCancel
-			// 
-			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butCancel.Autosize = true;
-			this.butCancel.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
-			this.butCancel.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
-			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(544, 351);
-			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75, 26);
-			this.butCancel.TabIndex = 3;
-			this.butCancel.Text = "&Cancel";
-			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
-			// 
-			// FormSigElementDefEdit
-			// 
-			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-			this.ClientSize = new System.Drawing.Size(671, 402);
-			this.Controls.Add(this.groupBox1);
-			this.Controls.Add(this.butDelete);
-			this.Controls.Add(this.label7);
-			this.Controls.Add(this.butColor);
-			this.Controls.Add(this.textLightRow);
-			this.Controls.Add(this.label6);
-			this.Controls.Add(this.label5);
-			this.Controls.Add(this.label3);
-			this.Controls.Add(this.textSigText);
-			this.Controls.Add(this.label2);
-			this.Controls.Add(this.listType);
-			this.Controls.Add(this.label1);
-			this.Controls.Add(this.butOK);
-			this.Controls.Add(this.butCancel);
-			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-			this.MaximizeBox = false;
-			this.MinimizeBox = false;
-			this.Name = "FormSigElementDefEdit";
-			this.ShowInTaskbar = false;
-			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "Edit Message Element";
-			this.Load += new System.EventHandler(this.FormSigElementDefEdit_Load);
-			this.groupBox1.ResumeLayout(false);
-			this.ResumeLayout(false);
-			this.PerformLayout();
+            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // label5
+            // 
+            this.label5.ImageAlign = System.Drawing.ContentAlignment.TopRight;
+            this.label5.Location = new System.Drawing.Point(74, 292);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(120, 23);
+            this.label5.TabIndex = 8;
+            this.label5.Text = "Light Row";
+            this.label5.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // label6
+            // 
+            this.label6.ImageAlign = System.Drawing.ContentAlignment.TopRight;
+            this.label6.Location = new System.Drawing.Point(74, 338);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(120, 23);
+            this.label6.TabIndex = 9;
+            this.label6.Text = "Light Color";
+            this.label6.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // butColor
+            // 
+            this.butColor.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.butColor.Location = new System.Drawing.Point(202, 333);
+            this.butColor.Name = "butColor";
+            this.butColor.Size = new System.Drawing.Size(36, 24);
+            this.butColor.TabIndex = 11;
+            this.butColor.Click += new System.EventHandler(this.butColor_Click);
+            // 
+            // label7
+            // 
+            this.label7.ImageAlign = System.Drawing.ContentAlignment.TopRight;
+            this.label7.Location = new System.Drawing.Point(337, 317);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(334, 85);
+            this.label7.TabIndex = 12;
+            this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.butRecordNew);
+            this.groupBox1.Controls.Add(this.butDeleteSound);
+            this.groupBox1.Controls.Add(this.butRecord);
+            this.groupBox1.Controls.Add(this.butExport);
+            this.groupBox1.Controls.Add(this.butImport);
+            this.groupBox1.Controls.Add(this.butPlay);
+            this.groupBox1.Location = new System.Drawing.Point(145, 107);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(557, 163);
+            this.groupBox1.TabIndex = 17;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Sound";
+            // 
+            // butRecordNew
+            // 
+            this.butRecordNew.AdjustImageLocation = new System.Drawing.Point(0, 0);
+            this.butRecordNew.Autosize = true;
+            this.butRecordNew.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+            this.butRecordNew.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
+            this.butRecordNew.CornerRadius = 4F;
+            this.butRecordNew.Location = new System.Drawing.Point(170, 58);
+            this.butRecordNew.Name = "butRecordNew";
+            this.butRecordNew.Size = new System.Drawing.Size(126, 26);
+            this.butRecordNew.TabIndex = 20;
+            this.butRecordNew.Text = "Record New";
+            this.butRecordNew.Click += new System.EventHandler(this.butRecordNew_Click);
+            // 
+            // butDeleteSound
+            // 
+            this.butDeleteSound.AdjustImageLocation = new System.Drawing.Point(0, 0);
+            this.butDeleteSound.Autosize = true;
+            this.butDeleteSound.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+            this.butDeleteSound.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
+            this.butDeleteSound.CornerRadius = 4F;
+            this.butDeleteSound.Location = new System.Drawing.Point(56, 57);
+            this.butDeleteSound.Name = "butDeleteSound";
+            this.butDeleteSound.Size = new System.Drawing.Size(66, 26);
+            this.butDeleteSound.TabIndex = 19;
+            this.butDeleteSound.Text = "Delete";
+            this.butDeleteSound.Click += new System.EventHandler(this.butDeleteSound_Click);
+            // 
+            // butRecord
+            // 
+            this.butRecord.AdjustImageLocation = new System.Drawing.Point(0, 0);
+            this.butRecord.Autosize = true;
+            this.butRecord.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+            this.butRecord.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
+            this.butRecord.CornerRadius = 4F;
+            this.butRecord.Location = new System.Drawing.Point(170, 24);
+            this.butRecord.Name = "butRecord";
+            this.butRecord.Size = new System.Drawing.Size(126, 27);
+            this.butRecord.TabIndex = 18;
+            this.butRecord.Text = "Windows Recorder";
+            this.butRecord.Click += new System.EventHandler(this.butRecord_Click);
+            // 
+            // butExport
+            // 
+            this.butExport.AdjustImageLocation = new System.Drawing.Point(0, 0);
+            this.butExport.Autosize = true;
+            this.butExport.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+            this.butExport.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
+            this.butExport.CornerRadius = 4F;
+            this.butExport.Location = new System.Drawing.Point(56, 123);
+            this.butExport.Name = "butExport";
+            this.butExport.Size = new System.Drawing.Size(66, 27);
+            this.butExport.TabIndex = 17;
+            this.butExport.Text = "Export";
+            this.butExport.Click += new System.EventHandler(this.butExport_Click);
+            // 
+            // butImport
+            // 
+            this.butImport.AdjustImageLocation = new System.Drawing.Point(0, 0);
+            this.butImport.Autosize = true;
+            this.butImport.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+            this.butImport.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
+            this.butImport.CornerRadius = 4F;
+            this.butImport.Location = new System.Drawing.Point(56, 90);
+            this.butImport.Name = "butImport";
+            this.butImport.Size = new System.Drawing.Size(66, 27);
+            this.butImport.TabIndex = 16;
+            this.butImport.Text = "Import";
+            this.butImport.Click += new System.EventHandler(this.butImport_Click);
+            // 
+            // butPlay
+            // 
+            this.butPlay.AdjustImageLocation = new System.Drawing.Point(0, 0);
+            this.butPlay.Autosize = true;
+            this.butPlay.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+            this.butPlay.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
+            this.butPlay.CornerRadius = 4F;
+            this.butPlay.Location = new System.Drawing.Point(56, 23);
+            this.butPlay.Name = "butPlay";
+            this.butPlay.Size = new System.Drawing.Size(66, 27);
+            this.butPlay.TabIndex = 15;
+            this.butPlay.Text = "Play";
+            this.butPlay.Click += new System.EventHandler(this.butPlay_Click);
+            // 
+            // openFileDialog1
+            // 
+            this.openFileDialog1.FileName = "openFileDialog1";
+            // 
+            // butDelete
+            // 
+            this.butDelete.AdjustImageLocation = new System.Drawing.Point(0, 0);
+            this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.butDelete.Autosize = true;
+            this.butDelete.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+            this.butDelete.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
+            this.butDelete.CornerRadius = 4F;
+            this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.butDelete.Location = new System.Drawing.Point(55, 343);
+            this.butDelete.Name = "butDelete";
+            this.butDelete.Size = new System.Drawing.Size(99, 30);
+            this.butDelete.TabIndex = 14;
+            this.butDelete.Text = "&Delete";
+            this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
+            // 
+            // textLightRow
+            // 
+            this.textLightRow.DoAutoSave = false;
+            this.textLightRow.Location = new System.Drawing.Point(202, 288);
+            this.textLightRow.MaxVal = 255;
+            this.textLightRow.MinVal = 0;
+            this.textLightRow.Name = "textLightRow";
+            this.textLightRow.Preference = OpenDentBusiness.PreferenceName.NotApplicable;
+            this.textLightRow.Size = new System.Drawing.Size(61, 22);
+            this.textLightRow.TabIndex = 1;
+            // 
+            // butOK
+            // 
+            this.butOK.AdjustImageLocation = new System.Drawing.Point(0, 0);
+            this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.butOK.Autosize = true;
+            this.butOK.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+            this.butOK.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
+            this.butOK.CornerRadius = 4F;
+            this.butOK.Location = new System.Drawing.Point(396, 343);
+            this.butOK.Name = "butOK";
+            this.butOK.Size = new System.Drawing.Size(90, 30);
+            this.butOK.TabIndex = 2;
+            this.butOK.Text = "&OK";
+            this.butOK.Click += new System.EventHandler(this.butOK_Click);
+            // 
+            // butCancel
+            // 
+            this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
+            this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.butCancel.Autosize = true;
+            this.butCancel.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+            this.butCancel.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
+            this.butCancel.CornerRadius = 4F;
+            this.butCancel.Location = new System.Drawing.Point(519, 343);
+            this.butCancel.Name = "butCancel";
+            this.butCancel.Size = new System.Drawing.Size(90, 30);
+            this.butCancel.TabIndex = 3;
+            this.butCancel.Text = "&Cancel";
+            this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
+            // 
+            // FormSigElementDefEdit
+            // 
+            this.AutoScaleBaseSize = new System.Drawing.Size(6, 15);
+            this.ClientSize = new System.Drawing.Size(671, 402);
+            this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.butDelete);
+            this.Controls.Add(this.label7);
+            this.Controls.Add(this.butColor);
+            this.Controls.Add(this.textLightRow);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.textSigText);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.listType);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.butOK);
+            this.Controls.Add(this.butCancel);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.Name = "FormSigElementDefEdit";
+            this.ShowInTaskbar = false;
+            this.Text = "Edit Message Element";
+            this.Load += new System.EventHandler(this.FormSigElementDefEdit_Load);
+            this.groupBox1.ResumeLayout(false);
+            this.ResumeLayout(false);
+            this.PerformLayout();
 
 		}
 		#endregion

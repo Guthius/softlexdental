@@ -1006,7 +1006,7 @@ namespace OpenDentBusiness
                 + "INNER JOIN appointment ON appointment.AptNum=task.KeyNum AND task.ObjectType=" + POut.Int((int)TaskObjectType.Appointment) + " "
                 + "INNER JOIN tasklist ON task.TaskListNum=tasklist.TaskListNum "
                 + "LEFT JOIN patient ON patient.PatNum=appointment.PatNum "
-                + "WHERE appointment.PatNum IN (" + string.Join(",", family.ListPats.Select(x => x.PatNum)) + ") "
+                + "WHERE appointment.PatNum IN (" + string.Join(",", family.Members.Select(x => x.PatNum)) + ") "
                 + "ORDER BY DateTimeEntry";
                 DataTable rawTask = DataConnection.ExecuteDataTable(command);
                 List<long> taskNums = rawTask.Select().Select(x => PIn.Long(x["TaskNum"].ToString())).ToList();

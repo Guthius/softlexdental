@@ -1,135 +1,143 @@
-using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Reflection;
 
 namespace OpenDentBusiness
 {
-    ///<summary></summary>
     public class Family
     {
-        ///<summary></summary>
+        /// <summary>
+        /// List of patients in the family.
+        /// </summary>
+        public Patient[] Members { get; set; }
+
         public Family()
         {
-
         }
 
-        ///<summary></summary>
-        public Family(List<Patient> listPats)
-        {
-            ListPats = listPats.ToArray();
-        }
+        public Family(List<Patient> patients) => Members = patients.ToArray();
 
-        ///<summary>List of patients in the family.</summary>
-        public Patient[] ListPats;
+        /// <summary>
+        /// Gets the guarantor of the family.
+        /// </summary>
+        public Patient Guarantor => Members.FirstOrDefault(x => x.Guarantor == x.PatNum);
 
-        ///<summary>The guarantor of the family.</summary>
-        public Patient Guarantor
+        /// <summary>
+        /// Tries to get the LastName, FirstName of the patient from this family.
+        /// If not found, then gets the name from the database.
+        /// </summary>
+        public string GetNameInFamLF(long patientId)
         {
-            get
+            foreach (var patient in Members)
             {
-                return ListPats.FirstOrDefault(x => x.Guarantor == x.PatNum);
-            }
-        }
-
-        ///<summary>Tries to get the LastName,FirstName of the patient from this family.  If not found, then gets the name from the database.</summary>
-        public string GetNameInFamLF(long myPatNum)
-        {
-            //No need to check RemotingRole; no call to db.
-            for (int i = 0; i < ListPats.Length; i++)
-            {
-                if (ListPats[i].PatNum == myPatNum)
+                if (patient.PatNum == patientId)
                 {
-                    return ListPats[i].GetNameLF();
+                    return patient.GetNameLF();
                 }
             }
-            return GetLim(myPatNum).GetNameLF();
+
+            return GetLim(patientId).GetNameLF();
         }
 
-        ///<summary>Gets last, (preferred) first middle</summary>
+        /// <summary>
+        /// Gets last, (preferred) first middle
+        /// /summary>
         public string GetNameInFamLFI(int myi)
         {
-            //No need to check RemotingRole; no call to db.
-            return Patients.GetNameLF(ListPats[myi].LName, ListPats[myi].FName, ListPats[myi].Preferred, ListPats[myi].MiddleI);
+            return Patients.GetNameLF(Members[myi].LName, Members[myi].FName, Members[myi].Preferred, Members[myi].MiddleI);
         }
 
-        ///<summary>Gets a formatted name from the family list.  If the patient is not in the family list, then it gets that info from the database.</summary>
+        /// <summary>
+        /// Gets a formatted name from the family list.
+        /// If the patient is not in the family list, then it gets that info from the database.
+        /// </summary>
         public string GetNameInFamFL(long myPatNum)
         {
-            //No need to check RemotingRole; no call to db.
-            for (int i = 0; i < ListPats.Length; i++)
+            for (int i = 0; i < Members.Length; i++)
             {
-                if (ListPats[i].PatNum == myPatNum)
+                if (Members[i].PatNum == myPatNum)
                 {
-                    return ListPats[i].GetNameFL();
+                    return Members[i].GetNameFL();
                 }
             }
             return GetLim(myPatNum).GetNameFL();
         }
 
-        ///<summary>Gets a formatted name from the family list.  If the patient is not in the family list, then it gets that info from the database.</summary>
-        public string GetNameInFamFLnoPref(long myPatNum)
+        /// <summary>
+        /// Gets a formatted name from the family list.
+        /// If the patient is not in the family list, then it gets that info from the database.
+        /// </summary>
+        public string GetNameInFamFLnoPref(long patientId)
         {
-            //No need to check RemotingRole; no call to db.
-            for (int i = 0; i < ListPats.Length; i++)
+            for (int i = 0; i < Members.Length; i++)
             {
-                if (ListPats[i].PatNum == myPatNum)
+                if (Members[i].PatNum == patientId)
                 {
-                    return ListPats[i].GetNameFLnoPref();
+                    return Members[i].GetNameFLnoPref();
                 }
             }
-            return GetLim(myPatNum).GetNameFLnoPref();
+            return GetLim(patientId).GetNameFLnoPref();
         }
 
-        ///<summary>Gets (preferred)first middle last</summary>
-        public string GetNameInFamFLI(int myi)
+        /// <summary>
+        /// Gets (preferred)first middle last
+        /// </summary>
+        public string GetNameInFamFLI(int index)
         {
-            //No need to check RemotingRole; no call to db.
-            string retStr = "";
-            if (ListPats[myi].Preferred != "")
+            string result = "";
+            if (Members[index].Preferred != "")
             {
-                retStr = "'" + ListPats[myi].Preferred + "' ";
+                result = "'" + Members[index].Preferred + "' ";
             }
-            retStr += Patients.GetNameFLnoPref(ListPats[myi].LName, ListPats[myi].FName, ListPats[myi].MiddleI);
-            return retStr;
+
+            result += Patients.GetNameFLnoPref(Members[index].LName, Members[index].FName, Members[index].MiddleI);
+
+            return result;
         }
 
-        ///<summary>Gets first name from the family list.  If the patient is not in the family list, then it gets that info from the database.  Includes preferred.</summary>
+        /// <summary>
+        /// Gets first name from the family list.
+        /// If the patient is not in the family list, then it gets that info from the database.
+        /// Includes preferred.
+        /// </summary>
         public string GetNameInFamFirst(long myPatNum)
         {
-            //No need to check RemotingRole; no call to db.
-            for (int i = 0; i < ListPats.Length; i++)
+            for (int i = 0; i < Members.Length; i++)
             {
-                if (ListPats[i].PatNum == myPatNum)
+                if (Members[i].PatNum == myPatNum)
                 {
-                    return ListPats[i].GetNameFirst();
+                    return Members[i].GetNameFirst();
                 }
             }
             return GetLim(myPatNum).GetNameFirst();
         }
 
-        ///<summary>Gets first name from the family list.  If the patient is not in the family list, then it gets that info from the database.  Includes preferred and last name.</summary>
+        /// <summary>
+        /// Gets first name from the family list. 
+        /// If the patient is not in the family list, then it gets that info from the database.
+        /// Includes preferred and last name.
+        /// </summary>
         public string GetNameInFamFirstOrPreferredOrLast(long myPatNum)
         {
-            //No need to check RemotingRole; no call to db.
-            for (int i = 0; i < ListPats.Length; i++)
+            for (int i = 0; i < Members.Length; i++)
             {
-                if (ListPats[i].PatNum == myPatNum)
+                if (Members[i].PatNum == myPatNum)
                 {
-                    return ListPats[i].GetNameFirstOrPreferredOrLast();
+                    return Members[i].GetNameFirstOrPreferredOrLast();
                 }
             }
             return GetLim(myPatNum).GetNameFirstOrPreferredOrLast();
         }
 
-        ///<summary>The index of the patient within the family.  Returns -1 if not found.</summary>
-        public int GetIndex(long patNum)
+        /// <summary>
+        /// The index of the patient within the family. 
+        /// Returns -1 if not found.
+        /// </summary>
+        public int GetIndex(long patientId)
         {
-            //No need to check RemotingRole; no call to db.
-            for (int i = 0; i < ListPats.Length; i++)
+            for (int i = 0; i < Members.Length; i++)
             {
-                if (ListPats[i].PatNum == patNum)
+                if (Members[i].PatNum == patientId)
                 {
                     return i;
                 }
@@ -137,79 +145,77 @@ namespace OpenDentBusiness
             return -1;
         }
 
-        ///<summary>Gets a copy of a specific patient from within the family. Does not make a call to the database.</summary>
-        public Patient GetPatient(long patNum)
+        /// <summary>
+        /// Gets a copy of a specific patient from within the family.
+        /// </summary>
+        public Patient GetPatient(long patientId)
         {
-            //No need to check RemotingRole; no call to db.
-            Patient retVal = null;
-            for (int i = 0; i < ListPats.Length; i++)
+            foreach (var patient in Members)
             {
-                if (ListPats[i].PatNum == patNum)
+                if (patient.PatNum == patientId)
                 {
-                    retVal = ListPats[i].Copy();
-                    break;
+                    return patient;
                 }
             }
-            return retVal;
+
+            return default;
         }
 
-        /// <summary>Duplicate of the same class in Patients.  Gets nine of the most useful fields from the db for the given patnum.</summary>
-        public static Patient GetLim(long patNum)
+        /// <summary>
+        /// Duplicate of the same class in Patients. 
+        /// Gets nine of the most useful fields from the db for the given patnum.
+        /// </summary>
+        public static Patient GetLim(long patientId)
         {
-            if (patNum == 0)
-            {
-                return new Patient();
-            }
+            if (patientId == 0) return new Patient();
+            
             string command =
-                "SELECT PatNum,LName,FName,MiddleI,Preferred,CreditType,Guarantor,HasIns,SSN "
-                + "FROM patient "
-                + "WHERE PatNum = '" + patNum.ToString() + "'";
+                "SELECT PatNum,LName,FName,MiddleI,Preferred,CreditType,Guarantor,HasIns,SSN " +
+                "FROM patient " +
+                "WHERE PatNum = '" + patientId.ToString() + "'";
+
             DataTable table = Db.GetTable(command);
             if (table.Rows.Count == 0)
             {
                 return new Patient();
             }
-            Patient Lim = new Patient();
-            Lim.PatNum = PIn.Int(table.Rows[0][0].ToString());
-            Lim.LName = PIn.String(table.Rows[0][1].ToString());
-            Lim.FName = PIn.String(table.Rows[0][2].ToString());
-            Lim.MiddleI = PIn.String(table.Rows[0][3].ToString());
-            Lim.Preferred = PIn.String(table.Rows[0][4].ToString());
-            Lim.CreditType = PIn.String(table.Rows[0][5].ToString());
-            Lim.Guarantor = PIn.Long(table.Rows[0][6].ToString());
-            Lim.HasIns = PIn.String(table.Rows[0][7].ToString());
-            Lim.SSN = PIn.String(table.Rows[0][8].ToString());
-            return Lim;
+
+            return new Patient
+            {
+                PatNum = PIn.Int(table.Rows[0][0].ToString()),
+                LName = PIn.String(table.Rows[0][1].ToString()),
+                FName = PIn.String(table.Rows[0][2].ToString()),
+                MiddleI = PIn.String(table.Rows[0][3].ToString()),
+                Preferred = PIn.String(table.Rows[0][4].ToString()),
+                CreditType = PIn.String(table.Rows[0][5].ToString()),
+                Guarantor = PIn.Long(table.Rows[0][6].ToString()),
+                HasIns = PIn.String(table.Rows[0][7].ToString()),
+                SSN = PIn.String(table.Rows[0][8].ToString())
+            };
         }
 
-        public bool IsInFamily(long patNum)
-        {
-            return ListPats.Any(x => x.PatNum == patNum);
-        }
+        public bool IsInFamily(long patientId) => Members.Any(x => x.PatNum == patientId);
 
-        public bool HasArchivedMember()
-        {
-            return ListPats.Any(x => x.PatStatus == PatientStatus.Archived);
-        }
+        public bool HasArchivedMember() => Members.Any(x => x.PatStatus == PatientStatus.Archived);
 
-        ///<summary>Replaces all patient family fields in the given message with the given patient's family information.  Returns the resulting string.
-        ///Replaces: [FamilyList]</summary>
+        /// <summary>
+        /// Replaces all patient family fields in the given message with the given patient's family 
+        /// information. Returns the resulting string.
+        /// Replaces: [FamilyList]
+        /// </summary>
         public static string ReplaceFamily(string message, Patient pat)
         {
-            if (pat == null)
+            if (pat == null) return message;
+            
+            var family = Patients.GetFamily(pat.PatNum);
+            if (family == null)
             {
                 return message;
             }
-            Family fam = Patients.GetFamily(pat.PatNum);
-            if (fam == null)
-            {
-                return message;
-            }
-            string retVal = message;
-            retVal = retVal.Replace("[FamilyList]", string.Join(",", fam.ListPats
-                .Select(x => Patients.GetNameFirstOrPrefML(x.LName, x.FName, x.Preferred, x.MiddleI))));
-            return retVal;
-        }
 
+            return message.Replace("[FamilyList]", 
+                string.Join(",", 
+                    family.Members.Select(x => Patients.GetNameFirstOrPrefML(x.LName, x.FName, x.Preferred, x.MiddleI))));
+        }
     }
 }

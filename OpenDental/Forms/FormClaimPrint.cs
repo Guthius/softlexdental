@@ -509,7 +509,7 @@ namespace OpenDental{
 				//Patients.GetFamily(ThisPatNum);//return to current family
 			}
 			else{
-				subsc=FamCur.ListPats[FamCur.GetIndex(subCur.Subscriber)];
+				subsc=FamCur.Members[FamCur.GetIndex(subCur.Subscriber)];
 			}
 			Patient otherSubsc=new Patient();
 			if(otherPlan.PlanNum!=0){//if secondary insurance exists
@@ -519,7 +519,7 @@ namespace OpenDental{
 					//Patients.GetFamily(ThisPatNum);//return to current family
 				}
 				else{
-					otherSubsc=FamCur.ListPats[FamCur.GetIndex(otherSub.Subscriber)];
+					otherSubsc=FamCur.Members[FamCur.GetIndex(otherSub.Subscriber)];
 				}
 			}
 			if(ClaimCur.ReferringProv>0) {

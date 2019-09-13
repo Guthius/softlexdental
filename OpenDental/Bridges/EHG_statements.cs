@@ -179,7 +179,7 @@ namespace OpenDental.Bridges {
 		public static void GenerateOneStatement(XmlWriter writer,Statement stmt,Patient pat,Family fam,DataSet dataSet){
 			DataTable tableMisc=dataSet.Tables["misc"];
 			DataTable tableAccount=dataSet.Tables.OfType<DataTable>().FirstOrDefault(x => x.TableName.StartsWith("account"));
-			Patient guar=fam.ListPats[0];
+			Patient guar=fam.Members[0];
 			if(!Regex.IsMatch(guar.State,"^[A-Z]{2}$")) {
 				throw new ApplicationException(Lan.g("EHG_Statements","Guarantor state must be two uppercase characters.")+" "+guar.FName+" "+guar.LName+" #"+guar.PatNum);
 			}

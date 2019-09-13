@@ -823,7 +823,7 @@ namespace OpenDental{
 				textNote.Text=StmtCur.Note;
 				textNoteBold.Text=StmtCur.NoteBold;
 				if(StmtCur.StatementType!=StmtType.LimitedStatement && Preference.GetBool(PreferenceName.ShowFeatureSuperfamilies)) {
-					Patient guarantor=Patients.GetFamily(StmtCur.PatNum).ListPats[0];
+					Patient guarantor=Patients.GetFamily(StmtCur.PatNum).Members[0];
 					_superHead=Patients.GetPat(guarantor.SuperFamily);
 					if(StmtCur.IsNew && !StmtCur.IsSent && guarantor.HasSuperBilling && guarantor.SuperFamily>0 && _superHead!=null && _superHead.HasSuperBilling) {
 						//Statement not sent, statements use sheets, and guarantor is a member of a superfamily, guarantor and superhead both have superbilling enabled.

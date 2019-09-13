@@ -20,11 +20,6 @@ using System.ComponentModel;
 
 namespace OpenDentBusiness
 {
-    /// <summary>
-    /// Because this enum is stored in the database as strings rather than as numbers, we can do the order alphabetically.  
-    /// 
-    /// Preferences that are missing in general will start with "Missing in general" in the summary section.
-    /// </summary>
     public enum PreferenceName
     {
         /// <summary>

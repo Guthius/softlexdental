@@ -50,12 +50,12 @@ namespace OpenDental {
 			textPayAmt.Text=PaymentAmt.ToString("f");
 			AmtTotal=PaymentAmt;
 			listPatNums=new List<long>();
-			for(int i=0;i<FamCur.ListPats.Length;i++) {
-				listPatNums.Add(FamCur.ListPats[i].PatNum);
+			for(int i=0;i<FamCur.Members.Length;i++) {
+				listPatNums.Add(FamCur.Members[i].PatNum);
 			}
 			dictPatients=new Dictionary<long,Patient>();
 			List<Patient> listPatients=Patients.GetAssociatedPatients(PatCur.PatNum);
-			listPatients.AddRange(FamCur.ListPats);
+			listPatients.AddRange(FamCur.Members);
 			foreach(Patient pat in listPatients) {
 				dictPatients[pat.PatNum]=pat;
 			}

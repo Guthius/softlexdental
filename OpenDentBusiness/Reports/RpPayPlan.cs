@@ -203,8 +203,8 @@ namespace OpenDentBusiness
                 if (showFamilyBalance)
                 {
                     Family famCur = Patients.GetFamily(PIn.Long(raw.Rows[i]["PatNum"].ToString()));
-                    famBal = (decimal)famCur.ListPats[0].BalTotal;
-                    row["famBal"] = (famBal - (decimal)famCur.ListPats[0].InsEst).ToString("F");
+                    famBal = (decimal)famCur.Members[0].BalTotal;
+                    row["famBal"] = (famBal - (decimal)famCur.Members[0].InsEst).ToString("F");
                 }
                 if (hasClinicsEnabled)
                 {//Using clinics

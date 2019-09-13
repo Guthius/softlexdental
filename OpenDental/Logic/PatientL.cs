@@ -59,9 +59,9 @@ namespace OpenDental
             menu.MenuItems.Add("FAMILY");
             if (patNum != 0 && fam != null)
             {
-                for (int i = 0; i < fam.ListPats.Length; i++)
+                for (int i = 0; i < fam.Members.Length; i++)
                 {
-                    menu.MenuItems.Add(fam.ListPats[i].GetNameLF(), onClick);
+                    menu.MenuItems.Add(fam.Members[i].GetNameLF(), onClick);
                 }
             }
         }
@@ -118,7 +118,7 @@ namespace OpenDental
             {
                 return 0;//will never happen
             }
-            return fam.ListPats[index - buttonLastFivePatNums.Count - 2].PatNum;
+            return fam.Members[index - buttonLastFivePatNums.Count - 2].PatNum;
         }
 
         ///<summary>Returns a string representation of the current state of the application designed for display in the main title.

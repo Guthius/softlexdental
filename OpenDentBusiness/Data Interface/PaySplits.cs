@@ -231,7 +231,7 @@ namespace OpenDentBusiness
         ///<summary>Gets all paysplits that have are designated as prepayments for the patient's family.</summary>
         public static List<PaySplit> GetPrepayForFam(Family fam, bool onlyUnallocated = true)
         {
-            List<long> listFamPatNums = fam.ListPats.Select(x => x.PatNum).Distinct().ToList();
+            List<long> listFamPatNums = fam.Members.Select(x => x.PatNum).Distinct().ToList();
             string command = "SELECT * FROM paysplit "
                 + "WHERE UnearnedType!=0 ";
             if (onlyUnallocated)

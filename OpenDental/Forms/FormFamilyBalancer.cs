@@ -44,7 +44,7 @@ namespace OpenDental {
 				List<Family> listFamiliesInBatch=Patients.GetFamilies(_listBatches[_batchNum]);
 				listFamiliesInBatch=listFamiliesInBatch.OrderBy(x => x.Guarantor.LName).ToList();
 				foreach(Family fam in listFamiliesInBatch) {
-					_dictCurrentFamilyBatch.Add(fam.Guarantor.PatNum,new FamilyAccount(fam.ListPats.ToList(),fam.Guarantor));
+					_dictCurrentFamilyBatch.Add(fam.Guarantor.PatNum,new FamilyAccount(fam.Members.ToList(),fam.Guarantor));
 				}
 				UpdateBatchLabel();
 				_batchNum++;

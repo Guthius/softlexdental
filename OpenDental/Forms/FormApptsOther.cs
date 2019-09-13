@@ -83,29 +83,29 @@ namespace OpenDental {
 
 		private void FillFamily() {
 			SelectedPatNum=_patCur.PatNum;//just in case user has selected a different family member
-			_listRecalls=Recalls.GetList(_famCur.ListPats.ToList());
+			_listRecalls=Recalls.GetList(_famCur.Members.ToList());
 			//Appointment[] aptsOnePat;
-			List<PatientLink> listLinks=PatientLinks.GetLinks(_famCur.ListPats.Select(x => x.PatNum).ToList(),PatientLinkType.Merge);
+			List<PatientLink> listLinks=PatientLinks.GetLinks(_famCur.Members.Select(x => x.PatNum).ToList(),PatientLinkType.Merge);
 			listViewFamily.Items.Clear();
 			ListViewItem item;
 			DateTime dateDue;
 			DateTime dateSched;
-			for(int i=0;i<_famCur.ListPats.Length;i++) {
-				if(PatientLinks.WasPatientMerged(_famCur.ListPats[i].PatNum,listLinks)) {
+			for(int i=0;i<_famCur.Members.Length;i++) {
+				if(PatientLinks.WasPatientMerged(_famCur.Members[i].PatNum,listLinks)) {
 					continue;//Do not include Merged patients in the displayed list.
 				}
 				item=new ListViewItem(_famCur.GetNameInFamFLI(i));
-				item.Tag=_famCur.ListPats[i];
-				if(_famCur.ListPats[i].PatNum==_patCur.PatNum) {
+				item.Tag=_famCur.Members[i];
+				if(_famCur.Members[i].PatNum==_patCur.PatNum) {
 					item.BackColor=Color.Silver;
 				}
-				item.SubItems.Add(_famCur.ListPats[i].Age.ToString());
-				item.SubItems.Add(_famCur.ListPats[i].Gender.ToString());
+				item.SubItems.Add(_famCur.Members[i].Age.ToString());
+				item.SubItems.Add(_famCur.Members[i].Gender.ToString());
 				dateDue=DateTime.MinValue;
 				dateSched=DateTime.MinValue;
 				bool isdisabled=false;
 				for(int j=0;j<_listRecalls.Count;j++) {
-					if(_listRecalls[j].PatNum==_famCur.ListPats[i].PatNum
+					if(_listRecalls[j].PatNum==_famCur.Members[i].PatNum
 						&& (_listRecalls[j].RecallTypeNum==RecallTypes.PerioType
 						|| _listRecalls[j].RecallTypeNum==RecallTypes.ProphyType))
 					{
@@ -135,7 +135,7 @@ namespace OpenDental {
 				listViewFamily.Items.Add(item);
 			}
 			checkDone.Checked=_patCur.PlannedIsDone;
-			textFinUrg.Text=_famCur.ListPats[0].FamFinUrgNote;
+			textFinUrg.Text=_famCur.Members[0].FamFinUrgNote;
 		}
 
 		private void listFamily_DoubleClick(object sender, System.EventArgs e) {
@@ -266,8 +266,8 @@ namespace OpenDental {
 			int countNoRecalls=0;
 			int countPatsRestricted=0;
 			int countPatsArchivedOrDeceased=0;
-			for(int i=0;i<_famCur.ListPats.Length;i++) {
-				Patient patCur=_famCur.ListPats[i];
+			for(int i=0;i<_famCur.Members.Length;i++) {
+				Patient patCur=_famCur.Members[i];
 				if(PatRestrictionL.IsRestricted(patCur.PatNum,PatRestrict.ApptSchedule,true)) {
 					countPatsRestricted++;
 					continue;

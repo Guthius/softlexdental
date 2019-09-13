@@ -19,7 +19,7 @@ namespace OpenDentBusiness
             ppCharge.PayPlanNum = payplan.PayPlanNum;
             //FamCur is the family of the patient, so check to see if the guarantor is in the patient's family. 
             //If the guar and pat are in the same family, then use the patnum. else, use guarantor.
-            if (famCur.ListPats.Select(x => (long)x.PatNum).Contains(payplan.Guarantor))
+            if (famCur.Members.Select(x => (long)x.PatNum).Contains(payplan.Guarantor))
             {
                 ppCharge.Guarantor = payplan.PatNum;
             }

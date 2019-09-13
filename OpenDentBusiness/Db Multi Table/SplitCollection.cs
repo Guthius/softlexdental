@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
@@ -12,85 +11,57 @@ namespace OpenDentBusiness
     [Serializable]
     public class SplitCollection : ICollection<PaySplit>, IXmlSerializable
     {
-        private List<PaySplit> _listSplits = new List<PaySplit>();
+        private List<PaySplit> paySplits = new List<PaySplit>();
 
-        public int Count
+        public int Count => paySplits.Count;
+
+        public bool IsReadOnly => false;
+
+        public void Add(PaySplit paySplit)
         {
-            get
+            if (!Contains(paySplit))
             {
-                return _listSplits.Count;
+                if (string.IsNullOrEmpty((string)paySplit.ODTag))
+                {
+                    paySplit.ODTag = Guid.NewGuid().ToString();
+                }
+
+                paySplits.Add(paySplit);
             }
         }
 
-        public bool IsReadOnly
+        public void AddRange(List<PaySplit> paySplits)
         {
-            get
+            foreach (PaySplit paySplit in paySplits)
             {
-                return false;
+                Add(paySplit);
             }
         }
 
-        public void Add(PaySplit paysplit)
-        {
-            if (_listSplits.Any(x => x.ODTag == paysplit.ODTag
-                 || (x.SplitNum == paysplit.SplitNum && x.SplitNum != 0)))
-            {
-                return;
-            }
-            if (string.IsNullOrEmpty((string)paysplit.ODTag))
-            {
-                paysplit.ODTag = Guid.NewGuid().ToString();
-            }
-            _listSplits.Add(paysplit);
-        }
+        public void Clear() => paySplits.Clear();
+        
 
-        public void AddRange(List<PaySplit> listPaySplits)
-        {
-            foreach (PaySplit split in listPaySplits)
-            {
-                Add(split);
-            }
-        }
-
-        public void Clear()
-        {
-            _listSplits.Clear();
-        }
-
-        public bool Contains(PaySplit paysplit)
-        {
-            return _listSplits.Any(x => x.ODTag == paysplit.ODTag
-                || (x.SplitNum == paysplit.SplitNum && x.SplitNum != 0));
-        }
+        public bool Contains(PaySplit paySplit) =>
+            paySplits.Any(x => x.ODTag == paySplit.ODTag || (x.SplitNum == paySplit.SplitNum && x.SplitNum != 0));
 
         public void CopyTo(PaySplit[] array, int arrayIndex)
         {
-            for (int i = arrayIndex; i < _listSplits.Count; i++)
+            for (int i = arrayIndex; i < paySplits.Count; i++)
             {
-                array[i] = _listSplits[i];
+                array[i] = paySplits[i];
             }
         }
 
         public bool Remove(PaySplit paySplit)
         {
-            return _listSplits.RemoveAll(x => x.ODTag == paySplit.ODTag || (x.SplitNum == paySplit.SplitNum && x.SplitNum != 0)) > 0;
+            return paySplits.RemoveAll(x => x.ODTag == paySplit.ODTag || (x.SplitNum == paySplit.SplitNum && x.SplitNum != 0)) > 0;
         }
 
-        public IEnumerator<PaySplit> GetEnumerator()
-        {
-            return _listSplits.GetEnumerator();
-        }
+        public IEnumerator<PaySplit> GetEnumerator() => paySplits.GetEnumerator();
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return ((IEnumerable<PaySplit>)_listSplits).GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => paySplits.GetEnumerator();
 
-        ///<summary>Returns null.  Required when extending IXmlSerializable.</summary>
-        public XmlSchema GetSchema()
-        {
-            return null;
-        }
+        public XmlSchema GetSchema() => null;
 
         public void ReadXml(XmlReader reader)
         {
@@ -101,14 +72,14 @@ namespace OpenDentBusiness
             {
                 return;
             }
-            _listSplits = (List<PaySplit>)serializer.Deserialize(reader);
+            paySplits = (List<PaySplit>)serializer.Deserialize(reader);
             reader.ReadEndElement();
         }
 
         public void WriteXml(XmlWriter writer)
         {
             XmlSerializer serializer = new XmlSerializer(typeof(List<PaySplit>));
-            serializer.Serialize(writer, _listSplits);
+            serializer.Serialize(writer, paySplits);
         }
     }
 }

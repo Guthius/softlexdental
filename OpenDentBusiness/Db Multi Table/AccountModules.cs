@@ -57,7 +57,7 @@ namespace OpenDentBusiness
             fam = Patients.GetFamily(patNum);
             if (intermingled)
             {
-                patNum = fam.ListPats[0].PatNum;//guarantor
+                patNum = fam.Members[0].PatNum;//guarantor
             }
             pat = fam.GetPatient(patNum);
             //We've gotten the patient and family objects, so now we can make a plethora of actions to run in parallel.
@@ -97,7 +97,7 @@ namespace OpenDentBusiness
 
             Action getMergeLinks = new Action(() =>
             {
-                retVal.ListMergeLinks = PatientLinks.GetLinks(fam.ListPats.Select(x => x.PatNum).ToList(), PatientLinkType.Merge);
+                retVal.ListMergeLinks = PatientLinks.GetLinks(fam.Members.Select(x => x.PatNum).ToList(), PatientLinkType.Merge);
             });
 
             Action getPrePayForFam = new Action(() =>
@@ -508,10 +508,10 @@ namespace OpenDentBusiness
             List<DataRow> rows = new List<DataRow>();
             string familyPatNums = POut.Long(pat.PatNum);//just in case, fam should never be null so this will be replaced by the patnums from fam.ListPats
             Dictionary<string, string> dictPatFNames = new Dictionary<string, string>() { { pat.PatNum.ToString(), pat.FName } };
-            if (fam != null && fam.ListPats != null && fam.ListPats.Length > 0)
+            if (fam != null && fam.Members != null && fam.Members.Length > 0)
             {
-                familyPatNums = string.Join(",", fam.ListPats.Select(x => POut.Long(x.PatNum)));
-                dictPatFNames = fam.ListPats.ToDictionary(x => x.PatNum.ToString(), x => x.FName);
+                familyPatNums = string.Join(",", fam.Members.Select(x => POut.Long(x.PatNum)));
+                dictPatFNames = fam.Members.ToDictionary(x => x.PatNum.ToString(), x => x.FName);
             }
             #region commlog
             List<Definition> listCommLogTypeDefs = Definition.GetByCategory(DefinitionCategory.CommLogTypes);
@@ -900,9 +900,9 @@ namespace OpenDentBusiness
             decimal amt;
             string command;
             string familyPatNums = "";
-            if (fam != null && fam.ListPats != null && fam.ListPats.Length > 0)
+            if (fam != null && fam.Members != null && fam.Members.Length > 0)
             {
-                familyPatNums = string.Join(",", fam.ListPats.Select(x => POut.Long(x.PatNum)));
+                familyPatNums = string.Join(",", fam.Members.Select(x => POut.Long(x.PatNum)));
             }
             string adjNumsForLimited = "";
             string paySplitNumsForLimited = "";
@@ -1372,7 +1372,7 @@ namespace OpenDentBusiness
             #region Paysplits
             //paysplits-----------------------------------------------------------------------------------------
             List<string> listWhereClauses = new List<string>();
-            string familyPayPlanNums = String.Join(",", PayPlans.GetForPats(fam.ListPats.Select(x => x.PatNum).ToList(), pat.PatNum)
+            string familyPayPlanNums = String.Join(",", PayPlans.GetForPats(fam.Members.Select(x => x.PatNum).ToList(), pat.PatNum)
                 .Select(y => y.PayPlanNum).ToList());
             if (familyPatNums != "")
             {
@@ -1483,7 +1483,7 @@ namespace OpenDentBusiness
             for (int i = 0; i < rawPay.Rows.Count; i++)
             {
                 //Skip payments where the patnum is not in the current family.
-                if (!fam.ListPats.Select(x => x.PatNum).Contains(PIn.Long(rawPay.Rows[i]["PatNum"].ToString())))
+                if (!fam.Members.Select(x => x.PatNum).Contains(PIn.Long(rawPay.Rows[i]["PatNum"].ToString())))
                 {
                     continue;
                 }
@@ -1839,14 +1839,14 @@ namespace OpenDentBusiness
             #endregion Claims
             #region Statements
             //Statement----------------------------------------------------------------------------------------
-            List<long> listPatNums = fam.ListPats.ToList().Select(x => x.PatNum).Distinct().ToList();
+            List<long> listPatNums = fam.Members.ToList().Select(x => x.PatNum).Distinct().ToList();
             command = "SELECT DateSent,IsSent,Mode_,StatementNum,PatNum,Note,NoteBold,IsInvoice,SuperFamily,DateTStamp "
                 + "FROM statement "
                 + "WHERE (PatNum IN (" + string.Join(",", listPatNums) + ") ";
             //Always include all statements from the super family if a super family is set.  They will be filtered out later.
-            if (fam.ListPats[0].SuperFamily > 0)
+            if (fam.Members[0].SuperFamily > 0)
             {
-                command += "OR SuperFamily =" + POut.Long(fam.ListPats[0].SuperFamily);//Get all statements for the superfamily as well.
+                command += "OR SuperFamily =" + POut.Long(fam.Members[0].SuperFamily);//Get all statements for the superfamily as well.
             }
             command += ") ";
             if (statementNum > 0)
@@ -1950,7 +1950,7 @@ namespace OpenDentBusiness
                 for (int i = 0; i < rawPayPlan.Rows.Count; i++)
                 {
                     //Version 1. If the payment plan's patnum isn't in the current family, then skip. We only want it to show as a credit for the patient of the payment plan.
-                    if (!fam.ListPats.Select(x => x.PatNum).Contains(PIn.Long(rawPayPlan.Rows[i]["PatNum"].ToString())))
+                    if (!fam.Members.Select(x => x.PatNum).Contains(PIn.Long(rawPayPlan.Rows[i]["PatNum"].ToString())))
                     {
                         continue;
                     }
@@ -2010,7 +2010,7 @@ namespace OpenDentBusiness
             if (payPlanVersionCur == PayPlanVersions.AgeCreditsAndDebits)
             { //this information is only required for v2
                 string patnums = familyPatNums;
-                List<Patient> listFamilyMembers = fam.ListPats.ToList();
+                List<Patient> listFamilyMembers = fam.Members.ToList();
                 //If we are make a superfamily invoice, we want to grab the payplan charges from all family members instead of just the superguarantor.
                 if (stmt.SuperFamily != 0)
                 {
@@ -2260,10 +2260,10 @@ namespace OpenDentBusiness
             DataTable[] rowsByPat = null;//will only used if multiple patients not intermingled
             if (singlePatient)
             {//This is usually used for Account module grid.  Always gets used for superstatements.
-                Patient patGuarantor = fam.ListPats[0];
+                Patient patGuarantor = fam.Members[0];
                 if (!fam.IsInFamily(patNum))
                 {//patNum is a pat from a different family (maybe not possible, but just to retain current behavior)
-                    patGuarantor = Patients.GetFamily(patNum).ListPats[0];
+                    patGuarantor = Patients.GetFamily(patNum).Members[0];
                 }
                 rows.RemoveAll(x => PIn.Long(x["SuperFamily"].ToString()) != 0 && !patGuarantor.HasSuperBilling);
                 rows.RemoveAll(x => PIn.Long(x["SuperFamily"].ToString()) == 0 && x["PatNum"].ToString() != patNum.ToString());
@@ -2271,13 +2271,13 @@ namespace OpenDentBusiness
             else if (!intermingled)
             {//multiple patients not intermingled.  This is most common for an ordinary statement.  Never gets used with superstatements.
                 rows.ForEach(x => table.Rows.Add(x));
-                rowsByPat = new DataTable[fam.ListPats.Length];
+                rowsByPat = new DataTable[fam.Members.Length];
                 DataTable tableCur;
                 for (int i = 0; i < rowsByPat.Length; i++)
                 {
                     tableCur = new DataTable();
                     SetTableColumns(tableCur);
-                    rows.FindAll(x => x["PatNum"].ToString() == fam.ListPats[i].PatNum.ToString()).ForEach(x => tableCur.ImportRow(x));
+                    rows.FindAll(x => x["PatNum"].ToString() == fam.Members[i].PatNum.ToString()).ForEach(x => tableCur.ImportRow(x));
                     rowsByPat[i] = tableCur;
                 }
             }
@@ -2395,7 +2395,7 @@ namespace OpenDentBusiness
                 DataTable tablep;
                 for (int p = 0; p < rowsByPat.Length; p++)
                 {
-                    Patient patRowCur = fam.ListPats[p];
+                    Patient patRowCur = fam.Members[p];
                     if (p > 0 && statementNum > 0 && patRowCur.PatStatus != PatientStatus.Patient && patRowCur.EstBalance == 0)
                     {
                         continue;
@@ -2779,12 +2779,12 @@ namespace OpenDentBusiness
             List<DataRow> rowspat = new List<DataRow>();
             decimal bal;
             decimal balfam = 0;
-            for (int p = 0; p < fam.ListPats.Length; p++)
+            for (int p = 0; p < fam.Members.Length; p++)
             {
                 row = table.NewRow();
                 bal = 0;
                 List<DataRow> listPatientRows;
-                if (dictPatientRows.TryGetValue(fam.ListPats[p].PatNum, out listPatientRows))
+                if (dictPatientRows.TryGetValue(fam.Members[p].PatNum, out listPatientRows))
                 {
                     foreach (DataRow rowPatient in listPatientRows)
                     {
@@ -2795,8 +2795,8 @@ namespace OpenDentBusiness
                 balfam += bal;
                 row["balanceDouble"] = bal;
                 row["balance"] = bal.ToString("n");
-                row["name"] = fam.ListPats[p].GetNameLF();
-                row["PatNum"] = fam.ListPats[p].PatNum.ToString();
+                row["name"] = fam.Members[p].GetNameLF();
+                row["PatNum"] = fam.Members[p].PatNum.ToString();
                 rowspat.Add(row);
                 if (isInvoice || statementType == StmtType.LimitedStatement)
                 {
@@ -2804,11 +2804,11 @@ namespace OpenDentBusiness
                 }
                 else
                 {
-                    if ((double)bal != fam.ListPats[p].EstBalance)
+                    if ((double)bal != fam.Members[p].EstBalance)
                     {
-                        Patient patnew = fam.ListPats[p].Copy();
+                        Patient patnew = fam.Members[p].Copy();
                         patnew.EstBalance = (double)bal;
-                        Patients.Update(patnew, fam.ListPats[p]);
+                        Patients.Update(patnew, fam.Members[p]);
                     }
                 }
             }
@@ -2817,7 +2817,7 @@ namespace OpenDentBusiness
             row["balanceDouble"] = balfam;
             row["balance"] = balfam.ToString("f");
             row["name"] = Lans.g("AccountModule", "Entire Family");
-            row["PatNum"] = fam.ListPats[0].PatNum.ToString();
+            row["PatNum"] = fam.Members[0].PatNum.ToString();
             rowspat.Add(row);
             for (int i = 0; i < rowspat.Count; i++)
             {
@@ -2847,13 +2847,13 @@ namespace OpenDentBusiness
             }
             else
             {
-                for (int i = 0; i < fam.ListPats.Length; i++)
+                for (int i = 0; i < fam.Members.Length; i++)
                 {
                     if (i != 0)
                     {
                         command += "OR ";
                     }
-                    command += "PatNum =" + POut.Long(fam.ListPats[i].PatNum) + " ";
+                    command += "PatNum =" + POut.Long(fam.Members[i].PatNum) + " ";
                 }
             }
             command += ") ORDER BY PatNum,AptDateTime";
@@ -2889,7 +2889,7 @@ namespace OpenDentBusiness
             //FamFinancial note--------------------
             string command =
                 "SELECT FamFinancial "
-                + "FROM patientnote WHERE patnum =" + POut.Long(fam.ListPats[0].PatNum);
+                + "FROM patientnote WHERE patnum =" + POut.Long(fam.Members[0].PatNum);
             DataTable raw = Db.GetTable(command);
             row = table.NewRow();
             row["descript"] = "FamFinancial";
@@ -2937,13 +2937,13 @@ namespace OpenDentBusiness
             //Unearned income----------------------
             command = "SELECT SUM(SplitAmt) FROM paysplit WHERE "
                 + "UnearnedType>0 AND (";
-            for (int i = 0; i < fam.ListPats.Length; i++)
+            for (int i = 0; i < fam.Members.Length; i++)
             {
                 if (i > 0)
                 {
                     command += " OR ";
                 }
-                command += "PatNum= " + POut.Long(fam.ListPats[i].PatNum);
+                command += "PatNum= " + POut.Long(fam.Members[i].PatNum);
             }
             command += ")";
             //Unearned Amount from this datatable is deprecated.  Account module uses S-class methods to calculate it now.

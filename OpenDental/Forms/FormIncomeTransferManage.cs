@@ -40,7 +40,7 @@ namespace OpenDental {
 			_listSplitsCur=new List<PaySplit>();
 			_listSplitsAssociated=new List<PaySplits.PaySplitAssociated>();
 			_dictPatients=Patients.GetAssociatedPatients(_patCur.PatNum).ToDictionary(x => x.PatNum,x => x);
-			_results=PaymentEdit.ConstructAndLinkChargeCredits(_famCur.ListPats.Select(x => x.PatNum).ToList(),_patCur.PatNum,new List<PaySplit>(),
+			_results=PaymentEdit.ConstructAndLinkChargeCredits(_famCur.Members.Select(x => x.PatNum).ToList(),_patCur.PatNum,new List<PaySplit>(),
 				_paymentCur,new List<AccountEntry>(),true,false);
 			FillGridSplits();
 		}

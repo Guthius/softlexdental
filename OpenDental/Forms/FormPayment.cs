@@ -204,7 +204,7 @@ namespace OpenDental {
 		///<summary>The list of patnums in _currentFamily, either the superfamily or the regular family depending on the superfam checkbox state.</summary>
 		private List<long> _listPatNums {
 			get {
-				return _curFamOrSuperFam.ListPats.Select(x => x.PatNum).ToList();
+				return _curFamOrSuperFam.Members.Select(x => x.PatNum).ToList();
 			}
 		}
 
@@ -1694,7 +1694,7 @@ namespace OpenDental {
 			}
 			else { 
 				//Check the Super Family box if there are any splits from a member in the super family who is not in the immediate family.
-				List<Patient> listSuperFamExclusive=_superFamCur.ListPats.Where(x => !_famCur.IsInFamily(x.PatNum)).ToList();
+				List<Patient> listSuperFamExclusive=_superFamCur.Members.Where(x => !_famCur.IsInFamily(x.PatNum)).ToList();
 				if(!IsNew && (_listSplitsCur.Any(x => x.PatNum.In(listSuperFamExclusive.Select(y => y.PatNum))))) {
 					checkShowSuperfamily.Checked=true;
 				}
@@ -3865,9 +3865,9 @@ namespace OpenDental {
 		}
 
 		private void checkPayTypeNone_Click(object sender,EventArgs e) {
-			List<long> listPatNumsFamily=_famCur.ListPats.Select(x => x.PatNum).ToList();
+			List<long> listPatNumsFamily=_famCur.Members.Select(x => x.PatNum).ToList();
 			if(checkShowSuperfamily.Checked) {
-				listPatNumsFamily.AddRange(_superFamCur.ListPats.Select(x => x.PatNum).ToList());
+				listPatNumsFamily.AddRange(_superFamCur.Members.Select(x => x.PatNum).ToList());
 				listPatNumsFamily=listPatNumsFamily.Distinct().ToList();
 			}
 			_loadData.ConstructChargesData=PaymentEdit.GetConstructChargesData(listPatNumsFamily,_patCur.PatNum,_loadData.ListSplits,_paymentCur.PayNum,checkPayTypeNone.Checked);
@@ -4329,9 +4329,9 @@ namespace OpenDental {
 			if(_patCur.SuperFamily==0) { //if no super family, just return.
 				return;
 			}
-			List<long> listPatNumsFamily=_famCur.ListPats.Select(x => x.PatNum).ToList();
+			List<long> listPatNumsFamily=_famCur.Members.Select(x => x.PatNum).ToList();
 			if(checkShowSuperfamily.Checked) {
-				listPatNumsFamily.AddRange(_superFamCur.ListPats.Select(x => x.PatNum).ToList());
+				listPatNumsFamily.AddRange(_superFamCur.Members.Select(x => x.PatNum).ToList());
 				listPatNumsFamily=listPatNumsFamily.Distinct().ToList();
 			}
 			_loadData.ConstructChargesData=PaymentEdit.GetConstructChargesData(listPatNumsFamily,_patCur.PatNum,_loadData.ListSplits,_paymentCur.PayNum,checkPayTypeNone.Checked);
@@ -4664,7 +4664,7 @@ namespace OpenDental {
 				}
 				else if(!_isCCDeclined
 					&& Payments.AllocationRequired(_paymentCur.PayAmt,_paymentCur.PatNum)
-					&& _curFamOrSuperFam.ListPats.Length>1 //Has other family members
+					&& _curFamOrSuperFam.Members.Length>1 //Has other family members
 					&& MsgBox.Show(this,MsgBoxButtons.YesNo,"Apply part of payment to other family members?"))
 				{
 					_listSplitsCur=Payments.Allocate(_paymentCur);//PayAmt needs to be set first

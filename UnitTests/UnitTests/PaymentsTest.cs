@@ -147,7 +147,7 @@ namespace UnitTests.UnitTests {
 			Procedure procedure3=ProcedureT.CreateProcedure(pat,"D0220",ProcStat.C,"",60,DateTime.Now.AddDays(-3));
 			Payment payment=PaymentT.MakePaymentNoSplits(patNum,150);
 			Family famForPat=Patients.GetFamily(patNum);
-			List<Patient> listFamForPat=famForPat.ListPats.ToList();
+			List<Patient> listFamForPat=famForPat.Members.ToList();
 			PaymentEdit.InitData init=PaymentEdit.Init(listFamForPat,famForPat,new Family { },payment,new List<PaySplit>(),new List<AccountEntry>(),patNum);
 			//Auto Splits will be in opposite order from least recent to most recent.
 			Assert.AreEqual(3,init.AutoSplitData.ListAutoSplits.Count);
@@ -168,7 +168,7 @@ namespace UnitTests.UnitTests {
 			Payment payment1=PaymentT.MakePayment(patNum,110,DateTime.Now.AddDays(-2));
 			Payment payment2=PaymentT.MakePaymentNoSplits(patNum,80,DateTime.Today);
 			Family famForPat=Patients.GetFamily(patNum);
-			List<Patient> listFamForPat=famForPat.ListPats.ToList();
+			List<Patient> listFamForPat=famForPat.Members.ToList();
 			PaymentEdit.InitData init=PaymentEdit.Init(listFamForPat,famForPat,new Family { },payment2,new List<PaySplit>(),new List<AccountEntry>(),patNum);
 			//Auto Splits will be in opposite order from least recent to most recent.
 			//ListSplitsCur should contain three paysplits, one for procedure1 for 40, and one for procedure2 for 30,
@@ -191,7 +191,7 @@ namespace UnitTests.UnitTests {
 			Payment payment1=PaymentT.MakePayment(patNum,200,DateTime.Now.AddDays(-2));
 			Payment payment2=PaymentT.MakePaymentNoSplits(patNum,50,DateTime.Today);
 			Family famForPat=Patients.GetFamily(patNum);
-			List<Patient> listFamForPat=famForPat.ListPats.ToList();
+			List<Patient> listFamForPat=famForPat.Members.ToList();
 			PaymentEdit.InitData init=PaymentEdit.Init(listFamForPat,famForPat,new Family { },payment2,new List<PaySplit>(),new List<AccountEntry>(),patNum);
 			//Auto Splits will be in opposite order from least recent to most recent.
 			//ListSplitsCur should contain one paysplit worth 50 and not attached to any procedures.
@@ -208,7 +208,7 @@ namespace UnitTests.UnitTests {
 			Procedure procedure1=ProcedureT.CreateProcedure(pat,"D1110",ProcStat.C,"",40,DateTime.Now.AddDays(-1));
 			Payment payment=PaymentT.MakePaymentNoSplits(patNum,-50,DateTime.Today);
 			Family famForPat=Patients.GetFamily(patNum);
-			List<Patient> listFamForPat=famForPat.ListPats.ToList();
+			List<Patient> listFamForPat=famForPat.Members.ToList();
 			PaymentEdit.InitData init=PaymentEdit.Init(listFamForPat,famForPat,new Family { },payment,new List<PaySplit>(),new List<AccountEntry>(),patNum);
 			//Auto Splits will be in opposite order from least recent to most recent.
 			//ListSplitsCur should contain no paysplits since it doesn't make sense to create negative payments when there are outstanding charges.
@@ -229,7 +229,7 @@ namespace UnitTests.UnitTests {
 			Payment payment=PaymentT.MakePayment(patNum,100,DateTime.Now.AddDays(-2),procNum:procedure3.ProcNum);
 			Payment payment2=PaymentT.MakePaymentNoSplits(patNum,50,DateTime.Today);
 			Family famForPat=Patients.GetFamily(patNum);
-			List<Patient> listFamForPat=famForPat.ListPats.ToList();
+			List<Patient> listFamForPat=famForPat.Members.ToList();
 			PaymentEdit.InitData init=PaymentEdit.Init(listFamForPat,famForPat,new Family { },payment2,new List<PaySplit>(),new List<AccountEntry>(),patNum);
 			//Auto Splits will be in opposite order from least recent to most recent.
 			//ListSplitsCur should contain two paysplits, 40 attached to the D1110 and another for the remainder of 10, not attached to any procedure.
@@ -247,7 +247,7 @@ namespace UnitTests.UnitTests {
 			Procedure procedure1=ProcedureT.CreateProcedure(pat,"D1110",ProcStat.C,"",-40,DateTime.Now.AddDays(-1));
 			Payment payment=PaymentT.MakePaymentNoSplits(patNum,-50,DateTime.Today);
 			Family famForPat=Patients.GetFamily(patNum);
-			List<Patient> listFamForPat=famForPat.ListPats.ToList();
+			List<Patient> listFamForPat=famForPat.Members.ToList();
 			PaymentEdit.InitData init=PaymentEdit.Init(listFamForPat,famForPat,new Family { },payment,new List<PaySplit>(),new List<AccountEntry>(),patNum);
 			//Auto Splits will be in opposite order from least recent to most recent.
 			//ListSplitsCur should contain one paysplit for the amount passed in that is unallocated.
@@ -271,7 +271,7 @@ namespace UnitTests.UnitTests {
 			Procedure procedure3=ProcedureT.CreateProcedure(pat,"D0220",ProcStat.C,"",60,DateTime.Now.AddDays(-3));
 			Payment payment=PaymentT.MakePaymentNoSplits(patNum,150,DateTime.Today);
 			Family famForPat=Patients.GetFamily(patNum);
-			List<Patient> listFamForPat=famForPat.ListPats.ToList();
+			List<Patient> listFamForPat=famForPat.Members.ToList();
 			PaymentEdit.InitData init=PaymentEdit.Init(listFamForPat,famForPat,new Family { },payment,new List<PaySplit>(),new List<AccountEntry>(),patNum);
 			//Auto Splits will be in opposite order from least recent to most recent.
 			Assert.AreEqual(3,init.AutoSplitData.ListAutoSplits.Count);
@@ -300,7 +300,7 @@ namespace UnitTests.UnitTests {
 			ClaimProcT.AddInsPaid(patNum,insPlan.PlanNum,procedure3.ProcNum,20,insSub.InsSubNum,0,10);
 			Payment payment=PaymentT.MakePaymentNoSplits(patNum,150,DateTime.Today);
 			Family famForPat=Patients.GetFamily(patNum);
-			List<Patient> listFamForPat=famForPat.ListPats.ToList();
+			List<Patient> listFamForPat=famForPat.Members.ToList();
 			PaymentEdit.InitData init=PaymentEdit.Init(listFamForPat,famForPat,new Family { },payment,new List<PaySplit>(),new List<AccountEntry>(),patNum);
 			//Auto Splits will be in opposite order from least recent to most recent.
 			//ListSplitsCur should contain four splits, 30, 35, and 30, then one unallocated for the remainder of the payment 55.

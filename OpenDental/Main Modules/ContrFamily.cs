@@ -1103,9 +1103,9 @@ namespace OpenDental
             ODGridCell cell;
             int selectedRow = -1;
 
-            for (int i = 0; i < FamCur.ListPats.Length; i++)
+            for (int i = 0; i < FamCur.Members.Length; i++)
             {
-                if (PatientLinks.WasPatientMerged(FamCur.ListPats[i].PatNum, _loadData.ListMergeLinks) && FamCur.ListPats[i].PatNum != PatCur.PatNum)
+                if (PatientLinks.WasPatientMerged(FamCur.Members[i].PatNum, _loadData.ListMergeLinks) && FamCur.Members[i].PatNum != PatCur.PatNum)
                 {
                     //Hide merged patients so that new things don't get added to them. If the user really wants to find this patient, they will have to use 
                     //the Select Patient window.
@@ -1114,14 +1114,14 @@ namespace OpenDental
 
                 var row = new ODGridRow();
                 row.Cells.Add(FamCur.GetNameInFamLFI(i));
-                row.Cells.Add(Lan.g("enumPatientPosition", FamCur.ListPats[i].Position.ToString()));
-                row.Cells.Add(Lan.g("enumPatientGender", FamCur.ListPats[i].Gender.ToString()));
-                row.Cells.Add(Lan.g("enumPatientStatus", FamCur.ListPats[i].PatStatus.ToString()));
-                row.Cells.Add(Patients.AgeToString(FamCur.ListPats[i].Age));
+                row.Cells.Add(Lan.g("enumPatientPosition", FamCur.Members[i].Position.ToString()));
+                row.Cells.Add(Lan.g("enumPatientGender", FamCur.Members[i].Gender.ToString()));
+                row.Cells.Add(Lan.g("enumPatientStatus", FamCur.Members[i].PatStatus.ToString()));
+                row.Cells.Add(Patients.AgeToString(FamCur.Members[i].Age));
                 recallDate = DateTime.MinValue;
                 for (int j = 0; j < RecallList.Count; j++)
                 {
-                    if (RecallList[j].PatNum == FamCur.ListPats[i].PatNum
+                    if (RecallList[j].PatNum == FamCur.Members[i].PatNum
                         && (RecallList[j].RecallTypeNum == Preference.GetLong(PreferenceName.RecallTypeSpecialProphy)
                         || RecallList[j].RecallTypeNum == Preference.GetLong(PreferenceName.RecallTypeSpecialPerio)))
                     {
@@ -1143,9 +1143,9 @@ namespace OpenDental
                 {//guarantor
                     row.Bold = true;
                 }
-                row.Tag = FamCur.ListPats[i];
+                row.Tag = FamCur.Members[i];
                 int idx = gridFamily.Rows.Add(row);
-                if (FamCur.ListPats[i].PatNum == PatCur.PatNum)
+                if (FamCur.Members[i].PatNum == PatCur.PatNum)
                 {
                     selectedRow = idx;
                 }
@@ -1217,9 +1217,9 @@ namespace OpenDental
             //Array.Resize(ref FamCur.ListPats,FamCur.ListPats.Length+1);
             //FamCur.ListPats[FamCur.ListPats.Length-1]=tempPat;
             //Adding the temp patient to the FamCur.ListPats without calling GetFamily which makes a call to the db
-            List<Patient> listPatsTemp = FamCur.ListPats.ToList();
+            List<Patient> listPatsTemp = FamCur.Members.ToList();
             listPatsTemp.Add(tempPat);
-            FamCur.ListPats = listPatsTemp.ToArray();
+            FamCur.Members = listPatsTemp.ToArray();
 
 
             using (var formPatientEdit = new FormPatientEdit(tempPat, FamCur))
@@ -1363,7 +1363,7 @@ namespace OpenDental
             Patient PatOld = PatCur.Copy();
             if (PatCur.PatNum == PatCur.Guarantor)
             {//if selecting guarantor
-                if (FamCur.ListPats.Length == 1)
+                if (FamCur.Members.Length == 1)
                 {
                     if (!MsgBox.Show(this, true, "Delete Patient?"))
                     {
@@ -1457,7 +1457,7 @@ namespace OpenDental
                     MsgBox.Show(this, "You cannot move the head of a super family. If you wish to move the super family head, you must first remove all other super family members.");
                     return;
                 }
-                if (FamCur.ListPats.Length == 1)
+                if (FamCur.Members.Length == 1)
                 {//and no other family members
                     if (!MovePats(PatOld))
                     {
@@ -1466,7 +1466,7 @@ namespace OpenDental
                 }
                 else
                 {//there are other family members
-                    foreach (Patient pat in FamCur.ListPats)
+                    foreach (Patient pat in FamCur.Members)
                     {
                         if (pat.PatNum == PatCur.PatNum)
                         {
@@ -1566,7 +1566,7 @@ namespace OpenDental
             Patient patInNewFam = Patients.GetPat(FormPS.SelectedPatNum);
             if (famCur != null)
             {//Move all family members marked as merged silently (The family should only contain guarantor and any merged pats at this point)
-                foreach (Patient pat in famCur.ListPats)
+                foreach (Patient pat in famCur.Members)
                 {
                     if (pat.PatNum == patOld.PatNum)
                     {
@@ -1945,7 +1945,7 @@ namespace OpenDental
             List<InsSub> listInsSubsForFam = InsSubs.RefreshForFam(famCur);
             List<InsPlan> listInsPlansForFam = InsPlans.RefreshForSubList(listInsSubsForFam);
             bool patPlanAdded = false;
-            foreach (Patient pat in famCur.ListPats)
+            foreach (Patient pat in famCur.Members)
             {//possibly filter by PatStatus, i.e. .Where(x => x.PatStatus==PatientStatus.Patient)
                 listPatPlansForPat = PatPlans.Refresh(pat.PatNum);
                 insSubCur = listInsSubsForFam.FirstOrDefault(x => x.Subscriber == pat.PatNum && x.PlanNum == sub.PlanNum);
@@ -2022,12 +2022,12 @@ namespace OpenDental
             {
                 return;
             }
-            for (int i = 0; i < FamCur.ListPats.Length; i++)
+            for (int i = 0; i < FamCur.Members.Length; i++)
             {//remove whole family
-                Patient tempPat = FamCur.ListPats[i].Copy();
+                Patient tempPat = FamCur.Members[i].Copy();
                 Popups.CopyForMovingSuperFamily(tempPat, 0);
                 tempPat.SuperFamily = 0;
-                Patients.Update(tempPat, FamCur.ListPats[i]);
+                Patients.Update(tempPat, FamCur.Members[i]);
             }
             ModuleSelected(PatCur.PatNum);
         }

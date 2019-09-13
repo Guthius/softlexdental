@@ -59,8 +59,8 @@ namespace OpenDental {
 		}
 
 		private void FormPaySplitEdit_Load(object sender, System.EventArgs e) {
-			List<PatientLink> listLinks=PatientLinks.GetLinks(_famCur.ListPats.Select(x => x.PatNum).ToList(),PatientLinkType.Merge);
-			List<Patient> listNonMergedPats=_famCur.ListPats.Where(x => !PatientLinks.WasPatientMerged(x.PatNum,listLinks)).ToList();
+			List<PatientLink> listLinks=PatientLinks.GetLinks(_famCur.Members.Select(x => x.PatNum).ToList(),PatientLinkType.Merge);
+			List<Patient> listNonMergedPats=_famCur.Members.Where(x => !PatientLinks.WasPatientMerged(x.PatNum,listLinks)).ToList();
 			//New object to break reference to famCur in calling method/class; avoids removing merged patients from original object.
 			_famCur=new Family(listNonMergedPats);
 			_paySplitCopy=PaySplitCur.Copy();
@@ -241,9 +241,9 @@ namespace OpenDental {
 		///<summary>PaySplit.Patient is one value that is always kept in synch with the display.  If program changes PaySplit.Patient, then it will run this method to update the display.  If user changes display, then _MouseDown is run to update the PaySplit.Patient.</summary>
 		private void FillPatient(){
 			listPatient.Items.Clear();
-			for(int i=0;i<_famCur.ListPats.Length;i++){
+			for(int i=0;i<_famCur.Members.Length;i++){
 				listPatient.Items.Add(_famCur.GetNameInFamLFI(i));
-				if(PaySplitCur.PatNum==_famCur.ListPats[i].PatNum){
+				if(PaySplitCur.PatNum==_famCur.Members[i].PatNum){
 					listPatient.SelectedIndex=i;
 				}
 			}
@@ -251,7 +251,7 @@ namespace OpenDental {
 			if(PaySplitCur.PatNum==0){
 				listPatient.SelectedIndex=0;
 				//the initial patient will be the first patient in the family, usually guarantor
-				PaySplitCur.PatNum=_famCur.ListPats[0].PatNum;
+				PaySplitCur.PatNum=_famCur.Members[0].PatNum;
 			}
 			if(listPatient.SelectedIndex==-1){//patient not in family
 				checkPatOtherFam.Checked=true;
@@ -295,7 +295,7 @@ namespace OpenDental {
 			if(listPatient.SelectedIndex==-1){
 				return;
 			}
-			PaySplitCur.PatNum=_famCur.ListPats[listPatient.SelectedIndex].PatNum;
+			PaySplitCur.PatNum=_famCur.Members[listPatient.SelectedIndex].PatNum;
 		}
 
 		private void FillProcedure(){
@@ -393,7 +393,7 @@ namespace OpenDental {
 				comboClinic.IndexSelectOrSetText(_listClinics.FindIndex(x => x.ClinicNum==PaySplitCur.ClinicNum),() => { return Clinics.GetAbbr(PaySplitCur.ClinicNum); });
 			}
 			//Proc selected will always be for the pat this paysplit was made for
-			listPatient.SelectedIndex=_famCur.ListPats.ToList().FindIndex(x => x.PatNum==PaySplitCur.PatNum);
+			listPatient.SelectedIndex=_famCur.Members.ToList().FindIndex(x => x.PatNum==PaySplitCur.PatNum);
 			ComputeTotals();
 			tabAdjustment.Enabled=false;
 		}
@@ -457,7 +457,7 @@ namespace OpenDental {
 				comboClinic.IndexSelectOrSetText(_listClinics.FindIndex(x => x.ClinicNum==_adjCur.ClinicNum),() => { return Clinics.GetAbbr(_adjCur.ClinicNum); });
 			}
 			//Proc selected will always be for the pat this paysplit was made for
-			listPatient.SelectedIndex=_famCur.ListPats.ToList().FindIndex(x => x.PatNum==_adjCur.PatNum);
+			listPatient.SelectedIndex=_famCur.Members.ToList().FindIndex(x => x.PatNum==_adjCur.PatNum);
 			tabProcedure.Enabled=false;//paysplits cannot have both procedure and adjustment
 		}
 
@@ -713,7 +713,7 @@ namespace OpenDental {
 				}
 				//PayPlan[] planListAll=PayPlans.Refresh(FamCur.List[listPatient.SelectedIndex].PatNum,0);
 				//get all plans where the selected patient is the patnum or the guarantor of the payplan. Do not include insurance payment plans
-				List<PayPlan> payPlanList=PayPlans.GetForPatNum(_famCur.ListPats[listPatient.SelectedIndex].PatNum).Where(x => x.PlanNum == 0).ToList();
+				List<PayPlan> payPlanList=PayPlans.GetForPatNum(_famCur.Members[listPatient.SelectedIndex].PatNum).Where(x => x.PlanNum == 0).ToList();
 				if(payPlanList.Count==0){//no valid plans
 					MsgBox.Show(this,"The selected patient is not the guarantor for any payment plans.");
 					checkPayPlan.Checked=false;

@@ -131,13 +131,13 @@ namespace OpenDental {
 			}
 			Fam=Patients.GetFamily(PatCur.PatNum);
 			AddressSameForFam=true;
-			for(int i=0;i<Fam.ListPats.Length;i++) {
-				if(PatCur.HmPhone!=Fam.ListPats[i].HmPhone
-					|| PatCur.Address!=Fam.ListPats[i].Address
-					|| PatCur.Address2!=Fam.ListPats[i].Address2
-					|| PatCur.City!=Fam.ListPats[i].City
-					|| PatCur.State!=Fam.ListPats[i].State
-					|| PatCur.Zip!=Fam.ListPats[i].Zip) 
+			for(int i=0;i<Fam.Members.Length;i++) {
+				if(PatCur.HmPhone!=Fam.Members[i].HmPhone
+					|| PatCur.Address!=Fam.Members[i].Address
+					|| PatCur.Address2!=Fam.Members[i].Address2
+					|| PatCur.City!=Fam.Members[i].City
+					|| PatCur.State!=Fam.Members[i].State
+					|| PatCur.Zip!=Fam.Members[i].Zip) 
 				{
 					AddressSameForFam=false;
 					break;

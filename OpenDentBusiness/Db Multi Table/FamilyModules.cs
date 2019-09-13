@@ -25,7 +25,7 @@ namespace OpenDentBusiness
             data.ListInsSubs = InsSubs.RefreshForFam(data.Fam);
             data.ListInsPlans = InsPlans.RefreshForSubList(data.ListInsSubs);
             data.ListBenefits = Benefits.Refresh(data.ListPatPlans, data.ListInsSubs);
-            data.ListRecalls = Recalls.GetList(data.Fam.ListPats.Select(x => x.PatNum).ToList());
+            data.ListRecalls = Recalls.GetList(data.Fam.Members.Select(x => x.PatNum).ToList());
             data.ArrPatFields = PatFields.Refresh(patNum);
             data.SuperFamilyMembers = Patients.GetBySuperFamily(data.Pat.SuperFamily);
             data.SuperFamilyGuarantors = Patients.GetSuperFamilyGuarantors(data.Pat.SuperFamily);
@@ -74,7 +74,7 @@ namespace OpenDentBusiness
             }
             else
             {
-                data.ListMergeLinks = PatientLinks.GetLinks(data.Fam.ListPats.Select(x => x.PatNum).ToList(), PatientLinkType.Merge);
+                data.ListMergeLinks = PatientLinks.GetLinks(data.Fam.Members.Select(x => x.PatNum).ToList(), PatientLinkType.Merge);
             }
             if (doCreateSecLog)
             {

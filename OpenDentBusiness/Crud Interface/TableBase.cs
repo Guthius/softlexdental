@@ -38,8 +38,8 @@ namespace OpenDentBusiness
                     return maxAllowedPacketCount;
                 }
 
-                int kilobyte = 1024;//1KB
-                int megabyte = kilobyte * kilobyte;//1MB
+                int kilobyte = 1024; // 1KB
+                int megabyte = kilobyte * kilobyte; // 1MB
 
                 // Minus 8KB to allow for MySQL header information. Ex see PrefL.CopyFromHereToUpdateFiles()
                 var retVal = MiscData.GetMaxAllowedPacket() - 8 * kilobyte;
