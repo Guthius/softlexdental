@@ -649,7 +649,7 @@ namespace OpenDental{
 			}
 			checkShowHidden.Checked=Preference.GetBool(PreferenceName.EasyHideDentalSchools);
 			if(!Security.IsAuthorized(Permissions.PatPriProvEdit,DateTime.MinValue,true,true)) {
-				string strToolTip=Lan.g("Security","Not authorized for")+" "+GroupPermissions.GetDesc(Permissions.PatPriProvEdit);
+				string strToolTip=Lan.g("Security","Not authorized for")+" "+GroupPermission.GetDescription(Permissions.PatPriProvEdit);
 				_priProvEditToolTip.SetToolTip(butReassign,strToolTip);
 				_priProvEditToolTip.SetToolTip(butMovePri,strToolTip);
 			}
@@ -1186,7 +1186,7 @@ namespace OpenDental{
 				user.UserName=GetUniqueUserName(prov.LName,prov.FName);
 				user.Password=Authentication.GenerateLoginDetailsSHA512(user.UserName);
 				try{
-					Userods.Insert(user,comboUserGroup.ListSelectedItems.OfType<ODBoxItem<UserGroup>>().Select(x => x.Tag.Id).ToList());
+					User.Insert(user,comboUserGroup.ListSelectedItems.OfType<ODBoxItem<UserGroup>>().Select(x => x.Tag.Id).ToList());
 				}
 				catch(ApplicationException ex){
 					MessageBox.Show(ex.Message);
@@ -1203,13 +1203,13 @@ namespace OpenDental{
 			if(fname.Length>0){
 				name+=fname.Substring(0,1);
 			}
-			if(Userods.IsUserNameUnique(name,0,false)){
+			if(!User.UserNameExists(name)){
 				return name;
 			}
 			int fnameI=1;
 			while(fnameI<fname.Length){
 				name+=fname.Substring(fnameI,1);
-				if(Userods.IsUserNameUnique(name,0,false)) {
+				if(!User.UserNameExists(name)) {
 					return name;
 				}
 				fnameI++;
@@ -1218,7 +1218,7 @@ namespace OpenDental{
 			do{
 				name+="x";
 			}
-			while(!Userods.IsUserNameUnique(name,0,false));
+			while(User.UserNameExists(name));
 			return name;
 		}
 

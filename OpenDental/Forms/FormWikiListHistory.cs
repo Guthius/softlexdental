@@ -62,7 +62,7 @@ namespace OpenDental
             for (int i = 0; i < _listWikiListHists.Count; i++)
             {
                 var row = new ODGridRow();
-                row.Cells.Add(Userods.GetName(_listWikiListHists[i].UserNum));
+                row.Cells.Add(User.GetName(_listWikiListHists[i].UserNum));
                 row.Cells.Add(_listWikiListHists[i].DateTimeSaved.ToString());
                 gridMain.Rows.Add(row);
             }

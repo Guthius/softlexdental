@@ -36,8 +36,8 @@ namespace OpenDental {
 			if(comboUserGroup.SelectedIndex==-1) {
 				comboUserGroup.SelectedIndex=0;
 			}
-			_listGroupPermissions=GroupPermissions.GetForUserGroups(_listUserGroups.Select(x => x.Id).ToList(),Permissions.DashboardWidget);
-			_listGroupPermissionsOld=_listGroupPermissions.Select(x => x.Copy()).ToList();
+			_listGroupPermissions=GroupPermission.GetByUserGroups(_listUserGroups.Select(x => x.Id).ToList(),Permissions.DashboardWidget).ToList();
+            _listGroupPermissionsOld = new List<GroupPermission>(_listGroupPermissions);
 		}
 
 		private void FillGridInternal() {
@@ -234,9 +234,9 @@ namespace OpenDental {
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
-			if(GroupPermissions.Sync(_listGroupPermissions,_listGroupPermissionsOld)) {
-				DataValid.SetInvalid(InvalidType.Security);
-			}
+			//if(GroupPermission.Sync(_listGroupPermissions,_listGroupPermissionsOld)) {
+			//	DataValid.SetInvalid(InvalidType.Security);
+			//}
 			DialogResult=DialogResult.OK;
 		}
 

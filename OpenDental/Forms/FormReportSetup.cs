@@ -249,11 +249,12 @@ namespace OpenDental {
 				DataValid.SetInvalid(InvalidType.Prefs);
 			}
 			if(Security.IsAuthorized(Permissions.SecurityAdmin)) {
-				GroupPermissions.Sync(userControlReportSetup.ListGroupPermissionsForReports,userControlReportSetup.ListGroupPermissionsOld);
-				if(userControlReportSetup.ListGroupPermissionsForReports.Exists(x => x.UserGroupId==_userGroupNum)) {
-					HasReportPerms=true;
-				}
-				DataValid.SetInvalid(InvalidType.Security);
+                // TODO: Fix me...
+				//GroupPermission.Sync(userControlReportSetup.ListGroupPermissionsForReports,userControlReportSetup.ListGroupPermissionsOld);
+				//if(userControlReportSetup.ListGroupPermissionsForReports.Exists(x => x.UserGroupId==_userGroupNum)) {
+				//	HasReportPerms=true;
+				//}
+				//DataValid.SetInvalid(InvalidType.Security);
 			}
 			if(DisplayReports.Sync(userControlReportSetup.ListDisplayReportAll)) {
 				DataValid.SetInvalid(InvalidType.DisplayReports);

@@ -1462,7 +1462,7 @@ namespace OpenDental{
 		}
 
 		private void butAuditTrail_Click(object sender,EventArgs e) {
-			List<Permissions> perms=new List<Permissions>();
+			List<string> perms=new List<string>();
 			perms.Add(Permissions.ProcFeeEdit);
 			FormAuditOneType FormA=new FormAuditOneType(0,perms,Lan.g(this,"All changes for")+" "+ProcCode.AbbrDesc+" - "+ProcCode.ProcCode,ProcCode.CodeNum);
 			FormA.ShowDialog();

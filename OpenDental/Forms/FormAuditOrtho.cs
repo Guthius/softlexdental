@@ -71,7 +71,7 @@ namespace OpenDental {
 				for(int i=0;i<DictDateOrthoLogs[dateRow].Count;i++) {
 					row=new ODGridRow();
 					row.Cells.Add(DictDateOrthoLogs[dateRow][i].LogDateTime.ToShortDateString()+" "+DictDateOrthoLogs[dateRow][i].LogDateTime.ToShortTimeString());
-					user=Userods.GetUser(DictDateOrthoLogs[dateRow][i].UserNum);
+					user=User.GetById(DictDateOrthoLogs[dateRow][i].UserNum);
 					if(user==null) {//Will be null for audit trails made by outside entities that do not require users to be logged in.  E.g. Web Sched.
 						row.Cells.Add("unknown");
 					}
@@ -87,7 +87,7 @@ namespace OpenDental {
 			for(int i=0;i<PatientFieldLogs.Count;i++) {
 				row=new ODGridRow();
 				row.Cells.Add(PatientFieldLogs[i].LogDateTime.ToShortDateString()+" "+PatientFieldLogs[i].LogDateTime.ToShortTimeString());
-				row.Cells.Add(Userods.GetUser(PatientFieldLogs[i].UserNum).UserName);
+				row.Cells.Add(User.GetById(PatientFieldLogs[i].UserNum).UserName);
 				row.Cells.Add(PatientFieldLogs[i].PermType.ToString());
 				row.Cells.Add(PatientFieldLogs[i].LogText);
 				gridMain.Rows.Add(row);

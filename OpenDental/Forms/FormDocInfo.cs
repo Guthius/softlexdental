@@ -415,7 +415,7 @@ namespace OpenDental{
 					MessageBox.Show(this,Lan.g(this,"Not allowed to future date this image from")+": "
 						+"\r\n"+DocCur.DateCreated.ToString()+" to "+dateTimeEntered.ToString()
 						+"\r\n\r\n"+Lan.g(this,"A user with the SecurityAdmin permission must grant you access for")
-						+":\r\n"+GroupPermissions.GetDesc(Permissions.ImageDelete));
+						+":\r\n"+GroupPermission.GetDescription(Permissions.ImageDelete));
 					return;
 				}
 			}
@@ -455,7 +455,7 @@ namespace OpenDental{
 		}
 
 		private void butAudit_Click(object sender,EventArgs e) {
-			List<Permissions> listPermissions=new List<Permissions>();
+			List<string> listPermissions=new List<string>();
 			listPermissions.Add(Permissions.ImageEdit);
 			listPermissions.Add(Permissions.ImageDelete);
 			FormAuditOneType formA=new FormAuditOneType(0,listPermissions,Lan.g(this,"Audit Trail for Document"),DocCur.DocNum);

@@ -42,7 +42,7 @@ namespace OpenDental {
 			if(Preference.GetBool(PreferenceName.CentralManagerSecurityLock)) {
 				butChange.Enabled=false;
 				labelGlobalDateLockDisabled.Visible=true;			}
-			List<UserGroup> listGroupsNotAdmin=UserGroup.All().FindAll(x => !GroupPermissions.HasPermission(x.Id,Permissions.SecurityAdmin,0));
+			List<UserGroup> listGroupsNotAdmin=UserGroup.All().FindAll(x => !GroupPermission.HasPermission(x.Id,Permissions.SecurityAdmin,null));
 			foreach(UserGroup group in listGroupsNotAdmin) {
 				int idx=comboGroups.Items.Add(new ODBoxItem<UserGroup>(group.Description,group));
 				if(Preference.GetLong(PreferenceName.DefaultUserGroup)==group.Id) {
@@ -174,7 +174,7 @@ namespace OpenDental {
 			//if PasswordsMustBeStrong was unchecked, then reset the strong password flags.
 			if(Preference.Update(PreferenceName.PasswordsMustBeStrong,checkPasswordsMustBeStrong.Checked) && !checkPasswordsMustBeStrong.Checked) {
 				invalidatePrefs=true;
-				Userods.ResetStrongPasswordFlags();
+				// TODO: User.ResetStrongPasswordFlags();
 			}
 			if(checkDisableBackupReminder.Checked) {
 				invalidatePrefs|=Preference.Update(PreferenceName.BackupReminderLastDateRun,DateTime.MaxValue.AddMonths(-1)); //if MaxValue, gives error on startup.

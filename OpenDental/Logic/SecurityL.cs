@@ -36,7 +36,7 @@ namespace OpenDental
 
                 try
                 {
-                    Userods.UpdatePassword(
+                    User.UpdatePassword(
                         Security.CurrentUser, 
                         formUserPassword.LoginDetails, 
                         formUserPassword.PasswordIsStrong);

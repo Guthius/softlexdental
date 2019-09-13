@@ -25,9 +25,9 @@ namespace OpenDental
 
         private void FormAutoNoteCompose_Load(object sender, EventArgs e)
         {
-            _listAutoNoteCatDefs = Definition.GetByCategory(DefinitionCategory.AutoNoteCats);;
-            _userOdCurPref = UserOdPrefs.GetByUserAndFkeyType(Security.CurrentUser.Id, UserPreferenceName.AutoNoteExpandedCats).FirstOrDefault();
-            FillListTree();
+            //_listAutoNoteCatDefs = Definition.GetByCategory(DefinitionCategory.AutoNoteCats);;
+            //_userOdCurPref = UserOdPrefs.GetByUserAndFkeyType(Security.CurrentUser.Id, UserPreferenceName.AutoNoteExpandedCats).FirstOrDefault();
+            //FillListTree();
         }
 
         private void FormAutoNoteCompose_Shown(object sender, EventArgs e)
@@ -491,23 +491,23 @@ namespace OpenDental
 
         private void FormAutoNoteCompose_FormClosing(object sender, FormClosingEventArgs e)
         {
-            //store the current node expanded state for this user
-            List<long> listExpandedDefNums = treeListMain.Nodes.OfType<TreeNode>().SelectMany(x => GetNodeAndChildren(x))
-                .Where(x => x.Tag is Definition && x.IsExpanded).Select(x => ((Definition)x.Tag).Id).Where(x => x > 0).ToList();
-            if (_userOdCurPref == null)
-            {
-                UserOdPrefs.Insert(new UserPreference()
-                {
-                    UserId = Security.CurrentUser.Id,
-                    FkeyType = UserPreferenceName.AutoNoteExpandedCats,
-                    Value = string.Join(",", listExpandedDefNums)
-                });
-            }
-            else
-            {
-                _userOdCurPref.Value = string.Join(",", listExpandedDefNums);
-                UserOdPrefs.Update(_userOdCurPref);
-            }
+            ////store the current node expanded state for this user
+            //List<long> listExpandedDefNums = treeListMain.Nodes.OfType<TreeNode>().SelectMany(x => GetNodeAndChildren(x))
+            //    .Where(x => x.Tag is Definition && x.IsExpanded).Select(x => ((Definition)x.Tag).Id).Where(x => x > 0).ToList();
+            //if (_userOdCurPref == null)
+            //{
+            //    UserOdPrefs.Insert(new UserPreference()
+            //    {
+            //        UserId = Security.CurrentUser.Id,
+            //        FkeyType = UserPreferenceName.AutoNoteExpandedCats,
+            //        Value = string.Join(",", listExpandedDefNums)
+            //    });
+            //}
+            //else
+            //{
+            //    _userOdCurPref.Value = string.Join(",", listExpandedDefNums);
+            //    UserOdPrefs.Update(_userOdCurPref);
+            //}
         }
 
 

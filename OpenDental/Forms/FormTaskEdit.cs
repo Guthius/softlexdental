@@ -1298,7 +1298,7 @@ namespace OpenDental {
 					}
 				}
 			}
-			textUser.Text=Userods.GetName(_taskCur.UserNum);//might be blank.
+			textUser.Text= User.GetName(_taskCur.UserNum);//might be blank.
 			if(_taskListCur!=null) {
 				_taskCur.ParentDesc=_taskListCur.Descript;
 				textTaskList.Text=_taskListCur.Descript;
@@ -1468,7 +1468,7 @@ namespace OpenDental {
 						butReply.Visible=false;
 					}
 				}
-                labelReply.Text = "(Send to " + Userods.GetName(_replyToUserNum) + ")";
+                labelReply.Text = "(Send to " + User.GetName(_replyToUserNum) + ")";
 			}
 			if(!Security.IsAuthorized(Permissions.TaskEdit,true)){
 				butAudit.Visible=false;
@@ -1539,7 +1539,7 @@ namespace OpenDental {
 			for(int i=0;i<_listTaskNotes.Count;i++) {
 				row=new ODGridRow();
 				row.Cells.Add(_listTaskNotes[i].DateTimeNote.ToShortDateString()+" "+_listTaskNotes[i].DateTimeNote.ToShortTimeString());
-				row.Cells.Add(Userods.GetName(_listTaskNotes[i].UserNum));
+				row.Cells.Add(User.GetName(_listTaskNotes[i].UserNum));
 				row.Cells.Add(_listTaskNotes[i].Note);
 				row.Tag=_listTaskNotes[i];
 				gridMain.Rows.Add(row);
@@ -1863,7 +1863,7 @@ namespace OpenDental {
 			FormChangeUser.ShowDialog();
 			if(FormChangeUser.DialogResult==DialogResult.OK) {
 				_taskCur.UserNum=FormChangeUser.CurUserSimpleSwitch.Id; //assign task new UserNum
-				textUser.Text=Userods.GetName(_taskCur.UserNum); //update user textbox on task.
+				textUser.Text= User.GetName(_taskCur.UserNum); //update user textbox on task.
 			}
 		}
 
@@ -1901,7 +1901,7 @@ namespace OpenDental {
 				+" - "+textDescript.Text; //task desc
 			for(int i=0;i<_listTaskNotes.Count;i++) {
 				taskText+="\r\n--------------------------------------------------\r\n";
-				taskText+="=="+Userods.GetName(_listTaskNotes[i].UserNum)+" - "+_listTaskNotes[i].DateTimeNote.ToShortDateString()+" "+_listTaskNotes[i].DateTimeNote.ToShortTimeString()+" - "+_listTaskNotes[i].Note;
+				taskText+="=="+ User.GetName(_listTaskNotes[i].UserNum)+" - "+_listTaskNotes[i].DateTimeNote.ToShortDateString()+" "+_listTaskNotes[i].DateTimeNote.ToShortTimeString()+" - "+_listTaskNotes[i].Note;
 			}
 			return taskText;
 		}
@@ -2198,7 +2198,7 @@ namespace OpenDental {
 				return;
 			}
 			long taskListNumCur=_taskCur.TaskListNum;
-			long inbox=Userods.GetInbox(_replyToUserNum);
+            long inbox = User.GetById(_replyToUserNum)?.TaskListId ?? 0;
 			if(inbox==0) {
 				MsgBox.Show(this,"No inbox has been set up for this user yet.");
 				return;
@@ -2234,7 +2234,7 @@ namespace OpenDental {
 				_mightNeedSetRead=false;//so that the automation won't happen again
 			}
 			long taskListNumCur=_taskCur.TaskListNum;
-			_taskCur.TaskListNum=Userods.GetInbox(_replyToUserNum);
+			_taskCur.TaskListNum= User.GetById(_replyToUserNum)?.TaskListId ?? 0; ;
 			if(!SaveCur()) {
 				return;
 			}
@@ -2297,9 +2297,9 @@ namespace OpenDental {
 				}
 				catch(Exception ex) {
 					MessageBox.Show(ex.Message);
-					return false;
+                    return false;
 				}
-				if(taskCopy.TaskListNum==Userods.GetInbox(Security.CurrentUser.Id)) {//My inbox.
+				if(taskCopy.TaskListNum== (User.GetById(Security.CurrentUser.Id)?.TaskListId ?? 0)) {//My inbox.
 					FormTaskEdit formT=new OpenDental.FormTaskEdit(taskCopy);//Maintain previous behavior. If I send to myself, should popup.
 					formT.Show();//Non-modal. 
 					UserControlTasks.RefillLocalTaskGrids(taskCopy,_listTaskNotes,null);//Refills local grids with _taskCur, which has a new taskNum now.

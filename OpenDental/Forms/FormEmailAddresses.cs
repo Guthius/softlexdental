@@ -103,7 +103,7 @@ namespace OpenDental
 
                     row.Cells.Add(emailAddress.SmtpUsername);
                     row.Cells.Add(emailAddress.Sender);
-                    row.Cells.Add(emailAddress.UserId.HasValue ? Userods.GetName(emailAddress.UserId.Value) : "");
+                    row.Cells.Add(emailAddress.UserId.HasValue ? User.GetName(emailAddress.UserId.Value) : "");
                     row.Cells.Add((emailAddress.Id == defaultEmailAddressId) ? "X" : "");
                     row.Tag = emailAddress;
 

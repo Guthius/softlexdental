@@ -43,7 +43,7 @@ namespace OpenDental
             _listList = DisplayReports.GetForCategory(DisplayReportCategory.Lists, false);
             _listPublicHealth = DisplayReports.GetForCategory(DisplayReportCategory.PublicHealth, false);
             _listArizonaPrimary = DisplayReports.GetForCategory(DisplayReportCategory.ArizonaPrimaryCare, false);
-            _listReportPermissions = GroupPermissions.GetPermsForReports().Where(x => Security.CurrentUser.IsInUserGroup(x.UserGroupId)).ToList();
+            _listReportPermissions = GroupPermission.GetPermissionsForReports().Where(x => Security.CurrentUser.IsInUserGroup(x.UserGroupId)).ToList();
             //add the items to the list boxes and set the list box heights. (positions too?)
             listProdInc.Items.Clear();
             listDaily.Items.Clear();
@@ -396,7 +396,7 @@ namespace OpenDental
             {
                 if (listReportPermissions == null)
                 {
-                    listReportPermissions = GroupPermissions.GetPermsForReports().Where(x => Security.CurrentUser.IsInUserGroup(x.UserGroupId)).ToList();
+                    listReportPermissions = GroupPermission.GetPermissionsForReports().Where(x => Security.CurrentUser.IsInUserGroup(x.UserGroupId)).ToList();
                 }
                 if (!listReportPermissions.Exists(x => x.ExternalId == displayReport.DisplayReportNum))
                 {

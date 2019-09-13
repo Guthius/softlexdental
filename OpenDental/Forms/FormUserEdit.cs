@@ -635,7 +635,7 @@ namespace OpenDental{
 				else if(listSubscribedClinics.Contains(0)) {//They are subscribed to Headquarters
 					listAlertSubsClinicsMulti.SetSelected(1,true);
 				}
-				List<UserClinic> listUserClinics=UserClinics.GetForUser(UserCur.Id);
+				List<UserClinic> listUserClinics=UserClinic.GetForUser(UserCur.Id).ToList();
 				for(int i=0;i<_listClinics.Count;i++) {
 					listClinic.Items.Add(_listClinics[i].Abbr);
 					listClinicMulti.Items.Add(_listClinics[i].Abbr);
@@ -747,7 +747,7 @@ namespace OpenDental{
 			UserCur.FailedDateTime=DateTime.MinValue;
 			UserCur.FailedAttempts=0;
 			try {
-				Userods.Update(UserCur);
+				User.Update(UserCur);
 				MsgBox.Show(this,"User has been unlocked.");
 			}
 			catch(Exception) {
@@ -808,9 +808,10 @@ namespace OpenDental{
 					return;
 				}
 			}
-			if(UserClinics.Sync(listUserClinics,UserCur.Id)) {//Either syncs new list, or clears old list if no longer restricted.
-				DataValid.SetInvalid(InvalidType.UserClinics);
-			}
+            // TODO: Fix me...
+			//if(UserClinic.Sync(listUserClinics,UserCur.Id)) {//Either syncs new list, or clears old list if no longer restricted.
+			//	DataValid.SetInvalid(InvalidType.UserClinics);
+			//}
 			if(!Preferences.HasClinicsEnabled || listClinic.SelectedIndex==0) {
 				UserCur.ClinicId=0;
 			}
@@ -828,26 +829,35 @@ namespace OpenDental{
 				UserCur.EmployeeId=_listEmployees[listEmployee.SelectedIndex-1].Id;
 			}
 			if(listProv.SelectedIndex==0) {
-				Provider prov=Providers.GetProv(UserCur.ProviderId);
-				if(prov!=null) {
-					prov.IsInstructor=false;//If there are more than 1 users associated to this provider, they will no longer be an instructor.
-					Providers.Update(prov);	
-				}
-				UserCur.ProviderId=0;
+                if (UserCur.ProviderId.HasValue)
+                {
+                    Provider prov = Providers.GetProv(UserCur.ProviderId.Value);
+                    if (prov != null)
+                    {
+                        prov.IsInstructor = false;//If there are more than 1 users associated to this provider, they will no longer be an instructor.
+                        Providers.Update(prov);
+                    }
+                }
+                UserCur.ProviderId = null;
 			}
 			else {
-				Provider prov=Providers.GetProv(UserCur.ProviderId);
-				if(prov!=null) {
-					if(prov.ProvNum!=_listProviders[listProv.SelectedIndex-1].ProvNum) {
-						prov.IsInstructor=false;//If there are more than 1 users associated to this provider, they will no longer be an instructor.
-					}
-					Providers.Update(prov);
-				}
+                if (UserCur.ProviderId.HasValue)
+                {
+                    Provider prov = Providers.GetProv(UserCur.ProviderId.Value);
+                    if (prov != null)
+                    {
+                        if (prov.ProvNum != _listProviders[listProv.SelectedIndex - 1].ProvNum)
+                        {
+                            prov.IsInstructor = false;//If there are more than 1 users associated to this provider, they will no longer be an instructor.
+                        }
+                        Providers.Update(prov);
+                    }
+                }
 				UserCur.ProviderId=_listProviders[listProv.SelectedIndex-1].ProvNum;
 			}
 			try{
 				if(IsNew){
-					Userods.Insert(UserCur,listUserGroup.SelectedItems.OfType<ODBoxItem<UserGroup>>().Select(x => x.Tag.Id).ToList());
+					User.Insert(UserCur,listUserGroup.SelectedItems.OfType<ODBoxItem<UserGroup>>().Select(x => x.Tag.Id).ToList());
 					//Set the userodprefs to the new user's UserNum that was just retreived from the database.
 					_listDoseSpotUserPrefNew.ForEach(x => x.UserId=UserCur.Id);
 					SecurityLogs.MakeLogEntry(Permissions.AddNewUser,0,"New user '"+UserCur.UserName+"' added");
@@ -855,7 +865,7 @@ namespace OpenDental{
 				else{
 					List<UserGroup> listNewUserGroups=listUserGroup.SelectedItems.OfType<ODBoxItem<UserGroup>>().Select(x => x.Tag).ToList();
 					List<UserGroup> listOldUserGroups=UserCur.GetGroups();
-					Userods.Update(UserCur,listNewUserGroups.Select(x => x.Id).ToList());
+					User.Update(UserCur,listNewUserGroups.Select(x => x.Id).ToList());
 					//if this is the current user, update the user, credentials, etc.
 					if(UserCur.Id==Security.CurrentUser.Id) {
 						Security.CurrentUser=UserCur.Copy();
@@ -891,15 +901,15 @@ namespace OpenDental{
 				return;
 			}
 			//DoseSpot User ID Insert/Update/Delete
-			if(_doseSpotUserPrefDefault.Value!=textDoseSpotUserID.Text) {
-				if(string.IsNullOrWhiteSpace(textDoseSpotUserID.Text)) {
-					UserOdPrefs.DeleteMany(_doseSpotUserPrefDefault.UserId,_doseSpotUserPrefDefault.Fkey,UserPreferenceName.Program);
-				}
-				else {
-					_doseSpotUserPrefDefault.Value=textDoseSpotUserID.Text;
-					UserOdPrefs.Upsert(_doseSpotUserPrefDefault);
-				}
-			}
+			//if(_doseSpotUserPrefDefault.Value!=textDoseSpotUserID.Text) {
+			//	if(string.IsNullOrWhiteSpace(textDoseSpotUserID.Text)) {
+			//		UserOdPrefs.DeleteMany(_doseSpotUserPrefDefault.UserId,_doseSpotUserPrefDefault.Fkey,UserPreferenceName.Program);
+			//	}
+			//	else {
+			//		_doseSpotUserPrefDefault.Value=textDoseSpotUserID.Text;
+			//		UserOdPrefs.Upsert(_doseSpotUserPrefDefault);
+			//	}
+			//}
 			DataValid.SetInvalid(InvalidType.Security);
 			//List of AlertTypes that are selected.
 			List<long> listUserAlertCats=new List<long>();
@@ -944,7 +954,7 @@ namespace OpenDental{
 				}
 			}
 			AlertSubs.Sync(_listUserAlertTypesNew,_listUserAlertTypesOld);
-			UserOdPrefs.Sync(_listDoseSpotUserPrefNew,_listDoseSpotUserPrefOld);
+			//UserOdPrefs.Sync(_listDoseSpotUserPrefNew,_listDoseSpotUserPrefOld);
 			DialogResult=DialogResult.OK;
 		}
 

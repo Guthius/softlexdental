@@ -23,17 +23,10 @@ namespace OpenDental {
 			User userEntered;
 			string password;
 			try {
-				bool useEcwAlgorithm=Programs.UsingEcwTightOrFullMode();
+
 				//ecw requires hash, but non-ecw requires actual password
 				password=textPassword.Text;
-				if(useEcwAlgorithm) {
-					//It doesn't matter what Security.CurUser is when it is null because we are technically trying to set it for the first time.
-					//It cannot be null before invoking HashPassword because middle needs it to NOT be null when creating the credentials for DtoGetString.
-					if(Security.CurrentUser==null) {
-						Security.CurrentUser=new User();
-					}
-					password=Authentication.HashPasswordMD5(password);
-				}
+
 				string username=textUser.Text;
 				#if DEBUG
 				if(username=="") {
@@ -43,7 +36,7 @@ namespace OpenDental {
 				#endif
 				//Set the PasswordTyped property prior to checking the credentials for Middle Tier.
 				Security.PasswordTyped=password;
-				userEntered=Userods.CheckUserAndPassword(username,password,useEcwAlgorithm);
+				userEntered= User.CheckUserAndPassword(username,password);
 			}
 			catch(Exception ex) {
 				MessageBox.Show(ex.Message);
@@ -55,7 +48,7 @@ namespace OpenDental {
 
 			if(Preference.GetBool(PreferenceName.PasswordsMustBeStrong)
 				&& Preference.GetBool(PreferenceName.PasswordsWeakChangeToStrong)
-				&& Userods.IsPasswordStrong(textPassword.Text)!="") //Password is not strong
+				&& User.IsPasswordStrong(textPassword.Text)!="") //Password is not strong
 			{
 				MsgBox.Show(this,"You must change your password to a strong password due to the current Security settings.");
 				if(!SecurityL.ChangePassword(true)) {//Failed password update.

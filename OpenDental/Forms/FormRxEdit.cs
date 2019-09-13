@@ -682,7 +682,7 @@ namespace OpenDental{
 					labelCPOE.Visible=true;
 					comboProvNum.Enabled=false;
 					butPickProv.Enabled=false;
-					RxPatCur.ProvNum=Security.CurrentUser.ProviderId;
+					RxPatCur.ProvNum=Security.CurrentUser.ProviderId.GetValueOrDefault();
 				}
 			}
 			else{
@@ -832,7 +832,7 @@ namespace OpenDental{
 		}
 
 		private void butAudit_Click(object sender,EventArgs e) {
-			List<Permissions> perms=new List<Permissions>();
+			List<string> perms=new List<string>();
 			perms.Add(Permissions.RxCreate);
 			perms.Add(Permissions.RxEdit);
 			FormAuditOneType FormA=new FormAuditOneType(RxPatCur.PatNum,perms,Lan.g(this,"Audit Trail for Rx"),RxPatCur.RxNum);

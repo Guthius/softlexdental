@@ -709,7 +709,7 @@ namespace OpenDental {
 				textDrugQty.Text=_procCur.DrugQty.ToString();
 			}
 			textClaimNote.Text=_procCur.ClaimNote;
-			textUser.Text=Userods.GetName(_procCur.UserNum);//might be blank. Will change automatically if user changes note or alters sig.
+			textUser.Text=User.GetName(_procCur.UserNum);//might be blank. Will change automatically if user changes note or alters sig.
 			string keyData=GetSignatureKey();
 			signatureBoxWrapper.FillSignature(_procCur.SigIsTopaz,keyData,_procCur.Signature);
 			if(Programs.UsingOrion) {//panelOrion.Visible) {
@@ -1016,7 +1016,7 @@ namespace OpenDental {
 				return;
 			}
 			//Use ProcDate to compare to the date/days newer restriction.
-			Permissions perm=Permissions.EditCompletedProcedure;
+			string perm=Permissions.EditCompletedProcedure;
 			bool isComplete=true;
 			if(_procCur.ProcStatus.In(ProcStat.EO,ProcStat.EC)) {
 				perm=Permissions.EditProcedure;
@@ -2414,7 +2414,7 @@ namespace OpenDental {
 
 		///<summary>This button is only visible when proc IsLocked.</summary>
 		private void butInvalidate_Click(object sender,EventArgs e) {
-			Permissions perm=Permissions.EditCompletedProcedure;
+            string perm =Permissions.EditCompletedProcedure;
 			if(_procCur.ProcStatus.In(ProcStat.EO,ProcStat.EC)) {
 				perm=Permissions.EditProcedure;
 			}
@@ -2554,7 +2554,7 @@ namespace OpenDental {
                 Procedures.Delete(_procCur.ProcNum);//also deletes the claimProcs and adjustments. Might throw exception.
                 _isEstimateRecompute = true;
                 Recalls.Synch(_procCur.PatNum);//needs to be moved into Procedures.Delete
-                Permissions perm = Permissions.ProcDelete;
+                string perm = Permissions.ProcDelete;
                 string tag = "";
                 switch (_procOld.ProcStatus)
                 {
@@ -3004,10 +3004,10 @@ namespace OpenDental {
 				if(listProcNotes.Count > 0 && _procOld.Note!=listProcNotes[0].Note) {
 					//Manipulate ProcCur.Note to include the most recent note in its entirety with some custom information required by job #2484
 					//Use DateTime.Now because the ProcNote won't get inserted until farther down in this method but we have to do this manipulation before sig.
-					_procCur.Note=DateTime.Now.ToString()+"  "+Userods.GetName(_procCur.UserNum)+"\r\n"+_procCur.Note;
+					_procCur.Note=DateTime.Now.ToString()+"  "+User.GetName(_procCur.UserNum)+"\r\n"+_procCur.Note;
 					//Now we need to append the old note from the database in the same format.
 					_procCur.Note+="\r\n------------------------------------------------------\r\n"
-						+listProcNotes[0].EntryDateTime.ToString()+"  "+Userods.GetName(listProcNotes[0].UserNum)
+						+listProcNotes[0].EntryDateTime.ToString()+"  "+User.GetName(listProcNotes[0].UserNum)
 						+"\r\n"+listProcNotes[0].Note;
 				}
 			}
@@ -3254,8 +3254,8 @@ namespace OpenDental {
 					}
 				}
 			}
-			//Autocodes----------------------------------------------------------------------------------------------------------------------------------------
-			Permissions perm=Permissions.EditCompletedProcedure;
+            //Autocodes----------------------------------------------------------------------------------------------------------------------------------------
+            string perm =Permissions.EditCompletedProcedure;
 			if(_procCur.ProcStatus.In(ProcStat.EC,ProcStat.EO)) {
 				perm=Permissions.EditProcedure;
 			}
@@ -3361,7 +3361,7 @@ namespace OpenDental {
 
 		private void FormProcEdit_FormClosing(object sender,FormClosingEventArgs e) {
 			//We need to update the CPOE status even if the user is cancelling out of the window.
-			if(Userods.IsUserCpoe(_curUser) && !_procOld.IsCpoe) {
+			if(User.IsUserCPOE(_curUser) && !_procOld.IsCpoe) {
 				//There's a possibility that we are making a second, unnecessary call to the database here but it is worth it to help meet EHR measures.
 				Procedures.UpdateCpoeForProc(_procCur.ProcNum,true);
 				//Make a log that we edited this procedure's CPOE flag.

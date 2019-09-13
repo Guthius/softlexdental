@@ -60,7 +60,7 @@ namespace OpenDental {
 			dateTo=(dateTo==DateTime.MinValue ? DateTime.Now : dateTo);
 			ODGridRow row;
 			List<ODGridRow> listRows=new List<ODGridRow>();
-			Dictionary<long,User> dictUsers=Userods.GetDeepCopy().ToDictionary(x => x.Id,x => x);
+			Dictionary<long,User> dictUsers=User.All().ToDictionary(x => x.Id,x => x);
 			foreach(InsEditLog logCur in _listLogs) {
 				if(!logCur.DateTStamp.Between(dateFrom,dateTo)) {
 					continue;

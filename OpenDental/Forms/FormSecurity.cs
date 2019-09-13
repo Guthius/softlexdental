@@ -75,7 +75,7 @@ namespace OpenDental {
 				return FormRS.DialogResult;
 			}
 			try {
-				GroupPermissions.Insert(perm);
+				GroupPermission.Insert(perm);
 			}
 			catch(Exception ex) {
 				MessageBox.Show(ex.Message);

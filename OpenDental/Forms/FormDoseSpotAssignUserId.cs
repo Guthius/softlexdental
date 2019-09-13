@@ -34,20 +34,20 @@ namespace OpenDental {
 
 		private List<User> GetListDoseSpotUsers(bool includeProv,string provNpi="") {
 			List<User> retVal=new List<User>();
-			List<Provider> listProviders=Providers.GetWhere(x => x.NationalProvID==provNpi,true);
-			List<UserPreference> listUserPrefDoseSpotIds=UserOdPrefs.GetAllByFkeyAndFkeyType(_programErx.ProgramNum,UserPreferenceName.Program);
-			listUserPrefDoseSpotIds=listUserPrefDoseSpotIds.FindAll(x => string.IsNullOrWhiteSpace(x.Value));
-			if(includeProv) {
-				retVal=Userods.GetWhere(
-					(x => listProviders.Exists(y => y.ProvNum==x.ProviderId) //Find users that have a link to the NPI that has been passed in
-						&& !listUserPrefDoseSpotIds.Exists(y => y.UserId==x.Id)) //Also, these users shouldn't already have a DoseSpot User ID.
-					,true);//Only consider non-hidden users.
-			}
-			else {
-				retVal=Userods.GetWhere(
-					(x => !listUserPrefDoseSpotIds.Exists(y => y.UserId==x.Id)) //All users that don't already have a DoseSpot User ID.
-					,true);//Only consider non-hidden users.
-			}
+			//List<Provider> listProviders=Providers.GetWhere(x => x.NationalProvID==provNpi,true);
+			//List<UserPreference> listUserPrefDoseSpotIds=UserOdPrefs.GetAllByFkeyAndFkeyType(_programErx.ProgramNum,UserPreferenceName.Program);
+			//listUserPrefDoseSpotIds=listUserPrefDoseSpotIds.FindAll(x => string.IsNullOrWhiteSpace(x.Value));
+			//if(includeProv) {
+			//	retVal=Userods.GetWhere(
+			//		(x => listProviders.Exists(y => y.ProvNum==x.ProviderId) //Find users that have a link to the NPI that has been passed in
+			//			&& !listUserPrefDoseSpotIds.Exists(y => y.UserId==x.Id)) //Also, these users shouldn't already have a DoseSpot User ID.
+			//		,true);//Only consider non-hidden users.
+			//}
+			//else {
+			//	retVal=Userods.GetWhere(
+			//		(x => !listUserPrefDoseSpotIds.Exists(y => y.UserId==x.Id)) //All users that don't already have a DoseSpot User ID.
+			//		,true);//Only consider non-hidden users.
+			//}
 			return retVal;
 		}
 
@@ -65,19 +65,19 @@ namespace OpenDental {
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
-			if(_selectedUserNum==0) {
-				MsgBox.Show(this,"Please select a user.");
-				return;
-			}
-			UserPreference userDosePref=UserOdPrefs.GetByCompositeKey(_selectedUserNum,_programErx.ProgramNum,UserPreferenceName.Program);
-			userDosePref.Value=_providerErxCur.UserId.ToString();
-			if(userDosePref.IsNew) {
-				userDosePref.Fkey=_programErx.ProgramNum;
-				UserOdPrefs.Insert(userDosePref);
-			}
-			else { 
-				UserOdPrefs.Update(userDosePref);
-			}
+			//if(_selectedUserNum==0) {
+			//	MsgBox.Show(this,"Please select a user.");
+			//	return;
+			//}
+			//UserPreference userDosePref=UserOdPrefs.GetByCompositeKey(_selectedUserNum,_programErx.ProgramNum,UserPreferenceName.Program);
+			//userDosePref.Value=_providerErxCur.UserId.ToString();
+			//if(userDosePref.IsNew) {
+			//	userDosePref.Fkey=_programErx.ProgramNum;
+			//	UserOdPrefs.Insert(userDosePref);
+			//}
+			//else { 
+			//	UserOdPrefs.Update(userDosePref);
+			//}
 			DialogResult=DialogResult.OK;
 		}
 

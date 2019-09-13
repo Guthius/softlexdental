@@ -1273,11 +1273,11 @@ namespace OpenDental
                 RefreshListPlaque();
             }
             listExams.SelectedIndex = PerioExams.ListExams.Count - 1;//this works even if no items.
-            _userPrefCurrentOnly = UserOdPrefs.GetByUserAndFkeyType(Security.CurrentUser.Id, UserPreferenceName.PerioCurrentExamOnly).FirstOrDefault();
-            if (_userPrefCurrentOnly != null && PIn.Bool(_userPrefCurrentOnly.Value))
-            {
-                checkShowCurrent.Checked = true;
-            }
+            //_userPrefCurrentOnly = UserOdPrefs.GetByUserAndFkeyType(Security.CurrentUser.Id, UserPreferenceName.PerioCurrentExamOnly).FirstOrDefault();
+            //if (_userPrefCurrentOnly != null && PIn.Bool(_userPrefCurrentOnly.Value))
+            //{
+            //    checkShowCurrent.Checked = true;
+            //}
             FillGrid();
             Plugin.Trigger(this, "FormPerio_Loaded");
         }
@@ -2519,23 +2519,23 @@ namespace OpenDental
 
         private void butClose_Click(object sender, System.EventArgs e)
         {
-            if (_userPrefCurrentOnly == null)
-            {
-                UserOdPrefs.Insert(new UserPreference()
-                {
-                    UserId = Security.CurrentUser.Id,
-                    FkeyType = UserPreferenceName.PerioCurrentExamOnly,
-                    Value = POut.Bool(checkShowCurrent.Checked)
-                });
-            }
-            else
-            {
-                if (_userPrefCurrentOnly.Value != POut.Bool(checkShowCurrent.Checked))
-                {//The user preference has changed.
-                    _userPrefCurrentOnly.Value = POut.Bool(checkShowCurrent.Checked);
-                    UserOdPrefs.Update(_userPrefCurrentOnly);
-                }
-            }
+            //if (_userPrefCurrentOnly == null)
+            //{
+            //    UserOdPrefs.Insert(new UserPreference()
+            //    {
+            //        UserId = Security.CurrentUser.Id,
+            //        FkeyType = UserPreferenceName.PerioCurrentExamOnly,
+            //        Value = POut.Bool(checkShowCurrent.Checked)
+            //    });
+            //}
+            //else
+            //{
+            //    if (_userPrefCurrentOnly.Value != POut.Bool(checkShowCurrent.Checked))
+            //    {//The user preference has changed.
+            //        _userPrefCurrentOnly.Value = POut.Bool(checkShowCurrent.Checked);
+            //        UserOdPrefs.Update(_userPrefCurrentOnly);
+            //    }
+            //}
             Close();
         }
 

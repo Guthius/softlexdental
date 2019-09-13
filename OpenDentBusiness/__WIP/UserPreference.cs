@@ -71,7 +71,7 @@ namespace OpenDentBusiness
             {
                 UserId = dataReader.GetInt64("user_id"),
                 Key = Convert.ToString(dataReader["key"]),
-                Value = Convert.ToString(dataReader["value"])
+                Value = Convert.ToString(dataReader["value"]),
             };
 
             if (dataReader.IsDBNull(0))

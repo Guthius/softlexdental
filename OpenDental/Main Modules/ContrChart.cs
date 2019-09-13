@@ -12831,7 +12831,7 @@ namespace OpenDental
                 {
                     procNew.DiagnosticCode = "";
                 }
-                if (Userods.IsUserCpoe(Security.CurrentUser))
+                if (User.IsUserCPOE(Security.CurrentUser))
                 {
                     //Only change the status of IsCpoe to true.  Never set it back to false for any reason.  Once true, always true.
                     procNew.IsCpoe = true;

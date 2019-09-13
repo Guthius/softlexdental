@@ -557,7 +557,7 @@ namespace OpenDentBusiness
             return _providerCache.GetFindIndex(x => x.ProvNum == provNum, true);
         }
 
-        public static List<User> GetAttachedUsers(long provNum) => User.GetByProviderId(provNum);
+        public static List<User> GetAttachedUsers(long provNum) => User.GetByProvider(provNum);
 
         ///<summary>If useClinic, then clinicInsBillingProv will be used.  Otherwise, the pref for the practice.  Either way, there are three different choices for getting the billing provider.  One of the three is to use the treating provider, so supply that as an argument.  It will return a valid provNum unless the supplied treatProv was invalid.</summary>
         public static long GetBillingProvNum(long treatProv, long clinicNum)
@@ -628,7 +628,7 @@ namespace OpenDentBusiness
             }
             Dictionary<long, List<long>> dictUserClinics = User.All()
                 .ToDictionary(x => x.Id, x => UserClinic.GetForUser(x.Id).Select(y => y.ClinicId).ToList());
-            Dictionary<long, List<long>> dictProvUsers = User.GetWithProvider().GroupBy(x => x.ProviderId.Value)
+            Dictionary<long, List<long>> dictProvUsers = User.AllProviders().GroupBy(x => x.ProviderId.Value)
                 .ToDictionary(x => x.Key, x => x.Select(y => y.Id).ToList());
             HashSet<long> hashSetProvsRestrictedOtherClinic = new HashSet<long>(ProviderClinicLinks.GetProvsRestrictedToOtherClinics(clinicNum));
             return Providers.GetWhere(x =>

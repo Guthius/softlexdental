@@ -774,7 +774,7 @@ namespace OpenDental{
 			ModifyForOrionMode();
 			textProcDate.Text=GroupCur.ProcDate.ToShortDateString();
 			textDateEntry.Text=GroupCur.DateEntryC.ToShortDateString();
-			textUser.Text=Userods.GetName(GroupCur.UserNum);//might be blank. Will change automatically if user changes note or alters sig.
+			textUser.Text=User.GetName(GroupCur.UserNum);//might be blank. Will change automatically if user changes note or alters sig.
 			textNotes.Text=GroupCur.Note;
 			if(GroupCur.ProcStatus==ProcStat.EC && Preference.GetBool(PreferenceName.ProcLockingIsAllowed) && !GroupCur.IsLocked) {
 				butLock.Visible=true;
@@ -782,7 +782,7 @@ namespace OpenDental{
 			else {
 				butLock.Visible=false;
 			}
-			Permissions perm=Permissions.EditCompletedProcedure;
+            string perm =Permissions.EditCompletedProcedure;
 			if(GroupCur.ProcStatus.In(ProcStat.EO,ProcStat.EC)) {
 				perm=Permissions.EditProcedure;
 			}

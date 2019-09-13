@@ -68,7 +68,7 @@ namespace OpenDental {
 		}
 
 		private void butAuditTrail_Click(object sender,EventArgs e) {
-			List<Permissions> listPermissions=new List<Permissions>();
+			List<string> listPermissions=new List<string>();
 			listPermissions.Add(Permissions.EhrMeasureEventEdit);
 			FormAuditOneType FormAOT=new FormAuditOneType(0,listPermissions,Lan.g(this,"EHR Measure Event Edits"),0);
 			FormAOT.ShowDialog();

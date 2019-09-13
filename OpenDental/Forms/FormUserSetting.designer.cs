@@ -42,7 +42,7 @@ namespace OpenDental
             this.acceptButton.Size = new System.Drawing.Size(110, 30);
             this.acceptButton.TabIndex = 3;
             this.acceptButton.Text = "&OK";
-            this.acceptButton.Click += new System.EventHandler(this.acceptButton_Click);
+            this.acceptButton.Click += new System.EventHandler(this.AcceptButton_Click);
             // 
             // cancelButton
             // 

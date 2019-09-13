@@ -20,8 +20,8 @@ namespace OpenDental {
 		}
 
 		private void FormTaskInboxSetup_Load(object sender,EventArgs e) {
-			UserList=Userods.GetDeepCopy(true);
-			UserListOld=Userods.GetDeepCopy(true);
+			UserList= User.All();
+			UserListOld= User.All();
 			TrunkList=TaskLists.RefreshMainTrunk(Security.CurrentUser.Id,TaskType.All);
 			listMain.Items.Add(Lan.g(this,"none"));
 			for(int i=0;i<TrunkList.Count;i++){
@@ -86,7 +86,7 @@ namespace OpenDental {
 			for(int i=0;i<UserList.Count;i++){
 				if(UserList[i].TaskListId!=UserListOld[i].TaskListId){
 					try {
-						Userods.Update(UserList[i]);
+						User.Update(UserList[i]);
 						changed=true;
 					}
 					catch(Exception ex) {

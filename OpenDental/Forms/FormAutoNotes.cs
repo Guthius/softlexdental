@@ -171,12 +171,12 @@ namespace OpenDental {
 		#endregion
 
 		private void FormAutoNotes_Load(object sender, System.EventArgs e) {
-			if(IsSelectionMode) {
-				butAdd.Visible=false;
-				labelSelection.Visible=true;
-			}
-			_userOdCurPref=UserOdPrefs.GetByUserAndFkeyType(Security.CurrentUser.Id,UserPreferenceName.AutoNoteExpandedCats).FirstOrDefault();
-			FillListTree();
+			//if(IsSelectionMode) {
+			//	butAdd.Visible=false;
+			//	labelSelection.Visible=true;
+			//}
+			//_userOdCurPref=UserOdPrefs.GetByUserAndFkeyType(Security.CurrentUser.Id,UserPreferenceName.AutoNoteExpandedCats).FirstOrDefault();
+			//FillListTree();
 		}
 
 		private void FillListTree() {
@@ -476,23 +476,23 @@ namespace OpenDental {
 		}
 
 		private void FormAutoNotes_FormClosing(object sender,FormClosingEventArgs e) {
-			//store the current node expanded state for this user
-			List<long> listExpandedDefNums=treeNotes.Nodes.OfType<TreeNode>()
-				.SelectMany(x => GetNodeAndChildren(x,true))
-				.Where(x => x.IsExpanded)
-				.Select(x => ((Definition)x.Tag).Id)
-				.Where(x => x>0).ToList();
-			if(_userOdCurPref==null) {
-				UserOdPrefs.Insert(new UserPreference() {
-					UserId=Security.CurrentUser.Id,
-					FkeyType=UserPreferenceName.AutoNoteExpandedCats,
-					Value=string.Join(",",listExpandedDefNums)
-				});
-			}
-			else {
-				_userOdCurPref.Value=string.Join(",",listExpandedDefNums);
-				UserOdPrefs.Update(_userOdCurPref);
-			}
+			////store the current node expanded state for this user
+			//List<long> listExpandedDefNums=treeNotes.Nodes.OfType<TreeNode>()
+			//	.SelectMany(x => GetNodeAndChildren(x,true))
+			//	.Where(x => x.IsExpanded)
+			//	.Select(x => ((Definition)x.Tag).Id)
+			//	.Where(x => x>0).ToList();
+			//if(_userOdCurPref==null) {
+			//	UserOdPrefs.Insert(new UserPreference() {
+			//		UserId=Security.CurrentUser.Id,
+			//		FkeyType=UserPreferenceName.AutoNoteExpandedCats,
+			//		Value=string.Join(",",listExpandedDefNums)
+			//	});
+			//}
+			//else {
+			//	_userOdCurPref.Value=string.Join(",",listExpandedDefNums);
+			//	UserOdPrefs.Update(_userOdCurPref);
+			//}
 		}
 	}
 

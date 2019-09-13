@@ -444,9 +444,9 @@ namespace OpenDental{
 				checkClinicInfo.Visible=false;
 				checkClinicBreakdown.Visible=false;
 			}
-			_listPayPeriods=PayPeriods.GetDeepCopy();
-			_selectedPayPeriodIdx=PayPeriods.GetForDate(DateTime.Today);
-			if(_selectedPayPeriodIdx<0) {
+			_listPayPeriods=PayPeriod.All();
+			_selectedPayPeriodIdx= _listPayPeriods.FindIndex(x => DateTime.Today >= x.DateStart.Date && DateTime.Today <= x.DateEnd.Date);
+            if (_selectedPayPeriodIdx<0) {
 				dtPickerFrom.Value=DateTime.Today.AddDays(-7);
 				dtPickerTo.Value=DateTime.Today;
 			}

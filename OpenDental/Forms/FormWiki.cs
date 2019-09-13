@@ -59,11 +59,12 @@ namespace OpenDental
         /// </summary>
         private void LoadWikiPageHome()
         {
-            historyNavBack--;//We have to decrement historyNavBack to tell whether or not we need to branch our page history or add to page history
-            List<UserPreference> listUserOdPrefs = UserOdPrefs.GetByUserAndFkeyType(Security.CurrentUser.Id, UserPreferenceName.WikiHomePage);
-            if (listUserOdPrefs.Count > 0)
+            historyNavBack--; // We have to decrement historyNavBack to tell whether or not we need to branch our page history or add to page history
+
+            var homePage = UserPreference.GetString(Security.CurrentUser.Id, UserPreferenceName.WikiHomePage);
+            if (!string.IsNullOrEmpty(homePage))
             {
-                LoadWikiPage(listUserOdPrefs[0].Value);
+                LoadWikiPage(homePage);
             }
             else
             {
@@ -302,28 +303,28 @@ namespace OpenDental
 
         private void menuItemHomePageSave_Click(object sender, EventArgs e)
         {
-            if (WikiPageCur == null)
-            {
-                MsgBox.Show(this, "Invalid wiki page selected.");
-                return;
-            }
-            List<UserPreference> listUserOdPrefs = UserOdPrefs.GetByUserAndFkeyType(Security.CurrentUser.Id, UserPreferenceName.WikiHomePage);
-            if (listUserOdPrefs.Count > 0)
-            {
-                //User is updating their current home page to a new one.
-                listUserOdPrefs[0].Value = WikiPageCur.PageTitle;
-                UserOdPrefs.Update(listUserOdPrefs[0]);
-            }
-            else
-            {
-                //User is saving a custom home page for the first time.
-                UserPreference userOdPref = new UserPreference();
-                userOdPref.UserId = Security.CurrentUser.Id;
-                userOdPref.Value = WikiPageCur.PageTitle;
-                userOdPref.FkeyType = UserPreferenceName.WikiHomePage;
-                UserOdPrefs.Insert(userOdPref);
-            }
-            MsgBox.Show(this, "Home page saved.");
+            //if (WikiPageCur == null)
+            //{
+            //    MsgBox.Show(this, "Invalid wiki page selected.");
+            //    return;
+            //}
+            //List<UserPreference> listUserOdPrefs = UserOdPrefs.GetByUserAndFkeyType(Security.CurrentUser.Id, UserPreferenceName.WikiHomePage);
+            //if (listUserOdPrefs.Count > 0)
+            //{
+            //    //User is updating their current home page to a new one.
+            //    listUserOdPrefs[0].Value = WikiPageCur.PageTitle;
+            //    UserOdPrefs.Update(listUserOdPrefs[0]);
+            //}
+            //else
+            //{
+            //    //User is saving a custom home page for the first time.
+            //    UserPreference userOdPref = new UserPreference();
+            //    userOdPref.UserId = Security.CurrentUser.Id;
+            //    userOdPref.Value = WikiPageCur.PageTitle;
+            //    userOdPref.FkeyType = UserPreferenceName.WikiHomePage;
+            //    UserOdPrefs.Insert(userOdPref);
+            //}
+            //MsgBox.Show(this, "Home page saved.");
         }
 
         private void Back_Click()

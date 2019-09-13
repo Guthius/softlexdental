@@ -426,11 +426,11 @@ namespace OpenDental{
 				butPickPresenter.Visible=false;
 			}
 			if(PlanCur.UserNumPresenter>0) {
-				_presenterCur=Userods.GetUser(PlanCur.UserNumPresenter);
+				_presenterCur= User.GetById(PlanCur.UserNumPresenter);
 				_presenterOld=_presenterCur.Copy();
 				textPresenter.Text=_presenterCur.UserName;
 			}
-			textUserEntry.Text=Userods.GetName(PlanCur.SecUserNumEntry);
+			textUserEntry.Text=User.GetName(PlanCur.SecUserNumEntry);
 			textDateTP.Text=PlanCur.DateTP.ToShortDateString();
 			textHeading.Text=PlanCur.Heading;
 			textNote.Text=PlanCur.Note;
@@ -543,7 +543,7 @@ namespace OpenDental{
 
 		private void butPickPresenter_Click(object sender,EventArgs e) {
 			FormUserPick FormUP=new FormUserPick();
-			List<User> listUsers=Userods.GetWhere(x => x.ClinicRestricted == false || x.ClinicId == Clinics.ClinicNum,true);
+			List<User> listUsers= User.AllActive().FindAll(x => x.ClinicRestricted == false || x.ClinicId == Clinics.ClinicNum);
 			FormUP.ListUserodsFiltered=listUsers;
 			if(_presenterCur!=null) {
 				FormUP.SuggestedUserNum=_presenterCur.Id;
@@ -553,7 +553,7 @@ namespace OpenDental{
 			if(FormUP.DialogResult!=DialogResult.OK) {
 				return;
 			}
-			_presenterCur=Userods.GetUser(FormUP.SelectedUserNum);//can be null
+			_presenterCur= User.GetById(FormUP.SelectedUserNum);//can be null
 			if(_presenterCur!=null) {
 				textPresenter.Text=_presenterCur.UserName;
 			}

@@ -411,8 +411,8 @@ namespace OpenDental{
 				row.Cells.Add(jeCur.CreditAmt==0?"":jeCur.CreditAmt.ToString("n"));
 				row.Cells.Add(bal.ToString("n"));
 				long userNum;
-				row.Cells.Add(Userods.GetName(_dictTransUsers.TryGetValue(jeCur.TransactionNum,out userNum)?userNum:0));
-				row.Cells.Add(Userods.GetName(jeCur.SecUserNumEdit));
+				row.Cells.Add(User.GetName(_dictTransUsers.TryGetValue(jeCur.TransactionNum,out userNum)?userNum:0));
+				row.Cells.Add(User.GetName(jeCur.SecUserNumEdit));
 				row.Cells.Add(jeCur.ReconcileNum==0?"":"X");
 				row.Tag=jeCur.TransactionNum;
 				gridToFill.Rows.Add(row);

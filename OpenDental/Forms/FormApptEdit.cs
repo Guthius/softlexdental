@@ -1248,7 +1248,7 @@ namespace OpenDental
                     isProcDeleted = true;
                     if (proc.ProcStatus.In(ProcStat.C, ProcStat.EO, ProcStat.EC))
                     {
-                        Permissions perm = Permissions.EditCompletedProcedure;
+                        string perm = Permissions.EditCompletedProcedure;
                         if (proc.ProcStatus.In(ProcStat.EO, ProcStat.EC))
                         {
                             perm = Permissions.EditProcedure;
@@ -2291,7 +2291,7 @@ namespace OpenDental
                 Procedure proc = procsForDay[i];
                 ProcedureCode procCode = ProcedureCodes.GetProcCode(proc.CodeNum);
                 Provider prov = _listProvidersAll.First(x => x.ProvNum == proc.ProvNum);
-                User usr = Userods.GetUser(proc.UserNum);
+                User usr = User.GetById(proc.UserNum);
                 ODGridRow row = new ODGridRow();
                 row.ColorLborder = System.Drawing.Color.Black;
                 for (int f = 0; f < fields.Count; f++)
@@ -2511,7 +2511,7 @@ namespace OpenDental
                 return;
             }
 
-            var permissions = new List<Permissions>
+            var permissions = new List<string>
             {
                 Permissions.AppointmentCreate,
                 Permissions.AppointmentEdit,
@@ -2892,7 +2892,7 @@ namespace OpenDental
             if (AptOld.AptStatus != ApptStatus.UnschedList && AptCur.AptStatus == ApptStatus.UnschedList)
             {
                 //Extra log entry if the appt was sent to the unscheduled list
-                Permissions perm = Permissions.AppointmentMove;
+                string perm = Permissions.AppointmentMove;
                 if (AptOld.AptStatus == ApptStatus.Complete)
                 {
                     perm = Permissions.AppointmentCompleteEdit;

@@ -41,15 +41,15 @@ namespace OpenDental
         /// Set isSimpleSwitch true if temporarily switching users for some reason.  This will leave Security.CurUser alone and will instead
         /// indicate which user was chosen / successfully logged in via CurUserSimpleSwitch.
         /// </summary>
-        public FormLogOn(long userNumSelected = 0, bool isSimpleSwitch = false, bool doRefreshSecurityCache = true)
+        public FormLogOn(long selectedUserId = 0, bool isSimpleSwitch = false, bool doRefreshSecurityCache = true)
         {
             InitializeComponent();
 
             Plugin.Trigger(this, "FormLogOn_Initialized", isSimpleSwitch);
 
-            if (userNumSelected > 0)
+            if (selectedUserId > 0)
             {
-                userNameAutoSelect = Userods.GetUserNameNoCache(userNumSelected);
+                userNameAutoSelect = User.GetUserName(selectedUserId);
             }
             else if (Security.CurrentUser != null)
             {
@@ -74,11 +74,6 @@ namespace OpenDental
 
                 // Focus should start with user name text box.
                 textSelectOnLoad = userTextBox; 
-            }
-            else
-            {
-                //Only show the show CEMT user check box if not manually typing user names and there are CEMT users present in the db.
-                CEMTUsersCheckBox.Visible = Userods.HasUsersForCEMTNoCache();
             }
 
             LoadUsers();
@@ -106,7 +101,7 @@ namespace OpenDental
             userListBox.BeginUpdate();
             userListBox.Items.Clear();
 
-            var userNameList = Userods.GetUserNamesNoCache(CEMTUsersCheckBox.Checked);
+            var userNameList = User.GetUserNames();
             foreach (var userName in userNameList)
             {
                 userListBox.Items.Add(userName);
@@ -137,7 +132,6 @@ namespace OpenDental
         /// </summary>
         void acceptButton_Click(object sender, EventArgs e)
         {
-            bool    isEcw       = Programs.UsingEcwTightOrFullMode();
             string  userName    = "";
             User  userCur     = null;
 
@@ -161,7 +155,7 @@ namespace OpenDental
 
             try
             {
-                userCur = Userods.CheckUserAndPassword(userName, passwordTyped, isEcw);
+                userCur = User.CheckUserAndPassword(userName, passwordTyped);
             }
             catch (Exception ex)
             {
@@ -182,7 +176,7 @@ namespace OpenDental
                 if (Preference.GetBool(PreferenceName.PasswordsMustBeStrong) && Preference.GetBool(PreferenceName.PasswordsWeakChangeToStrong))
                 {
                     // Check whether the password is strong enough.
-                    if (Userods.IsPasswordStrong(passwordTyped) != "")
+                    if (User.IsPasswordStrong(passwordTyped) != "")
                     {
                         MessageBox.Show(this, Translation.Language.lang_you_must_change_password_to_stronger_password);
                         if (!SecurityL.ChangePassword(true, doRefreshSecurityCache))

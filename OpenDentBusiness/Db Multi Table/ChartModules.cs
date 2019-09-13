@@ -240,7 +240,7 @@ namespace OpenDentBusiness
             List<Definition> listMiscColorDefs = Definition.GetByCategory(DefinitionCategory.MiscColors);
             List<Definition> listProgNoteColorDefs = Definition.GetByCategory(DefinitionCategory.ProgNoteColors);
             Family family = Patients.GetFamily(patNum);
-            Dictionary<string, string> dictUserNames = User.GetUsers().ToDictionary(x => x.Id.ToString(), x => x.UserName);
+            Dictionary<string, string> dictUserNames = User.AllActive().ToDictionary(x => x.Id.ToString(), x => x.UserName);
             if (componentsToLoad.ShowTreatPlan
                 || componentsToLoad.ShowCompleted
                 || componentsToLoad.ShowExisting

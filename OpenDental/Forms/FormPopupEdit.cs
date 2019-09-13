@@ -328,7 +328,7 @@ namespace OpenDental{
 			}
 			else {
 				if(PopupCur.UserNum!=0) {//This check is so that any old popups without a user will still display correctly.
-					textUser.Text=Userods.GetUser(PopupCur.UserNum).UserName;
+					textUser.Text=User.GetById(PopupCur.UserNum).UserName;
 				}
 				if(PopupAudit!=null) {//This checks if this window opened from FormPopupAudit
 					textCreateDate.Text="";

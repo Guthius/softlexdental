@@ -44,7 +44,7 @@ namespace OpenDental {
 				comboClinic.Visible=false;
 				fillComboProv();
 			}
-			textUser.Text=Userods.GetName(_procCur.UserNum);
+			textUser.Text= User.GetName(_procCur.UserNum);
 			textChartNotes.Text=_procCur.Note;
 			textAccountNotes.Text=_procCur.BillingNote;
 		}

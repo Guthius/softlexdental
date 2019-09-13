@@ -73,6 +73,9 @@ namespace OpenDentBusiness
 
         public static int GetCount() => cache.Count();
 
+
+        public static PayPeriod GetLast() => cache.Last(); // TODO: Is this correct?
+
         public static long Insert(PayPeriod payPeriod) =>
             payPeriod.Id = DataConnection.ExecuteInsert(
                 "INSERT INTO `pay_periods` (`date_start`, `date_end`, `date_paycheck`) VALUES (?date_start, ?date_end, ?date_paycheck)",

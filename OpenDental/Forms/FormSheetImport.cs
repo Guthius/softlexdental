@@ -2408,7 +2408,7 @@ namespace OpenDental {
 				if(AddressSameForFam) {
 					bool isAuthArchivedEdit=Security.IsAuthorized(Permissions.ArchivedPatientEdit,true);
 					if(!isAuthArchivedEdit && Fam.HasArchivedMember()) {
-						MessageBox.Show(Lans.g("Security","Not authorized for")+"\r\n"+GroupPermissions.GetDesc(Permissions.ArchivedPatientEdit)+"\r\n"
+						MessageBox.Show(Lans.g("Security","Not authorized for")+"\r\n"+GroupPermission.GetDescription(Permissions.ArchivedPatientEdit)+"\r\n"
 							+Lans.g(this,"Archived patients in the family will not be updated.  All other family members will be updated as usual."));
 					}
 					Patients.UpdateAddressForFam(PatCur,false,isAuthArchivedEdit);

@@ -103,7 +103,7 @@ namespace OpenDental
             if (Text == Translation.Language.ShowAll)
             {
                 Text = Translation.Language.ShowFiltered;
-                ShowUsers(Userods.GetDeepCopy());
+                ShowUsers(User.All());
             }
             else
             {
@@ -150,7 +150,7 @@ namespace OpenDental
                 return;
             }
 
-            if (!IsSelectionmode && !Security.IsAuthorized(Permissions.TaskEdit, true) && Userods.GetInbox(usersList[userListBox.SelectedIndex].Id) != 0)
+            if (!IsSelectionmode && !Security.IsAuthorized(Permissions.TaskEdit, true) && (User.GetById(usersList[userListBox.SelectedIndex].Id)?.TaskListId ?? 0) != 0)
             {
                 MessageBox.Show(
                     Translation.Language.PleaseSelectAUserThatDoesNotHaveAnInbox,

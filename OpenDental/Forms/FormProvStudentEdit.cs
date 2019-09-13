@@ -138,7 +138,7 @@ namespace OpenDental {
 				newUser.UserName=_autoUserName.ToString();
 				newUser.Password=Authentication.GenerateLoginDetailsSHA512(textPassword.Text);
 				newUser.ProviderId=provNum;
-				Userods.Insert(newUser,new List<long> { Preference.GetLong(PreferenceName.SecurityGroupForStudents) });
+				User.Insert(newUser,new List<long> { Preference.GetLong(PreferenceName.SecurityGroupForStudents) });
 			}
 			else {//Has changed the user name from the default or is editing a pre-existing student
 				try {
@@ -147,13 +147,13 @@ namespace OpenDental {
 						newUser.UserName=textUserName.Text;
 						newUser.Password=Authentication.GenerateLoginDetailsSHA512(textPassword.Text);
 						newUser.ProviderId=provNum;
-						Userods.Insert(newUser,new List<long> { Preference.GetLong(PreferenceName.SecurityGroupForStudents) });//Performs validation
+                        User.Insert(newUser,new List<long> { Preference.GetLong(PreferenceName.SecurityGroupForStudents) });//Performs validation
 					}
 					else {
 						Providers.Update(ProvStudent);
 						_existingUser.UserName=textUserName.Text;
 						_existingUser.Password=Authentication.GenerateLoginDetailsSHA512(textPassword.Text);
-						Userods.Update(_existingUser);//Performs validation
+                        User.Update(_existingUser);//Performs validation
 					}
 				}
 				catch(Exception ex) {

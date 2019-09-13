@@ -905,7 +905,7 @@ namespace OpenDental {
 			}
 			FillProvs();
 			FillDateFilterBy();
-			_listClaimSentEditUsers=Userods.GetUsersByPermission(Permissions.ClaimSentEdit,false);
+			_listClaimSentEditUsers=User.GetByPermission(Permissions.ClaimSentEdit,false);
 			FillUsers();
 			_listOldClaimTrackings=ClaimTrackings.RefreshForUsers(ClaimTrackingType.ClaimUser,_listClaimSentEditUsers.Select(x => x.Id).ToList());
 			_listNewClaimTrackings=_listOldClaimTrackings.Select(x => x.Copy()).ToList();
@@ -960,7 +960,7 @@ namespace OpenDental {
 
 		private void FillUsers() {
 			comboUserAssigned.Items.Add(new ODBoxItem<User>(Lans.g(this,"All"))); //tag=null
-			comboUserAssigned.Items.Add(new ODBoxItem<User>(Lans.g(this,"Unassigned"),new User() {Id=0}));
+			comboUserAssigned.Items.Add(new ODBoxItem<User>(Lans.g(this,"Unassigned"),new User()));
 			_listClaimSentEditUsers.ForEach(x => comboUserAssigned.Items.Add(new ODBoxItem<User>(x.UserName,x)));
 			comboUserAssigned.SetSelected(0,true);//Default to all
 		}
@@ -1141,7 +1141,7 @@ namespace OpenDental {
 							row.Cells.Add(Lan.g(this,type));
 							break;
 						case "User":
-							row.Cells.Add(Userods.GetName(claimCur.UserNum));
+							row.Cells.Add(User.GetName(claimCur.UserNum));
 							break;
 						case "PatName":
 							string patName=claimCur.PatLName+", "+claimCur.PatFName+" "+claimCur.PatMiddleI;

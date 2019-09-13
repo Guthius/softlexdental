@@ -40,9 +40,9 @@ namespace OpenDental
             noteTextBox.Text = Order.Note;
 
             userComboBox.Items.Clear();
-            userComboBox.Items.Add(new ODBoxItem<User>(Translation.Language.None, new User { Id = 0 }));
+            userComboBox.Items.Add(new ODBoxItem<User>(Translation.Language.None, new User()));
 
-            var usersList = Userods.GetUsers().FindAll(x => !x.IsHidden);
+            var usersList = User.All().FindAll(x => !x.IsHidden);
             foreach (var user in usersList)
             {
                 var userBoxItem = new ODBoxItem<User>(user.UserName, user);
@@ -58,7 +58,7 @@ namespace OpenDental
             {
                 userComboBox.IndexSelectOrSetText(-1, () =>
                 {
-                    return Userods.GetName(Order.UserNum);
+                    return User.GetName(Order.UserNum);
                 });
             }
         }

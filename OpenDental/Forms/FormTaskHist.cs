@@ -51,7 +51,7 @@ namespace OpenDental {
 				if(usernum==0) {
 					usernum=taskHistCur.UserNum;
 				}
-				row.Cells.Add(Userods.GetUser(usernum).UserName);
+				row.Cells.Add(User.GetById(usernum).UserName);
 				row.Cells.Add(TaskHists.GetChangesDescription(taskHistCur,taskHistNext));
 				gridTaskHist.Rows.Add(row);
 			}
@@ -73,7 +73,7 @@ namespace OpenDental {
 					if(usernum==0) {
 						usernum=taskHistCur.UserNum;
 					}
-					row.Cells.Add(Userods.GetUser(usernum).UserName);
+					row.Cells.Add(User.GetById(usernum).UserName);
 					row.Cells.Add(TaskHists.GetChangesDescription(taskHistCur,taskHistNext));
 					gridTaskHist.Rows.Add(row);
 				}

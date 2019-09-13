@@ -70,7 +70,7 @@ namespace OpenDental
                 {
                     if (!Security.IsAuthorized(Permissions.AdjustmentEditZero, true)) //Let user create an adjustment of zero if they have this perm.
                     {
-                        MessageBox.Show("Not authorized for\r\n" + GroupPermissions.GetDesc(Permissions.AdjustmentCreate));
+                        MessageBox.Show("Not authorized for\r\n" + GroupPermission.GetDescription(Permissions.AdjustmentCreate));
 
                         DialogResult = DialogResult.Cancel;
 
@@ -406,7 +406,7 @@ namespace OpenDental
                 {//Give message later.
                     if (!_checkZeroAmount)
                     {//Let user create as long as Amount is zero and has edit zero permissions.  This was checked on load.
-                        MessageBox.Show(Lans.g("Security", "Not authorized for") + "\r\n" + GroupPermissions.GetDesc(Permissions.AdjustmentCreate));
+                        MessageBox.Show(Lans.g("Security", "Not authorized for") + "\r\n" + GroupPermission.GetDescription(Permissions.AdjustmentCreate));
                         return;
                     }
                 }

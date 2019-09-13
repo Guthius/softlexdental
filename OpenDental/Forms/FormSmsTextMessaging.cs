@@ -174,16 +174,16 @@ namespace OpenDental {
 			checkSent.Checked=isSent;
 			checkRead.Checked=isReceived;
 			_smsNotifier=smsNotifier;
-			_groupByPref=UserOdPrefs.GetFirstOrNewByUserAndFkeyType(Security.CurrentUser.Id,UserPreferenceName.SmsGroupBy);
-			if(_groupByPref.Value=="1") {
-				radioGroupByPatient.Checked=true;
-			}
-			else if(_groupByPref.Value=="2") {
-				radioGroupByPhone.Checked=true;
-			}
-			else {
-				radioGroupByNone.Checked=true;
-			}
+			//_groupByPref=UserOdPrefs.GetFirstOrNewByUserAndFkeyType(Security.CurrentUser.Id,UserPreferenceName.SmsGroupBy);
+			//if(_groupByPref.Value=="1") {
+			//	radioGroupByPatient.Checked=true;
+			//}
+			//else if(_groupByPref.Value=="2") {
+			//	radioGroupByPhone.Checked=true;
+			//}
+			//else {
+			//	radioGroupByNone.Checked=true;
+			//}
 		}
 
 		private void FormSmsTextMessaging_Load(object sender,EventArgs e) {
@@ -221,16 +221,16 @@ namespace OpenDental {
 			radioGroupByPatient.CheckedChanged+=new EventHandler(RadioGroupBy_CheckedChanged);
 			radioGroupByPhone.CheckedChanged+=new EventHandler(RadioGroupBy_CheckedChanged);
 			this.FormClosing+=new FormClosingEventHandler((o,e1) => {
-				if(radioGroupByNone.Checked) {
-					_groupByPref.Value="0";
-				}
-				else if(radioGroupByPatient.Checked) {
-					_groupByPref.Value="1";
-				}
-				else if(radioGroupByPhone.Checked) {
-					_groupByPref.Value="2";
-				}
-				UserOdPrefs.Upsert(_groupByPref);
+				//if(radioGroupByNone.Checked) {
+				//	_groupByPref.Value="0";
+				//}
+				//else if(radioGroupByPatient.Checked) {
+				//	_groupByPref.Value="1";
+				//}
+				//else if(radioGroupByPhone.Checked) {
+				//	_groupByPref.Value="2";
+				//}
+				//UserOdPrefs.Upsert(_groupByPref);
 			});
             Plugin.Trigger(this, "FormSmsTextMessaging_Loaded");
 		}

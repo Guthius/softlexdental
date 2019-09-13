@@ -854,14 +854,14 @@ namespace OpenDental
             ODThread threadTasks = new ODThread(new ODThread.WorkerDelegate((o) =>
             {
                 List<TaskNote> listRefreshedTaskNotes = null;
-                List<UserPreference> listBlockedTaskLists = null;
+                List<UserPreference> listBlockedTaskLists = new List<UserPreference>();
                 //JM: Bug fix, but we do not know what would cause Security.CurUser to be null. Worst case task wont show till next signal tick.
                 long userNumCur = Security.CurrentUser?.Id ?? 0;
                 List<OpenDentBusiness.Task> listRefreshedTasks = Tasks.GetNewTasksThisUser(userNumCur, Clinics.ClinicNum, listEditedTaskNums);
                 if (listRefreshedTasks.Count > 0)
                 {
                     listRefreshedTaskNotes = TaskNotes.GetForTasks(listRefreshedTasks.Select(x => x.TaskNum).ToList());
-                    listBlockedTaskLists = UserPreference.GetByKey(userNumCur, UserPreferenceName.TaskListBlock);
+                    listBlockedTaskLists.Add(UserPreference.GetByKey(userNumCur, UserPreferenceName.TaskListBlock)); // TODO: It should be possible to block multiple lists...
                 }
                 this.Invoke((() => HandleRefreshedTasks(listSignalTasks, listEditedTaskNums, listRefreshedTasks, listRefreshedTaskNotes,
                     listBlockedTaskLists)));

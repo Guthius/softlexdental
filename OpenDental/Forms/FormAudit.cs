@@ -31,14 +31,16 @@ namespace OpenDental
             textDateFrom.Text = DateTime.Today.AddDays(-10).ToShortDateString();
             textDateTo.Text = DateTime.Today.ToShortDateString();
 
-            var permissions = (Permissions[])Enum.GetValues(typeof(Permissions));
-            foreach (var permission in permissions)
-            {
-                if (GroupPermissions.HasAuditTrail(permission))
-                {
-                    permissionNames.Add(permission.ToString());
-                }
-            }
+            //TODO: FIx me
+
+            //var permissions = (string[])Enum.GetValues(typeof(Permissions));
+            //foreach (var permission in permissions)
+            //{
+            //    if (GroupPermissions.HasAuditTrail(permission))
+            //    {
+            //        permissionNames.Add(permission.ToString());
+            //    }
+            //}
 
             permissionNames.Sort();
 
@@ -49,7 +51,7 @@ namespace OpenDental
             }
             permissionComboBox.SelectedIndex = 0;
 
-            users = Userods.GetDeepCopy();
+            users = User.All();
             userComboBox.Items.Add("All");
             foreach (var user in users)
             {
@@ -142,7 +144,7 @@ namespace OpenDental
                         SecurityLogs.Refresh(
                             DateTime.Parse(textDateFrom.Text),
                             DateTime.Parse(textDateTo.Text),
-                            Permissions.None, 
+                            "", 
                             patientId, 
                             userId, 
                             datePreviousFrom, 
@@ -156,7 +158,7 @@ namespace OpenDental
                         SecurityLogs.Refresh(
                             DateTime.Parse(textDateFrom.Text),
                             DateTime.Parse(textDateTo.Text),
-                            (Permissions)Enum.Parse(typeof(Permissions), permissionComboBox.SelectedItem.ToString()), 
+                            (string)permissionComboBox.SelectedItem, 
                             patientId, 
                             userId,
                             datePreviousFrom, 
@@ -192,7 +194,7 @@ namespace OpenDental
                 row.Cells.Add(securityLog.LogDateTime.ToShortTimeString());
                 row.Cells.Add(securityLog.PatientName);
 
-                row.Cells.Add(Userods.GetUser(securityLog.UserNum)?.UserName ?? "unknown");
+                row.Cells.Add(User.GetById(securityLog.UserNum)?.UserName ?? "unknown");
                 if (securityLog.PermType == Permissions.ModuleChart)
                 {
                     row.Cells.Add("ChartModuleViewed");

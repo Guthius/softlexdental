@@ -25,63 +25,63 @@ namespace OpenDental {
 		}
 
 		private void butStudentPicker_Click(object sender,EventArgs e) {
-			if(!Security.IsAuthorized(Permissions.SecurityAdmin)) {
-				return;
-			}
-			FormUserGroupPicker FormUGP=new FormUserGroupPicker();
-			FormUGP.IsAdminMode=false;
-			FormUGP.ShowDialog();
-			if(FormUGP.DialogResult!=DialogResult.OK) {
-				return;
-			}
-			DialogResult diag=MessageBox.Show(Lan.g(this,"Update all existing students to this user group?")+"\r\n"
-				+Lan.g(this,"Choose No to just save the new default user group for students."),"",MessageBoxButtons.YesNoCancel);
-			if(diag==DialogResult.Cancel) {
-				return;
-			}
-			if(diag==DialogResult.Yes) {
-				try {
-					Userods.UpdateUserGroupsForDentalSchools(FormUGP.UserGroup,false);
-				}
-				catch {
-					MsgBox.Show(this,"Cannot move students to the new user group because it would leave no users with the SecurityAdmin permission.  Give the SecurityAdmin permission to at least one user that is in another group or is not flagged as a student.");
-					return;
-				}
-			}
-			//For now, only one user group can be defined as the default security group for students/instructors.
-			Preference.Update(PreferenceName.SecurityGroupForStudents,FormUGP.UserGroup.Id);
-			textStudents.Text=FormUGP.UserGroup.Description;
-			DataValid.SetInvalid(InvalidType.Prefs);
+			//if(!Security.IsAuthorized(Permissions.SecurityAdmin)) {
+			//	return;
+			//}
+			//FormUserGroupPicker FormUGP=new FormUserGroupPicker();
+			//FormUGP.IsAdminMode=false;
+			//FormUGP.ShowDialog();
+			//if(FormUGP.DialogResult!=DialogResult.OK) {
+			//	return;
+			//}
+			//DialogResult diag=MessageBox.Show(Lan.g(this,"Update all existing students to this user group?")+"\r\n"
+			//	+Lan.g(this,"Choose No to just save the new default user group for students."),"",MessageBoxButtons.YesNoCancel);
+			//if(diag==DialogResult.Cancel) {
+			//	return;
+			//}
+			//if(diag==DialogResult.Yes) {
+			//	try {
+   //                 User.UpdateUserGroupsForDentalSchools(FormUGP.UserGroup,false);
+			//	}
+			//	catch {
+			//		MsgBox.Show(this,"Cannot move students to the new user group because it would leave no users with the SecurityAdmin permission.  Give the SecurityAdmin permission to at least one user that is in another group or is not flagged as a student.");
+			//		return;
+			//	}
+			//}
+			////For now, only one user group can be defined as the default security group for students/instructors.
+			//Preference.Update(PreferenceName.SecurityGroupForStudents,FormUGP.UserGroup.Id);
+			//textStudents.Text=FormUGP.UserGroup.Description;
+			//DataValid.SetInvalid(InvalidType.Prefs);
 		}
 
 		private void butInstructorPicker_Click(object sender,EventArgs e) {
-			if(!Security.IsAuthorized(Permissions.SecurityAdmin)) {
-				return;
-			}
-			FormUserGroupPicker FormUGP=new FormUserGroupPicker();
-			FormUGP.IsAdminMode=false;
-			FormUGP.ShowDialog();
-			if(FormUGP.DialogResult!=DialogResult.OK) {
-				return;
-			}
-			DialogResult diag=MessageBox.Show(Lan.g(this,"Update all existing instructors to this user group?")+"\r\n"
-				+Lan.g(this,"Choose No to just save the new default user group for instructors."),"",MessageBoxButtons.YesNoCancel);
-			if(diag==DialogResult.Cancel) {
-				return;
-			}
-			if(diag==DialogResult.Yes) {
-				try {
-					Userods.UpdateUserGroupsForDentalSchools(FormUGP.UserGroup,true);
-				}
-				catch {
-					MsgBox.Show(this,"Cannot move instructors to the new user group because it would leave no users with the SecurityAdmin permission.  Give the SecurityAdmin permission to at least one user that is in another group or is not flagged as an instructor.");
-					return;
-				}
-			}
-			//For now, only one user group can be defined as the default security group for students/instructors.
-			Preference.Update(PreferenceName.SecurityGroupForInstructors,FormUGP.UserGroup.Id);
-			textInstructors.Text=FormUGP.UserGroup.Description;
-			DataValid.SetInvalid(InvalidType.Prefs);
+			//if(!Security.IsAuthorized(Permissions.SecurityAdmin)) {
+			//	return;
+			//}
+			//FormUserGroupPicker FormUGP=new FormUserGroupPicker();
+			//FormUGP.IsAdminMode=false;
+			//FormUGP.ShowDialog();
+			//if(FormUGP.DialogResult!=DialogResult.OK) {
+			//	return;
+			//}
+			//DialogResult diag=MessageBox.Show(Lan.g(this,"Update all existing instructors to this user group?")+"\r\n"
+			//	+Lan.g(this,"Choose No to just save the new default user group for instructors."),"",MessageBoxButtons.YesNoCancel);
+			//if(diag==DialogResult.Cancel) {
+			//	return;
+			//}
+			//if(diag==DialogResult.Yes) {
+			//	try {
+			//		Userods.UpdateUserGroupsForDentalSchools(FormUGP.UserGroup,true);
+			//	}
+			//	catch {
+			//		MsgBox.Show(this,"Cannot move instructors to the new user group because it would leave no users with the SecurityAdmin permission.  Give the SecurityAdmin permission to at least one user that is in another group or is not flagged as an instructor.");
+			//		return;
+			//	}
+			//}
+			////For now, only one user group can be defined as the default security group for students/instructors.
+			//Preference.Update(PreferenceName.SecurityGroupForInstructors,FormUGP.UserGroup.Id);
+			//textInstructors.Text=FormUGP.UserGroup.Description;
+			//DataValid.SetInvalid(InvalidType.Prefs);
 		}
 
 		private void butGradingScales_Click(object sender,EventArgs e) {

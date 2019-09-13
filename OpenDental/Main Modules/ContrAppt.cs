@@ -930,7 +930,7 @@ namespace OpenDental
             }
             if (!reminderTask.Descript.StartsWith("==") && reminderTask.UserNum != 0)
             {
-                objDesc += Userods.GetName(reminderTask.UserNum) + " - ";
+                objDesc += User.GetName(reminderTask.UserNum) + " - ";
             }
             if (Preference.GetBool(PreferenceName.TasksNewTrackedByUser))
             {//The new way

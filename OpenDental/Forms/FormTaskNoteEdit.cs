@@ -22,7 +22,7 @@ namespace OpenDental {
 
 		private void FormTaskNoteEdit_Load(object sender,EventArgs e) {
 			textDateTime.Text=TaskNoteCur.DateTimeNote.ToString();
-			textUser.Text=Userods.GetName(TaskNoteCur.UserNum);
+			textUser.Text= User.GetName(TaskNoteCur.UserNum);
 			textNote.Text=TaskNoteCur.Note;
 			textNote.Select(TaskNoteCur.Note.Length,0);
 			this.Top+=150;

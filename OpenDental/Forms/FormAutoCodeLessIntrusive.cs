@@ -213,7 +213,7 @@ namespace OpenDental{
 					logText+=Lan.g(this,"Teeth")+": "+_teethText+", ";
 				}
 				logText+=Lan.g(this,"Fee")+": "+_procCur.ProcFee.ToString("F")+", "+_procCodeCur.Descript;
-				Permissions perm=Permissions.EditCompletedProcedure;
+				string perm=Permissions.EditCompletedProcedure;
 				if(_procCur.ProcStatus.In(ProcStat.EO,ProcStat.EC)) {
 					perm=Permissions.EditProcedure;
 				}

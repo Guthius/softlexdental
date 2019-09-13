@@ -683,7 +683,7 @@ namespace OpenDental {
 			SecurityLog[] orthoChartLogs;
 			SecurityLog[] patientFieldLogs;
 			try {
-				orthoChartLogs=SecurityLogs.Refresh(_patCur.PatNum,new List<Permissions> { Permissions.OrthoChartEditFull },null,checkIncludeArchived.Checked);
+				orthoChartLogs=SecurityLogs.Refresh(_patCur.PatNum,new List<string> { Permissions.OrthoChartEditFull },null,checkIncludeArchived.Checked);
 				patientFieldLogs=SecurityLogs.Refresh(new DateTime(1,1,1),DateTime.Today,Permissions.PatientFieldEdit,_patCur.PatNum,0,
 					DateTime.MinValue,DateTime.Today,checkIncludeArchived.Checked);
 			}

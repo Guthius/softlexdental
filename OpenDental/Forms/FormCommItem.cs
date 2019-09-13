@@ -13,9 +13,9 @@ namespace OpenDental
         bool _sigChanged;
         bool _isStartingUp;
 
-        UserPreference userOdPrefClearNote;
-        UserPreference userOdPrefEndDate;
-        UserPreference userOdPrefUpdateDateTimeNewPat;
+        bool userOdPrefClearNote;
+        bool userOdPrefEndDate;
+        bool userOdPrefUpdateDateTimeNewPat;
         List<Definition> commlogTypeDefsList;
 
         public Commlog CommlogCur;
@@ -48,9 +48,9 @@ namespace OpenDental
         {
             if (Security.CurrentUser == null || Security.CurrentUser.Id < 1) return;
             
-            userOdPrefClearNote             = UserOdPrefs.GetByUserAndFkeyType(Security.CurrentUser.Id, UserPreferenceName.CommlogPersistClearNote).FirstOrDefault();
-            userOdPrefEndDate               = UserOdPrefs.GetByUserAndFkeyType(Security.CurrentUser.Id, UserPreferenceName.CommlogPersistClearEndDate).FirstOrDefault();
-            userOdPrefUpdateDateTimeNewPat  = UserOdPrefs.GetByUserAndFkeyType(Security.CurrentUser.Id, UserPreferenceName.CommlogPersistUpdateDateTimeWithNewPatient).FirstOrDefault();
+            userOdPrefClearNote             = UserPreference.GetBool(Security.CurrentUser.Id, UserPreferenceName.CommlogPersistClearNote);
+            userOdPrefEndDate               = UserPreference.GetBool(Security.CurrentUser.Id, UserPreferenceName.CommlogPersistClearEndDate);
+            userOdPrefUpdateDateTimeNewPat  = UserPreference.GetBool(Security.CurrentUser.Id, UserPreferenceName.CommlogPersistUpdateDateTimeWithNewPatient);
         }
 
         /// <summary>
@@ -65,7 +65,7 @@ namespace OpenDental
         /// </summary>
         /// <param name="userNum">The user number.</param>
         /// <returns>The name of the user. Can by blank.</returns>
-        string GetUserodName(long userNum) => Userods.GetName(userNum);
+        string GetUserodName(long userNum) => User.GetName(userNum);
 
         /// <summary>
         /// Saves the current commlog to the database.
@@ -90,12 +90,9 @@ namespace OpenDental
                 // Post insert persistent user preferences.
                 if (IsPersistent)
                 {
-                    if (userOdPrefClearNote == null || PIn.Bool(userOdPrefClearNote.Value))
-                    {
-                        clearNoteButton_Click(this, EventArgs.Empty);
-                    }
+                    if (userOdPrefClearNote) clearNoteButton_Click(this, EventArgs.Empty);
 
-                    if (userOdPrefEndDate == null || PIn.Bool(userOdPrefEndDate.Value))
+                    if (userOdPrefEndDate)
                     {
                         endTextBox.Text = "";
                     }
@@ -161,7 +158,7 @@ namespace OpenDental
             if (e.Tag is long patNum)
             {
                 SetPatNum(patNum);
-                if (IsPersistent && (userOdPrefUpdateDateTimeNewPat == null || PIn.Bool(userOdPrefUpdateDateTimeNewPat.Value)))
+                if (IsPersistent && userOdPrefUpdateDateTimeNewPat)
                 {
                     startNowButton_Click(this, EventArgs.Empty);
                 }

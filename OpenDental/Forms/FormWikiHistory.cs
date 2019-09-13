@@ -93,8 +93,8 @@ namespace OpenDental
                 listWikiPageHists.Add(WikiPages.PageToHist(wikiPage));
             }
 
-            var usersDictionary = 
-                Userods.GetUsers(listWikiPageHists.Select(x => x.UserNum).Distinct().ToList()) //gets from cache, very fast
+            var usersDictionary =
+                User.GetById(listWikiPageHists.Select(x => x.UserNum).Distinct().ToList()) //gets from cache, very fast
                     .ToDictionary(x => x.Id, x => x.UserName);//create dictionary of key=UserNum, value=UserName for fast lookup
 
             wikiPagesGrid.Rows.Clear();

@@ -27,8 +27,8 @@ namespace OpenDental{
 		///<summary></summary>
 		public FormGroupPermEdit(GroupPermission cur){
 			InitializeComponent();
-			
-			Cur=cur.Copy();
+
+            Cur = cur;
 		}
 
 		///<summary></summary>
@@ -195,18 +195,18 @@ namespace OpenDental{
 		#endregion
 
 		private void FormGroupPermEdit_Load(object sender, System.EventArgs e) {
-			textName.Text=GroupPermissions.GetDesc(Cur.Permission);
-			if(Cur.NewerDate.Year<1880){
+			textName.Text=GroupPermission.GetDescription(Cur.Permission);
+			if(!Cur.NewerDate.HasValue){
 				textDate.Text="";
 			}
 			else{
-				textDate.Text=Cur.NewerDate.ToShortDateString();
+				textDate.Text=Cur.NewerDate.Value.ToShortDateString();
 			}
-			if(Cur.NewerDays==0){
+			if(!Cur.NewerDays.HasValue){
 				textDays.Text="";
 			}
 			else{
-				textDays.Text=Cur.NewerDays.ToString();
+				textDays.Text=Cur.NewerDays.Value.ToString();
 			}
 		}
 
@@ -244,24 +244,21 @@ namespace OpenDental{
 				return;
 			}
 			int newerDays=PIn.Int(textDays.Text);
-			if(newerDays>GroupPermissions.NewerDaysMax) {
-				MsgBox.Show(this,$"Days must be less than {GroupPermissions.NewerDaysMax.ToString()}.");
+			if(newerDays>GroupPermission.NewerDaysMax) {
+				MsgBox.Show(this,$"Days must be less than {GroupPermission.NewerDaysMax}.");
 				return;
 			}
 			Cur.NewerDays=newerDays;
 			Cur.NewerDate=PIn.Date(textDate.Text);
-			try{
-				if(Cur.IsNew) {
-					GroupPermissions.Insert(Cur);
-				}
-				else {
-					GroupPermissions.Update(Cur);
-				}
-			}
-			catch(Exception ex){
-				MessageBox.Show(ex.Message);
-				return;
-			}
+            try
+            {
+                GroupPermission.Insert(Cur);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                return;
+            }
 			DialogResult=DialogResult.OK;
 		}
 

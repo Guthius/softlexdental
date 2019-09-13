@@ -5754,70 +5754,70 @@ namespace OpenDental
         ///launch the dashboard.</summary>
         private void InitDashboards(long userNum, long patNum, bool canCreateNewPref = false)
         {
-            UserPreference userPrefDashboard = UserPreference.GetByKey(userNum, UserPreferenceName.Dashboard);
-            if (!canCreateNewPref && userPrefDashboard == null)
-            {
-                return;//User didn't have the dashboard open the last time logged out.
-            }
-            if (userControlTasks1.Visible && ComputerPrefs.LocalComputer.TaskDock == 1)
-            {//Tasks are docked right
-                this.InvokeIfRequired(() =>
-                {
-                    MsgBox.Show(this, "Dashboards are disabled when Tasks are docked to the right.");
-                });
-                return;
-            }
-            SheetDef sheetDefDashboard = GetUserDashboard(ref userPrefDashboard);
-            long sheetDefDashboardNum = sheetDefDashboard.SheetDefNum;
-            //Pass in SheetDef describing Dashboard layout.
-            userControlPatientDashboard.Initialize(sheetDefDashboard, () => { this.InvokeIfRequired(() => LayoutControls()); }
-                , () =>
-                {//What to do when the user closes the dashboard.
-                    UserPreference.Delete(userPrefDashboard);
-                    SheetDefs.DeleteObject(sheetDefDashboardNum);
-                    DataValid.SetInvalid(InvalidType.Sheets);
-                    RefreshMenuDashboards();
-                    if (ContrAppt2.Visible)
-                    {//Ensure appointment view redraws.
-                        ContrAppt2.ModuleSelected(CurPatNum);
-                    }
-                }
-            );
-            RefreshMenuDashboards();
+            // TODO: FIx me...
+
+            //UserPreference userPrefDashboard = UserPreference.GetByKey(userNum, UserPreferenceName.Dashboard);
+            //if (!canCreateNewPref && userPrefDashboard == null)
+            //{
+            //    return;//User didn't have the dashboard open the last time logged out.
+            //}
+            //if (userControlTasks1.Visible && ComputerPrefs.LocalComputer.TaskDock == 1)
+            //{//Tasks are docked right
+            //    this.InvokeIfRequired(() =>
+            //    {
+            //        MsgBox.Show(this, "Dashboards are disabled when Tasks are docked to the right.");
+            //    });
+            //    return;
+            //}
+            //SheetDef sheetDefDashboard = GetUserDashboard(ref userPrefDashboard);
+            //long sheetDefDashboardNum = sheetDefDashboard.SheetDefNum;
+            ////Pass in SheetDef describing Dashboard layout.
+            //userControlPatientDashboard.Initialize(sheetDefDashboard, () => { this.InvokeIfRequired(() => LayoutControls()); }
+            //    , () =>
+            //    {//What to do when the user closes the dashboard.
+            //        UserPreference.Delete(userPrefDashboard);
+            //        SheetDefs.DeleteObject(sheetDefDashboardNum);
+            //        DataValid.SetInvalid(InvalidType.Sheets);
+            //        RefreshMenuDashboards();
+            //        if (ContrAppt2.Visible)
+            //        {//Ensure appointment view redraws.
+            //            ContrAppt2.ModuleSelected(CurPatNum);
+            //        }
+            //    }
+            //);
+            //RefreshMenuDashboards();
         }
 
-        ///<summary>Gets the current user's SheetDef Dashboard, or creates one if the current user does not have one defined yet.</summary>
-        private static SheetDef GetUserDashboard(ref UserPreference userPrefDashboard)
+        /// <summary>
+        /// Gets the current user's SheetDef Dashboard, or creates one if the current user does not have one defined yet.
+        /// </summary>
+        private static SheetDef GetUserDashboard(out long dashboardId)
         {
-            if (userPrefDashboard == null)
-            {
-                userPrefDashboard = new UserPreference()
-                {
-                    UserId = Security.CurrentUser.Id,
-                    Fkey = 0,//Will get set later.
-                    FkeyType = UserPreferenceName.Dashboard,
-                    ClinicId = Clinics.ClinicNum
-                };
-            }
-            long sheetDefDashboardNum = userPrefDashboard.Fkey;//Can't reference userPrefDashboard (because passed by ref) in an anonymous func.
-            SheetDef sheetDefDashboard = SheetDefs.GetFirstOrDefault(x => x.SheetDefNum == sheetDefDashboardNum);
+            dashboardId = UserPreference.GetLong(Security.CurrentUser.Id, UserPreferenceName.Dashboard);
+
+            var y = dashboardId;
+
+            SheetDef sheetDefDashboard = SheetDefs.GetFirstOrDefault(x => x.SheetDefNum == y);
             if (sheetDefDashboard == null)
             {
                 sheetDefDashboard = new SheetDef()
                 {
-                    Description = User.GetName(userPrefDashboard.UserId) + "_Dashboard",
+                    Description = User.GetName(Security.CurrentUser.Id) + "_Dashboard",
                     SheetType = SheetTypeEnum.PatientDashboard,
                     Width = UserControlDashboard.DefaultWidth,
                     Height = UserControlDashboard.DefaultHeight,
                     SheetFieldDefs = new List<SheetFieldDef>(),
                     IsNew = true,
                 };
+
                 sheetDefDashboard.SheetDefNum = SheetDefs.InsertOrUpdate(sheetDefDashboard);
                 sheetDefDashboard.IsNew = false;//Otherwise, resizing the Dashboard will insert new SheetDefs. 
-                userPrefDashboard.Value = sheetDefDashboard.SheetDefNum.ToString();
+
                 DataValid.SetInvalid(InvalidType.Sheets);
-                UserPreference.Insert(userPrefDashboard);
+
+                UserPreference.Update(Security.CurrentUser.Id, UserPreferenceName.Dashboard, sheetDefDashboard.SheetDefNum);
             }
+
             return sheetDefDashboard;
         }
 

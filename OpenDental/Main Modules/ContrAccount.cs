@@ -288,15 +288,8 @@ namespace OpenDental
         ///<summary></summary>
         public void ModuleSelected(long patNum, bool isSelectingFamily)
         {
-            UserPreference userOdPrefProcBreakdown = UserOdPrefs.GetByUserAndFkeyType(Security.CurrentUser.Id, UserPreferenceName.AcctProcBreakdown).FirstOrDefault();
-            if (userOdPrefProcBreakdown == null)
-            {
-                checkShowDetail.Checked = true;
-            }
-            else
-            {
-                checkShowDetail.Checked = PIn.Bool(userOdPrefProcBreakdown.Value);
-            }
+            checkShowDetail.Checked = UserPreference.GetBool(Security.CurrentUser.Id, UserPreferenceName.AcctProcBreakdown, true);
+
             RefreshModuleData(patNum, isSelectingFamily);
             RefreshModuleScreen(isSelectingFamily);
 
@@ -2613,7 +2606,7 @@ namespace OpenDental
                     msg = Lan.g(this, "The guarantor of this family has been sent to TSI for a past due balance.") + "\r\n"
                         + Lan.g(this, "Creating a payment plan for this guarantor would cause the account to be suspended in the TSI system but you are not "
                             + "authorized for") + "\r\n"
-                        + GroupPermissions.GetDesc(Permissions.Billing);
+                        + GroupPermission.GetDescription(Permissions.Billing);
                     MessageBox.Show(this, msg);
                     return;
                 }
@@ -3549,16 +3542,8 @@ namespace OpenDental
 
         private void checkShowDetail_Click(object sender, EventArgs e)
         {
-            UserPreference userOdPrefProcBreakdown = UserOdPrefs.GetByUserAndFkeyType(Security.CurrentUser.Id, UserPreferenceName.AcctProcBreakdown).FirstOrDefault();
-            if (userOdPrefProcBreakdown == null)
-            {
-                userOdPrefProcBreakdown = new UserPreference();
-                userOdPrefProcBreakdown.UserId = Security.CurrentUser.Id;
-                userOdPrefProcBreakdown.FkeyType = UserPreferenceName.AcctProcBreakdown;
-                userOdPrefProcBreakdown.Fkey = 0;
-            }
-            userOdPrefProcBreakdown.Value = POut.Bool(checkShowDetail.Checked);
-            UserOdPrefs.Upsert(userOdPrefProcBreakdown);
+            UserPreference.Update(Security.CurrentUser.Id, UserPreferenceName.AcctProcBreakdown, checkShowDetail.Checked);
+
             if (PatCur == null)
             {
                 return;

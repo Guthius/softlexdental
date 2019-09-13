@@ -56,7 +56,7 @@ namespace OpenDental
                 {
                     if (emailAddress.UserId.HasValue)
                     {
-                        var user = Userods.GetUser(emailAddress.UserId.Value);
+                        var user = User.GetById(emailAddress.UserId.Value);
 
                         userTextBox.Tag = user;
                         userTextBox.Text = user?.UserName;
@@ -124,7 +124,7 @@ namespace OpenDental
 
                 if (formUserPick.ShowDialog() == DialogResult.OK)
                 {
-                    var user = Userods.GetUser(formUserPick.SelectedUserNum);
+                    var user = User.GetById(formUserPick.SelectedUserNum);
                     if (user.Id == (((User)userTextBox.Tag)?.Id ?? 0))
                     {
                         return;

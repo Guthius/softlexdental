@@ -24,13 +24,13 @@ namespace OpenDental {
 		}
 
 		private void FormTaskListBlock_Load(object sender,EventArgs e) {
-			_listAllTaskLists=TaskLists.GetAll().ToDictionary(x => x.TaskListNum);	//Used so we don't need to acces the database multiple times
-			_listUserOdPrefTaskListBlocks=UserOdPrefs.GetByUserAndFkeyType(Security.CurrentUser.Id,UserPreferenceName.TaskListBlock);
-			//We pull the list then save it so the sync moethod is able to run correctly.  
-			//This correctly fixes users having duplicate task list preferences in the databse.
-			_listUserDBPrefs=_listUserOdPrefTaskListBlocks.Select(x => x.Clone()).ToList();
-			_listUserOdPrefTaskListBlocks=_listUserOdPrefTaskListBlocks.GroupBy(x => x.Fkey).Select(x => x.First()).ToList();
-			InitializeTree();
+			//_listAllTaskLists=TaskLists.GetAll().ToDictionary(x => x.TaskListNum);	//Used so we don't need to acces the database multiple times
+			//_listUserOdPrefTaskListBlocks=UserOdPrefs.GetByUserAndFkeyType(Security.CurrentUser.Id,UserPreferenceName.TaskListBlock);
+   //         //We pull the list then save it so the sync moethod is able to run correctly.  
+   //         //This correctly fixes users having duplicate task list preferences in the databse.
+   //         _listUserDBPrefs = new List<UserPreference>(_listUserOdPrefTaskListBlocks);
+			//_listUserOdPrefTaskListBlocks=_listUserOdPrefTaskListBlocks.GroupBy(x => x.Fkey).Select(x => x.First()).ToList();
+			//InitializeTree();
 		}
 
 		///<summary>Fetches the subscriptions that the user is currently subscribed too ad adds them to the treeview.</summary>
@@ -151,14 +151,14 @@ namespace OpenDental {
 
 		/// <summary> Start from the roots of the tree, and work toward leaves.  Sets the node to checked if needed.
 		private void SetCheckBoxes(TreeNode node) {
-			node.Checked=false;//Unchecked if no block exists yet.
-			if(_listUserOdPrefTaskListBlocks.Exists(x => x.Fkey==(long)node.Tag && PIn.Bool(x.Value))) {
-				node.Checked=true;
-			}
-			//Deal with children
-			foreach(TreeNode child in node.Nodes) {
-				SetCheckBoxes(child);//Recursion
-			}
+			//node.Checked=false;//Unchecked if no block exists yet.
+			//if(_listUserOdPrefTaskListBlocks.Exists(x => x.Fkey==(long)node.Tag && PIn.Bool(x.Value))) {
+			//	node.Checked=true;
+			//}
+			////Deal with children
+			//foreach(TreeNode child in node.Nodes) {
+			//	SetCheckBoxes(child);//Recursion
+			//}
 		}
 		
 		///<summary>Handles the user clicking on the node text to activate the checkbox</summary>
@@ -224,33 +224,33 @@ namespace OpenDental {
 
 		///<summary>Goes through tree and sets up changes to the TaskList block preferences dictionary.</summary>
 		private void SetDictPrefsRecursive(TreeNode node) {
-			foreach(TreeNode child in node.Nodes) {
-				SetDictPrefsRecursive(child);	//Recursion
-			}
-			//Create preference
-			UserPreference pref=new UserPreference();
-			pref.Fkey=(long)node.Tag;
-			pref.FkeyType=UserPreferenceName.TaskListBlock;
-			pref.UserId=Security.CurrentUser.Id;
-			pref.Value=POut.Bool(node.Checked);
-			//Add preference to dictionary of preferences
-			_dictBlockedTaskPrefs[(long)node.Tag]=pref;
+			//foreach(TreeNode child in node.Nodes) {
+			//	SetDictPrefsRecursive(child);	//Recursion
+			//}
+			////Create preference
+			//UserPreference pref=new UserPreference();
+			//pref.Fkey=(long)node.Tag;
+			//pref.FkeyType=UserPreferenceName.TaskListBlock;
+			//pref.UserId=Security.CurrentUser.Id;
+			//pref.Value=POut.Bool(node.Checked);
+			////Add preference to dictionary of preferences
+			//_dictBlockedTaskPrefs[(long)node.Tag]=pref;
 		}
 
 		//~15ms with 8 TaskLists, about 1 frame @ 60fps
 		///<summary>Gets the changed preferences for the tree, then updates the database with the changes.</summary>
 		private void butOK_Click(object sender,EventArgs e) {
-			//Setup all the changed preferences
-			foreach(TreeNode node in treeSubscriptions.Nodes) {
-				SetDictPrefsRecursive(node);
-			}
-			//Add new preferences and changes to database
-			foreach(UserPreference editPref in _dictBlockedTaskPrefs.Values) {
-				if(_listUserOdPrefTaskListBlocks.Exists(x => x.Fkey==editPref.Fkey)) {
-					editPref.Id=_listUserOdPrefTaskListBlocks.Find(x => x.Fkey==editPref.Fkey).Id;
-				}
-			}
-			UserOdPrefs.Sync(_dictBlockedTaskPrefs.Select(x => x.Value).ToList(),_listUserDBPrefs);
+			////Setup all the changed preferences
+			//foreach(TreeNode node in treeSubscriptions.Nodes) {
+			//	SetDictPrefsRecursive(node);
+			//}
+			////Add new preferences and changes to database
+			//foreach(UserPreference editPref in _dictBlockedTaskPrefs.Values) {
+			//	if(_listUserOdPrefTaskListBlocks.Exists(x => x.Fkey==editPref.Fkey)) {
+			//		editPref.Id=_listUserOdPrefTaskListBlocks.Find(x => x.Fkey==editPref.Fkey).Id;
+			//	}
+			//}
+			//UserOdPrefs.Sync(_dictBlockedTaskPrefs.Select(x => x.Value).ToList(),_listUserDBPrefs);
 			DialogResult=DialogResult.OK;
 			this.Close();
 		}

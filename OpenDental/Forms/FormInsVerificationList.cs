@@ -249,8 +249,8 @@ namespace OpenDental {
 				//This will get every clinic associated to any of the currently selected regions.
 				listClinicNums=Clinics.GetListByRegion(_listDefNumsVerifyRegionsFilter);
 			}
-			_listUsersInRegion=Userods.GetUsersForVerifyList(listClinicNums,true);
-			_listUsersInRegionWithAssignedIns=Userods.GetUsersForVerifyList(listClinicNums,false);
+			_listUsersInRegion= User.GetUsersForVerifyList(listClinicNums,true);
+			_listUsersInRegionWithAssignedIns= User.GetUsersForVerifyList(listClinicNums,false);
 			for(int i=0;i<_listUsersInRegionWithAssignedIns.Count;i++) {
 				comboVerifyUser.Items.Add(_listUsersInRegionWithAssignedIns[i].UserName);
 				if(_verifyUserNum==_listUsersInRegionWithAssignedIns[i].Id) {

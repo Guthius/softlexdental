@@ -173,11 +173,16 @@ namespace OpenDental {
 						//or do something. later maybe.
 					}
 				}
-				ListEhrLabs[i].PatNum=PatCur.PatNum; 
-				Provider prov=Providers.GetProv(Security.CurrentUser.ProviderId);
-				if(Security.CurrentUser.ProviderId!=0 && EhrProvKeys.GetKeysByFLName(prov.LName,prov.FName).Count>0) {//The user who is currently logged in is a provider and has a valid EHR key.
-					ListEhrLabs[i].IsCpoe=true;
-				}
+				ListEhrLabs[i].PatNum=PatCur.PatNum;
+                if (Security.CurrentUser.ProviderId.HasValue)
+                {
+                    Provider prov = Providers.GetProv(Security.CurrentUser.ProviderId.Value);
+                    if (Security.CurrentUser.ProviderId != 0 && EhrProvKeys.GetKeysByFLName(prov.LName, prov.FName).Count > 0)
+                    {//The user who is currently logged in is a provider and has a valid EHR key.
+                        ListEhrLabs[i].IsCpoe = true;
+
+                    }
+                }
 				ListEhrLabs[i]=EhrLabs.SaveToDB(ListEhrLabs[i]);//SAVE
 				for(int j=0;j<ListEhrLabs[i].ListEhrLabResults.Count;j++) {//EHR TRIGGER
 					if(CDSPermissions.GetForUser(Security.CurrentUser.Id).ShowCDS && CDSPermissions.GetForUser(Security.CurrentUser.Id).LabTestCDS) {

@@ -99,7 +99,7 @@ namespace OpenDental
                 }
                 else
                 {
-                    row.Cells.Add(Userods.GetName(ordersList[i].UserNum));
+                    row.Cells.Add(User.GetName(ordersList[i].UserNum));
                 }
 
                 row.Tag = ordersList[i];

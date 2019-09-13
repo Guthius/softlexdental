@@ -100,7 +100,7 @@ namespace OpenDental {
 			if(IsNew) {
 				VaccinePatCur.UserNum=Security.CurrentUser.Id;
 			}
-			User user=Userods.GetUser(VaccinePatCur.UserNum);
+			User user= User.GetById(VaccinePatCur.UserNum);
 			if(user!=null) {//Will be null for vaccines entered in older versions, before the UserNum column was created.
 				textUser.Text=user.UserName;
 			}

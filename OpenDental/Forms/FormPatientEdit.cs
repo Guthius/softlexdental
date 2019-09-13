@@ -417,7 +417,7 @@ namespace OpenDental{
 			comboClinic.IndexSelectOrSetText(_listClinics.FindIndex(x => x.ClinicNum==_selectedClinicNum),() => { return Clinics.GetAbbr(_selectedClinicNum); });
 			fillComboProvHyg();
 			if(!Security.IsAuthorized(Permissions.PatPriProvEdit,DateTime.MinValue,true,true) && _selectedProvNum>0) {
-				string strToolTip=Lan.g("Security","Not authorized for")+" "+GroupPermissions.GetDesc(Permissions.PatPriProvEdit);
+				string strToolTip=Lan.g("Security","Not authorized for")+" "+GroupPermission.GetDescription(Permissions.PatPriProvEdit);
 				_priProvEditToolTip.SetToolTip(butPickPrimary,strToolTip);
 				_priProvEditToolTip.SetToolTip(comboPriProv,strToolTip);
 			}

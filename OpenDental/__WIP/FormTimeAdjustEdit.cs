@@ -65,43 +65,22 @@ namespace OpenDental
 
         private void butOK_Click(object sender, System.EventArgs e)
         {
-            try
-            {
-                DateTime.Parse(textTimeEntry.Text);
-            }
-            catch
+            if (!DateTime.TryParse(textTimeEntry.Text, out var date))
             {
                 MsgBox.Show(this, "Please enter a valid Date/Time.");
                 return;
             }
-            try
-            {
-                if (textHours.Text.Contains(":"))
-                {
-                    ClockEvent.ParseHours(textHours.Text);
-                }
-                else
-                {
-                    Double.Parse(textHours.Text);
-                }
-            }
-            catch
+
+            if (!TimeSpan.TryParse(textHours.Text, out var hoursEntered))
             {
                 MsgBox.Show(this, "Please enter valid Hours and Minutes.");
                 return;
             }
+
             //end of validation
             TimeAdjustCur.IsAuto = radioAuto.Checked;
-            TimeAdjustCur.Date = DateTime.Parse(textTimeEntry.Text);
-            TimeSpan hoursEntered;
-            if (textHours.Text.Contains(":"))
-            {
-                hoursEntered = ClockEvent.ParseHours(textHours.Text);//we know this will work because we tested ParseHours above.
-            }
-            else
-            {
-                hoursEntered = TimeSpan.FromHours(Double.Parse(textHours.Text));
-            }
+            TimeAdjustCur.Date = date;
+ 
             if (checkOvertime.Checked)
             {
                 TimeAdjustCur.HoursRegular = -hoursEntered;
@@ -110,7 +89,7 @@ namespace OpenDental
             else
             {
                 TimeAdjustCur.HoursRegular = hoursEntered;
-                TimeAdjustCur.HoursOvertime = TimeSpan.FromHours(0);
+                TimeAdjustCur.HoursOvertime = TimeSpan.Zero;
             }
             TimeAdjustCur.Note = textNote.Text;
             if (IsNew)
