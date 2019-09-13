@@ -25,7 +25,7 @@ namespace OpenDental
             //
             InitializeComponent();
 
-            TimeAdjustCur = timeAdjustCur.Copy();
+            TimeAdjustCur = timeAdjustCur;
         }
 
 

@@ -202,9 +202,8 @@ namespace OpenDentBusiness
 
         /// <summary>
         /// Returns all clock events (Breaks and Non-Breaks) for all employees across all clinics. 
-        /// Currently only used internally for payroll benefits report.
         /// </summary>
-        public static List<ClockEvent> GetAllForPeriod(DateTime fromDate, DateTime toDate) =>
+        public static List<ClockEvent> GetByDateRange(DateTime fromDate, DateTime toDate) =>
             SelectMany(
                 "SELECT * FROM `clock_events` WHERE `time1_displayed` >= ?from_date AND `time1_displayed` < ?to_date", FromReader,
                     new MySqlParameter("from_date", fromDate),

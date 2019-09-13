@@ -132,9 +132,9 @@ namespace OpenDental
 
         /// <summary>
         /// <para>Makes sure that the pay periods that the user has selected are safe to delete.</para>
-        /// <para>MA pay period cannot be deleted in bulk if:</para>
+        /// <para>A pay period cannot be deleted in bulk if:</para>
         /// a) It is in the past OR 
-        /// b) There are clockevents tied to it and there are no other pay periods for the date of the clockevent.
+        /// b) There are clock events tied to it and there are no other pay periods for the date of the clock event.
         /// </summary>
         private bool IsSafeToDelete(List<PayPeriod> selectedPayPeriods, out List<PayPeriod> results)
         {
@@ -149,7 +149,7 @@ namespace OpenDental
             }
 
 
-            var clockEvents = ClockEvent.GetAllForPeriod(selectedPayPeriods.Min(x => x.DateStart), selectedPayPeriods.Max(x => x.DateEnd));
+            var clockEvents = ClockEvent.GetByDateRange(selectedPayPeriods.Min(x => x.DateStart), selectedPayPeriods.Max(x => x.DateEnd));
             foreach (var payPeriod in selectedPayPeriods)
             {
                 var clockEventsForPayPeriod = clockEvents.Where(x => x.Date1Displayed >= payPeriod.DateStart && x.Date2Displayed <= payPeriod.DateEnd).ToList();
