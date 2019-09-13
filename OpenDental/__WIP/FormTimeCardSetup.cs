@@ -204,7 +204,7 @@ namespace OpenDental
                 DateStart =
                     PayPeriod.GetCount() == 0 ?
                         DateTime.Today :
-                        PayPeriod.GetLast().DateEnd.AddDays(1)
+                        PayPeriod.GetMostRecent().DateEnd.AddDays(1)
             };
 
             payPeriod.DateEnd = payPeriod.DateStart.AddDays(13);

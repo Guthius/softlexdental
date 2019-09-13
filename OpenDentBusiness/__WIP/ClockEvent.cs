@@ -36,8 +36,6 @@ namespace OpenDentBusiness
         DateTime GetDateTime();
     }
 
-
-
     /// <summary>
     /// One clock-in / clock-out pair.  Or, if the pair is a break, then it's an out/in pair. With 
     /// normal clock in/out pairs, we want to know how long the employee was working. It's the 
@@ -136,7 +134,7 @@ namespace OpenDentBusiness
         }
 
         public static ClockEvent GetById(long clockEventId) =>
-            SelectOne("SELECT * FROM clock_events WHERE id = " + clockEventId, FromReader);
+            SelectOne("SELECT * FROM `clock_events` WHERE `id` = " + clockEventId, FromReader);
 
         public static long Insert(ClockEvent clockEvent) =>
             clockEvent.Id = DataConnection.ExecuteInsert(

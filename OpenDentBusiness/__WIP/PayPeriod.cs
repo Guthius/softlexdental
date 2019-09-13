@@ -48,6 +48,11 @@ namespace OpenDentBusiness
         /// </summary>
         public DateTime DatePaycheck;
 
+        /// <summary>
+        /// Constructs a new instance of the <see cref="PayPeriod"/> class.
+        /// </summary>
+        /// <param name="dataReader">The data reader containing record data.</param>
+        /// <returns>A <see cref="PayPeriod"/> instance.</returns>
         public static PayPeriod FromReader(MySqlDataReader dataReader)
         {
             return new PayPeriod
@@ -59,23 +64,46 @@ namespace OpenDentBusiness
             };
         }
 
+        /// <summary>
+        /// Gets a list of all pay periods.
+        /// </summary>
+        /// <returns></returns>
         public static List<PayPeriod> All() =>
             cache.All().ToList();
 
+        /// <summary>
+        /// Gets the pay period with the specified ID.
+        /// </summary>
+        /// <param name="payPeriodId">The ID of the pay period.</param>
+        /// <returns>The pay period with the specified ID.</returns>
         public static PayPeriod GetById(long payPeriodId) =>
             cache.FirstOrDefault(payPeriod => payPeriod.Id == payPeriodId);
 
+        /// <summary>
+        /// Gets the pay period for the specified date.
+        /// </summary>
+        /// <param name="date">The date.</param>
+        /// <returns>The pay period for the specified date.</returns>
         public static PayPeriod GetByDate(DateTime date) =>
             cache.FirstOrDefault(x => date.Date >= x.DateStart.Date && date.Date <= x.DateEnd.Date);
 
+        /// <summary>
+        /// Gets the most recent pay period.
+        /// </summary>
+        /// <returns>The most recent pay period.</returns>
         public static PayPeriod GetMostRecent() =>
             SelectOne("SELECT * FROM `pay_periods` WHERE `date_end` = (SELECT MAX(`date_end`) FROM `pay_periods`)", FromReader);
 
+        /// <summary>
+        /// Returns the total number of pay periods.
+        /// </summary>
         public static int GetCount() => cache.Count();
 
-
-        public static PayPeriod GetLast() => cache.Last(); // TODO: Is this correct?
-
+        /// <summary>
+        /// Inserts the specified pay period into the database.
+        /// </summary>
+        /// <param name="payPeriod">The pay period.</param>
+        /// <returns>The ID assigned to the pay period.</returns>
         public static long Insert(PayPeriod payPeriod) =>
             payPeriod.Id = DataConnection.ExecuteInsert(
                 "INSERT INTO `pay_periods` (`date_start`, `date_end`, `date_paycheck`) VALUES (?date_start, ?date_end, ?date_paycheck)",
@@ -83,6 +111,10 @@ namespace OpenDentBusiness
                     new MySqlParameter("date_end", payPeriod.DateEnd),
                     new MySqlParameter("date_paycheck", payPeriod.DatePaycheck));
 
+        /// <summary>
+        /// Updates the specified pay period in the database.
+        /// </summary>
+        /// <param name="payPeriod">The pay period.</param>
         public static void Update(PayPeriod payPeriod) =>
             DataConnection.ExecuteNonQuery(
                 "UPDATE `pay_periods` SET `date_start` = ?date_start, `date_end` = ?date_end, `date_paycheck` = ?date_paycheck WHERE `id` = ?id",
@@ -91,6 +123,10 @@ namespace OpenDentBusiness
                     new MySqlParameter("date_paycheck", payPeriod.DatePaycheck),
                     new MySqlParameter("id", payPeriod.Id));
 
+        /// <summary>
+        /// Deletes the specified pay period from the database.
+        /// </summary>
+        /// <param name="payPeriod">The pay period to delete.</param>
         public static void Delete(PayPeriod payPeriod) =>
             DataConnection.ExecuteNonQuery("DELETE FROM `pay_periods` WHERE `id` = " + payPeriod.Id);
 

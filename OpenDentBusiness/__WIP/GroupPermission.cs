@@ -75,10 +75,10 @@ namespace OpenDentBusiness
             {
                 // Make sure there are no hidden users in the group that is about to get the Security Admin permission.
                 var count = DataConnection.ExecuteLong(
-                    "SELECT COUNT(*) FROM users " +
-                    "INNER JOIN user_group_users ON user_group_users.user_id = users.id " +
-                    "WHERE users.hidden = 1 " +
-                    "AND user_group_users.user_group_id = " + groupPermission.UserGroupId);
+                    "SELECT COUNT(*) FROM `users` " +
+                    "INNER JOIN `user_group_users` ON `user_group_users`.`user_id` = `users`.`id` " +
+                    "WHERE `users`.`hidden` = 1 " +
+                    "AND `user_group_users`.`user_group_id` = " + groupPermission.UserGroupId);
 
                 if (count > 0)
                 {
@@ -108,9 +108,21 @@ namespace OpenDentBusiness
             DataConnection.ExecuteNonQuery("DELETE FROM `group_permissions` WHERE `user_group_id` = " + groupPermission.UserGroupId + " AND `permission` = ?permission",
                 new MySqlParameter("permission", groupPermission.Permission ?? ""));
 
+        /// <summary>
+        /// Gets the specified permission for the specified user group. Returns null if the user 
+        /// group does not have the permission.
+        /// </summary>
+        /// <param name="userGroupId">The ID of the user group.</param>
+        /// <param name="permission">The permission.</param>
+        /// <returns></returns>
         public static GroupPermission GetPermission(long userGroupId, string permission) =>
             cache.SelectOne(groupPermission => groupPermission.UserGroupId == userGroupId && groupPermission.Permission == permission);
 
+        /// <summary>
+        /// Gets all permissions of the specified user group.
+        /// </summary>
+        /// <param name="userGroupId">The ID of the user group.</param>
+        /// <returns>All permissions of the specified user group.</returns>
         public static IEnumerable<GroupPermission> GetPermissions(long userGroupId) =>
             cache.SelectMany(groupPermission => groupPermission.UserGroupId == userGroupId);
 

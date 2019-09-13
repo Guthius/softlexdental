@@ -37,12 +37,12 @@ namespace OpenDentBusiness
         public DateTime Date;
 
         /// <summary>
-        /// The number of regular hours to adjust timecard by.  Can be + or -.
+        /// The number of regular hours to adjust timecard by.
         /// </summary>
         public TimeSpan HoursRegular;
 
         /// <summary>
-        /// Overtime hours. Usually +.  Automatically combined with a - adj to <see cref="HoursRegular"/>.  Another option is clockevent.OTimeHours.
+        /// Overtime hours.
         /// </summary>
         public TimeSpan HoursOvertime;
 

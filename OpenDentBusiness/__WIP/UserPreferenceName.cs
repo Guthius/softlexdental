@@ -99,22 +99,19 @@ namespace OpenDentBusiness
         /// <summary>
         /// Stores user specific username for programs.
         /// </summary>
-        [Obsolete] public const string ProgramUserName = "sys.program_username";
+        [Obsolete("Use program specific preference instead.")]
+        public const string ProgramUserName = "sys.program_username";
 
         /// <summary>
         /// Stores user specific password for programs.
         /// </summary>
-        [Obsolete] public const string ProgramPassword = "sys.program_password";
+        [Obsolete("Use program specific preference instead.")]
+        public const string ProgramPassword = "sys.program_password";
         
         ///<summary>
         ///Stores user specific dashboard to open on load. FKey points to the SheetDef.SheetDefNum that the user last had open.
         ///</summary>
         public const string Dashboard = "sys.dashboard";
-        
-        ///<summary>
-        ///Stores the theme the user has chosen to default to.
-        ///</summary>
-        [Obsolete] public const string UserTheme = "sys.user_theme";
         
         /// <summary>
         /// Stores the Dynamic Chart Layout SheetDef.SheetDefNum selected by a user.

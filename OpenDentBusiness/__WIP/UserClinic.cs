@@ -33,6 +33,11 @@ namespace OpenDentBusiness
                 dataReader.GetInt64(0),
                 dataReader.GetInt64(1));
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UserClinic"/> class.
+        /// </summary>
+        /// <param name="clinicId">The ID of the clinic.</param>
+        /// <param name="userId">The ID of the user.</param>
         public UserClinic(long clinicId, long userId)
         {
             UserId = userId;
