@@ -3291,10 +3291,10 @@ namespace OpenDental {
 		}
 
 		private void butChangeUser_Click(object sender,EventArgs e) {
-			FormLogOn FormChangeUser=new FormLogOn(isSimpleSwitch:true);
+			FormLogOn FormChangeUser=new FormLogOn(simpleSwitch:true);
 			FormChangeUser.ShowDialog();
 			if(FormChangeUser.DialogResult==DialogResult.OK) { //if successful
-				_curUser=FormChangeUser.CurUserSimpleSwitch; //assign temp user
+				_curUser=FormChangeUser.User; //assign temp user
 				FillClinicCombo();//update clinics and providers if needed
 				signatureBoxWrapper.ClearSignature(); //clear sig
 				signatureBoxWrapper.UserSig=_curUser;

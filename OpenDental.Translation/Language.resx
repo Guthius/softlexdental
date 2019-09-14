@@ -138,13 +138,13 @@
   <data name="LogOffConfirmation" xml:space="preserve">
     <value>Are you sure you would like to log off?</value>
   </data>
-  <data name="lang_login_failed" xml:space="preserve">
-    <value>Login failed</value>
+  <data name="LoginFailed" xml:space="preserve">
+    <value>Invalid username or password.</value>
   </data>
   <data name="lang_user_has_logged_on" xml:space="preserve">
     <value>User {0} has logged on</value>
   </data>
-  <data name="lang_you_must_change_password_to_stronger_password" xml:space="preserve">
+  <data name="YouMustChangeYourPasswordToAStrongPassword" xml:space="preserve">
     <value>You must change your password to a strong password due to the current Security settings.</value>
   </data>
   <data name="WikiArchiveWikiPageConfirm" xml:space="preserve">

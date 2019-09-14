@@ -1009,15 +1009,6 @@ namespace OpenDental.Translation {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Login failed.
-        /// </summary>
-        public static string lang_login_failed {
-            get {
-                return ResourceManager.GetString("lang_login_failed", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to New Password.
         /// </summary>
         public static string lang_new_password {
@@ -1054,11 +1045,11 @@ namespace OpenDental.Translation {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You must change your password to a strong password due to the current Security settings..
+        ///   Looks up a localized string similar to Invalid username or password..
         /// </summary>
-        public static string lang_you_must_change_password_to_stronger_password {
+        public static string LoginFailed {
             get {
-                return ResourceManager.GetString("lang_you_must_change_password_to_stronger_password", resourceCulture);
+                return ResourceManager.GetString("LoginFailed", resourceCulture);
             }
         }
         
@@ -2132,6 +2123,15 @@ namespace OpenDental.Translation {
         public static string WorkstationIsStillUpdating {
             get {
                 return ResourceManager.GetString("WorkstationIsStillUpdating", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You must change your password to a strong password due to the current Security settings..
+        /// </summary>
+        public static string YouMustChangeYourPasswordToAStrongPassword {
+            get {
+                return ResourceManager.GetString("YouMustChangeYourPasswordToAStrongPassword", resourceCulture);
             }
         }
         

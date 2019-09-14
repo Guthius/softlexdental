@@ -42,19 +42,19 @@ namespace OpenDentBusiness
         /// Boolean, false by default to preserve old functionality.  Allows users to make future dated patient payments when turned on.
         /// </summary>
         AccountAllowFutureDebits,
-        
+
         /// <summary>
         /// Defaulted to off, determines whether completed payment plans are visible in the account module.
         /// </summary>
         AccountShowCompletedPaymentPlans,
         AccountShowPaymentNums,
-        
+
         /// <summary>
         /// Show questionnaire button in account module toolbar.  Set in FormShowFeatures.
         /// </summary>
         [PrefName(ValueType = PrefValueType.BOOL)]
         AccountShowQuestionnaire,
-        
+
         /// <summary>
         /// Show TrojanCollect button in account module toolbar. Set in FormShowFeatures.
         /// </summary>
@@ -62,7 +62,7 @@ namespace OpenDentBusiness
         AccountShowTrojanExpressCollect,
         ADAComplianceDateTime,
         ADAdescriptionsReset,
-        
+
         /// <summary>
         /// Boolean, true by default. When set to true and a new family member is added, the new patient's email will be autofilled with the guarantor's email.
         /// </summary>
@@ -78,7 +78,7 @@ namespace OpenDentBusiness
         /// Enum:ADPCompanyCode Used to generate the export file from FormTimeCardManage. Set in FormTimeCardSetup.
         /// </summary>
         ADPCompanyCode,
-        
+
         /// <summary>
         /// Stored as DateTime, but cleared when aging finishes. 
         /// The DateTime will be used as a flag to signal other connections 
@@ -95,14 +95,14 @@ namespace OpenDentBusiness
         /// If true, aging will use the intermediate table famaging for calculating aging.
         /// </summary>
         AgingIsEnterprise,
-        
+
         /// <summary>
         /// If true, negative adjustments will be aged by AdjDate. 
         /// Otherwise (legacy behavior), negative adjustments are summed with 
         /// all other credits and applied to oldest charge first.
         /// </summary>
         AgingNegativeAdjsByAdjDate,
-        
+
         /// <summary>
         /// This pref is hidden, so no UI to enable this feature. 
         /// If this is true, there will be a checkbox in the aging report window to age patient payments to payment plans.
@@ -111,7 +111,7 @@ namespace OpenDentBusiness
         /// This is only for a specific customer, so no UI, defaults to false, only able to enable this via query.
         /// </summary>
         AgingReportShowAgePatPayplanPayments,
-        
+
         /// <summary>
         /// Stored as DateTime, but only the time is used. 
         /// This is the time of day during which aging will be calculated by the aging service.
@@ -121,12 +121,12 @@ namespace OpenDentBusiness
         /// This will be blank if disabled.
         /// </summary>
         AgingServiceTimeDue,
-        
+
         /// <summary>
         /// FK to allergydef.AllergyDefNum
         /// </summary>
         AllergiesIndicateNone,
-        
+
         /// <summary>
         /// Boolean defaults to true.  If true, allows a user to email CC receipt otherwise not allowed.
         /// </summary>
@@ -137,13 +137,13 @@ namespace OpenDentBusiness
         /// Boolean defauts to false.  If true, users can enter insurance payments that are for a future date.
         /// </summary>
         AllowFutureInsPayments,
-        
+
         /// <summary>
         /// Boolean, false by default to preserve old functionality.
         /// Allows users to attach providers to prepayments while EnforceFully is on.
         /// </summary>
         AllowPrepayProvider,
-        
+
         /// <summary>
         /// Bool. Allows adjustments from FormClaimEdit. 0 by default.
         /// </summary>
@@ -1581,8 +1581,14 @@ namespace OpenDentBusiness
         UseBillingAddressOnClaims,
         ///<summary>Enum:ToothNumberingNomenclature 0=Universal(American), 1=FDI, 2=Haderup, 3=Palmer</summary>
         UseInternationalToothNumbers,
-        ///<summary>Boolean.  0 by default.  When enabled, users must enter their user name manually at the log on window.</summary>
+
+        /// <summary>
+        /// Boolean. 0 by default.  When enabled, users must enter their user name manually at the log on window.
+        /// </summary>
+        [Obsolete("Manual entry is the only method...")]
         UserNameManualEntry,
+
+
         ///<summary>Boolean. 0 by default. When enabled, chart module procedures that are complete will use the provider's color as row's background color</summary>
         UseProviderColorsInChart,
         ///<summary>Used by OD HQ. Not added to db convert script. The path where voice mails will be archived.</summary>

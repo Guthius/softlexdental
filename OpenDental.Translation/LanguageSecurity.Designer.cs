@@ -131,5 +131,14 @@ namespace OpenDental.Translation {
                 return ResourceManager.GetString("UpdateSetupWindowAccessed", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User {0} has logged on.
+        /// </summary>
+        public static string UserHasLoggedIn {
+            get {
+                return ResourceManager.GetString("UserHasLoggedIn", resourceCulture);
+            }
+        }
     }
 }

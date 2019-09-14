@@ -1859,10 +1859,10 @@ namespace OpenDental {
 		}
 
 		private void butChangeUser_Click(object sender,EventArgs e) {
-			FormLogOn FormChangeUser=new FormLogOn(isSimpleSwitch:true);
+			FormLogOn FormChangeUser=new FormLogOn(simpleSwitch:true);
 			FormChangeUser.ShowDialog();
 			if(FormChangeUser.DialogResult==DialogResult.OK) {
-				_taskCur.UserNum=FormChangeUser.CurUserSimpleSwitch.Id; //assign task new UserNum
+				_taskCur.UserNum=FormChangeUser.User.Id; //assign task new UserNum
 				textUser.Text= User.GetName(_taskCur.UserNum); //update user textbox on task.
 			}
 		}
