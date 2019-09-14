@@ -270,9 +270,9 @@ namespace OpenDental {
 			List<UserGroup> listSelectedUserUserGroupsOld=SelectedUser.GetGroups();
 			List<UserGroup> listSelectedUserUserGroups=listUserTabUserGroups.SelectedTags<UserGroup>();
 			if(//Current selected groups do not contain SecurityAdmin permission
-				GroupPermission.GetByUserGroups(listSelectedUserUserGroups.Select(x => x.Id).ToList(),Permissions.SecurityAdmin).Count()==0
+				UserGroupPermission.GetByUserGroups(listSelectedUserUserGroups.Select(x => x.Id).ToList(),Permissions.SecurityAdmin).Count()==0
 				//Selected user had SecurityAdmin permission before new selections
-				&& GroupPermission.GetByUserGroups(listSelectedUserUserGroupsOld.Select(x => x.Id).ToList(),Permissions.SecurityAdmin).Count()>0) 
+				&& UserGroupPermission.GetByUserGroups(listSelectedUserUserGroupsOld.Select(x => x.Id).ToList(),Permissions.SecurityAdmin).Count()>0) 
 			{
 				//The SelectedUser is no longer part of SecurityAdmin group. Check that at least one other user is part of a SecurityAdmin Group.
 				if(!User.IsSomeoneElseSecurityAdmin(SelectedUser)) {
@@ -497,7 +497,7 @@ namespace OpenDental {
 		public UserGroup Group {
 			get;
 		}
-		public GroupPermission Perm {
+		public UserGroupPermission Perm {
 			get;
 		}
 
@@ -509,7 +509,7 @@ namespace OpenDental {
 			Group=userGroup;
 		}
 
-		public SecurityEventArgs(GroupPermission perm) {
+		public SecurityEventArgs(UserGroupPermission perm) {
 			Perm=perm;
 		}
 

@@ -22,10 +22,10 @@ using System.Linq;
 
 namespace OpenDentBusiness
 {
-    public class GroupPermission : DataRecordBase
+    public class UserGroupPermission : DataRecordBase
     {
-        private static readonly IDataRecordCacheBase<GroupPermission> cache =
-            new DataRecordCacheBase<GroupPermission>("SELECT * FROM `user_group_permissions`", FromReader);
+        private static readonly IDataRecordCacheBase<UserGroupPermission> cache =
+            new DataRecordCacheBase<UserGroupPermission>("SELECT * FROM `user_group_permissions`", FromReader);
 
         /// <summary>
         /// The ID of the user group the permission is granted to.
@@ -52,9 +52,14 @@ namespace OpenDentBusiness
         /// </summary>
         public long? ExternalId;
 
-        static GroupPermission FromReader(MySqlDataReader dataReader)
+        /// <summary>
+        /// Constructs a new instance of the <see cref="UserGroupPermission"/> class.
+        /// </summary>
+        /// <param name="dataReader">The data reader containing record data.</param>
+        /// <returns>A <see cref="UserGroupPermission"/> instance.</returns>
+        private static UserGroupPermission FromReader(MySqlDataReader dataReader)
         {
-            return new GroupPermission
+            return new UserGroupPermission
             {
                 UserGroupId = (long)dataReader["user_group_id"],
                 Permission = (string)dataReader["permission"],
@@ -64,21 +69,26 @@ namespace OpenDentBusiness
             };
         }
 
-        public static void Insert(GroupPermission groupPermission)
+        /// <summary>
+        /// Inserst the specified user group permission into the database.
+        /// </summary>
+        /// <param name="userGroupPermission">The user group permission.</param>
+        public static void Insert(UserGroupPermission userGroupPermission)
         {
-            if (groupPermission.NewerDate.HasValue && groupPermission.NewerDays.HasValue)
+            if (userGroupPermission.NewerDate.HasValue && 
+                userGroupPermission.NewerDays.HasValue)
             {
                 throw new Exception("Date or days can be set, but not both.");
             }
 
-            if (groupPermission.Permission == Permissions.SecurityAdmin)
+            if (userGroupPermission.Permission == Permissions.SecurityAdmin)
             {
                 // Make sure there are no hidden users in the group that is about to get the Security Admin permission.
                 var count = DataConnection.ExecuteLong(
                     "SELECT COUNT(*) FROM `users` " +
                     "INNER JOIN `user_group_users` ON `user_group_users`.`user_id` = `users`.`id` " +
                     "WHERE `users`.`hidden` = 1 " +
-                    "AND `user_group_users`.`user_group_id` = " + groupPermission.UserGroupId);
+                    "AND `user_group_users`.`user_group_id` = " + userGroupPermission.UserGroupId);
 
                 if (count > 0)
                 {
@@ -90,11 +100,11 @@ namespace OpenDentBusiness
             DataConnection.ExecuteNonQuery(
                 "INSERT INTO `user_group_permissions` (?user_group_id, ?permission, ?newer_date, ?newer_days, ?external_id) " +
                 "ON DUPLICATE KEY UPDATE `newer_date` = ?newer_date, `newer_days` = ?newer_days",
-                    new MySqlParameter("user_group_id", groupPermission.UserGroupId),
-                    new MySqlParameter("permission", groupPermission.Permission ?? ""),
-                    new MySqlParameter("newer_date", groupPermission.NewerDate.HasValue ? (object)groupPermission.NewerDate.Value : DBNull.Value),
-                    new MySqlParameter("newer_days", groupPermission.NewerDays.HasValue ? (object)groupPermission.NewerDays.Value : DBNull.Value),
-                    new MySqlParameter("external_id", groupPermission.ExternalId.HasValue ? (object)groupPermission.ExternalId.Value : DBNull.Value));
+                    new MySqlParameter("user_group_id", userGroupPermission.UserGroupId),
+                    new MySqlParameter("permission", userGroupPermission.Permission ?? ""),
+                    new MySqlParameter("newer_date", userGroupPermission.NewerDate.HasValue ? (object)userGroupPermission.NewerDate.Value : DBNull.Value),
+                    new MySqlParameter("newer_days", userGroupPermission.NewerDays.HasValue ? (object)userGroupPermission.NewerDays.Value : DBNull.Value),
+                    new MySqlParameter("external_id", userGroupPermission.ExternalId.HasValue ? (object)userGroupPermission.ExternalId.Value : DBNull.Value));
         }
 
         /// <summary>
@@ -104,8 +114,8 @@ namespace OpenDentBusiness
         /// This method is only called from the CEMT sync.
         /// RemovePermission should probably be used instead.
         /// </summary>
-        public static void Delete(GroupPermission groupPermission) => // TODO: Delete from the local cache...
-            DataConnection.ExecuteNonQuery("DELETE FROM `group_permissions` WHERE `user_group_id` = " + groupPermission.UserGroupId + " AND `permission` = ?permission",
+        public static void Delete(UserGroupPermission groupPermission) => // TODO: Delete from the local cache...
+            DataConnection.ExecuteNonQuery("DELETE FROM `user_group_permissions` WHERE `user_group_id` = " + groupPermission.UserGroupId + " AND `permission` = ?permission",
                 new MySqlParameter("permission", groupPermission.Permission ?? ""));
 
         /// <summary>
@@ -115,7 +125,7 @@ namespace OpenDentBusiness
         /// <param name="userGroupId">The ID of the user group.</param>
         /// <param name="permission">The permission.</param>
         /// <returns></returns>
-        public static GroupPermission GetPermission(long userGroupId, string permission) =>
+        public static UserGroupPermission GetPermission(long userGroupId, string permission) =>
             cache.SelectOne(groupPermission => groupPermission.UserGroupId == userGroupId && groupPermission.Permission == permission);
 
         /// <summary>
@@ -123,7 +133,7 @@ namespace OpenDentBusiness
         /// </summary>
         /// <param name="userGroupId">The ID of the user group.</param>
         /// <returns>All permissions of the specified user group.</returns>
-        public static IEnumerable<GroupPermission> GetPermissions(long userGroupId) =>
+        public static IEnumerable<UserGroupPermission> GetPermissions(long userGroupId) =>
             cache.SelectMany(groupPermission => groupPermission.UserGroupId == userGroupId);
 
         /// <summary>
@@ -161,7 +171,7 @@ namespace OpenDentBusiness
         /// </summary>
         public const double NewerDaysMax = 3000;
 
-        public static IEnumerable<GroupPermission> GetByUserGroups(List<long> userGroupIds, string permission = "")
+        public static IEnumerable<UserGroupPermission> GetByUserGroups(List<long> userGroupIds, string permission = "")
         {
             if (string.IsNullOrEmpty(permission))
             {
@@ -204,7 +214,7 @@ namespace OpenDentBusiness
             }
         }
 
-        public static IEnumerable<GroupPermission> GetPermissionsForReports() => 
+        public static IEnumerable<UserGroupPermission> GetPermissionsForReports() => 
             cache.Where(groupPermission => 
                 groupPermission.Permission == Permissions.Reports && 
                 groupPermission.ExternalId != null);

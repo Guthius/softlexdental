@@ -125,7 +125,7 @@ namespace OpenDental {
 				}
 				if(!Security.IsAuthorized(perm,proc.ProcDate,true,true)) {
 					MessageBox.Show(Lan.g("Procedures","The appointment provider does not match the provider on at least one completed procedure.")+"\r\n"
-						+Lans.g("Procedures","Not authorized for")+": "+GroupPermission.GetDescription(perm)+"\r\n"
+						+Lans.g("Procedures","Not authorized for")+": "+UserGroupPermission.GetDescription(perm)+"\r\n"
 						+Lan.g("Procedures","Any change to the provider on the completed procedure(s) will have to be made manually."));
 					return true;//user does not have permission to change the provider. Don't change provider.
 				}

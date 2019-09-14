@@ -79,7 +79,7 @@ namespace OpenDentBusiness
         /// </summary>
         public static bool IsAdminGroup(List<long> userGroupIdList)
         {
-            if (userGroupIdList.Any(userGroupId => GroupPermission.HasPermission(userGroupId, Permissions.SecurityAdmin, null)))
+            if (userGroupIdList.Any(userGroupId => UserGroupPermission.HasPermission(userGroupId, Permissions.SecurityAdmin, null)))
             {
                 return true;
             }

@@ -2606,7 +2606,7 @@ namespace OpenDental
                     msg = Lan.g(this, "The guarantor of this family has been sent to TSI for a past due balance.") + "\r\n"
                         + Lan.g(this, "Creating a payment plan for this guarantor would cause the account to be suspended in the TSI system but you are not "
                             + "authorized for") + "\r\n"
-                        + GroupPermission.GetDescription(Permissions.Billing);
+                        + UserGroupPermission.GetDescription(Permissions.Billing);
                     MessageBox.Show(this, msg);
                     return;
                 }

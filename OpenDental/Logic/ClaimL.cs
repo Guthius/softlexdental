@@ -74,7 +74,7 @@ namespace OpenDental {
 			}
 			createClaimDataWrapper.ListCreateClaimItems=listCreateClaimItems;
 			if(!Security.IsAuthorized(Permissions.ClaimView,true)) {
-				LogClaimError(createClaimDataWrapper,Lans.g("Security","Not authorized for")+"\r\n"+GroupPermission.GetDescription(Permissions.ClaimView),isVerbose);
+				LogClaimError(createClaimDataWrapper,Lans.g("Security","Not authorized for")+"\r\n"+UserGroupPermission.GetDescription(Permissions.ClaimView),isVerbose);
 				createClaimDataWrapper.DoRefresh=false;
 				return createClaimDataWrapper;
 			}
@@ -167,7 +167,7 @@ namespace OpenDental {
 		{
 			createClaimDataWrapper.ErrorMessage="";
 			if(!Security.IsAuthorized(Permissions.ClaimView,true)) {
-				LogClaimError(createClaimDataWrapper,Lans.g("Security","Not authorized for")+"\r\n"+GroupPermission.GetDescription(Permissions.ClaimView),isVerbose);
+				LogClaimError(createClaimDataWrapper,Lans.g("Security","Not authorized for")+"\r\n"+UserGroupPermission.GetDescription(Permissions.ClaimView),isVerbose);
 				createClaimDataWrapper.DoRefresh=false;
 				return createClaimDataWrapper;
 			}

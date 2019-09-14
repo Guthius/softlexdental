@@ -65,7 +65,7 @@ namespace OpenDental {
 		}
 
 		private DialogResult userControlSecurityTabs_ReportPermissionChecked(object sender,SecurityEventArgs e) {
-			GroupPermission perm = e.Perm;
+			UserGroupPermission perm = e.Perm;
 			FormReportSetup FormRS = new FormReportSetup(perm.UserGroupId,true);
 			FormRS.ShowDialog();
 			if(FormRS.DialogResult==DialogResult.Cancel) {
@@ -75,7 +75,7 @@ namespace OpenDental {
 				return FormRS.DialogResult;
 			}
 			try {
-				GroupPermission.Insert(perm);
+				UserGroupPermission.Insert(perm);
 			}
 			catch(Exception ex) {
 				MessageBox.Show(ex.Message);

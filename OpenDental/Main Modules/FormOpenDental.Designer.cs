@@ -889,12 +889,12 @@
             // 
             // menuItem20
             // 
-            this.menuItem20.Index = 35;
+            this.menuItem20.Index = 34;
             this.menuItem20.Text = "-";
             // 
             // menuItemObsolete
             // 
-            this.menuItemObsolete.Index = 36;
+            this.menuItemObsolete.Index = 35;
             this.menuItemObsolete.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.menuItemLetters,
             this.menuItemQuestions});
@@ -1392,13 +1392,13 @@
             // 
             // menuItemWiki
             // 
-            this.menuItemWiki.Index = 21;
+            this.menuItemWiki.Index = 20;
             this.menuItemWiki.Text = "Wiki";
             this.menuItemWiki.Click += new System.EventHandler(this.menuItemWiki_Click);
             // 
             // menuItemXWebTrans
             // 
-            this.menuItemXWebTrans.Index = 22;
+            this.menuItemXWebTrans.Index = 21;
             this.menuItemXWebTrans.Text = "&XWeb Transactions";
             this.menuItemXWebTrans.Click += new System.EventHandler(this.menuItemXWebTrans_Click);
             // 

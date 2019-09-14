@@ -1118,7 +1118,8 @@ namespace OpenDental
             #region InvalidType.Programs
             if (arrayITypes.Contains(InvalidType.Programs) || isAll)
             {
-                if (Programs.GetCur(ProgramName.PT).Enabled)
+                var program = Programs.GetCur(ProgramName.PT);
+                if (program != null && Programs.GetCur(ProgramName.PT).Enabled)
                 {
                     Bridges.PaperlessTechnology.InitializeFileWatcher();
                 }
@@ -4993,7 +4994,7 @@ namespace OpenDental
             if (!Security.IsAuthorized(Permissions.Providers, true) && !Security.IsAuthorized(Permissions.AdminDentalStudents, true))
             {
                 MessageBox.Show(Lans.g("Security", "Not authorized for") + "\r\n"
-                    + GroupPermission.GetDescription(Permissions.Providers) + " " + Lans.g("Security", "or") + " " + GroupPermission.GetDescription(Permissions.AdminDentalStudents));
+                    + UserGroupPermission.GetDescription(Permissions.Providers) + " " + Lans.g("Security", "or") + " " + UserGroupPermission.GetDescription(Permissions.AdminDentalStudents));
                 return;
             }
             FormProviderSetup FormPS = new FormProviderSetup();
@@ -6075,7 +6076,7 @@ namespace OpenDental
             List<DisplayReport> listDisplayReports = DisplayReports.GetSubMenuReports();
             if (listDisplayReports.Count > 0)
             {
-                List<long> listReportPermissionFkeys = GroupPermission.GetPermissionsForReports()
+                List<long> listReportPermissionFkeys = UserGroupPermission.GetPermissionsForReports()
                     .Where(x => Security.CurrentUser.IsInUserGroup(x.UserGroupId))
                     .Where(x => x.ExternalId.HasValue)
                     .Select(x => x.ExternalId.Value)
@@ -6613,13 +6614,16 @@ namespace OpenDental
         }
 
         #region LogOn
-        ///<summary>Logs on a user using the passed in credentials or Active Directory or the good old-fashioned log on window.</summary>
+
+        /// <summary>
+        /// Logs on a user using the passed in credentials or Active Directory or the good old-fashioned log on window.
+        /// </summary>
         private void LogOnOpenDentalUser(string odUser, string odPassword)
         {
-            //CurUser could already be set if using web service because login from ChooseDatabase window.
             if (Security.CurrentUser != null)
             {
                 Security.IsUserLoggedIn = true;//This might be wrong.  We set to true for backward compatibility.
+
                 return;
             }
 

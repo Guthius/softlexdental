@@ -3617,13 +3617,13 @@ namespace OpenDental
             {
                 ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Perio Chart"), Resources.IconChartLine, "", "Perio"));
             }
-            button = new ODToolBarButton(OrthoChartTabs.GetFirst(true).TabName, null, "", "Ortho");
-            if (OrthoChartTabs.GetCount(true) > 1)
-            {
-                button.Style = ODToolBarButtonStyle.DropDownButton;
-                button.DropDownMenu = menuOrthoChart;
-            }
-            ToolBarMain.Buttons.Add(button);
+            //button = new ODToolBarButton(OrthoChartTabs.GetFirst(true).TabName, null, "", "Ortho");
+            //if (OrthoChartTabs.GetCount(true) > 1)
+            //{
+            //    button.Style = ODToolBarButtonStyle.DropDownButton;
+            //    button.DropDownMenu = menuOrthoChart;
+            //}
+            //ToolBarMain.Buttons.Add(button);
             button = new ODToolBarButton(Lan.g(this, "Consent"), null, "", "Consent");
             if (SheetDefs.GetCustomForType(SheetTypeEnum.Consent).Count > 0)
             {

@@ -42,7 +42,7 @@ namespace OpenDental {
 			if(Preference.GetBool(PreferenceName.CentralManagerSecurityLock)) {
 				butChange.Enabled=false;
 				labelGlobalDateLockDisabled.Visible=true;			}
-			List<UserGroup> listGroupsNotAdmin=UserGroup.All().FindAll(x => !GroupPermission.HasPermission(x.Id,Permissions.SecurityAdmin,null));
+			List<UserGroup> listGroupsNotAdmin=UserGroup.All().FindAll(x => !UserGroupPermission.HasPermission(x.Id,Permissions.SecurityAdmin,null));
 			foreach(UserGroup group in listGroupsNotAdmin) {
 				int idx=comboGroups.Items.Add(new ODBoxItem<UserGroup>(group.Description,group));
 				if(Preference.GetLong(PreferenceName.DefaultUserGroup)==group.Id) {

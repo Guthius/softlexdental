@@ -238,7 +238,7 @@ namespace OpenDentBusiness
         /// </summary>
         public static bool HasSecurityAdminUser() =>
             DataConnection.ExecuteLong(
-                @"CALL usp_security_has_admin_user") > 0;
+                @"CALL `usp_security_has_admin_user`()") > 0;
 
         /// <summary>
         /// Gets the username of the user with the specified ID.
@@ -430,22 +430,25 @@ namespace OpenDentBusiness
                 }
             }
 
-            if (userGroupIds != null && userGroupIds.Count == 0)
+            if (userGroupIds != null)
             {
-                throw new Exception("The current user must be in at least one user group.");
+                if (userGroupIds.Count == 0)
+                {
+                    throw new Exception("The current user must be in at least one user group.");
+                }
+
+                var isAdmin =
+                    DataConnection.ExecuteLong(
+                        "SELECT COUNT(*) FROM `user_group_permissions` " +
+                        "WHERE `permission` = '" + Permissions.SecurityAdmin + "' " +
+                        "AND `user_group_id` IN (" + string.Join(", ", userGroupIds) + ")") > 0;
+
+                if (!user.IsNew && !isAdmin && !IsSomeoneElseSecurityAdmin(user))
+                    throw new Exception("At least one user must have Security Admin permission.");
+
+                if (user.IsHidden && isAdmin)
+                    throw new Exception("Admins cannot be hidden.");
             }
-
-            var isAdmin =
-                DataConnection.ExecuteLong(
-                    "SELECT COUNT(*) FROM `group_permissions` " +
-                    "WHERE `type` = '" + Permissions.SecurityAdmin + "' " +
-                    "AND `user_group_id` IN (" + string.Join(", ", userGroupIds) + ")") > 0;
-
-            if (!user.IsNew && !isAdmin && !IsSomeoneElseSecurityAdmin(user))
-                throw new Exception("At least one user must have Security Admin permission.");
-
-            if (user.IsHidden && isAdmin)
-                throw new Exception("Admins cannot be hidden.");
         }
 
 
@@ -597,7 +600,7 @@ namespace OpenDentBusiness
 
             foreach (var user in All().Where(user => showHidden || !user.IsHidden))
             {
-                if (GroupPermission.HasPermission(user, permission, null))
+                if (UserGroupPermission.HasPermission(user, permission, null))
                 {
                     users.Add(user);
                 }

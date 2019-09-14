@@ -19,7 +19,7 @@ namespace OpenDental
         private List<DisplayReport> _listList;
         private List<DisplayReport> _listPublicHealth;
         private List<DisplayReport> _listArizonaPrimary;
-        private List<GroupPermission> _listReportPermissions;
+        private List<UserGroupPermission> _listReportPermissions;
 
 
         public FormReportsMore() => InitializeComponent();
@@ -43,7 +43,7 @@ namespace OpenDental
             _listList = DisplayReports.GetForCategory(DisplayReportCategory.Lists, false);
             _listPublicHealth = DisplayReports.GetForCategory(DisplayReportCategory.PublicHealth, false);
             _listArizonaPrimary = DisplayReports.GetForCategory(DisplayReportCategory.ArizonaPrimaryCare, false);
-            _listReportPermissions = GroupPermission.GetPermissionsForReports().Where(x => Security.CurrentUser.IsInUserGroup(x.UserGroupId)).ToList();
+            _listReportPermissions = UserGroupPermission.GetPermissionsForReports().Where(x => Security.CurrentUser.IsInUserGroup(x.UserGroupId)).ToList();
             //add the items to the list boxes and set the list box heights. (positions too?)
             listProdInc.Items.Clear();
             listDaily.Items.Clear();
@@ -335,7 +335,7 @@ namespace OpenDental
         }
 
         ///<summary>Called from this form to do OpenReportHelper(...) logic and then close when needed.</summary>
-        private void OpenReportLocalHelper(DisplayReport displayReport, List<GroupPermission> listReportPermissions, bool doValidatePerm = true)
+        private void OpenReportLocalHelper(DisplayReport displayReport, List<UserGroupPermission> listReportPermissions, bool doValidatePerm = true)
         {
             RpNonModalSelection = OpenReportHelper(displayReport, listReportPermissions, doValidatePerm);
             switch (displayReport.InternalName)
@@ -390,13 +390,13 @@ namespace OpenDental
         ///<summary>Handles form and logic for most given displayReports.
         ///Returns ReportNonModalSelection.None if modal report is provided.
         ///If non-modal report is provided returns valid(not none) RpNonModalSelection to be handled later, See FormOpenDental.SpecialReportSelectionHelper(...)</summary>
-        public static ReportNonModalSelection OpenReportHelper(DisplayReport displayReport, List<GroupPermission> listReportPermissions = null, bool doValidatePerm = true)
+        public static ReportNonModalSelection OpenReportHelper(DisplayReport displayReport, List<UserGroupPermission> listReportPermissions = null, bool doValidatePerm = true)
         {
             if (doValidatePerm)
             {
                 if (listReportPermissions == null)
                 {
-                    listReportPermissions = GroupPermission.GetPermissionsForReports().Where(x => Security.CurrentUser.IsInUserGroup(x.UserGroupId)).ToList();
+                    listReportPermissions = UserGroupPermission.GetPermissionsForReports().Where(x => Security.CurrentUser.IsInUserGroup(x.UserGroupId)).ToList();
                 }
                 if (!listReportPermissions.Exists(x => x.ExternalId == displayReport.DisplayReportNum))
                 {

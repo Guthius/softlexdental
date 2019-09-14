@@ -3847,7 +3847,7 @@ namespace OpenDentBusiness
             switch (modeCur)
             {
                 case DatabaseMaintenanceMode.Check:
-                    command = $"SELECT COUNT(GroupPermNum) FROM grouppermission WHERE NewerDays<0 OR NewerDays>{GroupPermission.NewerDaysMax}";
+                    command = $"SELECT COUNT(GroupPermNum) FROM grouppermission WHERE NewerDays<0 OR NewerDays>{UserGroupPermission.NewerDaysMax}";
                     int numFound = PIn.Int(Db.GetCount(command));
                     if (numFound > 0 || verbose)
                     {
@@ -3857,8 +3857,8 @@ namespace OpenDentBusiness
                 case DatabaseMaintenanceMode.Fix:
                     string methodName = MethodBase.GetCurrentMethod().Name;
                     command = $@"UPDATE grouppermission 
-						SET NewerDays=(CASE WHEN NewerDays<0 THEN 0 ELSE {GroupPermission.NewerDaysMax} END) 
-						WHERE NewerDays<0 OR NewerDays>{GroupPermission.NewerDaysMax}";
+						SET NewerDays=(CASE WHEN NewerDays<0 THEN 0 ELSE {UserGroupPermission.NewerDaysMax} END) 
+						WHERE NewerDays<0 OR NewerDays>{UserGroupPermission.NewerDaysMax}";
                     long numfixed = Db.NonQ(command);
                     if (numfixed > 0 || verbose)
                     {

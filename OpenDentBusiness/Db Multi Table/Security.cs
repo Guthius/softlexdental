@@ -94,7 +94,7 @@ namespace OpenDentBusiness
 
             if (CurrentUser == null)
             {
-                message = "Not authorized for\r\n" + GroupPermission.GetDescription(permission);
+                message = "Not authorized for\r\n" + UserGroupPermission.GetDescription(permission);
                 if (!suppressMessage)
                 {
                     MessageBox.Show(
@@ -131,14 +131,14 @@ namespace OpenDentBusiness
         {
             date = date.Date;
 
-            if (!GroupPermission.HasPermission(curUser, permission, fKey))
+            if (!UserGroupPermission.HasPermission(curUser, permission, fKey))
             {
                 if (!suppressMessage)
                 {
                     throw new Exception(
                         "Not authorized.\r\n" +
                         "A user with the SecurityAdmin permission must grant you access for:\r\n" +
-                        GroupPermission.GetDescription(permission));
+                        UserGroupPermission.GetDescription(permission));
                 }
 
                 return false;
@@ -168,7 +168,7 @@ namespace OpenDentBusiness
             //}
 
 
-            var dateLimit = GroupPermission.GetDateRestrictedForPermission(permission, curUser.GetGroups().Select(x => x.Id).ToList());
+            var dateLimit = UserGroupPermission.GetDateRestrictedForPermission(permission, curUser.GetGroups().Select(x => x.Id).ToList());
             if (!dateLimit.HasValue || date > dateLimit)
             {
                 return true;
@@ -200,7 +200,7 @@ namespace OpenDentBusiness
             if (!suppressMessage)
             {
                 throw new Exception("Not authorized for" + "\r\n"
-                    + GroupPermission.GetDescription(permission) + "\r\n" + "Date limitation");
+                    + UserGroupPermission.GetDescription(permission) + "\r\n" + "Date limitation");
             }
             return false;
         }
@@ -234,7 +234,7 @@ namespace OpenDentBusiness
             {
                 return false;//Invalid or MinDate passed in.
             }
-            if (!Preference.GetBool(PreferenceName.SecurityLockIncludesAdmin) && GroupPermission.HasPermission(CurrentUser, Permissions.SecurityAdmin, 0))
+            if (!Preference.GetBool(PreferenceName.SecurityLockIncludesAdmin) && UserGroupPermission.HasPermission(CurrentUser, Permissions.SecurityAdmin, 0))
             {
                 return false;//admins are never affected by global date limitation when preference is false.
             }
@@ -275,7 +275,7 @@ namespace OpenDentBusiness
         /// Returns MinVal if the user is not restricted or does not have the permission.
         /// </summary>
         private static DateTime? GetDateLimit(string permission, List<long> userGroupIds) =>
-            GroupPermission.GetDateRestrictedForPermission(permission, userGroupIds);
+            UserGroupPermission.GetDateRestrictedForPermission(permission, userGroupIds);
 
         /// <summary>
         /// Gets a module that the user has permission to use. 

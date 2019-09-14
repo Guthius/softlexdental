@@ -415,7 +415,7 @@ namespace OpenDental{
 					MessageBox.Show(this,Lan.g(this,"Not allowed to future date this image from")+": "
 						+"\r\n"+DocCur.DateCreated.ToString()+" to "+dateTimeEntered.ToString()
 						+"\r\n\r\n"+Lan.g(this,"A user with the SecurityAdmin permission must grant you access for")
-						+":\r\n"+GroupPermission.GetDescription(Permissions.ImageDelete));
+						+":\r\n"+UserGroupPermission.GetDescription(Permissions.ImageDelete));
 					return;
 				}
 			}

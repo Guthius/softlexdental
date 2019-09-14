@@ -649,7 +649,7 @@ namespace OpenDental{
 			}
 			checkShowHidden.Checked=Preference.GetBool(PreferenceName.EasyHideDentalSchools);
 			if(!Security.IsAuthorized(Permissions.PatPriProvEdit,DateTime.MinValue,true,true)) {
-				string strToolTip=Lan.g("Security","Not authorized for")+" "+GroupPermission.GetDescription(Permissions.PatPriProvEdit);
+				string strToolTip=Lan.g("Security","Not authorized for")+" "+UserGroupPermission.GetDescription(Permissions.PatPriProvEdit);
 				_priProvEditToolTip.SetToolTip(butReassign,strToolTip);
 				_priProvEditToolTip.SetToolTip(butMovePri,strToolTip);
 			}

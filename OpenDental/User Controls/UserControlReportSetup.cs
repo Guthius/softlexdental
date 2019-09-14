@@ -9,8 +9,8 @@ using OpenDental.UI;
 namespace OpenDental.User_Controls {
 	public partial class UserControlReportSetup:UserControl {
 		public List<DisplayReport> ListDisplayReportAll;
-		public List<GroupPermission> ListGroupPermissionsForReports;
-		public List<GroupPermission> ListGroupPermissionsOld;
+		public List<UserGroupPermission> ListGroupPermissionsForReports;
+		public List<UserGroupPermission> ListGroupPermissionsOld;
 		private List<UserGroup> _listUserGroups;
 		private Point _selectedCell=new Point(-1,-1); //X:Col, Y:Row.
 		private ODGrid _selectedGrid=null;
@@ -55,9 +55,9 @@ namespace OpenDental.User_Controls {
 			}
 			if(refreshData) {
 				ListDisplayReportAll=DisplayReports.GetAll(true);
-                ListGroupPermissionsForReports = GroupPermission.GetPermissionsForReports().ToList();
-				ListGroupPermissionsOld=new List<GroupPermission>();
-				foreach(GroupPermission perm in ListGroupPermissionsForReports) {
+                ListGroupPermissionsForReports = UserGroupPermission.GetPermissionsForReports().ToList();
+				ListGroupPermissionsOld=new List<UserGroupPermission>();
+				foreach(UserGroupPermission perm in ListGroupPermissionsForReports) {
 					ListGroupPermissionsOld.Add(perm);
 				}
 
@@ -214,9 +214,9 @@ namespace OpenDental.User_Controls {
 			DisplayReport clicked=ListDisplayReportAll.Find(x => x.Category == selectedCat && x.ItemOrder == _selectedCell.Y);
 			if(_isPermissionMode) {
 				if(_selectedCell.X==1) {
-					GroupPermission groupPerm=ListGroupPermissionsForReports.Find(x => x.ExternalId==clicked.DisplayReportNum && x.UserGroupId==_listUserGroups[comboUserGroup.SelectedIndex].Id);
+					UserGroupPermission groupPerm=ListGroupPermissionsForReports.Find(x => x.ExternalId==clicked.DisplayReportNum && x.UserGroupId==_listUserGroups[comboUserGroup.SelectedIndex].Id);
 					if(groupPerm==null) {//They don't have perm
-						groupPerm=new GroupPermission();
+						groupPerm=new UserGroupPermission();
 						groupPerm.NewerDate=DateTime.MinValue;
 						groupPerm.NewerDays=0;
 						groupPerm.Permission=Permissions.Reports;
@@ -411,7 +411,7 @@ namespace OpenDental.User_Controls {
 				if(report.IsHidden) {
 					continue;
 				}
-				GroupPermission groupPerm=new GroupPermission();
+				UserGroupPermission groupPerm=new UserGroupPermission();
 				groupPerm.NewerDate=DateTime.MinValue;
 				groupPerm.NewerDays=0;
 				groupPerm.Permission=Permissions.Reports;

@@ -17,7 +17,7 @@ namespace OpenDental{
 		private OpenDental.ValidDate textDate;
 		private System.Windows.Forms.Label label3;
 		private ValidNumber textDays;
-		private GroupPermission Cur;
+		private UserGroupPermission Cur;
 		private System.Windows.Forms.GroupBox groupBox1;
 		///<summary></summary>
 		public bool IsNew;
@@ -25,7 +25,7 @@ namespace OpenDental{
 		private System.ComponentModel.Container components = null;
 
 		///<summary></summary>
-		public FormGroupPermEdit(GroupPermission cur){
+		public FormGroupPermEdit(UserGroupPermission cur){
 			InitializeComponent();
 
             Cur = cur;
@@ -195,7 +195,7 @@ namespace OpenDental{
 		#endregion
 
 		private void FormGroupPermEdit_Load(object sender, System.EventArgs e) {
-			textName.Text=GroupPermission.GetDescription(Cur.Permission);
+			textName.Text=UserGroupPermission.GetDescription(Cur.Permission);
 			if(!Cur.NewerDate.HasValue){
 				textDate.Text="";
 			}
@@ -244,15 +244,15 @@ namespace OpenDental{
 				return;
 			}
 			int newerDays=PIn.Int(textDays.Text);
-			if(newerDays>GroupPermission.NewerDaysMax) {
-				MsgBox.Show(this,$"Days must be less than {GroupPermission.NewerDaysMax}.");
+			if(newerDays>UserGroupPermission.NewerDaysMax) {
+				MsgBox.Show(this,$"Days must be less than {UserGroupPermission.NewerDaysMax}.");
 				return;
 			}
 			Cur.NewerDays=newerDays;
 			Cur.NewerDate=PIn.Date(textDate.Text);
             try
             {
-                GroupPermission.Insert(Cur);
+                UserGroupPermission.Insert(Cur);
             }
             catch (Exception ex)
             {

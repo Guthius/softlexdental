@@ -401,7 +401,7 @@ namespace OpenDental {
 
 		///<summary>Fills the tree's checkboxes depending on whether or not the usergroups in _listUserGroupNums have the specific permission.</summaryZ>
 		public void FillTreePerm() {
-            CacheManager.Invalidate<GroupPermission>();
+            CacheManager.Invalidate<UserGroupPermission>();
 			if(_listUserGroupNums.Count == 0) {
 				treePermissions.Enabled=false;
 			}
@@ -418,7 +418,7 @@ namespace OpenDental {
 		///<summary>This just keeps FillTreePermissionsInitial looking cleaner.</summary>
 		private TreeNode SetNode(string perm) {
 			TreeNode retVal = new TreeNode();
-			retVal.Text=GroupPermission.GetDescription(perm);
+			retVal.Text=UserGroupPermission.GetDescription(perm);
 			retVal.Tag=perm;
 			retVal.ImageIndex=1;
 			retVal.SelectedImageIndex=1;
@@ -436,15 +436,15 @@ namespace OpenDental {
 				return;
 			}
 			node.ImageIndex=1;
-			node.Text=GroupPermission.GetDescription((string)node.Tag);
+			node.Text=UserGroupPermission.GetDescription((string)node.Tag);
 			//get all grouppermissions for the passed-in usergroups
-			var listGroupPerms = GroupPermission.GetByUserGroups(listUserGroupNums);
-			List<GroupPermission> listBaseReportingPerms = listGroupPerms.Where(x => x.Permission == Permissions.Reports && x.ExternalId == 0).ToList();
-			List<GroupPermission> listDisplayReportingPerms = listGroupPerms.Where(x => x.Permission == Permissions.Reports && x.ExternalId != 0).ToList();
+			var listGroupPerms = UserGroupPermission.GetByUserGroups(listUserGroupNums);
+			List<UserGroupPermission> listBaseReportingPerms = listGroupPerms.Where(x => x.Permission == Permissions.Reports && x.ExternalId == 0).ToList();
+			List<UserGroupPermission> listDisplayReportingPerms = listGroupPerms.Where(x => x.Permission == Permissions.Reports && x.ExternalId != 0).ToList();
 			//group by permtype, preferring newerdays/newerdate that are further back in the past.
 			listGroupPerms=listGroupPerms.GroupBy(x => x.Permission)
 				.Select(x => x
-					.OrderBy((GroupPermission y) => {
+					.OrderBy((UserGroupPermission y) => {
 						if(!y.NewerDays.HasValue && !y.NewerDate.HasValue) {
 							return DateTime.MinValue;
 						}
@@ -476,7 +476,7 @@ namespace OpenDental {
 			//Special case for Reports permission.  
 			//Get a list of all report permissions from usergroups that this user is associated to IF the usergroup has the "base" (FKey = 0) report permission.
 			if((string)node.Tag == Permissions.Reports) {
-				List<GroupPermission> listReportPermsForUser = listDisplayReportingPerms.FindAll(x => listUserGroupNums.Contains(x.UserGroupId)).ToList();
+				List<UserGroupPermission> listReportPermsForUser = listDisplayReportingPerms.FindAll(x => listUserGroupNums.Contains(x.UserGroupId)).ToList();
 				listReportPermsForUser.RemoveAll(x => !listBaseReportingPerms.Select(y => y.UserGroupId).Contains(x.UserGroupId));
 				int state = DisplayReports.GetReportState(listReportPermsForUser);
 				if(state==1) {
@@ -582,7 +582,7 @@ namespace OpenDental {
 			}
 			//User clicked on a check box.  Do stuff.
 			if(_clickedPermNode.ImageIndex==1) {//unchecked, so need to add a permission
-				GroupPermission perm = new GroupPermission();
+				UserGroupPermission perm = new UserGroupPermission();
 				perm.Permission=(string)_clickedPermNode.Tag;
 				perm.UserGroupId=_listUserGroupNums.First();
 				//if(GroupPermission.PermTakesDates(perm.Permission)) {
@@ -605,7 +605,7 @@ namespace OpenDental {
 				}
 				else {
 					try {
-						GroupPermission.Insert(perm);
+						UserGroupPermission.Insert(perm);
 						SecurityLogs.MakeLogEntry(Permissions.SecurityAdmin,0,"Permission '"+perm.Permission+"' granted to '"
 							+UserGroup.GetById(perm.UserGroupId).Description+"'");
 					}
@@ -617,17 +617,17 @@ namespace OpenDental {
 				if(perm.Permission.In(Permissions.EditCompletedProcedure,Permissions.EditProcedure)) {
 					//Adding ProcComplEdit full, so add ProcComplEditlimited too.
 					//Do the same for EO and EC procs
-					GroupPermission permLimited = GroupPermission.GetPermission(_listUserGroupNums.First(),Permissions.ProcComplEditLimited);
+					UserGroupPermission permLimited = UserGroupPermission.GetPermission(_listUserGroupNums.First(),Permissions.ProcComplEditLimited);
 					if(permLimited==null) {
-                        CacheManager.Invalidate<GroupPermission>();
-						perm=GroupPermission.GetPermission(_listUserGroupNums.First(),perm.Permission);
-						permLimited=new GroupPermission();
+                        CacheManager.Invalidate<UserGroupPermission>();
+						perm=UserGroupPermission.GetPermission(_listUserGroupNums.First(),perm.Permission);
+						permLimited=new UserGroupPermission();
 						permLimited.NewerDate=perm.NewerDate;
 						permLimited.NewerDays=perm.NewerDays;
 						permLimited.UserGroupId=perm.UserGroupId;
 						permLimited.Permission=Permissions.ProcComplEditLimited;
 						try {
-							GroupPermission.Insert(permLimited);
+							UserGroupPermission.Insert(permLimited);
 							SecurityLogs.MakeLogEntry(Permissions.SecurityAdmin,0,"Permission '"+perm.Permission+"' granted to '"
 								+UserGroup.GetById(perm.UserGroupId).Description+"'");
 						}
@@ -640,7 +640,7 @@ namespace OpenDental {
 			}
 			else if(_clickedPermNode.ImageIndex==2) {//checked, so need to delete the perm
 				try {
-					GroupPermission.RemovePermission(_listUserGroupNums.First(),(string)_clickedPermNode.Tag);
+					UserGroupPermission.RemovePermission(_listUserGroupNums.First(),(string)_clickedPermNode.Tag);
 					SecurityLogs.MakeLogEntry(Permissions.SecurityAdmin,0,"Permission '"+_clickedPermNode.Tag+"' revoked from '"
 						+UserGroup.GetById(_listUserGroupNums.First()).Description+"'");
 				}
@@ -651,15 +651,15 @@ namespace OpenDental {
 				if((string)_clickedPermNode.Tag==Permissions.ProcComplEditLimited) {
 					//Deselecting ProcComplEditLimted, deselect ProcComplEdit and ProcExistingEdit permissions if present.
 					List<string> listPermissions=new List<string>();
-					if(GroupPermission.HasPermission(_listUserGroupNums.First(),Permissions.EditCompletedProcedure,0)) {
+					if(UserGroupPermission.HasPermission(_listUserGroupNums.First(),Permissions.EditCompletedProcedure,0)) {
 						listPermissions.Add(Permissions.EditCompletedProcedure);
 					}
-					if(GroupPermission.HasPermission(_listUserGroupNums.First(),Permissions.EditProcedure,0)) {
+					if(UserGroupPermission.HasPermission(_listUserGroupNums.First(),Permissions.EditProcedure,0)) {
 						listPermissions.Add(Permissions.EditProcedure);
 					}
 					listPermissions.ForEach(x => {
 						try {
-							GroupPermission.RemovePermission(_listUserGroupNums.First(),x);
+							UserGroupPermission.RemovePermission(_listUserGroupNums.First(),x);
 							SecurityLogs.MakeLogEntry(Permissions.SecurityAdmin,0,"Permission '"+_clickedPermNode.Tag+"' revoked from '"
 								+UserGroup.GetById(_listUserGroupNums.First()).Description+"'");
 						}
@@ -672,7 +672,7 @@ namespace OpenDental {
 			}
 			else if(_clickedPermNode.ImageIndex==3) {//Partially checked (currently only applies to Reports permission)
 				try {
-					GroupPermission.RemovePermission(_listUserGroupNums.First(),(string)_clickedPermNode.Tag);
+					UserGroupPermission.RemovePermission(_listUserGroupNums.First(),(string)_clickedPermNode.Tag);
 					SecurityLogs.MakeLogEntry(Permissions.SecurityAdmin,0,"Permission '"+_clickedPermNode.Tag+"' revoked from '"
 						+UserGroup.GetById(_listUserGroupNums.First()).Description+"'");
 				}
@@ -705,7 +705,7 @@ namespace OpenDental {
 			//if(!GroupPermission.PermTakesDates(permType)) {
 			//	return;
 			//}
-			GroupPermission perm = GroupPermission.GetPermission(_listUserGroupNums.First(),permType);
+			UserGroupPermission perm = UserGroupPermission.GetPermission(_listUserGroupNums.First(),permType);
 			if(perm==null) {
 				return;
 			}

@@ -124,7 +124,7 @@ namespace OpenDental{
 		private void FillList(){
             CacheManager.Invalidate<UserGroup>();
 			listGroups.Items.Clear();
-			_listUserGroups=UserGroup.All().Where(x => IsAdminMode || !GroupPermission.HasPermission(x.Id,Permissions.SecurityAdmin,null)).ToList();
+			_listUserGroups=UserGroup.All().Where(x => IsAdminMode || !UserGroupPermission.HasPermission(x.Id,Permissions.SecurityAdmin,null)).ToList();
 			for(int i=0;i<_listUserGroups.Count;i++) {
 				listGroups.Items.Add(_listUserGroups[i].Description);
 			}

@@ -12,8 +12,8 @@ namespace OpenDental {
 		///<summary>The currently logged user's first user group.</summary>
 		private long _userGroupNum;
 		private List<UserGroup> _listUserGroups;
-		private List<GroupPermission> _listGroupPermissions;
-		private List<GroupPermission> _listGroupPermissionsOld;
+		private List<UserGroupPermission> _listGroupPermissions;
+		private List<UserGroupPermission> _listGroupPermissionsOld;
 		///<summary>The index of the Allowed column in gridCustom.</summary>
 		private int _colAllowed;
 
@@ -36,8 +36,8 @@ namespace OpenDental {
 			if(comboUserGroup.SelectedIndex==-1) {
 				comboUserGroup.SelectedIndex=0;
 			}
-			_listGroupPermissions=GroupPermission.GetByUserGroups(_listUserGroups.Select(x => x.Id).ToList(),Permissions.DashboardWidget).ToList();
-            _listGroupPermissionsOld = new List<GroupPermission>(_listGroupPermissions);
+			_listGroupPermissions=UserGroupPermission.GetByUserGroups(_listUserGroups.Select(x => x.Id).ToList(),Permissions.DashboardWidget).ToList();
+            _listGroupPermissionsOld = new List<UserGroupPermission>(_listGroupPermissions);
 		}
 
 		private void FillGridInternal() {
@@ -87,10 +87,10 @@ namespace OpenDental {
 		}
 
 		private bool ToggleDashboardPermission(UserGroup userGroup,SheetDef sheetDefWidget) {
-			GroupPermission selectedGroupPermission=_listGroupPermissions
+			UserGroupPermission selectedGroupPermission=_listGroupPermissions
 				.FirstOrDefault(x => x.UserGroupId==userGroup.Id && x.ExternalId==sheetDefWidget.SheetDefNum);
 			if(selectedGroupPermission==null) {
-				GroupPermission groupPermission=new GroupPermission() {
+				UserGroupPermission groupPermission=new UserGroupPermission() {
 					NewerDate=DateTime.MinValue,
 					NewerDays=0,
 					Permission=Permissions.DashboardWidget,
@@ -108,10 +108,10 @@ namespace OpenDental {
 
 		private void SetDashboardPermission(UserGroup userGroup,params SheetDef[] arraySheetDefWidgets) {
 			foreach(SheetDef sheetDefWidget in arraySheetDefWidgets) {
-				GroupPermission selectedGroupPermission=_listGroupPermissions
+				UserGroupPermission selectedGroupPermission=_listGroupPermissions
 					.FirstOrDefault(x => x.UserGroupId==userGroup.Id && x.ExternalId==sheetDefWidget.SheetDefNum);
 				if(selectedGroupPermission==null) {
-					GroupPermission groupPermission=new GroupPermission() {
+					UserGroupPermission groupPermission=new UserGroupPermission() {
 						NewerDate=DateTime.MinValue,
 						NewerDays=0,
 						Permission=Permissions.DashboardWidget,

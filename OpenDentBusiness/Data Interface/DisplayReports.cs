@@ -114,7 +114,7 @@ namespace OpenDentBusiness
         }
 
         ///<summary>Returns -1 if the user has no report permission, 0 if they have incomplete permissions, and 1 if they have all unhidden reports available.</summary>
-        public static int GetReportState(List<GroupPermission> listGroupPerms)
+        public static int GetReportState(List<UserGroupPermission> listGroupPerms)
         {
             //No remotin grole check; no call to db
             List<DisplayReport> listDisplayReports = GetAll(false);

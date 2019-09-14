@@ -1,145 +1,61 @@
-using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Reflection;
-using System.Text;
 
-namespace OpenDentBusiness{
-	///<summary></summary>
-	public class OrthoChartTabs{
-		#region Get Methods
-		#endregion
+namespace OpenDentBusiness
+{
+    public class OrthoChartTabs
+    {
+        private class OrthoChartTabCache : CacheListAbs<OrthoChartTab>
+        {
+            protected override List<OrthoChartTab> GetCacheFromDb() => 
+                Crud.OrthoChartTabCrud.SelectMany("SELECT * FROM orthocharttab ORDER BY ItemOrder");
 
-		#region Modification Methods
-		
-		#region Insert
-		#endregion
+            protected override List<OrthoChartTab> TableToList(DataTable table) =>
+                Crud.OrthoChartTabCrud.TableToList(table);
 
-		#region Update
-		#endregion
+            protected override OrthoChartTab Copy(OrthoChartTab orthoChartTab) => 
+                orthoChartTab.Copy();
+            
+            protected override DataTable ListToTable(List<OrthoChartTab> listOrthoChartTabs) =>
+                Crud.OrthoChartTabCrud.ListToTable(listOrthoChartTabs, "OrthoChartTab");
+            
+            protected override void FillCacheIfNeeded() => 
+                OrthoChartTabs.GetTableFromCache(false);
 
-		#region Delete
-		#endregion
+            protected override bool IsInListShort(OrthoChartTab orthoChartTab) => 
+                !orthoChartTab.IsHidden;
+        }
 
-		#endregion
+        /// <summary>
+        /// The object that accesses the cache in a thread-safe manner.
+        /// </summary>
+        private static readonly OrthoChartTabCache orthoChartTabCache = new OrthoChartTabCache();
 
-		#region Misc Methods
-		#endregion
+        public static List<OrthoChartTab> GetDeepCopy(bool isShort = false) =>
+            orthoChartTabCache.GetDeepCopy(isShort);
 
-		#region CachePattern
+        public static OrthoChartTab GetFirst(bool isShort = false) => 
+            orthoChartTabCache.GetFirst(isShort);
 
-		private class OrthoChartTabCache : CacheListAbs<OrthoChartTab> {
-			protected override List<OrthoChartTab> GetCacheFromDb() {
-				string command="SELECT * FROM orthocharttab ORDER BY ItemOrder";
-				return Crud.OrthoChartTabCrud.SelectMany(command);
-			}
-			protected override List<OrthoChartTab> TableToList(DataTable table) {
-				return Crud.OrthoChartTabCrud.TableToList(table);
-			}
-			protected override OrthoChartTab Copy(OrthoChartTab orthoChartTab) {
-				return orthoChartTab.Copy();
-			}
-			protected override DataTable ListToTable(List<OrthoChartTab> listOrthoChartTabs) {
-				return Crud.OrthoChartTabCrud.ListToTable(listOrthoChartTabs,"OrthoChartTab");
-			}
-			protected override void FillCacheIfNeeded() {
-				OrthoChartTabs.GetTableFromCache(false);
-			}
-			protected override bool IsInListShort(OrthoChartTab orthoChartTab) {
-				return !orthoChartTab.IsHidden;
-			}
-		}
-		
-		///<summary>The object that accesses the cache in a thread-safe manner.</summary>
-		private static OrthoChartTabCache _orthoChartTabCache=new OrthoChartTabCache();
+        public static int GetCount(bool isShort = false) => 
+            orthoChartTabCache.GetCount(isShort);
 
-		public static List<OrthoChartTab> GetDeepCopy(bool isShort=false) {
-			return _orthoChartTabCache.GetDeepCopy(isShort);
-		}
+        /// <summary>
+        /// Refreshes the cache and returns it as a DataTable.
+        /// </summary>
+        public static DataTable RefreshCache() => GetTableFromCache(true);
 
-		public static OrthoChartTab GetFirst(bool isShort=false) {
-			return _orthoChartTabCache.GetFirst(isShort);
-		}
+        /// <summary>
+        /// Always refreshes the ClientWeb's cache.
+        /// </summary>
+        public static DataTable GetTableFromCache(bool doRefreshCache) => 
+            orthoChartTabCache.GetTableFromCache(doRefreshCache);
 
-		public static int GetCount(bool isShort=false) {
-			return _orthoChartTabCache.GetCount(isShort);
-		}
-
-		///<summary>Refreshes the cache and returns it as a DataTable. This will refresh the ClientWeb's cache and the ServerWeb's cache.</summary>
-		public static DataTable RefreshCache() {
-			return GetTableFromCache(true);
-		}
-
-		///<summary>Fills the local cache with the passed in DataTable.</summary>
-		public static void FillCacheFromTable(DataTable table) {
-			_orthoChartTabCache.FillCacheFromTable(table);
-		}
-
-		///<summary>Always refreshes the ClientWeb's cache.</summary>
-		public static DataTable GetTableFromCache(bool doRefreshCache) {
-			return _orthoChartTabCache.GetTableFromCache(doRefreshCache);
-		}
-
-		#endregion
-
-		///<summary>Inserts, updates, or deletes the passed in list against the stale list listOld.  Returns true if db changes were made.</summary>
-		public static bool Sync(List<OrthoChartTab> listNew,List<OrthoChartTab> listOld) {
-			return Crud.OrthoChartTabCrud.Sync(listNew,listOld);
-		}
-
-		/*
-		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
-
-		///<summary></summary>
-		public static List<OrthoChartTab> Refresh(long patNum){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<OrthoChartTab>>(MethodBase.GetCurrentMethod(),patNum);
-			}
-			string command="SELECT * FROM orthocharttab WHERE PatNum = "+POut.Long(patNum);
-			return Crud.OrthoChartTabCrud.SelectMany(command);
-		}
-
-		///<summary>Gets one OrthoChartTab from the db.</summary>
-		public static OrthoChartTab GetOne(long orthoChartTabNum){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				return Meth.GetObject<OrthoChartTab>(MethodBase.GetCurrentMethod(),orthoChartTabNum);
-			}
-			return Crud.OrthoChartTabCrud.SelectOne(orthoChartTabNum);
-		}
-
-		///<summary></summary>
-		public static long Insert(OrthoChartTab orthoChartTab){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				orthoChartTab.OrthoChartTabNum=Meth.GetLong(MethodBase.GetCurrentMethod(),orthoChartTab);
-				return orthoChartTab.OrthoChartTabNum;
-			}
-			return Crud.OrthoChartTabCrud.Insert(orthoChartTab);
-		}
-
-		///<summary></summary>
-		public static void Update(OrthoChartTab orthoChartTab){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),orthoChartTab);
-				return;
-			}
-			Crud.OrthoChartTabCrud.Update(orthoChartTab);
-		}
-
-		///<summary></summary>
-		public static void Delete(long orthoChartTabNum) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),orthoChartTabNum);
-				return;
-			}
-			Crud.OrthoChartTabCrud.Delete(orthoChartTabNum);
-		}
-
-		
-
-		
-		*/
-
-
-
-	}
+        /// <summary>
+        /// Inserts, updates, or deletes the passed in list against the stale list listOld. 
+        /// Returns true if db changes were made.
+        /// </summary>
+        public static bool Sync(List<OrthoChartTab> listNew, List<OrthoChartTab> listOld) => 
+            Crud.OrthoChartTabCrud.Sync(listNew, listOld);
+    }
 }

@@ -121,7 +121,7 @@ namespace OpenDentBusiness
         {
             var program = Programs.GetCur(ProgramName.Xcharge);
 
-            if (!program.Enabled)
+            if (program == null || !program.Enabled)
             {
                 return false;
             }

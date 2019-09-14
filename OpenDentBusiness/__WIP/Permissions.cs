@@ -120,7 +120,7 @@ namespace OpenDentBusiness
         /// <summary>
         /// Security Admin. At least one user must have this permission.
         /// </summary>
-        public const string SecurityAdmin = "sys_admin";
+        public const string SecurityAdmin = "security_admin";
 
         /// <summary>
         /// Appointment Create

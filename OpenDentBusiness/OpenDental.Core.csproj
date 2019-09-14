@@ -1306,7 +1306,7 @@
     <Compile Include="Data\Employee.cs" />
     <Compile Include="TableTypes\Employer.cs" />
     <Compile Include="TableTypes\Fee.cs" />
-    <Compile Include="__WIP\GroupPermission.cs" />
+    <Compile Include="__WIP\UserGroupPermission.cs" />
     <Compile Include="TableTypes\InsPlan.cs" />
     <Compile Include="TableTypes\InstructorOld.cs" />
     <Compile Include="Db\Interval.cs" />
