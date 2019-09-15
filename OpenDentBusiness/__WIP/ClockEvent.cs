@@ -205,7 +205,15 @@ namespace OpenDentBusiness
         public static void Delete(long clockEventId) =>
             DataConnection.ExecuteNonQuery("DELETE FROM `clock_events` WHERE `id` = " + clockEventId);
 
-        public static List<ClockEvent> Refresh(long employeeId, DateTime fromDate, DateTime toDate, bool isBreaks) =>
+        /// <summary>
+        /// Gets all clock events for the specified employee within the given date range.
+        /// </summary>
+        /// <param name="employeeId">The ID of the employee.</param>
+        /// <param name="fromDate">The start date.</param>
+        /// <param name="toDate">The end date.</param>
+        /// <param name="isBreaks">Value indicating whether to get breaks.</param>
+        /// <returns></returns>
+        public static List<ClockEvent> GetByEmployee(long employeeId, DateTime fromDate, DateTime toDate, bool isBreaks) =>
             SelectMany(
                 "SELECT * FROM `clock_events` WHERE `employee_id` = ?employee_id " +
                 "AND `date1_displayed` >= ?from_date AND `date1_displayed` < ?to_date AND `status` IN " + (isBreaks ? "(1) " : "(0, 2) ") + "" +
@@ -214,7 +222,14 @@ namespace OpenDentBusiness
                     new MySqlParameter("from_date", fromDate),
                     new MySqlParameter("to_date", toDate));
 
-        public static List<ClockEvent> GetSimpleList(long employeeId, DateTime fromDate, DateTime toDate) =>
+        /// <summary>
+        /// Gets all clock events for the specified employee within the given date range.
+        /// </summary>
+        /// <param name="employeeId">The ID of the employee.</param>
+        /// <param name="fromDate">The start date.</param>
+        /// <param name="toDate">The end date.</param>
+        /// <returns></returns>
+        public static List<ClockEvent> GetByEmployee(long employeeId, DateTime fromDate, DateTime toDate) =>
             SelectMany(
                 "SELECT * FROM `clock_events` WHERE `employee_id` = ?employee_id " +
                 "AND `date1_displayed` >= ?from_date AND `date1_displayed` < ?to_date " +
@@ -232,10 +247,10 @@ namespace OpenDentBusiness
                     new MySqlParameter("from_date", fromDate),
                     new MySqlParameter("to_date", toDate.AddDays(1)));
 
-
-
-
-
+        /// <summary>
+        /// Clocks in the specified employee.
+        /// </summary>
+        /// <param name="employeeId">The ID of the employee.</param>
         public static void ClockIn(long employeeId)
         {
             var minimumClockInTime = 
@@ -293,8 +308,13 @@ namespace OpenDentBusiness
             SecurityLogs.MakeLogEntry(Permissions.UserLogOnOff, 0, $"{employee} clocked in from {clockEvent.Status}.");
         }
 
-
-        public static void ClockOut(long employeeId, ClockEventStatus clockStatus)
+        /// <summary>
+        /// Clocks out the specified employee.
+        /// </summary>
+        /// <param name="employeeId">The ID of the employee.</param>
+        /// <param name="clockEventStatus">The clock out status.</param>
+        /// <exception cref="Exception">If the employee never clocked in, or has already clocked out.</exception>
+        public static void ClockOut(long employeeId, ClockEventStatus clockEventStatus)
         {
             var clockEvent = GetLastEvent(employeeId);
             if (clockEvent == null)
@@ -306,7 +326,7 @@ namespace OpenDentBusiness
             if (clockEvent.Date2Displayed.HasValue)
                 throw new Exception("Error. Already clocked out.");
 
-            if (clockStatus == ClockEventStatus.Break)
+            if (clockEventStatus == ClockEventStatus.Break)
             {
                 var clinicId = clockEvent.ClinicId;
 
@@ -325,7 +345,7 @@ namespace OpenDentBusiness
                         MiscData.GetNowDateTime();
 
                 clockEvent.Date2Displayed = clockEvent.Date2Entered;
-                clockEvent.Status = clockStatus;
+                clockEvent.Status = clockEventStatus;
 
                 Update(clockEvent);
             }
@@ -492,9 +512,6 @@ namespace OpenDentBusiness
             }
         }
 
-
-
-
         /// <summary>
         /// Used in the timecard to track hours worked per week when the week started in a previous 
         /// time period.  This gets all the hours of the first week before the date listed.
@@ -521,7 +538,7 @@ namespace OpenDentBusiness
                 firstDayOfWeekDate = firstDayOfWeekDate.AddDays(-1);
             }
 
-            var clockEvents = Refresh(employeeId, firstDayOfWeekDate, date.AddDays(-1), false);
+            var clockEvents = GetByEmployee(employeeId, firstDayOfWeekDate, date.AddDays(-1), false);
             foreach (var clockEvent in clockEvents)
             {
                 // If someone intentionally backdates a clock out event to get negative time, they can use an adjustment instead.

@@ -719,7 +719,7 @@ namespace OpenDental{
 		///<summary>fromDB is set to false when it is refreshing every second so that there will be no extra network traffic.</summary>
 		private void FillMain(bool fromDB){
 			if(fromDB){
-				ClockEventList=ClockEvent.Refresh(EmployeeCur.Id,PIn.Date(textDateStart.Text),PIn.Date(textDateStop.Text),IsBreaks);
+				ClockEventList=ClockEvent.GetByEmployee(EmployeeCur.Id,PIn.Date(textDateStart.Text),PIn.Date(textDateStop.Text),IsBreaks);
 				if(IsBreaks){
 					TimeAdjustList=new List<TimeAdjustment>();
 				}

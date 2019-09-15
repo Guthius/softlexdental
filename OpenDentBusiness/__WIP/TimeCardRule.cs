@@ -148,7 +148,7 @@ namespace OpenDentBusiness
         /// <param name="dateEnd"></param>
         public static void ClearAuto(long employeeId, DateTime dateStart, DateTime dateEnd)
         {
-            var clockEvents = ClockEvent.GetSimpleList(employeeId, dateStart, dateEnd);
+            var clockEvents = ClockEvent.GetByEmployee(employeeId, dateStart, dateEnd);
             foreach (var clockEvent in clockEvents)
             {
                 clockEvent.AdjustAuto = TimeSpan.Zero;
@@ -174,7 +174,7 @@ namespace OpenDentBusiness
         /// <param name="dateEnd"></param>
         public static void ClearManual(long employeeId, DateTime dateStart, DateTime dateEnd)
         {
-            var clockEvents = ClockEvent.GetSimpleList(employeeId, dateStart, dateEnd);
+            var clockEvents = ClockEvent.GetByEmployee(employeeId, dateStart, dateEnd);
             foreach (var clockEvent in clockEvents)
             {
                 clockEvent.Adjust = null;
@@ -210,8 +210,8 @@ namespace OpenDentBusiness
             {
                 stopDate = dateTimeNow.Date.AddDays(-1);
             }
-            List<ClockEvent> breakList = ClockEvent.Refresh(employeeCur.Id, startDate, stopDate, true);
-            List<ClockEvent> clockEventList = ClockEvent.Refresh(employeeCur.Id, startDate, stopDate, false);
+            List<ClockEvent> breakList = ClockEvent.GetByEmployee(employeeCur.Id, startDate, stopDate, true);
+            List<ClockEvent> clockEventList = ClockEvent.GetByEmployee(employeeCur.Id, startDate, stopDate, false);
             bool errorFound = false;
             string retVal = "Time card errors for employee : " + Employee.GetNameFL(employeeCur) + "\r\n";
             //Validate clock events
@@ -719,7 +719,7 @@ namespace OpenDentBusiness
                 //Only adjust breaks if preference is set.
                 return;
             }
-            List<ClockEvent> breakList = ClockEvent.Refresh(EmployeeCur.Id, StartDate, StopDate, true);//PIn.Date(textDateStart.Text),PIn.Date(textDateStop.Text),true);
+            List<ClockEvent> breakList = ClockEvent.GetByEmployee(EmployeeCur.Id, StartDate, StopDate, true);//PIn.Date(textDateStart.Text),PIn.Date(textDateStop.Text),true);
             TimeSpan totalToday = TimeSpan.Zero;
             TimeSpan totalOne = TimeSpan.Zero;
             DateTime previousDate = DateTime.MinValue;
@@ -757,7 +757,7 @@ namespace OpenDentBusiness
         public static void CalculateWeeklyOvertime_Old(Employee EmployeeCur, DateTime StartDate, DateTime StopDate)
         {
             List<TimeAdjustment> TimeAdjustList = TimeAdjustment.Refresh(EmployeeCur.Id, StartDate, StopDate);
-            List<ClockEvent> ClockEventList = ClockEvent.Refresh(EmployeeCur.Id, StartDate, StopDate, false);
+            List<ClockEvent> ClockEventList = ClockEvent.GetByEmployee(EmployeeCur.Id, StartDate, StopDate, false);
             //first, delete all existing overtime entries
             for (int i = 0; i < TimeAdjustList.Count; i++)
             {

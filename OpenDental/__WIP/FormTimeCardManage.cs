@@ -232,7 +232,7 @@ namespace OpenDental
         private ODGrid GetGridForPrinting(Employee emp)
         {
             ODGrid gridTimeCard = new ODGrid();
-            List<ClockEvent> clockEventList = ClockEvent.Refresh(emp.Id, PIn.Date(dateStartTextBox.Text), PIn.Date(dateEndTextBox.Text), false);
+            List<ClockEvent> clockEventList = ClockEvent.GetByEmployee(emp.Id, PIn.Date(dateStartTextBox.Text), PIn.Date(dateEndTextBox.Text), false);
             List<TimeAdjustment> timeAdjustList = TimeAdjustment.Refresh(emp.Id, PIn.Date(dateStartTextBox.Text), PIn.Date(dateEndTextBox.Text));
 
 
