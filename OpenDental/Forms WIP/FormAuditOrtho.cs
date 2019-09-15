@@ -70,26 +70,26 @@ namespace OpenDental {
 				}
 				for(int i=0;i<DictDateOrthoLogs[dateRow].Count;i++) {
 					row=new ODGridRow();
-					row.Cells.Add(DictDateOrthoLogs[dateRow][i].LogDateTime.ToShortDateString()+" "+DictDateOrthoLogs[dateRow][i].LogDateTime.ToShortTimeString());
-					user=User.GetById(DictDateOrthoLogs[dateRow][i].UserNum);
+					row.Cells.Add(DictDateOrthoLogs[dateRow][i].LogDate.ToShortDateString()+" "+DictDateOrthoLogs[dateRow][i].LogDate.ToShortTimeString());
+					user=User.GetById(DictDateOrthoLogs[dateRow][i].UserId);
 					if(user==null) {//Will be null for audit trails made by outside entities that do not require users to be logged in.  E.g. Web Sched.
 						row.Cells.Add("unknown");
 					}
 					else {
 						row.Cells.Add(user.UserName);
 					}
-					row.Cells.Add(DictDateOrthoLogs[dateRow][i].PermType.ToString());
-					row.Cells.Add(DictDateOrthoLogs[dateRow][i].LogText);
+					row.Cells.Add(DictDateOrthoLogs[dateRow][i].EventName.ToString());
+					row.Cells.Add(DictDateOrthoLogs[dateRow][i].LogMessage);
 					gridMain.Rows.Add(row);
 				}
 			}
 			//Then any applicable patient field logs.
 			for(int i=0;i<PatientFieldLogs.Count;i++) {
 				row=new ODGridRow();
-				row.Cells.Add(PatientFieldLogs[i].LogDateTime.ToShortDateString()+" "+PatientFieldLogs[i].LogDateTime.ToShortTimeString());
-				row.Cells.Add(User.GetById(PatientFieldLogs[i].UserNum).UserName);
-				row.Cells.Add(PatientFieldLogs[i].PermType.ToString());
-				row.Cells.Add(PatientFieldLogs[i].LogText);
+				row.Cells.Add(PatientFieldLogs[i].LogDate.ToShortDateString()+" "+PatientFieldLogs[i].LogDate.ToShortTimeString());
+				row.Cells.Add(User.GetById(PatientFieldLogs[i].UserId).UserName);
+				row.Cells.Add(PatientFieldLogs[i].EventName.ToString());
+				row.Cells.Add(PatientFieldLogs[i].LogMessage);
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();

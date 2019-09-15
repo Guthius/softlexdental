@@ -1054,7 +1054,7 @@
     <Compile Include="TableTypes\StateAbbr.cs" />
     <Compile Include="TableTypes\TaskHist.cs" />
     <Compile Include="__WIP\Permissions.cs" />
-    <Compile Include="__WIP\UserClinic.cs" />
+    <Compile Include="Data\ClinicUser.cs" />
     <Compile Include="__WIP\UserGroupUser.cs" />
     <Compile Include="TableTypes\UserodApptView.cs" />
     <Compile Include="__WIP\UserPreference.cs" />

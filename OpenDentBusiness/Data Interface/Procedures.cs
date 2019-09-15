@@ -3925,7 +3925,7 @@ namespace OpenDentBusiness
         ///Uses listSelectedRows and listProcNumsAttachedStart to determine if procs are attaching to or detaching from AptCur.
         ///When moving proc from another appt, other appt descriptions are updated.</summary>
         public static void ProcsAptNumHelper(List<Procedure> listProcs, Appointment AptCur, List<Appointment> listAppointments,
-            List<int> listSelectedRows, List<long> listProcNumsAttachedStart, bool isAptPlanned = false, LogSources logSource = LogSources.None)
+            List<int> listSelectedRows, List<long> listProcNumsAttachedStart, bool isAptPlanned = false, string logSource = LogSources.None)
         {
             //No need to check RemotingRole; no call to db.
             if (listProcs == null || AptCur == null || listAppointments == null || listSelectedRows == null || listProcNumsAttachedStart == null)
@@ -4043,7 +4043,7 @@ namespace OpenDentBusiness
         ///Also sets ProcDate for TP procs. Will automatically set procs in listProcs to complete and make securitylogs.</summary>
         public static bool UpdateProcsInApptHelper(List<Procedure> listProcsForAppt, Patient pat, Appointment AptCur, Appointment AptOld,
             List<InsPlan> PlanList, List<InsSub> SubList, List<int> listProcSelectedIndices, bool removeCompletedProcs, bool doUpdateProcFees = false,
-            LogSources logSource = LogSources.None)
+            string logSource = LogSources.None)
         {
             if (AptCur.AptStatus != ApptStatus.Complete)
             {//appt is not set complete, just update necessary fields like ProvNum, ProcDate, and ClinicNum

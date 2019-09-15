@@ -74,9 +74,9 @@ namespace OpenDental
             foreach (var securityLog in securityLogList)
             {
                 var row = new ODGridRow();
-                row.Cells.Add(securityLog.LogDateTime.ToShortDateString() + " " + securityLog.LogDateTime.ToShortTimeString());
+                row.Cells.Add(securityLog.LogDate.ToShortDateString() + " " + securityLog.LogDate.ToShortTimeString());
 
-                var user = User.GetById(securityLog.UserNum);
+                var user = User.GetById(securityLog.UserId);
                 if (user == null)
                 {
                     row.Cells.Add(Translation.Language.UserUnknown);
@@ -86,8 +86,8 @@ namespace OpenDental
                     row.Cells.Add(user.UserName);
                 }
 
-                row.Cells.Add(securityLog.PermType.ToString());
-                row.Cells.Add(securityLog.LogText);
+                row.Cells.Add(securityLog.EventName.ToString());
+                row.Cells.Add(securityLog.LogMessage);
 
                 logGrid.Rows.Add(row);
             }

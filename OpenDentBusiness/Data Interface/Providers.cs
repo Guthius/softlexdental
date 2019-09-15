@@ -464,7 +464,7 @@ namespace OpenDentBusiness
                 {
                     continue;
                 }
-                var listUserClinics = UserClinic.GetForUser(listUsersShort[i].Id);
+                var listUserClinics = ClinicUser.GetForUser(listUsersShort[i].Id);
                 //If filtering by a specific clinic, make sure the clinic matches the clinic passed in.
                 //If the user is associated to multiple clinics we check to make sure one of them isn't the clinic in question.
                 if (clinicNum > 0 && !listUserClinics.Any(x => x.ClinicId == clinicNum))
@@ -627,7 +627,7 @@ namespace OpenDentBusiness
                 return Providers.GetDeepCopy(true);//if clinics not enabled, return all visible providers.
             }
             Dictionary<long, List<long>> dictUserClinics = User.All()
-                .ToDictionary(x => x.Id, x => UserClinic.GetForUser(x.Id).Select(y => y.ClinicId).ToList());
+                .ToDictionary(x => x.Id, x => ClinicUser.GetForUser(x.Id).Select(y => y.ClinicId).ToList());
             Dictionary<long, List<long>> dictProvUsers = User.AllProviders().GroupBy(x => x.ProviderId.Value)
                 .ToDictionary(x => x.Key, x => x.Select(y => y.Id).ToList());
             HashSet<long> hashSetProvsRestrictedOtherClinic = new HashSet<long>(ProviderClinicLinks.GetProvsRestrictedToOtherClinics(clinicNum));

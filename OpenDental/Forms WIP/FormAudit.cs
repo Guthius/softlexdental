@@ -190,47 +190,47 @@ namespace OpenDental
             foreach (var securityLog in logList)
             {
                 var row = new ODGridRow();
-                row.Cells.Add(securityLog.LogDateTime.ToShortDateString());
-                row.Cells.Add(securityLog.LogDateTime.ToShortTimeString());
+                row.Cells.Add(securityLog.LogDate.ToShortDateString());
+                row.Cells.Add(securityLog.LogDate.ToShortTimeString());
                 row.Cells.Add(securityLog.PatientName);
 
-                row.Cells.Add(User.GetById(securityLog.UserNum)?.UserName ?? "unknown");
-                if (securityLog.PermType == Permissions.ModuleChart)
+                row.Cells.Add(User.GetById(securityLog.UserId)?.UserName ?? "unknown");
+                if (securityLog.EventName == Permissions.ModuleChart)
                 {
                     row.Cells.Add("ChartModuleViewed");
                 }
-                else if (securityLog.PermType == Permissions.ModuleFamily)
+                else if (securityLog.EventName == Permissions.ModuleFamily)
                 {
                     row.Cells.Add("FamilyModuleViewed");
                 }
-                else if (securityLog.PermType == Permissions.ModuleAccount)
+                else if (securityLog.EventName == Permissions.ModuleAccount)
                 {
                     row.Cells.Add("AccountModuleViewed");
                 }
-                else if (securityLog.PermType == Permissions.ModuleImages)
+                else if (securityLog.EventName == Permissions.ModuleImages)
                 {
                     row.Cells.Add("ImagesModuleViewed");
                 }
-                else if (securityLog.PermType == Permissions.ModuleTreatmentPlan)
+                else if (securityLog.EventName == Permissions.ModuleTreatmentPlan)
                 {
                     row.Cells.Add("TreatmentPlanModuleViewed");
                 }
                 else
                 {
-                    row.Cells.Add(securityLog.PermType.ToString());
+                    row.Cells.Add(securityLog.EventName.ToString());
                 }
-                row.Cells.Add(securityLog.CompName);
-                if (securityLog.PermType != Permissions.UserQuery)
+                row.Cells.Add(securityLog.ComputerName);
+                if (securityLog.EventName != Permissions.UserQuery)
                 {
-                    row.Cells.Add(securityLog.LogText);
+                    row.Cells.Add(securityLog.LogMessage);
                 }
                 else
                 {
                     //Only display the first snipet of very long queries. User can double click to view.
-                    row.Cells.Add(securityLog.LogText.Left(200, true));
+                    row.Cells.Add(securityLog.LogMessage.Left(200, true));
                     row.Tag = (Action)(() =>
                     {
-                        MsgBoxCopyPaste formText = new MsgBoxCopyPaste(securityLog.LogText);
+                        MsgBoxCopyPaste formText = new MsgBoxCopyPaste(securityLog.LogMessage);
                         formText.Show();
                     });
                 }

@@ -11,7 +11,7 @@ namespace OpenDentBusiness
     public class SecurityLogs
     {
         ///<summary>The log source of the current application.</summary>
-        public static LogSources LogSource = LogSources.None;
+        public static string LogSource = LogSources.None;
 
         #region Get Methods
         ///<summary>Returns one SecurityLog from the db.  Called from SecurityLogHashs.CreateSecurityLogHash()</summary>
@@ -102,7 +102,7 @@ namespace OpenDentBusiness
                 }
                 listLogs[i].LogHash = table.Rows[i]["LogHash"].ToString();
             }
-            return listLogs.OrderBy(x => x.LogDateTime).ToArray();
+            return listLogs.OrderBy(x => x.LogDate).ToArray();
         }
 
         ///<summary></summary>
@@ -150,7 +150,7 @@ namespace OpenDentBusiness
             }
             command += "ORDER BY LogDateTime";
             List<SecurityLog> listLogs = Crud.SecurityLogCrud.SelectMany(command);
-            return listLogs.OrderBy(x => x.LogDateTime).ToArray();
+            return listLogs.OrderBy(x => x.LogDate).ToArray();
         }
 
         ///<summary>Gets all security logs for the given foreign keys and permissions.</summary>
@@ -189,7 +189,7 @@ namespace OpenDentBusiness
         }
 
         ///<summary>Used when the security log needs to be identified by a particular source.  PatNum can be 0.</summary>
-        public static void MakeLogEntry(string permType, long patNum, string logText, LogSources logSource)
+        public static void MakeLogEntry(string permType, long patNum, string logText, string logSource)
         {
             //No need to check RemotingRole; no call to db.
             MakeLogEntry(permType, patNum, logText, 0, logSource, DateTime.MinValue);
@@ -203,13 +203,13 @@ namespace OpenDentBusiness
         }
 
         ///<summary>Takes a foreign key to a table associated with that PermType.  PatNum can be 0.</summary>
-        public static void MakeLogEntry(string permType, long patNum, string logText, long fKey, LogSources logSource, DateTime DateTPrevious)
+        public static void MakeLogEntry(string permType, long patNum, string logText, long fKey, string logSource, DateTime DateTPrevious)
         {
             MakeLogEntry(permType, patNum, logText, fKey, logSource, 0, 0, DateTPrevious);
         }
 
         ///<summary>Takes a foreign key to a table associated with that PermType.  PatNum can be 0.</summary>
-        public static void MakeLogEntry(string permType, long patNum, string logText, long fKey, LogSources logSource, long defNum, long defNumError,
+        public static void MakeLogEntry(string permType, long patNum, string logText, long fKey, string logSource, long defNum, long defNumError,
             DateTime DateTPrevious)
         {
             //No need to check RemotingRole; no call to db.
@@ -220,11 +220,11 @@ namespace OpenDentBusiness
         ///<summary>Take a SecurityLog object to save to the database. Creates a SecurityLogHash object as well.</summary>
         public static void MakeLogEntry(SecurityLog secLog)
         {
-            secLog.SecurityLogNum = SecurityLogs.Insert(secLog);
-            SecurityLogHashes.InsertSecurityLogHash(secLog.SecurityLogNum);//uses db date/time
-            if (secLog.PermType == Permissions.AppointmentCreate)
+            secLog.Id = SecurityLogs.Insert(secLog);
+            SecurityLogHashes.InsertSecurityLogHash(secLog.Id);//uses db date/time
+            if (secLog.EventName == Permissions.AppointmentCreate)
             {
-                EntryLogs.Insert(new EntryLog(secLog.UserNum, EntryLogFKeyType.Appointment, secLog.FKey, secLog.LogSource));
+                EntryLogs.Insert(new EntryLog(secLog.UserId, EntryLogFKeyType.Appointment, secLog.ExternalId, secLog.Source));
             }
         }
 
@@ -240,17 +240,17 @@ namespace OpenDentBusiness
             }
             List<SecurityLogHash> listHash = new List<SecurityLogHash>();
             List<EntryLog> listEntries = new List<EntryLog>();
-            listSecLogs = SecurityLogs.GetMany(SQLWhere.CreateIn(nameof(SecurityLog.SecurityLogNum),
-                listSecLogs.Select(x => x.SecurityLogNum).ToList()));
+            listSecLogs = SecurityLogs.GetMany(SQLWhere.CreateIn(nameof(SecurityLog.Id),
+                listSecLogs.Select(x => x.Id).ToList()));
             foreach (SecurityLog log in listSecLogs)
             {
                 SecurityLogHash secLogHash = new SecurityLogHash();
-                secLogHash.SecurityLogNum = log.SecurityLogNum;
-                secLogHash.LogHash = SecurityLogHashes.GetHashString(log);
+                secLogHash.SecurityLogId = log.Id;
+                secLogHash.Hash = SecurityLogHashes.GetHashString(log);
                 listHash.Add(secLogHash);
-                if (log.PermType == Permissions.AppointmentCreate)
+                if (log.EventName == Permissions.AppointmentCreate)
                 {
-                    listEntries.Add(new EntryLog(log.UserNum, EntryLogFKeyType.Appointment, log.FKey, log.LogSource));
+                    listEntries.Add(new EntryLog(log.UserId, EntryLogFKeyType.Appointment, log.ExternalId, log.Source));
                 }
             }
             EntryLogs.InsertMany(listEntries);
@@ -258,18 +258,18 @@ namespace OpenDentBusiness
         }
 
         ///<summary>Takes a foreign key to a table associated with that PermType.  PatNum can be 0.  Returns the created SecurityLog object.  Does not perform an insert.</summary>
-        public static SecurityLog MakeLogEntryNoInsert(string permType, long patNum, string logText, long fKey, LogSources logSource, long defNum = 0,
+        public static SecurityLog MakeLogEntryNoInsert(string permType, long patNum, string logText, long fKey, string logSource, long defNum = 0,
             long defNumError = 0, DateTime DateTPrevious = default(DateTime))
         {
             //No need to check RemotingRole; no call to db.
             SecurityLog securityLog = new SecurityLog();
-            securityLog.PermType = permType;
-            securityLog.UserNum = Security.CurrentUser.Id;
-            securityLog.LogText = logText;
-            securityLog.CompName = Security.CurrentComputerName;
-            securityLog.PatNum = (int)patNum;
-            securityLog.FKey = fKey;
-            securityLog.LogSource = logSource;
+            securityLog.EventName = permType;
+            securityLog.UserId = Security.CurrentUser.Id;
+            securityLog.LogMessage = logText;
+            securityLog.ComputerName = Security.CurrentComputerName;
+            securityLog.PatientId = (int)patNum;
+            securityLog.ExternalId = fKey;
+            securityLog.Source = logSource;
             securityLog.DefNum = defNum;
             securityLog.DefNumError = defNumError;
             securityLog.DateTPrevious = DateTPrevious;
@@ -283,18 +283,18 @@ namespace OpenDentBusiness
         }
 
         ///<summary>Used when making a security log from a remote server, possibly with multithreaded connections.</summary>
-        public static void MakeLogEntryNoCache(string permType, long patnum, string logText, long userNum, LogSources source)
+        public static void MakeLogEntryNoCache(string permType, long patnum, string logText, long userNum, string source)
         {
             SecurityLog securityLog = new SecurityLog();
-            securityLog.PermType = permType;
-            securityLog.UserNum = userNum;
-            securityLog.LogText = logText;
-            securityLog.CompName = Security.CurrentComputerName;
-            securityLog.PatNum = (int)patnum;
-            securityLog.FKey = 0;
-            securityLog.LogSource = source;
-            securityLog.SecurityLogNum = SecurityLogs.InsertNoCache(securityLog);
-            SecurityLogHashes.InsertSecurityLogHashNoCache(securityLog.SecurityLogNum);
+            securityLog.EventName = permType;
+            securityLog.UserId = userNum;
+            securityLog.LogMessage = logText;
+            securityLog.ComputerName = Security.CurrentComputerName;
+            securityLog.PatientId = (int)patnum;
+            securityLog.ExternalId = 0;
+            securityLog.Source = source;
+            securityLog.Id = SecurityLogs.InsertNoCache(securityLog);
+            SecurityLogHashes.InsertSecurityLogHashNoCache(securityLog.Id);
         }
 
         ///<summary>Insertion logic that doesn't use the cache. Has special cases for generating random PK's and handling Oracle insertions.</summary>

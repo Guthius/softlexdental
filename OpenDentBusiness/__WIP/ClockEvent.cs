@@ -111,6 +111,11 @@ namespace OpenDentBusiness
         /// </summary>
         public ClockEventStatus Status;
 
+        /// <summary>
+        /// Constructs a new instance of the <see cref="ClockEvent"/> class.
+        /// </summary>
+        /// <param name="dataReader">The data reader containing record data.</param>
+        /// <returns>A <see cref="ClockEvent"/> instance.</returns>
         static ClockEvent FromReader(MySqlDataReader dataReader)
         {
             return new ClockEvent
@@ -133,9 +138,19 @@ namespace OpenDentBusiness
             };
         }
 
+        /// <summary>
+        /// Gets the clock event with the specified ID from the database.
+        /// </summary>
+        /// <param name="clockEventId">The ID of the clock event.</param>
+        /// <returns>The clock event with the specified ID.</returns>
         public static ClockEvent GetById(long clockEventId) =>
             SelectOne("SELECT * FROM `clock_events` WHERE `id` = " + clockEventId, FromReader);
 
+        /// <summary>
+        /// Inserts the specified clock event into the database.
+        /// </summary>
+        /// <param name="clockEvent">The clock event.</param>
+        /// <returns>The ID assigned to the clock event.</returns>
         public static long Insert(ClockEvent clockEvent) =>
             clockEvent.Id = DataConnection.ExecuteInsert(
                 "INSERT INTO `clock_events` (`clinic_id`, `employee_id`, `date1_entered`, `date1_displayed`, `note`, `date2_entered`, `date2_displayed`, " +
@@ -157,6 +172,10 @@ namespace OpenDentBusiness
                     new MySqlParameter("rate2_auto", clockEvent.Rate2Auto),
                     new MySqlParameter("status", (int)clockEvent.Status));
 
+        /// <summary>
+        /// Updates the specified clock event in the database.
+        /// </summary>
+        /// <param name="clockEvent">The clock event.</param>
         public static void Update(ClockEvent clockEvent) =>
             DataConnection.ExecuteNonQuery(
                 "UPDATE `clock_events` SET `clinic_id` = ?clinic_id, `employee_id` = ?employee_id, `date1_entered` = ?date1_entered, " +
@@ -179,6 +198,10 @@ namespace OpenDentBusiness
                     new MySqlParameter("status", (int)clockEvent.Status),
                     new MySqlParameter("id", (int)clockEvent.Id));
 
+        /// <summary>
+        /// Deletes the specified clock event from the database.
+        /// </summary>
+        /// <param name="clockEventId">The ID of the clock event.</param>
         public static void Delete(long clockEventId) =>
             DataConnection.ExecuteNonQuery("DELETE FROM `clock_events` WHERE `id` = " + clockEventId);
 

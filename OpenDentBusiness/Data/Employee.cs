@@ -296,7 +296,7 @@ namespace OpenDentBusiness
             }
             List<Employee> listEmpsWithClinic = new List<Employee>();
             List<Employee> listEmpsUnassigned = new List<Employee>();
-            Dictionary<long, List<UserClinic>> dictUserClinics = new Dictionary<long, List<UserClinic>>();
+            Dictionary<long, List<ClinicUser>> dictUserClinics = new Dictionary<long, List<ClinicUser>>();
             foreach (Employee empCur in listEmpsShort)
             {
                 List<User> listUsers = User.GetByEmployee(empCur.Id);
@@ -314,7 +314,7 @@ namespace OpenDentBusiness
                     }
                     if (!dictUserClinics.ContainsKey(userCur.Id))
                     {//User is restricted to a clinic(s).  Compare to clinicNum
-                        dictUserClinics[userCur.Id] = UserClinic.GetForUser(userCur.Id).ToList();//run only once per user
+                        dictUserClinics[userCur.Id] = ClinicUser.GetForUser(userCur.Id).ToList();//run only once per user
                     }
                     if (dictUserClinics[userCur.Id].Count == 0)
                     {//unrestricted user, employee should show in all lists

@@ -42,15 +42,15 @@ namespace OpenDentBusiness.Crud{
 			SecurityLog securityLog;
 			foreach(DataRow row in table.Rows) {
 				securityLog=new SecurityLog();
-				securityLog.SecurityLogNum= PIn.Long  (row["SecurityLogNum"].ToString());
-				securityLog.PermType      = PIn.String(row["PermType"].ToString());
-				securityLog.UserNum       = PIn.Long  (row["UserNum"].ToString());
-				securityLog.LogDateTime   = PIn.DateT (row["LogDateTime"].ToString());
-				securityLog.LogText       = PIn.String(row["LogText"].ToString());
-				securityLog.PatNum        = PIn.Long  (row["PatNum"].ToString());
-				securityLog.CompName      = PIn.String(row["CompName"].ToString());
-				securityLog.FKey          = PIn.Long  (row["FKey"].ToString());
-				securityLog.LogSource     = (OpenDentBusiness.LogSources)PIn.Int(row["LogSource"].ToString());
+				securityLog.Id= PIn.Long  (row["SecurityLogNum"].ToString());
+				securityLog.EventName      = PIn.String(row["PermType"].ToString());
+				securityLog.UserId       = PIn.Long  (row["UserNum"].ToString());
+				securityLog.LogDate   = PIn.DateT (row["LogDateTime"].ToString());
+				securityLog.LogMessage       = PIn.String(row["LogText"].ToString());
+				securityLog.PatientId        = PIn.Long  (row["PatNum"].ToString());
+				securityLog.ComputerName      = PIn.String(row["CompName"].ToString());
+				securityLog.ExternalId          = PIn.Long  (row["FKey"].ToString());
+				securityLog.Source     = (OpenDentBusiness.LogSources)PIn.Int(row["LogSource"].ToString());
 				securityLog.DefNum        = PIn.Long  (row["DefNum"].ToString());
 				securityLog.DefNumError   = PIn.Long  (row["DefNumError"].ToString());
 				securityLog.DateTPrevious = PIn.DateT (row["DateTPrevious"].ToString());
@@ -79,15 +79,15 @@ namespace OpenDentBusiness.Crud{
 			table.Columns.Add("DateTPrevious");
 			foreach(SecurityLog securityLog in listSecurityLogs) {
 				table.Rows.Add(new object[] {
-					POut.Long  (securityLog.SecurityLogNum),
-					POut.String(securityLog.PermType),
-					POut.Long  (securityLog.UserNum),
-					POut.DateT (securityLog.LogDateTime,false),
-					            securityLog.LogText,
-					POut.Long  (securityLog.PatNum),
-					            securityLog.CompName,
-					POut.Long  (securityLog.FKey),
-					POut.Int   ((int)securityLog.LogSource),
+					POut.Long  (securityLog.Id),
+					POut.String(securityLog.EventName),
+					POut.Long  (securityLog.UserId),
+					POut.DateT (securityLog.LogDate,false),
+					            securityLog.LogMessage,
+					POut.Long  (securityLog.PatientId),
+					            securityLog.ComputerName,
+					POut.Long  (securityLog.ExternalId),
+					POut.Int   ((int)securityLog.Source),
 					POut.Long  (securityLog.DefNum),
 					POut.Long  (securityLog.DefNumError),
 					POut.DateT (securityLog.DateTPrevious,false),
@@ -104,7 +104,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Inserts one SecurityLog into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(SecurityLog securityLog,bool useExistingPK) {
 			if(!useExistingPK && Preferences.RandomKeys) {
-				securityLog.SecurityLogNum=ReplicationServers.GetKey("securitylog","SecurityLogNum");
+				securityLog.Id=ReplicationServers.GetKey("securitylog","SecurityLogNum");
 			}
 			string command="INSERT INTO securitylog (";
 			if(useExistingPK || Preferences.RandomKeys) {
@@ -112,31 +112,31 @@ namespace OpenDentBusiness.Crud{
 			}
 			command+="PermType,UserNum,LogDateTime,LogText,PatNum,CompName,FKey,LogSource,DefNum,DefNumError,DateTPrevious) VALUES(";
 			if(useExistingPK || Preferences.RandomKeys) {
-				command+=POut.Long(securityLog.SecurityLogNum)+",";
+				command+=POut.Long(securityLog.Id)+",";
 			}
 			command+=
-				     POut.String(securityLog.PermType)+","
-				+    POut.Long  (securityLog.UserNum)+","
+				     POut.String(securityLog.EventName)+","
+				+    POut.Long  (securityLog.UserId)+","
 				+    DbHelper.Now()+","
 				+    DbHelper.ParamChar+"paramLogText,"
-				+    POut.Long  (securityLog.PatNum)+","
-				+"'"+POut.String(securityLog.CompName)+"',"
-				+    POut.Long  (securityLog.FKey)+","
-				+    POut.Int   ((int)securityLog.LogSource)+","
+				+    POut.Long  (securityLog.PatientId)+","
+				+"'"+POut.String(securityLog.ComputerName)+"',"
+				+    POut.Long  (securityLog.ExternalId)+","
+				+    POut.Int   ((int)securityLog.Source)+","
 				+    POut.Long  (securityLog.DefNum)+","
 				+    POut.Long  (securityLog.DefNumError)+","
 				+    POut.DateT (securityLog.DateTPrevious)+")";
-			if(securityLog.LogText==null) {
-				securityLog.LogText="";
+			if(securityLog.LogMessage==null) {
+				securityLog.LogMessage="";
 			}
-			OdSqlParameter paramLogText=new OdSqlParameter("paramLogText",OdDbType.Text,POut.StringParam(securityLog.LogText));
+			OdSqlParameter paramLogText=new OdSqlParameter("paramLogText",OdDbType.Text,POut.StringParam(securityLog.LogMessage));
 			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramLogText);
 			}
 			else {
-				securityLog.SecurityLogNum=Db.NonQ(command,true,"SecurityLogNum","securityLog",paramLogText);
+				securityLog.Id=Db.NonQ(command,true,"SecurityLogNum","securityLog",paramLogText);
 			}
-			return securityLog.SecurityLogNum;
+			return securityLog.Id;
 		}
 
 		///<summary>Inserts one SecurityLog into the database.  Returns the new priKey.  Doesn't use the cache.</summary>
@@ -149,93 +149,93 @@ namespace OpenDentBusiness.Crud{
 			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO securitylog (";
 			if(!useExistingPK && isRandomKeys) {
-				securityLog.SecurityLogNum=ReplicationServers.GetKeyNoCache("securitylog","SecurityLogNum");
+				securityLog.Id=ReplicationServers.GetKeyNoCache("securitylog","SecurityLogNum");
 			}
 			if(isRandomKeys || useExistingPK) {
 				command+="SecurityLogNum,";
 			}
 			command+="PermType,UserNum,LogDateTime,LogText,PatNum,CompName,FKey,LogSource,DefNum,DefNumError,DateTPrevious) VALUES(";
 			if(isRandomKeys || useExistingPK) {
-				command+=POut.Long(securityLog.SecurityLogNum)+",";
+				command+=POut.Long(securityLog.Id)+",";
 			}
 			command+=
-				     POut.String(securityLog.PermType)+","
-				+    POut.Long  (securityLog.UserNum)+","
+				     POut.String(securityLog.EventName)+","
+				+    POut.Long  (securityLog.UserId)+","
 				+    DbHelper.Now()+","
 				+    DbHelper.ParamChar+"paramLogText,"
-				+    POut.Long  (securityLog.PatNum)+","
-				+"'"+POut.String(securityLog.CompName)+"',"
-				+    POut.Long  (securityLog.FKey)+","
-				+    POut.Int   ((int)securityLog.LogSource)+","
+				+    POut.Long  (securityLog.PatientId)+","
+				+"'"+POut.String(securityLog.ComputerName)+"',"
+				+    POut.Long  (securityLog.ExternalId)+","
+				+    POut.Int   ((int)securityLog.Source)+","
 				+    POut.Long  (securityLog.DefNum)+","
 				+    POut.Long  (securityLog.DefNumError)+","
 				+    POut.DateT (securityLog.DateTPrevious)+")";
-			if(securityLog.LogText==null) {
-				securityLog.LogText="";
+			if(securityLog.LogMessage==null) {
+				securityLog.LogMessage="";
 			}
-			OdSqlParameter paramLogText=new OdSqlParameter("paramLogText",OdDbType.Text,POut.StringParam(securityLog.LogText));
+			OdSqlParameter paramLogText=new OdSqlParameter("paramLogText",OdDbType.Text,POut.StringParam(securityLog.LogMessage));
 			if(useExistingPK || isRandomKeys) {
 				Db.NonQ(command,paramLogText);
 			}
 			else {
-				securityLog.SecurityLogNum=Db.NonQ(command,true,"SecurityLogNum","securityLog",paramLogText);
+				securityLog.Id=Db.NonQ(command,true,"SecurityLogNum","securityLog",paramLogText);
 			}
-			return securityLog.SecurityLogNum;
+			return securityLog.Id;
 		}
 
 		///<summary>Updates one SecurityLog in the database.</summary>
 		public static void Update(SecurityLog securityLog) {
 			string command="UPDATE securitylog SET "
-				+"PermType      =  "+POut.String(securityLog.PermType)+", "
-				+"UserNum       =  "+POut.Long  (securityLog.UserNum)+", "
+				+"PermType      =  "+POut.String(securityLog.EventName)+", "
+				+"UserNum       =  "+POut.Long  (securityLog.UserId)+", "
 				//LogDateTime not allowed to change
 				+"LogText       =  "+DbHelper.ParamChar+"paramLogText, "
-				+"PatNum        =  "+POut.Long  (securityLog.PatNum)+", "
-				+"CompName      = '"+POut.String(securityLog.CompName)+"', "
-				+"FKey          =  "+POut.Long  (securityLog.FKey)+", "
-				+"LogSource     =  "+POut.Int   ((int)securityLog.LogSource)+", "
+				+"PatNum        =  "+POut.Long  (securityLog.PatientId)+", "
+				+"CompName      = '"+POut.String(securityLog.ComputerName)+"', "
+				+"FKey          =  "+POut.Long  (securityLog.ExternalId)+", "
+				+"LogSource     =  "+POut.Int   ((int)securityLog.Source)+", "
 				+"DefNum        =  "+POut.Long  (securityLog.DefNum)+", "
 				+"DefNumError   =  "+POut.Long  (securityLog.DefNumError)+", "
 				+"DateTPrevious =  "+POut.DateT (securityLog.DateTPrevious)+" "
-				+"WHERE SecurityLogNum = "+POut.Long(securityLog.SecurityLogNum);
-			if(securityLog.LogText==null) {
-				securityLog.LogText="";
+				+"WHERE SecurityLogNum = "+POut.Long(securityLog.Id);
+			if(securityLog.LogMessage==null) {
+				securityLog.LogMessage="";
 			}
-			OdSqlParameter paramLogText=new OdSqlParameter("paramLogText",OdDbType.Text,POut.StringParam(securityLog.LogText));
+			OdSqlParameter paramLogText=new OdSqlParameter("paramLogText",OdDbType.Text,POut.StringParam(securityLog.LogMessage));
 			Db.NonQ(command,paramLogText);
 		}
 
 		///<summary>Updates one SecurityLog in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.  Returns true if an update occurred.</summary>
 		public static bool Update(SecurityLog securityLog,SecurityLog oldSecurityLog) {
 			string command="";
-			if(securityLog.PermType != oldSecurityLog.PermType) {
+			if(securityLog.EventName != oldSecurityLog.EventName) {
 				if(command!="") { command+=",";}
-				command+="PermType = "+POut.String(securityLog.PermType)+"";
+				command+="PermType = "+POut.String(securityLog.EventName)+"";
 			}
-			if(securityLog.UserNum != oldSecurityLog.UserNum) {
+			if(securityLog.UserId != oldSecurityLog.UserId) {
 				if(command!="") { command+=",";}
-				command+="UserNum = "+POut.Long(securityLog.UserNum)+"";
+				command+="UserNum = "+POut.Long(securityLog.UserId)+"";
 			}
 			//LogDateTime not allowed to change
-			if(securityLog.LogText != oldSecurityLog.LogText) {
+			if(securityLog.LogMessage != oldSecurityLog.LogMessage) {
 				if(command!="") { command+=",";}
 				command+="LogText = "+DbHelper.ParamChar+"paramLogText";
 			}
-			if(securityLog.PatNum != oldSecurityLog.PatNum) {
+			if(securityLog.PatientId != oldSecurityLog.PatientId) {
 				if(command!="") { command+=",";}
-				command+="PatNum = "+POut.Long(securityLog.PatNum)+"";
+				command+="PatNum = "+POut.Long(securityLog.PatientId)+"";
 			}
-			if(securityLog.CompName != oldSecurityLog.CompName) {
+			if(securityLog.ComputerName != oldSecurityLog.ComputerName) {
 				if(command!="") { command+=",";}
-				command+="CompName = '"+POut.String(securityLog.CompName)+"'";
+				command+="CompName = '"+POut.String(securityLog.ComputerName)+"'";
 			}
-			if(securityLog.FKey != oldSecurityLog.FKey) {
+			if(securityLog.ExternalId != oldSecurityLog.ExternalId) {
 				if(command!="") { command+=",";}
-				command+="FKey = "+POut.Long(securityLog.FKey)+"";
+				command+="FKey = "+POut.Long(securityLog.ExternalId)+"";
 			}
-			if(securityLog.LogSource != oldSecurityLog.LogSource) {
+			if(securityLog.Source != oldSecurityLog.Source) {
 				if(command!="") { command+=",";}
-				command+="LogSource = "+POut.Int   ((int)securityLog.LogSource)+"";
+				command+="LogSource = "+POut.Int   ((int)securityLog.Source)+"";
 			}
 			if(securityLog.DefNum != oldSecurityLog.DefNum) {
 				if(command!="") { command+=",";}
@@ -252,12 +252,12 @@ namespace OpenDentBusiness.Crud{
 			if(command=="") {
 				return false;
 			}
-			if(securityLog.LogText==null) {
-				securityLog.LogText="";
+			if(securityLog.LogMessage==null) {
+				securityLog.LogMessage="";
 			}
-			OdSqlParameter paramLogText=new OdSqlParameter("paramLogText",OdDbType.Text,POut.StringParam(securityLog.LogText));
+			OdSqlParameter paramLogText=new OdSqlParameter("paramLogText",OdDbType.Text,POut.StringParam(securityLog.LogMessage));
 			command="UPDATE securitylog SET "+command
-				+" WHERE SecurityLogNum = "+POut.Long(securityLog.SecurityLogNum);
+				+" WHERE SecurityLogNum = "+POut.Long(securityLog.Id);
 			Db.NonQ(command,paramLogText);
 			return true;
 		}
@@ -265,26 +265,26 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Returns true if Update(SecurityLog,SecurityLog) would make changes to the database.
 		///Does not make any changes to the database and can be called before remoting role is checked.</summary>
 		public static bool UpdateComparison(SecurityLog securityLog,SecurityLog oldSecurityLog) {
-			if(securityLog.PermType != oldSecurityLog.PermType) {
+			if(securityLog.EventName != oldSecurityLog.EventName) {
 				return true;
 			}
-			if(securityLog.UserNum != oldSecurityLog.UserNum) {
+			if(securityLog.UserId != oldSecurityLog.UserId) {
 				return true;
 			}
 			//LogDateTime not allowed to change
-			if(securityLog.LogText != oldSecurityLog.LogText) {
+			if(securityLog.LogMessage != oldSecurityLog.LogMessage) {
 				return true;
 			}
-			if(securityLog.PatNum != oldSecurityLog.PatNum) {
+			if(securityLog.PatientId != oldSecurityLog.PatientId) {
 				return true;
 			}
-			if(securityLog.CompName != oldSecurityLog.CompName) {
+			if(securityLog.ComputerName != oldSecurityLog.ComputerName) {
 				return true;
 			}
-			if(securityLog.FKey != oldSecurityLog.FKey) {
+			if(securityLog.ExternalId != oldSecurityLog.ExternalId) {
 				return true;
 			}
-			if(securityLog.LogSource != oldSecurityLog.LogSource) {
+			if(securityLog.Source != oldSecurityLog.Source) {
 				return true;
 			}
 			if(securityLog.DefNum != oldSecurityLog.DefNum) {

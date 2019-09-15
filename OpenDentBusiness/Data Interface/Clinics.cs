@@ -657,7 +657,7 @@ namespace OpenDentBusiness
             if (Preferences.HasClinicsEnabled && curUser.ClinicRestricted && curUser.ClinicId != 0)
             {
                 //Clinics are enabled and user is restricted, return clinics the person has permission for.
-                List<long> listUserClinicNums = UserClinic.GetForUser(curUser.Id).Select(x => x.ClinicId).ToList();
+                List<long> listUserClinicNums = ClinicUser.GetForUser(curUser.Id).Select(x => x.ClinicId).ToList();
                 listClinics.RemoveAll(x => !listUserClinicNums.Contains(x.ClinicNum));//Remove all clinics that are not in the list of UserClinics.
             }
             return listClinics;
@@ -674,7 +674,7 @@ namespace OpenDentBusiness
             }
             if (curUser.ClinicRestricted && curUser.ClinicId != 0)
             {
-                var listUserClinics = UserClinic.GetForUser(curUser.Id);
+                var listUserClinics = ClinicUser.GetForUser(curUser.Id);
                 return listClinics.FindAll(x => listUserClinics.Any(y => y.ClinicId == x.ClinicNum)).ToList();
             }
             return listClinics;

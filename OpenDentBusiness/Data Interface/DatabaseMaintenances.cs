@@ -1039,9 +1039,9 @@ namespace OpenDentBusiness
                     {
                         string methodName = MethodBase.GetCurrentMethod().Name;
                         List<DbmLog> listDbmLogs = new List<DbmLog>();
-                        command = "DELETE FROM securitylog WHERE SecurityLogNum IN(" + string.Join(",", listDupApptCreates.Select(x => x.SecurityLogNum)) + ")";
+                        command = "DELETE FROM securitylog WHERE SecurityLogNum IN(" + string.Join(",", listDupApptCreates.Select(x => x.Id)) + ")";
                         long numberFixed = Db.NonQ(command);
-                        listDupApptCreates.ForEach(x => listDbmLogs.Add(new DbmLog(Security.CurrentUser.Id, x.SecurityLogNum, DbmLogFKeyType.Securitylog,
+                        listDupApptCreates.ForEach(x => listDbmLogs.Add(new DbmLog(Security.CurrentUser.Id, x.Id, DbmLogFKeyType.Securitylog,
                             DbmLogActionType.Delete, methodName, "Audit trail entry deleted from AuditTrailDeleteDuplicateApptCreate.")));
                         if (numberFixed > 0 || verbose)
                         {

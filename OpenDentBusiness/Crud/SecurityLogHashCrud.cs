@@ -44,8 +44,8 @@ namespace OpenDentBusiness.Crud{
 			foreach(DataRow row in table.Rows) {
 				securityLogHash=new SecurityLogHash();
 				securityLogHash.SecurityLogHashNum= PIn.Long  (row["SecurityLogHashNum"].ToString());
-				securityLogHash.SecurityLogNum    = PIn.Long  (row["SecurityLogNum"].ToString());
-				securityLogHash.LogHash           = PIn.String(row["LogHash"].ToString());
+				securityLogHash.SecurityLogId    = PIn.Long  (row["SecurityLogNum"].ToString());
+				securityLogHash.Hash           = PIn.String(row["LogHash"].ToString());
 				retVal.Add(securityLogHash);
 			}
 			return retVal;
@@ -63,8 +63,8 @@ namespace OpenDentBusiness.Crud{
 			foreach(SecurityLogHash securityLogHash in listSecurityLogHashs) {
 				table.Rows.Add(new object[] {
 					POut.Long  (securityLogHash.SecurityLogHashNum),
-					POut.Long  (securityLogHash.SecurityLogNum),
-					            securityLogHash.LogHash,
+					POut.Long  (securityLogHash.SecurityLogId),
+					            securityLogHash.Hash,
 				});
 			}
 			return table;
@@ -89,8 +89,8 @@ namespace OpenDentBusiness.Crud{
 				command+=POut.Long(securityLogHash.SecurityLogHashNum)+",";
 			}
 			command+=
-				     POut.Long  (securityLogHash.SecurityLogNum)+","
-				+"'"+POut.String(securityLogHash.LogHash)+"')";
+				     POut.Long  (securityLogHash.SecurityLogId)+","
+				+"'"+POut.String(securityLogHash.Hash)+"')";
 			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -133,8 +133,8 @@ namespace OpenDentBusiness.Crud{
 					if(useExistingPK) {
 						sbRow.Append(POut.Long(securityLogHash.SecurityLogHashNum)); sbRow.Append(",");
 					}
-					sbRow.Append(POut.Long(securityLogHash.SecurityLogNum)); sbRow.Append(",");
-					sbRow.Append("'"+POut.String(securityLogHash.LogHash)+"'"); sbRow.Append(")");
+					sbRow.Append(POut.Long(securityLogHash.SecurityLogId)); sbRow.Append(",");
+					sbRow.Append("'"+POut.String(securityLogHash.Hash)+"'"); sbRow.Append(")");
 					if(sbCommands.Length+sbRow.Length+1 > ODTable.MaxAllowedPacketCount) {
 						Db.NonQ(sbCommands.ToString());
 						sbCommands=null;
@@ -173,8 +173,8 @@ namespace OpenDentBusiness.Crud{
 				command+=POut.Long(securityLogHash.SecurityLogHashNum)+",";
 			}
 			command+=
-				     POut.Long  (securityLogHash.SecurityLogNum)+","
-				+"'"+POut.String(securityLogHash.LogHash)+"')";
+				     POut.Long  (securityLogHash.SecurityLogId)+","
+				+"'"+POut.String(securityLogHash.Hash)+"')";
 			if(useExistingPK || isRandomKeys) {
 				Db.NonQ(command);
 			}
@@ -187,8 +187,8 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Updates one SecurityLogHash in the database.</summary>
 		public static void Update(SecurityLogHash securityLogHash) {
 			string command="UPDATE securityloghash SET "
-				+"SecurityLogNum    =  "+POut.Long  (securityLogHash.SecurityLogNum)+", "
-				+"LogHash           = '"+POut.String(securityLogHash.LogHash)+"' "
+				+"SecurityLogNum    =  "+POut.Long  (securityLogHash.SecurityLogId)+", "
+				+"LogHash           = '"+POut.String(securityLogHash.Hash)+"' "
 				+"WHERE SecurityLogHashNum = "+POut.Long(securityLogHash.SecurityLogHashNum);
 			Db.NonQ(command);
 		}
@@ -196,13 +196,13 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Updates one SecurityLogHash in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.  Returns true if an update occurred.</summary>
 		public static bool Update(SecurityLogHash securityLogHash,SecurityLogHash oldSecurityLogHash) {
 			string command="";
-			if(securityLogHash.SecurityLogNum != oldSecurityLogHash.SecurityLogNum) {
+			if(securityLogHash.SecurityLogId != oldSecurityLogHash.SecurityLogId) {
 				if(command!="") { command+=",";}
-				command+="SecurityLogNum = "+POut.Long(securityLogHash.SecurityLogNum)+"";
+				command+="SecurityLogNum = "+POut.Long(securityLogHash.SecurityLogId)+"";
 			}
-			if(securityLogHash.LogHash != oldSecurityLogHash.LogHash) {
+			if(securityLogHash.Hash != oldSecurityLogHash.Hash) {
 				if(command!="") { command+=",";}
-				command+="LogHash = '"+POut.String(securityLogHash.LogHash)+"'";
+				command+="LogHash = '"+POut.String(securityLogHash.Hash)+"'";
 			}
 			if(command=="") {
 				return false;
@@ -216,10 +216,10 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Returns true if Update(SecurityLogHash,SecurityLogHash) would make changes to the database.
 		///Does not make any changes to the database and can be called before remoting role is checked.</summary>
 		public static bool UpdateComparison(SecurityLogHash securityLogHash,SecurityLogHash oldSecurityLogHash) {
-			if(securityLogHash.SecurityLogNum != oldSecurityLogHash.SecurityLogNum) {
+			if(securityLogHash.SecurityLogId != oldSecurityLogHash.SecurityLogId) {
 				return true;
 			}
-			if(securityLogHash.LogHash != oldSecurityLogHash.LogHash) {
+			if(securityLogHash.Hash != oldSecurityLogHash.Hash) {
 				return true;
 			}
 			return false;

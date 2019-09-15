@@ -3683,7 +3683,7 @@ namespace OpenDentBusiness
         //private static FilterBlockouts(Appointment )
         /// <summary>Called to move existing appointments from the web.
         /// Will only attempt to move to given operatory.</summary>
-        public static void TryMoveApptWebHelper(Appointment appt, DateTime apptDateTimeNew, long opNumNew, LogSources secLogSource = LogSources.MobileWeb)
+        public static void TryMoveApptWebHelper(Appointment appt, DateTime apptDateTimeNew, long opNumNew, string secLogSource = LogSources.MobileWeb)
         {
             Appointment apptOld = GetOneApt(appt.AptNum);//Will always exist since you can not move a non inserted appointment.
             Patient pat = Patients.GetPat(appt.PatNum);
@@ -3710,7 +3710,7 @@ namespace OpenDentBusiness
         ///<summary>Throws exception. When doSkipValidation is false all 'do' bools need to be set and considered.</summary>
         public static void TryMoveAppointment(Appointment apt, Appointment aptOld, Patient patCur, Operatory curOp, List<Schedule> schedListPeriod,
             List<Operatory> listOps, DateTime newAptDateTime, bool doValidation, bool doSetArriveEarly, bool doProvChange, bool doUpdatePattern,
-            bool doAllowFreqConflicts, bool doResetConfirmationStatus, bool doUpdatePatStatus, bool provChanged, bool hygChanged, bool timeWasMoved, bool isOpChanged, bool isOpUpdate = false, LogSources secLogSource = LogSources.None)
+            bool doAllowFreqConflicts, bool doResetConfirmationStatus, bool doUpdatePatStatus, bool provChanged, bool hygChanged, bool timeWasMoved, bool isOpChanged, bool isOpUpdate = false, string secLogSource = LogSources.None)
         {
             if (newAptDateTime != DateTime.MinValue)
             {
@@ -4374,7 +4374,7 @@ namespace OpenDentBusiness
         ///<summary>Used by web to insert or update a given appt.
         ///Dynamically charts procs based on appt.AppointmentTypeNum when created or changed.
         ///This logic is attempting to mimic FormApptEdit when interacting with a new or existing appointment.</summary>
-        public static void UpsertApptFromWeb(Appointment appt, bool canUpdateApptPattern = false, LogSources secLogSource = LogSources.MobileWeb)
+        public static void UpsertApptFromWeb(Appointment appt, bool canUpdateApptPattern = false, string secLogSource = LogSources.MobileWeb)
         {
             Patient pat = Patients.GetPat(appt.PatNum);
             List<Procedure> listProcsForApptEdit = Procedures.GetProcsForApptEdit(appt);//List of all procedures that would show in FormApptEdit.cs
@@ -4425,15 +4425,15 @@ namespace OpenDentBusiness
                 Insert(appt, appt.SecUserNumEntry);//Inserts the invalid signal
                 SecurityLogs.MakeLogEntry(new SecurityLog()
                 {
-                    PermType = Permissions.AppointmentCreate,
-                    UserNum = appt.SecUserNumEntry,
-                    LogDateTime = DateTime.Now,
-                    LogText = "New appointment created from MobileWeb by " + User.GetById(appt.SecUserNumEntry).UserName,
-                    PatNum = appt.PatNum,
-                    FKey = appt.AptNum,
-                    LogSource = LogSources.MobileWeb,
+                    EventName = Permissions.AppointmentCreate,
+                    UserId = appt.SecUserNumEntry,
+                    LogDate = DateTime.Now,
+                    LogMessage = "New appointment created from MobileWeb by " + User.GetById(appt.SecUserNumEntry).UserName,
+                    PatientId = appt.PatNum,
+                    ExternalId = appt.AptNum,
+                    Source = LogSources.MobileWeb,
                     DateTPrevious = appt.SecDateEntry,
-                    CompName = Security.CurrentComputerName
+                    ComputerName = Security.CurrentComputerName
                 });
             }
             else
@@ -4441,15 +4441,15 @@ namespace OpenDentBusiness
                 Update(appt, apptOld);//Inserts the invalid signal
                 SecurityLogs.MakeLogEntry(new SecurityLog()
                 {
-                    PermType = Permissions.AppointmentEdit,
-                    UserNum = appt.SecUserNumEntry,
-                    LogDateTime = DateTime.Now,
-                    LogText = "Appointment updated from MobileWeb by " + User.GetById(appt.SecUserNumEntry).UserName,
-                    PatNum = appt.PatNum,
-                    FKey = appt.AptNum,
-                    LogSource = LogSources.MobileWeb,
+                    EventName = Permissions.AppointmentEdit,
+                    UserId = appt.SecUserNumEntry,
+                    LogDate = DateTime.Now,
+                    LogMessage = "Appointment updated from MobileWeb by " + User.GetById(appt.SecUserNumEntry).UserName,
+                    PatientId = appt.PatNum,
+                    ExternalId = appt.AptNum,
+                    Source = LogSources.MobileWeb,
                     DateTPrevious = appt.SecDateEntry,
-                    CompName = Security.CurrentComputerName,
+                    ComputerName = Security.CurrentComputerName,
                 });
             }
             #endregion

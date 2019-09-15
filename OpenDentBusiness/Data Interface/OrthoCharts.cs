@@ -228,7 +228,7 @@ namespace OpenDentBusiness{
 			DateTime retVal=DateTime.MinValue;
 			#region Ideal Case, Culture invariant
 			try {
-				string dateString=securityLog.LogText.Substring(securityLog.LogText.Length-8,8);
+				string dateString=securityLog.LogMessage.Substring(securityLog.LogMessage.Length-8,8);
 				retVal=new DateTime(int.Parse(dateString.Substring(0,4)),int.Parse(dateString.Substring(4,2)),int.Parse(dateString.Substring(6,2)));
 				if(retVal!=DateTime.MinValue) {
 					return retVal;
@@ -240,8 +240,8 @@ namespace OpenDentBusiness{
 			#endregion
 			#region Depricated, log written in english
 			try {
-				if(securityLog.LogText.StartsWith("Ortho chart field edited.  Field date: ")) {
-					retVal=DateTime.Parse(securityLog.LogText.Substring("Ortho chart field edited.  Field date: ".Length,10));//Date usually in the format MM/DD/YYYY, unless using en-UK for example
+				if(securityLog.LogMessage.StartsWith("Ortho chart field edited.  Field date: ")) {
+					retVal=DateTime.Parse(securityLog.LogMessage.Substring("Ortho chart field edited.  Field date: ".Length,10));//Date usually in the format MM/DD/YYYY, unless using en-UK for example
 					if(retVal!=DateTime.MinValue) {
 						return retVal;
 					}
@@ -253,8 +253,8 @@ namespace OpenDentBusiness{
 			#endregion
 			#region Depricated, log written in current culture
 			try {
-				if(securityLog.LogText.StartsWith(Lans.g("FormOrthoChart","Ortho chart field edited.  Field date"))) {
-					string[] tokens=securityLog.LogText.Split(new string[] { ": " },StringSplitOptions.None);
+				if(securityLog.LogMessage.StartsWith(Lans.g("FormOrthoChart","Ortho chart field edited.  Field date"))) {
+					string[] tokens=securityLog.LogMessage.Split(new string[] { ": " },StringSplitOptions.None);
 					retVal=DateTime.Parse(tokens[1].Replace(Lans.g("FormOrthoChart","Field name"),""));
 					if(retVal!=DateTime.MinValue) {
 						return retVal;

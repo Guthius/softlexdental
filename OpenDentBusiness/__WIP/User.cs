@@ -623,10 +623,10 @@ namespace OpenDentBusiness
             List<long> listUserNumsInClinic = new List<long>();
             if (clinicIds.Count > 0)
             {
-                List<UserClinic> listUserClinics = new List<UserClinic>();
+                List<ClinicUser> listUserClinics = new List<ClinicUser>();
                 for (int i = 0; i < clinicIds.Count; i++)
                 {
-                    listUserNumsInClinic.AddRange(UserClinic.GetForClinic(clinicIds[i]).Select(y => y.UserId).Distinct().ToList());
+                    listUserNumsInClinic.AddRange(ClinicUser.GetForClinic(clinicIds[i]).Select(y => y.UserId).Distinct().ToList());
                 }
                 listUserNumsInClinic.AddRange(AllActive().FindAll(x => !x.ClinicRestricted).Select(x => x.Id).Distinct().ToList());//Always add unrestricted users into the list.
                 listUserNumsInClinic = listUserNumsInClinic.Distinct().ToList();//Remove duplicates that could possibly be in the list.

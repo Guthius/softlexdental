@@ -38,7 +38,7 @@ namespace UnitTests {
 			_patS=PatientT.CreatePatient("Tasks",clinicNum:_clinicS.ClinicNum,lName:_clinicS.Description,fName:"Patient");
 			_userA=UserodT.CreateUser(userName:"TaskUserA",clinicNum:_clinicN.ClinicNum,isClinicIsRestricted:false);
 			_userNW=UserodT.CreateUser(userName:"TaskUserNW",clinicNum:_clinicNW.ClinicNum,isClinicIsRestricted:true);
-			List<UserClinic> listUserClinics=new List<UserClinic>() { new UserClinic(_clinicNW.ClinicNum,_userNW.Id) };
+			List<ClinicUser> listUserClinics=new List<ClinicUser>() { new ClinicUser(_clinicNW.ClinicNum,_userNW.Id) };
 			if(UserClinics.Sync(listUserClinics,_userNW.Id)) {//Either syncs new list, or clears old list if no longer restricted.
 				UserClinics.RefreshCache();
 			}

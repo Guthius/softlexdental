@@ -59,9 +59,9 @@ namespace OpenDentBusiness
             }
             SecurityLogHash securityLogHash = new SecurityLogHash();
             //Set the FK
-            securityLogHash.SecurityLogNum = securityLog.SecurityLogNum;
+            securityLogHash.SecurityLogId = securityLog.Id;
             //Hash the securityLog
-            securityLogHash.LogHash = GetHashString(securityLog);
+            securityLogHash.Hash = GetHashString(securityLog);
             Insert(securityLogHash);
         }
 
@@ -70,8 +70,8 @@ namespace OpenDentBusiness
         {
             SecurityLog securityLog = Crud.SecurityLogCrud.SelectOne(securityLogNum);
             SecurityLogHash securityLogHash = new SecurityLogHash();
-            securityLogHash.SecurityLogNum = securityLog.SecurityLogNum;
-            securityLogHash.LogHash = GetHashString(securityLog);
+            securityLogHash.SecurityLogId = securityLog.Id;
+            securityLogHash.Hash = GetHashString(securityLog);
             return InsertNoCache(securityLogHash);
         }
 
@@ -89,12 +89,12 @@ namespace OpenDentBusiness
             //Build string to hash
             string logString = "";
             //logString+=securityLog.SecurityLogNum;
-            logString += securityLog.PermType;
-            logString += securityLog.UserNum;
-            logString += POut.DateT(securityLog.LogDateTime, false);
-            logString += securityLog.LogText;
+            logString += securityLog.EventName;
+            logString += securityLog.UserId;
+            logString += POut.DateT(securityLog.LogDate, false);
+            logString += securityLog.LogMessage;
             //logString+=securityLog.CompName;
-            logString += securityLog.PatNum;
+            logString += securityLog.PatientId;
             //logString+=securityLog.FKey.ToString();
             if (securityLog.DateTPrevious != DateTime.MinValue)
             {

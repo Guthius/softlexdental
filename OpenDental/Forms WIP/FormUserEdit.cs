@@ -635,7 +635,7 @@ namespace OpenDental{
 				else if(listSubscribedClinics.Contains(0)) {//They are subscribed to Headquarters
 					listAlertSubsClinicsMulti.SetSelected(1,true);
 				}
-				List<UserClinic> listUserClinics=UserClinic.GetForUser(UserCur.Id).ToList();
+				List<ClinicUser> listUserClinics=ClinicUser.GetForUser(UserCur.Id).ToList();
 				for(int i=0;i<_listClinics.Count;i++) {
 					listClinic.Items.Add(_listClinics[i].Abbr);
 					listClinicMulti.Items.Add(_listClinics[i].Abbr);
@@ -797,10 +797,10 @@ namespace OpenDental{
 				}
 				return;
 			}
-			List<UserClinic> listUserClinics=new List<UserClinic>();
+			List<ClinicUser> listUserClinics=new List<ClinicUser>();
 			if(Preferences.HasClinicsEnabled && checkClinicIsRestricted.Checked) {//They want to restrict the user to certain clinics or clinics are enabled.  
 				for(int i=0;i<listClinicMulti.SelectedIndices.Count;i++) {
-					listUserClinics.Add(new UserClinic(_listClinics[listClinicMulti.SelectedIndices[i]].ClinicNum,UserCur.Id));
+					listUserClinics.Add(new ClinicUser(_listClinics[listClinicMulti.SelectedIndices[i]].ClinicNum,UserCur.Id));
 				}
 				//If they set the user up with a default clinic and it's not in the restricted list, return.
 				if(!listUserClinics.Exists(x => x.ClinicId==_listClinics[listClinic.SelectedIndex-1].ClinicNum)) {

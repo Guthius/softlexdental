@@ -1177,7 +1177,7 @@ namespace OpenDentBusiness
         ///securityLogMsg is typically set to something that lets the customer know where this new patient was created from.
         ///Used by multiple applications so be very careful when changing this method.  E.g. Open Dental and Web Sched.</summary>
         public static Patient CreateNewPatient(string lName, string fName, DateTime birthDate, long priProv, long clinicNum, string securityLogMsg
-            , LogSources logSource = LogSources.None, string email = "", string hmPhone = "", string wirelessPhone = "")
+            , string logSource = LogSources.None, string email = "", string hmPhone = "", string wirelessPhone = "")
         {
             //No need to check RemotingRole; no call to db.
             Patient patient = new Patient();
