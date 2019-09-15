@@ -43,10 +43,10 @@ namespace OpenDental {
 			}
 			Procedures.Lock(date1,date2);
 			if(date1.AddDays(7) < date2) {
-				SecurityLogs.MakeLogEntry(Permissions.SecurityAdmin,0,"Proc Lock Tool "+date1.ToShortDateString()+" - "+date2.ToShortDateString());
+				SecurityLog.Write(Permissions.SecurityAdmin,0,"Proc Lock Tool "+date1.ToShortDateString()+" - "+date2.ToShortDateString());
 			}
 			else {
-				SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Proc Lock Tool "+date1.ToShortDateString()+" - "+date2.ToShortDateString());
+				SecurityLog.Write(Permissions.Setup,0,"Proc Lock Tool "+date1.ToShortDateString()+" - "+date2.ToShortDateString());
 			}
 			DialogResult=DialogResult.OK;
 		}

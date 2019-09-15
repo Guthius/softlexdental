@@ -166,7 +166,7 @@ namespace OpenDental
                 MessageBoxButtons.OK, 
                 MessageBoxIcon.Information);
 
-            SecurityLogs.MakeLogEntry(Permissions.GraphicsEdit, 0, "Set the graphics for computer " + computersList[computerListBox.SelectedIndex].Name + " to simple");
+            SecurityLog.Write(Permissions.GraphicsEdit, 0, "Set the graphics for computer " + computersList[computerListBox.SelectedIndex].Name + " to simple");
         }
 
         /// <summary>

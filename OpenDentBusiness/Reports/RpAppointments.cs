@@ -40,18 +40,18 @@ namespace OpenDentBusiness
             }
             //WebSched Appointments
             string innerJoinWebSchedBoth = "";
-            List<LogSources> listSources = new List<LogSources>();
+            List<string> listSources = new List<string>();
             if (isShowNewPat)
             {
-                listSources.Add(LogSources.WebSchedNewPatAppt);
+                listSources.Add(SecurityLogSource.WebSchedulerNewPatient);
             }
             if (isShowRecall)
             {
-                listSources.Add(LogSources.WebSched);
+                listSources.Add(SecurityLogSource.WebScheduler);
             }
             if (isShowASAP)
             {
-                listSources.Add(LogSources.WebSchedASAP);
+                listSources.Add(SecurityLogSource.WebSchedulerASAP);
             }
             if (listSources.Count > 0)
             {
@@ -63,7 +63,7 @@ namespace OpenDentBusiness
                 }
                 innerJoinWebSchedBoth = " INNER JOIN securitylog ON appointment.AptNum=securitylog.FKey"
                     + " AND securitylog.PermType IN (" + string.Join(",", listPerms.Select(x => POut.String(x))) + ") "
-                    + " AND securitylog.LogSource IN (" + string.Join(",", listSources.Select(x => (int)x)) + ") ";
+                    + " AND securitylog.LogSource IN (" + string.Join(",", listSources) + ") ";
             }
             //Query
             string command = @"SELECT ";

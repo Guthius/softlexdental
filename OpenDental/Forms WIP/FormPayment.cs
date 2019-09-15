@@ -3082,7 +3082,7 @@ namespace OpenDental {
 				split.PayNum=voidPayment.PayNum;
 				PaySplits.Insert(split);
 			}
-			SecurityLogs.MakeLogEntry(Permissions.PaymentCreate,voidPayment.PatNum,Patients.GetLim(voidPayment.PatNum).GetNameLF()+", "
+			SecurityLog.Write(Permissions.PaymentCreate,voidPayment.PatNum,Patients.GetLim(voidPayment.PatNum).GetNameLF()+", "
 				+voidPayment.PayAmt.ToString("c"));
 		}
 
@@ -3738,7 +3738,7 @@ namespace OpenDental {
 			//		split.PayNum=voidPayment.PayNum;
 			//		PaySplits.Insert(split);
 			//	}
-			//	SecurityLogs.MakeLogEntry(Permissions.PaymentCreate,voidPayment.PatNum,
+			//	SecurityLog.Write(Permissions.PaymentCreate,voidPayment.PatNum,
 			//		Patients.GetLim(voidPayment.PatNum).GetNameLF()+", "+voidPayment.PayAmt.ToString("c"));
 			//}
 		}
@@ -3789,7 +3789,7 @@ namespace OpenDental {
 			//	split.PayNum=voidPayment.PayNum;
 			//	PaySplits.Insert(split);
 			//}
-			//SecurityLogs.MakeLogEntry(Permissions.PaymentCreate,voidPayment.PatNum,
+			//SecurityLog.Write(Permissions.PaymentCreate,voidPayment.PatNum,
 			//	Patients.GetLim(voidPayment.PatNum).GetNameLF()+", "+voidPayment.PayAmt.ToString("c"));
 		}
 
@@ -4400,7 +4400,7 @@ namespace OpenDental {
 				return;
 			}
 			if(!IsNew) {
-				SecurityLogs.MakeLogEntry(Permissions.PaymentEdit,_paymentCur.PatNum,"Delete for: "+Patients.GetLim(_paymentCur.PatNum).GetNameLF()+", "
+				SecurityLog.Write(Permissions.PaymentEdit,_paymentCur.PatNum,"Delete for: "+Patients.GetLim(_paymentCur.PatNum).GetNameLF()+", "
 					+_paymentOld.PayAmt.ToString("c"),0,_paymentOld.SecDateTEdit);
 			}
 			DialogResult=DialogResult.OK;
@@ -4731,11 +4731,11 @@ namespace OpenDental {
 					_curFamOrSuperFam.GetNameInFamFL(_paymentCur.PatNum));
 			}
 			if(IsNew) {
-				SecurityLogs.MakeLogEntry(Permissions.PaymentCreate,_paymentCur.PatNum,Patients.GetLim(_paymentCur.PatNum).GetNameLF()+", "
+				SecurityLog.Write(Permissions.PaymentCreate,_paymentCur.PatNum,Patients.GetLim(_paymentCur.PatNum).GetNameLF()+", "
 					+_paymentCur.PayAmt.ToString("c"));
 			}
 			else {
-				SecurityLogs.MakeLogEntry(Permissions.PaymentEdit,_paymentCur.PatNum,Patients.GetLim(_paymentCur.PatNum).GetNameLF()+", "
+				SecurityLog.Write(Permissions.PaymentEdit,_paymentCur.PatNum,Patients.GetLim(_paymentCur.PatNum).GetNameLF()+", "
 					+_paymentCur.PayAmt.ToString("c"),0,_paymentOld.SecDateTEdit);
 			}
 			if(hasChanged) {
@@ -4841,11 +4841,11 @@ namespace OpenDental {
 			}
 			bool hasChanged=PaySplits.Sync(_listSplitsCur,_listPaySplitsOld);
 			if(IsNew) {
-				SecurityLogs.MakeLogEntry(Permissions.PaymentCreate,_paymentCur.PatNum,Patients.GetLim(_paymentCur.PatNum).GetNameLF()+", "+
+				SecurityLog.Write(Permissions.PaymentCreate,_paymentCur.PatNum,Patients.GetLim(_paymentCur.PatNum).GetNameLF()+", "+
 					_paymentCur.PayAmt.ToString("c"));
 			}
 			else {
-				SecurityLogs.MakeLogEntry(Permissions.PaymentEdit,_paymentCur.PatNum,Patients.GetLim(_paymentCur.PatNum).GetNameLF()+", "+
+				SecurityLog.Write(Permissions.PaymentEdit,_paymentCur.PatNum,Patients.GetLim(_paymentCur.PatNum).GetNameLF()+", "+
 					_paymentCur.PayAmt.ToString("c"),0,_paymentOld.SecDateTEdit);
 			}
 			if(hasChanged) {

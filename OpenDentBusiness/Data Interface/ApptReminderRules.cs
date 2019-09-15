@@ -111,7 +111,7 @@ namespace OpenDentBusiness
             List<ApptReminderRule> listOld = ApptReminderRules.GetForClinicAndTypes(clinicNum, arrTypes);//ClinicNum can be 0
             if (Crud.ApptReminderRuleCrud.Sync(listNew, listOld))
             {
-                SecurityLogs.MakeLogEntry(Permissions.Setup, 0, string.Join(", ", arrTypes.Select(x => x.GetDescription()))
+                SecurityLog.Write(0, SecurityLogEvents.Setup, string.Join(", ", arrTypes.Select(x => x.GetDescription()))
                     + " rules changed for ClinicNum: " + clinicNum.ToString() + ".");
             }
         }
@@ -148,12 +148,11 @@ namespace OpenDentBusiness
             aptCur.Confirmed = confirmDefNum;
             Appointments.Update(aptCur, aptOld); // Appointments S-Class handles Signalods
 
-            SecurityLogs.MakeLogEntry(
-                Permissions.ApptConfirmStatusEdit, aptCur.PatNum,
+            SecurityLog.Write(
+                aptCur.PatNum, SecurityLogEvents.ApptConfirmStatusEdit, 
                 "Appointment confirmation status changed from " + Defs.GetName(DefinitionCategory.ApptConfirmed, aptOld.Confirmed) + " to " + Defs.GetName(DefinitionCategory.ApptConfirmed, aptCur.Confirmed) + " due to an eConfirmation.",
-                aptCur.AptNum,
-                LogSources.AutoConfirmations,
-                aptOld.DateTStamp);
+                SecurityLogSource.AutoConfirmations,
+                aptCur.AptNum, aptOld.DateTStamp);
 
             return true;
         }

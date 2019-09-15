@@ -385,7 +385,7 @@ namespace OpenDental {
             {
                 Storage.Default.OpenFile(filePathAndName);
             }
-            SecurityLogs.MakeLogEntry(Permissions.SheetEdit, sheet.PatNum, sheet.Description + " from " + sheet.DateTimeSheet.ToShortDateString() + " pdf was created");
+            SecurityLog.Write(Permissions.SheetEdit, sheet.PatNum, sheet.Description + " from " + sheet.DateTimeSheet.ToShortDateString() + " pdf was created");
             DialogResult = DialogResult.OK;
         }
 

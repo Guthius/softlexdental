@@ -390,7 +390,7 @@ namespace OpenDental{
 			refattach.IsTransitionOfCare=FormRS.SelectedReferral.IsDoctor;
 			refattach.ItemOrder=RefAttachList.Select(x=>x.ItemOrder+1).OrderByDescending(x=>x).FirstOrDefault();//Max+1 or 0
 			RefAttaches.Insert(refattach);
-			SecurityLogs.MakeLogEntry(Permissions.RefAttachAdd,PatNum,"Referred From "+Referrals.GetNameFL(refattach.ReferralNum));
+			SecurityLog.Write(Permissions.RefAttachAdd,PatNum,"Referred From "+Referrals.GetNameFL(refattach.ReferralNum));
 			FillGrid();
 			for(int i=0;i<RefAttachList.Count;i++){
 				if(RefAttachList[i].RefAttachNum==refattach.RefAttachNum) {
@@ -431,7 +431,7 @@ namespace OpenDental{
 				refattach.ProvNum=Patients.GetProvNum(PatNum);
 			}
 			RefAttaches.Insert(refattach);
-			SecurityLogs.MakeLogEntry(Permissions.RefAttachAdd,PatNum,"Referred To "+Referrals.GetNameFL(refattach.ReferralNum));
+			SecurityLog.Write(Permissions.RefAttachAdd,PatNum,"Referred To "+Referrals.GetNameFL(refattach.ReferralNum));
 			if(Preference.GetBool(PreferenceName.AutomaticSummaryOfCareWebmail)) {
 				FormRefAttachEdit FormRAE=new FormRefAttachEdit();
 				FormRAE.RefAttachCur=refattach;
@@ -537,7 +537,7 @@ namespace OpenDental{
 			refattach.IsTransitionOfCare=false;
 			refattach.ItemOrder=RefAttachList.Select(x=>x.ItemOrder+1).OrderByDescending(x=>x).FirstOrDefault();//Max+1 or 0
 			RefAttaches.Insert(refattach);
-			SecurityLogs.MakeLogEntry(Permissions.RefAttachAdd,PatNum,"Referred (custom) "+Referrals.GetNameFL(refattach.ReferralNum));
+			SecurityLog.Write(Permissions.RefAttachAdd,PatNum,"Referred (custom) "+Referrals.GetNameFL(refattach.ReferralNum));
 			FillGrid();
 			for(int i=0;i<RefAttachList.Count;i++){
 				if(RefAttachList[i].RefAttachNum==refattach.RefAttachNum) {

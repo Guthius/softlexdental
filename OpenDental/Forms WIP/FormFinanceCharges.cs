@@ -509,7 +509,7 @@ namespace OpenDental{
 				}
 			}
 			else {
-				SecurityLogs.MakeLogEntry(Permissions.AgingRan,0,"Aging Ran Automatically - Finance Charges Form");
+				SecurityLog.Write(Permissions.AgingRan,0,"Aging Ran Automatically - Finance Charges Form");
 				DateTime asOfDate=(Preference.GetBool(PreferenceName.AgingCalculatedMonthlyInsteadOfDaily)?Preference.GetDate(PreferenceName.DateLastAging):DateTime.Today);
 				bool result=true;
 				Cursor=Cursors.WaitCursor;
@@ -574,7 +574,7 @@ namespace OpenDental{
 				}
 				return false;
 			}
-			SecurityLogs.MakeLogEntry(Permissions.AgingRan,0,"Aging Ran - Finance Charges Form");
+			SecurityLog.Write(Permissions.AgingRan,0,"Aging Ran - Finance Charges Form");
 			Preference.Update(PreferenceName.AgingBeginDateTime,POut.DateT(dtNow,false));//get lock on pref to block others
 			Signalods.SetInvalid(InvalidType.Prefs);//signal a cache refresh so other computers will have the updated pref as quickly as possible
 			bool result=true;
@@ -650,7 +650,7 @@ namespace OpenDental{
 				}
 			}
 			else {
-				SecurityLogs.MakeLogEntry(Permissions.AgingRan,0,"Aging Ran - Finance Charges Form");
+				SecurityLog.Write(Permissions.AgingRan,0,"Aging Ran - Finance Charges Form");
 				DateTime asOfDate=(Preference.GetBool(PreferenceName.AgingCalculatedMonthlyInsteadOfDaily)?Preference.GetDate(PreferenceName.DateLastAging):DateTime.Today);
 				Cursor=Cursors.WaitCursor;
 				ODProgress.ShowAction(
@@ -661,7 +661,7 @@ namespace OpenDental{
 					actionException:ex => Ledgers.AgingExceptionHandler(ex,this));
 				Cursor=Cursors.Default;
 			}
-			SecurityLogs.MakeLogEntry(Permissions.Setup,0,chargeType+" Charges undo. Date "+textDateUndo.Text);
+			SecurityLog.Write(Permissions.Setup,0,chargeType+" Charges undo. Date "+textDateUndo.Text);
 			DialogResult=DialogResult.OK;
 		}
 
@@ -776,7 +776,7 @@ namespace OpenDental{
 				}
 			}
 			else {
-				SecurityLogs.MakeLogEntry(Permissions.AgingRan,0,"Aging Ran - Finance Charges Form");
+				SecurityLog.Write(Permissions.AgingRan,0,"Aging Ran - Finance Charges Form");
 				DateTime asOfDate=(Preference.GetBool(PreferenceName.AgingCalculatedMonthlyInsteadOfDaily)?Preference.GetDate(PreferenceName.DateLastAging):DateTime.Today);
 				Cursor=Cursors.WaitCursor;
 				ODProgress.ShowAction(() => Ledgers.RunAging(),

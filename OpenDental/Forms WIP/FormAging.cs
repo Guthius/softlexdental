@@ -108,7 +108,7 @@ namespace OpenDental
                 return false;
             }
 
-            SecurityLogs.MakeLogEntry(Permissions.AgingRan, 0, "Aging Ran - Aging Form");
+            SecurityLog.Write(Permissions.AgingRan, 0, "Aging Ran - Aging Form");
 
             Preference.Update(PreferenceName.AgingBeginDateTime, MiscData.GetNowDateTime());
             Signalods.SetInvalid(InvalidType.Prefs); // Signal a cache refresh so other computers will have the updated pref as quickly as possible
@@ -171,7 +171,7 @@ namespace OpenDental
             {
                 bool result = true;
 
-                SecurityLogs.MakeLogEntry(Permissions.AgingRan, 0, "Aging Ran - Aging Form");
+                SecurityLog.Write(Permissions.AgingRan, 0, "Aging Ran - Aging Form");
 
                 Cursor = Cursors.WaitCursor;
                 {

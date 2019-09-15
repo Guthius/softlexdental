@@ -1086,9 +1086,9 @@ namespace OpenDentBusiness.Eclaims
                 }
                 EOBImportHelper(fieldInputter, claimProcsClaim, procListAll, claimProcList, claim, false, showProviderTransferWindow, clearinghouseClin.IsEraDownloadAllowed
                     , planList, benefitList, subList, patient);
-                SecurityLogs.MakeLogEntry(Permissions.InsPayCreate, claim.PatNum
-                    , "Claim for service date " + POut.Date(claim.DateService) + " amounts overwritten using recieved EOB amounts."
-                    , LogSources.CanadaEobAutoImport);
+                SecurityLog.Write(claim.PatNum
+                    , SecurityLogEvents.InsPayCreate, "Claim for service date " + POut.Date(claim.DateService) + " amounts overwritten using recieved EOB amounts."
+                    , SecurityLogSource.CanadaEobAutoImport);
             }
             if (claim.ClaimType != "PreAuth")
             {

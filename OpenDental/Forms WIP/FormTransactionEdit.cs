@@ -1129,7 +1129,7 @@ namespace OpenDental{
 				return;
 			}
 			if(!IsNew){
-				SecurityLogs.MakeLogEntry(Permissions.AccountingEdit,0,securityentry);
+				SecurityLog.Write(Permissions.AccountingEdit,securityentry);
 			}
 			DialogResult=DialogResult.OK;
 		}
@@ -1214,8 +1214,8 @@ namespace OpenDental{
 				tot+=((JournalEntry)JournalList[i]).DebitAmt;
 			}
 			if(IsNew) {
-				SecurityLogs.MakeLogEntry(Permissions.AccountingCreate,0,
-					date.ToShortDateString()+" "+AccountOfOrigin.Description+" "+tot.ToString("c"),TransCur.TransactionNum,DateTime.MinValue);
+				SecurityLog.Write(null, Permissions.AccountingCreate,
+					date.ToShortDateString()+" "+AccountOfOrigin.Description+" "+tot.ToString("c"),TransCur.TransactionNum,null);
 			}
 			else {
 				string txt=date.ToShortDateString();
@@ -1223,7 +1223,7 @@ namespace OpenDental{
 					txt+=" "+AccountOfOrigin.Description;
 				}
 				txt+=" "+tot.ToString("c");
-				SecurityLogs.MakeLogEntry(Permissions.AccountingEdit,0,txt,TransCur.TransactionNum,datePrevious);
+				SecurityLog.Write(null, Permissions.AccountingEdit,txt,TransCur.TransactionNum,datePrevious);
 			}
 			DialogResult=DialogResult.OK;
 		}

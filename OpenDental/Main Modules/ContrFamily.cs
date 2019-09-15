@@ -1207,7 +1207,7 @@ namespace OpenDental
                 tempPat.SuperFamily = PatCur.SuperFamily;
             }
             Patients.Insert(tempPat, false);
-            SecurityLogs.MakeLogEntry(Permissions.PatientCreate, tempPat.PatNum, "Created from Family Module Add button.");
+            SecurityLog.Write(tempPat.PatNum, SecurityLogEvents.PatientCreated, "Created from Family Module Add button.");
             CustReference custRef = new CustReference();
             custRef.PatNum = tempPat.PatNum;
             CustReferences.Insert(custRef);
@@ -1385,7 +1385,7 @@ namespace OpenDental
                             Recalls.Update(RecallList[i]);
                         }
                     }
-                    SecurityLogs.MakeLogEntry(Permissions.PatientEdit, PatOld.PatNum, "Patient deleted");
+                    SecurityLog.Write(PatOld.PatNum, SecurityLogEvents.PatientEdit, "Patient deleted");
                     FormOpenDental.S_Contr_PatientSelected(new Patient(), false);
                     ModuleSelected(0);
                     //does not delete notes or plans, etc.
@@ -1418,7 +1418,7 @@ namespace OpenDental
                         Recalls.Update(RecallList[i]);
                     }
                 }
-                SecurityLogs.MakeLogEntry(Permissions.PatientEdit, PatOld.PatNum, "Patient deleted");
+                SecurityLog.Write(PatOld.PatNum, SecurityLogEvents.PatientEdit, "Patient deleted");
                 ModuleSelected(PatOld.Guarantor);//Sets PatCur to PatOld guarantor.
                 FormOpenDental.S_Contr_PatientSelected(PatCur, false);//PatCur is now the Guarantor.
             }
@@ -1506,7 +1506,7 @@ namespace OpenDental
                         {
                             AddSuperGuarPriInsToFam(PatCur.Guarantor);
                         }
-                        SecurityLogs.MakeLogEntry(Permissions.PatientEdit, PatCur.PatNum, "Patient moved to new family.");
+                        SecurityLog.Write(PatCur.PatNum, SecurityLogEvents.PatientEdit, "Patient moved to new family.");
                         break;
                     case DialogResult.No://move to an existing family
                         if (!MsgBox.Show(this, true, "Select the family to move this patient to from the list that will come up next."))
@@ -1536,7 +1536,7 @@ namespace OpenDental
                         PatCur.Guarantor = patInNewFam.Guarantor;
                         PatCur.SuperFamily = patInNewFam.SuperFamily;//assign to the new superfamily
                         Patients.Update(PatCur, PatOld);
-                        SecurityLogs.MakeLogEntry(Permissions.PatientEdit, PatCur.PatNum, "Patient moved from family of '" + PatOld.Guarantor + "' "
+                        SecurityLog.Write(PatCur.PatNum, SecurityLogEvents.PatientEdit, "Patient moved from family of '" + PatOld.Guarantor + "' "
                             + "to existing family of '" + PatCur.Guarantor + "'");
                         break;
                 }
@@ -2007,7 +2007,7 @@ namespace OpenDental
             }
             if (patPlanAdded)
             {
-                SecurityLogs.MakeLogEntry(Permissions.PatPlanCreate, superFamGuar.PatNum, "Inserted new PatPlans for each family member of the super family guarantor.");
+                SecurityLog.Write(superFamGuar.PatNum, SecurityLogEvents.PatPlanCreate, "Inserted new PatPlans for each family member of the super family guarantor.");
             }
         }
 
@@ -2359,7 +2359,7 @@ namespace OpenDental
             FormI.IsNewPatPlan = true;
             if (FormI.ShowDialog() != DialogResult.Cancel)
             {
-                SecurityLogs.MakeLogEntry(Permissions.PatPlanCreate, PatCur.PatNum, "Inserted new PatPlan for patient. InsPlanNum: " + FormI.PlanCurNum);
+                SecurityLog.Write(PatCur.PatNum, SecurityLogEvents.PatPlanCreate, "Inserted new PatPlan for patient. InsPlanNum: " + FormI.PlanCurNum);
                 //Update users treatment plans to tie in to insurance
                 TreatPlans.UpdateTreatmentPlanType(PatCur);
             }//this updates estimates also.
@@ -2388,7 +2388,7 @@ namespace OpenDental
                 if (Patients.Update(PatCur, patOld))
                 {
                     string logText = "The discount plan " + FormDP.SelectedPlan.Description + " was added.";
-                    SecurityLogs.MakeLogEntry(Permissions.DiscountPlanAddDrop, PatCur.PatNum, logText);
+                    SecurityLog.Write(PatCur.PatNum, Permissions.DiscountPlanAddDrop, logText);
                 }
                 TreatPlans.UpdateTreatmentPlanType(PatCur);
             }
@@ -2402,7 +2402,7 @@ namespace OpenDental
             if (Patients.Update(PatCur, patOld))
             {
                 string logText = "The discount plan " + DiscountPlans.GetPlan(patOld.DiscountPlanNum).Description + " was dropped.";
-                SecurityLogs.MakeLogEntry(Permissions.DiscountPlanAddDrop, PatCur.PatNum, logText);
+                SecurityLog.Write(PatCur.PatNum, Permissions.DiscountPlanAddDrop, logText);
             }
             FillInsData();
         }

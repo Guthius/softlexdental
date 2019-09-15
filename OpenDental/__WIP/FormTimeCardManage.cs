@@ -1420,7 +1420,7 @@ namespace OpenDental
             {
                 formTimeCardSetup.ShowDialog();
 
-                SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "Time Card Setup");
+                SecurityLog.Write(null, SecurityLogEvents.Setup, "Time Card Setup");
             }
         }
 

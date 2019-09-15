@@ -1197,7 +1197,7 @@ namespace OpenDental {
                 FormFriendlyException.Show(Lan.g(this,"Unable to open the file."),ex);
 				return;
 			}
-			SecurityLogs.MakeLogEntry(Permissions.SheetEdit,SheetCur.PatNum,SheetCur.Description+" from "+SheetCur.DateTimeSheet.ToShortDateString()+" pdf was created");
+			SecurityLog.Write(SheetCur.PatNum,Permissions.SheetEdit,SheetCur.Description+" from "+SheetCur.DateTimeSheet.ToShortDateString()+" pdf was created");
 			if(SheetCur.SheetType==SheetTypeEnum.Statement && SaveStatementToDocDelegate!=null) {
 				SaveStatementToDocDelegate(Stmt,SheetCur,filePathAndName);
 			}
@@ -1208,8 +1208,8 @@ namespace OpenDental {
 			FormPatientSelect FormPS=new FormPatientSelect();
 			FormPS.SelectionModeOnly=true;
 			if(FormPS.ShowDialog()==DialogResult.OK) {
-				SecurityLogs.MakeLogEntry(Permissions.SheetEdit,SheetCur.PatNum,Lan.g(this,"Sheet with ID")+" "+SheetCur.SheetNum+" "+Lan.g(this,"moved to PatNum")+" "+FormPS.SelectedPatNum);
-				SecurityLogs.MakeLogEntry(Permissions.SheetEdit,FormPS.SelectedPatNum,Lan.g(this,"Sheet with ID")+" "+SheetCur.SheetNum+" "+Lan.g(this,"moved from PatNum")+" "+SheetCur.PatNum);
+				SecurityLog.Write(SheetCur.PatNum,Permissions.SheetEdit,Lan.g(this,"Sheet with ID")+" "+SheetCur.SheetNum+" "+Lan.g(this,"moved to PatNum")+" "+FormPS.SelectedPatNum);
+				SecurityLog.Write(FormPS.SelectedPatNum,Permissions.SheetEdit,Lan.g(this,"Sheet with ID")+" "+SheetCur.SheetNum+" "+Lan.g(this,"moved from PatNum")+" "+SheetCur.PatNum);
 				SheetCur.PatNum=FormPS.SelectedPatNum;
 			}
 		}
@@ -1652,7 +1652,7 @@ namespace OpenDental {
 			if(!TryToSaveData()){
 				return;
 			}
-			SecurityLogs.MakeLogEntry(Permissions.SheetEdit,SheetCur.PatNum,SheetCur.Description+" from "+SheetCur.DateTimeSheet.ToShortDateString());
+			SecurityLog.Write(SheetCur.PatNum,Permissions.SheetEdit,SheetCur.Description+" from "+SheetCur.DateTimeSheet.ToShortDateString());
 			OkClose();
 		}
 
@@ -1681,7 +1681,7 @@ namespace OpenDental {
 				Screens.DeleteForSheet(SheetCur.SheetNum);
 			}
 			Sheets.Delete(SheetCur.SheetNum,SheetCur.PatNum,SheetCur.ShowInTerminal);
-			SecurityLogs.MakeLogEntry(Permissions.SheetEdit,SheetCur.PatNum,SheetCur.Description
+			SecurityLog.Write(SheetCur.PatNum,Permissions.SheetEdit,SheetCur.Description
 				+" "+Lan.g(this,"deleted from")+" "+SheetCur.DateTimeSheet.ToShortDateString());
 			if(SheetCur.ShowInTerminal>0) {
 				Signalods.SetInvalid(InvalidType.Kiosk);
@@ -1696,7 +1696,7 @@ namespace OpenDental {
 					return;
 				}
 				SaveSignaturePayPlan();
-				SecurityLogs.MakeLogEntry(Permissions.SheetEdit,SheetCur.PatNum,SheetCur.Description+" from "+SheetCur.DateTimeSheet.ToShortDateString());
+				SecurityLog.Write(Permissions.SheetEdit,SheetCur.PatNum,SheetCur.Description+" from "+SheetCur.DateTimeSheet.ToShortDateString());
 				OkClose();
 			}
 			else if(SheetCur.SheetType==SheetTypeEnum.ExamSheet) {//Exam sheet saves and keeps the window open
@@ -1755,7 +1755,7 @@ namespace OpenDental {
 			if(!TryToSaveData()){
 				return;
 			}
-			SecurityLogs.MakeLogEntry(Permissions.SheetEdit,SheetCur.PatNum,SheetCur.Description+" from "+SheetCur.DateTimeSheet.ToShortDateString());
+			SecurityLog.Write(Permissions.SheetEdit,SheetCur.PatNum,SheetCur.Description+" from "+SheetCur.DateTimeSheet.ToShortDateString());
 			OkClose();
 		}
 

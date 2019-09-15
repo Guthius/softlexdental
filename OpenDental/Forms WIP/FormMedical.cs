@@ -1216,7 +1216,7 @@ namespace OpenDental{
 		#endregion
 
 		private void FormMedical_Load(object sender, System.EventArgs e){
-			SecurityLogs.MakeLogEntry(Permissions.MedicalInfoViewed,PatCur.PatNum,"Patient medical information viewed");
+			SecurityLog.Write(Permissions.MedicalInfoViewed,PatCur.PatNum,"Patient medical information viewed");
 			_patOld=PatCur.Copy();
 			checkPremed.Checked=PatCur.Premed;
 			textMedUrgNote.Text=PatCur.MedUrgNote;
@@ -1669,7 +1669,7 @@ namespace OpenDental{
 						continue;//cancel 
 					}
 				}
-				SecurityLogs.MakeLogEntry(Permissions.PatProblemListEdit,PatCur.PatNum,FormDD.ListSelectedDiseaseDefs[i].Name+" added"); //Audit log made outside form because the form is just a list of problems and is called from many places.
+				SecurityLog.Write(Permissions.PatProblemListEdit,PatCur.PatNum,FormDD.ListSelectedDiseaseDefs[i].Name+" added"); //Audit log made outside form because the form is just a list of problems and is called from many places.
 			}
 			FillProblems();
 		}

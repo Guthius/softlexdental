@@ -2414,7 +2414,7 @@ namespace OpenDental {
 						break;
 				}
 				Patients.Insert(pat,false);
-				SecurityLogs.MakeLogEntry(Permissions.PatientCreate,pat.PatNum,"Created from Add Family window.");
+				SecurityLog.Write(SecurityLogEvents.PatientCreated,pat.PatNum,"Created from Add Family window.");
 				//if this is the first family member it is the guarantor, so set pat.Guarantor=pat.PatNum and update
 				//if this is not the first family member, the guarantor has been inserted and pat.Guarantor will already be set before inserting
 				if(i==0) {
@@ -2431,7 +2431,7 @@ namespace OpenDental {
 				if(_refCur!=null) {
 					refAttachCur.PatNum=pat.PatNum;
 					RefAttaches.Insert(refAttachCur);
-					SecurityLogs.MakeLogEntry(Permissions.RefAttachAdd,pat.PatNum,"Referred From "+Referrals.GetNameFL(refAttachCur.ReferralNum));
+					SecurityLog.Write(Permissions.RefAttachAdd,pat.PatNum,"Referred From "+Referrals.GetNameFL(refAttachCur.ReferralNum));
 				}
 				CustReference custRef=new CustReference();
 				custRef.PatNum=pat.PatNum;
@@ -2730,13 +2730,13 @@ namespace OpenDental {
 				}
 			}
 			if(patPlanAdded) {
-				SecurityLogs.MakeLogEntry(Permissions.PatPlanCreate,arrayPatsInFam[0].PatNum,"Multiple PatPlans created when adding multiple patients.");
+				SecurityLog.Write(arrayPatsInFam[0].PatNum,SecurityLogEvents.PatPlanCreate,"Multiple PatPlans created when adding multiple patients.");
 			}
 			#endregion Create PatPlans
 			#endregion Insurance
 			SelectedPatNum=arrayPatsInFam[0].PatNum;//Guarantor
 			if(hasSavedMissingFields) {
-				SecurityLogs.MakeLogEntry(Permissions.RequiredFields,SelectedPatNum,"Saved patient with required fields missing.");
+				SecurityLog.Write(Permissions.RequiredFields,SelectedPatNum,"Saved patient with required fields missing.");
 			}
 			#region Send HL7 if Applicable
 			//If there is an existing HL7 def enabled, send an ADT message for each patient inserted if there is an outbound ADT message defined

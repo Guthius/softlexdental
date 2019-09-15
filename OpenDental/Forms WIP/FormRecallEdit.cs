@@ -599,7 +599,7 @@ namespace OpenDental{
 				return;
 			}
 			Recalls.Delete(RecallCur);
-			SecurityLogs.MakeLogEntry(Permissions.RecallEdit,RecallCur.PatNum
+			SecurityLog.Write(Permissions.RecallEdit,RecallCur.PatNum
 				,"Recall deleted with type '"+RecallTypes.GetSpecialTypeStr(RecallCur.RecallTypeNum)+"' and interval '"+RecallCur.RecallInterval+"'");
 			DialogResult=DialogResult.OK;
 		}
@@ -649,7 +649,7 @@ namespace OpenDental{
 				//	return;
 				//}
 				Recalls.Insert(RecallCur);
-				SecurityLogs.MakeLogEntry(Permissions.RecallEdit,RecallCur.PatNum,"Recall added from the Edit Recall window.");
+				SecurityLog.Write(Permissions.RecallEdit,RecallCur.PatNum,"Recall added from the Edit Recall window.");
 			}
 			else{
 				/*if(Recalls.IsAllDefault(RecallCur)){
@@ -662,7 +662,7 @@ namespace OpenDental{
 				}
 				else{*/
 				Recalls.Update(RecallCur);
-				SecurityLogs.MakeLogEntry(Permissions.RecallEdit,RecallCur.PatNum,"Recall edited from the Edit Recall window.");
+				SecurityLog.Write(Permissions.RecallEdit,RecallCur.PatNum,"Recall edited from the Edit Recall window.");
 				//}
 			}
 			//Recalls.Synch(PatCur.PatNum,RecallCur);//This was moved up into FormRecallsPat.FillGrid.  This is the only way to access a recall.

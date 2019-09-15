@@ -814,7 +814,7 @@ namespace OpenDental {
 				return;
 			}
 			if(_errorMessage=="") {
-				SecurityLogs.MakeLogEntry(Permissions.Backup,0,Lan.g(this,"Database backup created at ")+textBackupToPath.Text);
+				SecurityLog.Write(Permissions.Backup,0,Lan.g(this,"Database backup created at ")+textBackupToPath.Text);
 				MessageBox.Show(Lan.g(this,"Backup complete."));
 			}
 			else {//Backup failed for some reason.

@@ -392,13 +392,13 @@ namespace OpenDental {
 					}
 				}
 				if(logTextProcComplete!="") {
-					SecurityLogs.MakeLogEntry(Permissions.EditCompletedProcedure,patNum,logTextProcComplete);
+					SecurityLog.Write(Permissions.EditCompletedProcedure,patNum,logTextProcComplete);
 				}
 				if(logTextProcExisting!="") {
-					SecurityLogs.MakeLogEntry(Permissions.EditProcedure,patNum,logTextProcExisting);
+					SecurityLog.Write(Permissions.EditProcedure,patNum,logTextProcExisting);
 				}
 				if(logTextProcOther!="") {
-					SecurityLogs.MakeLogEntry(Permissions.ProcEdit,patNum,logTextProcOther);
+					SecurityLog.Write(SecurityLogEvents.ProcEdit,patNum,logTextProcOther);
 				}
 			}
 			#endregion

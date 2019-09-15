@@ -453,7 +453,7 @@ namespace OpenDentBusiness
                 emailMessageHeaders,
                 GetAndDownloadAttachmentList(emailMessage));
 
-            SecurityLogs.MakeLogEntry(Permissions.EmailSend, emailMessage.PatientId.Value, "Email Sent");
+            SecurityLog.Write(emailMessage.PatientId.Value, SecurityLogEvents.EmailSend, "Email Sent");
         }
 
         /// <summary>

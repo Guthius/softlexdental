@@ -866,7 +866,7 @@ namespace OpenDentBusiness
                             //Security.CurUser.UserNum gets set on MT by the DtoProcessor so it matches the user from the client WS.
                             tempPat.SecUserNumEntry = Security.CurrentUser.Id;
                             Patients.Insert(tempPat, false);
-                            SecurityLogs.MakeLogEntry(Permissions.PatientCreate, tempPat.PatNum, "Recreated from DBM fix for AppointmentsNoPatients.", LogSources.DBM);
+                            SecurityLog.Write(tempPat.PatNum, SecurityLogEvents.PatientCreated, "Recreated from DBM fix for AppointmentsNoPatients.", SecurityLogSource.DBM);
                             Patient oldPat = tempPat.Copy();
                             tempPat.Guarantor = tempPat.PatNum;
                             Patients.Update(tempPat, oldPat);//update guarantor
@@ -902,7 +902,7 @@ namespace OpenDentBusiness
                             //Add new patients to listDbmLogs
                             listDbmLogs.Add(new DbmLog(Security.CurrentUser.Id, patnum, DbmLogFKeyType.Patient, DbmLogActionType.Insert, methodName,
                                 "Inserted patient from AppointmentsNoPatients."));
-                            SecurityLogs.MakeLogEntry(Permissions.PatientCreate, patnum, "Recreated from DBM fix for AppointmentsNoPatients.", LogSources.DBM);
+                            SecurityLog.Write(patnum, "Recreated from DBM fix for AppointmentsNoPatients.", SecurityLogEvents.PatientCreated, SecurityLogSource.DBM);
                             patientsAdded++;
                         }
                         Crud.DbmLogCrud.InsertMany(listDbmLogs);
@@ -1009,50 +1009,52 @@ namespace OpenDentBusiness
         [DatabaseMaintenanceAttribute]
         public static string AuditTrailDeleteDuplicateApptCreate(bool verbose, DatabaseMaintenanceMode modeCur)
         {
-            string command = "SELECT securitylog.* "
-                + "FROM securitylog "
-                + "INNER JOIN ("
-                    + "SELECT PatNum,FKey,MAX(LogDateTime) LogDateTime "
-                    + "FROM securitylog "
-                    + "WHERE PermType=" + POut.String(Permissions.AppointmentCreate) + " "
-                    + "AND FKey>0 "
-                    + "GROUP BY PatNum,FKey "
-                    + "HAVING COUNT(*)>1"
-                + ") sl ON sl.PatNum=securitylog.PatNum "
-                + "AND sl.FKey=securitylog.FKey "
-                + "AND sl.LogDateTime!=securitylog.LogDateTime "
-                + "AND securitylog.PermType=" + POut.String(Permissions.AppointmentCreate) + " "
-                + "GROUP BY securitylog.PatNum,securitylog.FKey";
-            List<SecurityLog> listDupApptCreates = Crud.SecurityLogCrud.SelectMany(command);
-            string log = "";
-            switch (modeCur)
-            {
-                case DatabaseMaintenanceMode.Check:
-                    int numFound = listDupApptCreates.Count;
-                    if (numFound > 0 || verbose)
-                    {
-                        log += Lans.g("FormDatabaseMaintenance", "Appointments found with duplicate Appt Create audit trail entries:") + " " + numFound + "\r\n";
-                    }
-                    break;
-                case DatabaseMaintenanceMode.Fix:
-                    if (listDupApptCreates.Count > 0)
-                    {
-                        string methodName = MethodBase.GetCurrentMethod().Name;
-                        List<DbmLog> listDbmLogs = new List<DbmLog>();
-                        command = "DELETE FROM securitylog WHERE SecurityLogNum IN(" + string.Join(",", listDupApptCreates.Select(x => x.Id)) + ")";
-                        long numberFixed = Db.NonQ(command);
-                        listDupApptCreates.ForEach(x => listDbmLogs.Add(new DbmLog(Security.CurrentUser.Id, x.Id, DbmLogFKeyType.Securitylog,
-                            DbmLogActionType.Delete, methodName, "Audit trail entry deleted from AuditTrailDeleteDuplicateApptCreate.")));
-                        if (numberFixed > 0 || verbose)
-                        {
-                            Crud.DbmLogCrud.InsertMany(listDbmLogs);
-                            log += Lans.g("FormDatabaseMaintenance", "Audit trail entries deleted due to duplicate Appt Create entries:") + " "
-                                + numberFixed.ToString() + "\r\n";
-                        }
-                    }
-                    break;
-            }
-            return log;
+            //string command = "SELECT securitylog.* "
+            //    + "FROM securitylog "
+            //    + "INNER JOIN ("
+            //        + "SELECT PatNum,FKey,MAX(LogDateTime) LogDateTime "
+            //        + "FROM securitylog "
+            //        + "WHERE PermType=" + POut.String(Permissions.AppointmentCreate) + " "
+            //        + "AND FKey>0 "
+            //        + "GROUP BY PatNum,FKey "
+            //        + "HAVING COUNT(*)>1"
+            //    + ") sl ON sl.PatNum=securitylog.PatNum "
+            //    + "AND sl.FKey=securitylog.FKey "
+            //    + "AND sl.LogDateTime!=securitylog.LogDateTime "
+            //    + "AND securitylog.PermType=" + POut.String(Permissions.AppointmentCreate) + " "
+            //    + "GROUP BY securitylog.PatNum,securitylog.FKey";
+            //List<SecurityLog> listDupApptCreates = Crud.SecurityLogCrud.SelectMany(command);
+            //string log = "";
+            //switch (modeCur)
+            //{
+            //    case DatabaseMaintenanceMode.Check:
+            //        int numFound = listDupApptCreates.Count;
+            //        if (numFound > 0 || verbose)
+            //        {
+            //            log += Lans.g("FormDatabaseMaintenance", "Appointments found with duplicate Appt Create audit trail entries:") + " " + numFound + "\r\n";
+            //        }
+            //        break;
+            //    case DatabaseMaintenanceMode.Fix:
+            //        if (listDupApptCreates.Count > 0)
+            //        {
+            //            string methodName = MethodBase.GetCurrentMethod().Name;
+            //            List<DbmLog> listDbmLogs = new List<DbmLog>();
+            //            command = "DELETE FROM securitylog WHERE SecurityLogNum IN(" + string.Join(",", listDupApptCreates.Select(x => x.Id)) + ")";
+            //            long numberFixed = Db.NonQ(command);
+            //            listDupApptCreates.ForEach(x => listDbmLogs.Add(new DbmLog(Security.CurrentUser.Id, x.Id, DbmLogFKeyType.Securitylog,
+            //                DbmLogActionType.Delete, methodName, "Audit trail entry deleted from AuditTrailDeleteDuplicateApptCreate.")));
+            //            if (numberFixed > 0 || verbose)
+            //            {
+            //                Crud.DbmLogCrud.InsertMany(listDbmLogs);
+            //                log += Lans.g("FormDatabaseMaintenance", "Audit trail entries deleted due to duplicate Appt Create entries:") + " "
+            //                    + numberFixed.ToString() + "\r\n";
+            //            }
+            //        }
+            //        break;
+            //}
+            //return log;
+
+            return "";
         }
 
         [DatabaseMaintenanceAttribute]
@@ -1959,7 +1961,7 @@ namespace OpenDentBusiness
                                 long dummyPatNum = Patients.Insert(dummyPatient, true);
                                 listDbmLogs.Add(new DbmLog(Security.CurrentUser.Id, dummyPatNum, DbmLogFKeyType.Patient, DbmLogActionType.Insert,
                                     methodName, "Inserted new patient from ClaimPaymentCheckAmt."));
-                                SecurityLogs.MakeLogEntry(Permissions.PatientCreate, dummyPatNum, "Recreated from DBM fix for ClaimPaymentCheckAmt.", LogSources.DBM);
+                                SecurityLog.Write(dummyPatNum, SecurityLogEvents.PatientCreated, "Recreated from DBM fix for ClaimPaymentCheckAmt.", SecurityLogSource.DBM);
                                 pat = Patients.GetPat(dummyPatient.PatNum);
                             }
                             log += "   Patient: #" + table.Rows[i]["PatNum"].ToString() + ":" + pat.GetNameFirstOrPrefL()
@@ -4450,8 +4452,8 @@ namespace OpenDentBusiness
                             Patients.Update(pat, patOld);
                             listDbmLogs.Add(new DbmLog(Security.CurrentUser.Id, pat.PatNum, DbmLogFKeyType.Patient, DbmLogActionType.Update,
                                 methodName, "Updated PatStatus from" + patOld.PatStatus + " to " + PatientStatus.Archived + "."));
-                            SecurityLogs.MakeLogEntry(Permissions.PatientEdit, pat.PatNum,
-                                "Patient status changed from 'Deleted' to 'Archived' from DBM fix for InsSubInvalidSubscriber.", LogSources.DBM);
+                            SecurityLog.Write( pat.PatNum, SecurityLogEvents.PatientEdit,
+                                "Patient status changed from 'Deleted' to 'Archived' from DBM fix for InsSubInvalidSubscriber.", SecurityLogSource.DBM);
                         }
                         else
                         {//The patient does not exist in the db at all.
@@ -4468,13 +4470,13 @@ namespace OpenDentBusiness
                             Patients.Insert(pat, true);
                             listDbmLogs.Add(new DbmLog(Security.CurrentUser.Id, pat.PatNum, DbmLogFKeyType.Patient, DbmLogActionType.Insert,
                                 methodName, "Inserted patient from InsSubInvalidSubscriber."));
-                            SecurityLogs.MakeLogEntry(Permissions.PatientCreate, pat.PatNum, "Recreated from DBM fix for InsSubInvalidSubscriber.", LogSources.DBM);
+                            SecurityLog.Write(pat.PatNum, SecurityLogEvents.PatientCreated, "Recreated from DBM fix for InsSubInvalidSubscriber.", SecurityLogSource.DBM);
                         }
                     }
                     int numberFixed = table.Rows.Count;
                     if (numberFixed > 0 || verbose)
                     {
-                        log += Lans.g("FormDatabaseMaintenance", "InsSub subscribers fixed: ") + numberFixed.ToString() + "\r\n";
+                        log += "InsSub subscribers fixed: " + numberFixed.ToString() + "\r\n";
                         Crud.DbmLogCrud.InsertMany(listDbmLogs);
                     }
                     break;

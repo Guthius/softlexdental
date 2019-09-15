@@ -1058,7 +1058,7 @@ namespace OpenDentBusiness
                     }
                     #endregion Create List of Actions to Update Patient Recalls
                     ODThread.RunParallel(listActions, TimeSpan.FromMinutes(10));//each group of actions gets X minutes.
-                    SecurityLogs.MakeLogEntry(Permissions.RecallEdit, listSecurityLogPatNums, "Recall updated by Recall Synch for all patients.");
+                    SecurityLog.WriteMany(listSecurityLogPatNums, SecurityLogEvents.RecallEdit, "Recall updated by Recall Synch for all patients.");
                     #region Insert New Recalls
                     if (listRecallsForInsert.Count == 0)
                     {
@@ -1363,7 +1363,7 @@ namespace OpenDentBusiness
                         }
                         recallNew.DateDue = recallNew.DateDueCalc;
                         Recalls.Insert(recallNew);
-                        SecurityLogs.MakeLogEntry(Permissions.RecallEdit, recallNew.PatNum, "Recall added by Recall Synch.");
+                        SecurityLog.Write( recallNew.PatNum, SecurityLogEvents.RecallEdit, "Recall added by Recall Synch.");
                     }
                 }
                 else
@@ -1389,7 +1389,7 @@ namespace OpenDentBusiness
                         matchingRecall.DateDueCalc = DateTime.MinValue;
                         if (Recalls.Update(matchingRecall, recallOld))
                         {
-                            SecurityLogs.MakeLogEntry(Permissions.RecallEdit, matchingRecall.PatNum, "Recall updated by Recall Synch.");
+                            SecurityLog.Write(matchingRecall.PatNum, SecurityLogEvents.RecallEdit, "Recall updated by Recall Synch.");
                         }
                     }
                     else
@@ -1410,7 +1410,7 @@ namespace OpenDentBusiness
                         matchingRecall.DateDueCalc = matchingRecall.DatePrevious + matchingRecall.RecallInterval;
                         if (Recalls.Update(matchingRecall, recallOld))
                         {
-                            SecurityLogs.MakeLogEntry(Permissions.RecallEdit, matchingRecall.PatNum, "Recall updated by Recall Synch.");
+                            SecurityLog.Write(matchingRecall.PatNum, SecurityLogEvents.RecallEdit, "Recall updated by Recall Synch.");
                         }
                     }
                 }
@@ -1501,7 +1501,7 @@ namespace OpenDentBusiness
                 recallList[i].DateDueCalc = recallList[i].DatePrevious + defaultIntervalNew;
                 recallList[i].RecallInterval = defaultIntervalNew;
                 Update(recallList[i]);
-                SecurityLogs.MakeLogEntry(Permissions.RecallEdit, recallList[i].PatNum, "Recall interval updated to Recall Type default interval.");
+                SecurityLog.Write(recallList[i].PatNum, SecurityLogEvents.RecallEdit, "Recall interval updated to Recall Type default interval.");
             }
         }
 
@@ -2088,13 +2088,13 @@ namespace OpenDentBusiness
                         recallCur.Priority = RecallPriority.Normal;
                         if (Recalls.Update(recallCur, recallOld))
                         {
-                            SecurityLogs.MakeLogEntry(Permissions.RecallEdit, recallCur.PatNum, "Recall priority changed to Normal by Web Sched.");
+                            SecurityLog.Write(recallCur.PatNum, SecurityLogEvents.RecallEdit, "Recall priority changed to Normal by Web Sched.");
                         }
                     }
                     //Create a security log so that the office knows where this appointment came from.
-                    SecurityLogs.MakeLogEntry(Permissions.AppointmentCreate, aptCur.PatNum,
+                    SecurityLog.Write(aptCur.PatNum, SecurityLogEvents.AppointmentCreate,
                         aptCur.AptDateTime.ToString() + ", " + aptCur.ProcDescript + "  -  Created via Web Sched",
-                        aptCur.AptNum, source, aptOld.DateTStamp);
+                        source, aptCur.AptNum, aptOld.DateTStamp);
                     if (sendVerification)
                     {
                         Appointments.SendWebSchedVerification(aptCur, PreferenceName.WebSchedVerifyRecallType, PreferenceName.WebSchedVerifyRecallText,

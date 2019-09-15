@@ -1330,7 +1330,7 @@ namespace OpenDental{
 				return;
 			}
 			if(IsDeleting){//This is here because the delete button could also set this.
-				SecurityLogs.MakeLogEntry(Permissions.InsPayEdit,0,"Claim Payment Deleted: "+ClaimPaymentCur.ClaimPaymentNum);
+				SecurityLog.Write(Permissions.InsPayEdit,0,"Claim Payment Deleted: "+ClaimPaymentCur.ClaimPaymentNum);
 				return;
 			}
 			if(IsDisposed) {//This should only happen if interupted by an Auto-Logoff.
@@ -1366,10 +1366,10 @@ namespace OpenDental{
 				}
 			}
 			if(IsNew) {
-				SecurityLogs.MakeLogEntry(Permissions.InsPayCreate,0,"Claim Payment: "+ClaimPaymentCur.ClaimPaymentNum);
+				SecurityLog.Write(Permissions.InsPayCreate,0,"Claim Payment: "+ClaimPaymentCur.ClaimPaymentNum);
 			}
 			else {
-				SecurityLogs.MakeLogEntry(Permissions.InsPayEdit,0,"Claim Payment: "+ClaimPaymentCur.ClaimPaymentNum);
+				SecurityLog.Write(Permissions.InsPayEdit,0,"Claim Payment: "+ClaimPaymentCur.ClaimPaymentNum);
 			}
 		}
 	}

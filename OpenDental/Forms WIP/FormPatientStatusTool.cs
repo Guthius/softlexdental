@@ -137,7 +137,7 @@ namespace OpenDental {
 			MsgBoxCopyPaste msg=new MsgBoxCopyPaste(builder.ToString());
 			msg.Text=Lans.g(this,"Done");
 			msg.ShowDialog();
-			SecurityLogs.MakeLogEntry(Permissions.SecurityAdmin,listPatNums,Lans.g(this,"Patient status changed from")+" "
+			SecurityLog.WriteMany(listPatNums,Permissions.SecurityAdmin,Lans.g(this,"Patient status changed from")+" "
 				+(_isConvertToPatient ? inactiveStatus : patientStatus)+" "
 				+Lans.g(this,"to")+" "+(_isConvertToPatient ? patientStatus : inactiveStatus)
 				+Lans.g(this," by the Patient Status Setter tool."));

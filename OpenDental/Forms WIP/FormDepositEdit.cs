@@ -1046,7 +1046,7 @@ namespace OpenDental{
 					,_depositCur.Amount
 					,textMemo.Text
 					,classRef);//if classRef=="" then it will be safely ignored here
-				SecurityLogs.MakeLogEntry(Permissions.DepositSlips,0,Lan.g(this,"Deposit slip sent to QuickBooks.")+"\r\n"
+				SecurityLog.Write(Permissions.DepositSlips,0,Lan.g(this,"Deposit slip sent to QuickBooks.")+"\r\n"
 					+Lan.g(this,"Deposit date")+": "+_depositCur.DateDeposit.ToShortDateString()+" "+Lan.g(this,"for")+" "+_depositCur.Amount.ToString("c"));
 				Cursor.Current=Cursors.Default;
 				MsgBox.Show(this,"Deposit successfully sent to QuickBooks.");
@@ -1456,10 +1456,10 @@ namespace OpenDental{
 					je.TransactionNum=trans.TransactionNum;
 					JournalEntries.Insert(je);
 				}
-				SecurityLogs.MakeLogEntry(Permissions.DepositSlips,0,_depositCur.DateDeposit.ToShortDateString()+" New "+_depositCur.Amount.ToString("c"));
+				SecurityLog.Write(Permissions.DepositSlips,0,_depositCur.DateDeposit.ToShortDateString()+" New "+_depositCur.Amount.ToString("c"));
 			}
 			else {//Not new
-				SecurityLogs.MakeLogEntry(Permissions.AdjustmentEdit,0,_depositCur.DateDeposit.ToShortDateString()+" "+_depositCur.Amount.ToString("c"));
+				SecurityLog.Write(Permissions.AdjustmentEdit,0,_depositCur.DateDeposit.ToShortDateString()+" "+_depositCur.Amount.ToString("c"));
 			}
 			DialogResult=DialogResult.OK;
 		}

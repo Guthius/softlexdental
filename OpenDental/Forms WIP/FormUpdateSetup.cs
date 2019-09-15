@@ -39,11 +39,11 @@ namespace OpenDental
         void FormUpdateSetup_FormClosing(object sender, FormClosingEventArgs e)
         {
             var permission = 
-                DialogResult == DialogResult.OK ? 
-                    Permissions.SecurityAdmin : 
-                    Permissions.Setup;
+                DialogResult == DialogResult.OK ?
+                    SecurityLogEvents.SecurityAdmin :
+                    SecurityLogEvents.Setup;
 
-            SecurityLogs.MakeLogEntry(permission, 0, 
+            SecurityLog.Write(permission, 
                 Translation.LanguageSecurity.UpdateSetupWindowAccessed);
         }
 
@@ -56,7 +56,7 @@ namespace OpenDental
             {
                 formRegistrationKey.ShowDialog();
 
-                DataValid.SetInvalid(InvalidType.Prefs);
+                CacheManager.Invalidate<Preference>();
 
                 registrationKey = Preference.GetString(PreferenceName.RegistrationKey);
                 registrationKeyTextBox.Text = License.FormatKey(registrationKey);
@@ -81,7 +81,7 @@ namespace OpenDental
             {
                 Cursor = Cursors.WaitCursor;
 
-                DataValid.SetInvalid(InvalidType.Prefs);
+                CacheManager.Invalidate<Preference>();
 
                 Cursor = Cursors.Default;
             }

@@ -46,7 +46,7 @@ namespace OpenDental {
 				return;
 			}
 			Commlogs.RecallUndo(date);
-			SecurityLogs.MakeLogEntry(Permissions.CommlogEdit,0,"Recall list undo tool ran");
+			SecurityLog.Write(Permissions.CommlogEdit,0,"Recall list undo tool ran");
 			MsgBox.Show(this,"Done");
 			DialogResult=DialogResult.OK;
 		}

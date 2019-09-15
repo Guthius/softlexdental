@@ -444,7 +444,7 @@ namespace OpenDental{
 			//}
 			//else{
 			if(Documents.Update(DocCur,DocOld)) {
-				ImageStore.LogDocument(Lan.g(this,"Document Edited")+": ",Permissions.ImageEdit,DocCur,DocOld.DateTStamp);
+				ImageStore.LogDocument(Lan.g(this,"Document Edited")+": ",SecurityLogEvents.ImageEdit,DocCur,DocOld.DateTStamp);
 			}
 			//}
 			DialogResult=DialogResult.OK;
@@ -456,7 +456,7 @@ namespace OpenDental{
 
 		private void butAudit_Click(object sender,EventArgs e) {
 			List<string> listPermissions=new List<string>();
-			listPermissions.Add(Permissions.ImageEdit);
+			listPermissions.Add(SecurityLogEvents.ImageEdit);
 			listPermissions.Add(Permissions.ImageDelete);
 			FormAuditOneType formA=new FormAuditOneType(0,listPermissions,Lan.g(this,"Audit Trail for Document"),DocCur.DocNum);
 			formA.ShowDialog();

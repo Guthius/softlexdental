@@ -85,7 +85,7 @@ namespace OpenDental
             {
                 CommlogCur.CommlogNum = Commlogs.Insert(CommlogCur);
 
-                SecurityLogs.MakeLogEntry(Permissions.CommlogEdit, CommlogCur.PatNum, "Insert");
+                SecurityLog.Write(Permissions.CommlogEdit, CommlogCur.PatNum, "Insert");
 
                 // Post insert persistent user preferences.
                 if (IsPersistent)
@@ -104,7 +104,7 @@ namespace OpenDental
             {
                 Commlogs.Update(CommlogCur);
 
-                SecurityLogs.MakeLogEntry(Permissions.CommlogEdit, CommlogCur.PatNum, "");
+                SecurityLog.Write(Permissions.CommlogEdit, CommlogCur.PatNum, "");
             }
             return true;
         }
@@ -117,7 +117,7 @@ namespace OpenDental
         {
             Commlogs.Delete(CommlogCur);
 
-            SecurityLogs.MakeLogEntry(Permissions.CommlogEdit, CommlogCur.PatNum, logText);
+            SecurityLog.Write(Permissions.CommlogEdit, CommlogCur.PatNum, logText);
         }
 
         public void SetPatNum(long patNum)
@@ -400,7 +400,7 @@ namespace OpenDental
             {
                 CommlogCur.CommlogNum = Commlogs.Insert(CommlogCur);
 
-                SecurityLogs.MakeLogEntry(Permissions.CommlogEdit, CommlogCur.PatNum, "Autosave Insert");
+                SecurityLog.Write(Permissions.CommlogEdit, CommlogCur.PatNum, "Autosave Insert");
 
                 IsNew = false;
             }

@@ -579,7 +579,7 @@ namespace OpenDental {
 					List<Action> listActions=dictClinFromCounts.Select(x => new Action(() => {
 						Patients.ChangeClinicsForAll(x.Key,clinicTo.ClinicNum);//update all clinicNums to new clinic
 						Clinic clinicCur;
-						SecurityLogs.MakeLogEntry(Permissions.PatientEdit,0,"Clinic changed for "+x.Value+" patients from "
+						SecurityLog.Write(SecurityLogEvents.PatientEdit,"Clinic changed for "+x.Value+" patients from "
 							+(dictClinicsFrom.TryGetValue(x.Key,out clinicCur)?clinicCur.Abbr:"")+" to "+clinicTo.Abbr+".");
 						patsMoved+=x.Value;
 						ClinicEvent.Fire(ODEventType.Clinic,Lan.g(this,"Moved patients")+": "+patsMoved+" "+Lan.g(this,"out of")+" "

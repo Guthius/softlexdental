@@ -96,13 +96,13 @@ namespace OpenDental {
 				msgBox.ShowDialog();
 				return;//Since this exception is due to validation failure, do not close the form.  Let the user manually click Cancel so they know what happened.
 			}
-			SecurityLogs.MakeLogEntry(Permissions.InsPlanChangeSubsc,0,Lan.g(this,"Subscribers Moved from")+" "+_fromInsPlan.PlanNum+" "+Lan.g(this,"to")+" "+_intoInsPlan.PlanNum);
+			SecurityLog.Write(Permissions.InsPlanChangeSubsc,Lan.g(this,"Subscribers Moved from")+" "+_fromInsPlan.PlanNum+" "+Lan.g(this,"to")+" "+_intoInsPlan.PlanNum);
 			DialogResult=DialogResult.OK;//Closes the form.
 		}
 
 		private void butCancel_Click(object sender,EventArgs e) {
 			//probably don't need this log entry, but here to maintain old behavior
-			SecurityLogs.MakeLogEntry(Permissions.InsPlanChangeSubsc,0,Lan.g(this,"Subscriber Move Cancel"));
+			SecurityLog.Write(Permissions.InsPlanChangeSubsc,Lan.g(this,"Subscriber Move Cancel"));
 			DialogResult=DialogResult.Cancel;//Closes the form.
 		}
 

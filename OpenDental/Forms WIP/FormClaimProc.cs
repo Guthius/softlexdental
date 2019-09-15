@@ -624,11 +624,11 @@ namespace OpenDental {
 				FormFE.IsNew=true;
 			}
 			DateTime datePrevious=FeeCur.SecDateTEdit;
-			//Make an audit entry that the user manually launched the Fee Edit window from this location.
-			SecurityLogs.MakeLogEntry(Permissions.ProcFeeEdit,0,Lan.g(this,"Procedure")+": "+ProcedureCodes.GetStringProcCode(FeeCur.CodeNum)
-				+", "+Lan.g(this,"Fee")+": "+FeeCur.Amount.ToString("c")+", "+Lan.g(this,"Fee Schedule")+": "+FeeScheds.GetDescription(FeeCur.FeeSched)
-				+". "+Lan.g(this,"Manually launched Edit Fee window via Edit Claim Procedure window."),FeeCur.CodeNum,DateTime.MinValue);
-			SecurityLogs.MakeLogEntry(Permissions.LogFeeEdit,0,Lan.g(this,"Fee Inserted"),FeeCur.FeeNum,datePrevious);
+            //Make an audit entry that the user manually launched the Fee Edit window from this location.
+            SecurityLog.Write(null, SecurityLogEvents.ProcFeeEdit, Lan.g(this, "Procedure") + ": " + ProcedureCodes.GetStringProcCode(FeeCur.CodeNum)
+                + ", " + Lan.g(this, "Fee") + ": " + FeeCur.Amount.ToString("c") + ", " + Lan.g(this, "Fee Schedule") + ": " + FeeScheds.GetDescription(FeeCur.FeeSched)
+                + ". " + Lan.g(this, "Manually launched Edit Fee window via Edit Claim Procedure window."), FeeCur.CodeNum, null);
+			SecurityLog.Write(null, SecurityLogEvents.LogFeeEdit,Lan.g(this,"Fee Inserted"),FeeCur.FeeNum,datePrevious);
 			FormFE.FeeCur=FeeCur;
 			FormFE.ShowDialog();
 			//The Fees cache is updated in the closing of FormFeeEdit if there were any changes made.  Simply refresh our window.
@@ -1263,7 +1263,7 @@ namespace OpenDental {
 			//created before editing.
 			if(ClaimProcCur.ClaimPaymentNum>0){//attached to ins check
 				//note: the amount and the date will not have been changed.
-				SecurityLogs.MakeLogEntry(Permissions.InsPayEdit,ClaimProcCur.PatNum,
+				SecurityLog.Write(Permissions.InsPayEdit,ClaimProcCur.PatNum,
 					Patients.GetLim(ClaimProcCur.PatNum).GetNameLF()+", "
 					+Lan.g(this,"Date and amount not changed."));//I'm really not sure what they would have changed.
 			}
@@ -1279,7 +1279,7 @@ namespace OpenDental {
 					strSecLog = ProcedureCodes.GetProcCode(proc.CodeNum).ProcCode+" - "+textInsPlan.Text+". "+Lan.g(this,"Provider changed from")+" "
 					+Providers.GetAbbr(ClaimProcOld.ProvNum)+" "+Lan.g(this,"to")+" "+Providers.GetAbbr(ClaimProcCur.ProvNum);
 				}
-				SecurityLogs.MakeLogEntry(Permissions.ClaimProcClaimAttachedProvEdit,ClaimProcCur.PatNum,strSecLog);
+				SecurityLog.Write(Permissions.ClaimProcClaimAttachedProvEdit,ClaimProcCur.PatNum,strSecLog);
 			}
 			IsSaved=true;
 			DialogResult=DialogResult.OK;

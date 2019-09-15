@@ -961,7 +961,7 @@ namespace OpenDental {
 						}
 					}
 					logText+=" "+Lan.g(this,"were all cleared.");
-					SecurityLogs.MakeLogEntry(Permissions.ProcFeeEdit,0,logText);
+					SecurityLog.Write(SecurityLogEvents.ProcFeeEdit,0,logText);
 					_changed=true;
 				});
 			DialogResult=DialogResult.OK;
@@ -1089,8 +1089,8 @@ namespace OpenDental {
 						}
 						logText+=". "+Lan.g(this,"Fee increased by")+" "+((float)percent/100.0f).ToString("p")+" "+Lan.g(this," using the increase "
 							+"button in the Fee Tools window.");
-						SecurityLogs.MakeLogEntry(Permissions.ProcFeeEdit,0,logText,listFees[i].CodeNum,DateTime.MinValue);
-						SecurityLogs.MakeLogEntry(Permissions.LogFeeEdit,0,Lan.g(this,"Fee Updated"),listFees[i].FeeNum,listFees[i].SecDateTEdit);
+						SecurityLog.Write(SecurityLogEvents.ProcFeeEdit,0,logText,listFees[i].CodeNum,DateTime.MinValue);
+						SecurityLog.Write(SecurityLogEvents.LogFeeEdit,0,Lan.g(this,"Fee Updated"),listFees[i].FeeNum,listFees[i].SecDateTEdit);
 						FeeSchedEvent.Fire(ODEventType.FeeSched,Lan.g(this,"Modifying fees, please wait")+"...");
 					}
 					_changed=true;
@@ -1699,7 +1699,7 @@ namespace OpenDental {
 			if(DialogResult==DialogResult.OK && _changed) {
 				Cursor=Cursors.WaitCursor;
 				_feeCache.SaveToDb();
-				SecurityLogs.MakeLogEntries(Permissions.FeeSchedEdit,0,_listSecurityLogEntries);
+				SecurityLog.WriteMany(null, Permissions.FeeSchedEdit,_listSecurityLogEntries);
 				Cursor=Cursors.Default;
 			}
 		}

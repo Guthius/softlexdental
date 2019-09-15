@@ -612,7 +612,7 @@ namespace OpenDental{
 					continue;
 				}
 				//==Michael - We are changing plans here, but not carriers, so this is not needed:
-				//SecurityLogs.MakeLogEntry(Permissions.InsPlanChangeCarrierName
+				//SecurityLog.Write(Permissions.InsPlanChangeCarrierName
 				InsPlans.ChangeReferences(listSelected[i].PlanNum,planToMergeTo.PlanNum);
 				Benefits.DeleteForPlan(listSelected[i].PlanNum);
 				try {
@@ -620,7 +620,7 @@ namespace OpenDental{
 				}
 				catch (ApplicationException ex){
 					MessageBox.Show(ex.Message);
-					SecurityLogs.MakeLogEntry(Permissions.InsPlanEdit,0,
+					SecurityLog.Write(Permissions.InsPlanEdit,0,
 						Lan.g(this,"InsPlan Combine delete validation failed.  Plan was not deleted."),
 						listSelected[i].PlanNum,listSelected[i].SecDateTEdit); //new plan, no date needed.
 					//Since we already deleted/changed all of the other dependencies, 
@@ -635,7 +635,7 @@ namespace OpenDental{
 			}
 			if(didMerge) {
 				string logText=Lan.g(this,"Merged the following PlanNum(s): ")+string.Join(", ",listMergedPlanNums)+" "+Lan.g(this,"into")+" "+planToMergeTo.PlanNum;
-				SecurityLogs.MakeLogEntry(Permissions.InsPlanMerge,0,logText);
+				SecurityLog.Write(Permissions.InsPlanMerge,0,logText);
 			}
 			FillGrid();
 			//highlight the merged plan

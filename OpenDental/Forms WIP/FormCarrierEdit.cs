@@ -1073,7 +1073,7 @@ namespace OpenDental{
 					Carriers.Update(CarrierCur,carrierOld);
 					//If the carrier name has changed loop through all the insplans that use this carrier and make a securitylog entry.
 					if(carrierOld.CarrierName!=CarrierCur.CarrierName) {
-						SecurityLogs.MakeLogEntry(Permissions.InsPlanChangeCarrierName,0,Lan.g(this,"Carrier name changed in Edit Carrier window from")+" "
+						SecurityLog.Write(Permissions.InsPlanChangeCarrierName,0,Lan.g(this,"Carrier name changed in Edit Carrier window from")+" "
 							+carrierOld.CarrierName+" "+Lan.g(this,"to")+" "+CarrierCur.CarrierName);
 					}
 				}

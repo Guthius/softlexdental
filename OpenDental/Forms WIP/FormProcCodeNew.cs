@@ -716,7 +716,7 @@ namespace OpenDental{
 			code.ProcCat=_listProcCodeCatDefs[comboCategory.SelectedIndex].Id;
 			ProcedureCodes.Insert(code);
 			Changed=true;
-			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Added Procedure Code: "+code.ProcCode);
+			SecurityLog.Write(Permissions.Setup,0,"Added Procedure Code: "+code.ProcCode);
 			return true;
 		}
 

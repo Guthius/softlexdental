@@ -199,7 +199,6 @@
     <Compile Include="Crud\DbmLogCrud.cs" />
     <Compile Include="Crud\DefLinkCrud.cs" />
     <Compile Include="Crud\DiscountPlanCrud.cs" />
-    <Compile Include="Crud\EntryLogCrud.cs" />
     <Compile Include="Crud\Etrans835AttachCrud.cs" />
     <Compile Include="Crud\HistAppointmentCrud.cs" />
     <Compile Include="Crud\InsEditLogCrud.cs" />
@@ -220,7 +219,6 @@
     <Compile Include="Data Interface\DbmLogs.cs" />
     <Compile Include="Data Interface\DefLinks.cs" />
     <Compile Include="Data Interface\DiscountPlans.cs" />
-    <Compile Include="Data Interface\EntryLogs.cs" />
     <Compile Include="Data Interface\Etrans835Attaches.cs" />
     <Compile Include="Data Interface\MobileAppDevices.cs" />
     <Compile Include="Data Interface\PayConnectResponseWebs.cs" />
@@ -310,7 +308,6 @@
     <Compile Include="Reports\RpDiscountPlan.cs" />
     <Compile Include="TableTypes\ClinicErx.cs" />
     <Compile Include="TableTypes\DatabaseMaintenance.cs" />
-    <Compile Include="TableTypes\EntryLog.cs" />
     <Compile Include="TableTypes\TaskTaken.cs" />
     <Compile Include="UI\ISignalProcessor.cs" />
     <Compile Include="Data Interface\Sites.cs" />
@@ -563,8 +560,6 @@
     <Compile Include="Crud\ScreenCrud.cs" />
     <Compile Include="Crud\ScreenGroupCrud.cs" />
     <Compile Include="Crud\ScreenPatCrud.cs" />
-    <Compile Include="Crud\SecurityLogCrud.cs" />
-    <Compile Include="Crud\SecurityLogHashCrud.cs" />
     <Compile Include="Crud\SheetCrud.cs" />
     <Compile Include="Crud\SheetDefCrud.cs" />
     <Compile Include="Crud\SheetFieldCrud.cs" />
@@ -709,7 +704,6 @@
     <Compile Include="Data Interface\SmsPhones.cs" />
     <Compile Include="Data Interface\TaskHists.cs" />
     <Compile Include="Data Interface\ProcButtonQuicks.cs" />
-    <Compile Include="Data Interface\SecurityLogHashes.cs" />
     <Compile Include="Data Interface\Snomeds.cs" />
     <Compile Include="Data Interface\Sops.cs" />
     <Compile Include="Data Interface\UserodApptViews.cs" />
@@ -890,7 +884,6 @@
     <Compile Include="Data Interface\ScreenGroups.cs" />
     <Compile Include="Data Interface\Screens.cs" />
     <Compile Include="Db Multi Table\Security.cs" />
-    <Compile Include="Data Interface\SecurityLogs.cs" />
     <Compile Include="Data Interface\SheetFieldDefs.cs" />
     <Compile Include="Data Interface\SheetDefs.cs" />
     <Compile Include="Data Interface\SheetFields.cs" />
@@ -1055,6 +1048,8 @@
     <Compile Include="TableTypes\TaskHist.cs" />
     <Compile Include="__WIP\Permissions.cs" />
     <Compile Include="Data\ClinicUser.cs" />
+    <Compile Include="__WIP\SecurityLogEvents.cs" />
+    <Compile Include="__WIP\SecurityLogSource.cs" />
     <Compile Include="__WIP\UserGroupUser.cs" />
     <Compile Include="TableTypes\UserodApptView.cs" />
     <Compile Include="__WIP\UserPreference.cs" />
@@ -1105,7 +1100,7 @@
     <Compile Include="TableTypes\EhrNotPerformed.cs" />
     <Compile Include="TableTypes\EhrCode.cs" />
     <Compile Include="TableTypes\Loinc.cs" />
-    <Compile Include="TableTypes\SecurityLogHash.cs" />
+    <Compile Include="__WIP\SecurityLogHash.cs" />
     <Compile Include="TableTypes\FamilyHealth.cs" />
     <Compile Include="TableTypes\PatientRace.cs" />
     <Compile Include="TableTypes\Snomed.cs" />
@@ -1358,7 +1353,7 @@
     <Compile Include="TableTypes\SchoolCourse.cs" />
     <Compile Include="TableTypes\ScreenGroup.cs" />
     <Compile Include="TableTypes\Screen.cs" />
-    <Compile Include="TableTypes\SecurityLog.cs" />
+    <Compile Include="__WIP\SecurityLog.cs" />
     <Compile Include="TableTypes\SigButDef.cs" />
     <Compile Include="TableTypes\SigElementDef.cs" />
     <Compile Include="TableTypes\Task.cs" />

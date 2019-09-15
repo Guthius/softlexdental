@@ -209,7 +209,7 @@ namespace OpenDental
 						return;
 					}
 				}
-				SecurityLogs.MakeLogEntry(Permissions.AgingRan,0,"Aging Ran Automatically - AR Manager");
+				SecurityLog.Write(Permissions.AgingRan,0,"Aging Ran Automatically - AR Manager");
 			}
 			catch {
 				msgText="There was a problem running aging.  Would you like to load the accounts grid with currently existing account information?";
@@ -279,7 +279,7 @@ namespace OpenDental
 				MessageBox.Show(this,msgText);
 				return false;
 			}
-			SecurityLogs.MakeLogEntry(Permissions.AgingRan,0,"Aging Ran - AR Manager");
+			SecurityLog.Write(Permissions.AgingRan,0,"Aging Ran - AR Manager");
 			Preference.Update(PreferenceName.AgingBeginDateTime,POut.DateT(dtNow,false));//get lock on pref to block others
 			Signalods.SetInvalid(InvalidType.Prefs);//signal a cache refresh so other computers will have the updated pref as quickly as possible
 			Cursor=Cursors.WaitCursor;
@@ -1050,7 +1050,7 @@ namespace OpenDental
 
 		private void butRunAging_Click(object sender,EventArgs e) {
 			RunAgingIfNecessary();
-			SecurityLogs.MakeLogEntry(Permissions.AgingRan,0,"Aging Ran - AR Manager");
+			SecurityLog.Write(Permissions.AgingRan,0,"Aging Ran - AR Manager");
 			RefreshAll();
 			FillGrids();
 		}

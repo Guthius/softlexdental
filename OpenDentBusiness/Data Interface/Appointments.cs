@@ -3032,7 +3032,7 @@ namespace OpenDentBusiness
             if (!isNew && aptCur.Confirmed != aptOld.Confirmed)
             {
                 //Log confirmation status changes.
-                SecurityLogs.MakeLogEntry(Permissions.ApptConfirmStatusEdit, pat.PatNum, "Appointment confirmation status changed from" + " "
+                SecurityLog.Write(pat.PatNum, SecurityLogEvents.ApptConfirmStatusEdit, "Appointment confirmation status changed from" + " "
                     + Defs.GetName(DefinitionCategory.ApptConfirmed, aptOld.Confirmed) + " to " + Defs.GetName(DefinitionCategory.ApptConfirmed, aptCur.Confirmed)
                     + " from the appointment edit window.", aptCur.AptNum, datePrevious);
             }
@@ -3048,7 +3048,7 @@ namespace OpenDentBusiness
                 {
                     if (doCreateSecLog)
                     {
-                        SecurityLogs.MakeLogEntry(Permissions.AppointmentCreate, pat.PatNum,
+                        SecurityLog.Write(pat.PatNum, SecurityLogEvents.AppointmentCreate,
                             aptCur.AptDateTime.ToString() + ", " + aptCur.ProcDescript,
                             aptCur.AptNum, datePrevious);
                     }
@@ -3100,13 +3100,17 @@ namespace OpenDentBusiness
                 {
                     if (aptOld.AptStatus != ApptStatus.Complete)
                     { //seperate log entry for completed appointments
-                        SecurityLogs.MakeLogEntry(Permissions.AppointmentEdit, pat.PatNum,
-                            aptCur.AptDateTime.ToShortDateString() + ", " + aptCur.ProcDescript + logEntryMessage, aptCur.AptNum, datePrevious);
+                        SecurityLog.Write(pat.PatNum,
+                            SecurityLogEvents.AppointmentEdited, 
+                            aptCur.AptDateTime.ToShortDateString() + ", " + aptCur.ProcDescript + logEntryMessage, 
+                            aptCur.AptNum, datePrevious);
                     }
                     else
                     {
-                        SecurityLogs.MakeLogEntry(Permissions.AppointmentCompleteEdit, pat.PatNum,
-                            aptCur.AptDateTime.ToShortDateString() + ", " + aptCur.ProcDescript + logEntryMessage, aptCur.AptNum, datePrevious);
+                        SecurityLog.Write(pat.PatNum,
+                            SecurityLogEvents.CompletedAppointmentEdited, 
+                            aptCur.AptDateTime.ToShortDateString() + ", " + aptCur.ProcDescript + logEntryMessage, 
+                            aptCur.AptNum, datePrevious);
                     }
                 }
                 sendHL7 = true;
@@ -3683,7 +3687,7 @@ namespace OpenDentBusiness
         //private static FilterBlockouts(Appointment )
         /// <summary>Called to move existing appointments from the web.
         /// Will only attempt to move to given operatory.</summary>
-        public static void TryMoveApptWebHelper(Appointment appt, DateTime apptDateTimeNew, long opNumNew, string secLogSource = LogSources.MobileWeb)
+        public static void TryMoveApptWebHelper(Appointment appt, DateTime apptDateTimeNew, long opNumNew, string secLogSource = SecurityLogSource.MobileWeb)
         {
             Appointment apptOld = GetOneApt(appt.AptNum);//Will always exist since you can not move a non inserted appointment.
             Patient pat = Patients.GetPat(appt.PatNum);
@@ -3710,7 +3714,7 @@ namespace OpenDentBusiness
         ///<summary>Throws exception. When doSkipValidation is false all 'do' bools need to be set and considered.</summary>
         public static void TryMoveAppointment(Appointment apt, Appointment aptOld, Patient patCur, Operatory curOp, List<Schedule> schedListPeriod,
             List<Operatory> listOps, DateTime newAptDateTime, bool doValidation, bool doSetArriveEarly, bool doProvChange, bool doUpdatePattern,
-            bool doAllowFreqConflicts, bool doResetConfirmationStatus, bool doUpdatePatStatus, bool provChanged, bool hygChanged, bool timeWasMoved, bool isOpChanged, bool isOpUpdate = false, string secLogSource = LogSources.None)
+            bool doAllowFreqConflicts, bool doResetConfirmationStatus, bool doUpdatePatStatus, bool provChanged, bool hygChanged, bool timeWasMoved, bool isOpChanged, bool isOpUpdate = false, string secLogSource = SecurityLogSource.None)
         {
             if (newAptDateTime != DateTime.MinValue)
             {
@@ -3902,10 +3906,12 @@ namespace OpenDentBusiness
             if (apt.Confirmed != aptOld.Confirmed)
             {
                 //Log confirmation status changes.
-                SecurityLogs.MakeLogEntry(Permissions.ApptConfirmStatusEdit, apt.PatNum,
-                    Lans.g("MoveAppointment", "Appointment confirmation status changed from") + " "
-                    + Defs.GetName(DefinitionCategory.ApptConfirmed, aptOld.Confirmed) + " " + Lans.g("MoveAppointment", "to") + " " + Defs.GetName(DefinitionCategory.ApptConfirmed, apt.Confirmed)
-                    + Lans.g("MoveAppointment", "from the appointment module") + ".", apt.AptNum, secLogSource, aptOld.DateTStamp);
+                SecurityLog.Write(apt.PatNum,
+                    SecurityLogEvents.ApptConfirmStatusEdit, 
+                    "Appointment confirmation status changed from " + 
+                    Defs.GetName(DefinitionCategory.ApptConfirmed, aptOld.Confirmed) + " to " + Defs.GetName(DefinitionCategory.ApptConfirmed, apt.Confirmed) + 
+                    "from the appointment module" + ".", secLogSource, 
+                    apt.AptNum, aptOld.DateTStamp);
             }
             #endregion
             #region Set prov in apt
@@ -3939,34 +3945,36 @@ namespace OpenDentBusiness
                 string logtext = "";
                 if (provChanged)
                 {
-                    logtext = " " + Lans.g("MoveAppointment", "provider changed");
+                    logtext = " provider changed";
                 }
                 if (hygChanged)
                 {
                     if (logtext != "")
                     {
-                        logtext += " " + Lans.g("MoveAppointment", "and");
+                        logtext += " and";
                     }
-                    logtext += " " + Lans.g("MoveAppointment", "hygienist changed");
+                    logtext += " hygienist changed";
                 }
                 if (logtext != "")
                 {
-                    SecurityLogs.MakeLogEntry(Permissions.AppointmentEdit, apt.PatNum, Lans.g("MoveAppointment", "Appointment on") + " " + apt.AptDateTime.ToString() + logtext, secLogSource);
+                    SecurityLog.Write(apt.PatNum, SecurityLogEvents.AppointmentEdited, "Appointment on " + apt.AptDateTime.ToString() + logtext, secLogSource);
                 }
             }
             else
             {
                 if (apt.AptStatus != ApptStatus.Complete)
                 { //seperate log entry for editing completed appointments
-                    SecurityLogs.MakeLogEntry(Permissions.AppointmentMove, apt.PatNum,
-                        apt.ProcDescript + " " + Lans.g("MoveAppointment", "from") + " " + aptOld.AptDateTime.ToString() + ", " + Lans.g("MoveAppointment", "to") + " " + apt.AptDateTime.ToString(),
-                        apt.AptNum, secLogSource, aptOld.DateTStamp);
+                    SecurityLog.Write(apt.PatNum, 
+                        SecurityLogEvents.AppointmentMove,
+                        apt.ProcDescript + " from " + aptOld.AptDateTime.ToString() + ", to " + apt.AptDateTime.ToString(),
+                        secLogSource, apt.AptNum, aptOld.DateTStamp);
                 }
                 else
                 {
-                    SecurityLogs.MakeLogEntry(Permissions.AppointmentCompleteEdit, apt.PatNum,
-                            Lans.g("MoveAppointment", "moved") + " " + apt.ProcDescript + " " + Lans.g("MoveAppointment", "from") + " " + aptOld.AptDateTime.ToString() + ", " + Lans.g("MoveAppointment", "to") + " " + apt.AptDateTime.ToString(),
-                            apt.AptNum, secLogSource, aptOld.DateTStamp);
+                    SecurityLog.Write(apt.PatNum,
+                            SecurityLogEvents.CompletedAppointmentEdited,
+                            "moved " + apt.ProcDescript + " from " + aptOld.AptDateTime.ToString() + ", to " + apt.AptDateTime.ToString(),
+                            secLogSource, apt.AptNum, aptOld.DateTStamp);
                 }
             }
             #endregion SecurityLog
@@ -4374,7 +4382,7 @@ namespace OpenDentBusiness
         ///<summary>Used by web to insert or update a given appt.
         ///Dynamically charts procs based on appt.AppointmentTypeNum when created or changed.
         ///This logic is attempting to mimic FormApptEdit when interacting with a new or existing appointment.</summary>
-        public static void UpsertApptFromWeb(Appointment appt, bool canUpdateApptPattern = false, string secLogSource = LogSources.MobileWeb)
+        public static void UpsertApptFromWeb(Appointment appt, bool canUpdateApptPattern = false, string secLogSource = SecurityLogSource.MobileWeb)
         {
             Patient pat = Patients.GetPat(appt.PatNum);
             List<Procedure> listProcsForApptEdit = Procedures.GetProcsForApptEdit(appt);//List of all procedures that would show in FormApptEdit.cs
@@ -4423,32 +4431,32 @@ namespace OpenDentBusiness
                 appt.DateTimeDismissed = appt.AptDateTime.Date;
                 #endregion
                 Insert(appt, appt.SecUserNumEntry);//Inserts the invalid signal
-                SecurityLogs.MakeLogEntry(new SecurityLog()
+                SecurityLog.Insert(new SecurityLog()
                 {
-                    EventName = Permissions.AppointmentCreate,
+                    Event = Permissions.AppointmentCreate,
                     UserId = appt.SecUserNumEntry,
                     LogDate = DateTime.Now,
                     LogMessage = "New appointment created from MobileWeb by " + User.GetById(appt.SecUserNumEntry).UserName,
                     PatientId = appt.PatNum,
                     ExternalId = appt.AptNum,
-                    Source = LogSources.MobileWeb,
-                    DateTPrevious = appt.SecDateEntry,
+                    Source = SecurityLogSource.MobileWeb,
+                    ExternalDate = appt.SecDateEntry,
                     ComputerName = Security.CurrentComputerName
                 });
             }
             else
             {
                 Update(appt, apptOld);//Inserts the invalid signal
-                SecurityLogs.MakeLogEntry(new SecurityLog()
+                SecurityLog.Insert(new SecurityLog()
                 {
-                    EventName = Permissions.AppointmentEdit,
+                    Event = Permissions.AppointmentEdit,
                     UserId = appt.SecUserNumEntry,
                     LogDate = DateTime.Now,
                     LogMessage = "Appointment updated from MobileWeb by " + User.GetById(appt.SecUserNumEntry).UserName,
                     PatientId = appt.PatNum,
                     ExternalId = appt.AptNum,
-                    Source = LogSources.MobileWeb,
-                    DateTPrevious = appt.SecDateEntry,
+                    Source = SecurityLogSource.MobileWeb,
+                    ExternalDate = appt.SecDateEntry,
                     ComputerName = Security.CurrentComputerName,
                 });
             }
@@ -4746,7 +4754,7 @@ namespace OpenDentBusiness
             if (apt.AptStatus == ApptStatus.PtNote)
             {
                 Appointments.SetAptStatus(apt, ApptStatus.PtNoteCompleted);//Sets the invalid signal
-                SecurityLogs.MakeLogEntry(Permissions.AppointmentEdit, apt.PatNum,
+                SecurityLog.Write(apt.PatNum, SecurityLogEvents.AppointmentEdited,
                     apt.AptDateTime.ToString() + ", Patient NOTE Set Complete",
                     apt.AptNum, datePrevious);//shouldn't ever happen, but don't allow procedures to be completed from notes
             }
@@ -4758,13 +4766,14 @@ namespace OpenDentBusiness
                 Procedures.SetCompleteInAppt(apt, PlanList, PatPlanList, pat, SubList, removeCompletedProcs);//loops through each proc
                 if (apt.AptStatus != ApptStatus.Complete)
                 { // seperate log entry for editing completed appointments.
-                    SecurityLogs.MakeLogEntry(Permissions.AppointmentEdit, apt.PatNum,
+                    SecurityLog.Write( apt.PatNum, SecurityLogEvents.AppointmentEdited,
                         apt.ProcDescript + ", " + apt.AptDateTime.ToString() + ", Set Complete",
                         apt.AptNum, datePrevious);//Log showing the appt. is set complete
                 }
                 else
                 {
-                    SecurityLogs.MakeLogEntry(Permissions.AppointmentCompleteEdit, apt.PatNum,
+                    SecurityLog.Write(apt.PatNum,
+                        SecurityLogEvents.CompletedAppointmentEdited, 
                         apt.ProcDescript + ", " + apt.AptDateTime.ToString() + ", Set Complete",
                         apt.AptNum, datePrevious);//Log showing the appt. is set complete
                 }

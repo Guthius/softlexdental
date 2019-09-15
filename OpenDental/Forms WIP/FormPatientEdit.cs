@@ -2543,7 +2543,7 @@ namespace OpenDental{
 			}
 			refattach.ItemOrder=_listRefAttaches.Select(x => x.ItemOrder).DefaultIfEmpty().Max()+1;
 			RefAttaches.Insert(refattach);
-			SecurityLogs.MakeLogEntry(Permissions.RefAttachAdd,PatCur.PatNum,"Referred From "+Referrals.GetNameFL(refattach.ReferralNum));
+			SecurityLog.Write(Permissions.RefAttachAdd,PatCur.PatNum,"Referred From "+Referrals.GetNameFL(refattach.ReferralNum));
 			FillReferrals();
 		}
 
@@ -2714,7 +2714,7 @@ namespace OpenDental{
 					SetRequiredFields();
 					return;
 				}
-				SecurityLogs.MakeLogEntry(Permissions.RequiredFields,PatCur.PatNum,"Saved patient with required fields missing.");
+				SecurityLog.Write(Permissions.RequiredFields,PatCur.PatNum,"Saved patient with required fields missing.");
 			}
 			PatCur.LName=textLName.Text;
 			PatCur.FName=textFName.Text;
@@ -2949,7 +2949,7 @@ namespace OpenDental{
 			PatientNotes.Update(PatCurNote,PatCur.Guarantor);
 			string strPatPriProvDesc=Providers.GetLongDesc(PatCur.PriProv);
 			if(PatCur.PriProv!=PatOld.PriProv) {
-				SecurityLogs.MakeLogEntry(Permissions.PatPriProvEdit,PatCur.PatNum,
+				SecurityLog.Write(Permissions.PatPriProvEdit,PatCur.PatNum,
 					"Primary provider changed from "+(PatOld.PriProv==0?"'blank'":Providers.GetLongDesc(PatOld.PriProv))+" to "+strPatPriProvDesc+".");
 			}
 			if(checkRestrictSched.Checked) {
@@ -2987,7 +2987,7 @@ namespace OpenDental{
 				bool isChangePriProvs=(listPatsForPriProvEdit.Count>0 && Security.IsAuthorized(Permissions.PatPriProvEdit,DateTime.MinValue,true,true));
 				Patients.UpdateBillingProviderForFam(PatCur,isChangePriProvs,isAuthArchivedEdit);//if user is not authorized this will not update PriProvs for fam
 				if(isChangePriProvs) {
-					listPatsForPriProvEdit.ForEach(x => SecurityLogs.MakeLogEntry(Permissions.PatPriProvEdit,x.PatNum,
+					listPatsForPriProvEdit.ForEach(x => SecurityLog.Write(Permissions.PatPriProvEdit,x.PatNum,
 						"Primary provider changed from "+(x.PriProv==0?"'blank'":Providers.GetLongDesc(x.PriProv))+" to "+strPatPriProvDesc+"."));
 				}
 			}
@@ -3082,7 +3082,7 @@ namespace OpenDental{
 				//	RefAttaches.Delete(RefList[i]);
 				//}
 				Patients.Delete(PatCur);
-				SecurityLogs.MakeLogEntry(Permissions.PatientEdit,PatCur.PatNum,Lan.g(this,"Canceled creating new patient. Deleting patient record."));
+				SecurityLog.Write(SecurityLogEvents.PatientEdit,PatCur.PatNum,Lan.g(this,"Canceled creating new patient. Deleting patient record."));
 			}
 			if(_hasGuardiansChanged) {  //If guardian information was changed, and user canceled.
 				//revert any changes to the guardian list for all family members

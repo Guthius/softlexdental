@@ -183,7 +183,7 @@ namespace OpenDental
                     ShowBillingOptions(0);
                 }
             }
-            SecurityLogs.MakeLogEntry(Permissions.Billing, 0, "");
+            SecurityLog.Write(SecurityLogEvents.Billing, "");
         }
 
         /// <summary>
@@ -278,7 +278,7 @@ namespace OpenDental
         {
             if (!Security.IsAuthorized(Permissions.Backup)) return;
 
-            SecurityLogs.MakeLogEntry(Permissions.Backup, 0, "FormBackup was accessed");
+            SecurityLog.Write(SecurityLogEvents.Backup, "FormBackup was accessed");
 
             using (var formBackup = new FormBackup())
             {

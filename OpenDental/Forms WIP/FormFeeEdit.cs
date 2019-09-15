@@ -188,10 +188,10 @@ namespace OpenDental{
 				//Fee object always created and inserted externally first
 				Fees.Update(FeeCur);
 			}
-			SecurityLogs.MakeLogEntry(Permissions.ProcFeeEdit,0,Lan.g(this,"Procedure")+": "+ProcedureCodes.GetStringProcCode(FeeCur.CodeNum)
+			SecurityLog.Write(null, SecurityLogEvents.ProcFeeEdit,Lan.g(this,"Procedure")+": "+ProcedureCodes.GetStringProcCode(FeeCur.CodeNum)
 				+", "+Lan.g(this,"Fee: ")+""+FeeCur.Amount.ToString("c")+", "+Lan.g(this,"Fee Schedule")+": "+FeeScheds.GetDescription(FeeCur.FeeSched)
-				+". "+Lan.g(this,"Manual edit in Edit Fee window."),FeeCur.CodeNum,DateTime.MinValue);
-			SecurityLogs.MakeLogEntry(Permissions.LogFeeEdit,0,Lan.g(this,"Fee Updated"),FeeCur.FeeNum,datePrevious);
+				+". "+Lan.g(this,"Manual edit in Edit Fee window."),FeeCur.CodeNum, null);
+			SecurityLog.Write(null, SecurityLogEvents.LogFeeEdit,Lan.g(this,"Fee Updated"),FeeCur.FeeNum,datePrevious);
 			//FeeCur.UseDefaultCov=checkDefCov.Checked;
 			//FeeCur.UseDefaultFee=checkDefFee.Checked;			
 			DialogResult=DialogResult.OK;

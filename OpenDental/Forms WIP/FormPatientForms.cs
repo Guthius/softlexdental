@@ -87,7 +87,7 @@ namespace OpenDental {
 			}
 			FormSheetDefs FormSD=new FormSheetDefs();
 			FormSD.ShowDialog();
-			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Sheets");
+			SecurityLog.Write(Permissions.Setup,0,"Sheets");
 			FillGrid();
 		}
 
@@ -97,7 +97,7 @@ namespace OpenDental {
 			}
 			FormDefinitions formD=new FormDefinitions(DefinitionCategory.ImageCats);
 			formD.ShowDialog();
-			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Defs");
+			SecurityLog.Write(Permissions.Setup,0,"Defs");
 			FillGrid();
 		}
 
@@ -107,7 +107,7 @@ namespace OpenDental {
 			}
 			FormSheetSetup formSS=new FormSheetSetup();
 			formSS.ShowDialog();
-			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"ShowForms");
+			SecurityLog.Write(Permissions.Setup,0,"ShowForms");
 			FillGrid();
 		}
 
@@ -190,7 +190,7 @@ namespace OpenDental {
 						gridMain.SetSelected(i,true);
 					}
 				}
-				SecurityLogs.MakeLogEntry(Permissions.Copy,PatNum,"Patient form "+sheet.Description+" from "+sheet.DateTimeSheet.ToString()+" copied");
+				SecurityLog.Write(SecurityLogEvents.Copy,PatNum,"Patient form "+sheet.Description+" from "+sheet.DateTimeSheet.ToString()+" copied");
 			}
 		}
 		

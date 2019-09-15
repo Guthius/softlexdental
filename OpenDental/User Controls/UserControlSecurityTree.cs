@@ -606,7 +606,7 @@ namespace OpenDental {
 				else {
 					try {
 						UserGroupPermission.Insert(perm);
-						SecurityLogs.MakeLogEntry(Permissions.SecurityAdmin,0,"Permission '"+perm.Permission+"' granted to '"
+						SecurityLog.Write(SecurityLogEvents.SecurityAdmin,"Permission '"+perm.Permission+"' granted to '"
 							+UserGroup.GetById(perm.UserGroupId).Description+"'");
 					}
 					catch(Exception ex) {
@@ -626,22 +626,24 @@ namespace OpenDental {
 						permLimited.NewerDays=perm.NewerDays;
 						permLimited.UserGroupId=perm.UserGroupId;
 						permLimited.Permission=Permissions.ProcComplEditLimited;
-						try {
-							UserGroupPermission.Insert(permLimited);
-							SecurityLogs.MakeLogEntry(Permissions.SecurityAdmin,0,"Permission '"+perm.Permission+"' granted to '"
-								+UserGroup.GetById(perm.UserGroupId).Description+"'");
-						}
-						catch(Exception ex) {
-							MessageBox.Show(ex.Message);
-							return;
-						}
+                        try
+                        {
+                            UserGroupPermission.Insert(permLimited);
+                            SecurityLog.Write(SecurityLogEvents.SecurityAdmin, "Permission '" + perm.Permission + "' granted to '"
+                                + UserGroup.GetById(perm.UserGroupId).Description + "'");
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show(ex.Message);
+                            return;
+                        }
 					}
 				}
 			}
 			else if(_clickedPermNode.ImageIndex==2) {//checked, so need to delete the perm
 				try {
 					UserGroupPermission.RemovePermission(_listUserGroupNums.First(),(string)_clickedPermNode.Tag);
-					SecurityLogs.MakeLogEntry(Permissions.SecurityAdmin,0,"Permission '"+_clickedPermNode.Tag+"' revoked from '"
+					SecurityLog.Write(SecurityLogEvents.SecurityAdmin,"Permission '"+_clickedPermNode.Tag+"' revoked from '"
 						+UserGroup.GetById(_listUserGroupNums.First()).Description+"'");
 				}
 				catch(Exception ex) {
@@ -660,7 +662,7 @@ namespace OpenDental {
 					listPermissions.ForEach(x => {
 						try {
 							UserGroupPermission.RemovePermission(_listUserGroupNums.First(),x);
-							SecurityLogs.MakeLogEntry(Permissions.SecurityAdmin,0,"Permission '"+_clickedPermNode.Tag+"' revoked from '"
+							SecurityLog.Write(SecurityLogEvents.SecurityAdmin,"Permission '"+_clickedPermNode.Tag+"' revoked from '"
 								+UserGroup.GetById(_listUserGroupNums.First()).Description+"'");
 						}
 						catch(Exception ex) {
@@ -673,7 +675,7 @@ namespace OpenDental {
 			else if(_clickedPermNode.ImageIndex==3) {//Partially checked (currently only applies to Reports permission)
 				try {
 					UserGroupPermission.RemovePermission(_listUserGroupNums.First(),(string)_clickedPermNode.Tag);
-					SecurityLogs.MakeLogEntry(Permissions.SecurityAdmin,0,"Permission '"+_clickedPermNode.Tag+"' revoked from '"
+					SecurityLog.Write(SecurityLogEvents.SecurityAdmin,"Permission '"+_clickedPermNode.Tag+"' revoked from '"
 						+UserGroup.GetById(_listUserGroupNums.First()).Description+"'");
 				}
 				catch(Exception ex) {

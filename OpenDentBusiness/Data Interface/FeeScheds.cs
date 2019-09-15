@@ -200,7 +200,7 @@ namespace OpenDentBusiness{
 							securityLogText+="To Clinic \""+Clinics.GetDesc(clinicNumTo)+"\", ";
 						}
 						securityLogText+="Proc Code \""+procCode.ProcCode+"\", Fee \""+fee.Amount+"\"";
-						SecurityLogs.MakeLogEntry(Permissions.FeeSchedEdit,0,securityLogText);
+						SecurityLog.Write(null, SecurityLogEvents.FeeSchedEdit, securityLogText);
 						FeeSchedEvent.Fire(ODEventType.FeeSched,
 							new ProgressBarHelper(Lans.g("FormFeeSchedTools","Copying fees, please wait")+"...",blockValue:blockValue,blockMax:blockMax,
 							progressStyle:ProgBarStyle.Continuous));

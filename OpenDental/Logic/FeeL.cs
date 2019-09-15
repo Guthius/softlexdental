@@ -88,13 +88,13 @@ namespace OpenDental
 						else{
 							//doesn't matter if the existing fee is an override or not.
 							Fees.Delete(fee);
-							SecurityLogs.MakeLogEntry(Permissions.ProcFeeEdit,0,"Procedure: "+fields[0]+", "
+							SecurityLog.Write(null, SecurityLogEvents.ProcFeeEdit,"Procedure: "+fields[0]+", "
 								+feeOldStr
 								//+", Deleted Fee: "+fee.Amount.ToString("c")+", "
 								+"Fee Schedule: "+FeeScheds.GetDescription(feeSchedNum)+". "
 								+"Fee deleted using the Import button in the Fee Tools window.",codeNum,
 								DateTime.MinValue);
-							SecurityLogs.MakeLogEntry(Permissions.LogFeeEdit,0,"Fee deleted",fee.FeeNum,datePrevious);
+							SecurityLog.Write(null, SecurityLogEvents.LogFeeEdit,"Fee deleted",fee.FeeNum,datePrevious);
 						}
 					}
 					else {//value found
@@ -111,13 +111,13 @@ namespace OpenDental
 							fee.Amount=PIn.Double(fields[1]);
 							Fees.Update(fee);
 						}
-						SecurityLogs.MakeLogEntry(Permissions.ProcFeeEdit,0,"Procedure: "+fields[0]+", "
+						SecurityLog.Write(null, SecurityLogEvents.ProcFeeEdit,"Procedure: "+fields[0]+", "
 							+feeOldStr
 							+", New Fee: "+fee.Amount.ToString("c")+", "
 							+"Fee Schedule: "+FeeScheds.GetDescription(feeSchedNum)+". "
 							+"Fee changed using the Import button in the Fee Tools window.",codeNum,
 							DateTime.MinValue);
-						SecurityLogs.MakeLogEntry(Permissions.LogFeeEdit,0,"Fee changed",fee.FeeNum,datePrevious);
+						SecurityLog.Write(null, SecurityLogEvents.LogFeeEdit,"Fee changed",fee.FeeNum,datePrevious);
 					}
 					//FeeSchedEvent.Fire(ODEventType.FeeSched,new ProgressBarHelper("Importing fees...",));
 					double percent=(double)counter*100d/(double)lineCount;

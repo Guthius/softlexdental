@@ -48,7 +48,7 @@ namespace OpenDentBusiness
                 {
                     rx.IsNew = true;//Might not be necessary, but does not hurt.
                     rx.IsErxOld = false;
-                    SecurityLogs.MakeLogEntry(Permissions.RxCreate, rx.PatNum, "eRx automatically created: " + rx.Drug);
+                    SecurityLog.Write(rx.PatNum, SecurityLogEvents.RxCreate, "eRx automatically created: " + rx.Drug);
                     RxPats.Insert(rx);
                 }
             }

@@ -2554,7 +2554,7 @@ namespace OpenDental{
 					Adjustments.Insert(adj);
 					Patient pat=Patients.GetPat(_payPlanCur.PatNum);
 					TsiTransLogs.CheckAndInsertLogsIfAdjTypeExcluded(adj,pat.Guarantor,pat.ClinicNum);
-					SecurityLogs.MakeLogEntry(Permissions.AdjustmentCreate,PatCur.PatNum,Lan.g(this,"Adjustment created from payment plan for")+" "
+					SecurityLog.Write(Permissions.AdjustmentCreate,PatCur.PatNum,Lan.g(this,"Adjustment created from payment plan for")+" "
 					+PatCur.GetNameFL()+", "+adj.AdjAmt.ToString("c"));
 				}				
 			}
@@ -2578,51 +2578,51 @@ namespace OpenDental{
 			//deleted logs are in butDelete_click since that method doesn't call SaveData.
 			//new
 			if(IsNew) {
-				SecurityLogs.MakeLogEntry(Permissions.PayPlanEdit,PatCur.PatNum,
+				SecurityLog.Write(Permissions.PayPlanEdit,PatCur.PatNum,
 							(_payPlanCur.PlanNum == 0 ? "Patient" : "Insurance") + " Payment Plan created.",_payPlanOld.PayPlanNum,DateTime.MinValue);
 				return;
 			}
 			//closed
 			if(!_payPlanCur.IsClosed && _payPlanOld.IsClosed) {
-				SecurityLogs.MakeLogEntry(Permissions.PayPlanEdit,PatCur.PatNum,
+				SecurityLog.Write(Permissions.PayPlanEdit,PatCur.PatNum,
 							(_payPlanCur.PlanNum == 0 ? "Patient" : "Insurance") + " Payment Plan reopened.",_payPlanOld.PayPlanNum,DateTime.MinValue);
 			}
 			if(signatureBoxWrapper.GetSigChanged()) {
 				//signed
 				if(!_isSigOldValid && !signatureBoxWrapper.SigIsBlank && signatureBoxWrapper.IsValid) {
-					SecurityLogs.MakeLogEntry(Permissions.PayPlanEdit,PatCur.PatNum,
+					SecurityLog.Write(Permissions.PayPlanEdit,PatCur.PatNum,
 								(_payPlanCur.PlanNum == 0 ? "Patient" : "Insurance") + " Payment Plan signed.",_payPlanOld.PayPlanNum,DateTime.MinValue);
 				}
 				//sig invalidated
 				if(_isSigOldValid && (!signatureBoxWrapper.IsValid || signatureBoxWrapper.SigIsBlank)) {
-					SecurityLogs.MakeLogEntry(Permissions.PayPlanEdit,PatCur.PatNum,
+					SecurityLog.Write(Permissions.PayPlanEdit,PatCur.PatNum,
 								(_payPlanCur.PlanNum == 0 ? "Patient" : "Insurance") + " Payment Plan signature invalidated.",_payPlanOld.PayPlanNum,DateTime.MinValue);
 				}
 			}
 			//guarantor changed
 			if(_payPlanOld.Guarantor != _payPlanCur.Guarantor) {
-				SecurityLogs.MakeLogEntry(Permissions.PayPlanEdit,PatCur.PatNum,
+				SecurityLog.Write(Permissions.PayPlanEdit,PatCur.PatNum,
 							(_payPlanCur.PlanNum == 0 ? "Patient" : "Insurance") + " Payment Plan guarantor changed from "
 							+Patients.GetNameLF(_payPlanOld.Guarantor)+" to "+Patients.GetNameLF(_payPlanCur.Guarantor)+".",_payPlanOld.PayPlanNum,DateTime.MinValue);
 			}
 			//Completed Amt Changed
 			if(_payPlanOld.CompletedAmt != _payPlanCur.CompletedAmt) {
-				SecurityLogs.MakeLogEntry(Permissions.PayPlanEdit,PatCur.PatNum,
+				SecurityLog.Write(Permissions.PayPlanEdit,PatCur.PatNum,
 							(_payPlanCur.PlanNum == 0 ? "Patient" : "Insurance") + " Payment Plan completed amount changed.",_payPlanOld.PayPlanNum,DateTime.MinValue);
 			}
 			//Ins Plan Changed
 			if(_payPlanOld.PlanNum != _payPlanCur.PlanNum) {
-				SecurityLogs.MakeLogEntry(Permissions.PayPlanEdit,PatCur.PatNum,
+				SecurityLog.Write(Permissions.PayPlanEdit,PatCur.PatNum,
 							(_payPlanCur.PlanNum == 0 ? "Patient" : "Insurance") + " Payment Plan ins plan changed.",_payPlanOld.PayPlanNum,DateTime.MinValue);
 			}
 			//Note Changed
 			if(_payPlanOld.Note != _payPlanCur.Note) {
-				SecurityLogs.MakeLogEntry(Permissions.PayPlanEdit,PatCur.PatNum,
+				SecurityLog.Write(Permissions.PayPlanEdit,PatCur.PatNum,
 							(_payPlanCur.PlanNum == 0 ? "Patient" : "Insurance") + " Payment Plan note changed.",_payPlanOld.PayPlanNum,DateTime.MinValue);
 			}
 			//closed
 			if(_payPlanCur.IsClosed && !_payPlanOld.IsClosed) {
-				SecurityLogs.MakeLogEntry(Permissions.PayPlanEdit,PatCur.PatNum,
+				SecurityLog.Write(Permissions.PayPlanEdit,PatCur.PatNum,
 							(_payPlanCur.PlanNum == 0 ? "Patient" : "Insurance") + " Payment Plan closed.",_payPlanOld.PayPlanNum,DateTime.MinValue);
 			}
 		}
@@ -2635,7 +2635,7 @@ namespace OpenDental{
 			try {
 				PayPlans.Delete(_payPlanCur);
 				//Delete log here since this button doesn't call SaveData().
-				SecurityLogs.MakeLogEntry(Permissions.PayPlanEdit,PatCur.PatNum,
+				SecurityLog.Write(Permissions.PayPlanEdit,PatCur.PatNum,
 							(_payPlanOld.PlanNum == 0 ? "Patient" : "Insurance") + " Payment Plan deleted.",_payPlanOld.PayPlanNum,DateTime.MinValue);
 			}
 			catch(ApplicationException ex) {

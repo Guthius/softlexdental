@@ -680,12 +680,12 @@ namespace OpenDental {
 		}
 
 		private void butAudit_Click(object sender,EventArgs e) {
-			SecurityLog[] orthoChartLogs;
-			SecurityLog[] patientFieldLogs;
+            List<SecurityLog> orthoChartLogs;
+            List<SecurityLog> patientFieldLogs;
 			try {
-				orthoChartLogs=SecurityLogs.Refresh(_patCur.PatNum,new List<string> { Permissions.OrthoChartEditFull },null,checkIncludeArchived.Checked);
-				patientFieldLogs=SecurityLogs.Refresh(new DateTime(1,1,1),DateTime.Today,Permissions.PatientFieldEdit,_patCur.PatNum,0,
-					DateTime.MinValue,DateTime.Today,checkIncludeArchived.Checked);
+				orthoChartLogs=SecurityLog.Find(_patCur.PatNum,new List<string> { Permissions.OrthoChartEditFull },null);
+				patientFieldLogs=SecurityLog.Find(null,_patCur.PatNum,new DateTime(1,1,1),DateTime.Today, SecurityLogEvents.PatientFieldEdit,
+					DateTime.MinValue,DateTime.Today);
 			}
 			catch(Exception ex) {
                 FormFriendlyException.Show(Lan.g(this,"There was a problem loading the Audit Trail."),ex);
@@ -701,7 +701,7 @@ namespace OpenDental {
 				dictDatesOfServiceLogEntries.Add(dtCur,new List<SecurityLog>());
 			}
 			//Add Ortho Audit Trail Entries
-			for(int i=0;i<orthoChartLogs.Length;i++) {
+			for(int i=0;i<orthoChartLogs.Count;i++) {
 				DateTime dtCur=OrthoCharts.GetOrthoDateFromLog(orthoChartLogs[i]);
 				if(!dictDatesOfServiceLogEntries.ContainsKey(dtCur)) {
 					dictDatesOfServiceLogEntries.Add(dtCur,new List<SecurityLog>());

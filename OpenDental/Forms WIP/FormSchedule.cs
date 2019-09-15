@@ -1496,7 +1496,7 @@ namespace OpenDental{
 
 		private void FormSchedule_FormClosing(object sender,FormClosingEventArgs e) {
 			if(changed){
-				SecurityLogs.MakeLogEntry(Permissions.Schedules,0,"");
+				SecurityLog.Write(Permissions.Schedules,"");
 			}
 		}
 	}

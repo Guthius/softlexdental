@@ -988,7 +988,7 @@ namespace OpenDental{
 				return;
 			}
 			string secLogText="Referral '"+RefCur.LName+", "+RefCur.FName+"' deleted";
-			SecurityLogs.MakeLogEntry(Permissions.ReferralEdit,RefCur.PatNum,secLogText); //RefCur.PatNum should be 0 if not a patient.
+			SecurityLog.Write(Permissions.ReferralEdit,RefCur.PatNum,secLogText); //RefCur.PatNum should be 0 if not a patient.
 			DialogResult=DialogResult.OK;
 		}
 
@@ -1053,13 +1053,13 @@ namespace OpenDental{
 					}
 				}
 				string secLogText="Referral '"+RefCur.LName+", "+RefCur.FName+"' created";
-				SecurityLogs.MakeLogEntry(Permissions.ReferralAdd,RefCur.PatNum,secLogText);
+				SecurityLog.Write(Permissions.ReferralAdd,RefCur.PatNum,secLogText);
 				Referrals.Insert(RefCur);
 				Signalods.SetInvalid(InvalidType.Referral);//Make sure other instances have the new referral in their cache.
 			}
 			else{
 				string secLogText="Referral '"+RefCur.LName+", "+RefCur.FName+"' edited";
-				SecurityLogs.MakeLogEntry(Permissions.ReferralEdit,RefCur.PatNum,secLogText);
+				SecurityLog.Write(Permissions.ReferralEdit,RefCur.PatNum,secLogText);
 				Referrals.Update(RefCur);
 			}
 			Referrals.RefreshCache();//We might want to enhance this to call DataValid.SetInvalid(InvalidType.Referral); eventually.

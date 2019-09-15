@@ -190,7 +190,7 @@ namespace OpenDental {
 						PIn.Int(rowCur["MonthsTreat"].ToString()),((dateSpanMonthsRem.YearsDiff * 12) + dateSpanMonthsRem.MonthsDiff));
 					PatPlans.IncrementOrthoNextClaimDates(patPlanCur,insPlanCur,monthsTreat,patNoteCur);
 					rowsSucceeded.Add(rowCur);
-					SecurityLogs.MakeLogEntry(Permissions.CreateCompletedProcedure,patCur.PatNum
+					SecurityLog.Write(Permissions.CreateCompletedProcedure,patCur.PatNum
 						,Lan.g(this,"Automatic ortho procedure and claim generated for")+" "+dateDue.ToShortDateString());
 				}
 				catch(Exception) {

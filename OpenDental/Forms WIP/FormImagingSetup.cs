@@ -602,7 +602,7 @@ namespace OpenDental{
 			ComputerPrefs.Update(ComputerPrefs.LocalComputer);
 			DataValid.SetInvalid(InvalidType.Prefs);
 			if(_scanDocSelectSourceOld!=checkScanDocSelectSource.Checked) {
-				SecurityLogs.MakeLogEntry(Permissions.Setup,0
+				SecurityLog.Write(Permissions.Setup,0
 					,Lan.g(this,"Show Select Scanner Window option changed from")+" "
 					+(_scanDocSelectSourceOld?Lan.g(this,"true"):Lan.g(this,"false"))+" "
 					+Lan.g(this,"to")+" "+(checkScanDocSelectSource.Checked?Lan.g(this,"true"):Lan.g(this,"false")));

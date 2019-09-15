@@ -316,7 +316,7 @@ namespace OpenDental {
 			DiseaseDef.Insert(formDDE.DiseaseDefCur);
 			DataValid.SetInvalid(InvalidType.Diseases);
             _listDiseaseDefs = DiseaseDef.All();
-			SecurityLogs.MakeLogEntry(Permissions.ProblemEdit,0,formDDE.SecurityLogMsgText);
+			SecurityLog.Write(Permissions.ProblemEdit,0,formDDE.SecurityLogMsgText);
 			FillListMedical(MedicalListType.problem);
 		}
 

@@ -806,7 +806,7 @@ namespace OpenDental{
 			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Are you absolutely sure you want to delete all recalls of this type?")) {
 				return;
 			}
-			SecurityLogs.MakeLogEntry(Permissions.RecallEdit,0,"Recall type deleted with description '"+RecallTypeCur.Description+"'");
+			SecurityLog.Write(Permissions.RecallEdit,0,"Recall type deleted with description '"+RecallTypeCur.Description+"'");
 			Recalls.DeleteAllOfType(RecallTypeCur.RecallTypeNum);
 			CountForType=Recalls.GetCountForType(RecallTypeCur.RecallTypeNum);
 			MsgBox.Show(this,"Done.");
@@ -868,10 +868,10 @@ namespace OpenDental{
 			try{
 				if(RecallTypeCur.IsNew) {
 					RecallTypes.Insert(RecallTypeCur);
-					SecurityLogs.MakeLogEntry(Permissions.RecallEdit,0,"Recall type added '"+RecallTypeCur.Description+"'");
+					SecurityLog.Write(Permissions.RecallEdit,0,"Recall type added '"+RecallTypeCur.Description+"'");
 				}
 				else {
-					SecurityLogs.MakeLogEntry(Permissions.RecallEdit,0,"Recall type having description '"+RecallTypeCur.Description+"' edited");
+					SecurityLog.Write(Permissions.RecallEdit,0,"Recall type having description '"+RecallTypeCur.Description+"' edited");
 					RecallTypes.Update(RecallTypeCur);
 				}
 			}

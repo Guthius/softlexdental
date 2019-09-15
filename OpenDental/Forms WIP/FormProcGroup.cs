@@ -1311,7 +1311,7 @@ namespace OpenDental{
 			if(FormRS.DialogResult!=DialogResult.OK) {
 				return;
 			}
-			SecurityLogs.MakeLogEntry(Permissions.RxCreate,PatCur.PatNum,PatCur.GetNameLF());
+			SecurityLog.Write(Permissions.RxCreate,PatCur.PatNum,PatCur.GetNameLF());
 			RxPat Rx=RxPats.GetRx(RxNum);
 			if(textNotes.Text!=""){
 				textNotes.Text+="\r\n";
@@ -1465,7 +1465,7 @@ namespace OpenDental{
 				return;
 			}
 			//Log entry does not show procstatus because group notes don't technically have a status, always EC.
-			SecurityLogs.MakeLogEntry(Permissions.ProcDelete,PatCur.PatNum,Lan.g(this,"Invalidated: ")+
+			SecurityLog.Write(Permissions.ProcDelete,PatCur.PatNum,Lan.g(this,"Invalidated: ")+
 				ProcedureCodes.GetStringProcCode(GroupCur.CodeNum).ToString()+", "+GroupCur.ProcDate.ToShortDateString());
 			DialogResult=DialogResult.OK;
 		}
@@ -1590,11 +1590,11 @@ namespace OpenDental{
 			//This log entry is similar to the log entry made when right-clicking in the Chart and using the delete option,
 			//except there is an extra : in the description for this log entry, so we programmers can know for sure where the entry was made from.
 			if(_attachedToCompletedProc) {
-				SecurityLogs.MakeLogEntry(Permissions.EditCompletedProcedure,PatCur.PatNum,
+				SecurityLog.Write(Permissions.EditCompletedProcedure,PatCur.PatNum,
 					":"+ProcedureCodes.GetStringProcCode(GroupCur.CodeNum).ToString()+" ("+GroupCur.ProcStatus+"), "+GroupCur.ProcDate.ToShortDateString());
 			}
 			else {
-				SecurityLogs.MakeLogEntry(Permissions.ProcDelete,PatCur.PatNum,
+				SecurityLog.Write(Permissions.ProcDelete,PatCur.PatNum,
 					":"+ProcedureCodes.GetStringProcCode(GroupCur.CodeNum).ToString()+" ("+GroupCur.ProcStatus+"), "+GroupCur.ProcDate.ToShortDateString());
 			}
 			DialogResult=DialogResult.OK;

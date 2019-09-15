@@ -1248,16 +1248,16 @@ namespace OpenDental
                     isProcDeleted = true;
                     if (proc.ProcStatus.In(ProcStat.C, ProcStat.EO, ProcStat.EC))
                     {
-                        string perm = Permissions.EditCompletedProcedure;
+                        string perm = SecurityLogEvents.CompletedProcedureEdited;
                         if (proc.ProcStatus.In(ProcStat.EO, ProcStat.EC))
                         {
-                            perm = Permissions.EditProcedure;
+                            perm = SecurityLogEvents.ProcedureEdited;
                         }
-                        SecurityLogs.MakeLogEntry(perm, AptCur.PatNum, ProcedureCodes.GetProcCode(proc.CodeNum).ProcCode + " (" + proc.ProcStatus + "), " + proc.ProcFee.ToString("c") + ", Deleted");
+                        SecurityLog.Write(AptCur.PatNum, perm, ProcedureCodes.GetProcCode(proc.CodeNum).ProcCode + " (" + proc.ProcStatus + "), " + proc.ProcFee.ToString("c") + ", Deleted");
                     }
                     else
                     {
-                        SecurityLogs.MakeLogEntry(Permissions.ProcDelete, AptCur.PatNum, ProcedureCodes.GetProcCode(proc.CodeNum).ProcCode + " (" + proc.ProcStatus + "), " + proc.ProcFee.ToString("c"));
+                        SecurityLog.Write(AptCur.PatNum, SecurityLogEvents.ProcDelete, ProcedureCodes.GetProcCode(proc.CodeNum).ProcCode + " (" + proc.ProcStatus + "), " + proc.ProcFee.ToString("c"));
                     }
                 }
             }
@@ -2160,8 +2160,8 @@ namespace OpenDental
                 //Nathan asked for a specific log entry message explaining why each apt was deleted.
                 foreach (long aptNumDeleted in listAptsToDelete)
                 {
-                    SecurityLogs.MakeLogEntry(Permissions.AppointmentEdit, AptCur.PatNum
-                        , "All procedures were moved off of the appointment, resulting in its deletion."
+                    SecurityLog.Write(AptCur.PatNum
+                        , SecurityLogEvents.AppointmentEdited, "All procedures were moved off of the appointment, resulting in its deletion."
                         , aptNumDeleted, DateTime.MinValue);
                 }
             }
@@ -2487,7 +2487,7 @@ namespace OpenDental
             CloseOD = true;
             if (IsNew)
             {
-                SecurityLogs.MakeLogEntry(Permissions.AppointmentCreate, pat.PatNum,
+                SecurityLog.Write(pat.PatNum, SecurityLogEvents.AppointmentCreate,
                 AptCur.AptDateTime.ToString() + ", " + AptCur.ProcDescript,
                 AptCur.AptNum, datePrevious);
             }
@@ -2851,13 +2851,13 @@ namespace OpenDental
             _listAppointments.RemoveAll(x => x.AptNum == AptCur.AptNum);
             if (AptOld.AptStatus != ApptStatus.Complete)
             { //seperate log entry for completed appointments
-                SecurityLogs.MakeLogEntry(Permissions.AppointmentEdit, pat.PatNum,
-                    "Delete for date/time: " + AptCur.AptDateTime.ToString(),
+                SecurityLog.Write(pat.PatNum,
+                    SecurityLogEvents.AppointmentEdited, "Delete for date/time: " + AptCur.AptDateTime.ToString(),
                     AptCur.AptNum, datePrevious);
             }
             else
             {
-                SecurityLogs.MakeLogEntry(Permissions.AppointmentCompleteEdit, pat.PatNum,
+                SecurityLog.Write(pat.PatNum, SecurityLogEvents.CompletedAppointmentEdited,
                     "Delete for date/time: " + AptCur.AptDateTime.ToString(),
                     AptCur.AptNum, datePrevious);
             }
@@ -2892,12 +2892,12 @@ namespace OpenDental
             if (AptOld.AptStatus != ApptStatus.UnschedList && AptCur.AptStatus == ApptStatus.UnschedList)
             {
                 //Extra log entry if the appt was sent to the unscheduled list
-                string perm = Permissions.AppointmentMove;
+                string perm = SecurityLogEvents.AppointmentMove;
                 if (AptOld.AptStatus == ApptStatus.Complete)
                 {
-                    perm = Permissions.AppointmentCompleteEdit;
+                    perm = SecurityLogEvents.CompletedAppointmentEdited;
                 }
-                SecurityLogs.MakeLogEntry(perm, AptCur.PatNum, AptCur.ProcDescript + ", " + AptCur.AptDateTime.ToString()
+                SecurityLog.Write(AptCur.PatNum, perm, AptCur.ProcDescript + ", " + AptCur.AptDateTime.ToString()
                     + ", Sent to Unscheduled List", AptCur.AptNum, datePrevious);
             }
             #region Validate Apt Start and End
@@ -2965,7 +2965,7 @@ namespace OpenDental
                 }
                 if (IsNew)
                 {
-                    SecurityLogs.MakeLogEntry(Permissions.AppointmentEdit, AptCur.PatNum,
+                    SecurityLog.Write(AptCur.PatNum, SecurityLogEvents.AppointmentEdited,
                         "Create cancel for date/time: " + AptCur.AptDateTime.ToString(),
                         AptCur.AptNum, datePrevious);
                     //If cancel was pressed we want to un-do any changes to other appointments that were done.

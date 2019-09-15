@@ -762,7 +762,7 @@ namespace OpenDental {
 			//We have been getting null reference reports from this security log entry.
 			//Only check if PaySplitCur is null because _paySplitCopy gets set OnLoad() which must have been invoked especially if they clicked Delete.
 			if(PaySplitCur!=null) {
-				SecurityLogs.MakeLogEntry(Permissions.PaymentEdit,PaySplitCur.PatNum,"Payment deleted for "+PaySplitCur.SplitAmt,0,_paySplitCopy.SecDateTEdit);
+				SecurityLog.Write(Permissions.PaymentEdit,PaySplitCur.PatNum,"Payment deleted for "+PaySplitCur.SplitAmt,0,_paySplitCopy.SecDateTEdit);
 			}
 			PaySplitCur=null;
 			DialogResult=DialogResult.OK;
@@ -864,7 +864,7 @@ namespace OpenDental {
 					secLogText+=", clinic "+Clinics.GetAbbr(PaySplitCur.ClinicNum);
 				}
 				secLogText+=", amount "+PaySplitCur.SplitAmt.ToString("F");
-				SecurityLogs.MakeLogEntry(Permissions.PaymentEdit,PaySplitCur.PatNum,secLogText);
+				SecurityLog.Write(Permissions.PaymentEdit,PaySplitCur.PatNum,secLogText);
 			}
 			else {
 				string secLogText="Paysplit edited";
@@ -875,7 +875,7 @@ namespace OpenDental {
 				secLogText+=SecurityLogEntryHelper(Clinics.GetAbbr(_paySplitCopy.ClinicNum),Clinics.GetAbbr(PaySplitCur.ClinicNum),"clinic");
 				secLogText+=SecurityLogEntryHelper(_paySplitCopy.SplitAmt.ToString("F"),PaySplitCur.SplitAmt.ToString("F"),"amount");
 				secLogText+=SecurityLogEntryHelper(_paySplitCopy.PatNum.ToString(),PaySplitCur.PatNum.ToString(),"patient number");
-				SecurityLogs.MakeLogEntry(Permissions.PaymentEdit,PaySplitCur.PatNum,secLogText,0,_paySplitCopy.SecDateTEdit);
+				SecurityLog.Write(Permissions.PaymentEdit,PaySplitCur.PatNum,secLogText,0,_paySplitCopy.SecDateTEdit);
 			}
 			DialogResult=DialogResult.OK;
 		}

@@ -3628,8 +3628,8 @@ namespace OpenDental
             Provider patProv = Providers.GetProv(PatCur.PriProv);
             if (AddProcAndValidate(textQuickProcs.Text, patProv))
             {
-                SecurityLogs.MakeLogEntry(Permissions.AccountProcsQuickAdd, PatCur.PatNum
-                    , Lan.g(this, "The following procedures were added via the Quick Charge button from the Account module")
+                SecurityLog.Write(PatCur.PatNum
+                    , Permissions.AccountProcsQuickAdd, Lan.g(this, "The following procedures were added via the Quick Charge button from the Account module")
                         + ": " + string.Join(",", textQuickProcs.Text));
                 ModuleSelected(PatCur.PatNum);
             }
@@ -3672,8 +3672,8 @@ namespace OpenDental
             }
             if (procCodesAdded.Count > 0)
             {
-                SecurityLogs.MakeLogEntry(Permissions.AccountProcsQuickAdd, PatCur.PatNum
-                    , Lan.g(this, "The following procedures were added via the Quick Charge button from the Account module")
+                SecurityLog.Write(PatCur.PatNum
+                    , Permissions.AccountProcsQuickAdd, Lan.g(this, "The following procedures were added via the Quick Charge button from the Account module")
                         + ": " + string.Join(",", procCodesAdded));
                 ModuleSelected(PatCur.PatNum);
             }

@@ -890,7 +890,7 @@ namespace OpenDental{
 			//pharmacy is set when using pick button.
 			if(IsNew){
 				RxPatCur.RxNum=RxPats.Insert(RxPatCur);
-				SecurityLogs.MakeLogEntry(Permissions.RxCreate,RxPatCur.PatNum,"CREATED("+RxPatCur.RxDate.ToShortDateString()+","+RxPatCur.Drug+","
+				SecurityLog.Write(Permissions.RxCreate,RxPatCur.PatNum,"CREATED("+RxPatCur.RxDate.ToShortDateString()+","+RxPatCur.Drug+","
 					+RxPatCur.ProvNum+","+RxPatCur.Disp+","+RxPatCur.Refills+")",RxPatCur.RxNum,DateTime.MinValue);//No date previous needed, new Rx Pat
 				if(FormProcGroup.IsOpen){
 					FormProcGroup.RxNum=RxPatCur.RxNum;
@@ -899,7 +899,7 @@ namespace OpenDental{
 			else{
 				if(RxPats.Update(RxPatCur,_rxPatOld)) {
 					//The rx has changed, make an edit entry.
-					SecurityLogs.MakeLogEntry(Permissions.RxEdit,RxPatCur.PatNum,"FROM("+_rxPatOld.RxDate.ToShortDateString()+","+_rxPatOld.Drug+","
+					SecurityLog.Write(Permissions.RxEdit,RxPatCur.PatNum,"FROM("+_rxPatOld.RxDate.ToShortDateString()+","+_rxPatOld.Drug+","
 						+_rxPatOld.ProvNum+","+_rxPatOld.Disp+","+_rxPatOld.Refills+")"+"\r\nTO("+RxPatCur.RxDate.ToShortDateString()+","+RxPatCur.Drug+","
 						+RxPatCur.ProvNum+","+RxPatCur.Disp+","+RxPatCur.Refills+")",RxPatCur.RxNum,_rxPatOld.DateTStamp);
 				}
@@ -920,7 +920,7 @@ namespace OpenDental{
 			if(MessageBox.Show(Lan.g(this,"Delete Prescription?"),"",MessageBoxButtons.OKCancel)!=DialogResult.OK) {
 				return;
 			}
-			SecurityLogs.MakeLogEntry(Permissions.RxEdit,RxPatCur.PatNum,"FROM("+_rxPatOld.RxDate.ToShortDateString()+","+_rxPatOld.Drug+","+_rxPatOld.ProvNum+","+_rxPatOld.Disp+","+_rxPatOld.Refills+")"+"\r\nTO('deleted')",RxPatCur.RxNum,_rxPatOld.DateTStamp);
+			SecurityLog.Write(Permissions.RxEdit,RxPatCur.PatNum,"FROM("+_rxPatOld.RxDate.ToShortDateString()+","+_rxPatOld.Drug+","+_rxPatOld.ProvNum+","+_rxPatOld.Disp+","+_rxPatOld.Refills+")"+"\r\nTO('deleted')",RxPatCur.RxNum,_rxPatOld.DateTStamp);
 			RxPats.Delete(RxPatCur.RxNum);
 			DialogResult=DialogResult.OK;	
 		}

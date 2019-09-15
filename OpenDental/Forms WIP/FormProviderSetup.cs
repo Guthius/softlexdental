@@ -1051,7 +1051,7 @@ namespace OpenDental{
 						patsMoved+=x.Value.Count;
 						PatientEvent.Fire(ODEventType.Patient,Lan.g(this,"Moving patients")+": "+patsMoved+" out of "+totalPatCount);
 						Patients.ChangePrimaryProviders(x.Key,provTo.ProvNum);//update all priprovs to new provider
-						SecurityLogs.MakeLogEntry(Permissions.PatPriProvEdit,0,"Primary provider changed for "+x.Value.Count+" patients from "
+						SecurityLog.Write(Permissions.PatPriProvEdit,0,"Primary provider changed for "+x.Value.Count+" patients from "
 							+Providers.GetLongDesc(x.Key)+" to "+provTo.GetLongDesc()+".");
 					})).ToList();
 					ODThread.RunParallel(listActions,TimeSpan.FromMinutes(2));
@@ -1150,7 +1150,7 @@ namespace OpenDental{
 							PatientEvent.Fire(ODEventType.Patient,Lan.g(this,"Reassigning patients")+": "+patsReassigned
 								+" "+Lan.g(this,"out of")+" "+listPatProvFrom.Count);
 							Patients.ReassignProv(x.Key.To,x.Value);
-							SecurityLogs.MakeLogEntry(Permissions.PatPriProvEdit,0,"Primary provider changed for "+x.Value.Count+" patients from "
+							SecurityLog.Write(Permissions.PatPriProvEdit,0,"Primary provider changed for "+x.Value.Count+" patients from "
 								+Providers.GetLongDesc(x.Key.From)+" to "+Providers.GetLongDesc(x.Key.To)+".");
 						})).ToList();
 					ODThread.RunParallel(listActions,TimeSpan.FromMinutes(2));//each group of actions gets 2 minutes
@@ -1275,7 +1275,7 @@ namespace OpenDental{
 			if(_hasChanged){
 				DataValid.SetInvalid(InvalidType.Providers, InvalidType.Security);
 			}
-			//SecurityLogs.MakeLogEntry("Providers","Altered Providers",user);
+			//SecurityLog.Write("Providers","Altered Providers",user);
 		}
 	}
 }

@@ -50,7 +50,7 @@ namespace OpenDental
                     return;
                 }
 
-                SecurityLogs.MakeLogEntry(Permissions.GraphicsRemoteEdit, 0, "Edited graphical settings for " + ComputerPrefCur.ComputerName);
+                SecurityLog.Write(Permissions.GraphicsRemoteEdit, 0, "Edited graphical settings for " + ComputerPrefCur.ComputerName);
             }
             Text += " - " + ComputerPrefCur.ComputerName;
 

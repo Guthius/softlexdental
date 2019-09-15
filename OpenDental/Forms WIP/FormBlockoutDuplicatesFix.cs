@@ -39,7 +39,7 @@ namespace OpenDental {
 			}
 			Cursor=Cursors.WaitCursor;
 			Schedules.ClearDuplicates();
-			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Clear duplicate blockouts.");
+			SecurityLog.Write(Permissions.Setup,0,"Clear duplicate blockouts.");
 			Cursor=Cursors.Default;
 			MsgBox.Show(this,"Done.");
 			FillLabels();

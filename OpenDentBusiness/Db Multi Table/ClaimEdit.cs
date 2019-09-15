@@ -59,7 +59,7 @@ namespace OpenDentBusiness
 
             if (doMakeSecLog)
             {
-                SecurityLogs.MakeLogEntry(permissionToLog, ClaimCur.PatNum,
+                SecurityLog.Write(ClaimCur.PatNum, permissionToLog,
                     pat.GetNameLF() + ", Date of service: " + ClaimCur.DateService.ToShortDateString());
             }
 

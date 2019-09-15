@@ -210,7 +210,7 @@ namespace OpenDental {
 							pregDisDefNumCur=DiseaseDef.Insert(disdefCur);
                             CacheManager.Invalidate<DiseaseDef>();
 							DataValid.SetInvalid(InvalidType.Diseases);
-							SecurityLogs.MakeLogEntry(Permissions.ProblemEdit,0,disdefCur.Name+" added.");
+							SecurityLog.Write(Permissions.ProblemEdit,disdefCur.Name+" added.");
 						}
 					}
 					#endregion

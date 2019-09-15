@@ -424,7 +424,7 @@ Body
                 End("ClinicalDocument");
                 #endregion ClinicalDocument
             }
-            SecurityLogs.MakeLogEntry(Permissions.Copy, pat.PatNum, "CCD generated");           //Create audit log entry.
+            SecurityLog.Write(pat.PatNum, SecurityLogEvents.Copy, "CCD generated");           //Create audit log entry.
             return strBuilder.ToString();
         }
 

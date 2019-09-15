@@ -217,7 +217,7 @@ namespace OpenDental{
 				if(_procCur.ProcStatus.In(ProcStat.EO,ProcStat.EC)) {
 					perm=Permissions.EditProcedure;
 				}
-				SecurityLogs.MakeLogEntry(perm,_patCur.PatNum,logText);
+				SecurityLog.Write(perm,_patCur.PatNum,logText);
 			}
 			DialogResult=DialogResult.OK;
 		}

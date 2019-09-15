@@ -295,7 +295,7 @@ namespace OpenDental {
 							}
 							refattach.ItemOrder=order+1;
 							RefAttaches.Insert(refattach);
-							SecurityLogs.MakeLogEntry(Permissions.RefAttachAdd,PatNum,"Referred From "+Referrals.GetNameFL(refattach.ReferralNum));
+							SecurityLog.Write(Permissions.RefAttachAdd,PatNum,"Referred From "+Referrals.GetNameFL(refattach.ReferralNum));
 						}
 						else if(compare==-1) {//The referral count is greater than the reconcile count.
 							//So we do not need to show the referral window, we just need to reconcile below.
@@ -451,7 +451,7 @@ namespace OpenDental {
 								}
 								refattach.ItemOrder=order+1;
 								RefAttaches.Insert(refattach);
-								SecurityLogs.MakeLogEntry(Permissions.RefAttachAdd,PatNum,"Referred From "+Referrals.GetNameFL(refattach.ReferralNum));
+								SecurityLog.Write(Permissions.RefAttachAdd,PatNum,"Referred From "+Referrals.GetNameFL(refattach.ReferralNum));
 								FormMedicationReconcile FormMedRec=new FormMedicationReconcile();
 								FormMedRec.PatCur=PatCur;
 								FormMedRec.ShowDialog();

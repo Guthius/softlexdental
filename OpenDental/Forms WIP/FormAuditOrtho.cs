@@ -78,7 +78,7 @@ namespace OpenDental {
 					else {
 						row.Cells.Add(user.UserName);
 					}
-					row.Cells.Add(DictDateOrthoLogs[dateRow][i].EventName.ToString());
+					row.Cells.Add(DictDateOrthoLogs[dateRow][i].Event.ToString());
 					row.Cells.Add(DictDateOrthoLogs[dateRow][i].LogMessage);
 					gridMain.Rows.Add(row);
 				}
@@ -88,7 +88,7 @@ namespace OpenDental {
 				row=new ODGridRow();
 				row.Cells.Add(PatientFieldLogs[i].LogDate.ToShortDateString()+" "+PatientFieldLogs[i].LogDate.ToShortTimeString());
 				row.Cells.Add(User.GetById(PatientFieldLogs[i].UserId).UserName);
-				row.Cells.Add(PatientFieldLogs[i].EventName.ToString());
+				row.Cells.Add(PatientFieldLogs[i].Event.ToString());
 				row.Cells.Add(PatientFieldLogs[i].LogMessage);
 				gridMain.Rows.Add(row);
 			}

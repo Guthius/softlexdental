@@ -5684,14 +5684,14 @@ namespace OpenDental{
 			int prefRigorousAccounting= Preference.GetInt(PreferenceName.RigorousAccounting);
 			if(Preference.Update(PreferenceName.RigorousAccounting,comboRigorousAccounting.SelectedIndex)) {
 				_changed=true;
-				SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Rigorous accounting changed from "+
+				SecurityLog.Write(Permissions.Setup,0,"Rigorous accounting changed from "+
 					((RigorousAccounting)prefRigorousAccounting).GetDescription()+" to "
 					+((RigorousAccounting)comboRigorousAccounting.SelectedIndex).GetDescription()+".");
 			}
 			int prefRigorousAdjustments=Preference.GetInt(PreferenceName.RigorousAdjustments);
 			if(Preference.Update(PreferenceName.RigorousAdjustments,comboRigorousAdjustments.SelectedIndex)) {
 				_changed=true;
-				SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Rigorous adjustments changed from "+
+				SecurityLog.Write(Permissions.Setup,0,"Rigorous adjustments changed from "+
 					((RigorousAdjustments)prefRigorousAdjustments).GetDescription()+" to "
 					+((RigorousAdjustments)comboRigorousAdjustments.SelectedIndex).GetDescription()+".");
 			}

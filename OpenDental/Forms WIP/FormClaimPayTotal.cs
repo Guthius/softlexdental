@@ -593,10 +593,10 @@ namespace OpenDental {
 					FeeCur.Amount=PIn.Double(gridMain.Rows[i].Cells[gridMain.Columns.GetIndex(Lan.g("TableClaimProc","Allowed"))].Text);
 					Fees.Update(FeeCur);
 				}
-				SecurityLogs.MakeLogEntry(Permissions.ProcFeeEdit,0,Lan.g(this,"Procedure")+": "+ProcedureCodes.GetStringProcCode(FeeCur.CodeNum)
+				SecurityLog.Write(SecurityLogEvents.ProcFeeEdit,0,Lan.g(this,"Procedure")+": "+ProcedureCodes.GetStringProcCode(FeeCur.CodeNum)
 					+", "+Lan.g(this,"Fee")+": "+FeeCur.Amount.ToString("c")+", "+Lan.g(this,"Fee Schedule")+" "+FeeScheds.GetDescription(FeeCur.FeeSched)
 					+". "+Lan.g(this,"Automatic change to allowed fee in Enter Payment window.  Confirmed by user."),FeeCur.CodeNum,DateTime.MinValue);
-				SecurityLogs.MakeLogEntry(Permissions.LogFeeEdit,0,Lan.g(this,"Fee Updated"),FeeCur.FeeNum,datePrevious);
+				SecurityLog.Write(SecurityLogEvents.LogFeeEdit,0,Lan.g(this,"Fee Updated"),FeeCur.FeeNum,datePrevious);
 				invalidFeeSchedNums.Add(FeeCur.FeeSched);
 			}
 			foreach(long feeSchedNum in invalidFeeSchedNums.Distinct()) {

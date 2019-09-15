@@ -184,7 +184,7 @@ namespace OpenDental
                     case AutomationAction.PatRestrictApptSchedTrue:
                         if (!Security.IsAuthorized(Permissions.PatientApptRestrict, true))
                         {
-                            SecurityLogs.MakeLogEntry(Permissions.PatientApptRestrict, patNum, "Attempt to restrict patient scheduling was blocked due to lack of user permission.");
+                            SecurityLog.Write(patNum, SecurityLogEvents.PatientApptRestrict, "Attempt to restrict patient scheduling was blocked due to lack of user permission.");
                             continue;
                         }
                         PatRestrictions.Upsert(patNum, PatRestrict.ApptSchedule);
@@ -193,7 +193,7 @@ namespace OpenDental
                     case AutomationAction.PatRestrictApptSchedFalse:
                         if (!Security.IsAuthorized(Permissions.PatientApptRestrict, true))
                         {
-                            SecurityLogs.MakeLogEntry(Permissions.PatientApptRestrict, patNum, "Attempt to allow patient scheduling was blocked due to lack of user permission.");
+                            SecurityLog.Write(patNum, SecurityLogEvents.PatientApptRestrict, "Attempt to allow patient scheduling was blocked due to lack of user permission.");
                             continue;
                         }
                         PatRestrictions.RemovePatRestriction(patNum, PatRestrict.ApptSchedule);
@@ -229,7 +229,7 @@ namespace OpenDental
                         pat.PatStatus = listAutomations[i].PatStatus;
                         if (Patients.Update(pat, patOld))
                         {
-                            SecurityLogs.MakeLogEntry(Permissions.PatientEdit, patNum, "Patient status changed from " + patOld.PatStatus.GetDescription() +
+                            SecurityLog.Write(patNum, SecurityLogEvents.PatientEdit, "Patient status changed from " + patOld.PatStatus.GetDescription() +
                                 " to " + listAutomations[i].PatStatus.GetDescription() + " through ChangePatStatus automation.");
                         }
                         automationHappened = true;

@@ -134,8 +134,8 @@ namespace OpenDental
 
                 Security.IsUserLoggedIn = true;
 
-                SecurityLogs.MakeLogEntry(
-                    Permissions.UserLogOnOff, 0, 
+                SecurityLog.Write(
+                    SecurityLogEvents.UserLogOnOff, 
                     string.Format(
                         Translation.LanguageSecurity.UserHasLoggedIn, 
                         Security.CurrentUser.UserName));

@@ -210,7 +210,7 @@ namespace OpenDentBusiness{
 						+Lans.g("OrthoCharts","New value")+": \""+listUpdNew[i].FieldValue+"\" ";
 				}
 				logText+=listUpdDB[i].DateService.ToString("yyyyMMdd");//This date stamp must be the last 8 characters for new OrthoEdit audit trail entries.
-				SecurityLogs.MakeLogEntry(Permissions.OrthoChartEditFull,patCur.PatNum,logText);
+				SecurityLog.Write(patCur.PatNum, SecurityLogEvents.OrthoChartEditFull, logText);
 				#endregion
 			}
 			for(int i=0;i<listDel.Count;i++) {//All logging should have been performed above in the "Update block"

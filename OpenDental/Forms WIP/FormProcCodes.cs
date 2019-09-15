@@ -1645,13 +1645,13 @@ namespace OpenDental{
 				}
 			}
 			changed=true;//Cause a cache refresh signal to be sent on closing.
-			SecurityLog secLog=SecurityLogs.MakeLogEntryNoInsert(Permissions.ProcFeeEdit,0,Lan.g(this,"Procedure")+": "+ProcedureCodes.GetStringProcCode(fee.CodeNum)
-				+", "+Lan.g(this,"Fee")+": "+fee.Amount.ToString("c")+", "+Lan.g(this,"Fee Schedule")+": "+FeeScheds.GetDescription(fee.FeeSched)
-				+". "+Lan.g(this,"Manual edit in grid from Procedure Codes list."),fee.CodeNum,LogSources.None);
-			_dictFeeLogs[fee.FeeNum]=new List<SecurityLog>();
-			_dictFeeLogs[fee.FeeNum].Add(secLog);
-			_dictFeeLogs[fee.FeeNum].Add(SecurityLogs.MakeLogEntryNoInsert(Permissions.LogFeeEdit,0,"Fee changed",fee.FeeNum,LogSources.None,
-				DateTPrevious:fee.SecDateTEdit));
+			//SecurityLog secLog=SecurityLog.WriteNoInsert(Permissions.ProcFeeEdit,0,Lan.g(this,"Procedure")+": "+ProcedureCodes.GetStringProcCode(fee.CodeNum)
+			//	+", "+Lan.g(this,"Fee")+": "+fee.Amount.ToString("c")+", "+Lan.g(this,"Fee Schedule")+": "+FeeScheds.GetDescription(fee.FeeSched)
+			//	+". "+Lan.g(this,"Manual edit in grid from Procedure Codes list."),fee.CodeNum,SecurityLogSource.None);
+			//_dictFeeLogs[fee.FeeNum]=new List<SecurityLog>();
+			//_dictFeeLogs[fee.FeeNum].Add(secLog);
+			//_dictFeeLogs[fee.FeeNum].Add(SecurityLog.WriteNoInsert(SecurityLogEvents.LogFeeEdit,0,"Fee changed",fee.FeeNum,SecurityLogSource.None,
+			//	DateTPrevious:fee.SecDateTEdit));
 			FillGrid();
 		}
 
@@ -1681,7 +1681,7 @@ namespace OpenDental{
 				}
 			}
 			//we need to move security log to within the definition window for more complete tracking
-			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Definitions");
+			SecurityLog.Write(Permissions.Setup,0,"Definitions");
 			FillGrid();
 		}
 
@@ -1731,7 +1731,7 @@ namespace OpenDental{
 			FormF.ShowDialog();
 			FillComboBoxes();
 			FillGrid();
-			SecurityLogs.MakeLogEntry(Permissions.FeeSchedEdit,0,"Fee Schedules");
+			SecurityLog.Write(Permissions.FeeSchedEdit,0,"Fee Schedules");
 		}
 
 		private void butTools_Click(object sender,System.EventArgs e) {
@@ -1755,7 +1755,7 @@ namespace OpenDental{
 				FillComboBoxes();//To show possible added fee schedule.
 			}
 			FillGrid();
-			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Fee Schedule Tools");
+			SecurityLog.Write(Permissions.Setup,0,"Fee Schedule Tools");
 		}
 
 		private void butExport_Click(object sender,EventArgs e) {
@@ -1811,7 +1811,7 @@ namespace OpenDental{
 			ProcedureCodes.RefreshCache();
 			FillCats();
 			FillGrid();
-			SecurityLogs.MakeLogEntry(Permissions.Setup,0,Lan.g(this,"Imported Procedure Codes"));
+			SecurityLog.Write(Permissions.Setup,0,Lan.g(this,"Imported Procedure Codes"));
 		}
 
 		///<summary>Can be called externally.  Surround with try catch.  Returns number of codes inserted. 
@@ -1879,7 +1879,7 @@ namespace OpenDental{
 				}
 				listCodes[i].ProvNumDefault=0;//Always import procedure codes with no specific provider set.  The incoming prov might not exist.
 				ProcedureCodes.Insert(listCodes[i]);				
-				SecurityLogs.MakeLogEntry(Permissions.EditProcedureCode,0,"Code"+listCodes[i].ProcCode+" added from procedure code import.",listCodes[i].CodeNum,
+				SecurityLog.Write(Permissions.EditProcedureCode,0,"Code"+listCodes[i].ProcCode+" added from procedure code import.",listCodes[i].CodeNum,
 					DateTime.MinValue);
 				retVal++;
 			}
@@ -2018,12 +2018,12 @@ namespace OpenDental{
 		}
 
 		private void SaveLogs() {
-			foreach(long feeNum in _dictFeeLogs.Keys) {
-				foreach(SecurityLog secLog in _dictFeeLogs[feeNum]) {
-					SecurityLogs.MakeLogEntry(secLog);
-				}
-			}
-			_dictFeeLogs.Clear();
+			//foreach(long feeNum in _dictFeeLogs.Keys) {
+			//	foreach(SecurityLog secLog in _dictFeeLogs[feeNum]) {
+			//		SecurityLog.Write(secLog);
+			//	}
+			//}
+			//_dictFeeLogs.Clear();
 		}
 
 		///<summary>Saves the fee cache and the security logs.</summary>

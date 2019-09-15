@@ -32,9 +32,7 @@ namespace OpenDental {
 				InsertNewMed(medGenPair,listMedsExisting);
 				countImportedMedications++;
 			}
-			SecurityLogs.MakeLogEntry(Permissions.Setup,0
-				,Lans.g("Medications","Imported")+" "+POut.Int(countImportedMedications)+" "+Lans.g("Medications","medications.")
-			);
+            SecurityLog.Write(SecurityLogEvents.Setup, Lans.g("Medications", "Imported") + " " + POut.Int(countImportedMedications) + " " + Lans.g("Medications", "medications."));
 			return countImportedMedications;
 		}
 
@@ -90,9 +88,7 @@ namespace OpenDental {
 				strBldrOutput.AppendLine(med.Description+'\t'+Medication.GetGenericName(med.GenericId.Value)+'\t'+med.Notes+'\t'+med.RxCui);
 			}
 			File.WriteAllText(filename,strBldrOutput.ToString());//Allow Exception to trickle up.
-			SecurityLogs.MakeLogEntry(Permissions.Setup,0,
-				Lans.g("Medications","Exported")+" "+POut.Int(listMedications.Count)+" "+Lans.g("Medications","medications to:")+" "+filename
-			);
+            SecurityLog.Write(SecurityLogEvents.Setup, "Exported " + POut.Int(listMedications.Count) + " medications to: " + filename);
 			return listMedications.Count;
 		}
 

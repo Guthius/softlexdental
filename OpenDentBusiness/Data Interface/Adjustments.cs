@@ -216,7 +216,7 @@ namespace OpenDentBusiness
 
             Patient pat = Patients.GetPat(procedure.PatNum);
             TsiTransLogs.CheckAndInsertLogsIfAdjTypeExcluded(adjustmentCur, pat.Guarantor, pat.ClinicNum);
-            SecurityLogs.MakeLogEntry(Permissions.AdjustmentCreate, procedure.PatNum, "Adjustment made for discount plan: " + adjustmentCur.AdjAmt.ToString("f"));
+            SecurityLog.Write(procedure.PatNum, SecurityLogEvents.AdjustmentCreated, "Adjustment made for discount plan: " + adjustmentCur.AdjAmt.ToString("f"));
         }
 
         /// <summary>
@@ -344,14 +344,15 @@ namespace OpenDentBusiness
         public static void DeleteForProcedure(long procNum)
         {
             // Create log for each adjustment that is going to be deleted.
-            List<Adjustment> listAdjustments = Crud.AdjustmentCrud.SelectMany("SELECT * FROM adjustment WHERE ProcNum = " + POut.Long(procNum));
+            List<Adjustment> listAdjustments = Crud.AdjustmentCrud.SelectMany("SELECT * FROM adjustment WHERE ProcNum = " + procNum);
             for (int i = 0; i < listAdjustments.Count; i++)
             {
-                SecurityLogs.MakeLogEntry(
-                    Permissions.AdjustmentEdit, listAdjustments[i].PatNum, 
+                SecurityLog.Write(
+                    listAdjustments[i].PatNum,
+                    SecurityLogEvents.AdjustmentEdited, 
                     "Delete adjustment for patient: "
                     + Patients.GetLim(listAdjustments[i].PatNum).GetNameLF() + ", "
-                    + (listAdjustments[i].AdjAmt).ToString("c"), 0, listAdjustments[i].SecDateTEdit);
+                    + listAdjustments[i].AdjAmt.ToString("c"), null, listAdjustments[i].SecDateTEdit);
             }
 
             // Delete each adjustment for the procedure.
@@ -441,10 +442,11 @@ namespace OpenDentBusiness
             {
                 listActions.Add(new Action(() =>
                 {
-                    SecurityLogs.MakeLogEntry(Permissions.AdjustmentEdit, PIn.Long(row["PatNum"].ToString()),
+                    SecurityLog.Write(PIn.Long(row["PatNum"].ToString()),
+                        SecurityLogEvents.AdjustmentEdited, 
                         "Delete adjustment for patient, undo " + adjTypeStr.ToLower() + " charges: "
                         + Patients.GetNameLF(row["LName"].ToString(), row["FName"].ToString(), row["Preferred"].ToString(), row["MiddleI"].ToString())
-                        + ", " + PIn.Double(row["AdjAmt"].ToString()).ToString("c"), 0, PIn.DateT(row["SecDateTEdit"].ToString()));
+                        + ", " + PIn.Double(row["AdjAmt"].ToString()).ToString("c"), null, PIn.DateT(row["SecDateTEdit"].ToString()));
 
                     if (++loopCount % 5 == 0)
                     {

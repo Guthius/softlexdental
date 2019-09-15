@@ -93,7 +93,7 @@ namespace OpenDentBusiness
             }
             if (isCommand)
             {
-                SecurityLogs.MakeLogEntry(Permissions.CommandQuery, 0, "Command query run.");
+                SecurityLog.Write(null, SecurityLogEvents.CommandQuery, "Command query run.");
             }
             return true;
         }

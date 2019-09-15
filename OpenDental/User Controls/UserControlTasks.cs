@@ -766,7 +766,7 @@ namespace OpenDental {
 					}
 					if(_listTasks[i].TaskStatus==TaskStatusEnum.New) {
 						Tasks.Delete(_listTasks[i].TaskNum);
-						SecurityLogs.MakeLogEntry(Permissions.TaskEdit,0,"Task "+POut.Long(_listTasks[i].TaskNum)+" deleted",0);
+                        SecurityLog.Write(SecurityLogEvents.TaskEdit, "Task " + POut.Long(_listTasks[i].TaskNum) + " deleted");
 						changeMade=true;
 					}
 				}
@@ -2065,7 +2065,7 @@ namespace OpenDental {
 				taskHistory.IsNoteChange=false;
 				taskHistory.UserNum=Security.CurrentUser.Id;
 				TaskHists.Insert(taskHistory);
-				SecurityLogs.MakeLogEntry(Permissions.TaskEdit,0,"Task "+POut.Long(_clickedTask.TaskNum)+" deleted",0);
+				SecurityLog.Write(SecurityLogEvents.TaskEdit,"Task "+POut.Long(_clickedTask.TaskNum)+" deleted");
 			}
 		}
 
@@ -2079,7 +2079,7 @@ namespace OpenDental {
 			}
 			for(int i=0;i<childTasks.Count;i++) {
 				Tasks.Delete(childTasks[i].TaskNum);
-				SecurityLogs.MakeLogEntry(Permissions.TaskEdit,0,"Task "+POut.Long(childTasks[i].TaskNum)+" deleted",0);
+				SecurityLog.Write(SecurityLogEvents.TaskEdit,"Task "+POut.Long(childTasks[i].TaskNum)+" deleted");
 			}
 			try {
 				TaskLists.Delete(list);

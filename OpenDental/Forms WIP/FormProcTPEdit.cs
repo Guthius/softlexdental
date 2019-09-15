@@ -510,7 +510,7 @@ namespace OpenDental{
 
 		private void butDelete_Click(object sender, System.EventArgs e) {
 			ProcTPs.Delete(ProcCur);
-			SecurityLogs.MakeLogEntry(Permissions.TreatPlanEdit,ProcCur.PatNum,"Delete tp proc: "+ProcCur.Descript);
+			SecurityLog.Write(Permissions.TreatPlanEdit,ProcCur.PatNum,"Delete tp proc: "+ProcCur.Descript);
 			
 			DialogResult=DialogResult.OK;
 		}
@@ -546,7 +546,7 @@ namespace OpenDental{
 			ProcCur.ProcAbbr=textProcAbbr.Text;
 			ProcCur.FeeAllowed=PIn.Double(textFeeAllowed.Text);
 			ProcTPs.InsertOrUpdate(ProcCur,false);//IsNew not applicable here
-			SecurityLogs.MakeLogEntry(Permissions.TreatPlanEdit,ProcCur.PatNum,"Edit proc: "+ProcCur.Descript);
+			SecurityLog.Write(Permissions.TreatPlanEdit,ProcCur.PatNum,"Edit proc: "+ProcCur.Descript);
 			DialogResult=DialogResult.OK;
 		}
 

@@ -1181,7 +1181,7 @@ namespace OpenDental{
 					SetRequiredFields();
 					return;
 				}
-				SecurityLogs.MakeLogEntry(Permissions.RequiredFields,ClaimPaymentCur.ClaimPaymentNum,"Saved claim payment with required fields missing.");
+				SecurityLog.Write(Permissions.RequiredFields,ClaimPaymentCur.ClaimPaymentNum,"Saved claim payment with required fields missing.");
 			}
 			#region Automatic Deposit
 			Definition paymentType=Definition.GetByCategory(DefinitionCategory.InsurancePaymentType)[comboPayType.SelectedIndex];
@@ -1200,7 +1200,7 @@ namespace OpenDental{
 					return;
 				}
 				ClaimPaymentCur.DepositNum=Deposits.Insert(depositCur);
-				SecurityLogs.MakeLogEntry(Permissions.DepositSlips,0
+				SecurityLog.Write(Permissions.DepositSlips,0
 					,Lan.g(this,"Auto Deposit created via the Edit Insurance Payment window:")+" "+depositCur.DateDeposit.ToShortDateString()
 					+" "+Lan.g(this,"New")+" "+depositCur.Amount.ToString("c"));
 			}
@@ -1266,7 +1266,7 @@ namespace OpenDental{
 			try{
 				if(IsNew) {
 					ClaimPayments.Insert(ClaimPaymentCur);//error thrown if trying to change amount and already attached to a deposit.
-					SecurityLogs.MakeLogEntry(Permissions.InsPayCreate,0,
+					SecurityLog.Write(Permissions.InsPayCreate,0,
 						Lan.g(this,"Carrier Name: ")+ClaimPaymentCur.CarrierName+", "
 						+Lan.g(this,"Total Amount: ")+ClaimPaymentCur.CheckAmt.ToString("c")+", "
 						+Lan.g(this,"Check Date: ")+ClaimPaymentCur.CheckDate.ToShortDateString()+", "//Date the check is entered in the system (i.e. today)
@@ -1281,14 +1281,14 @@ namespace OpenDental{
 						return;
 					}
 					if(IsCreateLogEntry) { //need a InsPayCreate Log entry because it just was pre-inserted.
-						SecurityLogs.MakeLogEntry(Permissions.InsPayCreate,0,
+						SecurityLog.Write(Permissions.InsPayCreate,0,
 							Lan.g(this,"Carrier Name: ")+ClaimPaymentCur.CarrierName+", "
 							+Lan.g(this,"Total Amount: ")+ClaimPaymentCur.CheckAmt.ToString("c")+", "
 							+Lan.g(this,"Check Date: ")+ClaimPaymentCur.CheckDate.ToShortDateString()+", "//Date the check is entered in the system (i.e. today)
 							+"ClaimPaymentNum: "+ClaimPaymentCur.ClaimPaymentNum);//Column name, not translated.
 					}
 					else {
-						SecurityLogs.MakeLogEntry(Permissions.InsPayEdit,0,
+						SecurityLog.Write(Permissions.InsPayEdit,0,
 							Lan.g(this,"Carrier Name: ")+ClaimPaymentCur.CarrierName+", "
 							+Lan.g(this,"Total Amount: ")+ClaimPaymentCur.CheckAmt.ToString("c")+", "
 							+Lan.g(this,"Check Date: ")+ClaimPaymentCur.CheckDate.ToShortDateString()+", "//Date the check is entered in the system

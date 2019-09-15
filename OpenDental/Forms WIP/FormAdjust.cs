@@ -474,7 +474,7 @@ namespace OpenDental
                 if (IsNew)
                 {
                     Adjustments.Insert(adjustment);
-                    SecurityLogs.MakeLogEntry(Permissions.AdjustmentCreate, adjustment.PatNum,
+                    SecurityLog.Write(Permissions.AdjustmentCreate, adjustment.PatNum,
                         patient.GetNameLF() + ", "
                         + adjustment.AdjAmt.ToString("c"));
                     TsiTransLogs.CheckAndInsertLogsIfAdjTypeExcluded(adjustment, patient.Guarantor, patient.ClinicNum, _isTsiAdj);
@@ -482,7 +482,7 @@ namespace OpenDental
                 else
                 {
                     Adjustments.Update(adjustment);
-                    SecurityLogs.MakeLogEntry(Permissions.AdjustmentEdit, adjustment.PatNum, patient.GetNameLF() + ", " + adjustment.AdjAmt.ToString("c"), 0
+                    SecurityLog.Write(Permissions.AdjustmentEdit, adjustment.PatNum, patient.GetNameLF() + ", " + adjustment.AdjAmt.ToString("c"), 0
                         , datePreviousChange);
                 }
             }
@@ -507,7 +507,7 @@ namespace OpenDental
                 return;
             }
 
-            SecurityLogs.MakeLogEntry(
+            SecurityLog.Write(
                 Permissions.AdjustmentEdit, adjustment.PatNum, 
                 "Delete for patient: " + patient.GetNameLF() + ", " + adjustment.AdjAmt.ToString("c"), 
                 0, 

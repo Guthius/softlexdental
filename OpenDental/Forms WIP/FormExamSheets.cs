@@ -92,7 +92,7 @@ namespace OpenDental {
 			}
 			FormSheetDefs FormSD=new FormSheetDefs();
 			FormSD.ShowDialog();
-			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Sheets");
+			SecurityLog.Write(Permissions.Setup,0,"Sheets");
 			FillListExamTypes();
 			FillGrid();
 		}

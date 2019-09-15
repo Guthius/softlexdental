@@ -4299,7 +4299,7 @@ namespace OpenDental
                 FormRS.ShowDialog();
                 if (FormRS.DialogResult != DialogResult.OK) return;
                 ModuleSelected(PatCur.PatNum);
-                SecurityLogs.MakeLogEntry(Permissions.RxCreate, PatCur.PatNum, "Created prescription.");
+                SecurityLog.Write(PatCur.PatNum, Permissions.RxCreate, "Created prescription.");
             }
         }
 
@@ -5031,7 +5031,7 @@ namespace OpenDental
 //                doseSpotLog.MsgText = queryString;
 //                doseSpotLog.ProvNum = prov.ProvNum;
 //                doseSpotLog.UserNum = Security.CurUser.UserNum;
-//                SecurityLogs.MakeLogEntry(Permissions.RxCreate, doseSpotLog.PatNum, Lan.g(this, "eRx DoseSpot entry made for provider") + " " + Providers.GetAbbr(doseSpotLog.ProvNum));
+//                SecurityLog.Write(Permissions.RxCreate, doseSpotLog.PatNum, Lan.g(this, "eRx DoseSpot entry made for provider") + " " + Providers.GetAbbr(doseSpotLog.ProvNum));
 //                ErxLogs.Insert(doseSpotLog);
 //                return;
 //            }
@@ -5174,7 +5174,7 @@ namespace OpenDental
 //            erxLog.MsgText = clickThroughXml;
 //            erxLog.ProvNum = prov.ProvNum;
 //            erxLog.UserNum = Security.CurUser.UserNum;
-//            SecurityLogs.MakeLogEntry(Permissions.RxCreate, erxLog.PatNum, Lan.g(this, "eRx entry made for provider") + " " + Providers.GetAbbr(erxLog.ProvNum));
+//            SecurityLog.Write(Permissions.RxCreate, erxLog.PatNum, Lan.g(this, "eRx entry made for provider") + " " + Providers.GetAbbr(erxLog.ProvNum));
 //            ErxLogs.Insert(erxLog);
         }
 
@@ -6037,7 +6037,7 @@ namespace OpenDental
             }
             FormSheetDefs FormSD = new FormSheetDefs();
             FormSD.ShowDialog();
-            SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "Sheets");
+            SecurityLog.Write(SecurityLogEvents.Setup, "Sheets");
             RefreshSheetLayout();//Could have added or deleted layouts, refresh list.
             RefreshModuleScreen(false);//Update UI to reflect any changed dynamic SheetDefs.
         }
@@ -9728,7 +9728,7 @@ namespace OpenDental
                             }
                             Procedures.Delete(PIn.Long(row["ProcNum"].ToString()));//also deletes the claimprocs
                             CanadianLabFeeHelper(Procedures.GetOneProc(PIn.Long(row["ProcNum"].ToString()), false).ProcNumLab);
-                            SecurityLogs.MakeLogEntry(Permissions.ProcDelete, PatCur.PatNum, row["ProcCode"].ToString() + " (" + row["procStatus"] + "), "
+                            SecurityLog.Write(PatCur.PatNum, Permissions.ProcDelete, row["ProcCode"].ToString() + " (" + row["procStatus"] + "), "
                                 + PIn.Double(row["procFee"].ToString()).ToString("c"));
                         }
                         catch (Exception ex)
@@ -9746,7 +9746,7 @@ namespace OpenDental
                         continue;
                     }
                     RxPat rxPat = RxPats.GetRx(PIn.Long(row["RxNum"].ToString()));
-                    SecurityLogs.MakeLogEntry(Permissions.RxEdit, PatCur.PatNum, "FROM(" + rxPat.RxDate.ToShortDateString() + "," + rxPat.Drug + "," + rxPat.ProvNum + ","
+                    SecurityLog.Write(PatCur.PatNum, Permissions.RxEdit, "FROM(" + rxPat.RxDate.ToShortDateString() + "," + rxPat.Drug + "," + rxPat.ProvNum + ","
                         + rxPat.Disp + "," + rxPat.Refills + ")" + "\r\nTO('deleted')", rxPat.RxNum, rxPat.DateTStamp);
                     RxPats.Delete(PIn.Long(row["RxNum"].ToString()));
                 }
@@ -12585,7 +12585,7 @@ namespace OpenDental
                 List<Procedure> listProcsForAppt = Procedures.GetProcsForSingle(apt.AptNum, false);
                 bool removeCompletedProcs = ProcedureL.DoRemoveCompletedProcs(apt, listProcsForAppt.FindAll(x => x.AptNum == apt.AptNum && x.ProcStatus == ProcStat.C));
                 ProcedureL.SetCompleteInAppt(apt, PlanList, PatPlanList, PatCur, SubList, removeCompletedProcs);//loops through each proc, also makes completed security logs
-                SecurityLogs.MakeLogEntry(Permissions.AppointmentEdit, apt.PatNum,
+                SecurityLog.Write(apt.PatNum, Permissions.AppointmentEdit, 
                     apt.ProcDescript + ", " + apt.AptDateTime.ToString() + ", Set Complete",
                     apt.AptNum, datePrevious);
                 //If there is an existing HL7 def enabled, send a SIU message if there is an outbound SIU message defined

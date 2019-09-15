@@ -128,7 +128,7 @@ namespace OpenDental
             }
 
 
-            SecurityLog[] logList = null;
+            List<SecurityLog> logList = null;
             DateTime datePreviousFrom = DateTime.Parse(textDateEditedFrom.Text);
             DateTime datePreviousTo = DateTime.Today;
 
@@ -141,29 +141,27 @@ namespace OpenDental
                 if (permissionComboBox.SelectedIndex == 0)
                 {
                     logList = 
-                        SecurityLogs.Refresh(
+                        SecurityLog.Find(
+                            userId,
+                            patientId, 
                             DateTime.Parse(textDateFrom.Text),
                             DateTime.Parse(textDateTo.Text),
-                            "", 
-                            patientId, 
-                            userId, 
+                            "",
                             datePreviousFrom, 
                             datePreviousTo, 
-                            false, 
                             int.Parse(rowsTextBox.Text));
                 }
                 else
                 {
                     logList = 
-                        SecurityLogs.Refresh(
+                        SecurityLog.Find(
+                            patientId,
+                            userId,
                             DateTime.Parse(textDateFrom.Text),
                             DateTime.Parse(textDateTo.Text),
                             (string)permissionComboBox.SelectedItem, 
-                            patientId, 
-                            userId,
                             datePreviousFrom, 
                             datePreviousTo,
-                            false, 
                             int.Parse(rowsTextBox.Text));
                 }
             }
@@ -172,7 +170,7 @@ namespace OpenDental
                 FormFriendlyException.Show(
                     "There was a problem refreshing the Audit Trail with the current filters.", exception);
 
-                logList = new SecurityLog[0];
+                logList = new List<SecurityLog>();
             }
 
             grid.BeginUpdate();
@@ -192,62 +190,35 @@ namespace OpenDental
                 var row = new ODGridRow();
                 row.Cells.Add(securityLog.LogDate.ToShortDateString());
                 row.Cells.Add(securityLog.LogDate.ToShortTimeString());
-                row.Cells.Add(securityLog.PatientName);
-
-                row.Cells.Add(User.GetById(securityLog.UserId)?.UserName ?? "unknown");
-                if (securityLog.EventName == Permissions.ModuleChart)
-                {
-                    row.Cells.Add("ChartModuleViewed");
-                }
-                else if (securityLog.EventName == Permissions.ModuleFamily)
-                {
-                    row.Cells.Add("FamilyModuleViewed");
-                }
-                else if (securityLog.EventName == Permissions.ModuleAccount)
-                {
-                    row.Cells.Add("AccountModuleViewed");
-                }
-                else if (securityLog.EventName == Permissions.ModuleImages)
-                {
-                    row.Cells.Add("ImagesModuleViewed");
-                }
-                else if (securityLog.EventName == Permissions.ModuleTreatmentPlan)
-                {
-                    row.Cells.Add("TreatmentPlanModuleViewed");
-                }
-                else
-                {
-                    row.Cells.Add(securityLog.EventName.ToString());
-                }
+                row.Cells.Add(""); // TODO: Patient Name
+                row.Cells.Add(User.GetById(securityLog.UserId)?.UserName ?? "Unknown");
+                row.Cells.Add(securityLog.Event);
                 row.Cells.Add(securityLog.ComputerName);
-                if (securityLog.EventName != Permissions.UserQuery)
+
+                if (securityLog.Event != Permissions.UserQuery)
                 {
                     row.Cells.Add(securityLog.LogMessage);
                 }
                 else
                 {
-                    //Only display the first snipet of very long queries. User can double click to view.
+                    // Only display the first snipet of very long queries. User can double click to view.
                     row.Cells.Add(securityLog.LogMessage.Left(200, true));
                     row.Tag = (Action)(() =>
                     {
-                        MsgBoxCopyPaste formText = new MsgBoxCopyPaste(securityLog.LogMessage);
-                        formText.Show();
+                        var msgBoxCopyPaste = new MsgBoxCopyPaste(securityLog.LogMessage);
+
+                        msgBoxCopyPaste.Show();
                     });
                 }
-                if (securityLog.DateTPrevious.Year < 1880)
+
+                row.Cells.Add(securityLog.ExternalDate.HasValue ? securityLog.ExternalDate.ToString() : "");
+                
+                // Mark the row with a red background if the hashes don't match
+                if (securityLog.Hash != SecurityLogHash.GetHashString(securityLog))
                 {
-                    row.Cells.Add("");
+                    row.ColorText = Color.Red; 
                 }
-                else
-                {
-                    row.Cells.Add(securityLog.DateTPrevious.ToString());
-                }
-                //Get the hash for the audit log entry from the database and rehash to compare
-                if (securityLog.LogHash != SecurityLogHashes.GetHashString(securityLog))
-                {
-                    row.ColorText = Color.Red; //Bad hash or no hash entry at all.  This prevents users from deleting the entire hash table to make the audit trail look valid and encrypted.
-                                               //historical entries will show as red.
-                }
+
                 grid.Rows.Add(row);
             }
             grid.EndUpdate();

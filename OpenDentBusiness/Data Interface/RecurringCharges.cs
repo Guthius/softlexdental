@@ -717,7 +717,7 @@ namespace OpenDentBusiness
             paymentCur.PaymentSource = ccSource;
             paymentCur.Receipt = receipt;
             Payments.Insert(paymentCur);
-            SecurityLogs.MakeLogEntry(Permissions.PaymentCreate, paymentCur.PatNum, patCur.GetNameLF() + ", "
+            SecurityLog.Write(paymentCur.PatNum, SecurityLogEvents.PaymentCreate, patCur.GetNameLF() + ", "
                 + paymentCur.PayAmt.ToString("c") + ", " + Lans.g(_lanThis, "created from the Recurring Charges List"));
             recCharge.RecurringCharge.PayNum = paymentCur.PayNum;
             long provNumPayPlan = recCharge.ProvNum;//for payment plans only

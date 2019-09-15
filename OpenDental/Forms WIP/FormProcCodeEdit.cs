@@ -1463,7 +1463,7 @@ namespace OpenDental{
 
 		private void butAuditTrail_Click(object sender,EventArgs e) {
 			List<string> perms=new List<string>();
-			perms.Add(Permissions.ProcFeeEdit);
+			perms.Add(SecurityLogEvents.ProcFeeEdit);
 			FormAuditOneType FormA=new FormAuditOneType(0,perms,Lan.g(this,"All changes for")+" "+ProcCode.AbbrDesc+" - "+ProcCode.ProcCode,ProcCode.CodeNum);
 			FormA.ShowDialog();
 		}
@@ -1566,7 +1566,7 @@ namespace OpenDental{
 				secLog+=SecurityLogEntryHelper(_procCodeOld.ProvNumDefault.ToString(),ProcCode.ProvNumDefault.ToString(),"provider number");
 				secLog+=SecurityLogEntryHelper(_procCodeOld.BypassGlobalLock.ToString(),ProcCode.BypassGlobalLock.ToString(),"bypass global lock box");
 				secLog+=SecurityLogEntryHelper(_procCodeOld.ProcCatDescript,ProcCode.ProcCatDescript,"category");
-				SecurityLogs.MakeLogEntry(Permissions.EditProcedureCode,0,secLog,ProcCode.CodeNum,_procCodeOld.DateTStamp);
+				SecurityLog.Write(Permissions.EditProcedureCode,0,secLog,ProcCode.CodeNum,_procCodeOld.DateTStamp);
 				DataValid.SetInvalid(InvalidType.ProcCodes);
 			}
 			DialogResult=DialogResult.OK;

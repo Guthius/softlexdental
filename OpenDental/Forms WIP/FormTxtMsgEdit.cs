@@ -135,7 +135,7 @@ namespace OpenDental {
 			//commlog.UserNum=Security.CurUser.UserNum;
 			//commlog.DateTimeEnd=DateTime.Now;
 			//Commlogs.Insert(commlog);
-			//SecurityLogs.MakeLogEntry(Permissions.CommlogEdit,commlog.PatNum,"Insert Text Message");
+			//SecurityLog.Write(Permissions.CommlogEdit,commlog.PatNum,"Insert Text Message");
 			return true;
 		}
 

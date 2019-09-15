@@ -91,7 +91,7 @@ namespace OpenDental {
 			long rowsChanged= Medication.Merge(_medFrom.Id,_medInto.Id);
 			string logText=Lan.g(this,"Medications merged")+": "+_medFrom.Description+" "+Lan.g(this,"merged into")+" "+_medInto.Description+".\r\n"
 			+Lan.g(this,"Rows changed")+": "+POut.Long(rowsChanged);
-			SecurityLogs.MakeLogEntry(Permissions.MedicationMerge,0,logText);
+			SecurityLog.Write(Permissions.MedicationMerge,0,logText);
 			textRxFrom.Clear();
 			textMedNumFrom.Clear();
 			textMedNameFrom.Clear();

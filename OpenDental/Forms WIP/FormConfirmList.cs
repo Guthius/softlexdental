@@ -801,7 +801,7 @@ namespace OpenDental{
 				}
 				if(apt.Confirmed!=aptOld.Confirmed) {
 					//Log confirmation status changes.
-					SecurityLogs.MakeLogEntry(Permissions.ApptConfirmStatusEdit,apt.PatNum,Lans.g(this,"Appointment confirmation status changed from")+" "
+					SecurityLog.Write(Permissions.ApptConfirmStatusEdit,apt.PatNum,Lans.g(this,"Appointment confirmation status changed from")+" "
 						+Defs.GetName(DefinitionCategory.ApptConfirmed,aptOld.Confirmed)+" "+Lans.g(this,"to")+" "+Defs.GetName(DefinitionCategory.ApptConfirmed,apt.Confirmed)
 						+" "+Lans.g(this,"from the confirmation list")+".",apt.AptNum,aptOld.DateTStamp);
 				}
@@ -1234,11 +1234,11 @@ namespace OpenDental{
 				}
 				MsgBoxCopyPaste msgbox=new MsgBoxCopyPaste(errors);
 				msgbox.ShowDialog();
-				SecurityLogs.MakeLogEntry(Permissions.EmailSend,0,"Confirmation Emails Sent: "+(listPatNumsSelected.Count-listPatNumsFailed.Count));
+				SecurityLog.Write(Permissions.EmailSend,0,"Confirmation Emails Sent: "+(listPatNumsSelected.Count-listPatNumsFailed.Count));
 				return;
 			}
 			//none failed
-			SecurityLogs.MakeLogEntry(Permissions.EmailSend,0,"Confirmation Emails Sent: "+listPatNumsSelected.Count);
+			SecurityLog.Write(Permissions.EmailSend,0,"Confirmation Emails Sent: "+listPatNumsSelected.Count);
 			FillMain();
 			//reselect the original list 
 			for(int i=0;i<Table.Rows.Count;i++) {
@@ -1344,7 +1344,7 @@ namespace OpenDental{
 					Appointments.SetConfirmed(aptOld,newStatus);
 					if(newStatus!=oldStatus) {
 						//Log confirmation status changes.
-						SecurityLogs.MakeLogEntry(Permissions.ApptConfirmStatusEdit,patNum,
+						SecurityLog.Write(Permissions.ApptConfirmStatusEdit,patNum,
 							Lans.g(this,"Appointment confirmation status automatically changed from")+" "
 							+Defs.GetName(DefinitionCategory.ApptConfirmed,oldStatus)+" "+Lans.g(this,"to")+" "+Defs.GetName(DefinitionCategory.ApptConfirmed,newStatus)
 							+" "+Lans.g(this,"from the confirmation list")+".",ContrApptSingle.SelectedAptNum,aptOld.DateTStamp);

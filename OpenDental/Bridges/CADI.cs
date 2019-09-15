@@ -38,7 +38,7 @@ namespace OpenDental.Bridges
                     MessageBoxButtons.OK, 
                     MessageBoxIcon.Error);
 
-                SecurityLogs.MakeLogEntry(Permissions.ModuleChart, ODMethodsT.Coalesce(patient).PatNum, exception.Message);
+                SecurityLog.Write(patient?.PatNum, SecurityLogEvents.ModuleChart, exception.Message);
             }
         }
     }

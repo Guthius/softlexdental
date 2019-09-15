@@ -66,7 +66,7 @@ namespace OpenDentBusiness
         /// Create Completed Procedure (or set complete)
         /// </summary>
         public const string CreateCompletedProcedure = "procedure_create_completed";
-
+        
         /// <summary>
         /// Choose Database.
         /// </summary>
@@ -241,11 +241,7 @@ namespace OpenDentBusiness
         public const string Billing = "billing"; // Billing
         public const string ProblemEdit = "problem_edit"; // Problem Edit
 
-        /// <summary>
-        /// There is no user interface in the security window for this permission. It is only used for tracking. FK to CodeNum.
-        /// </summary>
-        [Obsolete("Audit.")]
-        public const string ProcFeeEdit = "proc_fee_edit"; // Proc Fee Edit
+
 
         /// <summary>
         /// There is no user interface in the security window for this permission.
@@ -269,24 +265,6 @@ namespace OpenDentBusiness
         /// Add or delete lists and list columns.
         /// </summary>
         public const string WikiListSetup = "wiki_list_setup"; // Wiki List Setup
-
-        /// <summary>
-        /// There is no user interface in the security window for this permission.
-        /// It is only used for tracking. 
-        /// Tracks copying of patient information.
-        /// Required by EHR.
-        /// </summary>
-        [Obsolete("Audit.")]
-        public const string Copy = "copy"; // Copy
-
-        /// <summary>
-        /// There is no user interface in the security window for this permission.
-        /// It is only used for tracking.
-        /// Tracks printing of patient information.
-        /// Required by EHR.
-        /// </summary>
-        [Obsolete("Audit.")]
-        public const string Printing = "printing"; // Printing
 
         /// <summary>
         /// There is no user interface in the security window for this permission.
@@ -356,13 +334,7 @@ namespace OpenDentBusiness
         /// </summary>
         public const string OrthoChartEditFull = "ortho_chart_edit_full"; // Ortho Chart Edit (full)
 
-        /// <summary>
-        /// There is no user interface in the security window for this permission.
-        /// It is only used for tracking.
-        /// Mainly used for ortho clinics.
-        /// </summary>
-        [Obsolete("Audit.")]
-        public const string PatientFieldEdit = "patient_field_edit"; // Patient Field Edit
+
 
         /// <summary>
         /// Assign this permission to a staff person who will edit evaluations in case of an emergency.
@@ -370,19 +342,9 @@ namespace OpenDentBusiness
         /// </summary>
         public const string AdminDentalEvaluations = "admin_dental_evaluations"; // Admin Evaluation Edit
 
-        /// <summary>
-        /// There is no user interface in the security window for this permission. 
-        /// It is only used for tracking.
-        /// </summary>
-        [Obsolete("Audit.")]
-        public const string TreatPlanDiscountEdit = "treat_plan_discount_edit"; // Treat Plan Discount Edit
 
-        /// <summary>
-        /// There is no user interface in the security window for this permission.
-        /// It is only used for tracking.
-        /// </summary>
-        [Obsolete("Audit.")]
-        public const string UserLogOnOff = "user_log_on_off";
+
+
 
         /// <summary>
         /// Allows user to edit other users' tasks.
@@ -410,12 +372,7 @@ namespace OpenDentBusiness
         /// </summary>
         public const string InsPlanChangeAssign = "ins_plan_change_assign"; // Insurance Plan Change Assignment of Benefits
 
-        /// <summary>
-        /// Audit trail for images and documents in the image module.
-        /// There is no user interface in the security window for this permission because it is only used for tracking.
-        /// </summary>
-        [Obsolete("Audit.")]
-        public const string ImageEdit = "image_edit"; // Image Edit
+
 
         /// <summary>
         /// Allows editing of all measure events.  Also used to track changes made to events.
@@ -472,16 +429,7 @@ namespace OpenDentBusiness
         /// </summary>
         public const string ReferralMerge = "referral_merge"; // Referral Merge
 
-        /// <summary>
-        /// There is no user interface in the security window for this permission. 
-        /// It is only used for tracking. Currently only used for tracking automatically changing 
-        /// the IsCpoe flag on procedures.  Can be enhanced to do more in the future. There is 
-        /// only one place where we could have automatically changed IsCpoe without a 
-        /// corresponding log of a different permission. That place is in the OnClosing of the 
-        /// Procedure Edit window. We update this flag even when the user Cancels out of it.
-        /// </summary>
-        [Obsolete("Audit.")]
-        public const string ProcEdit = "proc_edit"; // Proc Edit
+
 
         /// <summary>
         /// Allows user to use the provider merge tool.
@@ -509,21 +457,11 @@ namespace OpenDentBusiness
         public const string TaskListCreate = "task_list_create"; // TaskList Create
 
         /// <summary>
-        /// Audit when a new patient is added.
-        /// </summary>
-        [Obsolete("Only for tracking.")]
-        public const string PatientCreate = "patient_create";
-       
-        /// <summary>
         /// Allows changing the settings for graphical repots.
         /// </summary>
         public const string GraphicalReportSetup = "graphic_report_setup"; // Reports - Graphical Setup
 
-        /// <summary>
-        /// Audit when a patient is edited.
-        /// </summary>
-        [Obsolete("Audit.")]
-        public const string PatientEdit = "patient_edit"; // Patient Edit
+
 
         /// <summary>
         /// Audit when an insurance plan is created. 
@@ -539,32 +477,7 @@ namespace OpenDentBusiness
         [Obsolete("Audit.")]
         public const string InsPlanEdit = "ins_plan_edit"; // Insurance Plan Edit
 
-        /// <summary>
-        /// Audit when an insurance subscriber is created.
-        /// The naming convention of this permission was decided upon by Nathan and Derek based on 
-        /// the following existing permissions: InsPlanChangeSubsc, InsPlanChangeCarrierName, 
-        /// InsPlanChangeAssign. Currently only used in X12 834 insurance plan import.
-        /// </summary>
-        [Obsolete("Audit.")]
-        public const string InsPlanCreateSub = "ins_plan_create_sub"; // Insurance Plan Create Subscriber
 
-        /// <summary>
-        /// Audit when an insurance subscriber is edited. The naming convention of this permission 
-        /// was decided upon by Nathan and Derek based on the following existing permissions: 
-        /// InsPlanChangeSubsc, InsPlanChangeCarrierName, InsPlanChangeAssign. Currently only used 
-        /// in X12 834 insurance plan import.
-        /// </summary>
-        [Obsolete("Audit.")]
-        public const string InsPlanEditSub = "ins_plan_edit_sub"; // Insurance Plan Edit Subscriber
-
-        /// <summary>
-        /// Audit when a patient is added to an insurance plan. The naming convention of this 
-        /// permission was decided upon by Nathan and Derek based on the following existing 
-        /// permissions: InsPlanChangeSubsc, InsPlanChangeCarrierName, InsPlanChangeAssign.
-        /// Currently only used in X12 834 insurance plan import.
-        /// </summary>
-        [Obsolete("Audit.")]
-        public const string InsPlanAddPat = "ins_plan_add_pat"; // Insurance Plan Add Patient
 
         /// <summary>
         /// Audit when a patient is dropped from an insurance plan. The naming convention of this 
@@ -637,11 +550,7 @@ namespace OpenDentBusiness
         /// </summary>
         public const string ClaimProcReceivedEdit = "claim_proc_received_edit"; // Claim Procedure Received Edit
 
-        /// <summary>
-        /// Used to diagnose an error in statement creation. Audit Trail Permission Only
-        /// </summary>
-        [Obsolete("Audit.")]
-        public const string StatementPatNumMismatch = "statement_pat_num_mismatch";
+
         
         /// <summary>
         /// User has access to Mobile Web.
@@ -649,12 +558,7 @@ namespace OpenDentBusiness
         [Obsolete]
         public const string MobileWeb = ""; // Mobile Web
 
-        /// <summary>
-        /// For logging purposes only.
-        /// Used when PatPlans are created and not otherwise logged.
-        /// </summary>
-        [Obsolete("Audit.")]
-        public const string PatPlanCreate = "pat_plan_create";
+
        
         /// <summary>
         /// Allows the user to change a patient's primary provider, with audit trail logging.
@@ -782,10 +686,7 @@ namespace OpenDentBusiness
         /// </summary>
         public const string PreAuthSentEdit = "pre_auth_sent_edit"; // PreAuth Sent Edit
 
-        /// <summary>
-        /// Edit fees (for logging only). Security log entry for this points to feeNum instead of CodeNum.
-        /// </summary>
-        public const string LogFeeEdit = "log_fee_edit";
+
        
         /// <summary>
         /// Log ClaimProcEdit

@@ -314,19 +314,19 @@ namespace OpenDentBusiness
                 else if (procOld.ProcStatus.In(ProcStat.C, ProcStat.EO, ProcStat.EC) && !isNew)
                 {
                     #region SecurityLog for editing a previously completed proc
-                    string perm = Permissions.EditCompletedProcedure;//If was complete before the window loaded.
+                    string perm = SecurityLogEvents.CompletedProcedureEdited;//If was complete before the window loaded.
                     string logText = procCode.ProcCode + " (" + procOld.ProcStatus + "), ";
                     if (!string.IsNullOrEmpty(procTeethStr))
                     {
-                        logText += Lans.g("Procedures", "Teeth") + ": " + procTeethStr + ", ";
+                        logText += "Teeth: " + procTeethStr + ", ";
                     }
-                    logText += Lans.g("Procedures", "Fee") + ": " + procNew.ProcFee.ToString("F") + ", " + procCode.Descript;
+                    logText += "Fee: " + procNew.ProcFee.ToString("F") + ", " + procCode.Descript;
                     if (procOld.ProcStatus.In(ProcStat.EO, ProcStat.EC))
                     {
-                        perm = Permissions.EditProcedure;
+                        perm = SecurityLogEvents.ProcedureEdited;
                     }
                     #endregion
-                    SecurityLogs.MakeLogEntry(perm, procNew.PatNum, logText);
+                    SecurityLog.Write(procNew.PatNum, perm, logText);
                 }
             }
             SetToothInitialForCompExtraction(procNew);
@@ -452,7 +452,7 @@ namespace OpenDentBusiness
                     + ": " + procNew.ProcDate.ToShortDateString() + "  " + Lans.g("Procedures", "With a Fee of") + ": " + procNew.ProcFee.ToString("c") + ".  "
                     + Lans.g("Procedures", "Changed the discount value from") + " " + procOld.Discount.ToString("c") + " " + Lans.g("Procedures", "to") + " "
                     + procNew.Discount.ToString("c");
-            SecurityLogs.MakeLogEntry(Permissions.TreatPlanDiscountEdit, procNew.PatNum, message);
+            SecurityLog.Write(procNew.PatNum, SecurityLogEvents.TreatmentPlanDiscountEdited, message);
         }
 
         ///<summary></summary>
@@ -3925,7 +3925,7 @@ namespace OpenDentBusiness
         ///Uses listSelectedRows and listProcNumsAttachedStart to determine if procs are attaching to or detaching from AptCur.
         ///When moving proc from another appt, other appt descriptions are updated.</summary>
         public static void ProcsAptNumHelper(List<Procedure> listProcs, Appointment AptCur, List<Appointment> listAppointments,
-            List<int> listSelectedRows, List<long> listProcNumsAttachedStart, bool isAptPlanned = false, string logSource = LogSources.None)
+            List<int> listSelectedRows, List<long> listProcNumsAttachedStart, bool isAptPlanned = false, string logSource = SecurityLogSource.None)
         {
             //No need to check RemotingRole; no call to db.
             if (listProcs == null || AptCur == null || listAppointments == null || listSelectedRows == null || listProcNumsAttachedStart == null)
@@ -3954,9 +3954,9 @@ namespace OpenDentBusiness
                     {//Currently attached to another planned appointment.
                         Appointment apptOldPlanned = listAppointments.FirstOrDefault(x => x.AptNum == proc.PlannedAptNum && x.AptStatus == ApptStatus.Planned);
                         string apptOldPlannedDateStr = (apptOldPlanned == null ? "[INVALID #" + proc.PlannedAptNum + "]" : apptOldPlanned.AptDateTime.ToShortDateString());
-                        SecurityLogs.MakeLogEntry(Permissions.AppointmentEdit, AptCur.PatNum, Lans.g("AppointmentEdit", "Procedure") + " "
-                            + ProcedureCodes.GetProcCode(proc.CodeNum).AbbrDesc + " " + Lans.g("AppointmentEdit", "moved from planned appointment created on") + " "
-                            + apptOldPlannedDateStr + " " + Lans.g("AppointmentEdit", "to planned appointment created on") + " "
+                        SecurityLog.Write(AptCur.PatNum, SecurityLogEvents.AppointmentEdited, "Procedure "
+                            + ProcedureCodes.GetProcCode(proc.CodeNum).AbbrDesc + " moved from planned appointment created on "
+                            + apptOldPlannedDateStr + " to planned appointment created on "
                             + AptCur.AptDateTime.ToShortDateString(), logSource);
                         UpdateOtherApptDesc(proc, AptCur, isAptPlanned, listAppointments, listProcs);
                     }
@@ -3968,9 +3968,9 @@ namespace OpenDentBusiness
                     {//Currently attached to another appointment.
                         Appointment apptOld = listAppointments.FirstOrDefault(x => x.AptNum == proc.AptNum);
                         string apptOldDateStr = (apptOld == null ? "[INVALID #" + proc.AptNum + "]" : apptOld.AptDateTime.ToShortDateString());
-                        SecurityLogs.MakeLogEntry(Permissions.AppointmentEdit, AptCur.PatNum, Lans.g("AppointmentEdit", "Procedure") + " "
-                            + ProcedureCodes.GetProcCode(proc.CodeNum).AbbrDesc + " " + Lans.g("AppointmentEdit", "moved from appointment on") + " " + apptOldDateStr
-                            + " " + Lans.g("AppointmentEdit", "to appointment on") + " " + AptCur.AptDateTime, logSource);
+                        SecurityLog.Write(AptCur.PatNum, SecurityLogEvents.AppointmentEdited, "Procedure "
+                            + ProcedureCodes.GetProcCode(proc.CodeNum).AbbrDesc + " moved from appointment on " + apptOldDateStr
+                            + " to appointment on " + AptCur.AptDateTime, logSource);
                         UpdateOtherApptDesc(proc, AptCur, isAptPlanned, listAppointments, listProcs);
                     }
                     proc.AptNum = AptCur.AptNum;
@@ -4018,24 +4018,22 @@ namespace OpenDentBusiness
             string logText = procCode.ProcCode + ", ";
             if (toothNums != null && toothNums.Trim() != "")
             {
-                logText += Lans.g("Procedures", "Teeth") + ": " + toothNums + ", ";
+                logText += "Teeth: " + toothNums + ", ";
             }
-            logText += Lans.g("Procedures", "Fee") + ": " + procCur.ProcFee.ToString("F") + ", " + procCode.Descript;
-            SecurityLogs.MakeLogEntry(Permissions.CreateCompletedProcedure, patNum, logText);
+            logText += "Fee: " + procCur.ProcFee.ToString("F") + ", " + procCode.Descript;
+            SecurityLog.Write(patNum, SecurityLogEvents.CompletedProcedureCreated, logText);
         }
 
         ///<summary>Creates securitylog entry for completed procedure where appointment ProvNum is different than the procedures provnum.</summary>
         private static void LogProcComplEdit(Procedure proc, Procedure procOld, List<ProcedureCode> listProcedureCodes = null)
         {
             ProcedureCode procCode = ProcedureCodes.GetProcCode(proc.CodeNum, listProcedureCodes);
-            string logText = Lans.g("Procedures", "Completed procedure") + " " + procCode.ProcCode.ToString() + " "
-                + Lans.g("Procedures", "edited by setting appointment complete.");
+            string logText = "Completed procedure" + " " + procCode.ProcCode.ToString() + " edited by setting appointment complete.";
             if (proc.ProvNum != procOld.ProvNum)
             {
-                logText += " " + Lans.g("Procedures", "Provider was changed from") + " " + Providers.GetAbbr(procOld.ProvNum) + " " + Lans.g("Procedures", "to") + " " +
-                    Providers.GetAbbr(proc.ProvNum) + ".";
+                logText += " Provider was changed from " + Providers.GetAbbr(procOld.ProvNum) + " to " + Providers.GetAbbr(proc.ProvNum) + ".";
             }
-            SecurityLogs.MakeLogEntry(Permissions.EditCompletedProcedure, proc.PatNum, logText, proc.ProcNum, LogSources.None, procOld.DateTStamp);
+            SecurityLog.Write(proc.PatNum, SecurityLogEvents.CompletedProcedureEdited, logText, SecurityLogSource.None, proc.ProcNum, procOld.DateTStamp);
         }
 
         ///<summary>Returns true when automation needed.
@@ -4043,7 +4041,7 @@ namespace OpenDentBusiness
         ///Also sets ProcDate for TP procs. Will automatically set procs in listProcs to complete and make securitylogs.</summary>
         public static bool UpdateProcsInApptHelper(List<Procedure> listProcsForAppt, Patient pat, Appointment AptCur, Appointment AptOld,
             List<InsPlan> PlanList, List<InsSub> SubList, List<int> listProcSelectedIndices, bool removeCompletedProcs, bool doUpdateProcFees = false,
-            string logSource = LogSources.None)
+            string logSource = SecurityLogSource.None)
         {
             if (AptCur.AptStatus != ApptStatus.Complete)
             {//appt is not set complete, just update necessary fields like ProvNum, ProcDate, and ClinicNum
@@ -4077,15 +4075,13 @@ namespace OpenDentBusiness
                 SetCompleteInAppt(AptCur, PlanList, listPatPlans, pat, SubList, removeCompletedProcs);
                 if (AptOld.AptStatus == ApptStatus.Complete)
                 {//seperate log entry for completed appointments
-                    SecurityLogs.MakeLogEntry(Permissions.AppointmentCompleteEdit, pat.PatNum, AptCur.AptDateTime.ToShortDateString()
-                        + ", " + AptCur.ProcDescript + ", Procedures automatically set complete due to appt being set complete", AptCur.AptNum, logSource,
-                        AptOld.DateTStamp);
+                    SecurityLog.Write(pat.PatNum, SecurityLogEvents.CompletedAppointmentEdited, AptCur.AptDateTime.ToShortDateString()
+                        + ", " + AptCur.ProcDescript + ", Procedures automatically set complete due to appt being set complete", logSource, AptCur.AptNum, AptOld.DateTStamp);
                 }
                 else
                 {
-                    SecurityLogs.MakeLogEntry(Permissions.AppointmentEdit, pat.PatNum, AptCur.AptDateTime.ToShortDateString()
-                        + ", " + AptCur.ProcDescript + ", Procedures automatically set complete due to appt being set complete", AptCur.AptNum, logSource,
-                        AptOld.DateTStamp);
+                    SecurityLog.Write(pat.PatNum, SecurityLogEvents.AppointmentEdited, AptCur.AptDateTime.ToShortDateString()
+                        + ", " + AptCur.ProcDescript + ", Procedures automatically set complete due to appt being set complete", logSource, AptCur.AptNum, AptOld.DateTStamp);
                 }
                 return true;
             }

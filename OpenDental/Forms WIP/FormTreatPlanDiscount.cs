@@ -55,7 +55,7 @@ namespace OpenDental {
 						+": "+ProcedureCodes.GetProcCode(_listProcs[j].CodeNum).ProcCode+"  "+Lan.g(this,"Dated")
 						+": "+_listProcs[j].ProcDate.ToShortDateString()+"  "+Lan.g(this,"With a Fee of")+": "+_listProcs[j].ProcFee.ToString("c")+".  "+Lan.g(this,"Attributed a")+" "+percent
 					+" "+Lan.g(this,"percent discount, changing the discount value from")+" "+_oldListProcs[j].Discount.ToString("c")+" "+Lan.g(this,"to")+" "+_listProcs[j].Discount.ToString("c");
-					SecurityLogs.MakeLogEntry(Permissions.TreatPlanDiscountEdit,_listProcs[j].PatNum,message);
+                    SecurityLog.Write(_listProcs[j].PatNum, SecurityLogEvents.TreatmentPlanDiscountEdited, message);
 				}
 				Procedures.Update(_listProcs[j],_oldListProcs[j]);
 			}

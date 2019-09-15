@@ -576,7 +576,7 @@ namespace OpenDental{
 				return;
 			}
 			TreatPlans.Delete(PlanCur);
-			SecurityLogs.MakeLogEntry(Permissions.TreatPlanEdit,PlanCur.PatNum,"Delete TP: "+PlanCur.DateTP.ToShortDateString());
+			SecurityLog.Write(PlanCur.PatNum,Permissions.TreatPlanEdit,"Delete TP: "+PlanCur.DateTP.ToShortDateString());
 			DialogResult=DialogResult.OK;
 		}
 
@@ -601,9 +601,9 @@ namespace OpenDental{
 			}
 			//PlanCur.SecUserNumEntry is updated automatically by MySQL.
 			TreatPlans.Update(PlanCur);
-			SecurityLogs.MakeLogEntry(Permissions.TreatPlanEdit,PlanCur.PatNum,"Edit TP: "+PlanCur.DateTP.ToShortDateString());
+			SecurityLog.Write(PlanCur.PatNum,Permissions.TreatPlanEdit,"Edit TP: "+PlanCur.DateTP.ToShortDateString());
 			if(_presenterCur!=null && (_presenterOld==null || _presenterCur.Id != _presenterOld.Id)) {
-				SecurityLogs.MakeLogEntry(Permissions.TreatPlanPresenterEdit,PlanCur.PatNum,
+				SecurityLog.Write(PlanCur.PatNum,Permissions.TreatPlanPresenterEdit,
 					"TP Presenter Changed from "+(_presenterOld==null?"\"null\"":_presenterOld.UserName)+" to "+_presenterCur.UserName+".");
 			}
 			DialogResult=DialogResult.OK;

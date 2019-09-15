@@ -234,7 +234,7 @@ namespace OpenDental
             {
                 FormQ = new FormQuery(null);
                 FormQ.ShowDialog();
-                SecurityLogs.MakeLogEntry(Permissions.UserQuery, 0, "");
+                SecurityLog.Write(Permissions.UserQuery, 0, "");
             }
             else
             {
@@ -245,7 +245,7 @@ namespace OpenDental
                     FormQ = new FormQuery(null, true);
                     FormQ.textQuery.Text = FormQF.UserQueryCur.QueryText;
                     FormQ.textTitle.Text = FormQF.UserQueryCur.FileName;
-                    SecurityLogs.MakeLogEntry(Permissions.UserQuery, 0, Lan.g(this, "User query form accessed."));
+                    SecurityLog.Write(Permissions.UserQuery, 0, Lan.g(this, "User query form accessed."));
                     FormQ.ShowDialog();
                 }
             }
@@ -261,7 +261,7 @@ namespace OpenDental
             {
                 System.Windows.Forms.MessageBox.Show("PracticeWeb Reports module unavailable.");
             }
-            SecurityLogs.MakeLogEntry(Permissions.Reports, 0, "Practice Web");
+            SecurityLog.Write(Permissions.Reports, 0, "Practice Web");
         }
 
         private void listProdInc_MouseDown(object sender, MouseEventArgs e)
@@ -413,7 +413,7 @@ namespace OpenDental
                     FormPI.DateStart = DateTime.Today;
                     FormPI.DateEnd = DateTime.Today;
                     FormPI.ShowDialog();
-                    SecurityLogs.MakeLogEntry(Permissions.Reports, 0, "Production and Income report run for today.");
+                    SecurityLog.Write(Permissions.Reports, 0, "Production and Income report run for today.");
                     break;
                 case "ODYesterday"://Yesterday
                     FormPI = new FormRpProdInc();
@@ -429,7 +429,7 @@ namespace OpenDental
                         FormPI.DateEnd = DateTime.Today.AddDays(-1);
                     }
                     FormPI.ShowDialog();
-                    SecurityLogs.MakeLogEntry(Permissions.Reports, 0, "Production and Income report run for yesterday.");
+                    SecurityLog.Write(Permissions.Reports, 0, "Production and Income report run for yesterday.");
                     break;
                 case "ODThisMonth"://This Month
                     FormPI = new FormRpProdInc();
@@ -437,7 +437,7 @@ namespace OpenDental
                     FormPI.DateStart = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
                     FormPI.DateEnd = new DateTime(DateTime.Today.AddMonths(1).Year, DateTime.Today.AddMonths(1).Month, 1).AddDays(-1);
                     FormPI.ShowDialog();
-                    SecurityLogs.MakeLogEntry(Permissions.Reports, 0, "Production and Income report run for this month.");
+                    SecurityLog.Write(Permissions.Reports, 0, "Production and Income report run for this month.");
                     break;
                 case "ODLastMonth"://Last Month
                     FormPI = new FormRpProdInc();
@@ -445,7 +445,7 @@ namespace OpenDental
                     FormPI.DateStart = new DateTime(DateTime.Today.AddMonths(-1).Year, DateTime.Today.AddMonths(-1).Month, 1);
                     FormPI.DateEnd = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1).AddDays(-1);
                     FormPI.ShowDialog();
-                    SecurityLogs.MakeLogEntry(Permissions.Reports, 0, "Production and Income report run for last month.");
+                    SecurityLog.Write(Permissions.Reports, 0, "Production and Income report run for last month.");
                     break;
                 case "ODThisYear"://This Year
                     FormPI = new FormRpProdInc();
@@ -453,22 +453,22 @@ namespace OpenDental
                     FormPI.DateStart = new DateTime(DateTime.Today.Year, 1, 1);
                     FormPI.DateEnd = new DateTime(DateTime.Today.Year, 12, 31);
                     FormPI.ShowDialog();
-                    SecurityLogs.MakeLogEntry(Permissions.Reports, 0, "Production and Income report run for this year.");
+                    SecurityLog.Write(Permissions.Reports, 0, "Production and Income report run for this year.");
                     break;
                 case "ODMoreOptions"://More Options
                     FormPI = new FormRpProdInc();
                     FormPI.ShowDialog();
-                    SecurityLogs.MakeLogEntry(Permissions.Reports, 0, "Production and Income report 'more options' accessed.");
+                    SecurityLog.Write(Permissions.Reports, 0, "Production and Income report 'more options' accessed.");
                     break;
                 case "ODProviderPayrollSummary":
                     FormRpProviderPayroll FormPP = new FormRpProviderPayroll();
                     FormPP.ShowDialog();
-                    SecurityLogs.MakeLogEntry(Permissions.Reports, 0, "Provider Payroll Summary report run.");
+                    SecurityLog.Write(Permissions.Reports, 0, "Provider Payroll Summary report run.");
                     break;
                 case "ODProviderPayrollDetailed":
                     FormRpProviderPayroll FormPPD = new FormRpProviderPayroll(true);
                     FormPPD.ShowDialog();
-                    SecurityLogs.MakeLogEntry(Permissions.Reports, 0, "Provider Payroll Detailed report run.");
+                    SecurityLog.Write(Permissions.Reports, 0, "Provider Payroll Detailed report run.");
                     break;
                 case "ODAdjustments"://Adjustments
                     if (Security.CurrentUser.ProviderId == 0 && !Security.IsAuthorized(Permissions.ReportDailyAllProviders, true))
@@ -478,7 +478,7 @@ namespace OpenDental
                     }
                     FormRpAdjSheet FormAdjSheet = new FormRpAdjSheet();
                     FormAdjSheet.ShowDialog();
-                    SecurityLogs.MakeLogEntry(Permissions.Reports, 0, "Adjustments report run.");
+                    SecurityLog.Write(Permissions.Reports, 0, "Adjustments report run.");
                     break;
                 case "ODPayments"://Payments
                     if (Security.CurrentUser.ProviderId == 0 && !Security.IsAuthorized(Permissions.ReportDailyAllProviders, true))
@@ -488,7 +488,7 @@ namespace OpenDental
                     }
                     FormRpPaySheet FormPaySheet = new FormRpPaySheet();
                     FormPaySheet.ShowDialog();
-                    SecurityLogs.MakeLogEntry(Permissions.Reports, 0, "Daily Payments report run.");
+                    SecurityLog.Write(Permissions.Reports, 0, "Daily Payments report run.");
                     break;
                 case "ODProcedures"://Procedures
                     if (Security.CurrentUser.ProviderId == 0 && !Security.IsAuthorized(Permissions.ReportDailyAllProviders, true))
@@ -498,10 +498,10 @@ namespace OpenDental
                     }
                     FormRpProcSheet FormProcSheet = new FormRpProcSheet();
                     FormProcSheet.ShowDialog();
-                    SecurityLogs.MakeLogEntry(Permissions.Reports, 0, "Daily Procedures report run.");
+                    SecurityLog.Write(Permissions.Reports, 0, "Daily Procedures report run.");
                     break;
                 case DisplayReports.ReportNames.ODProcOverpaid:
-                    SecurityLogs.MakeLogEntry(Permissions.Reports, 0, "Procedures overpaid report run.");
+                    SecurityLog.Write(Permissions.Reports, 0, "Procedures overpaid report run.");
                     return ReportNonModalSelection.ODProcsOverpaid;
                 case "ODWriteoffs"://Writeoffs
                     if (Security.CurrentUser.ProviderId == 0 && !Security.IsAuthorized(Permissions.ReportDailyAllProviders, true))
@@ -511,130 +511,130 @@ namespace OpenDental
                     }
                     FormRpWriteoffSheet FormW = new FormRpWriteoffSheet();
                     FormW.ShowDialog();
-                    SecurityLogs.MakeLogEntry(Permissions.Reports, 0, "Daily Writeoffs report run.");
+                    SecurityLog.Write(Permissions.Reports, 0, "Daily Writeoffs report run.");
                     break;
                 case DisplayReports.ReportNames.IncompleteProcNotes://Incomplete Procedure Notes
-                    SecurityLogs.MakeLogEntry(Permissions.Reports, 0, "Daily Procedure Notes report run.");
+                    SecurityLog.Write(Permissions.Reports, 0, "Daily Procedure Notes report run.");
                     return ReportNonModalSelection.IncompleteProcNotes;
                 case "ODRoutingSlips"://Routing Slips
                     FormRpRouting FormR = new FormRpRouting();
                     FormR.ShowDialog();
-                    SecurityLogs.MakeLogEntry(Permissions.Reports, 0, "Routing Slips report run.");
+                    SecurityLog.Write(Permissions.Reports, 0, "Routing Slips report run.");
                     break;
                 case "ODNetProdDetailDaily":
                     FormRpNetProdDetail FormNetProdDetail = new FormRpNetProdDetail(true);
                     FormNetProdDetail.ShowDialog();
-                    SecurityLogs.MakeLogEntry(Permissions.Reports, 0, "Daily Net Prod report run.");
+                    SecurityLog.Write(Permissions.Reports, 0, "Daily Net Prod report run.");
                     break;
                 case DisplayReports.ReportNames.UnfinalizedInsPay:
-                    SecurityLogs.MakeLogEntry(Permissions.Reports, 0, "Unfinalized Insurance Payment report run.");
+                    SecurityLog.Write(Permissions.Reports, 0, "Unfinalized Insurance Payment report run.");
                     return ReportNonModalSelection.UnfinalizedInsPay;
                 case DisplayReports.ReportNames.PatPortionUncollected:
                     FormRpPatPortionUncollected FormPPU = new FormRpPatPortionUncollected();
                     FormPPU.ShowDialog();
-                    SecurityLogs.MakeLogEntry(Permissions.Reports, 0, "Patient Portion Uncollected report run.");
+                    SecurityLog.Write(Permissions.Reports, 0, "Patient Portion Uncollected report run.");
                     break;
                 case "ODAgingAR"://Aging of Accounts Receivable Report
                     FormRpAging FormA = new FormRpAging();
                     FormA.ShowDialog();
-                    SecurityLogs.MakeLogEntry(Permissions.Reports, 0, "Aging of A/R report run.");
+                    SecurityLog.Write(Permissions.Reports, 0, "Aging of A/R report run.");
                     break;
                 case DisplayReports.ReportNames.ClaimsNotSent://Claims Not Sent
-                    SecurityLogs.MakeLogEntry(Permissions.Reports, 0, "Claims Not Sent report run.");
+                    SecurityLog.Write(Permissions.Reports, 0, "Claims Not Sent report run.");
                     return ReportNonModalSelection.UnsentClaim;
                 case "ODCapitation"://Capitation Utilization
                     FormRpCapitation FormC = new FormRpCapitation();
                     FormC.ShowDialog();
-                    SecurityLogs.MakeLogEntry(Permissions.Reports, 0, "Capitation report run.");
+                    SecurityLog.Write(Permissions.Reports, 0, "Capitation report run.");
                     break;
                 case "ODFinanceCharge"://Finance Charge Report
                     FormRpFinanceCharge FormRpFinance = new FormRpFinanceCharge();
                     FormRpFinance.ShowDialog();
-                    SecurityLogs.MakeLogEntry(Permissions.Reports, 0, "Finance Charges report run.");
+                    SecurityLog.Write(Permissions.Reports, 0, "Finance Charges report run.");
                     break;
                 case DisplayReports.ReportNames.OutstandingInsClaims://Outstanding Insurance Claims
-                    SecurityLogs.MakeLogEntry(Permissions.Reports, 0, "Outstanding Insurance Claims report run.");
+                    SecurityLog.Write(Permissions.Reports, 0, "Outstanding Insurance Claims report run.");
                     return ReportNonModalSelection.OutstandingIns;
                 case DisplayReports.ReportNames.ProcNotBilledIns://Procedures Not Billed to Insurance
-                    SecurityLogs.MakeLogEntry(Permissions.Reports, 0, "Procedures not billed to insurance report run.");
+                    SecurityLog.Write(Permissions.Reports, 0, "Procedures not billed to insurance report run.");
                     return ReportNonModalSelection.ProcNotBilledIns;
                 case "ODPPOWriteoffs"://PPO Writeoffs
                     FormRpPPOwriteoffs FormPPO = new FormRpPPOwriteoffs();
                     FormPPO.ShowDialog();
-                    SecurityLogs.MakeLogEntry(Permissions.Reports, 0, "PPO Writeoffs report run.");
+                    SecurityLog.Write(Permissions.Reports, 0, "PPO Writeoffs report run.");
                     break;
                 case "ODPaymentPlans"://Payment Plans
                     FormRpPayPlans FormPayPlans = new FormRpPayPlans();
                     FormPayPlans.ShowDialog();
-                    SecurityLogs.MakeLogEntry(Permissions.Reports, 0, "Payment Plans report run.");
+                    SecurityLog.Write(Permissions.Reports, 0, "Payment Plans report run.");
                     break;
                 case "ODReceivablesBreakdown"://Receivable Breakdown
                     FormRpReceivablesBreakdown FormRcv = new FormRpReceivablesBreakdown();
                     FormRcv.ShowDialog();
-                    SecurityLogs.MakeLogEntry(Permissions.Reports, 0, "Receivable Breakdown report run.");
+                    SecurityLog.Write(Permissions.Reports, 0, "Receivable Breakdown report run.");
                     break;
                 case "ODUnearnedIncome"://Unearned Income
                     FormRpUnearnedIncome FormU = new FormRpUnearnedIncome();
                     FormU.ShowDialog();
-                    SecurityLogs.MakeLogEntry(Permissions.Reports, 0, "Unearned Income report run.");
+                    SecurityLog.Write(Permissions.Reports, 0, "Unearned Income report run.");
                     break;
                 case "ODInsuranceOverpaid"://Insurance Overpaid
                     FormRpInsOverpaid FormI = new FormRpInsOverpaid();
                     FormI.ShowDialog();
-                    SecurityLogs.MakeLogEntry(Permissions.Reports, 0, "Insurance Overpaid report run.");
+                    SecurityLog.Write(Permissions.Reports, 0, "Insurance Overpaid report run.");
                     break;
                 case "ODPresentedTreatmentProd"://Treatment Planned Presenter
                     FormRpPresentedTreatmentProduction FormPTP = new FormRpPresentedTreatmentProduction();
                     FormPTP.ShowDialog();
-                    SecurityLogs.MakeLogEntry(Permissions.Reports, 0, "Treatment Plan Presenter report run.");
+                    SecurityLog.Write(Permissions.Reports, 0, "Treatment Plan Presenter report run.");
                     break;
                 case "ODTreatmentPresentationStats"://Treatment Planned Presenter
                     FormRpTreatPlanPresentationStatistics FormTPS = new FormRpTreatPlanPresentationStatistics();
                     FormTPS.ShowDialog();
-                    SecurityLogs.MakeLogEntry(Permissions.Reports, 0, "Treatment Plan Presented Procedures report run.");
+                    SecurityLog.Write(Permissions.Reports, 0, "Treatment Plan Presented Procedures report run.");
                     break;
                 case "ODInsurancePayPlansPastDue"://Insurance Payment Plans
                     FormRpInsPayPlansPastDue FormIPP = new FormRpInsPayPlansPastDue();
                     FormIPP.ShowDialog();
-                    SecurityLogs.MakeLogEntry(Permissions.Reports, 0, "Insurance Payment Plan report run.");
+                    SecurityLog.Write(Permissions.Reports, 0, "Insurance Payment Plan report run.");
                     break;
                 case DisplayReports.ReportNames.InsAging://Insurance Aging Report
                     FormRpInsAging FormIA = new FormRpInsAging();
                     FormIA.ShowDialog();
-                    SecurityLogs.MakeLogEntry(Permissions.Reports, 0, "Insurance Aging report run");
+                    SecurityLog.Write(Permissions.Reports, 0, "Insurance Aging report run");
                     break;
                 case DisplayReports.ReportNames.CustomAging://Insurance Aging Report
-                    SecurityLogs.MakeLogEntry(Permissions.Reports, 0, "Custom Aging report run");
+                    SecurityLog.Write(Permissions.Reports, 0, "Custom Aging report run");
                     return ReportNonModalSelection.CustomAging;
                 case "ODActivePatients"://Active Patients
                     FormRpActivePatients FormAP = new FormRpActivePatients();
                     FormAP.ShowDialog();
-                    SecurityLogs.MakeLogEntry(Permissions.Reports, 0, "Active Patients report run.");
+                    SecurityLog.Write(Permissions.Reports, 0, "Active Patients report run.");
                     break;
                 case "ODAppointments"://Appointments
                     FormRpAppointments FormAppointments = new FormRpAppointments();
                     FormAppointments.ShowDialog();
-                    SecurityLogs.MakeLogEntry(Permissions.Reports, 0, "Appointments report run.");
+                    SecurityLog.Write(Permissions.Reports, 0, "Appointments report run.");
                     break;
                 case "ODBirthdays"://Birthdays
                     FormRpBirthday FormB = new FormRpBirthday();
                     FormB.ShowDialog();
-                    SecurityLogs.MakeLogEntry(Permissions.Reports, 0, "Birthdays report run.");
+                    SecurityLog.Write(Permissions.Reports, 0, "Birthdays report run.");
                     break;
                 case "ODBrokenAppointments"://Broken Appointments
                     FormRpBrokenAppointments FormBroken = new FormRpBrokenAppointments();
                     FormBroken.ShowDialog();
-                    SecurityLogs.MakeLogEntry(Permissions.Reports, 0, "Broken Appointments report run.");
+                    SecurityLog.Write(Permissions.Reports, 0, "Broken Appointments report run.");
                     break;
                 case "ODInsurancePlans"://Insurance Plans
                     FormRpInsCo FormInsCo = new FormRpInsCo();
                     FormInsCo.ShowDialog();
-                    SecurityLogs.MakeLogEntry(Permissions.Reports, 0, "Insurance Plans report run.");
+                    SecurityLog.Write(Permissions.Reports, 0, "Insurance Plans report run.");
                     break;
                 case "ODNewPatients"://New Patients
                     FormRpNewPatients FormNewPats = new FormRpNewPatients();
                     FormNewPats.ShowDialog();
-                    SecurityLogs.MakeLogEntry(Permissions.Reports, 0, "New Patients report run.");
+                    SecurityLog.Write(Permissions.Reports, 0, "New Patients report run.");
                     break;
                 case "ODPatientsRaw"://Patients - Raw
                     if (!Security.IsAuthorized(Permissions.UserQuery))
@@ -643,7 +643,7 @@ namespace OpenDental
                     }
                     FormRpPatients FormPatients = new FormRpPatients();
                     FormPatients.ShowDialog();
-                    SecurityLogs.MakeLogEntry(Permissions.Reports, 0, "Patients - Raw report run.");
+                    SecurityLog.Write(Permissions.Reports, 0, "Patients - Raw report run.");
                     break;
                 case "ODPatientNotes"://Patient Notes
                     if (!Security.IsAuthorized(Permissions.UserQuery))
@@ -652,17 +652,17 @@ namespace OpenDental
                     }
                     FormSearchPatNotes FormSearchPatNotes = new FormSearchPatNotes();
                     FormSearchPatNotes.ShowDialog();
-                    SecurityLogs.MakeLogEntry(Permissions.Reports, 0, "Patient Notes report run.");
+                    SecurityLog.Write(Permissions.Reports, 0, "Patient Notes report run.");
                     break;
                 case "ODPrescriptions"://Prescriptions
                     FormRpPrescriptions FormPrescript = new FormRpPrescriptions();
                     FormPrescript.ShowDialog();
-                    SecurityLogs.MakeLogEntry(Permissions.Reports, 0, "Rx report run.");
+                    SecurityLog.Write(Permissions.Reports, 0, "Rx report run.");
                     break;
                 case "ODProcedureCodes"://Procedure Codes - Fee Schedules
                     FormRpProcCodes FormProcCodes = new FormRpProcCodes();
                     FormProcCodes.ShowDialog();
-                    SecurityLogs.MakeLogEntry(Permissions.Reports, 0, "Procedure Codes - Fee Schedules report run.");
+                    SecurityLog.Write(Permissions.Reports, 0, "Procedure Codes - Fee Schedules report run.");
                     break;
                 case "ODReferralsRaw"://Referrals - Raw
                     if (!Security.IsAuthorized(Permissions.UserQuery))
@@ -671,23 +671,23 @@ namespace OpenDental
                     }
                     FormRpReferrals FormReferral = new FormRpReferrals();
                     FormReferral.ShowDialog();
-                    SecurityLogs.MakeLogEntry(Permissions.Reports, 0, "Referrals - Raw report run.");
+                    SecurityLog.Write(Permissions.Reports, 0, "Referrals - Raw report run.");
                     break;
                 case "ODReferralAnalysis"://Referral Analysis
                     FormRpReferralAnalysis FormRA = new FormRpReferralAnalysis();
                     FormRA.ShowDialog();
-                    SecurityLogs.MakeLogEntry(Permissions.Reports, 0, "Referral Analysis report run.");
+                    SecurityLog.Write(Permissions.Reports, 0, "Referral Analysis report run.");
                     break;
                 case DisplayReports.ReportNames.ReferredProcTracking://Referred Proc Tracking
                     FormReferralProcTrack FormRP = new FormReferralProcTrack();
                     FormRP.ShowDialog();
-                    SecurityLogs.MakeLogEntry(Permissions.Reports, 0, "ReferredProcTracking report run.");
+                    SecurityLog.Write(Permissions.Reports, 0, "ReferredProcTracking report run.");
                     break;
                 case DisplayReports.ReportNames.TreatmentFinder://Treatment Finder
-                    SecurityLogs.MakeLogEntry(Permissions.Reports, 0, "Treatment Finder report run.");
+                    SecurityLog.Write(Permissions.Reports, 0, "Treatment Finder report run.");
                     return ReportNonModalSelection.TreatmentFinder;
                 case DisplayReports.ReportNames.WebSchedAppointments://Web Sched Appts
-                    SecurityLogs.MakeLogEntry(Permissions.Reports, 0, "Web Sched Appointments report run.");
+                    SecurityLog.Write(Permissions.Reports, 0, "Web Sched Appointments report run.");
                     return ReportNonModalSelection.WebSchedAppointments;
                 case "ODRawScreeningData"://Raw Screening Data
                     if (!Security.IsAuthorized(Permissions.UserQuery))
@@ -696,7 +696,7 @@ namespace OpenDental
                     }
                     FormRpPHRawScreen FormPH = new FormRpPHRawScreen();
                     FormPH.ShowDialog();
-                    SecurityLogs.MakeLogEntry(Permissions.Reports, 0, "PH Raw Screening");
+                    SecurityLog.Write(Permissions.Reports, 0, "PH Raw Screening");
                     break;
                 case "ODRawPopulationData"://Raw Population Data
                     if (!Security.IsAuthorized(Permissions.UserQuery))
@@ -705,32 +705,32 @@ namespace OpenDental
                     }
                     FormRpPHRawPop FormPHR = new FormRpPHRawPop();
                     FormPHR.ShowDialog();
-                    SecurityLogs.MakeLogEntry(Permissions.Reports, 0, "PH Raw population");
+                    SecurityLog.Write(Permissions.Reports, 0, "PH Raw population");
                     break;
                 case "ODDentalSealantMeasure"://FQHC Dental Sealant Measure
                     FormRpDentalSealantMeasure FormDSM = new FormRpDentalSealantMeasure();
                     FormDSM.ShowDialog();
-                    SecurityLogs.MakeLogEntry(Permissions.Reports, 0, "FQHC Dental Sealant Measure report run.");
+                    SecurityLog.Write(Permissions.Reports, 0, "FQHC Dental Sealant Measure report run.");
                     break;
                 case "ODEligibilityFile"://Eligibility File
                     FormRpArizonaPrimaryCareEligibility frapce = new FormRpArizonaPrimaryCareEligibility();
                     frapce.ShowDialog();
-                    SecurityLogs.MakeLogEntry(Permissions.Reports, 0, "Arizona Primary Care Eligibility");
+                    SecurityLog.Write(Permissions.Reports, 0, "Arizona Primary Care Eligibility");
                     break;
                 case "ODEncounterFile"://Encounter File
                     FormRpArizonaPrimaryCareEncounter frapcn = new FormRpArizonaPrimaryCareEncounter();
                     frapcn.ShowDialog();
-                    SecurityLogs.MakeLogEntry(Permissions.Reports, 0, "Arizona Primary Care Encounter");
+                    SecurityLog.Write(Permissions.Reports, 0, "Arizona Primary Care Encounter");
                     break;
                 case "ODDiscountPlan"://Discount Plans
                     FormRpDiscountPlan FormDiscountPlan = new FormRpDiscountPlan();
                     FormDiscountPlan.ShowDialog();
-                    SecurityLogs.MakeLogEntry(Permissions.Reports, 0, "Discount Plans report run.");
+                    SecurityLog.Write(Permissions.Reports, 0, "Discount Plans report run.");
                     break;
                 case "ODMonthlyProductionGoal"://Monthly Production Goal
                     FormRpProdGoal FormProdGoal = new FormRpProdGoal();
                     FormProdGoal.ShowDialog();
-                    SecurityLogs.MakeLogEntry(Permissions.Reports, 0, "Monthly Production Goal report run.");
+                    SecurityLog.Write(Permissions.Reports, 0, "Monthly Production Goal report run.");
                     break;
                 default:
                     MsgBox.Show("FormReportsMore", "Error finding the report");

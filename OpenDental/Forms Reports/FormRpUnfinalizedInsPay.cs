@@ -302,7 +302,7 @@ namespace OpenDental {
 			}
 			try {
 				ClaimPayments.Delete(unfinalPay.ClaimPaymentCur);
-				SecurityLogs.MakeLogEntry(Permissions.InsPayEdit,0,"Claim Payment Deleted: "+unfinalPay.ClaimPaymentCur.ClaimPaymentNum);
+				SecurityLog.Write(SecurityLogEvents.InsPayEdit,"Claim Payment Deleted: "+unfinalPay.ClaimPaymentCur.ClaimPaymentNum);
 			}
 			catch(ApplicationException ex) {
 				MessageBox.Show(ex.Message);

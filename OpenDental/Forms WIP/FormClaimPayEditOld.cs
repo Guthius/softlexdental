@@ -445,7 +445,7 @@ namespace OpenDental{
 			}
 			for(int i=0;i<splits.Count;i++){
 				if(splits[i].ClaimPaymentNum==ClaimPaymentCur.ClaimPaymentNum){
-					SecurityLogs.MakeLogEntry(Permissions.InsPayEdit,splits[i].PatNum,
+					SecurityLog.Write(Permissions.InsPayEdit,splits[i].PatNum,
 						"Delete for patient: "
 						+Patients.GetLim(splits[i].PatNum).GetNameLF()+", "
 						+Lan.g(this,"Total Amt: ")+ClaimPaymentCur.CheckAmt.ToString("c")+", "
@@ -529,13 +529,13 @@ namespace OpenDental{
 					//And it always makes more audit trail entries when you click OK, even if you didn't actually attach new claims.
 					//But since this will cover the vast majority if situations.
 					if(IsNew){
-						SecurityLogs.MakeLogEntry(Permissions.InsPayCreate,splits[i].PatNum,
+						SecurityLog.Write(Permissions.InsPayCreate,splits[i].PatNum,
 							Patients.GetLim(splits[i].PatNum).GetNameLF()+", "
 							+Lan.g(this,"Total Amt: ")+ClaimPaymentCur.CheckAmt.ToString("c")+", "
 							+Lan.g(this,"Claim Split: ")+splits[i].InsPayAmt.ToString("c"));
 					}
 					else{
-						SecurityLogs.MakeLogEntry(Permissions.InsPayEdit,splits[i].PatNum,
+						SecurityLog.Write(Permissions.InsPayEdit,splits[i].PatNum,
 							Patients.GetLim(splits[i].PatNum).GetNameLF()+", "
 							+Lan.g(this,"Total Amt: ")+ClaimPaymentCur.CheckAmt.ToString("c")+", "
 							+Lan.g(this,"Claim Split: ")+splits[i].InsPayAmt.ToString("c"));

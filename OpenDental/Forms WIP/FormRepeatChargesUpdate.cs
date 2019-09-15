@@ -169,7 +169,7 @@ namespace OpenDental{
 			}
 			Cursor=Cursors.WaitCursor;
 			RepeatChargeResult result=RepeatCharges.RunRepeatingCharges(MiscData.GetNowDateTime(),checkRunAging.Checked);
-			SecurityLogs.MakeLogEntry(Permissions.RepeatChargeTool,0,"Repeat Charge Tool ran.");
+			SecurityLog.Write(Permissions.RepeatChargeTool,0,"Repeat Charge Tool ran.");
 			Cursor=Cursors.Default;
 			MessageBox.Show(result.ProceduresAddedCount+" "+Lan.g(this,"procedures added.")+"\r\n"+result.ClaimsAddedCount+" "
 				+Lan.g(this,"claims added."));

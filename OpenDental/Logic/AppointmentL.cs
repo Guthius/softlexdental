@@ -113,13 +113,13 @@ namespace OpenDental
             Appointments.SetAptStatus(appt, ApptStatus.Broken, suppressHistory); //Appointments S-Class handles Signalods
             if (appt.AptStatus != ApptStatus.Complete)
             { //seperate log entry for completed appointments.
-                SecurityLogs.MakeLogEntry(Permissions.AppointmentEdit, pat.PatNum,
+                SecurityLog.Write( pat.PatNum,Permissions.AppointmentEdit,
                     appt.ProcDescript + ", " + appt.AptDateTime.ToString()
                     + ", Broken from the Appts module.", appt.AptNum, datePrevious);
             }
             else
             {
-                SecurityLogs.MakeLogEntry(Permissions.AppointmentCompleteEdit, pat.PatNum,
+                SecurityLog.Write(pat.PatNum,Permissions.AppointmentCompleteEdit, 
                     appt.ProcDescript + ", " + appt.AptDateTime.ToString()
                     + ", Broken from the Appts module.", appt.AptNum, datePrevious);
             }
@@ -301,13 +301,13 @@ namespace OpenDental
             #region SecurityLogs
             if (appt.AptStatus != ApptStatus.Complete)
             { //seperate log entry for editing completed appts.
-                SecurityLogs.MakeLogEntry(Permissions.AppointmentMove, appt.PatNum,
+                SecurityLog.Write(appt.PatNum,Permissions.AppointmentMove, 
                     appt.ProcDescript + ", " + appt.AptDateTime.ToString() + ", Sent to Unscheduled List",
                     appt.AptNum, datePrevious);
             }
             else
             {
-                SecurityLogs.MakeLogEntry(Permissions.AppointmentCompleteEdit, appt.PatNum,
+                SecurityLog.Write(appt.PatNum,Permissions.AppointmentCompleteEdit, 
                     appt.ProcDescript + ", " + appt.AptDateTime.ToString() + ", Sent to Unscheduled List",
                     appt.AptNum, datePrevious);
             }

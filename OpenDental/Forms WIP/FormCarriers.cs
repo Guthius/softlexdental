@@ -654,10 +654,10 @@ namespace OpenDental{
 				//Carriers were combined successfully. Loop through all the associated insplans and make a securitylog entry that their carrier changed.
 				for(int i=0;i<listInsPlans.Count;i++) {
 					for(int j=0;j<listInsPlans[i].Count;j++) {
-						SecurityLogs.MakeLogEntry(Permissions.InsCarrierCombine,0,Lan.g(this,"Carrier with name ")+" "+carrierNames[i]+" "
+						SecurityLog.Write(Permissions.InsCarrierCombine,0,Lan.g(this,"Carrier with name ")+" "+carrierNames[i]+" "
 							+Lan.g(this,"was combined with")+" "+carrierTo,listInsPlans[i][j].PlanNum,listInsPlans[i][j].SecDateTEdit);
 						if(carrierNames[i].Trim().ToLower()!=carrierTo.Trim().ToLower()) {
-							SecurityLogs.MakeLogEntry(Permissions.InsPlanChangeCarrierName,0,Lan.g(this,"Carrier with name ")+" "+carrierNames[i]+" "
+							SecurityLog.Write(Permissions.InsPlanChangeCarrierName,0,Lan.g(this,"Carrier with name ")+" "+carrierNames[i]+" "
 								+Lan.g(this,"was merged with")+" "+carrierTo,listInsPlans[i][j].PlanNum,listInsPlans[i][j].SecDateTEdit);
 						}
 					}

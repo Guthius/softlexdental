@@ -255,7 +255,7 @@ namespace OpenDental {
 			#endregion 3
 			//Create audit log entry for printing.  PatNum can be 0.
 			if(!string.IsNullOrEmpty(auditDescription)){
-				SecurityLogs.MakeLogEntry(Permissions.Printing,patNum,auditDescription);
+				SecurityLog.Write(patNum,SecurityLogEvents.Printing,auditDescription);
 			}
 			return true;
 		}

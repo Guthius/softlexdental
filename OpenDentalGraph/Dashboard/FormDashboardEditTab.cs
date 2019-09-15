@@ -109,7 +109,7 @@ Double-click tab header to rename tab.";
 				if(!Security.IsAuthorized(Permissions.GraphicalReportSetup)) {
 					return;
 				}
-				SecurityLogs.MakeLogEntry(Permissions.GraphicalReportSetup,0,"Accessed graphical reports setup controls.");
+				SecurityLog.Write(Permissions.GraphicalReportSetup,"Accessed graphical reports setup controls.");
 			}
 			IsEditMode=!IsEditMode;
 		}

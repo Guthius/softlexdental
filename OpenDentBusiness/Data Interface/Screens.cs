@@ -241,7 +241,7 @@ namespace OpenDentBusiness
                 Procedure proc = Procedures.CreateProcForPatNum(sheet.PatNum, ProcedureCodes.GetCodeNum(strProcCode), "", "", ProcStat.C, provNum);
                 if (proc != null)
                 {
-                    SecurityLogs.MakeLogEntry(Permissions.ProcEdit, sheet.PatNum, strProcCode + " " + Lans.g("Screens", "treatment planned during screening."));
+                    SecurityLog.Write(sheet.PatNum, SecurityLogEvents.ProcEdit, strProcCode + " treatment planned during screening.");
                 }
             }
         }
@@ -392,8 +392,8 @@ namespace OpenDentBusiness
                     Procedure proc = Procedures.CreateProcForPatNum(patNum, ProcedureCodes.GetCodeNum("D1351"), surf, tooth, ProcStat.TP, provNum);
                     if (proc != null)
                     {
-                        SecurityLogs.MakeLogEntry(Permissions.ProcEdit, patNum, "D1351 " + Lans.g("Screens", "treatment planned during screening with tooth")
-                            + " " + proc.ToothNum.ToString() + " " + Lans.g("Screens", "and surface") + " " + proc.Surf);
+                        SecurityLog.Write(patNum, SecurityLogEvents.ProcEdit, 
+                            "D1351 treatment planned during screening with tooth " + proc.ToothNum.ToString() + " and surface " + proc.Surf);
                     }
                 }
                 else if (chartType == ScreenChartType.C)
@@ -412,8 +412,8 @@ namespace OpenDentBusiness
                     }
                     if (proc != null)
                     {
-                        SecurityLogs.MakeLogEntry(Permissions.CreateCompletedProcedure, patNum, "D1351 " + Lans.g("Screens", "set complete during screening with tooth")
-                            + " " + proc.ToothNum.ToString() + " " + Lans.g("Screens", "and surface") + " " + proc.Surf);
+                        SecurityLog.Write(patNum, SecurityLogEvents.CompletedProcedureCreated, 
+                            "D1351 set complete during screening with tooth " + proc.ToothNum.ToString() + " and surface " + proc.Surf);
                     }
                 }
             }

@@ -592,7 +592,7 @@ namespace OpenDental {
 			}
 			if(listAdjustmentAmounts.Count>0) {
 				string log=Lan.g(this,"Adjustment(s) created from Multiple Adjustments window:")+" ";
-				SecurityLogs.MakeLogEntry(Permissions.AdjustmentCreate,_patCur.PatNum,log+string.Join(",",listAdjustmentAmounts));
+				SecurityLog.Write(Permissions.AdjustmentCreate,_patCur.PatNum,log+string.Join(",",listAdjustmentAmounts));
 			}
 			DialogResult=DialogResult.OK;
 		}

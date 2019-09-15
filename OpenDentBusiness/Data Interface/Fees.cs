@@ -720,44 +720,48 @@ namespace OpenDentBusiness{
 			return listFeesRetVal;
 		}
 
-		///<summary>Deprecated.  Part of the old cache pattern. This method will remove and/or add a fee for the fee information passed in.
-		///codeText will typically be one valid procedure code.  E.g. D1240
-		///If an amt of -1 is passed in, then it indicates a "blank" entry which will cause deletion of any existing fee.
-		///Returns listFees back after importing the passed in fee information.
-		///Does not make any database calls.  This is left up to the user to take action on the list of fees returned.
-		///Also, makes security log entries based on how the fee changed.  Does not make a log for codes that were removed (user already warned)</summary>
-		public static List<Fee> Import(string codeText,double amt,long feeSchedNum,long clinicNum,long provNum,List<Fee> listFees) {
-			//No need to check RemotingRole; no call to db.
-			if(!ProcedureCodes.IsValidCode(codeText)){
-				return listFees;//skip for now. Possibly insert a code in a future version.
-			}
-			string feeOldStr="";
-			long codeNum = ProcedureCodes.GetCodeNum(codeText);
-			Fee fee = listFees.FirstOrDefault(x => x.CodeNum==codeNum && x.FeeSched==feeSchedNum && x.ClinicNum==clinicNum && x.ProvNum==provNum);
-			DateTime datePrevious=DateTime.MinValue;
-			if(fee!=null) {
-				feeOldStr=Lans.g("FormFeeSchedTools","Old Fee")+": "+fee.Amount.ToString("c")+", ";
-				datePrevious=fee.SecDateTEdit;
-				listFees.Remove(fee);
-			}
-			if(amt==-1) {
-				return listFees;
-			}
-			fee=new Fee();
-			fee.Amount=amt;
-			fee.FeeSched=feeSchedNum;
-			fee.CodeNum=ProcedureCodes.GetCodeNum(codeText);
-			fee.ClinicNum=clinicNum;//Either 0 because you're importing on an HQ schedule or local clinic because the feesched is localizable.
-			fee.ProvNum=provNum;
-			listFees.Add(fee);//Insert new fee specific to the active clinic.
-			SecurityLogs.MakeLogEntry(Permissions.ProcFeeEdit,0,Lans.g("FormFeeSchedTools","Procedure")+": "+codeText+", "+feeOldStr
-				+Lans.g("FormFeeSchedTools","New Fee")+": "+amt.ToString("c")+", "
-				+Lans.g("FormFeeSchedTools","Fee Schedule")+": "+FeeScheds.GetDescription(feeSchedNum)+". "
-				+Lans.g("FormFeeSchedTools","Fee changed using the Import button in the Fee Tools window."),ProcedureCodes.GetCodeNum(codeText),
-				DateTime.MinValue);
-			SecurityLogs.MakeLogEntry(Permissions.LogFeeEdit,0,"Fee changed",fee.FeeNum,datePrevious);
-			return listFees;
-		}
+        ///<summary>Deprecated.  Part of the old cache pattern. This method will remove and/or add a fee for the fee information passed in.
+        ///codeText will typically be one valid procedure code.  E.g. D1240
+        ///If an amt of -1 is passed in, then it indicates a "blank" entry which will cause deletion of any existing fee.
+        ///Returns listFees back after importing the passed in fee information.
+        ///Does not make any database calls.  This is left up to the user to take action on the list of fees returned.
+        ///Also, makes security log entries based on how the fee changed.  Does not make a log for codes that were removed (user already warned)</summary>
+        public static List<Fee> Import(string codeText, double amt, long feeSchedNum, long clinicNum, long provNum, List<Fee> listFees)
+        {
+            //No need to check RemotingRole; no call to db.
+            if (!ProcedureCodes.IsValidCode(codeText))
+            {
+                return listFees;//skip for now. Possibly insert a code in a future version.
+            }
+            string feeOldStr = "";
+            long codeNum = ProcedureCodes.GetCodeNum(codeText);
+            Fee fee = listFees.FirstOrDefault(x => x.CodeNum == codeNum && x.FeeSched == feeSchedNum && x.ClinicNum == clinicNum && x.ProvNum == provNum);
+            DateTime datePrevious = DateTime.MinValue;
+            if (fee != null)
+            {
+                feeOldStr = Lans.g("FormFeeSchedTools", "Old Fee") + ": " + fee.Amount.ToString("c") + ", ";
+                datePrevious = fee.SecDateTEdit;
+                listFees.Remove(fee);
+            }
+            if (amt == -1)
+            {
+                return listFees;
+            }
+            fee = new Fee();
+            fee.Amount = amt;
+            fee.FeeSched = feeSchedNum;
+            fee.CodeNum = ProcedureCodes.GetCodeNum(codeText);
+            fee.ClinicNum = clinicNum;//Either 0 because you're importing on an HQ schedule or local clinic because the feesched is localizable.
+            fee.ProvNum = provNum;
+            listFees.Add(fee);//Insert new fee specific to the active clinic.
+            SecurityLog.Write(null, SecurityLogEvents.ProcFeeEdit,
+                "Procedure: " + codeText + ", " + feeOldStr + "New Fee: " + amt.ToString("c") + ", " +
+                "Fee Schedule: " + FeeScheds.GetDescription(feeSchedNum) + ". " +
+                "Fee changed using the Import button in the Fee Tools window.", ProcedureCodes.GetCodeNum(codeText),
+                DateTime.MinValue);
+            SecurityLog.Write(null, SecurityLogEvents.LogFeeEdit, "Fee changed", fee.FeeNum, datePrevious);
+            return listFees;
+        }
 
 		///<summary>Zeros securitylog FKey column for rows that are using the matching feeNum as FKey and are related to Fee.
 		///Permtypes are generated from the AuditPerms property of the CrudTableAttribute within the Fee table type.</summary>

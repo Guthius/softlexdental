@@ -273,7 +273,7 @@ namespace OpenDental
 			FormAccountingLock FormA=new FormAccountingLock();
 			FormA.ShowDialog();
 			if(FormA.DialogResult==DialogResult.OK){
-				SecurityLogs.MakeLogEntry(Permissions.SecurityAdmin,0,"Accounting Lock Changed");
+				SecurityLog.Write(Permissions.SecurityAdmin,0,"Accounting Lock Changed");
 			}
 		}
 

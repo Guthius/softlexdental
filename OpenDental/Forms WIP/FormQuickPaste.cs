@@ -721,7 +721,7 @@ namespace OpenDental{
 			}
 			_hasChanges|=QuickPasteCats.Sync(_listCats,_listCatsOld);
 			if(QuickPasteNotes.Sync(_listNotes,_listNotesOld) || _hasChanges) {
-				SecurityLogs.MakeLogEntry(Permissions.AutoNoteQuickNoteEdit,0,"Quick Paste Notes/Cats Changed");
+				SecurityLog.Write(Permissions.AutoNoteQuickNoteEdit,0,"Quick Paste Notes/Cats Changed");
 				DataValid.SetInvalid(InvalidType.QuickPaste);
 			}
 		}

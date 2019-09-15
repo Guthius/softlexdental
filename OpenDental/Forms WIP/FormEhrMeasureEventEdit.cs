@@ -100,7 +100,7 @@ namespace OpenDental {
 				+Lan.g(this,"Date")+": "+PIn.DateT(textDateTime.Text)+"  "
 				+Lan.g(this,"Type")+": "+_measureEventCur.EventType.ToString()+"  "
 				+Lan.g(this,"Patient")+": "+textPatient.Text;
-			SecurityLogs.MakeLogEntry(Permissions.EhrMeasureEventEdit,_measureEventCur.PatNum,logEntry);
+			SecurityLog.Write(Permissions.EhrMeasureEventEdit,_measureEventCur.PatNum,logEntry);
 			EhrMeasureEvents.Delete(_measureEventCur.EhrMeasureEventNum);
 			DialogResult=DialogResult.Cancel;
 		}
@@ -139,7 +139,7 @@ namespace OpenDental {
 			}
 			if(listLogEdits.Count>0) {
 				listLogEdits.Insert(0,Lan.g(this,"EHR Measure Event was edited."));
-				SecurityLogs.MakeLogEntry(Permissions.EhrMeasureEventEdit,_measureEventCur.PatNum,string.Join("  ",listLogEdits));
+				SecurityLog.Write(Permissions.EhrMeasureEventEdit,_measureEventCur.PatNum,string.Join("  ",listLogEdits));
 			}
 			if(_measureEventCur.IsNew) {//should never happen, only updates happen here
 				EhrMeasureEvents.Insert(_measureEventCur);

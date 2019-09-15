@@ -381,7 +381,7 @@ namespace OpenDental
 
             Employee.UpdateClockStatus(clockEvent.EmployeeId);
 
-            SecurityLogs.MakeLogEntry(Permissions.TimecardDeleteEntry, 0, "Original entry: " + clockEvent.Date1Entered.ToString());
+            SecurityLog.Write(SecurityLogEvents.TimecardDeleteEntry, "Original entry: " + clockEvent.Date1Entered.ToString());
 
             DialogResult = DialogResult.OK;
         }

@@ -939,7 +939,7 @@ namespace OpenDental {
 				}
 			}
 			logText+=" "+Lan.g(this,"were all cleared.");
-			SecurityLogs.MakeLogEntry(Permissions.ProcFeeEdit,0,logText);
+			SecurityLog.Write(SecurityLogEvents.ProcFeeEdit,0,logText);
 			//	});
 			MsgBox.Show(this,"Done");
 		}
@@ -1061,8 +1061,8 @@ namespace OpenDental {
 						}
 						logText+=". Fee increased by "+((float)percent/100.0f).ToString("p")+" using the increase "
 							+"button in the Fee Tools window.";
-						SecurityLogs.MakeLogEntry(Permissions.ProcFeeEdit,0,logText,listFees[i].CodeNum,DateTime.MinValue);
-						SecurityLogs.MakeLogEntry(Permissions.LogFeeEdit,0,"Fee Updated",listFees[i].FeeNum,listFees[i].SecDateTEdit);
+						SecurityLog.Write(null, SecurityLogEvents.ProcFeeEdit,logText,listFees[i].CodeNum,null);
+						SecurityLog.Write(null, SecurityLogEvents.LogFeeEdit,"Fee Updated",listFees[i].FeeNum,listFees[i].SecDateTEdit);
 						FeeSchedEvent.Fire(ODEventType.FeeSched,"Modifying fees, please wait...");
 					}
 				},

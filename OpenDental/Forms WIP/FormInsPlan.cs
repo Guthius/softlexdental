@@ -4162,7 +4162,7 @@ namespace OpenDental{
 						+Lan.g(this,"with the Subscriber ID")+" "+_subCur.SubscriberID+" "+Lan.g(this,"was deleted.");
 					_hasDeleted=true;
 					//PatPlanCur will be null if editing insurance plans from Lists > Insurance Plans.
-					SecurityLogs.MakeLogEntry(Permissions.InsPlanEdit,(PatPlanCur==null)?0:PatPlanCur.PatNum,logText,(_planCur==null)?0:_planCur.PlanNum,
+					SecurityLog.Write(Permissions.InsPlanEdit,(PatPlanCur==null)?0:PatPlanCur.PatNum,logText,(_planCur==null)?0:_planCur.PlanNum,
 						_planCur.SecDateTEdit);
 					DialogResult=DialogResult.OK;
 					return;
@@ -4186,7 +4186,7 @@ namespace OpenDental{
 			logText=Lan.g(this,"The insurance plan for the carrier")+" "+Carriers.GetCarrier(_planCur.CarrierNum).CarrierName+" "+Lan.g(this,"was deleted.");
 			_hasDeleted=true;
 			//PatPlanCur will be null if editing insurance plans from Lists > Insurance Plans.
-			SecurityLogs.MakeLogEntry(Permissions.InsPlanEdit,(PatPlanCur==null)?0:PatPlanCur.PatNum,logText,(_planCur==null)?0:_planCur.PlanNum,
+			SecurityLog.Write(Permissions.InsPlanEdit,(PatPlanCur==null)?0:PatPlanCur.PatNum,logText,(_planCur==null)?0:_planCur.PlanNum,
 				datePrevious);
 			DialogResult=DialogResult.OK;
 		}
@@ -4228,7 +4228,7 @@ namespace OpenDental{
 			//PlanCur.ComputeEstimatesForCur();
 			_hasDropped=true;
 			string logText=Lan.g(this,"The insurance plan for the carrier")+" "+Carriers.GetCarrier(_planCur.CarrierNum).CarrierName+" "+Lan.g(this,"was dropped.");
-			SecurityLogs.MakeLogEntry(Permissions.InsPlanEdit,(PatPlanCur==null)?0:PatPlanCur.PatNum,logText,(_planCur==null)?0:_planCur.PlanNum,
+			SecurityLog.Write(Permissions.InsPlanEdit,(PatPlanCur==null)?0:PatPlanCur.PatNum,logText,(_planCur==null)?0:_planCur.PlanNum,
 				_planCur.SecDateTEdit);
 			DialogResult=DialogResult.OK;
 			return true;
@@ -5503,7 +5503,7 @@ namespace OpenDental{
 					}
 					//It is very possible that the user changed the patient associated to the ins sub.
 					//We need to make a security log for the most recent patient (_subCur.Subscriber) instead of the original patient (_subOld.Subscriber) that was passed in.
-					SecurityLogs.MakeLogEntry(Permissions.InsPlanChangeAssign,_subCur.Subscriber,Lan.g(this,"Assignment of Benefits (pay dentist) changed from")
+					SecurityLog.Write(Permissions.InsPlanChangeAssign,_subCur.Subscriber,Lan.g(this,"Assignment of Benefits (pay dentist) changed from")
 						+" "+(_subOld.AssignBen?Lan.g(this,"checked"):Lan.g(this,"unchecked"))+" "
 						+Lan.g(this,"to")
 						+" "+(checkAssign.Checked?Lan.g(this,"checked"):Lan.g(this,"unchecked"))+" for plan "
@@ -5608,7 +5608,7 @@ namespace OpenDental{
 									catch(ApplicationException ex) {
 										MessageBox.Show(ex.Message);
 										//do not need to update PlanCur because no changes were made.
-										SecurityLogs.MakeLogEntry(Permissions.InsPlanEdit,(PatPlanCur==null) ? 0 : PatPlanCur.PatNum
+										SecurityLog.Write(Permissions.InsPlanEdit,(PatPlanCur==null) ? 0 : PatPlanCur.PatNum
 											,Lan.g(this,"FormInsPlan region 5 delete validation failed.  Plan was not deleted."),_planOld.PlanNum,
 											DateTime.MinValue); //new plan, no date needed.
 										Close();
@@ -5650,7 +5650,7 @@ namespace OpenDental{
 										}
 										catch(ApplicationException ex) {
 											MessageBox.Show(ex.Message);
-											SecurityLogs.MakeLogEntry(Permissions.InsPlanEdit,(PatPlanCur==null) ? 0 : PatPlanCur.PatNum
+											SecurityLog.Write(Permissions.InsPlanEdit,(PatPlanCur==null) ? 0 : PatPlanCur.PatNum
 												,Lan.g(this,"FormInsPlan region 6 delete validation failed.  Plan was not deleted."),_planOld.PlanNum,
 												DateTime.MinValue); //new plan, no date needed.
 											Close();
@@ -5835,7 +5835,7 @@ namespace OpenDental{
 								}
 								catch(ApplicationException ex) {
 									MessageBox.Show(ex.Message);
-									SecurityLogs.MakeLogEntry(Permissions.InsPlanEdit,(PatPlanCur==null) ? 0 : PatPlanCur.PatNum
+									SecurityLog.Write(Permissions.InsPlanEdit,(PatPlanCur==null) ? 0 : PatPlanCur.PatNum
 										,Lan.g(this,"FormInsPlan region 5a delete validation failed.  Plan was not deleted."),
 										_planOld.PlanNum,DateTime.MinValue); //new plan, no date needed.
 									Close();
@@ -5891,7 +5891,7 @@ namespace OpenDental{
 				string carrierNameOrig=Carriers.GetCarrier(_planCurOriginal.CarrierNum).CarrierName;
 				string carrierNameNew=Carriers.GetCarrier(_planCur.CarrierNum).CarrierName;
 				if(carrierNameOrig!=carrierNameNew) {//The CarrierNum could have changed but the CarrierName might not have changed.  Only make an audit entry if the name changed.
-					SecurityLogs.MakeLogEntry(Permissions.InsPlanChangeCarrierName,patNum,Lan.g(this,"Carrier name changed in Edit Insurance Plan window from")+" "
+					SecurityLog.Write(Permissions.InsPlanChangeCarrierName,patNum,Lan.g(this,"Carrier name changed in Edit Insurance Plan window from")+" "
 					+carrierNameOrig+" "+Lan.g(this,"to")+" "+carrierNameNew,_planCur.PlanNum,_planCurOriginal.SecDateTEdit);
 				}
 			}
@@ -5908,12 +5908,12 @@ namespace OpenDental{
 				string feeSchedOld=FeeScheds.GetDescription(_planCurOriginal.FeeSched);
 				string feeSchedNew=FeeScheds.GetDescription(_planCur.FeeSched);
 				string logText=Lan.g(this,"The fee schedule associated with insurance plan number")+" "+_planCur.PlanNum.ToString()+" "+Lan.g(this,"for the carrier")+" "+carrierCur.CarrierName+" "+Lan.g(this,"was changed from")+" "+feeSchedOld+" "+Lan.g(this,"to")+" "+feeSchedNew;
-				SecurityLogs.MakeLogEntry(Permissions.InsPlanEdit,PatPlanCur==null?0:PatPlanCur.PatNum,logText,(_planCur==null)?0:_planCur.PlanNum,
+				SecurityLog.Write(Permissions.InsPlanEdit,PatPlanCur==null?0:PatPlanCur.PatNum,logText,(_planCur==null)?0:_planCur.PlanNum,
 					_planCurOriginal.SecDateTEdit);
 			}
 			if(InsPlanCrud.UpdateComparison(_planCurOriginal,_planCur)) {
 				string logText=Lan.g(this,"Insurance plan")+" "+_planCur.PlanNum.ToString()+" "+Lan.g(this,"for the carrier")+" "+carrierCur.CarrierName+" "+Lan.g(this,"has changed.");
-				SecurityLogs.MakeLogEntry(Permissions.InsPlanEdit,PatPlanCur==null?0:PatPlanCur.PatNum,logText,(_planCur==null)?0:_planCur.PlanNum,
+				SecurityLog.Write(Permissions.InsPlanEdit,PatPlanCur==null?0:PatPlanCur.PatNum,logText,(_planCur==null)?0:_planCur.PlanNum,
 					_planCurOriginal.SecDateTEdit);
 			}
 			}
@@ -5974,7 +5974,7 @@ namespace OpenDental{
 				}
 				catch(ApplicationException ex) {
 					MessageBox.Show(ex.Message);
-					SecurityLogs.MakeLogEntry(Permissions.InsPlanEdit,(PatPlanCur==null)?0:PatPlanCur.PatNum
+					SecurityLog.Write(Permissions.InsPlanEdit,(PatPlanCur==null)?0:PatPlanCur.PatNum
 						,Lan.g(this,"FormInsPlan_Closing delete validation failed.  Plan was not deleted."),_planOld.PlanNum,DateTime.MinValue);//new plan, no date needed.
 					return;
 				}

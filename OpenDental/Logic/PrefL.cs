@@ -35,7 +35,7 @@ namespace OpenDental
                         Signalods.Insert(sig);
                         Computer.ClearAllHeartBeats(Environment.MachineName);//always assume success
                         isShutdownWindowNeeded = false;
-                        //SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Shutdown all workstations.");//can't do this because sometimes no user.
+                        //SecurityLog.Write(Permissions.Setup,0,"Shutdown all workstations.");//can't do this because sometimes no user.
                     }
                     else if (formShutdown.DialogResult == DialogResult.Cancel)
                     {

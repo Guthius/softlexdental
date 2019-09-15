@@ -1058,7 +1058,7 @@ namespace OpenDental {
 				Appointment apt=(Appointment)gridAppts.SelectedGridRows[i].Tag;
 				DateTime datePrevious=apt.DateTStamp;
 				Appointments.SetPriority(apt,ApptPriority.Normal);
-				SecurityLogs.MakeLogEntry(Permissions.AppointmentEdit,apt.PatNum,"Appointment priority set from ASAP to normal from ASAP list.",apt.AptNum,
+				SecurityLog.Write(apt.PatNum,SecurityLogEvents.AppointmentEdited,"Appointment priority set from ASAP to normal from ASAP list.",apt.AptNum,
 					datePrevious);
 			}
 			FillGridAppts();
@@ -1255,7 +1255,7 @@ namespace OpenDental {
 			foreach(Recall recall in _listSelectedRecalls) { 
 				recall.Priority=RecallPriority.Normal;
 				Recalls.Update(recall);
-				SecurityLogs.MakeLogEntry(Permissions.RecallEdit,recall.PatNum,"Recall priority set to Normal from the ASAP List.");
+				SecurityLog.Write(recall.PatNum,SecurityLogEvents.RecallEdit,"Recall priority set to Normal from the ASAP List.");
 			}
 			FillGridRecalls();
 		}
@@ -1784,7 +1784,7 @@ namespace OpenDental {
 			}
 			FormAsapSetup FormAS=new FormAsapSetup();
 			FormAS.ShowDialog();
-			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"ASAP List Setup");
+			SecurityLog.Write(null,SecurityLogEvents.Setup,"ASAP List Setup");
 		}
 
 		private void butPrint_Click(object sender,EventArgs e) {

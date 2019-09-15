@@ -145,7 +145,7 @@ namespace OpenDental {
 				if(FormRS.DialogResult!=DialogResult.OK) {
 					return;
 				}
-				SecurityLogs.MakeLogEntry(Permissions.RxCreate,_patCur.PatNum,"Created prescription.");
+				SecurityLog.Write(Permissions.RxCreate,_patCur.PatNum,"Created prescription.");
 			}
 			FillGrid();
 		}

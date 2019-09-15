@@ -77,7 +77,7 @@ namespace OpenDental {
 			long rowsChanged=Providers.Merge(PIn.Long(textProvNumFrom.Text),PIn.Long(textProvNumInto.Text));
 			string logText=Lan.g(this,"Providers merged")+": "+textAbbrFrom.Text+" "+Lan.g(this,"merged into")+" "+textAbbrInto.Text+".\r\n"
 			+Lan.g(this,"Rows changed")+": "+POut.Long(rowsChanged);
-			SecurityLogs.MakeLogEntry(Permissions.ProviderMerge,0,logText);
+			SecurityLog.Write(Permissions.ProviderMerge,0,logText);
 			textAbbrFrom.Clear();
 			textProvNumFrom.Clear();
 			textNpiFrom.Clear();

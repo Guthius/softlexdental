@@ -2433,7 +2433,7 @@ namespace OpenDental {
 				MessageBox.Show(ex.Message);
 				return;
 			}
-			SecurityLogs.MakeLogEntry(perm,_patCur.PatNum,Lan.g(this,"Invalidated: ")+
+			SecurityLog.Write(perm,_patCur.PatNum,Lan.g(this,"Invalidated: ")+
 				ProcedureCodes.GetStringProcCode(_procCur.CodeNum).ToString()+" ("+_procCur.ProcStatus+"), "
 				+_procCur.ProcDate.ToShortDateString()+", "+_procCur.ProcFee.ToString("c")+", Deleted");
 			DialogResult=DialogResult.OK;
@@ -2568,7 +2568,7 @@ namespace OpenDental {
                         tag = ", " + Lan.g(this, "Deleted");
                         break;
                 }
-                SecurityLogs.MakeLogEntry(perm, _procOld.PatNum,
+                SecurityLog.Write(perm, _procOld.PatNum,
                     ProcedureCodes.GetProcCode(_procOld.CodeNum).ProcCode + " (" + _procOld.ProcStatus + "), " + _procOld.ProcFee.ToString("c") + tag);
 
                 Plugin.Trigger(this, "FormProcEdit_Button_Delete", _procCur);
@@ -3365,7 +3365,7 @@ namespace OpenDental {
 				//There's a possibility that we are making a second, unnecessary call to the database here but it is worth it to help meet EHR measures.
 				Procedures.UpdateCpoeForProc(_procCur.ProcNum,true);
 				//Make a log that we edited this procedure's CPOE flag.
-				SecurityLogs.MakeLogEntry(Permissions.ProcEdit,_procCur.PatNum,ProcedureCodes.GetProcCode(_procCur.CodeNum).ProcCode
+				SecurityLog.Write(SecurityLogEvents.ProcEdit,_procCur.PatNum,ProcedureCodes.GetProcCode(_procCur.CodeNum).ProcCode
 					+", "+_procCur.ProcFee.ToString("c")+", "+Lan.g(this,"automatically flagged as CPOE."));
 			}
 			if(DialogResult==DialogResult.OK) {

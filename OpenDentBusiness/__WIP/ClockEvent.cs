@@ -305,7 +305,7 @@ namespace OpenDentBusiness
 
             var employee = Employee.GetById(employeeId);
 
-            SecurityLogs.MakeLogEntry(Permissions.UserLogOnOff, 0, $"{employee} clocked in from {clockEvent.Status}.");
+            SecurityLog.Write(null, SecurityLogEvents.UserLogOnOff, $"{employee} clocked in from {clockEvent.Status}.");
         }
 
         /// <summary>
@@ -352,7 +352,7 @@ namespace OpenDentBusiness
 
             var employee = Employee.GetById(employeeId);
 
-            SecurityLogs.MakeLogEntry(Permissions.UserLogOnOff, 0, $"{employee} clocked out for {clockEvent.Status}.");
+            SecurityLog.Write(null, SecurityLogEvents.UserLogOnOff, $"{employee} clocked out for {clockEvent.Status}.");
         }
 
 

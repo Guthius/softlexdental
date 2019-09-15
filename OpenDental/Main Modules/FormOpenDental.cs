@@ -3936,7 +3936,7 @@ namespace OpenDental
             {
                 formPrinterSetup.ShowDialog();
 
-                SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "Printers");
+                SecurityLog.Write(SecurityLogEvents.Setup, "Printers");
             }
         }
 
@@ -3969,7 +3969,7 @@ namespace OpenDental
         {
             if (!Security.IsAuthorized(Permissions.ChooseDatabase)) return;
             
-            SecurityLogs.MakeLogEntry(Permissions.ChooseDatabase, 0, "");//make the entry before switching databases.
+            SecurityLog.Write(SecurityLogEvents.ChooseDatabase, "");//make the entry before switching databases.
 
             using (var formChooseDatabase = new FormChooseDatabase())
             {
@@ -4012,7 +4012,7 @@ namespace OpenDental
             }
             FormApptFieldDefs FormA = new FormApptFieldDefs();
             FormA.ShowDialog();
-            SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "Appointment Field Defs");
+            SecurityLog.Write(SecurityLogEvents.Setup, "Appointment Field Defs");
         }
 
         private void menuItemApptRules_Click(object sender, EventArgs e)
@@ -4023,7 +4023,7 @@ namespace OpenDental
             }
             FormApptRules FormA = new FormApptRules();
             FormA.ShowDialog();
-            SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "Appointment Rules");
+            SecurityLog.Write(SecurityLogEvents.Setup, "Appointment Rules");
         }
 
         private void menuItemApptTypes_Click(object sender, EventArgs e)
@@ -4034,7 +4034,7 @@ namespace OpenDental
             }
             FormApptTypes FormA = new FormApptTypes();
             FormA.ShowDialog();
-            SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "Appointment Types");
+            SecurityLog.Write(SecurityLogEvents.Setup, "Appointment Types");
         }
 
         private void menuItemApptViews_Click(object sender, System.EventArgs e)
@@ -4046,7 +4046,7 @@ namespace OpenDental
             FormApptViews FormAV = new FormApptViews();
             FormAV.ShowDialog();
             RefreshCurrentModule(true);
-            SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "Appointment Views");
+            SecurityLog.Write(SecurityLogEvents.Setup, "Appointment Views");
         }
 
         private void menuItemAlertCategories_Click(object sender, EventArgs e)
@@ -4057,7 +4057,7 @@ namespace OpenDental
             }
             FormAlertCategorySetup FormACS = new FormAlertCategorySetup();
             FormACS.ShowDialog();
-            SecurityLogs.MakeLogEntry(Permissions.SecurityAdmin, 0, "Alert Categories");
+            SecurityLog.Write(SecurityLogEvents.SecurityAdmin, "Alert Categories");
         }
 
         private void menuItemAutoCodes_Click(object sender, System.EventArgs e)
@@ -4068,7 +4068,7 @@ namespace OpenDental
             }
             FormAutoCode FormAC = new FormAutoCode();
             FormAC.ShowDialog();
-            SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "Auto Codes");
+            SecurityLog.Write(SecurityLogEvents.Setup, "Auto Codes");
         }
 
         private void menuItemAutomation_Click(object sender, EventArgs e)
@@ -4079,7 +4079,7 @@ namespace OpenDental
             }
             FormAutomation FormA = new FormAutomation();
             FormA.ShowDialog();
-            SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "Automation");
+            SecurityLog.Write(SecurityLogEvents.Setup, "Automation");
         }
 
         private void menuItemAutoNotes_Click(object sender, EventArgs e)
@@ -4090,7 +4090,7 @@ namespace OpenDental
             }
             FormAutoNotes FormA = new FormAutoNotes();
             FormA.ShowDialog();
-            SecurityLogs.MakeLogEntry(Permissions.AutoNoteQuickNoteEdit, 0, "Auto Notes Setup");
+            SecurityLog.Write(SecurityLogEvents.AutoNoteQuickNoteEdit, "Auto Notes Setup");
         }
 
         private void menuItemMobileAppDevices_Click(object sender, EventArgs e)
@@ -4116,7 +4116,7 @@ namespace OpenDental
             }
             FormClaimForms FormCF = new FormClaimForms();
             FormCF.ShowDialog();
-            SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "Claim Forms");
+            SecurityLog.Write(SecurityLogEvents.Setup, "Claim Forms");
         }
 
         private void menuItemClearinghouses_Click(object sender, System.EventArgs e)
@@ -4127,7 +4127,7 @@ namespace OpenDental
             }
             FormClearinghouses FormC = new FormClearinghouses();
             FormC.ShowDialog();
-            SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "Clearinghouses");
+            SecurityLog.Write(SecurityLogEvents.Setup, "Clearinghouses");
         }
 
         private void menuItemDiscountPlans_Click(object sender, EventArgs e)
@@ -4138,7 +4138,7 @@ namespace OpenDental
             }
             FormDiscountPlans FormDP = new FormDiscountPlans();
             FormDP.ShowDialog();
-            SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "Discount Plans");
+            SecurityLog.Write(SecurityLogEvents.Setup, "Discount Plans");
         }
 
         private void menuItemComputers_Click(object sender, System.EventArgs e)
@@ -4149,7 +4149,7 @@ namespace OpenDental
             }
             FormComputers FormC = new FormComputers();
             FormC.ShowDialog();
-            SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "Computers");
+            SecurityLog.Write(SecurityLogEvents.Setup, "Computers");
         }
 
         private void menuItemDataPath_Click(object sender, System.EventArgs e)
@@ -4159,7 +4159,7 @@ namespace OpenDental
             FormP.ShowDialog();
             CheckCustomReports();
             this.RefreshCurrentModule();
-            SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "Data Path");
+            SecurityLog.Write(SecurityLogEvents.Setup, "Data Path");
         }
 
         private void menuItemDefaultCCProcs_Click(object sender, System.EventArgs e)
@@ -4170,7 +4170,7 @@ namespace OpenDental
             }
             FormDefaultCCProcs FormD = new FormDefaultCCProcs();
             FormD.ShowDialog();
-            SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "Default CC Procedures");
+            SecurityLog.Write(SecurityLogEvents.Setup, "Default CC Procedures");
         }
 
         private void menuItemDefinitions_Click(object sender, System.EventArgs e)
@@ -4182,7 +4182,7 @@ namespace OpenDental
             FormDefinitions FormD = new FormDefinitions(DefinitionCategory.AccountColors);//just the first cat.
             FormD.ShowDialog();
             RefreshCurrentModule(true);
-            SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "Definitions");
+            SecurityLog.Write(SecurityLogEvents.Setup, "Definitions");
         }
 
         private void menuItemDentalSchools_Click(object sender, EventArgs e)
@@ -4194,7 +4194,7 @@ namespace OpenDental
             FormDentalSchoolSetup FormDSS = new FormDentalSchoolSetup();
             FormDSS.ShowDialog();
             RefreshCurrentModule();
-            SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "Dental Schools");
+            SecurityLog.Write(SecurityLogEvents.Setup, "Dental Schools");
         }
 
         private void menuItemDisplayFields_Click(object sender, EventArgs e)
@@ -4206,7 +4206,7 @@ namespace OpenDental
             FormDisplayFieldCategories FormD = new FormDisplayFieldCategories();
             FormD.ShowDialog();
             RefreshCurrentModule(true);
-            SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "Display Fields");
+            SecurityLog.Write(SecurityLogEvents.Setup, "Display Fields");
         }
 
         private void menuItemEnterprise_Click(object sender, EventArgs e)
@@ -4217,7 +4217,7 @@ namespace OpenDental
             }
             FormEnterpriseSetup FormES = new FormEnterpriseSetup();
             FormES.ShowDialog();
-            SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "Enterprise");
+            SecurityLog.Write(SecurityLogEvents.Setup, "Enterprise");
         }
 
         private void menuItemEmail_Click(object sender, System.EventArgs e)
@@ -4228,7 +4228,7 @@ namespace OpenDental
             }
             FormEmailAddresses FormEA = new FormEmailAddresses();
             FormEA.ShowDialog();
-            SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "Email");
+            SecurityLog.Write(SecurityLogEvents.Setup, "Email");
         }
 
         private void menuItemEHR_Click(object sender, EventArgs e)
@@ -4238,7 +4238,7 @@ namespace OpenDental
             //}
             FormEhrSetup FormE = new FormEhrSetup();
             FormE.ShowDialog();
-            SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "EHR");
+            SecurityLog.Write(SecurityLogEvents.Setup, "EHR");
         }
 
         private void menuItemFeeScheds_Click(object sender, EventArgs e)
@@ -4249,7 +4249,7 @@ namespace OpenDental
             }
             FormFeeScheds FormF = new FormFeeScheds(false);
             FormF.ShowDialog();
-            SecurityLogs.MakeLogEntry(Permissions.FeeSchedEdit, 0, "Fee Schedules");
+            SecurityLog.Write(SecurityLogEvents.Setup, "Fee Schedules");
         }
 
         private void menuItemFHIR_Click(object sender, EventArgs e)
@@ -4260,7 +4260,7 @@ namespace OpenDental
             }
             FormFHIRSetup FormFS = new FormFHIRSetup();
             FormFS.ShowDialog();
-            SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "FHIR");
+            SecurityLog.Write(SecurityLogEvents.Setup, "FHIR");
         }
 
         private void menuItemHL7_Click(object sender, EventArgs e)
@@ -4272,7 +4272,7 @@ namespace OpenDental
             FormHL7Defs FormH = new FormHL7Defs();
             FormH.CurPatNum = CurPatNum;
             FormH.ShowDialog();
-            SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "HL7");
+            SecurityLog.Write(SecurityLogEvents.Setup, "HL7");
         }
 
         private void menuItemImaging_Click(object sender, System.EventArgs e)
@@ -4283,7 +4283,7 @@ namespace OpenDental
             }
             FormImagingSetup FormI = new FormImagingSetup();
             FormI.ShowDialog();
-            SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "Imaging");
+            SecurityLog.Write(SecurityLogEvents.Setup, "Imaging");
         }
 
         private void menuItemInsCats_Click(object sender, System.EventArgs e)
@@ -4294,7 +4294,7 @@ namespace OpenDental
             }
             FormInsCatsSetup FormE = new FormInsCatsSetup();
             FormE.ShowDialog();
-            SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "Insurance Categories");
+            SecurityLog.Write(SecurityLogEvents.Setup, "Insurance Categories");
         }
 
         private void menuItemInsFilingCodes_Click(object sender, EventArgs e)
@@ -4305,7 +4305,7 @@ namespace OpenDental
             }
             FormInsFilingCodes FormF = new FormInsFilingCodes();
             FormF.ShowDialog();
-            SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "Insurance Filing Codes");
+            SecurityLog.Write(SecurityLogEvents.Setup, "Insurance Filing Codes");
         }
 
         private void menuItemLaboratories_Click(object sender, EventArgs e)
@@ -4319,7 +4319,7 @@ namespace OpenDental
 
             FormLaboratories FormL = new FormLaboratories();
             FormL.ShowDialog();
-            SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "Laboratories");
+            SecurityLog.Write(SecurityLogEvents.Setup, "Laboratories");
         }
 
         private void menuItemLetters_Click(object sender, EventArgs e)
@@ -4336,7 +4336,7 @@ namespace OpenDental
             }
             FormMessagingSetup FormM = new FormMessagingSetup();
             FormM.ShowDialog();
-            SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "Messaging");
+            SecurityLog.Write(SecurityLogEvents.Setup, "Messaging");
         }
 
         private void menuItemMessagingButs_Click(object sender, EventArgs e)
@@ -4347,7 +4347,7 @@ namespace OpenDental
             }
             FormMessagingButSetup FormM = new FormMessagingButSetup();
             FormM.ShowDialog();
-            SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "Messaging");
+            SecurityLog.Write(SecurityLogEvents.Setup, "Messaging");
         }
 
         private void menuItemMisc_Click(object sender, System.EventArgs e)
@@ -4371,7 +4371,7 @@ namespace OpenDental
                 timerSignals.Enabled = true;
             }
 
-            SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "Misc");
+            SecurityLog.Write(SecurityLogEvents.Setup, "Misc");
         }
 
         ///<summary>Only used when theme is changed.</summary>
@@ -4449,7 +4449,7 @@ namespace OpenDental
             }
             FillPatientButton(Patients.GetPat(CurPatNum));
             RefreshCurrentModule(true);
-            SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "Modules");
+            SecurityLog.Write(SecurityLogEvents.Setup, "Modules");
         }
 
         private void menuItemOperatories_Click(object sender, System.EventArgs e)
@@ -4466,7 +4466,7 @@ namespace OpenDental
                 FormAC.Show();
                 FormAC.BringToFront();
             }
-            SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "Operatories");
+            SecurityLog.Write(SecurityLogEvents.Setup, "Operatories");
         }
 
         private void menuItemPatFieldDefs_Click(object sender, EventArgs e)
@@ -4477,7 +4477,7 @@ namespace OpenDental
             }
             FormPatFieldDefs FormP = new FormPatFieldDefs();
             FormP.ShowDialog();
-            SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "Patient Field Defs");
+            SecurityLog.Write(SecurityLogEvents.Setup, "Patient Field Defs");
         }
 
         private void menuItemPayerIDs_Click(object sender, EventArgs e)
@@ -4489,7 +4489,7 @@ namespace OpenDental
             FormElectIDs FormE = new FormElectIDs();
             FormE.IsSelectMode = false;
             FormE.ShowDialog();
-            SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "Payer IDs");
+            SecurityLog.Write(SecurityLogEvents.Setup, "Payer IDs");
         }
 
         private void menuItemPractice_Click(object sender, System.EventArgs e)
@@ -4500,7 +4500,7 @@ namespace OpenDental
             }
             FormPractice FormPr = new FormPractice();
             FormPr.ShowDialog();
-            SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "Practice Info");
+            SecurityLog.Write(SecurityLogEvents.Setup, "Practice Info");
             if (FormPr.DialogResult != DialogResult.OK)
             {
                 return;
@@ -4518,7 +4518,7 @@ namespace OpenDental
             FormDiseaseDefs FormD = new FormDiseaseDefs();
             FormD.ShowDialog();
             //RefreshCurrentModule();
-            SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "Disease Defs");
+            SecurityLog.Write(SecurityLogEvents.Setup, "Disease Defs");
         }
 
         private void menuItemProcedureButtons_Click(object sender, System.EventArgs e)
@@ -4531,7 +4531,7 @@ namespace OpenDental
             FormPB.Owner = this;
             FormPB.ShowDialog();
             SetModuleSelected();
-            SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "Procedure Buttons");
+            SecurityLog.Write(SecurityLogEvents.Setup, "Procedure Buttons");
         }
 
         private void menuItemLinks_Click(object sender, System.EventArgs e)
@@ -4550,7 +4550,7 @@ namespace OpenDental
                 Patient pat = Patients.GetPat(CurPatNum);
                 FillPatientButton(pat);
             }
-            SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "Program Links");
+            SecurityLog.Write(SecurityLogEvents.Setup, "Program Links");
         }
 
         /*
@@ -4573,7 +4573,7 @@ namespace OpenDental
             }
             FormAsapSetup FormAS = new FormAsapSetup();
             FormAS.ShowDialog();
-            SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "ASAP List Setup");
+            SecurityLog.Write(SecurityLogEvents.Setup, "ASAP List Setup");
         }
 
         private void menuItemConfirmations_Click(object sender, EventArgs e)
@@ -4584,7 +4584,7 @@ namespace OpenDental
             }
             FormConfirmationSetup FormCS = new FormConfirmationSetup();
             FormCS.ShowDialog();
-            SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "Confirmation Setup");
+            SecurityLog.Write(SecurityLogEvents.Setup, "Confirmation Setup");
         }
 
         private void menuItemInsVerify_Click(object sender, EventArgs e)
@@ -4595,7 +4595,7 @@ namespace OpenDental
             }
             FormInsVerificationSetup FormIV = new FormInsVerificationSetup();
             FormIV.ShowDialog();
-            SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "Insurance Verification");
+            SecurityLog.Write(SecurityLogEvents.Setup, "Insurance Verification");
         }
 
         private void menuItemQuestions_Click(object sender, EventArgs e)
@@ -4607,7 +4607,7 @@ namespace OpenDental
             FormQuestionDefs FormQ = new FormQuestionDefs();
             FormQ.ShowDialog();
             //RefreshCurrentModule();
-            SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "Questionnaire");
+            SecurityLog.Write(SecurityLogEvents.Setup, "Questionnaire");
         }
 
         private void menuItemRecall_Click(object sender, System.EventArgs e)
@@ -4618,7 +4618,7 @@ namespace OpenDental
             }
             FormRecallSetup FormRS = new FormRecallSetup();
             FormRS.ShowDialog();
-            SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "Recall");
+            SecurityLog.Write(SecurityLogEvents.Setup, "Recall");
         }
 
         private void menuItemRecallTypes_Click(object sender, EventArgs e)
@@ -4629,7 +4629,7 @@ namespace OpenDental
             }
             FormRecallTypes FormRT = new FormRecallTypes();
             FormRT.ShowDialog();
-            SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "Recall Types");
+            SecurityLog.Write(SecurityLogEvents.Setup, "Recall Types");
         }
 
         private void menuItemReactivation_Click(object sender, System.EventArgs e)
@@ -4640,18 +4640,18 @@ namespace OpenDental
             }
             FormReactivationSetup FormRS = new FormReactivationSetup();
             FormRS.ShowDialog();
-            SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "Reactivation");
+            SecurityLog.Write(SecurityLogEvents.Setup, "Reactivation");
         }
 
         private void menuItemReplication_Click(object sender, EventArgs e)
         {
-            if (!Security.IsAuthorized(Permissions.ReplicationSetup))
-            {
-                return;
-            }
-            FormReplicationSetup FormRS = new FormReplicationSetup();
-            FormRS.ShowDialog();
-            SecurityLogs.MakeLogEntry(Permissions.ReplicationSetup, 0, "Replication setup.");
+            //if (!Security.IsAuthorized(Permissions.ReplicationSetup))
+            //{
+            //    return;
+            //}
+            //FormReplicationSetup FormRS = new FormReplicationSetup();
+            //FormRS.ShowDialog();
+            //SecurityLog.Write(Permissions.ReplicationSetup, 0, "Replication setup.");
         }
 
         private void menuItemReports_Click(object sender, EventArgs e)
@@ -4672,7 +4672,7 @@ namespace OpenDental
             }
             FormRequiredFields FormRF = new FormRequiredFields();
             FormRF.ShowDialog();
-            SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "Required Fields");
+            SecurityLog.Write(SecurityLogEvents.Setup, "Required Fields");
         }
 
         private void menuItemRequirementsNeeded_Click(object sender, EventArgs e)
@@ -4683,7 +4683,7 @@ namespace OpenDental
             }
             FormReqNeededs FormR = new FormReqNeededs();
             FormR.ShowDialog();
-            SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "Requirements Needed");
+            SecurityLog.Write(SecurityLogEvents.Setup, "Requirements Needed");
         }
 
         private void menuItemSched_Click(object sender, EventArgs e)
@@ -4694,7 +4694,7 @@ namespace OpenDental
             //}
             FormSchedule FormS = new FormSchedule();
             FormS.ShowDialog();
-            //SecurityLogs.MakeLogEntry(Permissions.Schedules,0,"");
+            //SecurityLog.Write(Permissions.Schedules,0,"");
         }
 
         /*private void menuItemBlockoutDefault_Click(object sender,System.EventArgs e) {
@@ -4703,7 +4703,7 @@ namespace OpenDental
 			}
 			FormSchedDefault FormSD=new FormSchedDefault(ScheduleType.Blockout);
 			FormSD.ShowDialog();
-			SecurityLogs.MakeLogEntry(Permissions.Blockouts,0,"Default");
+			SecurityLog.Write(Permissions.Blockouts,0,"Default");
 		}*/
 
         public static void S_MenuItemSecurity_Click(object sender, EventArgs e)
@@ -4719,7 +4719,7 @@ namespace OpenDental
             }
             FormSecurity FormS = new FormSecurity();
             FormS.ShowDialog();
-            SecurityLogs.MakeLogEntry(Permissions.SecurityAdmin, 0, "Security Window");
+            SecurityLog.Write(SecurityLogEvents.SecurityAdmin, "Security Window");
             if (!Preferences.HasClinicsEnabled)
             {//clinics not enabled, refresh current module and return
                 RefreshCurrentModule();
@@ -4779,7 +4779,7 @@ namespace OpenDental
             }
             FormSheetDefs FormSD = new FormSheetDefs();
             FormSD.ShowDialog();
-            SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "Sheets");
+            SecurityLog.Write(SecurityLogEvents.Setup, "Sheets");
         }
 
         //This shows as "Show Features"
@@ -4795,7 +4795,7 @@ namespace OpenDental
             RefreshCurrentModule(true);
             //Show enterprise setup if it was enabled
             menuItemEnterprise.Visible = Preference.GetBool(PreferenceName.ShowFeatureEnterprise);
-            SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "Show Features");
+            SecurityLog.Write(SecurityLogEvents.Setup, "Show Features");
         }
 
         private void menuItemSpellCheck_Click(object sender, EventArgs e)
@@ -4812,7 +4812,7 @@ namespace OpenDental
             }
             FormTimeCardSetup FormTCS = new FormTimeCardSetup();
             FormTCS.ShowDialog();
-            SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "Time Card Setup");
+            SecurityLog.Write(SecurityLogEvents.Setup, "Time Card Setup");
         }
 
         private void menuItemTask_Click(object sender, EventArgs e)
@@ -4830,7 +4830,7 @@ namespace OpenDental
             {
                 userControlTasks1.InitializeOnStartup();
             }
-            SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "Task");
+            SecurityLog.Write(SecurityLogEvents.Setup, "Task");
         }
 
         private void menuItemQuickPasteNotes_Click(object sender, EventArgs e)
@@ -4868,7 +4868,7 @@ namespace OpenDental
             FormC.IncludeHQInList = true;
             FormC.IsMultiSelect = true;
             FormC.ShowDialog();
-            SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "Clinics");
+            SecurityLog.Write(SecurityLogEvents.Setup, "Clinics");
             //this menu item is only visible if the clinics show feature is enabled (!EasyNoClinics)
             if (Clinics.GetDesc(Clinics.ClinicNum) == "")
             {//will be empty string if ClinicNum is not valid, in case they deleted the clinic
@@ -4897,7 +4897,7 @@ namespace OpenDental
             }
             FormCounties FormC = new FormCounties();
             FormC.ShowDialog();
-            SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "Counties");
+            SecurityLog.Write(SecurityLogEvents.Setup, "Counties");
         }
 
         private void menuItemSchoolClass_Click(object sender, System.EventArgs e)
@@ -4908,7 +4908,7 @@ namespace OpenDental
             }
             FormSchoolClasses FormS = new FormSchoolClasses();
             FormS.ShowDialog();
-            SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "Dental School Classes");
+            SecurityLog.Write(SecurityLogEvents.Setup, "Dental School Classes");
         }
 
         private void menuItemSchoolCourses_Click(object sender, System.EventArgs e)
@@ -4919,7 +4919,7 @@ namespace OpenDental
             }
             FormSchoolCourses FormS = new FormSchoolCourses();
             FormS.ShowDialog();
-            SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "Dental School Courses");
+            SecurityLog.Write(SecurityLogEvents.Setup, "Dental School Courses");
         }
 
         private void menuItemEmployees_Click(object sender, System.EventArgs e)
@@ -4930,7 +4930,7 @@ namespace OpenDental
             }
             FormEmployeeSelect FormEmp = new FormEmployeeSelect();
             FormEmp.ShowDialog();
-            SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "Employees");
+            SecurityLog.Write(SecurityLogEvents.Setup, "Employees");
         }
 
         private void menuItemEmployers_Click(object sender, System.EventArgs e)
@@ -4946,7 +4946,7 @@ namespace OpenDental
 			}
 			FormInstructors FormI=new FormInstructors();
 			FormI.ShowDialog();
-			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Dental School Instructors");*/
+			SecurityLog.Write(Permissions.Setup,0,"Dental School Instructors");*/
         }
 
         private void menuItemCarriers_Click(object sender, System.EventArgs e)
@@ -4993,13 +4993,13 @@ namespace OpenDental
         {
             if (!Security.IsAuthorized(Permissions.Providers, true) && !Security.IsAuthorized(Permissions.AdminDentalStudents, true))
             {
-                MessageBox.Show(Lans.g("Security", "Not authorized for") + "\r\n"
-                    + UserGroupPermission.GetDescription(Permissions.Providers) + " " + Lans.g("Security", "or") + " " + UserGroupPermission.GetDescription(Permissions.AdminDentalStudents));
+                MessageBox.Show(
+                    "Not authorized for\r\n" + UserGroupPermission.GetDescription(Permissions.Providers) + " " + Lans.g("Security", "or") + " " + UserGroupPermission.GetDescription(Permissions.AdminDentalStudents));
                 return;
             }
             FormProviderSetup FormPS = new FormProviderSetup();
             FormPS.ShowDialog();
-            SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "Providers");
+            SecurityLog.Write(SecurityLogEvents.Setup, "Providers");
         }
 
         private void menuItemPrescriptions_Click(object sender, System.EventArgs e)
@@ -5010,7 +5010,7 @@ namespace OpenDental
             }
             FormRxSetup FormRxSetup2 = new FormRxSetup();
             FormRxSetup2.ShowDialog();
-            SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "Rx");
+            SecurityLog.Write(SecurityLogEvents.Setup, "Rx");
         }
 
         private void menuItemReferrals_Click(object sender, System.EventArgs e)
@@ -5028,7 +5028,7 @@ namespace OpenDental
             FormSites FormS = new FormSites();
             FormS.ShowDialog();
             RefreshCurrentModule();
-            SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "Sites");
+            SecurityLog.Write(SecurityLogEvents.Setup, "Sites");
         }
 
         private void menuItemStateAbbrs_Click(object sender, System.EventArgs e)
@@ -5040,7 +5040,7 @@ namespace OpenDental
             FormStateAbbrs formSA = new FormStateAbbrs();
             formSA.ShowDialog();
             RefreshCurrentModule();
-            SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "StateAbbrs");
+            SecurityLog.Write(SecurityLogEvents.Setup, "StateAbbrs");
         }
 
         private void menuItemZipCodes_Click(object sender, System.EventArgs e)
@@ -5050,7 +5050,7 @@ namespace OpenDental
             //}
             FormZipCodes FormZ = new FormZipCodes();
             FormZ.ShowDialog();
-            //SecurityLogs.MakeLogEntry(Permissions.Setup,"Zip Codes");
+            //SecurityLog.Write(Permissions.Setup,"Zip Codes");
         }
 
         #endregion
@@ -5106,7 +5106,7 @@ namespace OpenDental
             }
             if (Security.IsAuthorized(Permissions.UserQueryAdmin, true))
             {
-                SecurityLogs.MakeLogEntry(Permissions.UserQuery, 0, Lan.g(this, "User query form accessed."));
+                SecurityLog.Write(SecurityLogEvents.UserQuery, "User query form accessed.");
                 if (_formUserQuery != null)
                 {
                     _formUserQuery.BringToFront();
@@ -5137,11 +5137,11 @@ namespace OpenDental
         {
             if (listSignals.Count == 0)
             {
-                menuItemReportsUnfinalizedPay.Text = Lan.g(this, "Unfinalized Payments");
+                menuItemReportsUnfinalizedPay.Text = "Unfinalized Payments";
                 return;
             }
             Signalod signal = listSignals.OrderByDescending(x => x.SigDateTime).First();
-            menuItemReportsUnfinalizedPay.Text = Lan.g(this, "Unfinalized Payments") + ": " + signal.MsgValue;
+            menuItemReportsUnfinalizedPay.Text = "Unfinalized Payments: " + signal.MsgValue;
         }
 
         private void RefreshMenuReports()
@@ -5336,7 +5336,7 @@ namespace OpenDental
             FormProcLockTool FormT = new FormProcLockTool();
             FormT.ShowDialog();
             //security entries made inside the form
-            //SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Proc Lock Tool");
+            //SecurityLog.Write(Permissions.Setup,0,"Proc Lock Tool");
         }
 
         private void menuItemSetupWizard_Click(object sender, EventArgs e)
@@ -5367,7 +5367,7 @@ namespace OpenDental
             sig.IType = InvalidType.ShutDownNow;
             Signalods.Insert(sig);
             Computer.ClearAllHeartBeats(Environment.MachineName);//always assume success
-            SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "Shutdown all workstations.");
+            SecurityLog.Write(SecurityLogEvents.Setup, "Shutdown all workstations.");
         }
 
         private void menuTelephone_Click(object sender, System.EventArgs e)
@@ -5420,7 +5420,7 @@ namespace OpenDental
             }
             FormAudit FormA = new FormAudit(CurPatNum);
             FormA.ShowDialog();
-            SecurityLogs.MakeLogEntry(Permissions.AuditTrail, 0, "Audit Trail");
+            SecurityLog.Write(SecurityLogEvents.AuditTrail, "Audit Trail");
         }
 
         private void menuItemFinanceCharge_Click(object sender, System.EventArgs e)
@@ -5431,7 +5431,7 @@ namespace OpenDental
             }
             FormFinanceCharges FormFC = new FormFinanceCharges();
             FormFC.ShowDialog();
-            SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "Run Finance Charges");
+            SecurityLog.Write(SecurityLogEvents.Setup, "Run Finance Charges");
         }
 
         private void menuItemCCRecurring_Click(object sender, EventArgs e)
@@ -5458,7 +5458,7 @@ namespace OpenDental
             }
             FormDatabaseMaintenance FormDM = new FormDatabaseMaintenance();
             FormDM.ShowDialog();
-            SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "Database Maintenance");
+            SecurityLog.Write(SecurityLogEvents.Setup, "Database Maintenance");
         }
 
         private void menuItemDispensary_Click(object sender, System.EventArgs e)
@@ -6184,7 +6184,7 @@ namespace OpenDental
 
         private void ExecuteQueryFavorite(UserQuery userQuery)
         {
-            SecurityLogs.MakeLogEntry(Permissions.UserQuery, 0, Lan.g(this, "User query form accessed."));
+            SecurityLog.Write(SecurityLogEvents.UserQuery, "User query form accessed.");
             //ReportSimpleGrid report=new ReportSimpleGrid();
             if (userQuery.IsPromptSetup && UserQueries.ParseSetStatements(userQuery.QueryText).Count > 0)
             {
@@ -6315,7 +6315,7 @@ namespace OpenDental
             //updates are handled more automatically.
             FormUpdate FormU = new FormUpdate();
             FormU.ShowDialog();
-            SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "Update Version");
+            SecurityLog.Write(SecurityLogEvents.Setup, "Update Version");
         }
 
         /// <summary>
@@ -6688,7 +6688,7 @@ namespace OpenDental
                     //            Security.CurrentUser = Userods.GetUserNoCache(dictDomainUserNumsAndNames.Keys.ElementAt(box.SelectedIndex));
                     //            CheckForPasswordReset();
 
-                    //            SecurityLogs.MakeLogEntry(Permissions.UserLogOnOff, 0, Lan.g(this, "User:") + " " + Security.CurrentUser.UserName + " "
+                    //            SecurityLog.Write(Permissions.UserLogOnOff, 0, Lan.g(this, "User:") + " " + Security.CurrentUser.UserName + " "
                     //                + Lan.g(this, "has logged on automatically via ActiveDirectory."));
                     //        }
                     //        else
@@ -6701,7 +6701,7 @@ namespace OpenDental
                     //        Security.CurrentUser = Userods.GetUserNoCache(dictDomainUserNumsAndNames.Keys.First());
                     //        CheckForPasswordReset();
 
-                    //        SecurityLogs.MakeLogEntry(Permissions.UserLogOnOff, 0, Lan.g(this, "User:") + " " + Security.CurrentUser.UserName + " "
+                    //        SecurityLog.Write(Permissions.UserLogOnOff, 0, Lan.g(this, "User:") + " " + Security.CurrentUser.UserName + " "
                     //                + Lan.g(this, "has logged on automatically via ActiveDirectory."));
                     //    }
                     //}
@@ -6966,11 +6966,11 @@ namespace OpenDental
 
             if (isForced)
             {
-                SecurityLogs.MakeLogEntry(Permissions.UserLogOnOff, 0, "User: " + Security.CurrentUser.UserName + " has auto logged off.");
+                SecurityLog.Write(SecurityLogEvents.UserLogOnOff, "User: " + Security.CurrentUser.UserName + " has auto logged off.");
             }
             else
             {
-                SecurityLogs.MakeLogEntry(Permissions.UserLogOnOff, 0, "User: " + Security.CurrentUser.UserName + " has logged off.");
+                SecurityLog.Write(SecurityLogEvents.UserLogOnOff, "User: " + Security.CurrentUser.UserName + " has logged off.");
             }
 
 
@@ -7117,7 +7117,7 @@ namespace OpenDental
             {
                 try
                 {
-                    SecurityLogs.MakeLogEntry(Permissions.UserLogOnOff, 0, "User: " + Security.CurrentUser.UserName + " has logged off.");
+                    SecurityLog.Write(SecurityLogEvents.UserLogOnOff, "User: " + Security.CurrentUser.UserName + " has logged off.");
                     Clinics.LogOff();
                 }
                 catch

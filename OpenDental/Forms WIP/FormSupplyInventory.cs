@@ -82,7 +82,7 @@ namespace OpenDental
                 formDefinitions.ShowDialog(this);
             }
 
-            SecurityLogs.MakeLogEntry(Permissions.Setup, 0, Translation.LanguageSecurity.DefinitionsAccessed);
+            SecurityLog.Write(Permissions.Setup, 0, Translation.LanguageSecurity.DefinitionsAccessed);
         }
 
         /// <summary>

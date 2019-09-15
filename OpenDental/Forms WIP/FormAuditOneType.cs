@@ -13,7 +13,7 @@ namespace OpenDental
         readonly long patientNum;
         readonly List<string> permTypes;
         readonly long foreignKey;
-        SecurityLog[] securityLogList;
+        List<SecurityLog> securityLogList;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FormAuditOneType"/> class.
@@ -53,14 +53,14 @@ namespace OpenDental
         {
             try
             {
-                securityLogList = SecurityLogs.Refresh(patientNum, permTypes, foreignKey, includeArchivedCheckBox.Checked);
+                securityLogList = SecurityLog.Find(patientNum, permTypes, foreignKey);
             }
             catch (Exception ex)
             {
                 FormFriendlyException.Show(
                     Translation.Language.ProblemRefreshingAuditTrail, ex);
 
-                securityLogList = new SecurityLog[0];
+                securityLogList = new List<SecurityLog>();
             }
 
             logGrid.BeginUpdate();
@@ -86,7 +86,7 @@ namespace OpenDental
                     row.Cells.Add(user.UserName);
                 }
 
-                row.Cells.Add(securityLog.EventName.ToString());
+                row.Cells.Add(securityLog.Event.ToString());
                 row.Cells.Add(securityLog.LogMessage);
 
                 logGrid.Rows.Add(row);

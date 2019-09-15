@@ -371,7 +371,7 @@ namespace OpenDentBusiness
             patientSynch.PriProv = primaryProvNum;
             patientSynch.ClinicNum = clinicNum;
             Patients.Insert(patientSynch, false);
-            SecurityLogs.MakeLogEntry(Permissions.PatientCreate, patientSynch.PatNum, Lans.g("ContrFamily", "Created from Family Module Clones Add button."));
+            SecurityLog.Write(patientSynch.PatNum, SecurityLogEvents.PatientCreated, "Created from Family Module Clones Add button.");
             PatientLinks.Insert(new PatientLink()
             {
                 PatNumFrom = patient.PatNum,
@@ -968,7 +968,7 @@ namespace OpenDentBusiness
             }
             if (patientClonePatPlanChanges.PatPlansInserted)
             {
-                SecurityLogs.MakeLogEntry(Permissions.PatPlanCreate, 0, Lans.g("ContrFamily", "One or more PatPlans created via Synch Clone tool."));
+                SecurityLog.Write(null, SecurityLogEvents.PatPlanCreate, "One or more PatPlans created via Synch Clone tool.");
             }
             if (patientClonePatPlanChanges.PatPlansChanged)
             {
@@ -1177,7 +1177,7 @@ namespace OpenDentBusiness
         ///securityLogMsg is typically set to something that lets the customer know where this new patient was created from.
         ///Used by multiple applications so be very careful when changing this method.  E.g. Open Dental and Web Sched.</summary>
         public static Patient CreateNewPatient(string lName, string fName, DateTime birthDate, long priProv, long clinicNum, string securityLogMsg
-            , string logSource = LogSources.None, string email = "", string hmPhone = "", string wirelessPhone = "")
+            , string logSource = SecurityLogSource.None, string email = "", string hmPhone = "", string wirelessPhone = "")
         {
             //No need to check RemotingRole; no call to db.
             Patient patient = new Patient();
@@ -1199,7 +1199,7 @@ namespace OpenDentBusiness
             patient.HmPhone = hmPhone;
             patient.WirelessPhone = wirelessPhone;
             Patients.Insert(patient, false);
-            SecurityLogs.MakeLogEntry(Permissions.PatientCreate, patient.PatNum, securityLogMsg, logSource);
+            SecurityLog.Write(patient.PatNum, SecurityLogEvents.PatientCreated, securityLogMsg, logSource);
             CustReference custRef = new CustReference();
             custRef.PatNum = patient.PatNum;
             CustReferences.Insert(custRef);
@@ -2298,7 +2298,7 @@ namespace OpenDentBusiness
             secLogText.Append(SecurityLogEntryHelper(patOld.Zip, patCur.Zip, "zip code"));
             if (secLogText.ToString() != "")
             {
-                SecurityLogs.MakeLogEntry(Permissions.PatientEdit, patCur.PatNum, secLogText.ToString());
+                SecurityLog.Write(patCur.PatNum, SecurityLogEvents.PatientEdit, secLogText.ToString());
             }
         }
 
@@ -2451,7 +2451,7 @@ namespace OpenDentBusiness
                         recalls[i].IsDisabled = true;
                         recalls[i].DateDue = DateTime.MinValue;
                         Recalls.Update(recalls[i]);
-                        SecurityLogs.MakeLogEntry(Permissions.RecallEdit, recalls[i].PatNum, "Recall disabled from the " + sender + ".");
+                        SecurityLog.Write(recalls[i].PatNum, SecurityLogEvents.RecallEdit, "Recall disabled from the " + sender + ".");
                     }
                 }
             }
@@ -2465,7 +2465,7 @@ namespace OpenDentBusiness
                     {
                         recalls[i].IsDisabled = false;
                         Recalls.Update(recalls[i]);
-                        SecurityLogs.MakeLogEntry(Permissions.RecallEdit, recalls[i].PatNum, "Recall re-enabled from the " + sender + ".");
+                        SecurityLog.Write(recalls[i].PatNum, SecurityLogEvents.RecallEdit, "Recall re-enabled from the " + sender + ".");
                     }
                 }
                 Recalls.Synch(patNew.PatNum);

@@ -215,7 +215,7 @@ namespace OpenDental {
 				}
 				Appointments.Update(apt,oldApt);
 				_oResult=OtherResult.CreateNew;
-				SecurityLogs.MakeLogEntry(Permissions.AppointmentCreate,apt.PatNum,apt.AptDateTime.ToString(),apt.AptNum,datePrevious);
+				SecurityLog.Write(Permissions.AppointmentCreate,apt.PatNum,apt.AptDateTime.ToString(),apt.AptNum,datePrevious);
 				//If there is an existing HL7 def enabled, send a SIU message if there is an outbound SIU message defined
 				if(HL7Defs.IsExistingHL7Enabled()) {
 					//S12 - New Appt Booking event
@@ -306,7 +306,7 @@ namespace OpenDental {
 					DateJumpToString=recall.DateDue.ToShortDateString();
 				}
 				//Log will be made when appointment dragged off of the pinboard.
-				//SecurityLogs.MakeLogEntry(Permissions.AppointmentCreate,apt.PatNum,apt.AptDateTime.ToString(),apt.AptNum);
+				//SecurityLog.Write(Permissions.AppointmentCreate,apt.PatNum,apt.AptDateTime.ToString(),apt.AptNum);
 			}
 			List<string> listUserMsgs=new List<string>();
 			if(countPatsRestricted > 0) {

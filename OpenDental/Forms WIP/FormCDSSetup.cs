@@ -194,7 +194,7 @@ namespace OpenDental {
 					+(_listCdsPermissions[i].LabTestCDS					?"T":"F")
 					+(_listCdsPermissions[i].VitalCDS						?"T":"F")
 					;
-				SecurityLogs.MakeLogEntry(Permissions.SecurityAdmin,0,cdsLog);//Log entry example: CDSPermChanged,33,TTTFFFFFF
+				SecurityLog.Write(Permissions.SecurityAdmin,0,cdsLog);//Log entry example: CDSPermChanged,33,TTTFFFFFF
 			}
 			DialogResult=DialogResult.OK;
 		}

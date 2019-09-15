@@ -989,7 +989,7 @@ namespace OpenDental{
 					//(Find the index of listTempQueueItem c where c.ClaimNum is the same as the ClaimNum of the item just sent.)
 					listTempQueueItem.RemoveAt(listTempQueueItem.FindIndex(c => c.ClaimNum==queueItems[i].ClaimNum));
 					//one securitylog entry for each sent claim
-					SecurityLogs.MakeLogEntry(Permissions.ClaimSend,queueItems[i].PatNum,Lan.g(this,"Claim sent from Claims Send Window."));
+					SecurityLog.Write(Permissions.ClaimSend,queueItems[i].PatNum,Lan.g(this,"Claim sent from Claims Send Window."));
 				}
 			}
 			_arrayQueueAll=listTempQueueItem.ToArray();

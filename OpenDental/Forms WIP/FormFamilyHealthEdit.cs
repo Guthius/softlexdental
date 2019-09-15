@@ -60,7 +60,7 @@ namespace OpenDental {
 				return;
 			}
 			FamilyHealths.Delete(FamilyHealthCur.FamilyHealthNum);
-			SecurityLogs.MakeLogEntry(Permissions.PatFamilyHealthEdit,FamilyHealthCur.PatNum,FamilyHealthCur.PersonName+" "+FamilyHealthCur.Relationship+" deleted");
+			SecurityLog.Write(Permissions.PatFamilyHealthEdit,FamilyHealthCur.PatNum,FamilyHealthCur.PersonName+" "+FamilyHealthCur.Relationship+" deleted");
 			DialogResult=DialogResult.OK;
 		}
 
@@ -81,12 +81,12 @@ namespace OpenDental {
 			FamilyHealthCur.Relationship=(FamilyRelationship)listRelationship.SelectedIndex;
 			FamilyHealthCur.PersonName=textName.Text;
 			if(FamilyHealthCur.IsNew) {
-				SecurityLogs.MakeLogEntry(Permissions.PatFamilyHealthEdit,FamilyHealthCur.PatNum,FamilyHealthCur.PersonName+" "+FamilyHealthCur.Relationship+" added");
+				SecurityLog.Write(Permissions.PatFamilyHealthEdit,FamilyHealthCur.PatNum,FamilyHealthCur.PersonName+" "+FamilyHealthCur.Relationship+" added");
 				FamilyHealths.Insert(FamilyHealthCur);
 			}
 			else {
 				FamilyHealths.Update(FamilyHealthCur);
-				SecurityLogs.MakeLogEntry(Permissions.PatFamilyHealthEdit,FamilyHealthCur.PatNum,FamilyHealthCur.PersonName+" "+FamilyHealthCur.Relationship+" edited");
+				SecurityLog.Write(Permissions.PatFamilyHealthEdit,FamilyHealthCur.PatNum,FamilyHealthCur.PersonName+" "+FamilyHealthCur.Relationship+" edited");
 			}
 			DialogResult=DialogResult.OK;
 		}

@@ -1282,7 +1282,7 @@ namespace OpenDental{
 					+"the 'Clear' button."));
 				return false;
 			}
-			SecurityLogs.MakeLogEntry(Permissions.AgingRan,0,"Aging Ran Automatically - Billing Options Form, Create List");
+			SecurityLog.Write(Permissions.AgingRan,0,"Aging Ran Automatically - Billing Options Form, Create List");
 			Preference.Update(PreferenceName.AgingBeginDateTime,POut.DateT(dtNow,false));//get lock on pref to block others
 			Signalods.SetInvalid(InvalidType.Prefs);//signal a cache refresh so other computers will have the updated pref as quickly as possible
 			Cursor=Cursors.WaitCursor;
@@ -1349,7 +1349,7 @@ namespace OpenDental{
 				}
 			}
 			else if(!Preference.GetBool(PreferenceName.AgingCalculatedMonthlyInsteadOfDaily)) {
-				SecurityLogs.MakeLogEntry(Permissions.AgingRan,0,"Aging Ran Automatically - Billing Options Form, Create List");
+				SecurityLog.Write(Permissions.AgingRan,0,"Aging Ran Automatically - Billing Options Form, Create List");
 				DateTime asOfDate=(Preference.GetBool(PreferenceName.AgingCalculatedMonthlyInsteadOfDaily)?Preference.GetDate(PreferenceName.DateLastAging):DateTime.Today);
 				ODProgress.ShowAction(() => Ledgers.RunAging(),
 					startingMessage:Lan.g(this,"Calculating aging for all patients as of")+" "+asOfDate.ToShortDateString()+"...",

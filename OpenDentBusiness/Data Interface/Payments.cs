@@ -211,8 +211,9 @@ namespace OpenDentBusiness
                 ProvNum = provNum,
                 SplitAmt = amount,
             });
-            SecurityLogs.MakeLogEntry(Permissions.PaymentCreate, patNum, Lans.g("Payments.InsertFromXWeb", "XWeb payment by") + " "
-                + OpenDentBusiness.Patients.GetLim(patNum).GetNameLF() + ", " + amount.ToString("c"), LogSources.PatientPortal);
+            SecurityLog.Write(patNum, SecurityLogEvents.PaymentCreate, 
+                "XWeb payment by " + Patients.GetLim(patNum).GetNameLF() + ", " + amount.ToString("c"), 
+                SecurityLogSource.PatientPortal);
             return ret;
         }
         #endregion

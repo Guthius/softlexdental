@@ -291,8 +291,8 @@ namespace OpenDental {
 			CreditCards.Update(creditCard);
 			FillGrid();
 			MsgBox.Show(this,"Credit card moved successfully");
-			SecurityLogs.MakeLogEntry(Permissions.CreditCardMove,patNumOrig,$"Credit card moved to PatNum: {form.SelectedPatNum}");
-			SecurityLogs.MakeLogEntry(Permissions.CreditCardMove,form.SelectedPatNum,$"Credit card moved from PatNum: {patNumOrig}");
+			SecurityLog.Write(Permissions.CreditCardMove,patNumOrig,$"Credit card moved to PatNum: {form.SelectedPatNum}");
+			SecurityLog.Write(Permissions.CreditCardMove,form.SelectedPatNum,$"Credit card moved from PatNum: {patNumOrig}");
 		}
 
 		private void butUp_Click(object sender,EventArgs e) {

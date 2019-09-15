@@ -1721,7 +1721,7 @@ namespace OpenDental{
 					+"and pressing the 'Clear' button."));
 				return false;
 			}
-			SecurityLogs.MakeLogEntry(Permissions.AgingRan,0,"Aging Ran Automatically - Billing Form");
+			SecurityLog.Write(Permissions.AgingRan,0,"Aging Ran Automatically - Billing Form");
 			Preference.Update(PreferenceName.AgingBeginDateTime,POut.DateT(dtNow,false));//get lock on pref to block others
 			Signalods.SetInvalid(InvalidType.Prefs);//signal a cache refresh so other computers will have the updated pref as quickly as possible
 			Cursor=Cursors.WaitCursor;
@@ -1815,7 +1815,7 @@ namespace OpenDental{
 								runningTotal+=dictClinicStatmentsToDelete[clinicNum].Count;
 							}
 							//This is not an accurate permission type.
-							SecurityLogs.MakeLogEntry(Permissions.Accounting,0,"Billing: Unsent statements were deleted.");
+							SecurityLog.Write(Permissions.Accounting,0,"Billing: Unsent statements were deleted.");
 						},
 						startingMessage:"Deleteing Statements...",
 						actionException:ex => this.Invoke(() => {

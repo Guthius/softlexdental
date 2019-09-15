@@ -138,7 +138,7 @@ namespace OpenDental
 
             Allergies.Delete(Allergy.AllergyNum);
 
-            SecurityLogs.MakeLogEntry(
+            SecurityLog.Write(
                 Permissions.PatAllergyListEdit, 
                 Allergy.PatNum, 
                 string.Format(
@@ -178,7 +178,7 @@ namespace OpenDental
             {
                 Allergies.Insert(Allergy);
 
-                SecurityLogs.MakeLogEntry(
+                SecurityLog.Write(
                     Permissions.PatAllergyListEdit, 
                     Allergy.PatNum,
                     string.Format(
@@ -189,7 +189,7 @@ namespace OpenDental
             {
                 Allergies.Update(Allergy);
 
-                SecurityLogs.MakeLogEntry(
+                SecurityLog.Write(
                     Permissions.PatAllergyListEdit, 
                     Allergy.PatNum,
                     string.Format(

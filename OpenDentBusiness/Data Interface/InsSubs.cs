@@ -488,14 +488,14 @@ namespace OpenDentBusiness
                 InsPlans.ResetAppointmentInsplanNum(sub.PlanNum);
                 //The inssub points to an invalid plan, attempt to delete sub
                 InsSubs.Delete(sub.InsSubNum);
-                SecurityLogs.MakeLogEntry(Permissions.InsPlanEditSub, subscriberNum, "Deleted inssub with invalid insplan attached.");
+                SecurityLog.Write(subscriberNum, SecurityLogEvents.InsPlanEditSub, "Deleted inssub with invalid insplan attached.");
             }
             catch
             {
                
                 //Create blank insplan and attach to inssub
                 InsSubs.AssignBlankPlanToInsSub(sub);
-                SecurityLogs.MakeLogEntry(Permissions.InsPlanEditSub, subscriberNum, "Inssub with invalid insplan found, attached blank insplan.");
+                SecurityLog.Write(subscriberNum, SecurityLogEvents.InsPlanEditSub, "Inssub with invalid insplan found, attached blank insplan.");
             }
             //Return false because the plan wasn't valid when entering the method, although it is now valid.
             return false;

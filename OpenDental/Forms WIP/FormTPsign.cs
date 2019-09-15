@@ -605,7 +605,7 @@ namespace OpenDental{
 					TreatPlans.Update(TPcur); //update docnum. must be called after signature is updated.
 				}
 			}
-			SecurityLogs.MakeLogEntry(Permissions.TreatPlanEdit,TPcur.PatNum,"Sign TP");
+			SecurityLog.Write(TPcur.PatNum,Permissions.TreatPlanEdit,"Sign TP");
 			DialogResult=DialogResult.OK;
 		}
 

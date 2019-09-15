@@ -65,9 +65,9 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1 {
 				FormWarnToCloseComputers fwc = new FormWarnToCloseComputers();
 				if(fwc.ShowDialog() == DialogResult.Yes) {
 					Reporting.Allocators.MyAllocator1_ProviderPayment allocator1 = new OpenDental.Reporting.Allocators.MyAllocator1_ProviderPayment();
-					SecurityLogs.MakeLogEntry(OpenDentBusiness.Permissions.Setup,0,"Started Batch Allocation For Provider Allocation Tool");
+					SecurityLog.Write(OpenDentBusiness.SecurityLogEvents.Setup,"Started Batch Allocation For Provider Allocation Tool");
 					allocator1.StartBatchAllocation();
-					SecurityLogs.MakeLogEntry(OpenDentBusiness.Permissions.Setup,0,"Finished Batch Allocation For Provider Allocation Tool");
+					SecurityLog.Write(OpenDentBusiness.SecurityLogEvents.Setup,"Finished Batch Allocation For Provider Allocation Tool");
 
 					List<string> commands = new List<string>();
 					if(!Preferences.ContainsKey(MyAllocator1_ProviderPayment.Pref_AllocatorProvider1_ToolHasRun)) {

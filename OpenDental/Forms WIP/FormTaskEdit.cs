@@ -2184,7 +2184,7 @@ namespace OpenDental {
 			taskHistory.IsNoteChange=NotesChanged;
 			taskHistory.UserNum=Security.CurrentUser.Id;
 			TaskHists.Insert(taskHistory);
-			SecurityLogs.MakeLogEntry(Permissions.TaskEdit,0,"Task "+POut.Long(_taskCur.TaskNum)+" deleted",0);
+			SecurityLog.Write(Permissions.TaskEdit,"Task "+POut.Long(_taskCur.TaskNum)+" deleted");
 			DialogResult=DialogResult.OK;
 			Close();
 		}
@@ -2420,7 +2420,7 @@ namespace OpenDental {
 			}
 			if(IsNew) {
 				Tasks.Delete(_taskCur.TaskNum);//Shouldn't be displayed in UserControlTasks yet, so no refill needed.
-				SecurityLogs.MakeLogEntry(Permissions.TaskEdit,0,"Task "+POut.Long(_taskCur.TaskNum)+" deleted",0);
+				SecurityLog.Write(Permissions.TaskEdit,"Task "+POut.Long(_taskCur.TaskNum)+" deleted");
 			}
 			else if(NotesChanged) {//Note changed and dialogue result was not OK
 				//This should only ever be hit if the user clicked cancel or X.  Everything else will have dialogue result OK and exit above.

@@ -60,8 +60,7 @@ namespace OpenDentBusiness
         ///<summary></summary>
         public static void Delete(PatField pf)
         {
-            string command = "DELETE FROM patfield WHERE PatFieldNum =" + POut.Long(pf.PatFieldNum);
-            Db.NonQ(command);
+            Db.NonQ("DELETE FROM patfield WHERE PatFieldNum =" + pf.PatFieldNum);
         }
 
         ///<summary>Frequently returns null.</summary>
@@ -81,15 +80,15 @@ namespace OpenDentBusiness
         ///<summary>A helper method to make a security log entry for deletion.  Because we have several patient field edit windows, this will allow us to change them all at once.</summary>
         public static void MakeDeleteLogEntry(PatField patField)
         {
-            SecurityLogs.MakeLogEntry(Permissions.PatientFieldEdit, patField.PatNum, "Deleted patient field " + patField.FieldName + ".  Value before deletion: \"" + patField.FieldValue + "\"");
+            SecurityLog.Write(patField.PatNum, SecurityLogEvents.PatientFieldEdit, "Deleted patient field " + patField.FieldName + ".  Value before deletion: \"" + patField.FieldValue + "\"");
         }
 
         ///<summary>A helper method to make a security log entry for an edit.  Because we have several patient field edit windows, this will allow us to change them all at once.</summary>
         public static void MakeEditLogEntry(PatField patFieldOld, PatField patFieldCur)
         {
-            SecurityLogs.MakeLogEntry(Permissions.PatientFieldEdit, patFieldCur.PatNum
-                    , "Edited patient field " + patFieldCur.FieldName + "\r\n"
-                    + "Old value" + ": \"" + patFieldOld.FieldValue + "\"  New value: \"" + patFieldCur.FieldValue + "\"");
+            SecurityLog.Write(patFieldCur.PatNum, SecurityLogEvents.PatientFieldEdit, 
+                "Edited patient field " + patFieldCur.FieldName + "\r\n" +
+                "Old value" + ": \"" + patFieldOld.FieldValue + "\"  New value: \"" + patFieldCur.FieldValue + "\"");
         }
 
     }

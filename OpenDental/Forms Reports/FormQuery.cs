@@ -761,7 +761,7 @@ namespace OpenDental{
 					myGridTS.GridColumnStyles[iCol].Alignment=_reportSimpleGrid.ColAlign[iCol];
 				}
 			}
-			SecurityLogs.MakeLogEntry(Permissions.UserQuery,0,textQuery.Text);
+			SecurityLog.Write(SecurityLogEvents.UserQuery,textQuery.Text);
 			LayoutHelperForState(QueryExecuteState.Idle);
 			Cursor=Cursors.Default;
 		}

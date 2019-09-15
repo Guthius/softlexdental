@@ -1720,7 +1720,7 @@ namespace OpenDental
             RefreshListExams();
             listExams.SelectedIndex = PerioExams.ListExams.Count - 1;
             FillGrid();
-            SecurityLogs.MakeLogEntry(Permissions.PerioEdit, PatCur.PatNum, "Perio exam created");
+            SecurityLog.Write(Permissions.PerioEdit, PatCur.PatNum, "Perio exam created");
         }
 
         ///<summary>Creates a new perio chart and marks any teeth missing as necessary.</summary>
@@ -1785,7 +1785,7 @@ namespace OpenDental
             RefreshListExams();
             listExams.SelectedIndex = PerioExams.ListExams.Count - 1; //select the exam that was just inserted.
             FillGrid();
-            SecurityLogs.MakeLogEntry(Permissions.PerioEdit, PatCur.PatNum, "Perio exam copied.");
+            SecurityLog.Write(Permissions.PerioEdit, PatCur.PatNum, "Perio exam copied.");
         }
 
         private void butDelete_Click(object sender, System.EventArgs e)
@@ -1811,7 +1811,7 @@ namespace OpenDental
             else
                 listExams.SelectedIndex = PerioExams.ListExams.Count - 1;
             FillGrid();
-            SecurityLogs.MakeLogEntry(Permissions.PerioEdit, PatCur.PatNum, "Perio exam deleted");
+            SecurityLog.Write(Permissions.PerioEdit, PatCur.PatNum, "Perio exam deleted");
         }
 
         private void butListen_Click(object sender, EventArgs e)

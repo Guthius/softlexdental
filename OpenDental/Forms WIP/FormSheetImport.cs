@@ -2344,7 +2344,7 @@ namespace OpenDental {
 							ra.RefDate=DateTimeOD.Today;
 							ra.ReferralNum=((Referral)Rows[i].ImpValObj).ReferralNum;
 							RefAttaches.Insert(ra);//no security to block this action.
-							SecurityLogs.MakeLogEntry(Permissions.RefAttachAdd,PatCur.PatNum,"Referred From "+Referrals.GetNameFL(ra.ReferralNum));
+							SecurityLog.Write(PatCur.PatNum,Permissions.RefAttachAdd,"Referred From "+Referrals.GetNameFL(ra.ReferralNum));
 							break;
 						#endregion
 						#region Address and Home Phone

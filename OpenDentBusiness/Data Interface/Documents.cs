@@ -465,8 +465,10 @@ namespace OpenDentBusiness
                     Insert(doc, patient);
                     countAdded++;
                     string docCat = Defs.GetDef(DefinitionCategory.ImageCats, doc.DocCategory).Description;
-                    SecurityLogs.MakeLogEntry(Permissions.ImageEdit, patient.PatNum, Lans.g("ContrImages", "Document Created: A file") + ", " + doc.FileName + ", "
-                        + Lans.g("ContrImages", "placed into the patient's AtoZ images folder from outside of the program was detected and a record automatically inserted into the first image category") + ", " + docCat, doc.DocNum, datePrevious);
+                    SecurityLog.Write(patient.PatNum, SecurityLogEvents.ImageEdit, 
+                        "Document Created: A file, " + doc.FileName + ", placed into the patient's AtoZ images folder from outside of " +
+                        "the program was detected and a record automatically inserted into the first image category, " + docCat, 
+                        doc.DocNum, datePrevious);
                 }
             }
             return countAdded;

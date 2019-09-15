@@ -1226,7 +1226,7 @@ namespace OpenDentBusiness
                     }
                 }
             }
-            SecurityLogs.MakeLogEntry(perm, patNum, logText, task.TaskNum, DateTime.MinValue); //tasks do not track DateTStamp
+            SecurityLog.Write(patNum, perm, logText, task.TaskNum, null);
         }
 
         ///<summary>Sorted in Ascending order: Unread/Read, </summary>

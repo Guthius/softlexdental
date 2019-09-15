@@ -519,7 +519,7 @@ namespace OpenDental{
 					return;
 				}
 			}
-			SecurityLogs.MakeLogEntry(Permissions.PatProblemListEdit,DiseaseCur.PatNum,DiseaseDef.GetName(DiseaseCur.DiseaseDefNum)+" deleted");
+			SecurityLog.Write(Permissions.PatProblemListEdit,DiseaseCur.PatNum,DiseaseDef.GetName(DiseaseCur.DiseaseDefNum)+" deleted");
 			Diseases.Delete(DiseaseCur);
 			DialogResult=DialogResult.OK;
 		}
@@ -560,7 +560,7 @@ namespace OpenDental{
 			if(IsNew){
 				//This code is never hit in current implementation 09/26/2013.
 				Diseases.Insert(DiseaseCur);
-				SecurityLogs.MakeLogEntry(Permissions.PatProblemListEdit,DiseaseCur.PatNum,DiseaseDef.GetName(DiseaseCur.DiseaseDefNum)+" added");
+				SecurityLog.Write(Permissions.PatProblemListEdit,DiseaseCur.PatNum,DiseaseDef.GetName(DiseaseCur.DiseaseDefNum)+" added");
 			}
 			else{
 				//See if this problem is the pregnancy linked to a vitalsign exam
@@ -580,7 +580,7 @@ namespace OpenDental{
 					}
 				}
 				Diseases.Update(DiseaseCur);
-				SecurityLogs.MakeLogEntry(Permissions.PatProblemListEdit,DiseaseCur.PatNum,DiseaseDef.GetName(DiseaseCur.DiseaseDefNum)+" edited");
+				SecurityLog.Write(Permissions.PatProblemListEdit,DiseaseCur.PatNum,DiseaseDef.GetName(DiseaseCur.DiseaseDefNum)+" edited");
 			}
 			DialogResult=DialogResult.OK;
 		}

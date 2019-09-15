@@ -302,7 +302,7 @@ namespace OpenDental{
 				else {
 					log+="to Unchecked";
 				}
-				SecurityLogs.MakeLogEntry(Permissions.FeeSchedEdit,0,log);
+				SecurityLog.Write(Permissions.FeeSchedEdit,0,log);
 			}
 			DialogResult=DialogResult.OK;
 		}

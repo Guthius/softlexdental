@@ -860,7 +860,7 @@ namespace OpenDental{
 					User.Insert(UserCur,listUserGroup.SelectedItems.OfType<ODBoxItem<UserGroup>>().Select(x => x.Tag.Id).ToList());
 					//Set the userodprefs to the new user's UserNum that was just retreived from the database.
 					_listDoseSpotUserPrefNew.ForEach(x => x.UserId=UserCur.Id);
-					SecurityLogs.MakeLogEntry(Permissions.AddNewUser,0,"New user '"+UserCur.UserName+"' added");
+                    SecurityLog.Write(null, SecurityLogEvents.AddNewUser, "New user '" + UserCur.UserName + "' added");
 				}
 				else{
 					List<UserGroup> listNewUserGroups=listUserGroup.SelectedItems.OfType<ODBoxItem<UserGroup>>().Select(x => x.Tag).ToList();
@@ -887,11 +887,11 @@ namespace OpenDental{
 					List<UserGroup> listRemovedGroups=funcGetMissing(listOldUserGroups,listNewUserGroups);
 					List<UserGroup> listAddedGroups=funcGetMissing(listNewUserGroups,listOldUserGroups);
 					if(listRemovedGroups.Count>0) {//Only log if there are items in the list
-						SecurityLogs.MakeLogEntry(Permissions.SecurityAdmin,0,"User "+UserCur.UserName+
+						SecurityLog.Write(null, SecurityLogEvents.SecurityAdmin, "User " +UserCur.UserName+
 							" removed from User group(s): "+string.Join(", ",listRemovedGroups.Select(x => x.Description).ToArray())+" by: "+Security.CurrentUser.UserName);
 					}
 					if(listAddedGroups.Count>0) {//Only log if there are items in the list.
-						SecurityLogs.MakeLogEntry(Permissions.SecurityAdmin,0,"User "+UserCur.UserName+
+						SecurityLog.Write(null, SecurityLogEvents.SecurityAdmin, "User " +UserCur.UserName+
 							" added to User group(s): "+string.Join(", ",listAddedGroups.Select(x => x.Description).ToArray())+" by: "+Security.CurrentUser.UserName);
 					}
 				}

@@ -1228,7 +1228,7 @@ namespace OpenDental{
 			}
 			_gridCur.FillGrid();
 			if(sentEmailCount>0) {
-				SecurityLogs.MakeLogEntry(Permissions.EmailSend,0,$"{(IsRecallGridSelected()?"Recall":"Reactivation")} Emails Sent: "+sentEmailCount);
+				SecurityLog.Write(Permissions.EmailSend,0,$"{(IsRecallGridSelected()?"Recall":"Reactivation")} Emails Sent: "+sentEmailCount);
 			}
 			Cursor=Cursors.Default;
 		}

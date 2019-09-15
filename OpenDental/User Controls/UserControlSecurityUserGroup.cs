@@ -288,7 +288,7 @@ namespace OpenDental {
 
             string logText="User group(s) for "+SelectedUser.UserName+" changed To: "+string.Join(", ",listDescriptions.ToArray())+" From: "
 				+string.Join(", ",listDescriptionsOld.ToArray())+" by: "+Security.CurrentUser.UserName;
-			SecurityLogs.MakeLogEntry(Permissions.SecurityAdmin,0,logText);
+			SecurityLog.Write(SecurityLogEvents.SecurityAdmin,logText);
 			RefreshUserTree();
 		}
 

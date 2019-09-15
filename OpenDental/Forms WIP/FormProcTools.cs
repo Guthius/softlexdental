@@ -439,7 +439,7 @@ namespace OpenDental{
 				RecallTypes.SetToDefault();
 				Changed=true;
 				DataValid.SetInvalid(InvalidType.RecallTypes,InvalidType.Prefs);				
-				SecurityLogs.MakeLogEntry(Permissions.RecallEdit,0,"Recall types set to default.");
+				SecurityLog.Write(Permissions.RecallEdit,0,"Recall types set to default.");
 			}
 			#endregion
 			#region T Codes
@@ -448,12 +448,12 @@ namespace OpenDental{
 				Changed=true;
 				//yes, this really does refresh before moving on.
 				DataValid.SetInvalid(InvalidType.Defs, InvalidType.ProcCodes, InvalidType.Fees);
-				SecurityLogs.MakeLogEntry(Permissions.EditProcedureCode,0,"T-Codes deleted.");
+				SecurityLog.Write(Permissions.EditProcedureCode,0,"T-Codes deleted.");
 			}
 			#endregion
 			if(Changed) {
 				MessageBox.Show(Lan.g(this,"Done."));
-				SecurityLogs.MakeLogEntry(Permissions.Setup,0,"New Customer Procedure codes tool was run.");
+				SecurityLog.Write(Permissions.Setup,0,"New Customer Procedure codes tool was run.");
 			}
 		}
 

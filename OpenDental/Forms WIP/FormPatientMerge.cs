@@ -109,7 +109,7 @@ namespace OpenDental {
             }
             catch (Exception ex)
             {
-                SecurityLogs.MakeLogEntry(Permissions.PatientMerge, _patTo.PatNum,
+                SecurityLog.Write(Permissions.PatientMerge, _patTo.PatNum,
                     "Error occurred while merging Patient: " + _patFrom.GetNameFL() + "\r\nPatNum From: " + _patFrom.PatNum + "\r\nPatNum To: " + _patTo.PatNum);
                 Cursor = Cursors.Default;
                 FormFriendlyException.Show(Lan.g(this, "Unable to fully merge patients.  Contact support."), ex);
@@ -214,7 +214,7 @@ namespace OpenDental {
                 textPatFromBirthdate.Text = "";
                 CheckUIState();
                 //Make log entry here not in parent form because we can merge multiple patients at a time.
-                SecurityLogs.MakeLogEntry(Permissions.PatientMerge, _patTo.PatNum,
+                SecurityLog.Write(Permissions.PatientMerge, _patTo.PatNum,
                     "Patient: " + _patFrom.GetNameFL() + "\r\nPatNum From: " + _patFrom.PatNum + "\r\nPatNum To: " + _patTo.PatNum);
                 MsgBox.Show(this, "Patients merged successfully.");
             }//end MergeTwoPatients

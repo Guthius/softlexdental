@@ -82,7 +82,7 @@ namespace OpenDental {
 		private void butDrop_Click(object sender,EventArgs e) {
 			DiscountPlans.DropForPatient(FormOpenDental.CurPatNum);
 			string logText="The discount plan "+DiscountPlanCur.Description+" was dropped.";
-			SecurityLogs.MakeLogEntry(Permissions.DiscountPlanAddDrop,FormOpenDental.CurPatNum,logText);
+			SecurityLog.Write(Permissions.DiscountPlanAddDrop,FormOpenDental.CurPatNum,logText);
 			DialogResult=DialogResult.OK;
 		}
 

@@ -510,7 +510,7 @@ namespace OpenDentBusiness
                 image.Save(stream, format);
             }
 
-            LogDocument("Document Created: ", Permissions.ImageEdit, document, DateTime.MinValue); //a brand new document is always passed-in
+            LogDocument("Document Created: ", SecurityLogEvents.ImageEdit, document, DateTime.MinValue); //a brand new document is always passed-in
         }
 
         public static void SaveDocument(Document doc, Image image, ImageCodecInfo codec, EncoderParameters encoderParameters, string patFolder)
@@ -520,14 +520,14 @@ namespace OpenDentBusiness
                 image.Save(stream, codec, encoderParameters);
             }
 
-            LogDocument("Document Created: ", Permissions.ImageEdit, doc, DateTime.MinValue); //a brand new document is always passed-in
+            LogDocument("Document Created: ", SecurityLogEvents.ImageEdit, doc, DateTime.MinValue); //a brand new document is always passed-in
         }
 
         public static void SaveDocument(Document doc, string sourceFileName, string patientPath)
         {
             Storage.Default.CopyFile(sourceFileName, Storage.Default.CombinePath(patientPath, doc.FileName));
 
-            LogDocument("Document Created: ", Permissions.ImageEdit, doc, DateTime.MinValue);
+            LogDocument("Document Created: ", SecurityLogEvents.ImageEdit, doc, DateTime.MinValue);
         }
 
         public static void SaveEobAttach(EobAttach eob, Bitmap image, ImageCodecInfo codec, EncoderParameters encoderParameters, string eobFolder)
@@ -686,9 +686,9 @@ namespace OpenDentBusiness
         /// <summary>
         /// Makes log entry for documents. Supply beginning text, permission, document, and the DateTStamp that the document was previously last edited.
         /// </summary>
-        public static void LogDocument(string logMsgStart, string perm, Document doc, DateTime secDatePrevious)
+        public static void LogDocument(string logMsgStart, string eventName, Document doc, DateTime secDatePrevious)
         {
-            string logMsg = logMsgStart + doc.FileName;
+            var logMessage = logMsgStart + doc.FileName;
 
             if (doc.Description != "")
             {
@@ -697,13 +697,13 @@ namespace OpenDentBusiness
                 {
                     descriptDoc = descriptDoc.Substring(0, 50);
                 }
-                logMsg += " " + "with description " + descriptDoc;
+                logMessage += " " + "with description " + descriptDoc;
             }
 
             Definition docCat = Defs.GetDef(DefinitionCategory.ImageCats, doc.DocCategory);
-            logMsg += " with category " + docCat.Description;
+            logMessage += " with category " + docCat.Description;
 
-            SecurityLogs.MakeLogEntry(perm, doc.PatNum, logMsg, doc.DocNum, secDatePrevious);
+            SecurityLog.Write(doc.PatNum, eventName, logMessage, doc.DocNum, secDatePrevious);
         }
     }
 }

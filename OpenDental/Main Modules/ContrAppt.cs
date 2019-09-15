@@ -231,7 +231,7 @@ namespace OpenDental
                                     logText += aptCur.AptDateTime.ToString() + ", ";
                                 }
                                 logText += aptCur.ProcDescript;
-                                SecurityLogs.MakeLogEntry(Permissions.AppointmentEdit, aptCur.PatNum, logText);
+                                SecurityLog.Write(aptCur.PatNum, Permissions.AppointmentEdit, logText);
                             }
                         }
                     }
@@ -2038,7 +2038,7 @@ namespace OpenDental
             FormScheduleDayEdit FormSDE = new FormScheduleDayEdit(AppointmentL.DateSelected, Clinics.ClinicNum);
             FormSDE.ShowOkSchedule = true;
             FormSDE.ShowDialog();
-            SecurityLogs.MakeLogEntry(Permissions.Schedules, 0, "");
+            SecurityLog.Write(Permissions.Schedules, "");
             SetWeeklyView(false);//to refresh
             if (FormSDE.GotoScheduleOnClose)
             {
@@ -2552,8 +2552,8 @@ namespace OpenDental
                     }
                     else
                     {
-                        SecurityLogs.MakeLogEntry(Permissions.AppointmentCreate, aptCur.PatNum,
-                            aptCur.AptDateTime.ToString() + ", " + aptCur.ProcDescript,
+                        SecurityLog.Write(aptCur.PatNum,
+                            Permissions.AppointmentCreate, aptCur.AptDateTime.ToString() + ", " + aptCur.ProcDescript,
                             aptCur.AptNum, aptOld.DateTStamp);
                     }
                     procsForSingleApt = Procedures.GetProcsForSingle(aptCur.AptNum, false);
@@ -2568,15 +2568,15 @@ namespace OpenDental
                         Appointments.Update(aptCur, aptOld);//Appointments S-Class handles Signalods
                         if (aptOld.AptStatus == ApptStatus.UnschedList && aptOld.AptDateTime == DateTime.MinValue)
                         { //If new appt is being added to schedule from pinboard
-                            SecurityLogs.MakeLogEntry(Permissions.AppointmentCreate, aptCur.PatNum,
-                                aptCur.AptDateTime.ToString() + ", " + aptCur.ProcDescript,
+                            SecurityLog.Write(aptCur.PatNum,
+                                Permissions.AppointmentCreate, aptCur.AptDateTime.ToString() + ", " + aptCur.ProcDescript,
                                 aptCur.AptNum, aptOld.DateTStamp);
                             isCreate = true;
                         }
                         else
                         { //If existing appt is being moved
-                            SecurityLogs.MakeLogEntry(Permissions.AppointmentMove, aptCur.PatNum,
-                                aptCur.ProcDescript + ", from " + aptOld.AptDateTime.ToString() + ", to " + aptCur.AptDateTime.ToString(),
+                            SecurityLog.Write(aptCur.PatNum,
+                                Permissions.AppointmentMove, aptCur.ProcDescript + ", from " + aptOld.AptDateTime.ToString() + ", to " + aptCur.AptDateTime.ToString(),
                                 aptCur.AptNum, aptOld.DateTStamp);
                             if (aptOld.AptStatus == ApptStatus.UnschedList)
                             {
@@ -2586,7 +2586,8 @@ namespace OpenDental
                         if (aptCur.Confirmed != aptOld.Confirmed)
                         {
                             //Log confirmation status changes.
-                            SecurityLogs.MakeLogEntry(Permissions.ApptConfirmStatusEdit, aptCur.PatNum,
+                            SecurityLog.Write(aptCur.PatNum,
+                                Permissions.ApptConfirmStatusEdit, 
                                 Lans.g(this, "Appointment confirmation status automatically changed from") + " "
                                 + Defs.GetName(DefinitionCategory.ApptConfirmed, aptOld.Confirmed) + " " + Lans.g(this, "to") + " " + Defs.GetName(DefinitionCategory.ApptConfirmed, aptCur.Confirmed)
                                 + Lans.g(this, "from the appointment module") + ".", aptCur.AptNum, aptOld.DateTStamp);
@@ -3328,7 +3329,7 @@ namespace OpenDental
                         pattern = "///";
                     }
                     Appointments.SetPattern(curApt, pattern); //Appointments S-Class handles Signalods
-                    SecurityLogs.MakeLogEntry(Permissions.AppointmentEdit, PatCur.PatNum, Lan.g(this, "Appointment resized from the appointment module."),
+                    SecurityLog.Write(PatCur.PatNum, Permissions.AppointmentEdit, Lan.g(this, "Appointment resized from the appointment module."),
                         TempApptSingle.AptNum, datePrevious);//Generate FKey to the appointment to show the audit entry in the ApptEdit window.
                     RefreshModuleDataPatient(PatCur.PatNum);
                     FormOpenDental.S_Contr_PatientSelected(PatCur, true, false);
@@ -5611,8 +5612,8 @@ namespace OpenDental
                         Commlogs.Insert(CommlogCur);
                     }
                 }
-                SecurityLogs.MakeLogEntry(Permissions.AppointmentEdit, PatCur.PatNum,
-                    ContrApptSheet2[thisI].Procs + ", " + ContrApptSheet2[thisI].AptDateTime.ToString() + ", " + "NOTE Deleted",
+                SecurityLog.Write(PatCur.PatNum,
+                    Permissions.AppointmentEdit, ContrApptSheet2[thisI].Procs + ", " + ContrApptSheet2[thisI].AptDateTime.ToString() + ", " + "NOTE Deleted",
                     ContrApptSheet2[thisI].AptNum, apt.DateTStamp);
             }
             else
@@ -5642,14 +5643,14 @@ namespace OpenDental
                 }
                 if (apt.AptStatus != ApptStatus.Complete)
                 {// seperate log entry for editing completed appointments.
-                    SecurityLogs.MakeLogEntry(Permissions.AppointmentEdit, PatCur.PatNum,
-                        ContrApptSheet2[thisI].Procs + ", " + ContrApptSheet2[thisI].AptDateTime.ToString() + ", " + "Deleted",
+                    SecurityLog.Write(PatCur.PatNum,
+                        Permissions.AppointmentEdit, ContrApptSheet2[thisI].Procs + ", " + ContrApptSheet2[thisI].AptDateTime.ToString() + ", " + "Deleted",
                         ContrApptSheet2[thisI].AptNum, apt.DateTStamp);
                 }
                 else
                 {
-                    SecurityLogs.MakeLogEntry(Permissions.AppointmentCompleteEdit, PatCur.PatNum,
-                        ContrApptSheet2[thisI].Procs + ", " + ContrApptSheet2[thisI].AptDateTime.ToString() + ", " + "Deleted",
+                    SecurityLog.Write(PatCur.PatNum,
+                        Permissions.AppointmentCompleteEdit, ContrApptSheet2[thisI].Procs + ", " + ContrApptSheet2[thisI].AptDateTime.ToString() + ", " + "Deleted",
                         ContrApptSheet2[thisI].AptNum, apt.DateTStamp);
                 }
                 //If there is an existing HL7 def enabled, send a SIU message if there is an outbound SIU message defined
@@ -5986,7 +5987,7 @@ namespace OpenDental
             }
             FormDefinitions FormD = new FormDefinitions(DefinitionCategory.BlockoutTypes);
             FormD.ShowDialog();
-            SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "Definitions.");
+            SecurityLog.Write(SecurityLogEvents.Setup, "Definitions.");
             RefreshPeriodSchedules();
         }
 
@@ -6149,7 +6150,7 @@ namespace OpenDental
             {
                 return;
             }
-            SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "Update Provs on Future Appts tool run on operatory " + operatory.Abbrev + ".");
+            SecurityLog.Write(SecurityLogEvents.Setup, "Update Provs on Future Appts tool run on operatory " + operatory.Abbrev + ".");
             List<Appointment> listAppts = Appointments.GetAppointmentsForOpsByPeriod(new List<long>() { operatory.OperatoryNum }, DateTime.Now);
             List<Appointment> listApptsOld = new List<Appointment>();
             foreach (Appointment appt in listAppts)
@@ -6474,7 +6475,7 @@ namespace OpenDental
             if (newStatus != oldStatus)
             {
                 //Log confirmation status changes.
-                SecurityLogs.MakeLogEntry(Permissions.ApptConfirmStatusEdit, PatCur.PatNum, Lans.g(this, "Appointment confirmation status changed from") + " "
+                SecurityLog.Write(PatCur.PatNum, Permissions.ApptConfirmStatusEdit, Lans.g(this, "Appointment confirmation status changed from") + " "
                     + Defs.GetName(DefinitionCategory.ApptConfirmed, oldStatus) + " " + Lans.g(this, "to") + " " + Defs.GetName(DefinitionCategory.ApptConfirmed, newStatus)
                     + " " + Lans.g(this, "from the appointment module") + ".", ContrApptSingle.SelectedAptNum, datePrevious);
             }

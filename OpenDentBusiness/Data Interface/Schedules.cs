@@ -275,7 +275,7 @@ namespace OpenDentBusiness
                 + (dateCopyStart == dateCopyEnd ? "" : Lans.g("Schedule", "through") + " " + dateCopyEnd.ToShortDateString() + " ")
                 + (numRepeat > 1 ? Lans.g("Schedule", "and pasted from") + " " + dateSelectedStart.ToShortDateString() + " " + Lans.g("Schedule", "until") : Lans.g("Schedule", "and pasted to"))
                 + " " + dateEnd.ToShortDateString();
-            SecurityLogs.MakeLogEntry(Permissions.Blockouts, 0, logText);
+            SecurityLog.Write(null, SecurityLogEvents.Blockouts, logText);
             return "";
         }
 
@@ -360,7 +360,7 @@ namespace OpenDentBusiness
                 logText += " " + Lans.g("Schedule", "on") + " " + blockout.SchedDate.ToShortDateString() + " "
                     + Lans.g("Schedule", "for") + " " + blockout.StartTime.ToShortTimeString() + " - " + blockout.StopTime.ToShortTimeString();
             }
-            SecurityLogs.MakeLogEntry(Permissions.Blockouts, 0, logText);
+            SecurityLog.Write(null, SecurityLogEvents.Blockouts, logText);
         }
 
         #endregion

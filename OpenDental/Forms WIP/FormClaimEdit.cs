@@ -2310,7 +2310,7 @@ namespace OpenDental{
 			if(!ClaimIsValid()) {
 				return;
 			}
-			SecurityLogs.MakeLogEntry(_claimEditPermission,PatCur.PatNum,"Claim Previewed for "+PatCur.LName+","+PatCur.FName);
+			SecurityLog.Write(_claimEditPermission,PatCur.PatNum,"Claim Previewed for "+PatCur.LName+","+PatCur.FName);
 			UpdateClaim();
 			FormClaimPrint FormCP=new FormClaimPrint();
 			FormCP.PatNumCur=ClaimCur.PatNum;
@@ -2356,7 +2356,7 @@ namespace OpenDental{
 			//ClaimCur.ClaimStatus="S";
 			//ClaimCur.DateSent=DateTime.Today;
 			//Claims.Update(ClaimCur);
-			SecurityLogs.MakeLogEntry(Permissions.ClaimSend,ClaimCur.PatNum,Lan.g(this,"Claim printed from Claim Edit window."));
+			SecurityLog.Write(Permissions.ClaimSend,ClaimCur.PatNum,Lan.g(this,"Claim printed from Claim Edit window."));
 			DialogResult=DialogResult.OK;
 		}
 
@@ -2519,7 +2519,7 @@ namespace OpenDental{
 					FormClaimPrint.FillRenaissance,new FormTerminalConnection());//this also calls SetClaimSentOrPrinted which creates the etrans entry.
 			}
 			Cursor=Cursors.Default;
-			SecurityLogs.MakeLogEntry(Permissions.ClaimSend,PatCur.PatNum,Lan.g(this,"Claim sent from Claim Edit Window."));
+			SecurityLog.Write(Permissions.ClaimSend,PatCur.PatNum,Lan.g(this,"Claim sent from Claim Edit Window."));
 			DialogResult=DialogResult.OK;
 		}
 
@@ -3231,7 +3231,7 @@ namespace OpenDental{
 			}
 			ClaimProcs.DeleteEstimatesForDroppedPatPlan(_listClaimProcsForClaim);
 			Claims.Delete(ClaimCur);
-			SecurityLogs.MakeLogEntry(Permissions.ClaimDelete,ClaimCur.PatNum,PatCur.GetNameLF()
+			SecurityLog.Write(Permissions.ClaimDelete,ClaimCur.PatNum,PatCur.GetNameLF()
 				+", "+Lan.g(this,"Date Entry")+": "+ClaimCur.SecDateEntry.ToShortDateString()
 				+", "+Lan.g(this,"Date of Service")+": "+ClaimCur.DateService.ToShortDateString());
 			_isDeleting=true;
@@ -3349,10 +3349,10 @@ namespace OpenDental{
 					return;
 				}
 				if(IsNew) {
-					SecurityLogs.MakeLogEntry(_claimEditPermission,PatCur.PatNum,"New claim created for "+PatCur.LName+","+PatCur.FName);
+					SecurityLog.Write(_claimEditPermission,PatCur.PatNum,"New claim created for "+PatCur.LName+","+PatCur.FName);
 				}
 				else {//save for all except Delete
-					SecurityLogs.MakeLogEntry(_claimEditPermission,PatCur.PatNum,"Claim saved for "+PatCur.LName+","+PatCur.FName);
+					SecurityLog.Write(_claimEditPermission,PatCur.PatNum,"Claim saved for "+PatCur.LName+","+PatCur.FName);
 				}
 				if(comboClaimStatus.SelectedIndex==5) {//Received
 					if(_isPaymentEntered && Preference.GetBool(PreferenceName.PromptForSecondaryClaim) && Security.IsAuthorized(Permissions.ClaimSend,true)) {
@@ -3373,7 +3373,7 @@ namespace OpenDental{
 				return;
 			}
 			//This is a new claim where they clicked "Cancel".
-			SecurityLogs.MakeLogEntry(Permissions.ClaimEdit,PatCur.PatNum,"New claim cancelled for "+PatCur.LName+","+PatCur.FName);
+			SecurityLog.Write(Permissions.ClaimEdit,PatCur.PatNum,"New claim cancelled for "+PatCur.LName+","+PatCur.FName);
 			//The following claimproc statuses are not probable at this point.  One possible way to have these claimproc statuses is if the user manually edits the claimproc and forces a status change.
 			//Adjustment - Never attached to a claim (not even available to manual switch to).
 			//Supplemental - Supplemental button is grayed out for new claims.

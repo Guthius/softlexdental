@@ -589,10 +589,10 @@ namespace OpenDental{
 			}
 			MedicationPats.Delete(MedicationPatCur);
 			if(MedicationPatCur.MedicationNum==0) {
-				SecurityLogs.MakeLogEntry(Permissions.PatMedicationListEdit,MedicationPatCur.PatNum,MedicationPatCur.MedDescript+" deleted");
+				SecurityLog.Write(Permissions.PatMedicationListEdit,MedicationPatCur.PatNum,MedicationPatCur.MedDescript+" deleted");
 			}
 			else {
-				SecurityLogs.MakeLogEntry(Permissions.PatMedicationListEdit,MedicationPatCur.PatNum, Medication.GetById(MedicationPatCur.MedicationNum).Description+" deleted");
+				SecurityLog.Write(Permissions.PatMedicationListEdit,MedicationPatCur.PatNum, Medication.GetById(MedicationPatCur.MedicationNum).Description+" deleted");
 			}
 			MedicationPatCur=null;//This prevents other windows trying to use the medication pat after this window has closed.
 			DialogResult=DialogResult.OK;
@@ -627,19 +627,19 @@ namespace OpenDental{
 			if(IsNew){
 				MedicationPats.Insert(MedicationPatCur);
 				if(MedicationPatCur.MedicationNum==0) {
-					SecurityLogs.MakeLogEntry(Permissions.PatMedicationListEdit,MedicationPatCur.PatNum,MedicationPatCur.MedDescript+" added");
+					SecurityLog.Write(Permissions.PatMedicationListEdit,MedicationPatCur.PatNum,MedicationPatCur.MedDescript+" added");
 				}
 				else {
-					SecurityLogs.MakeLogEntry(Permissions.PatMedicationListEdit,MedicationPatCur.PatNum, Medication.GetById(MedicationPatCur.MedicationNum).Description+" added");
+					SecurityLog.Write(Permissions.PatMedicationListEdit,MedicationPatCur.PatNum, Medication.GetById(MedicationPatCur.MedicationNum).Description+" added");
 				}
 			}
 			else{
 				MedicationPats.Update(MedicationPatCur);
 				if(MedicationPatCur.MedicationNum==0) {
-					SecurityLogs.MakeLogEntry(Permissions.PatMedicationListEdit,MedicationPatCur.PatNum,MedicationPatCur.MedDescript+" edited");
+					SecurityLog.Write(Permissions.PatMedicationListEdit,MedicationPatCur.PatNum,MedicationPatCur.MedDescript+" edited");
 				}
 				else {
-					SecurityLogs.MakeLogEntry(Permissions.PatMedicationListEdit,MedicationPatCur.PatNum, Medication.GetById(MedicationPatCur.MedicationNum).Description+" edited");
+					SecurityLog.Write(Permissions.PatMedicationListEdit,MedicationPatCur.PatNum, Medication.GetById(MedicationPatCur.MedicationNum).Description+" edited");
 				}
 			}
 			DialogResult=DialogResult.OK;

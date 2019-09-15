@@ -55,7 +55,7 @@ namespace OpenDental {
 					return;
 				}
 			}
-			SecurityLogs.MakeLogEntry(Permissions.UserLogOnOff,0,"User: "+Security.CurrentUser.Id+" has logged on.");
+			SecurityLog.Write(SecurityLogEvents.UserLogOnOff,"User: "+Security.CurrentUser.Id+" has logged on.");
 			DialogResult=DialogResult.OK;
 		}
 

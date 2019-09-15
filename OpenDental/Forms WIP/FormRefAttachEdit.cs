@@ -668,7 +668,7 @@ namespace OpenDental{
 			if(!MsgBox.Show(this,true,"Detach Referral?")) {
 				return;
 			}
-			SecurityLogs.MakeLogEntry(Permissions.RefAttachDelete,RefAttachCur.PatNum,"Referral attachment deleted for "+Referrals.GetNameFL(RefAttachCur.ReferralNum));
+			SecurityLog.Write(Permissions.RefAttachDelete,RefAttachCur.PatNum,"Referral attachment deleted for "+Referrals.GetNameFL(RefAttachCur.ReferralNum));
 			RefAttaches.Delete(RefAttachCur);
 			DialogResult=DialogResult.OK;
 		}

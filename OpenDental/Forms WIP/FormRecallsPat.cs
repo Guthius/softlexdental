@@ -150,7 +150,7 @@ namespace OpenDental {
 						RecallList[i].RecallInterval=RecallTypes.GetInterval(Preference.GetLong(PreferenceName.RecallTypeSpecialProphy));
 						//previous date will be reset below in synch, but probably won't change since similar triggers.
 						Recalls.Update(RecallList[i]);
-						SecurityLogs.MakeLogEntry(Permissions.RecallEdit,RecallList[i].PatNum,"Recall changed to Prophy from the Recalls for Patient window.");
+						SecurityLog.Write(Permissions.RecallEdit,RecallList[i].PatNum,"Recall changed to Prophy from the Recalls for Patient window.");
 						break;
 					}
 				}
@@ -164,7 +164,7 @@ namespace OpenDental {
 						RecallList[i].RecallInterval=RecallTypes.GetInterval(Preference.GetLong(PreferenceName.RecallTypeSpecialPerio));
 						//previous date will be reset below in synch, but probably won't change since similar triggers.
 						Recalls.Update(RecallList[i]);
-						SecurityLogs.MakeLogEntry(Permissions.RecallEdit,RecallList[i].PatNum,"Recall changed to Perio from the Recalls for Patient window.");
+						SecurityLog.Write(Permissions.RecallEdit,RecallList[i].PatNum,"Recall changed to Perio from the Recalls for Patient window.");
 						found=true;
 						break;
 					}
@@ -176,7 +176,7 @@ namespace OpenDental {
 					recall.RecallInterval=RecallTypes.GetInterval(Preference.GetLong(PreferenceName.RecallTypeSpecialPerio));
 					recall.RecallTypeNum=Preference.GetLong(PreferenceName.RecallTypeSpecialPerio);
 					Recalls.Insert(recall);
-					SecurityLogs.MakeLogEntry(Permissions.RecallEdit,recall.PatNum,"Perio recall added from the Recalls for Patient window.");
+					SecurityLog.Write(Permissions.RecallEdit,recall.PatNum,"Perio recall added from the Recalls for Patient window.");
 				}
 			}
 			FillGrid();

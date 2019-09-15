@@ -336,7 +336,7 @@ namespace OpenDentBusiness
             Operatory masterOp = listOps.FirstOrDefault(x => x.OperatoryNum == masterOpNum);
             if (masterOp == null)
             {
-                throw new ApplicationException(Lans.g("Operatories", "Operatory to merge into no longer exists."));
+                throw new ApplicationException("Operatory to merge into no longer exists.");
             }
             if (listApptsToMerge.Count > 0)
             {
@@ -349,10 +349,9 @@ namespace OpenDentBusiness
             listOpsToMerge.FindAll(x => x.OperatoryNum != masterOpNum && listOpNumsToMerge.Contains(x.OperatoryNum))
                 .ForEach(x => x.IsHidden = true);
             Operatories.Sync(listOpsToMerge, listOps);
-            SecurityLogs.MakeLogEntry(Permissions.Setup, 0
-                , Lans.g("Operatories", "The following operatories and all of their appointments were merged into the")
-                    + " " + masterOp.Abbrev + " " + Lans.g("Operatories", "operatory;") + " "
-                    + string.Join(", ", listOpsToMerge.FindAll(x => x.OperatoryNum != masterOpNum && listOpNumsToMerge.Contains(x.OperatoryNum)).Select(x => x.Abbrev)));
+            SecurityLog.Write(null, SecurityLogEvents.Setup, 
+                "The following operatories and all of their appointments were merged into the " + masterOp.Abbrev + " operatory; " + 
+                string.Join(", ", listOpsToMerge.FindAll(x => x.OperatoryNum != masterOpNum && listOpNumsToMerge.Contains(x.OperatoryNum)).Select(x => x.Abbrev)));
         }
     }
 }

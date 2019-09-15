@@ -478,7 +478,7 @@ namespace OpenDental
             PatFolder = ImageStore.GetPatientFolder(PatCur);//This is where the pat folder gets created if it does not yet exist.
             if (_patNumLast != patNum)
             {
-                SecurityLogs.MakeLogEntry(Permissions.ModuleImages, patNum, "");
+                SecurityLog.Write(patNum, SecurityLogEvents.ModuleImages, "");
                 _patNumLast = patNum;
             }
 
@@ -1449,15 +1449,15 @@ namespace OpenDental
                         pd.Print();
                         if (((ImageNodeTag)treeDocuments.SelectedNode.Tag).NodeType == ImageNodeType.Eob)
                         { //This happens when printing an EOB from the Batch Ins Claim
-                            SecurityLogs.MakeLogEntry(Permissions.Printing, 0, "EOB printed");
+                            SecurityLog.Write(null, SecurityLogEvents.Printing, "EOB printed");
                         }
                         else if (description == "")
                         {
-                            SecurityLogs.MakeLogEntry(Permissions.Printing, PatCur.PatNum, "Patient image " + fileName + " printed");
+                            SecurityLog.Write(PatCur.PatNum, SecurityLogEvents.Printing, "Patient image " + fileName + " printed");
                         }
                         else
                         {
-                            SecurityLogs.MakeLogEntry(Permissions.Printing, PatCur.PatNum, "Patient image " + description + " printed");
+                            SecurityLog.Write(PatCur.PatNum, SecurityLogEvents.Printing, "Patient image " + description + " printed");
                         }
                     }
                 }
@@ -2471,12 +2471,12 @@ namespace OpenDental
             }
             if (nodeId.NodeType == ImageNodeType.ApteryxImage)
             {
-                SecurityLogs.MakeLogEntry(Permissions.Copy, patNum, "Patient image " + nodeId.ImgDownload.AcquisitionDate.ToShortDateString() + " "
+                SecurityLog.Write(patNum, SecurityLogEvents.Copy, "Patient image " + nodeId.ImgDownload.AcquisitionDate.ToShortDateString() + " "
                     + nodeId.ImgDownload.AdultTeeth.ToString() + nodeId.ImgDownload.DeciduousTeeth.ToString() + " copied to clipboard");
             }
             else
             {
-                SecurityLogs.MakeLogEntry(Permissions.Copy, patNum, "Patient image " + Documents.GetByNum(nodeId.PriKey).FileName + " copied to clipboard");
+                SecurityLog.Write(patNum, SecurityLogEvents.Copy, "Patient image " + Documents.GetByNum(nodeId.PriKey).FileName + " copied to clipboard");
             }
             Cursor = Cursors.Default;
         }
@@ -2917,8 +2917,7 @@ namespace OpenDental
                 string mountSourceCat = Defs.GetDef(DefinitionCategory.ImageCats, mount.DocCategory).Description;
                 string mountDestCat = Defs.GetDef(DefinitionCategory.ImageCats, nodeOverCategoryDefNum).Description;
                 mount.DocCategory = nodeOverCategoryDefNum;
-                SecurityLogs.MakeLogEntry(Permissions.ImageEdit, mount.PatNum, Lan.g(this, "Mount moved from") + " " + mountSourceCat + " "
-                    + Lan.g(this, "to") + " " + mountDestCat);
+                SecurityLog.Write(mount.PatNum, SecurityLogEvents.ImageEdit, "Mount moved from " + mountSourceCat + " to " + mountDestCat);
                 Mounts.Update(mount);
             }
             else if (NodeIdentifierDown.NodeType == ImageNodeType.Doc)
@@ -2938,7 +2937,7 @@ namespace OpenDental
                     logText += " " + Lan.g(this, "with description") + " " + docDescript;
                 }
                 logText += " " + Lan.g(this, "from category") + " " + docSourceCat + " " + Lan.g(this, "to category") + " " + docDestCat;
-                SecurityLogs.MakeLogEntry(Permissions.ImageEdit, doc.PatNum, logText, doc.DocNum, doc.DateTStamp);
+                SecurityLog.Write(doc.PatNum, SecurityLogEvents.ImageEdit, logText, doc.DocNum, doc.DateTStamp);
                 Documents.Update(doc);
             }
             FillDocList(true);
