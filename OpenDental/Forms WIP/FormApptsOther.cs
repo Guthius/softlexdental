@@ -506,7 +506,7 @@ namespace OpenDental {
 			if(PatRestrictionL.IsRestricted(_patCur.PatNum,PatRestrict.ApptSchedule)) {
 				return;
 			}
-			if(!AppointmentL.OKtoSendToPinboard(odApptGrid.SelectedApptOther,odApptGrid.ListApptOthers,this)) {//Tag is AptNum
+			if(!AppointmentL.OKtoSendToPinboard(odApptGrid.SelectedApptOther,odApptGrid.ListApptOthers)) {//Tag is AptNum
 				return;
 			}
 			AptNumsSelected.Add(odApptGrid.SelectedApptOther.AptNum);

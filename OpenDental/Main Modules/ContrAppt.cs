@@ -4144,7 +4144,7 @@ namespace OpenDental
             long apptOtherNum = apptOther.AptNum;
             this.InvokeIfRequired(() =>
             {
-                if (!AppointmentL.OKtoSendToPinboard(apptOther, listApptOther, this))
+                if (!AppointmentL.OKtoSendToPinboard(apptOther, listApptOther))
                 {
                     return;
                 }
