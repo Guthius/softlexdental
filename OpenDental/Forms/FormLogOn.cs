@@ -125,7 +125,7 @@ namespace OpenDental
                             MessageBoxButtons.OK,
                             MessageBoxIcon.Error);
 
-                        if (!SecurityL.ChangePassword(true, doRefreshSecurityCache))
+                        if (!SecurityL.ChangePassword(true))
                         {
                             return;
                         }

@@ -13,7 +13,7 @@ namespace OpenDental
         /// <param name="forceLogOff">A value indicating whether to force a log off if the user cancels out the change password dialog.</param>
         /// <param name="refreshSecurityCache"></param>
         /// <returns>True if the password was changed succesfully; otherwise, false.</returns>
-        public static bool ChangePassword(bool forceLogOff, bool refreshSecurityCache = true)
+        public static bool ChangePassword(bool forceLogOff)
         {
             using (var formUserPassword = new FormUserPassword(false, Security.CurrentUser.UserName))
             {
@@ -41,10 +41,10 @@ namespace OpenDental
                         formUserPassword.LoginDetails, 
                         formUserPassword.PasswordIsStrong);
                 }
-                catch (Exception ex)
+                catch (Exception exception)
                 {
                     MessageBox.Show(
-                        ex.Message, 
+                        exception.Message, 
                         Translation.Language.OpenDental, 
                         MessageBoxButtons.OK, 
                         MessageBoxIcon.Error);
@@ -54,13 +54,8 @@ namespace OpenDental
 
                 Security.CurrentUser.PasswordIsStrong = formUserPassword.PasswordIsStrong;
                 Security.CurrentUser.Password = formUserPassword.LoginDetails;
-                Security.PasswordTyped = formUserPassword.Password;
             }
 
-            if (refreshSecurityCache)
-            {
-                DataValid.SetInvalid(InvalidType.Security);
-            }
             return true;
         }
     }
