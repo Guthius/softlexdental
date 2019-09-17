@@ -59,12 +59,12 @@ namespace OpenDental
         {
             alertTypesListBox.Items.Clear();
 
-            List<AlertType> listCategoryAlertTypes = oldAlertCategoryLinks.Select(x => x.AlertType).ToList();
+            var categoryAlertTypes = oldAlertCategoryLinks.Select(x => x.AlertType).ToList();
             foreach (var alertType in alertTypes)
             {
                 int index = alertTypesListBox.Items.Add(alertType);
 
-                alertTypesListBox.SetSelected(index, listCategoryAlertTypes.Contains(alertType));
+                alertTypesListBox.SetSelected(index, categoryAlertTypes.Contains(alertType));
             }
         }
 

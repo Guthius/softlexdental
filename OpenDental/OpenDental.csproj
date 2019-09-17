@@ -1006,16 +1006,16 @@
     <Compile Include="Forms WIP\FormWebSchedAppts.designer.cs">
       <DependentUpon>FormWebSchedAppts.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms WIP\FormAlertCategoryEdit.cs">
+    <Compile Include="Forms\FormAlertCategoryEdit.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms WIP\FormAlertCategoryEdit.designer.cs">
+    <Compile Include="Forms\FormAlertCategoryEdit.designer.cs">
       <DependentUpon>FormAlertCategoryEdit.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms WIP\FormAlertCategorySetup.cs">
+    <Compile Include="Forms\FormAlertCategorySetup.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms WIP\FormAlertCategorySetup.designer.cs">
+    <Compile Include="Forms\FormAlertCategorySetup.designer.cs">
       <DependentUpon>FormAlertCategorySetup.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms WIP\FormDefEditBlockout.cs">
@@ -5052,10 +5052,10 @@
     <EmbeddedResource Include="Forms WIP\FormWebSchedAppts.resx">
       <DependentUpon>FormWebSchedAppts.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms WIP\FormAlertCategoryEdit.resx">
+    <EmbeddedResource Include="Forms\FormAlertCategoryEdit.resx">
       <DependentUpon>FormAlertCategoryEdit.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms WIP\FormAlertCategorySetup.resx">
+    <EmbeddedResource Include="Forms\FormAlertCategorySetup.resx">
       <DependentUpon>FormAlertCategorySetup.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms WIP\FormDefEditBlockout.resx">
