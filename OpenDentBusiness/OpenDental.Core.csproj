@@ -180,7 +180,6 @@
     <Compile Include="Cache\CacheDictNonPkAbs.cs" />
     <Compile Include="Cache\CacheListAbs.cs" />
     <Compile Include="Cache\FeeCache.cs" />
-    <Compile Include="Cache\FeeNoCache.cs" />
     <Compile Include="Cache\IFeeCache.cs" />
     <Compile Include="Claims\ClaimProcessorProgramBridge.cs" />
     <Compile Include="Claims\IClaimProcessorProgramBridge.cs" />
