@@ -49,7 +49,7 @@ namespace OpenDental {
 		/// </summary>
 		private void BuildTaskListTree(List<TaskList> listTaskListSubs) {
 			//Add users inbox to the task list.
-			long inboxNum=Security.CurrentUser.TaskListId;
+			long inboxNum=Security.CurrentUser.TaskListId.GetValueOrDefault();
 			if(inboxNum!=0) {
 				listTaskListSubs.Add(_listAllTaskLists[inboxNum]);
 			}
@@ -68,7 +68,7 @@ namespace OpenDental {
 
 		///<summary>Recursively returns a list of all leaf nodes down stream from the given parent taskListNode.</summary>
 		private List<TaskList> GetLeafSubsFromTask(TaskList taskListNode,List<TaskList> listTaskListSubs) {
-			List<TaskList> children=TaskLists.RefreshChildren(taskListNode.TaskListNum,Security.CurrentUser.Id,Security.CurrentUser.TaskListId,TaskType.All);
+			List<TaskList> children=TaskLists.RefreshChildren(taskListNode.TaskListNum,Security.CurrentUser.Id,Security.CurrentUser.TaskListId.GetValueOrDefault(),TaskType.All);
 			if(children.Count==0) {//base case: is a leaf
 				return new List<TaskList>() { taskListNode };
 			}

@@ -171,7 +171,7 @@ namespace OpenDental {
 			}
 
 			if(!checkShowHidden.Checked) {
-				retVal.RemoveAll(x => x.IsHidden);
+				retVal.RemoveAll(x => x.Hidden);
 			}
 			long classNum = 0;
 			if(comboSchoolClass.Visible && comboSchoolClass.SelectedIndex>0) {
@@ -349,7 +349,7 @@ namespace OpenDental {
 				row.Cells.Add(Employee.GetNameFL(user.EmployeeId.GetValueOrDefault()));
 				row.Cells.Add(Providers.GetLongDesc(user.ProviderId.GetValueOrDefault()));
 				if(Preferences.HasClinicsEnabled) {
-					row.Cells.Add(Clinics.GetAbbr(user.ClinicId));
+					row.Cells.Add(Clinics.GetAbbr(user.ClinicId.GetValueOrDefault()));
 					row.Cells.Add(user.ClinicRestricted?"X":"");
 				}
 				row.Cells.Add(user.PasswordIsStrong?"X":"");

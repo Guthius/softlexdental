@@ -198,7 +198,7 @@ namespace OpenDental {
 
 		private void FormTaskListSelect_Load(object sender, System.EventArgs e) {
 			SetLabelText();
-			_userCurTaskListInbox=TaskLists.GetOne(Security.CurrentUser.TaskListId);
+			_userCurTaskListInbox=TaskLists.GetOne(Security.CurrentUser.TaskListId.GetValueOrDefault());
 			if(_userCurTaskListInbox!=null) {
 				_userCurTaskListInbox.Descript=Lan.g(this,"My Inbox")+": "+_userCurTaskListInbox.Descript;
 			}
@@ -256,7 +256,7 @@ namespace OpenDental {
 
 		///<summary>Returns a list of TaskList inboxes for non hidden users with an inbox setup.</summary>
 		private List<TaskList> GetUserInboxTaskLists() {
-			List<TaskList> listUserInboxTaskLists=TaskLists.GetMany(User.All().Select(x => x.TaskListId).ToList());
+			List<TaskList> listUserInboxTaskLists=TaskLists.GetMany(User.All().Select(x => x.TaskListId.GetValueOrDefault()).ToList());
 			return listUserInboxTaskLists.OrderBy(x => x.Descript).ThenBy(x => x.DateTimeEntry).ToList();
 		}
 

@@ -4726,9 +4726,9 @@ namespace OpenDental
                 return;
             }
             //clinics is enabled
-            if (Security.CurrentUser.ClinicRestricted)
+            if (Security.CurrentUser.ClinicId.HasValue)
             {
-                Clinics.ClinicNum = Security.CurrentUser.ClinicId;
+                Clinics.ClinicNum = Security.CurrentUser.ClinicId.Value;
             }
             Text = PatientL.GetMainTitle(Patients.GetPat(CurPatNum), Clinics.ClinicNum);
             SetSmsNotificationText();
@@ -4872,7 +4872,7 @@ namespace OpenDental
             //this menu item is only visible if the clinics show feature is enabled (!EasyNoClinics)
             if (Clinics.GetDesc(Clinics.ClinicNum) == "")
             {//will be empty string if ClinicNum is not valid, in case they deleted the clinic
-                Clinics.ClinicNum = Security.CurrentUser.ClinicId;
+                Clinics.ClinicNum = Security.CurrentUser.ClinicId.GetValueOrDefault();
                 SetSmsNotificationText();
                 Text = PatientL.GetMainTitle(Patients.GetPat(CurPatNum), Clinics.ClinicNum);
             }
@@ -6724,11 +6724,11 @@ namespace OpenDental
         /// <summary>
         /// Show the log on window.
         /// </summary>
-        void ShowLogOn()
+        private void ShowLogOn()
         {
-            using (var formLogOn = new FormLogOn(doRefreshSecurityCache: false))
+            using (var formLogOn = new FormLogOn())
             {
-                if (formLogOn.ShowDialog(this) == DialogResult.OK)
+                if (formLogOn.ShowDialog(this) != DialogResult.OK)
                 {
                     Cursor = Cursors.Default;
 
@@ -6749,7 +6749,7 @@ namespace OpenDental
         /// </summary>
         void CheckForPasswordReset()
         {
-            if (Security.CurrentUser.IsPasswordResetRequired)
+            if (Security.CurrentUser.PasswordResetRequired)
             {
                 using (var formUserPassword = new FormUserPassword(false, Security.CurrentUser.UserName, true))
                 {
@@ -6765,7 +6765,7 @@ namespace OpenDental
                     var isStrongPassword = formUserPassword.PasswordIsStrong;
                     try
                     {
-                        Security.CurrentUser.IsPasswordResetRequired = false;
+                        Security.CurrentUser.PasswordResetRequired = false;
 
                         User.Update(Security.CurrentUser);
                         User.UpdatePassword(Security.CurrentUser, formUserPassword.LoginDetails, isStrongPassword);

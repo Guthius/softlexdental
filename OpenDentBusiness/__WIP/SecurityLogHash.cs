@@ -45,7 +45,7 @@ namespace OpenDentBusiness
         /// <param name="securityLogHash">The security log hash.</param>
         public static void Insert(SecurityLogHash securityLogHash) =>
             DataConnection.ExecuteNonQuery(
-                "INSERT INTO `security_log_hashes` (?security_log_id, ?hash) ON DUPLICATE KEY UPDATE `hash` = ?hash",
+                "INSERT INTO `security_log_hashes` (`security_log_id`, `hash`) VALUES (?security_log_id, ?hash) ON DUPLICATE KEY UPDATE `hash` = ?hash",
                     new MySqlParameter("security_log_id", securityLogHash.SecurityLogId),
                     new MySqlParameter("hash", securityLogHash.Hash ?? ""));
         

@@ -1755,7 +1755,7 @@ namespace OpenDental {
 			}
 			Task task=_clickedTask;
 			Task oldTask=task.Copy();
-			task.TaskListNum=Security.CurrentUser.TaskListId;
+			task.TaskListNum=Security.CurrentUser.TaskListId.GetValueOrDefault();
 			Cursor=Cursors.WaitCursor;
 			List<long> listSignalNums=new List<long>();
 			try {

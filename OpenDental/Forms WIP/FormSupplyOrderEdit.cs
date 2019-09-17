@@ -42,7 +42,7 @@ namespace OpenDental
             userComboBox.Items.Clear();
             userComboBox.Items.Add(new ODBoxItem<User>(Translation.Language.None, new User()));
 
-            var usersList = User.All().FindAll(x => !x.IsHidden);
+            var usersList = User.All().FindAll(x => !x.Hidden);
             foreach (var user in usersList)
             {
                 var userBoxItem = new ODBoxItem<User>(user.UserName, user);

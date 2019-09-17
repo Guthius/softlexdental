@@ -24,35 +24,23 @@ namespace OpenDentBusiness
 {
     public class User : DataRecord
     {
-        public string UserName;
-        
-        /// <summary>
-        /// The password details in a "HashType$Salt$Hash" format, separating the different fields by '$'.
-        /// This is NOT the actual password but the encoded password hash.
-        /// If the contents of this variable are not in the aforementioned format, it is assumed to be a legacy password hash (MD5).
-        /// </summary>
-        public string PasswordDigest;
-
-        [Obsolete("Use UserGroupAttaches to link users to user groups.")]
-        public long UserGroupId;
-
-        /// <summary>
-        /// FK to employee.EmployeeNum. Cannot be used if provnum is used. Used for timecards to block access by other users.
-        /// </summary>
-        public long? EmployeeId;
-        
         /// <summary>
         /// Default clinic for this user.  
         /// It causes new patients to default to this clinic when entered by this user.  
         /// If null, then user has no default clinic or default clinic is HQ if clinics are enabled.
         /// </summary> 		
-        public long ClinicId;
+        public long? ClinicId;
 
         /// <summary>
         /// A value indicating whether the access of the user is restricted to a single clinic.
         /// This only applies when <see cref="ClinicId"/> is not null.
         /// </summary>
-        public bool ClinicRestricted;
+        public bool ClinicRestricted { get => ClinicId.HasValue; }
+
+        /// <summary>
+        /// FK to employee.EmployeeNum. Cannot be used if provnum is used. Used for timecards to block access by other users.
+        /// </summary>
+        public long? EmployeeId;
 
         /// <summary>
         /// FK to provider.ProvNum. Cannot be used if EmployeeNum is used. 
@@ -61,35 +49,52 @@ namespace OpenDentBusiness
         public long? ProviderId;
 
         /// <summary>
-        /// Set true to hide user from login list.
-        /// </summary>
-        public bool IsHidden;
-        
-        /// <summary>
         /// FK to tasklist.TaskListNum.  0 if no inbox setup yet. It is assumed that the TaskList 
         /// is in the main trunk, but this is not strictly enforced. User can't delete an 
         /// attached TaskList, but they could move it.
         /// </summary>
-        public long TaskListId;
-        
+        public long? TaskListId;
+
         /// <summary>
-        /// Defaults to 3 (regular user) unless specified. Helps populates the Anesthetist, 
-        /// Surgeon, Assistant and Circulator dropdowns properly on FormAnestheticRecord
+        /// The username of the user.
         /// </summary>
-        public int AnesthProvType;
-        
+        public string UserName;
+
         /// <summary>
-        /// If set to true, the BlockSubsc button will start out pressed for this user.
+        /// The password details in a "HashType$Salt$Hash" format, separating the different fields by '$'.
+        /// This is NOT the actual password but the encoded password hash.
+        /// If the contents of this variable are not in the aforementioned format, it is assumed to be a legacy password hash (MD5).
         /// </summary>
-        public bool DefaultHidePopups;
-        
+        public string PasswordDigest;
+
         /// <summary>
         /// Gets set to true if strong passwords are turned on, and this user changes their 
         /// password to a strong password.  We don't store actual passwords, so this flag is the 
         /// only way to tell.
         /// </summary>
         public bool PasswordIsStrong;
-       
+
+        /// <summary>
+        /// Boolean.  If true, the user's password needs to be reset on next login.
+        /// </summary>
+        public bool PasswordResetRequired;
+
+        /// <summary>
+        /// The name of the Active Directory user account the user is linked to.
+        /// </summary>
+        public string DomainUser;
+
+        /// <summary>
+        /// Defaults to 3 (regular user) unless specified. Helps populates the Anesthetist, 
+        /// Surgeon, Assistant and Circulator dropdowns properly on FormAnestheticRecord
+        /// </summary>
+        public int AnesthProvType;
+
+        /// <summary>
+        /// If set to true, the BlockSubsc button will start out pressed for this user.
+        /// </summary>
+        public bool DefaultHidePopups;
+
         /// <summary>
         /// If set to true, the BlockInbox button will start out pressed for this user.
         /// </summary>
@@ -103,17 +108,12 @@ namespace OpenDentBusiness
         /// <summary>
         /// The number of failed login attempts.
         /// </summary>
-        public byte FailedAttempts;
-        
+        public int FailedAttempts;
+
         /// <summary>
-        /// The name of the Active Directory user account the user is linked to.
+        /// Set true to hide user from login list.
         /// </summary>
-        public string DomainUser;
-        
-        /// <summary>
-        /// Boolean.  If true, the user's password needs to be reset on next login.
-        /// </summary>
-        public bool IsPasswordResetRequired;
+        public bool Hidden;
 
         /// <summary>
         /// The getter will return a struct created from the database-ready password which is stored in the Password field.
@@ -140,12 +140,26 @@ namespace OpenDentBusiness
         /// </summary>
         public override string ToString() => UserName;
 
-
         private static User FromReader(MySqlDataReader dataReader)
         {
             return new User
             {
-                // TODO: ....
+                Id  = (long)dataReader["id"],
+                ClinicId = dataReader["clinic_id"] as long?,
+                EmployeeId = dataReader["employee_id"] as long?,
+                ProviderId = dataReader["provider_id"] as long?,
+                TaskListId = dataReader["task_list_id"] as long?,
+                UserName = (string)dataReader["username"],
+                PasswordDigest = (string)dataReader["password_digest"],
+                PasswordIsStrong = (bool)dataReader["password_is_strong"],
+                PasswordResetRequired = (bool)dataReader["password_reset_required"],
+                DomainUser = (string)dataReader["domain_user"],
+                AnesthProvType = Convert.ToInt32(dataReader["anesthesia_provider_type"]),
+                DefaultHidePopups = (bool)dataReader["hide_popups_default"],
+                InboxHidePopups = (bool)dataReader["hide_popups_inbox"],
+                FailedDateTime = dataReader["failed_date"] as DateTime?,
+                FailedAttempts = Convert.ToInt32(dataReader["failed_attempts"]),
+                Hidden = (bool)dataReader["hidden"]
             };
         }
 
@@ -264,7 +278,7 @@ namespace OpenDentBusiness
         /// <exception cref="Exception">If there was a problem during user validation.</exception>
         public static long Insert(User user, List<long> userGroupIds)
         {
-            if (user.IsHidden && UserGroup.IsAdminGroup(userGroupIds))
+            if (user.Hidden && UserGroup.IsAdminGroup(userGroupIds))
                 throw new Exception("Admins cannot be hidden.");
 
             Validate(user, userGroupIds);
@@ -421,7 +435,7 @@ namespace OpenDentBusiness
         /// <exception cref="Exception">If there was a problem during user validation.</exception>
         private static void Validate(User user, List<long> userGroupIds)
         {
-            if (!user.IsHidden)
+            if (!user.Hidden)
             {
                 var otherUser = GetByUserName(user.UserName);
                 if (otherUser != null && otherUser.Id != user.Id)
@@ -446,7 +460,7 @@ namespace OpenDentBusiness
                 if (!user.IsNew && !isAdmin && !IsSomeoneElseSecurityAdmin(user))
                     throw new Exception("At least one user must have Security Admin permission.");
 
-                if (user.IsHidden && isAdmin)
+                if (user.Hidden && isAdmin)
                     throw new Exception("Admins cannot be hidden.");
             }
         }
@@ -598,7 +612,7 @@ namespace OpenDentBusiness
         {
             var users = new List<User>();
 
-            foreach (var user in All().Where(user => showHidden || !user.IsHidden))
+            foreach (var user in All().Where(user => showHidden || !user.Hidden))
             {
                 if (UserGroupPermission.HasPermission(user, permission, null))
                 {

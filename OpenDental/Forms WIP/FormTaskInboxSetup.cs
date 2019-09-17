@@ -43,7 +43,7 @@ namespace OpenDental {
 			for(int i=0;i<UserList.Count;i++){
 				row=new ODGridRow();
 				row.Cells.Add(UserList[i].UserName);
-				row.Cells.Add(GetDescription(UserList[i].TaskListId));
+				row.Cells.Add(GetDescription(UserList[i].TaskListId.GetValueOrDefault()));
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();

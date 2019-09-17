@@ -30,7 +30,7 @@ namespace OpenDental
         /// Used when temporarily switching users. Currently only used when overriding signed notes.
         /// The user will not be logged on (Security.CurUser is untouched) but CurUserSimpleSwitch will be set to the desired user.
         /// </summary>
-        private bool simpleSwitch;
+        private readonly bool simpleSwitch;
 
         /// <summary>
         /// Gets set to the user that just successfully logged in when in Simple Switch mode.
@@ -38,16 +38,11 @@ namespace OpenDental
         public User User { get; private set; }
 
         /// <summary>
-        /// Set to true when the calling method has indicated that it will take care of any Security cache refreshing.
-        /// </summary>
-        readonly bool doRefreshSecurityCache = false;
-
-        /// <summary>
         /// Set userNumSelected to automatically select the corresponding user in the list (if available).
         /// Set isSimpleSwitch true if temporarily switching users for some reason.  This will leave Security.CurUser alone and will instead
         /// indicate which user was chosen / successfully logged in via CurUserSimpleSwitch.
         /// </summary>
-        public FormLogOn(long selectedUserId = 0, bool simpleSwitch = false, bool doRefreshSecurityCache = true)
+        public FormLogOn(long selectedUserId = 0, bool simpleSwitch = false)
         {
             InitializeComponent();
 
@@ -62,17 +57,14 @@ namespace OpenDental
                 usernameTextBox.Text = Security.CurrentUser.UserName;
             }
 
-            this.doRefreshSecurityCache = doRefreshSecurityCache;
             this.simpleSwitch = simpleSwitch;
         }
 
         /// <summary>
         /// Loads the form.
         /// </summary>
-        void FormLogOn_Load(object sender, EventArgs e)
+        private void FormLogOn_Load(object sender, EventArgs e)
         {
-            passwordTextBox.Select();
-
             Plugin.Trigger(this, "FormLogOn_Loaded", simpleSwitch);
         }
 

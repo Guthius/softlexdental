@@ -558,7 +558,7 @@ namespace OpenDental{
 		#endregion
 
 		private void FormUserEdit_Load(object sender, System.EventArgs e) {
-			checkIsHidden.Checked=UserCur.IsHidden;
+			checkIsHidden.Checked=UserCur.Hidden;
 			if(UserCur.Id!=0) {
 				textUserNum.Text=UserCur.Id.ToString();
 			}
@@ -569,7 +569,7 @@ namespace OpenDental{
 				textDomainUser.Visible=false;
 				butPickDomainUser.Visible=false;
 			}
-			checkRequireReset.Checked=UserCur.IsPasswordResetRequired;
+			checkRequireReset.Checked=UserCur.PasswordResetRequired;
 			_listUserGroups=UserGroup.All();
 			for(int i=0;i<_listUserGroups.Count;i++){
 				listUserGroup.Items.Add(new ODBoxItem<UserGroup>(_listUserGroups[i].Description,_listUserGroups[i]));
@@ -818,9 +818,9 @@ namespace OpenDental{
 			else {
 				UserCur.ClinicId=_listClinics[listClinic.SelectedIndex-1].ClinicNum;
 			}
-			UserCur.ClinicRestricted=checkClinicIsRestricted.Checked;//This is kept in sync with their choice of "All".
-			UserCur.IsHidden=checkIsHidden.Checked;
-			UserCur.IsPasswordResetRequired=checkRequireReset.Checked;
+			//UserCur.ClinicRestricted=checkClinicIsRestricted.Checked;//This is kept in sync with their choice of "All".
+			UserCur.Hidden=checkIsHidden.Checked;
+			UserCur.PasswordResetRequired=checkRequireReset.Checked;
 			UserCur.UserName=textUserName.Text;
 			if(listEmployee.SelectedIndex==0){
 				UserCur.EmployeeId=0;

@@ -235,7 +235,7 @@ namespace OpenDentBusiness
                         }
                         else
                         {
-                            _clinicNum = Security.CurrentUser.ClinicId;//Use the user's default clinic if they don't have access to LocalComputer's clinic.
+                            _clinicNum = Security.CurrentUser.ClinicId.GetValueOrDefault();//Use the user's default clinic if they don't have access to LocalComputer's clinic.
                         }
                     }
                     else
@@ -254,7 +254,7 @@ namespace OpenDentBusiness
                 default:
                     if (listClinics.Any(x => x.ClinicNum == Security.CurrentUser.ClinicId))
                     {
-                        _clinicNum = Security.CurrentUser.ClinicId;
+                        _clinicNum = Security.CurrentUser.ClinicId.Value;
                     }
                     break;
             }
