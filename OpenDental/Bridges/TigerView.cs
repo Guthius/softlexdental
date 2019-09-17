@@ -273,7 +273,7 @@ namespace OpenDental.Bridges {
 				def.Value="X"; //Will make this category show in the chart module
 				def.SortOrder=listImageCatDefs.Count;
 				imageCatDefNum=Definition.Insert(def);
-				Cache.Refresh(InvalidType.Defs);
+				//Cache.Refresh(InvalidType.Defs);
 			}
 			string newFileName="TV_"+filename.Substring(0,filename.IndexOf('.')+1)+CodeBase.MiscUtils.CreateRandomAlphaNumericString(4);
 			newFileName=newFileName.Replace('.','_'); //Get rid of any periods in the file name.

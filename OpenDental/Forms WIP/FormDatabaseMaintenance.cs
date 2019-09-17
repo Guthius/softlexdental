@@ -1709,7 +1709,7 @@ namespace OpenDental {
 				//Invalidate all cached tables.  DBM could have touched anything so blast them all.
 				//Failure to invalidate cache can cause UEs in the main program.
 				Action actionCloseProgress=ODProgress.Show(odEventType:ODEventType.Cache);
-				DataValid.SetInvalid(Cache.GetAllCachedInvalidTypes().ToArray());
+				//DataValid.SetInvalid(Cache.GetAllCachedInvalidTypes().ToArray());
 				actionCloseProgress();
 			}
 		}

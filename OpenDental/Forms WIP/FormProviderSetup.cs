@@ -859,7 +859,7 @@ namespace OpenDental{
 			//new provider has already been inserted into DB from above
 			Providers.MoveDownBelow(provCur);//safe to run even if none selected.
 			_hasChanged=true;
-			Cache.Refresh(InvalidType.Providers);
+			//Cache.Refresh(InvalidType.Providers);
 			_listProvs=Providers.GetDeepCopy();
 			FillGrid();
 			gridMain.ScrollToEnd();//should change this to scroll to the same place as before.
@@ -977,7 +977,7 @@ namespace OpenDental{
 				}
 			}
 			_hasChanged=true;
-			Cache.Refresh(InvalidType.Providers);
+			//Cache.Refresh(InvalidType.Providers);
 			_listProvs=Providers.GetDeepCopy();
 			FillGrid();
 		}

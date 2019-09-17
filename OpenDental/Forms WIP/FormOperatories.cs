@@ -257,7 +257,7 @@ namespace OpenDental{
 		}
 
 		private void RefreshList() {
-			Cache.Refresh(InvalidType.Operatories);
+			//Cache.Refresh(InvalidType.Operatories);
 			_listOps=Operatories.GetDeepCopy();//Already ordered by ItemOrder
 			_listOpsOld=_listOps.Select(x => x.Copy()).ToList();
 			FillGrid();

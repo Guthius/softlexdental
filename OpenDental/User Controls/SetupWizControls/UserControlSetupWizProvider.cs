@@ -161,7 +161,7 @@ namespace OpenDental.User_Controls.SetupWizard {
 			provCur=FormPE.ProvCur;
 			//new provider has already been inserted into DB from above
 			Providers.MoveDownBelow(provCur);//safe to run even if none selected.
-			Cache.Refresh(InvalidType.Providers);
+			//Cache.Refresh(InvalidType.Providers);
 			FillGrid();
 		}
 

@@ -225,7 +225,7 @@ namespace OpenDental
             using (var formSupplyEdit = new FormSupplyEdit())
             {
                 formSupplyEdit.Supply = supply;
-                formSupplyEdit.Suppliers = suppliers;
+                formSupplyEdit.Suppliers.AddRange(suppliers);
 
                 if (formSupplyEdit.ShowDialog(this) != DialogResult.OK)
                 {
@@ -290,7 +290,7 @@ namespace OpenDental
             using (var formSupplyEdit = new FormSupplyEdit())
             {
                 formSupplyEdit.Supply = selectedSupply;
-                formSupplyEdit.Suppliers = suppliers;
+                formSupplyEdit.Suppliers.AddRange(suppliers);
 
                 if (formSupplyEdit.ShowDialog(this) != DialogResult.OK)
                 {

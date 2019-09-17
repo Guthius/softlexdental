@@ -191,7 +191,7 @@ namespace OpenDental{
 				return;
 			}
 			_isChanged=true;
-			Cache.Refresh(InvalidType.StateAbbrs);
+			//Cache.Refresh(InvalidType.StateAbbrs);
 			FillGrid();
 		}
 
@@ -210,7 +210,7 @@ namespace OpenDental{
 				return;
 			}
 			_isChanged=true;
-			Cache.Refresh(InvalidType.StateAbbrs);
+			//Cache.Refresh(InvalidType.StateAbbrs);
 			FillGrid();
 		}
 

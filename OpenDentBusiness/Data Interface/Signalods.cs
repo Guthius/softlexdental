@@ -102,7 +102,7 @@ namespace OpenDentBusiness
                                 signal.IType)
                         .Distinct();
 
-                Cache.Refresh(true, invalidTypes.ToArray());
+                //Cache.Refresh(true, invalidTypes.ToArray());
 
                 processAction(signalProcessors, signals);
             });

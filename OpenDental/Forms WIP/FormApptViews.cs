@@ -60,7 +60,7 @@ namespace OpenDental
 
         void FillViewList()
         {
-            Cache.Refresh(InvalidType.Views);
+            //Cache.Refresh(InvalidType.Views);
             viewsListBox.Items.Clear();
 
             apptViewsList = new List<ApptView>();

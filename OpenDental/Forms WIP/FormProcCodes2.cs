@@ -1945,7 +1945,7 @@ namespace OpenDental{
 					def.Description=listCodes[i].ProcCatDescript;
 					def.SortOrder=Definition.GetByCategory(DefinitionCategory.ProcCodeCats).Count;
                     Definition.Insert(def);
-					Cache.Refresh(InvalidType.Defs);
+					//Cache.Refresh(InvalidType.Defs);
 					listCodes[i].ProcCat=def.Id;
 				}
 				listCodes[i].ProvNumDefault=0;//Always import procedure codes with no specific provider set.  The incoming prov might not exist.

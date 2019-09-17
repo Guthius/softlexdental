@@ -97,19 +97,19 @@ namespace OpenDentBusiness.Eclaims
             }
             else if (clearinghouseClin.CommBridge == EclaimsCommBridge.Inmediata)
             {
-                if (!Inmediata.Launch(clearinghouseClin, batchNum))
-                {
-                    MessageBox.Show(Lans.g("Eclaims", "Claim file created, but could not launch Inmediata client.") + "\r\n" + Inmediata.ErrorMessage);
-                    //continue;
-                }
+                //if (!Inmediata.Launch(clearinghouseClin, batchNum))
+                //{
+                //    MessageBox.Show(Lans.g("Eclaims", "Claim file created, but could not launch Inmediata client.") + "\r\n" + Inmediata.ErrorMessage);
+                //    //continue;
+                //}
             }
             else if (clearinghouseClin.CommBridge == EclaimsCommBridge.AOS)
             { // added by SPK 7/13/05
-                if (!AOS.Launch(clearinghouseClin, batchNum))
-                {
-                    MessageBox.Show(Lans.g("Eclaims", "Claim file created, but could not launch AOS Communicator.") + "\r\n" + AOS.ErrorMessage);
-                    //continue;
-                }
+                //if (!AOS.Launch(clearinghouseClin, batchNum))
+                //{
+                //    MessageBox.Show(Lans.g("Eclaims", "Claim file created, but could not launch AOS Communicator.") + "\r\n" + AOS.ErrorMessage);
+                //    //continue;
+                //}
             }
             else if (clearinghouseClin.CommBridge == EclaimsCommBridge.PostnTrack)
             {
@@ -125,10 +125,10 @@ namespace OpenDentBusiness.Eclaims
             }
             else if (clearinghouseClin.CommBridge == EclaimsCommBridge.ClaimX)
             {
-                if (!ClaimX.Launch(clearinghouseClin, batchNum))
-                {
-                    MessageBox.Show(Lans.g("Eclaims", "Claim file created, but encountered an error while launching ClaimX Client.") + ":\r\n" + ClaimX.ErrorMessage);
-                }
+                //if (!ClaimX.Launch(clearinghouseClin, batchNum))
+                //{
+                //    MessageBox.Show(Lans.g("Eclaims", "Claim file created, but encountered an error while launching ClaimX Client.") + ":\r\n" + ClaimX.ErrorMessage);
+                //}
             }
             //else if (clearinghouseClin.CommBridge == EclaimsCommBridge.EmdeonMedical)
             //{

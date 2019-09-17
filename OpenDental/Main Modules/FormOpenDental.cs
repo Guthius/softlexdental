@@ -935,7 +935,7 @@ namespace OpenDental
         {
             try
             {
-                Cache.Refresh(InvalidType.Prefs);
+                // Cache.Refresh(InvalidType.Prefs);
             }
             catch (Exception ex)
             {
@@ -967,7 +967,7 @@ namespace OpenDental
                         Environment.Exit(ExitCode);
                         return false;
                     }
-                    Cache.Refresh(InvalidType.Prefs);
+                    // Cache.Refresh(InvalidType.Prefs);
                 }
             }
 
@@ -993,7 +993,7 @@ namespace OpenDental
             {
                 return;//Just in case.
             }
-            Cache.Refresh(doRefreshServerCache, arrayITypes);
+            //Cache.Refresh(doRefreshServerCache, arrayITypes);
             RefreshLocalDataPostCleanup(arrayITypes);
         }
 

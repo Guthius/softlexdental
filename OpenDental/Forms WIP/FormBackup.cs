@@ -1153,7 +1153,7 @@ namespace OpenDental {
 				return;
 			}
 			else {
-				DataValid.SetInvalid(Cache.GetAllCachedInvalidTypes().ToArray());
+				//DataValid.SetInvalid(Cache.GetAllCachedInvalidTypes().ToArray());
 			}
 			MsgBox.Show(this,"Done");
 			Close();

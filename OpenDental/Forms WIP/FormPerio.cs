@@ -2010,7 +2010,7 @@ namespace OpenDental
             Definition DefCur = _listMiscColorDefs[1].Copy();
             DefCur.Color = colorDialog1.Color;
             Definition.Update(DefCur);
-            Cache.Refresh(InvalidType.Defs);
+            //Cache.Refresh(InvalidType.Defs);
             localDefsChanged = true;
             gridP.SetColors();
             gridP.Invalidate();
@@ -2028,7 +2028,7 @@ namespace OpenDental
             Definition DefCur = _listMiscColorDefs[2].Copy();
             DefCur.Color = colorDialog1.Color;
             Definition.Update(DefCur);
-            Cache.Refresh(InvalidType.Defs);
+            //Cache.Refresh(InvalidType.Defs);
             localDefsChanged = true;
             gridP.SetColors();
             gridP.Invalidate();
@@ -2046,7 +2046,7 @@ namespace OpenDental
             Definition DefCur = _listMiscColorDefs[4].Copy();
             DefCur.Color = colorDialog1.Color;
             Definition.Update(DefCur);
-            Cache.Refresh(InvalidType.Defs);
+            //Cache.Refresh(InvalidType.Defs);
             localDefsChanged = true;
             gridP.SetColors();
             gridP.Invalidate();
@@ -2064,7 +2064,7 @@ namespace OpenDental
             Definition DefCur = _listMiscColorDefs[5].Copy();
             DefCur.Color = colorDialog1.Color;
             Definition.Update(DefCur);
-            Cache.Refresh(InvalidType.Defs);
+            //Cache.Refresh(InvalidType.Defs);
             localDefsChanged = true;
             gridP.SetColors();
             gridP.Invalidate();
@@ -2132,7 +2132,7 @@ namespace OpenDental
             //pref.ValueString=currentValue.ToString();
             //Prefs.Update(pref);
             localDefsChanged = true;
-            Cache.Refresh(InvalidType.Prefs);
+            //Cache.Refresh(InvalidType.Prefs);
             if (sender == updownProb)
             {
                 textRedProb.Text = currentValue.ToString();
