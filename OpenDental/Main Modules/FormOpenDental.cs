@@ -598,17 +598,19 @@ namespace OpenDental
             {
                 userControlTasks1.InitializeOnStartup();
             }
-            myOutlookBar.SelectedIndex = Security.GetModule(0);//for eCW, this fails silently.
-            if (Programs.UsingEcwTightOrFullMode()
-                || (HL7Defs.IsExistingHL7Enabled() && !HL7Defs.GetOneDeepEnabled().ShowAppts))
+
+            myOutlookBar.SelectedIndex = Security.GetModule(0);
+            if (HL7Defs.IsExistingHL7Enabled() && !HL7Defs.GetOneDeepEnabled().ShowAppts)
             {
                 myOutlookBar.SelectedIndex = 4;//Chart module
                 LayoutControls();
             }
+
             if (Programs.UsingOrion)
             {
                 myOutlookBar.SelectedIndex = 1;//Family module
             }
+
             myOutlookBar.Invalidate();
             LayoutToolBar();
             RefreshMenuReports();
@@ -624,10 +626,10 @@ namespace OpenDental
             }
 
 
-            Bridges.Trojan.StartupCheck();
+            //Bridges.Trojan.StartupCheck();
             FormUAppoint.StartThreadIfEnabled();
-            Bridges.ICat.StartFileWatcher();
-            Bridges.TigerView.StartFileWatcher();
+            //Bridges.ICat.StartFileWatcher();
+            //Bridges.TigerView.StartFileWatcher();
 
             if (Preference.GetDate(PreferenceName.BackupReminderLastDateRun).AddMonths(1) < DateTime.Today)
             {

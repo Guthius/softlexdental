@@ -26,30 +26,28 @@ namespace OpenDentBusiness
 {
     public class Security
     {
-        ///<summary>Tracks whether or not the user is logged in.  Security.CurUser==null usually is used for this purpose, 
-        ///but in Middle Tier we do not null out CurUser so that queries can continue to be run on the web service.</summary>
-        public static bool IsUserLoggedIn;
+        /// <summary>
+        /// Tracks whether or not the user is logged in. 
+        /// Security.CurUser==null usually is used for this purpose, 
+        /// but in Middle Tier we do not null out CurUser so that queries can continue to be run on the web service.
+        /// </summary>
+        public static bool IsUserLoggedIn { get; set; }
 
-        ///<summary>The last local datetime that there was any mouse or keyboard activity.  Used for auto logoff comparison and for disabling signal 
-        ///processing due to inactivity.  Must be public so that it can be accessed from multiple application level classes.</summary>
-        public static DateTime DateTimeLastActivity;
+        /// <summary>
+        /// The last local datetime that there was any mouse or keyboard activity. 
+        /// Used for auto logoff comparison and for disabling signal processing due to inactivity.
+        /// Must be public so that it can be accessed from multiple application level classes.
+        /// </summary>
+        public static DateTime DateTimeLastActivity { get; set; }
 
         /// <summary>
         /// Gets or sets the currently logged in user.
         /// </summary>
         public static User CurrentUser { get; set; }
 
-        /// <summary>
-        /// Gets the name of the current computer.
-        /// </Summary>
         [Obsolete("Use Environment.MachineName instead.")]
         public static string CurrentComputerName { get; set; }
 
-        /// <summary>
-        /// Remember the password that the user typed in. This is always saved on Log On. 
-        /// Do not store it in the database. We will need it when connecting to the web service.
-        /// Needed for CEMT and reporting servers. If eCW, then this is already encrypted.
-        /// </summary>
         [Obsolete("Don't use the plaintext password of the user.")]
         public static string PasswordTyped { get; set; }
 
@@ -70,31 +68,31 @@ namespace OpenDentBusiness
             IsAuthorized(permission, date, suppressMessage, false);
 
         public static bool IsAuthorized(string permission, DateTime date, bool suppressMessage, bool suppressLockDateMessage) => 
-            IsAuthorized(permission, date, suppressMessage, suppressLockDateMessage, 0, -1, 0, 0);
+            IsAuthorized(permission, date, suppressMessage, suppressLockDateMessage, null, -1, null, null);
 
-        public static bool IsAuthorized(string permission, long foreignKey, bool suppressMessage) =>
-            IsAuthorized(permission, DateTime.MinValue, suppressMessage, true, 0, -1, 0, foreignKey);
+        public static bool IsAuthorized(string permission, long? externalId, bool suppressMessage) =>
+            IsAuthorized(permission, DateTime.MinValue, suppressMessage, true, null, -1, null, externalId);
 
         public static bool IsAuthorized(string permission, out string msg) => 
-            IsAuthorized(permission, DateTime.MinValue, true, true, 0, -1, 0, 0, out msg);
+            IsAuthorized(permission, DateTime.MinValue, true, true, null, -1, null, null, out msg);
 
-        public static bool IsAuthorized(string permission, DateTime date, long procedureCodeId, double procedureCodeFee) => 
-            IsAuthorized(permission, date, false, false, procedureCodeId, procedureCodeFee, 0, 0);
+        public static bool IsAuthorized(string permission, DateTime date, long? procedureCodeId, double procedureCodeFee) => 
+            IsAuthorized(permission, date, false, false, procedureCodeId, procedureCodeFee, null, null);
         
-        public static bool IsAuthorized(string permission, DateTime date, bool suppressMessage, bool suppressLockDateMessage, long procedureCodeId, double procedureCodeFee, long sheetDefinitionId, long foreignKey) => 
-            IsAuthorized(permission, date, suppressMessage, suppressLockDateMessage, procedureCodeId, procedureCodeFee, sheetDefinitionId, foreignKey, out _);
+        public static bool IsAuthorized(string permission, DateTime date, bool suppressMessage, bool suppressLockDateMessage, long? procedureCodeId, double procedureCodeFee, long? sheetDefinitionId, long? externalId) => 
+            IsAuthorized(permission, date, suppressMessage, suppressLockDateMessage, procedureCodeId, procedureCodeFee, sheetDefinitionId, externalId, out _);
         
         /// <summary>
         /// Checks to see if current user is authorized. It also checks any date restrictions. 
         /// If not authorized, it gives a Message box saying so and returns false.
         /// </summary>
-        public static bool IsAuthorized(string permission, DateTime date, bool suppressMessage, bool suppressLockDateMessage, long procedureCodeId, double procedureCodeFee, long sheetDefinitionId, long foreignKey, out string message)
+        public static bool IsAuthorized(string permission, DateTime date, bool suppressMessage, bool suppressLockDateMessage, long? procedureCodeId, double procedureCodeFee, long? sheetDefinitionId, long? externalId, out string message)
         {
             message = "";
 
             if (CurrentUser == null)
             {
-                message = "Not authorized for\r\n" + UserGroupPermission.GetDescription(permission);
+                message = "You have insufficient permissions to perform that action.";
                 if (!suppressMessage)
                 {
                     MessageBox.Show(
@@ -109,7 +107,7 @@ namespace OpenDentBusiness
 
             try
             {
-                return IsAuthorized(permission, date, suppressMessage, suppressLockDateMessage, CurrentUser, procedureCodeId, procedureCodeFee, sheetDefinitionId, foreignKey);
+                return IsAuthorized(permission, date, suppressMessage, suppressLockDateMessage, CurrentUser, procedureCodeId, procedureCodeFee, sheetDefinitionId, externalId);
             }
             catch (Exception exception)
             {
@@ -126,25 +124,24 @@ namespace OpenDentBusiness
         /// <summary>
         /// Will throw an error if not authorized and message not suppressed.
         /// </summary>
-        public static bool IsAuthorized(string permission, DateTime date, bool suppressMessage, bool suppressLockDateMessage, User curUser,
-            long procedureCodeId, double procedureFee, long sheetDefNum, long fKey)
+        public static bool IsAuthorized(string permission, DateTime date, bool suppressMessage, bool suppressLockDateMessage, User user, long? procedureCodeId, double procedureFee, long? sheetDefinitionId, long? externalId)
         {
             date = date.Date;
 
-            if (!UserGroupPermission.HasPermission(curUser, permission, fKey))
+            if (!UserGroupPermission.HasPermission(user, permission, externalId))
             {
                 if (!suppressMessage)
                 {
                     throw new Exception(
-                        "Not authorized.\r\n" +
-                        "A user with the SecurityAdmin permission must grant you access for:\r\n" +
-                        UserGroupPermission.GetDescription(permission));
+                        $"You have insufficient permissions to perform that action.\r\n\r\n" +
+                        $"To perform this action a administrator must grant you the '{UserGroupPermission.GetDescription(permission).ToUpper()}' permission.");
                 }
 
                 return false;
             }
 
-            if (permission == Permissions.AccountingCreate || permission == Permissions.AccountingEdit)
+            if (permission == Permissions.AccountingCreate || 
+                permission == Permissions.AccountingEdit)
             {
                 if (date <= Preference.GetDate(PreferenceName.AccountingLockDate))
                 {
@@ -156,7 +153,7 @@ namespace OpenDentBusiness
                 }
             }
 
-            if (IsGlobalDateLock(permission, date, suppressMessage || suppressLockDateMessage, procedureCodeId, procedureFee, sheetDefNum))
+            if (IsGlobalDateLock(permission, date, suppressMessage || suppressLockDateMessage, procedureCodeId.GetValueOrDefault(), procedureFee, sheetDefinitionId.GetValueOrDefault()))
             {
                 return false;
             }
@@ -168,7 +165,7 @@ namespace OpenDentBusiness
             //}
 
 
-            var dateLimit = UserGroupPermission.GetDateRestrictedForPermission(permission, curUser.GetGroups().Select(x => x.Id).ToList());
+            var dateLimit = UserGroupPermission.GetDateRestrictedForPermission(permission, user.GetGroups().Select(x => x.Id).ToList());
             if (!dateLimit.HasValue || date > dateLimit)
             {
                 return true;
@@ -270,14 +267,6 @@ namespace OpenDentBusiness
         }
 
         /// <summary>
-        /// Returns the Date that the user is restricted to for the passed-in PermType. 
-        /// 
-        /// Returns MinVal if the user is not restricted or does not have the permission.
-        /// </summary>
-        private static DateTime? GetDateLimit(string permission, List<long> userGroupIds) =>
-            UserGroupPermission.GetDateRestrictedForPermission(permission, userGroupIds);
-
-        /// <summary>
         /// Gets a module that the user has permission to use. 
         /// 
         /// Tries the suggestedI first.  If a -1 is supplied, it tries to find any authorized module. 
@@ -285,6 +274,8 @@ namespace OpenDentBusiness
         /// </summary>
         public static int GetModule(int suggestI)
         {
+            if (IsAuthorized(Permissions.SecurityAdmin)) return 0;
+
             if (suggestI != -1 && IsAuthorized(PermofModule(suggestI), DateTime.MinValue, true))
             {
                 return suggestI;
