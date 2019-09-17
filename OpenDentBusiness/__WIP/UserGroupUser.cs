@@ -30,7 +30,9 @@ namespace OpenDentBusiness
         public long UserId;
 
         static UserGroupUser FromReader(MySqlDataReader dataReader) =>
-            new UserGroupUser(dataReader.GetInt64(0), dataReader.GetInt64(1));
+            new UserGroupUser(
+                dataReader.GetInt64(0), 
+                dataReader.GetInt64(1));
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UserGroupUser"/> class.

@@ -1049,7 +1049,7 @@
     <Compile Include="__WIP\Permissions.cs" />
     <Compile Include="Data\ClinicUser.cs" />
     <Compile Include="__WIP\SecurityLogEvents.cs" />
-    <Compile Include="__WIP\SecurityLogSource.cs" />
+    <Compile Include="Data\SecurityLogSource.cs" />
     <Compile Include="__WIP\UserGroupUser.cs" />
     <Compile Include="TableTypes\UserodApptView.cs" />
     <Compile Include="__WIP\UserPreference.cs" />
@@ -1100,7 +1100,7 @@
     <Compile Include="TableTypes\EhrNotPerformed.cs" />
     <Compile Include="TableTypes\EhrCode.cs" />
     <Compile Include="TableTypes\Loinc.cs" />
-    <Compile Include="__WIP\SecurityLogHash.cs" />
+    <Compile Include="Data\SecurityLogHash.cs" />
     <Compile Include="TableTypes\FamilyHealth.cs" />
     <Compile Include="TableTypes\PatientRace.cs" />
     <Compile Include="TableTypes\Snomed.cs" />
@@ -1160,8 +1160,8 @@
     <Compile Include="TableTypes\EtransMessageText.cs" />
     <Compile Include="TableTypes\InsFilingCode.cs" />
     <Compile Include="TableTypes\InsFilingCodeSubtype.cs" />
-    <Compile Include="__WIP\PayPeriodInterval.cs" />
-    <Compile Include="__WIP\TimeCardRule.cs" />
+    <Compile Include="Data\PayPeriodInterval.cs" />
+    <Compile Include="Data\TimeCardRule.cs" />
     <Compile Include="TableTypes\VaccineDef.cs" />
     <Compile Include="TableTypes\VaccinePat.cs" />
     <Compile Include="TableTypes\Vitalsign.cs" />
@@ -1252,7 +1252,7 @@
     <Compile Include="TableTypes\ClaimValCodeLog.cs" />
     <Compile Include="TableTypes\Clearinghouse.cs" />
     <Compile Include="TableTypes\Clinic.cs" />
-    <Compile Include="__WIP\ClockEvent.cs" />
+    <Compile Include="Data\ClockEvent.cs" />
     <Compile Include="TableTypes\Commlog.cs" />
     <Compile Include="Data\Computer.cs" />
     <Compile Include="TableTypes\ComputerPref.cs" />
@@ -1301,7 +1301,7 @@
     <Compile Include="Data\Employee.cs" />
     <Compile Include="TableTypes\Employer.cs" />
     <Compile Include="TableTypes\Fee.cs" />
-    <Compile Include="__WIP\UserGroupPermission.cs" />
+    <Compile Include="Data\UserGroupPermission.cs" />
     <Compile Include="TableTypes\InsPlan.cs" />
     <Compile Include="TableTypes\InstructorOld.cs" />
     <Compile Include="Db\Interval.cs" />
@@ -1318,7 +1318,7 @@
     <Compile Include="TableTypes\PatientNote.cs" />
     <Compile Include="TableTypes\PatPlan.cs" />
     <Compile Include="TableTypes\Payment.cs" />
-    <Compile Include="__WIP\PayPeriod.cs" />
+    <Compile Include="Data\PayPeriod.cs" />
     <Compile Include="TableTypes\PayPlan.cs" />
     <Compile Include="TableTypes\PayPlanCharge.cs" />
     <Compile Include="TableTypes\PaySplit.cs" />
