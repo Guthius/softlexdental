@@ -48,7 +48,6 @@ namespace OpenDental {
 		private void userControlSecurityTabs_AddUserGroupClick(object sender,SecurityEventArgs e) {
 			UserGroup group = new UserGroup();
 			FormUserGroupEdit FormU = new FormUserGroupEdit(group);
-			FormU.IsNew=true;
 			FormU.ShowDialog();
 			if(FormU.DialogResult == DialogResult.OK) {
 				userControlSecurityTabs.FillListUserGroupTabUserGroups();//update to reflect changes that were made in FormUserGroupEdit.
