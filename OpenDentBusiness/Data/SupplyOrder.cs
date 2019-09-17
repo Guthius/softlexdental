@@ -34,7 +34,7 @@ namespace OpenDentBusiness
         /// <summary>
         /// The ID of the user that placed the order.
         /// </summary>
-        public long UserId;
+        public long? UserId;
 
         /// <summary>
         /// The date the order was placed. Null when the order is started but has not yet been placed.
@@ -66,7 +66,7 @@ namespace OpenDentBusiness
             {
                 Id = (long)dataReader["id"],
                 SupplierId = (long)dataReader["supplier_id"],
-                UserId = (long)dataReader["user_id"],
+                UserId = dataReader["user_id"] as long?,
                 DatePlaced = dataReader["date_placed"] as DateTime?,
                 Note = (string)dataReader["note"],
                 AmountTotal = (double)dataReader["amount_total"],
@@ -100,7 +100,7 @@ namespace OpenDentBusiness
                 "INSERT INTO `supply_orders` (`supplier_id`, `user_id`, `date_placed`, `note`, `amount_total`, `shipping_charge`) " +
                 "VALUES (?supplier_id, ?user_id, ?date_placed, ?note, ?amount_total, ?shipping_charge)",
                     new MySqlParameter("supplier_id", supplyOrder.SupplierId),
-                    new MySqlParameter("user_id", supplyOrder.SupplierId),
+                    new MySqlParameter("user_id", supplyOrder.UserId.HasValue ? (object)supplyOrder.UserId : DBNull.Value),
                     new MySqlParameter("date_placed", supplyOrder.DatePlaced.HasValue ? (object)supplyOrder.DatePlaced : DBNull.Value),
                     new MySqlParameter("note", supplyOrder.Note ?? ""),
                     new MySqlParameter("amount_total", supplyOrder.AmountTotal),
@@ -115,7 +115,7 @@ namespace OpenDentBusiness
                 "UPDATE `supply_orders` SET `supplier_id` = ?supplier_id, `user_id` = ?user_id, `date_placed` = ?date_placed, `note` = ?note, " +
                 "`amount_total` = ?amount_total, `shipping_charge` = ?shipping_charge WHERE `id` = ?id",
                     new MySqlParameter("supplier_id", supplyOrder.SupplierId),
-                    new MySqlParameter("user_id", supplyOrder.SupplierId),
+                    new MySqlParameter("user_id", supplyOrder.UserId.HasValue ? (object)supplyOrder.UserId : DBNull.Value),
                     new MySqlParameter("date_placed", supplyOrder.DatePlaced.HasValue ? (object)supplyOrder.DatePlaced : DBNull.Value),
                     new MySqlParameter("note", supplyOrder.Note ?? ""),
                     new MySqlParameter("amount_total", supplyOrder.AmountTotal),
