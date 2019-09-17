@@ -173,5 +173,16 @@ namespace OpenDentBusiness
         public const string Billing = "";
         public const string Backup = "";
         public const string TimecardDeleteEntry = "";
+
+        /// <summary>
+        /// Indicates changes were made to the patient allergies list.
+        /// </summary>
+        public const string PatientAlergyListEdited = "patient_alergy_list_edited";
+
+
+        /// <summary>
+        /// Logs when aging is being ran and from where.
+        /// </summary>
+        public const string AgingRan = "aging_ran"; // Aging Ran
     }
 }

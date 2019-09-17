@@ -24,9 +24,12 @@ namespace OpenDental
 {
     public partial class FormAllergyEdit : FormBase
     {
-        List<AllergyDef> allergiesList;
-        Snomed snomedReaction;
+        private List<AllergyDef> allergies;
+        private Snomed snomedReaction;
 
+        /// <summary>
+        /// Gets or sets the allergy being edited.
+        /// </summary>
         public Allergy Allergy { get; set; }
 
         /// <summary>
@@ -40,9 +43,9 @@ namespace OpenDental
         private void FormAllergyEdit_Load(object sender, EventArgs e)
         {
             int allergyIndex = 0;
-            allergiesList = AllergyDefs.GetAll(false);
+            allergies = AllergyDefs.GetAll(false);
 
-            if (allergiesList.Count < 1)
+            if (allergies.Count < 1)
             {
                 MessageBox.Show(
                     "Need to set up at least one Allergy from EHR setup window.",
@@ -54,10 +57,10 @@ namespace OpenDental
                 return;
             }
 
-            for (int i = 0; i < allergiesList.Count; i++)
+            for (int i = 0; i < allergies.Count; i++)
             {
-                allergyComboBox.Items.Add(allergiesList[i].Description);
-                if (!Allergy.IsNew && allergiesList[i].Id == Allergy.AllergyDefNum)
+                allergyComboBox.Items.Add(allergies[i].Description);
+                if (!Allergy.IsNew && allergies[i].Id == Allergy.AllergyDefNum)
                 {
                     allergyIndex = i;
                 }
@@ -98,6 +101,7 @@ namespace OpenDental
             using (var formSnomeds = new FormSnomeds())
             {
                 formSnomeds.IsSelectionMode = true;
+
                 if (formSnomeds.ShowDialog() == DialogResult.OK)
                 {
                     snomedReaction = formSnomeds.SelectedSnomed;
@@ -139,8 +143,8 @@ namespace OpenDental
             Allergies.Delete(Allergy.AllergyNum);
 
             SecurityLog.Write(
-                Permissions.PatAllergyListEdit, 
-                Allergy.PatNum, 
+                Allergy.PatNum,
+                SecurityLogEvents.PatientAlergyListEdited, 
                 string.Format(
                     Translation.LanguageSecurity.GenericItemDeleted, 
                     AllergyDefs.GetDescription(Allergy.AllergyDefNum)));
@@ -169,7 +173,7 @@ namespace OpenDental
             }
 
             Allergy.DateAdverseReaction = dateTime;
-            Allergy.AllergyDefNum = allergiesList[allergyComboBox.SelectedIndex].Id;
+            Allergy.AllergyDefNum = allergies[allergyComboBox.SelectedIndex].Id;
             Allergy.Reaction = reactionTextBox.Text;
             Allergy.SnomedReaction = snomedReaction?.SnomedCode ?? "";
             Allergy.StatusIsActive = activeCheckBox.Checked;
@@ -179,8 +183,8 @@ namespace OpenDental
                 Allergies.Insert(Allergy);
 
                 SecurityLog.Write(
-                    Permissions.PatAllergyListEdit, 
                     Allergy.PatNum,
+                    SecurityLogEvents.PatientAlergyListEdited,
                     string.Format(
                         Translation.LanguageSecurity.GenericItemAdded,
                         AllergyDefs.GetDescription(Allergy.AllergyDefNum)));
@@ -190,8 +194,8 @@ namespace OpenDental
                 Allergies.Update(Allergy);
 
                 SecurityLog.Write(
-                    Permissions.PatAllergyListEdit, 
                     Allergy.PatNum,
+                    SecurityLogEvents.PatientAlergyListEdited,
                     string.Format(
                         Translation.LanguageSecurity.GenericItemModified,
                         AllergyDefs.GetDescription(Allergy.AllergyDefNum)));

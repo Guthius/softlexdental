@@ -26,47 +26,50 @@ namespace OpenDental
 {
     public partial class FormAdjustmentPicker : FormBase
     {
-        readonly bool unattachedMode;
-        readonly long patientId;
-        List<Adjustment> adjustmentList;
-        List<Adjustment> adjustmentListFiltered;
+        private readonly bool unattachedMode;
+        private readonly long patientId;
+        private List<Adjustment> adjustments;
+        private List<Adjustment> adjustmentsFiltered;
 
-        public Adjustment SelectedAdjustment;
+        /// <summary>
+        /// Gets or sets the selected adjustment.
+        /// </summary>
+        public Adjustment SelectedAdjustment { get; set; }
 
-        public FormAdjustmentPicker(long patientId, bool unattachedMode = false, List<Adjustment> adjustmentList = null)
+        public FormAdjustmentPicker(long patientId, bool unattachedMode = false, List<Adjustment> adjustments = null)
         {
             InitializeComponent();
 
             this.patientId = patientId;
             this.unattachedMode = unattachedMode;
-            this.adjustmentList = adjustmentList;
+            this.adjustments = adjustments;
         }
 
         void LoadAdjustments()
         {
-            adjustmentListFiltered = adjustmentList;
+            adjustmentsFiltered = adjustments;
             if (unattachedCheckBox.Checked)
             {
-                adjustmentListFiltered = adjustmentList.FindAll(x => x.ProcNum == 0);
+                adjustmentsFiltered = adjustments.FindAll(x => x.ProcNum == 0);
             }
 
             adjustmentGrid.BeginUpdate();
             adjustmentGrid.Columns.Clear();
-            adjustmentGrid.Columns.Add(new ODGridColumn("Date", 90));
+            adjustmentGrid.Columns.Add(new ODGridColumn(Translation.Language.ColumnDate, 90));
             adjustmentGrid.Columns.Add(new ODGridColumn("PatNum", 100));
-            adjustmentGrid.Columns.Add(new ODGridColumn("Type", 120));
-            adjustmentGrid.Columns.Add(new ODGridColumn("Amount", 70));
+            adjustmentGrid.Columns.Add(new ODGridColumn(Translation.Language.ColumnType, 120));
+            adjustmentGrid.Columns.Add(new ODGridColumn(Translation.Language.ColumnAmount, 70));
             adjustmentGrid.Columns.Add(new ODGridColumn("Has Proc", 0, HorizontalAlignment.Center));
             adjustmentGrid.Rows.Clear();
 
-            foreach (var adjustment in adjustmentListFiltered)
+            foreach (var adjustment in adjustmentsFiltered)
             {
                 var row = new ODGridRow();
 
                 row.Cells.Add(adjustment.AdjDate.ToShortDateString());
                 row.Cells.Add(adjustment.PatNum.ToString());
                 row.Cells.Add(Defs.GetName(DefinitionCategory.AdjTypes, adjustment.AdjType));
-                row.Cells.Add(adjustment.AdjAmt.ToString("F"));
+                row.Cells.Add(adjustment.AdjAmt.ToString("f"));
                 row.Cells.Add(adjustment.ProcNum != 0 ? "X" : "");
                 row.Tag = adjustment;
 
@@ -83,9 +86,9 @@ namespace OpenDental
                 unattachedCheckBox.Enabled = false;
             }
 
-            if (adjustmentList == null)
+            if (adjustments == null)
             {
-                adjustmentList = Adjustments.Refresh(patientId).ToList();
+                adjustments = Adjustments.Refresh(patientId).ToList();
             }
 
             LoadAdjustments();
@@ -97,7 +100,7 @@ namespace OpenDental
         
         void AcceptButton_Click(object sender, EventArgs e)
         {
-            SelectedAdjustment = adjustmentListFiltered[adjustmentGrid.GetSelectedIndex()];
+            SelectedAdjustment = adjustmentsFiltered[adjustmentGrid.GetSelectedIndex()];
 
             DialogResult = DialogResult.OK;
         }

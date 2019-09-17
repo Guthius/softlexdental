@@ -291,14 +291,6 @@ namespace OpenDentBusiness
         public const string PatMedicationListEdit = "pat_medication_list_edit"; // Pat Medication List Edit
 
         /// <summary>
-        /// There is no user interface in the security window for this permission.
-        /// It is only used for tracking.
-        /// Tracks creation and editing of patient allergies.
-        /// </summary>
-        [Obsolete("Audit.")]
-        public const string PatAllergyListEdit = "pat_allergy_list_edit"; // Pat Allergy List Edit
-
-        /// <summary>
         /// There is no user interface in the security window for this permission. 
         /// It is only used for tracking.
         /// Tracks creation and editing of patient family health history.
@@ -767,11 +759,7 @@ namespace OpenDentBusiness
         [Obsolete("Audit.")]
         public const string CreditCardMove = "credit_card_move"; // Credit Card Moved
 
-        /// <summary>
-        /// Logs when aging is being ran and from where.
-        /// </summary>
-        [Obsolete("Audit.")]
-        public const string AgingRan = "aging_ran"; // Aging Ran
+
 
         /// <summary>
         /// Logging into patient portal. Used for audit trail only.

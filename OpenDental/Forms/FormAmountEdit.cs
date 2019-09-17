@@ -23,7 +23,7 @@ namespace OpenDental
 {
     public partial class FormAmountEdit : FormBase
     {
-        readonly string text;
+        private readonly string text;
 
         public decimal Amount;
 
@@ -51,9 +51,6 @@ namespace OpenDental
             amountTextBox.Text = Amount.ToString("N2");
         }
 
-        void AcceptButton_Click(object sender, EventArgs e)
-        {
-            DialogResult = DialogResult.OK;
-        }
+        void AcceptButton_Click(object sender, EventArgs e) => DialogResult = DialogResult.OK;
     }
 }

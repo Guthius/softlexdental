@@ -532,7 +532,7 @@
     <Compile Include="__WIP\FormClockEventEdit.Designer.cs">
       <DependentUpon>FormClockEventEdit.cs</DependentUpon>
     </Compile>
-    <Compile Include="__WIP\FormPayPeriodEdit.Designer.cs">
+    <Compile Include="Forms\FormPayPeriodEdit.Designer.cs">
       <DependentUpon>FormPayPeriodEdit.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms WIP\FormPaySplitEdit.designer.cs">
@@ -1351,10 +1351,10 @@
     <Compile Include="Forms WIP\FormOrthoChartTabEdit.designer.cs">
       <DependentUpon>FormOrthoChartTabEdit.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms WIP\FormAdjustmentPicker.cs">
+    <Compile Include="Forms\FormAdjustmentPicker.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms WIP\FormAdjustmentPicker.designer.cs">
+    <Compile Include="Forms\FormAdjustmentPicker.designer.cs">
       <DependentUpon>FormAdjustmentPicker.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms WIP\FormDefinitionPicker.cs">
@@ -1384,7 +1384,7 @@
     <Compile Include="Forms WIP\FormDecimalSettings.designer.cs">
       <DependentUpon>FormDecimalSettings.cs</DependentUpon>
     </Compile>
-    <Compile Include="__WIP\FormPayPeriodManager.cs">
+    <Compile Include="Forms\FormPayPeriodManager.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms WIP\FormApptReminderRuleEdit.cs">
@@ -1663,10 +1663,10 @@
     <Compile Include="Forms WIP\FormEhrMeasureEvents.designer.cs">
       <DependentUpon>FormEhrMeasureEvents.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms WIP\FormAmountEdit.cs">
+    <Compile Include="Forms\FormAmountEdit.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms WIP\FormAmountEdit.designer.cs">
+    <Compile Include="Forms\FormAmountEdit.designer.cs">
       <DependentUpon>FormAmountEdit.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms WIP\FormPayPlanRecalculate.cs">
@@ -2938,16 +2938,16 @@
     <Compile Include="Forms WIP\FormRxAlertEdit.designer.cs">
       <DependentUpon>FormRxAlertEdit.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms WIP\FormAllergyEdit.cs">
+    <Compile Include="Forms\FormAllergyEdit.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms WIP\FormAllergyEdit.designer.cs">
+    <Compile Include="Forms\FormAllergyEdit.designer.cs">
       <DependentUpon>FormAllergyEdit.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms WIP\FormAllergySetup.cs">
+    <Compile Include="Forms\FormAllergySetup.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms WIP\FormAllergySetup.designer.cs">
+    <Compile Include="Forms\FormAllergySetup.designer.cs">
       <DependentUpon>FormAllergySetup.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms WIP\FormIcd9Edit.cs">
@@ -4145,7 +4145,7 @@
     <Compile Include="Forms WIP\FormPayment.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="__WIP\FormPayPeriodEdit.cs">
+    <Compile Include="Forms\FormPayPeriodEdit.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="__WIP\FormTimeCardSetup.cs">
@@ -4808,7 +4808,7 @@
     <Compile Include="User Controls\ValidTime.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="__WIP\FormPayPeriodManager.Designer.cs">
+    <Compile Include="Forms\FormPayPeriodManager.Designer.cs">
       <DependentUpon>FormPayPeriodManager.cs</DependentUpon>
     </Compile>
     <Compile Include="__WIP\FormTimeCardSetup.Designer.cs">
@@ -5227,7 +5227,7 @@
     <EmbeddedResource Include="Forms WIP\FormOrthoChartTabEdit.resx">
       <DependentUpon>FormOrthoChartTabEdit.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms WIP\FormAdjustmentPicker.resx">
+    <EmbeddedResource Include="Forms\FormAdjustmentPicker.resx">
       <DependentUpon>FormAdjustmentPicker.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms WIP\FormDefinitionPicker.resx">
@@ -5246,7 +5246,7 @@
     <EmbeddedResource Include="Forms WIP\FormDecimalSettings.resx">
       <DependentUpon>FormDecimalSettings.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="__WIP\FormPayPeriodManager.resx">
+    <EmbeddedResource Include="Forms\FormPayPeriodManager.resx">
       <DependentUpon>FormPayPeriodManager.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -5395,7 +5395,7 @@
     <EmbeddedResource Include="Forms WIP\FormEhrMeasureEvents.resx">
       <DependentUpon>FormEhrMeasureEvents.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms WIP\FormAmountEdit.resx">
+    <EmbeddedResource Include="Forms\FormAmountEdit.resx">
       <DependentUpon>FormAmountEdit.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms WIP\FormPayPlanRecalculate.resx">
@@ -6110,11 +6110,11 @@
       <DependentUpon>FormRxAlertEdit.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms WIP\FormAllergyEdit.resx">
+    <EmbeddedResource Include="Forms\FormAllergyEdit.resx">
       <DependentUpon>FormAllergyEdit.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms WIP\FormAllergySetup.resx">
+    <EmbeddedResource Include="Forms\FormAllergySetup.resx">
       <DependentUpon>FormAllergySetup.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -6981,7 +6981,7 @@
       <DependentUpon>FormPayment.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="__WIP\FormPayPeriodEdit.resx">
+    <EmbeddedResource Include="Forms\FormPayPeriodEdit.resx">
       <DependentUpon>FormPayPeriodEdit.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>

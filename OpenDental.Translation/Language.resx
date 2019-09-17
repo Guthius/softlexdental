@@ -867,4 +867,7 @@ Click 'Skip' if you do not wish to finish setting this section up at this time.<
   <data name="YouMustSpecifyAValidDay" xml:space="preserve">
     <value>You must specify a valid day.</value>
   </data>
+  <data name="ColumnDate" xml:space="preserve">
+    <value>Date</value>
+  </data>
 </root>
