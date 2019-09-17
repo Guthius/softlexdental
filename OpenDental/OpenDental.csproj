@@ -901,10 +901,10 @@
     <Compile Include="Forms WIP\FormDatabaseMaintenancePat.designer.cs">
       <DependentUpon>FormDatabaseMaintenancePat.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms WIP\FormGlobalSecurity.cs">
+    <Compile Include="__WIP\FormGlobalSecurity.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms WIP\FormGlobalSecurity.designer.cs">
+    <Compile Include="__WIP\FormGlobalSecurity.designer.cs">
       <DependentUpon>FormGlobalSecurity.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms WIP\FormSecurity.cs">
@@ -4989,7 +4989,7 @@
     <EmbeddedResource Include="Forms WIP\FormDatabaseMaintenancePat.resx">
       <DependentUpon>FormDatabaseMaintenancePat.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms WIP\FormGlobalSecurity.resx">
+    <EmbeddedResource Include="__WIP\FormGlobalSecurity.resx">
       <DependentUpon>FormGlobalSecurity.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms WIP\FormSecurity.resx">

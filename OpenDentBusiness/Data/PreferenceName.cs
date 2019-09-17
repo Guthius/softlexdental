@@ -412,13 +412,13 @@ namespace OpenDentBusiness
         ///<summary>For Ontario Dental Association fee schedules.</summary>
         CanadaODAMemberPass,
         ///<summary>Boolean.  0 by default.  If enabled, only CEMT can edit certain security settings.  Currently only used for global lock date.</summary>
-        CentralManagerSecurityLock,
+        [Obsolete] CentralManagerSecurityLock,
         ///<summary>This is the hash of the password that is needed to open the Central Manager tool.</summary>
-        CentralManagerPassHash,
+        [Obsolete] CentralManagerPassHash,
         ///<summary>This is the salt that is prepended to the password when hashing.  It provides an extra layer of security.</summary>
-        CentralManagerPassSalt,
+        [Obsolete] CentralManagerPassSalt,
         ///<summary>Blank by default.  Contains a key for the CEMT.  Each CEMT database contains a unique sync code.  Syncing from the CEMT will skip any databases without the correct sync code.</summary>
-        CentralManagerSyncCode,
+        [Obsolete] CentralManagerSyncCode,
         ///<summary>Deprecated.</summary>
         ChartQuickAddHideAmalgam,
         ///<summary>Deprecated. If set to true (1), then after adding a proc, a row will be added to datatable instead of rebuilding entire datatable by making queries to the database.
@@ -1322,10 +1322,12 @@ namespace OpenDentBusiness
         SecurityGroupForInstructors,
         ///<summary>UserGroupNum for Students.  Set only for dental schools in dental school setup.</summary>
         SecurityGroupForStudents,
-        SecurityLockDate,
+
+        [Obsolete] SecurityLockDate,
         ///<summary>Set to 0 to always grant permission. 1 means only today.</summary>
-        SecurityLockDays,
-        SecurityLockIncludesAdmin,
+        [Obsolete] SecurityLockDays,
+
+        [Obsolete] SecurityLockIncludesAdmin,
         ///<summary>Set to 0 to disable auto logoff.</summary>
         SecurityLogOffAfterMinutes,
         SecurityLogOffWithWindows,

@@ -143,7 +143,7 @@ namespace OpenDentBusiness
         /// <param name="permission">The permission.</param>
         /// <param name="externalId"></param>
         /// <returns></returns>
-        public static bool HasPermission(long userGroupId, string permission, long? externalId) =>
+        public static bool HasPermission(long userGroupId, string permission, long? externalId = null) =>
             cache.Any(
                 groupPermission => 
                     groupPermission.UserGroupId == userGroupId && 
@@ -157,7 +157,7 @@ namespace OpenDentBusiness
         /// <param name="permission">The permission.</param>
         /// <param name="externalId"></param>
         /// <returns></returns>
-        public static bool HasPermission(User user, string permission, long? externalId) =>
+        public static bool HasPermission(User user, string permission, long? externalId = null) =>
             cache.Any(
                 groupPermission =>
                     groupPermission.Permission == permission &&

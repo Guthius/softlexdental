@@ -32,6 +32,11 @@ namespace OpenDentBusiness
         public string Description;
 
         /// <summary>
+        /// Returns a string representation of the user group.
+        /// </summary>
+        public override string ToString() => Description;
+
+        /// <summary>
         /// Constructs a new instance of the <see cref="UserGroup"/> class.
         /// </summary>
         /// <param name="dataReader">The data reader containing record data.</param>
