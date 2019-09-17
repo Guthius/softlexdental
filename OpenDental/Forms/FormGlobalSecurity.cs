@@ -188,8 +188,6 @@ namespace OpenDental
                 Preference.Update(PreferenceName.PasswordsWeakChangeToStrong, forceChangeWeakPasswordsCheckBox.Checked) |
                 Preference.Update(PreferenceName.SecurityLogOffAfterMinutes, autoLogoffMinutes) |
                 Preference.Update(PreferenceName.DomainLoginPath, domainPathTextBox.Text) |
-                Preference.Update(PreferenceName.DomainLoginPath, domainPathTextBox.Text) |
-                Preference.Update(PreferenceName.DomainLoginPath, domainPathTextBox.Text) |
                 Preference.Update(PreferenceName.DomainLoginEnabled, domainEnabledCheckBox.Checked) |
                 Preference.Update(PreferenceName.DefaultUserGroup, userGroupId) |
                 Preference.Update(PreferenceName.PasswordsMustBeStrong, passwordsMustBeStrongCheckBox.Checked) |
