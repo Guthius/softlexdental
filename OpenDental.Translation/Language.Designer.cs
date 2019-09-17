@@ -244,6 +244,15 @@ namespace OpenDental.Translation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cannot delete user group that is set as the default user group..
+        /// </summary>
+        public static string CannotDeleteDefaultUserGroup {
+            get {
+                return ResourceManager.GetString("CannotDeleteDefaultUserGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cannot delete the e-mail address because it is used by clinic {0}..
         /// </summary>
         public static string CannotDeleteMailAddressInUseByClinic {
@@ -1709,6 +1718,15 @@ namespace OpenDental.Translation {
         public static string UpdatesNotAllowedOnReplicationServer {
             get {
                 return ResourceManager.GetString("UpdatesNotAllowedOnReplicationServer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User Group.
+        /// </summary>
+        public static string UserGroup {
+            get {
+                return ResourceManager.GetString("UserGroup", resourceCulture);
             }
         }
         

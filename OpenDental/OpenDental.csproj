@@ -590,7 +590,7 @@
     <Compile Include="Forms WIP\FormUpdateSetup.Designer.cs">
       <DependentUpon>FormUpdateSetup.cs</DependentUpon>
     </Compile>
-    <Compile Include="__WIP\FormUserPassword.Designer.cs">
+    <Compile Include="Forms\FormUserPassword.Designer.cs">
       <DependentUpon>FormUserPassword.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms WIP\FormInsHistSetup.cs">
@@ -1834,6 +1834,9 @@
     <Compile Include="Forms WIP\FormTreatPlanDiscount.designer.cs">
       <DependentUpon>FormTreatPlanDiscount.cs</DependentUpon>
     </Compile>
+    <Compile Include="__WIP\FormUserGroupEdit.Designer.cs">
+      <DependentUpon>FormUserGroupEdit.cs</DependentUpon>
+    </Compile>
     <Compile Include="__WIP\FormUserGroupPicker.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -3016,10 +3019,10 @@
     <Compile Include="Forms WIP\FormCreditCardManage.designer.cs">
       <DependentUpon>FormCreditCardManage.cs</DependentUpon>
     </Compile>
-    <Compile Include="__WIP\FormUserPick.cs">
+    <Compile Include="Forms\FormUserPick.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="__WIP\FormUserPick.designer.cs">
+    <Compile Include="Forms\FormUserPick.designer.cs">
       <DependentUpon>FormUserPick.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms WIP\FormTaskNoteEdit.cs">
@@ -4388,7 +4391,7 @@
     <Compile Include="__WIP\FormUserGroupEdit.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="__WIP\FormUserPassword.cs">
+    <Compile Include="Forms\FormUserPassword.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms WIP\FormZipCodeEdit.cs">
@@ -6166,7 +6169,7 @@
       <DependentUpon>FormCreditCardManage.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="__WIP\FormUserPick.resx">
+    <EmbeddedResource Include="Forms\FormUserPick.resx">
       <DependentUpon>FormUserPick.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -7305,7 +7308,7 @@
       <DependentUpon>FormUserGroupEdit.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="__WIP\FormUserPassword.resx">
+    <EmbeddedResource Include="Forms\FormUserPassword.resx">
       <DependentUpon>FormUserPassword.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>

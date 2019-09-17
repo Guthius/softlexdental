@@ -822,4 +822,10 @@ Click 'Skip' if you do not wish to finish setting this section up at this time.<
   <data name="PleaseSelectAPatientFirst" xml:space="preserve">
     <value>Please select a patient first.</value>
   </data>
+  <data name="CannotDeleteDefaultUserGroup" xml:space="preserve">
+    <value>Cannot delete user group that is set as the default user group.</value>
+  </data>
+  <data name="UserGroup" xml:space="preserve">
+    <value>User Group</value>
+  </data>
 </root>

@@ -559,9 +559,12 @@ namespace OpenDentBusiness
         DefaultCCProcs,
         DefaultClaimForm,
         DefaultProcedurePlaceService,
-        ///<summary>Long. 0 by default. Used to assign a user group to a new user that is added by a user who does not have the SecurityAdmin user 
-        ///permission.</summary>
+
+        /// <summary>
+        /// Used to assign a user group to a new user that is added by a user who does not have the <see cref="Permissions.SecurityAdmin"/> permission.
+        /// </summary>
         DefaultUserGroup,
+
         ///<summary>Boolean. Set to true by default. When true, patient fields that do not have a matching patient field def will display at the bottom
         ///of the patient fields with gray text.</summary>
         DisplayRenamedPatFields,
