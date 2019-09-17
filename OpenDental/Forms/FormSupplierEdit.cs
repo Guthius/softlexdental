@@ -1,3 +1,20 @@
+/**
+ * Copyright (C) 2019 Dental Stars SRL
+ * Copyright (C) 2003-2019 Jordan S. Sparks, D.M.D.
+ * 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; If not, see <http://www.gnu.org/licenses/>
+ */
 using OpenDentBusiness;
 using System;
 using System.Windows.Forms;
@@ -6,7 +23,10 @@ namespace OpenDental
 {
     public partial class FormSupplierEdit : FormBase
     {
-        public Supplier Supp;
+        /// <summary>
+        /// Gets or sets the supplier.
+        /// </summary>
+        public Supplier Supplier { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FormSupplierEdit"/> class.
@@ -18,13 +38,13 @@ namespace OpenDental
         /// </summary>
         void FormSupplierEdit_Load(object sender, EventArgs e)
         {
-            nameTextBox.Text = Supp.Name;
-            phoneTextBox.Text = Supp.Phone;
-            customerIdTextBox.Text = Supp.CustomerId;
-            textWebsite.Text = Supp.Website;
-            userNameTextBox.Text = Supp.UserName;
-            passwordTextBox.Text = Supp.Password;
-            noteTextBox.Text = Supp.Note;
+            nameTextBox.Text = Supplier.Name;
+            phoneTextBox.Text = Supplier.Phone;
+            customerIdTextBox.Text = Supplier.CustomerId;
+            textWebsite.Text = Supplier.Website;
+            userNameTextBox.Text = Supplier.UserName;
+            passwordTextBox.Text = Supplier.Password;
+            noteTextBox.Text = Supplier.Note;
         }
 
         /// <summary>
@@ -32,7 +52,7 @@ namespace OpenDental
         /// </summary>
         void DeleteButton_Click(object sender, EventArgs e)
         {
-            if (Supp.SupplierNum == 0)
+            if (Supplier.SupplierNum == 0)
             {
                 DialogResult = DialogResult.Cancel;
                 return;
@@ -49,12 +69,12 @@ namespace OpenDental
 
             try
             {
-                Suppliers.DeleteObject(Supp);
+                Suppliers.DeleteObject(Supplier);
             }
-            catch (ApplicationException ex)
+            catch (Exception exception)
             {
                 MessageBox.Show(
-                    ex.Message,
+                    exception.Message,
                     Translation.Language.Supplier, 
                     MessageBoxButtons.OK, 
                     MessageBoxIcon.Error);
@@ -82,21 +102,21 @@ namespace OpenDental
                 return;
             }
 
-            Supp.Name = name;
-            Supp.Phone = phoneTextBox.Text;
-            Supp.CustomerId = customerIdTextBox.Text;
-            Supp.Website = textWebsite.Text;
-            Supp.UserName = userNameTextBox.Text;
-            Supp.Password = passwordTextBox.Text;
-            Supp.Note = noteTextBox.Text;
+            Supplier.Name = name;
+            Supplier.Phone = phoneTextBox.Text;
+            Supplier.CustomerId = customerIdTextBox.Text;
+            Supplier.Website = textWebsite.Text;
+            Supplier.UserName = userNameTextBox.Text;
+            Supplier.Password = passwordTextBox.Text;
+            Supplier.Note = noteTextBox.Text;
 
-            if (Supp.SupplierNum == 0)
+            if (Supplier.SupplierNum == 0)
             {
-                Suppliers.Insert(Supp);
+                Suppliers.Insert(Supplier);
             }
             else
             {
-                Suppliers.Update(Supp);
+                Suppliers.Update(Supplier);
             }
 
             DialogResult = DialogResult.OK;

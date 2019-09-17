@@ -2653,10 +2653,10 @@
     <Compile Include="Forms WIP\FormHL7Defs.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms WIP\FormSupplyOrders.cs">
+    <Compile Include="__WIP\FormSupplyOrders.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms WIP\FormSupplyOrders.designer.cs">
+    <Compile Include="__WIP\FormSupplyOrders.designer.cs">
       <DependentUpon>FormSupplyOrders.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms WIP\FormEtrans835Edit.cs">
@@ -3538,52 +3538,52 @@
     <Compile Include="Forms WIP\FormPopupDisplay.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms WIP\FormSupplyOrderItemEdit.cs">
+    <Compile Include="__WIP\FormSupplyOrderItemEdit.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms WIP\FormSupplyOrderItemEdit.Designer.cs">
+    <Compile Include="__WIP\FormSupplyOrderItemEdit.Designer.cs">
       <DependentUpon>FormSupplyOrderItemEdit.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms WIP\FormSupplies.cs">
+    <Compile Include="__WIP\FormSupplies.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms WIP\FormSupplies.Designer.cs">
+    <Compile Include="__WIP\FormSupplies.Designer.cs">
       <DependentUpon>FormSupplies.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms WIP\FormSupplyOrderEdit.cs">
+    <Compile Include="__WIP\FormSupplyOrderEdit.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms WIP\FormSupplyOrderEdit.Designer.cs">
+    <Compile Include="__WIP\FormSupplyOrderEdit.Designer.cs">
       <DependentUpon>FormSupplyOrderEdit.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms WIP\FormSupplyEdit.cs">
+    <Compile Include="__WIP\FormSupplyEdit.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms WIP\FormSupplyEdit.Designer.cs">
+    <Compile Include="__WIP\FormSupplyEdit.Designer.cs">
       <DependentUpon>FormSupplyEdit.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms WIP\FormSupplierEdit.cs">
+    <Compile Include="__WIP\FormSupplierEdit.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms WIP\FormSupplierEdit.Designer.cs">
+    <Compile Include="__WIP\FormSupplierEdit.Designer.cs">
       <DependentUpon>FormSupplierEdit.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms WIP\FormSuppliers.cs">
+    <Compile Include="__WIP\FormSuppliers.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms WIP\FormSuppliers.Designer.cs">
+    <Compile Include="__WIP\FormSuppliers.Designer.cs">
       <DependentUpon>FormSuppliers.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms WIP\FormSupplyNeededEdit.cs">
+    <Compile Include="__WIP\FormSupplyNeededEdit.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms WIP\FormSupplyNeededEdit.Designer.cs">
+    <Compile Include="__WIP\FormSupplyNeededEdit.Designer.cs">
       <DependentUpon>FormSupplyNeededEdit.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms WIP\FormSupplyInventory.cs">
+    <Compile Include="__WIP\FormSupplyInventory.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms WIP\FormSupplyInventory.Designer.cs">
+    <Compile Include="__WIP\FormSupplyInventory.Designer.cs">
       <DependentUpon>FormSupplyInventory.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms WIP\FormImageSelect.cs">
@@ -5916,7 +5916,7 @@
       <DependentUpon>FormHL7Defs.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms WIP\FormSupplyOrders.resx">
+    <EmbeddedResource Include="__WIP\FormSupplyOrders.resx">
       <DependentUpon>FormSupplyOrders.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms WIP\FormEtrans835Edit.resx">
@@ -6214,35 +6214,35 @@
       <DependentUpon>FormPopupDisplay.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms WIP\FormSupplyOrderItemEdit.resx">
+    <EmbeddedResource Include="__WIP\FormSupplyOrderItemEdit.resx">
       <DependentUpon>FormSupplyOrderItemEdit.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms WIP\FormSupplies.resx">
+    <EmbeddedResource Include="__WIP\FormSupplies.resx">
       <DependentUpon>FormSupplies.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms WIP\FormSupplyOrderEdit.resx">
+    <EmbeddedResource Include="__WIP\FormSupplyOrderEdit.resx">
       <DependentUpon>FormSupplyOrderEdit.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms WIP\FormSupplyEdit.resx">
+    <EmbeddedResource Include="__WIP\FormSupplyEdit.resx">
       <DependentUpon>FormSupplyEdit.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms WIP\FormSupplierEdit.resx">
+    <EmbeddedResource Include="__WIP\FormSupplierEdit.resx">
       <DependentUpon>FormSupplierEdit.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms WIP\FormSuppliers.resx">
+    <EmbeddedResource Include="__WIP\FormSuppliers.resx">
       <DependentUpon>FormSuppliers.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms WIP\FormSupplyNeededEdit.resx">
+    <EmbeddedResource Include="__WIP\FormSupplyNeededEdit.resx">
       <DependentUpon>FormSupplyNeededEdit.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms WIP\FormSupplyInventory.resx">
+    <EmbeddedResource Include="__WIP\FormSupplyInventory.resx">
       <DependentUpon>FormSupplyInventory.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>

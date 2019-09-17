@@ -283,25 +283,25 @@ namespace OpenDental
 
             using (var formSupplies = new FormSupplies())
             {
-                formSupplies.IsSelectMode = true;
-                formSupplies.SelectedSupplierNum = ordersList[ordersGrid.GetSelectedIndex()].SupplierNum;
+                formSupplies.IsSelectionMode = true;
+                formSupplies.SelectedSupplierId = ordersList[ordersGrid.GetSelectedIndex()].SupplierNum;
                 if (formSupplies.ShowDialog(this) != DialogResult.OK)
                 {
                     return;
                 }
 
-                for (int i = 0; i < formSupplies.ListSelectedSupplies.Count; i++)
+                for (int i = 0; i < formSupplies.SelectedSupplies.Count; i++)
                 {	
-                    if (orderItemsTable.Rows.OfType<DataRow>().Any(x => PIn.Long(x["SupplyNum"].ToString()) == formSupplies.ListSelectedSupplies[i].SupplyNum))
+                    if (orderItemsTable.Rows.OfType<DataRow>().Any(x => PIn.Long(x["SupplyNum"].ToString()) == formSupplies.SelectedSupplies[i].SupplyNum))
                     {
                         continue;
                     }
 
                     var supplyOrderItem = new SupplyOrderItem
                     {
-                        SupplyNum       = formSupplies.ListSelectedSupplies[i].SupplyNum,
+                        SupplyNum       = formSupplies.SelectedSupplies[i].SupplyNum,
                         Qty             = 1,
-                        Price           = formSupplies.ListSelectedSupplies[i].Price,
+                        Price           = formSupplies.SelectedSupplies[i].Price,
                         SupplyOrderNum  = ordersList[ordersGrid.GetSelectedIndex()].SupplyOrderNum
                     };
 
