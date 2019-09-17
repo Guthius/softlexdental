@@ -645,7 +645,7 @@ namespace OpenDentBusiness
             Crud.ScheduleCrud.Update(sched);
             string command = "DELETE FROM scheduleop WHERE ScheduleNum=" + POut.Long(sched.ScheduleNum);
             Db.NonQ(command);
-            Signalods.SetInvalidSched(sched);
+            // TODO: Signalods.SetInvalidSched(sched);
             sched.Ops.ForEach(x => ScheduleOps.Insert(new ScheduleOp { ScheduleNum = sched.ScheduleNum, OperatoryNum = x }));
         }
 
@@ -659,7 +659,7 @@ namespace OpenDentBusiness
             Crud.ScheduleCrud.Update(schedNew, schedOld); //may not cause an update, but we still need to check for updates to ScheduleOps below.
             if (hasSignal)
             {
-                Signalods.SetInvalidSched(schedNew);
+                // TODO: Signalods.SetInvalidSched(schedNew);
             }
             //Sort Ops for SequenceEqual call below.
             schedNew.Ops.Sort();
@@ -710,7 +710,7 @@ namespace OpenDentBusiness
             }
             if (hasSignal)
             {
-                Signalods.SetInvalidSched(arraySchedules);
+                // TODO: Signalods.SetInvalidSched(arraySchedules);
             }
             //Create a new ScheduleOp object for every single OperatoryNum within each schedule's Ops variable.
             List<ScheduleOp> listScheduleOps = arraySchedules.SelectMany(
@@ -785,7 +785,7 @@ namespace OpenDentBusiness
             }
             if (hasSignal)
             {
-                Signalods.SetInvalidSched(sched);
+                // TODO: Signalods.SetInvalidSched(sched);
             }
         }
 
@@ -805,7 +805,7 @@ namespace OpenDentBusiness
             Db.NonQ(command);
             command = "DELETE FROM scheduleop WHERE ScheduleNum IN(" + string.Join(",", listSchedNums) + ")";
             Db.NonQ(command);
-            Signalods.SetInvalidSched(listDeleteSchedules.ToArray());
+            // TODO: Signalods.SetInvalidSched(listDeleteSchedules.ToArray());
         }
 
         ///<summary>Supply a list of all Schedule for one day. Then, this filters out for one type.</summary>
@@ -1054,7 +1054,7 @@ namespace OpenDentBusiness
             //then delete scheduleops for the deleted schedules.
             command = "DELETE FROM scheduleop WHERE ScheduleNum IN(" + schedNumStr + ")";
             Db.NonQ(command);
-            Signalods.SetInvalidSched(date);
+            // TODO: Signalods.SetInvalidSched(date);
         }
 
         public static void ClearBlockoutsForOp(long opNum, DateTime dateClear)
@@ -1070,7 +1070,7 @@ namespace OpenDentBusiness
             Schedules.DeleteOrphanedBlockouts(listSchedOps.Select(x => x.ScheduleNum).ToList());
             Dictionary<DateTime, List<long>> dictOpNumsForDates = new Dictionary<DateTime, List<long>>();
             dictOpNumsForDates[dateClear] = new List<long>() { opNum };
-            Signalods.SetInvalidSchedForOps(dictOpNumsForDates);
+            // TODO: Signalods.SetInvalidSchedForOps(dictOpNumsForDates);
         }
 
         public static void ClearBlockoutsForClinic(long clinicNum, DateTime dateClear)
@@ -1087,7 +1087,7 @@ namespace OpenDentBusiness
             Schedules.DeleteOrphanedBlockouts(listSchedOps.Select(x => x.ScheduleNum).ToList());
             Dictionary<DateTime, List<long>> dictOpNumsForDates = new Dictionary<DateTime, List<long>>();
             dictOpNumsForDates[dateClear] = listSchedOps.Select(x => x.OperatoryNum).ToList();
-            Signalods.SetInvalidSchedForOps(dictOpNumsForDates);
+            // TODO: Signalods.SetInvalidSchedForOps(dictOpNumsForDates);
         }
 
         ///<summary>Will only check for orphaned blockouts for those schedulenums passed in. Inserts an invalid schedule signalod.</summary>
@@ -1594,7 +1594,7 @@ namespace OpenDentBusiness
             {
                 //We supress signal insertion in SyncToDbHelper since we know that this method is only called by SetForDay, we can use the date from the first
                 //sched in either the new or old list (since either, but not both, can be empty at this point) and insert a generalized signal for that date.
-                Signalods.SetInvalidSched(listNew.Concat(listOld).First().SchedDate);
+                // TODO: Signalods.SetInvalidSched(listNew.Concat(listOld).First().SchedDate);
             }
             return isSuccess;
         }
@@ -1689,7 +1689,7 @@ namespace OpenDentBusiness
             DeleteOrphanedBlockouts(table.Select().Select(x => PIn.Long(x["ScheduleNum"].ToString())).Distinct().ToList());
             Dictionary<DateTime, List<long>> dictOpNumsForDates = table.Select().GroupBy(x => PIn.Date(x["SchedDate"].ToString()))
                 .ToDictionary(x => x.Key, x => x.Select(y => PIn.Long(y["OperatoryNum"].ToString())).ToList());
-            Signalods.SetInvalidSchedForOps(dictOpNumsForDates);
+            // TODO: Signalods.SetInvalidSchedForOps(dictOpNumsForDates);
         }
 
         public static int GetDuplicateBlockoutCount()
@@ -1716,7 +1716,7 @@ namespace OpenDentBusiness
             long schedDel = Db.NonQ(command);
             command = "DELETE FROM scheduleop WHERE ScheduleNum IN(" + string.Join(",", listDupSchedNums) + ")";
             long schedOpsDel = Db.NonQ(command);
-            Signalods.SetInvalidSched(listDeleteSchedules.ToArray());
+            // TODO: Signalods.SetInvalidSched(listDeleteSchedules.ToArray());
         }
 
         ///<summary>Set clinicNum to 0 to return 'unassigned' clinics.  Otherwise, filters the data set on the clinic num passed in.

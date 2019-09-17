@@ -937,7 +937,7 @@ namespace OpenDentBusiness
             TaskUnreads.AddUnreads(taskNext, Security.CurrentUser.Id);  //We need the new copy to marked as unread for everyone for when it is "due"
                                                                          //Here we do our best to follow the signal logic in OpenDental namespace.  This may be unneccessary because the copied task isn't due 
                                                                          //for at least a day.  There will already be one signal for the old task being marked due, this is just for the copied task.
-            Signalods.SetInvalid(InvalidType.TaskPopup, KeyType.Task, newTaskNum);
+            // TODO: Signalods.SetInvalid(InvalidType.TaskPopup, KeyType.Task, newTaskNum);
             return taskNext;
         }
 

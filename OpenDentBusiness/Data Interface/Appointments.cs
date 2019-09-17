@@ -2758,7 +2758,7 @@ namespace OpenDentBusiness
 
             InsertIncludeAptNum(appt, false, secUserNum);
 
-            Signalods.SetInvalidAppt(appt);
+            // TODO: Signalods.SetInvalidAppt(appt);
         }
 
         ///<summary>Set includeAptNum to true only in rare situations.  Like when we are inserting for eCW. Inserts an invalid appointment signalod.
@@ -2789,7 +2789,7 @@ namespace OpenDentBusiness
             //ApptComms.InsertForAppt(appt,dayInterval,hourInterval,automationBeginPref,automationEndPref);
             long retVal = Crud.AppointmentCrud.Insert(appt, useExistingPK);
             HistAppointments.CreateHistoryEntry(appt.AptNum, HistAppointmentAction.Created);
-            Signalods.SetInvalidAppt(appt);
+            // TODO: Signalods.SetInvalidAppt(appt);
             return retVal;
         }
 
@@ -2809,7 +2809,7 @@ namespace OpenDentBusiness
             {
                 AlertItems.DeleteFor(AlertType.CallbackRequested, new List<long> { appt.AptNum });
             }
-            Signalods.SetInvalidAppt(appt);
+            // TODO: Signalods.SetInvalidAppt(appt);
             if (newStatus != ApptStatus.Scheduled)
             {
                 //ApptComms.DeleteForAppt(aptNum);//Delete the automated reminder if it was unscheduled.
@@ -2832,7 +2832,7 @@ namespace OpenDentBusiness
                 + "WHERE AptNum=" + POut.Long(appt.AptNum);
             Db.NonQ(command);
             AlertItems.DeleteFor(AlertType.CallbackRequested, new List<long> { appt.AptNum });
-            Signalods.SetInvalidAppt(appt);
+            // TODO: Signalods.SetInvalidAppt(appt);
             HistAppointments.CreateHistoryEntry(appt.AptNum, HistAppointmentAction.Changed);
         }
 
@@ -2842,14 +2842,14 @@ namespace OpenDentBusiness
             string command = "UPDATE appointment SET Priority=" + POut.Int((int)priority)
                 + " WHERE AptNum=" + POut.Long(appt.AptNum);
             Db.NonQ(command);
-            Signalods.SetInvalidAppt(appt);
+            // TODO: Signalods.SetInvalidAppt(appt);
             HistAppointments.CreateHistoryEntry(appt.AptNum, HistAppointmentAction.Changed);
         }
 
         public static void SetAptTimeLocked()
         {
             string command = "UPDATE appointment SET TimeLocked=" + POut.Bool(true);
-            Signalods.SetInvalid(InvalidType.Appointment);
+            // TODO: Signalods.SetInvalid(InvalidType.Appointment);
             Db.NonQ(command);
         }
 
@@ -2875,7 +2875,7 @@ namespace OpenDentBusiness
             {//now the status is not 'Callback'
                 AlertItems.DeleteFor(AlertType.CallbackRequested, new List<long> { appt.AptNum });
             }
-            Signalods.SetInvalidAppt(appt);
+            // TODO: Signalods.SetInvalidAppt(appt);
 
             Plugin.Trigger(null, "Data_Appointment_Confirmed", appt.AptNum, newStatus);
 
@@ -2888,7 +2888,7 @@ namespace OpenDentBusiness
         {
             string command = "UPDATE appointment SET Pattern='" + POut.String(newPattern) + "' WHERE AptNum=" + POut.Long(appt.AptNum);
             Db.NonQ(command);
-            Signalods.SetInvalidAppt(appt);
+            // TODO: Signalods.SetInvalidAppt(appt);
             HistAppointments.CreateHistoryEntry(appt.AptNum, HistAppointmentAction.Changed);
         }
 
@@ -2901,7 +2901,7 @@ namespace OpenDentBusiness
             retval = Crud.AppointmentCrud.Update(appointment, oldAppointment);
             if (retval)
             {
-                Signalods.SetInvalidAppt(appointment, oldAppointment);
+                // TODO: Signalods.SetInvalidAppt(appointment, oldAppointment);
             }
             if (appointment.AptStatus == ApptStatus.UnschedList && appointment.AptStatus != oldAppointment.AptStatus)
             {
@@ -2957,7 +2957,7 @@ namespace OpenDentBusiness
             Db.NonQ(command);
             if (addSignal)
             {
-                Signalods.SetInvalid(InvalidType.Appointment);
+                // TODO: Signalods.SetInvalid(InvalidType.Appointment);
             }
         }
 
@@ -2998,7 +2998,7 @@ namespace OpenDentBusiness
                 SetProcDescript(apt);
                 if (Appointments.Update(apt, aptOld))
                 {
-                    Signalods.SetInvalidAppt(apt, aptOld);
+                    // TODO: Signalods.SetInvalidAppt(apt, aptOld);
                 }
             }
         }
@@ -3235,7 +3235,7 @@ namespace OpenDentBusiness
             Db.NonQ(command);
             if (hasSignal)
             {
-                Signalods.SetInvalidAppt(null, apt);//pass in the old appointment that we are deleting
+                // TODO:  Signalods.SetInvalidAppt(null, apt);//pass in the old appointment that we are deleting
             }
         }
 
@@ -3322,7 +3322,7 @@ namespace OpenDentBusiness
             AlertItems.DeleteFor(AlertType.CallbackRequested, listApts.Select(x => x.AptNum).ToList());
 
             Db.NonQ("DELETE FROM appointment WHERE AptNum IN(" + String.Join(",", listAllAptNums) + ")");
-            Signalods.SetInvalid(InvalidType.Appointment);
+            // TODO: Signalods.SetInvalid(InvalidType.Appointment);
         }
 
         ///<summary>Inserts, updates, or deletes db rows to match listNew.  No need to pass in userNum, it's set before remoting role check and passed to
@@ -3337,13 +3337,13 @@ namespace OpenDentBusiness
             {
                 if (isOpMerge)
                 { //If this is operatory merge the list could be very long.  Just send a generalized, invalid appt signal, this shouldn't happen often anyway.
-                    Signalods.SetInvalid(InvalidType.Appointment);
+                    // TODO: Signalods.SetInvalid(InvalidType.Appointment);
                 }
                 else
                 {
                     foreach (Appointment appt in listNew.Union(listOld).DistinctBy(x => x.AptNum))
                     { //insert a new signal for each unique appt
-                        Signalods.SetInvalidAppt(appt);
+                        // TODO: Signalods.SetInvalidAppt(appt);
                     }
                 }
             }

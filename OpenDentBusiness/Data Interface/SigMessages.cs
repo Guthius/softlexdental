@@ -80,7 +80,7 @@ namespace OpenDentBusiness
             command = "UPDATE sigmessage SET AckDateTime = " + DbHelper.Now() + " "
                 + "WHERE SigMessageNum IN (" + string.Join(",", listSigMessageNums) + ")";
             Db.NonQ(command);
-            listSigMessageNums.ForEach(x => Signalods.SetInvalid(InvalidType.SigMessages, KeyType.SigMessage, x));
+            // TODO: listSigMessageNums.ForEach(x => Signalods.SetInvalid(InvalidType.SigMessages, KeyType.SigMessage, x));
         }
 
         ///<summary>Acknowledge one sig message from the manage module grid.</summary>

@@ -155,7 +155,7 @@ namespace OpenDentBusiness
                     ProcMultiVisits.Insert(pmv);
                 }
             }
-            Signalods.SetInvalid(InvalidType.ProcMultiVisits);
+            // TODO: Signalods.SetInvalid(InvalidType.ProcMultiVisits);
             RefreshCache();
         }
 
@@ -201,7 +201,7 @@ namespace OpenDentBusiness
                 UpdateInProcessForGroup(pmv.GroupProcMultiVisitNum, isGroupInProcess);
             }
             //Always send a signal and refresh the cache in case someone else is going to edit the group soon.
-            Signalods.SetInvalid(InvalidType.ProcMultiVisits);
+            // TODO: Signalods.SetInvalid(InvalidType.ProcMultiVisits);
 
             RefreshCache();
         }

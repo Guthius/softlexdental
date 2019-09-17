@@ -96,20 +96,5 @@ namespace CodeBase.MVC
                 WindowState = previousWindowState;
             }
         }
-
-        /// <summary>
-        /// Base handler for the IODProcessor interface. Wrap it with logging and callback to OnProcess().
-        /// </summary>
-        public void ProcessObjects(List<TProcessor> listObjs)
-        {
-            OnProcessObjects(listObjs);
-        }
-
-        /// <summary>
-        /// Override this if your form cares about object processing.
-        /// </summary>
-        public virtual void OnProcessObjects(List<TProcessor> listObjs)
-        {
-        }
     }
 }

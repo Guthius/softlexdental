@@ -595,7 +595,7 @@ namespace OpenDentBusiness
                 Insert(carrier); //Insert function takes care of logging.
                 if (updateCacheIfNew)
                 {
-                    Signalods.SetInvalid(InvalidType.Carriers);
+                    // TODO: Signalods.SetInvalid(InvalidType.Carriers);
                     RefreshCache();
                 }
             }

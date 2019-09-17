@@ -107,7 +107,7 @@ namespace OpenDentBusiness
                     Count = PIn.Int(x["CountUnread"].ToString()),
                 }).ToList();
             //Insert as structured data signal so all workstations won't have to query the db to get the counts. They will get it directly from Signalod.MsgValue.
-            Signalods.InsertSmsNotification(SmsNotification.GetJsonFromList(ret));
+            // TODO: Signalods.InsertSmsNotification(SmsNotification.GetJsonFromList(ret));
             return ret;
         }
 

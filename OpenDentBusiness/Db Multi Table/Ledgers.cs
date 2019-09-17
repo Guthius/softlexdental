@@ -209,11 +209,17 @@ namespace OpenDentBusiness{
                 }
                 else
                 {
-                    Preference.Update(PreferenceName.AgingBeginDateTime, dtNow);//get lock on pref to block others
-                    Signalods.SetInvalid(InvalidType.Prefs);//signal a cache refresh so other computers will have the updated pref as quickly as possible
-                    Ledgers.ComputeAging(listGuarantorNums, dateAsOf);
+                    Preference.Update(PreferenceName.AgingBeginDateTime, dtNow);
+
+                    CacheManager.InvalidateEverywhere<Preference>();
+
+                    ComputeAging(listGuarantorNums, dateAsOf);
+
                     Preference.Update(PreferenceName.AgingBeginDateTime, "");//clear lock on pref whether aging was successful or not
-                    Signalods.SetInvalid(InvalidType.Prefs);
+
+                    CacheManager.InvalidateEverywhere<Preference>();
+
+                    CacheManager.Invalidate<Preference>();
                 }
             }
             else

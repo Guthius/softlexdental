@@ -28,7 +28,7 @@ namespace OpenDental
     }
 
     ///<summary>Most OD forms extend this class. It does help and signal processing.</summary>
-    public class ODForm : ODFormAbs<Signal>, ISignalProcessor
+    public class ODForm : ODFormAbs<Signal>
     {
         string helpFormName;
 
@@ -51,7 +51,8 @@ namespace OpenDental
 
             Shown += new EventHandler((o, e) =>
             {
-                Signalods.SubscribeSignalProcessor(this);
+                Signal.Process += OnProcessSignals;
+
             });
 
             InitializeHelp();
@@ -102,7 +103,7 @@ namespace OpenDental
 
             if (!e.Handled)
             {
-                OpenDentalHelp.ODHelp.GetManualPage(e.FormName, Preference.GetString(PreferenceName.ProgramVersion));
+                // TODO: OpenDentalHelp.ODHelp.GetManualPage(e.FormName, Preference.GetString(PreferenceName.ProgramVersion));
             }
         }
 
@@ -114,15 +115,8 @@ namespace OpenDental
             }
         }
 
-        ///<summary>Override this if your form cares about signal processing.</summary>
-        public virtual void OnProcessSignals(List<Signal> listObjs)
+        public virtual void OnProcessSignals(IEnumerable<Signal> signals)
         {
-        }
-
-        ///<summary>Seal OnProcessObjects because it is too vague and our engineers are already used to overriding OnProcessSignals.</summary>
-        public sealed override void OnProcessObjects(List<Signal> listObjs)
-        {
-            OnProcessSignals(listObjs);
         }
 
         ///<summary>Call before form is Shown. Adds the given controls to the list of filter controls.

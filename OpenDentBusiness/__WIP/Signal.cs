@@ -409,10 +409,10 @@ namespace OpenDentBusiness
                 signals.Add(
                     new Signal()
                     {
-                        DateViewing = newAppointment.AptDateTime,
-                        IType = InvalidType.Appointment,
                         ExternalId = newAppointment.ProvNum,
-                        FKeyType = KeyType.Provider,
+                        ExternalDate = newAppointment.AptDateTime,
+                        Name = "appointment",
+                        Param1 = "provider",
                     });
                 //  2.New Hyg
                 if (newAppointment.ProvHyg > 0)
@@ -420,10 +420,10 @@ namespace OpenDentBusiness
                     signals.Add(
                         new Signal()
                         {
-                            DateViewing = newAppointment.AptDateTime,
-                            IType = InvalidType.Appointment,
                             ExternalId = newAppointment.ProvHyg,
-                            FKeyType = KeyType.Provider,
+                            ExternalDate = newAppointment.AptDateTime,
+                            Name = "appointment",
+                            Param1 = "provider",
                         });
                 }
                 //  3.New Op
@@ -432,10 +432,10 @@ namespace OpenDentBusiness
                     signals.Add(
                         new Signal()
                         {
-                            DateViewing = newAppointment.AptDateTime,
-                            IType = InvalidType.Appointment,
                             ExternalId = newAppointment.Op,
-                            FKeyType = KeyType.Operatory,
+                            ExternalDate = newAppointment.AptDateTime,
+                            Name = "appointment",
+                            Param1 = "operatory",
                         });
                 }
             }
@@ -448,10 +448,10 @@ namespace OpenDentBusiness
                     signals.Add(
                         new Signal()
                         {
-                            DateViewing = oldAppointment.AptDateTime,
-                            IType = InvalidType.Appointment,
                             ExternalId = oldAppointment.ProvNum,
-                            FKeyType = KeyType.Provider,
+                            ExternalDate = oldAppointment.AptDateTime,
+                            Name = "appointment",
+                            Param1 = "provider",
                         });
                 }
                 //  5.Old Hyg
@@ -460,10 +460,10 @@ namespace OpenDentBusiness
                     signals.Add(
                         new Signal()
                         {
-                            DateViewing = oldAppointment.AptDateTime,
-                            IType = InvalidType.Appointment,
                             ExternalId = oldAppointment.ProvHyg,
-                            FKeyType = KeyType.Provider,
+                            ExternalDate = oldAppointment.AptDateTime,
+                            Name = "appointment",
+                            Param1 = "provider",
                         });
                 }
                 //  6.Old Op
@@ -472,19 +472,15 @@ namespace OpenDentBusiness
                     signals.Add(
                         new Signal()
                         {
-                            DateViewing = oldAppointment.AptDateTime,
-                            IType = InvalidType.Appointment,
                             ExternalId = oldAppointment.Op,
-                            FKeyType = KeyType.Operatory,
+                            ExternalDate = oldAppointment.AptDateTime,
+                            Name = "appointment",
+                            Param1 = "operatory",
                         });
                 }
             }
-            signals.ForEach(x => Insert(x));
 
-            // There was a delay when using this method to refresh the appointment module due to
-            // the time it takes to loop through the signals that iSignalProcessors need to loop
-            // through.
-            // BroadcastSignals(listSignals);//for immediate update. Signals will be processed again at next tick interval.
+            signals.ForEach(x => Insert(x));
         }
 
 
@@ -585,29 +581,26 @@ namespace OpenDentBusiness
         /// current Appt Module View. Always returns true if any signals have
         /// DateViewing=DateTime.MinVal.
         /// </summary>
-        public static bool IsApptRefreshNeeded(DateTime startDate, DateTime endDate, List<Signal> signals)
+        public static bool IsApptRefreshNeeded(DateTime startDate, DateTime endDate, IEnumerable<Signal> signals)
         {
-            // A date range was refreshed. Easier to refresh all without checking.
-            if (signals.Exists(
-                signal =>
-                    signal.DateViewing.Date == DateTime.MinValue.Date &&
-                    signal.IType == InvalidType.Appointment))
+            if (signals.Any(s => !s.ExternalDate.HasValue && s.Name == "appointment"))
                 return true;
 
-            var appointmentSignals =
-                signals.FindAll(
+            // Get all signals within the specified date range.
+            signals =
+                signals.Where(
                     signal =>
-                        signal.IType == InvalidType.Appointment &&
-                        signal.DateViewing.Date >= startDate.Date &&
-                        signal.DateViewing.Date <= endDate.Date);
+                        signal.Name == "appointment" &&
+                        signal.ExternalDate.Value.Date >= startDate.Date &&
+                        signal.ExternalDate.Value.Date <= endDate.Date);
 
-            if (appointmentSignals.Count == 0) return false;
+            if (signals.Count() == 0) return false;
 
             var visibleOperatoryIds = ApptDrawing.VisOps.Select(x => x.OperatoryNum).ToList();
             var visibleProviderIds = ApptDrawing.VisProvs.Select(x => x.ProvNum).ToList();
 
-            if (appointmentSignals.Any(x => x.FKeyType == KeyType.Operatory && visibleOperatoryIds.Contains(x.ExternalId)) ||
-                appointmentSignals.Any(x => x.FKeyType == KeyType.Provider && visibleProviderIds.Contains(x.ExternalId)))
+            if (signals.Any(x => x.Param1 == "operatory" && visibleOperatoryIds.Contains(x.ExternalId.Value)) ||
+                signals.Any(x => x.Param1 == "provider" && visibleProviderIds.Contains(x.ExternalId.Value)))
             {
                 return true;
             }

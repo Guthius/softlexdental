@@ -512,10 +512,21 @@ namespace OpenDentBusiness
               //Due to concurrency issues we have to treat all Adds as if they could be Updates because another user could have added already added this fee
                 listFeeScheds = Fees.UpdateFromCache(feeUpdateQueue.ToList());
             }
+
             foreach (long feeSched in listFeeScheds)
             {
-                Signalods.SetInvalid(InvalidType.Fees, KeyType.FeeSched, feeSched);
+                // TODO: CacheManager.Invalidate<FeeSched>();
+
+                Signal.Insert(new Signal
+                {
+                    Name = SignalName.CacheInvalidate,
+                    ExternalId = feeSched,
+                    Param1 = typeof(FeeSched).FullName
+                });
+
+                //Signalods.SetInvalid(InvalidType.Fees, KeyType.FeeSched, feeSched);
             }
+
             Fees.InvalidateFeeSchedules(listFeeScheds);
             hasTransStarted = false;
             feeUpdateQueue = new ConcurrentQueue<FeeUpdate>();//clear the list of updates

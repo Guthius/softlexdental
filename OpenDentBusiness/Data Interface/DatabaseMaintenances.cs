@@ -1093,7 +1093,7 @@ namespace OpenDentBusiness
                     }
                     if (numFixed > 0)
                     {
-                        Signalods.SetInvalid(InvalidType.AutoCodes);
+                        // TODO: Signalods.SetInvalid(InvalidType.AutoCodes);
                     }
                     if (numFixed != 0 || verbose)
                     {
@@ -1133,7 +1133,7 @@ namespace OpenDentBusiness
                         DbmLogActionType.Delete, methodName, "Deleted AutoCode:" + x.Description + " from AutoCodesDeleteWithNoItems")));
                     if (numberFixed > 0)
                     {
-                        Signalods.SetInvalid(InvalidType.AutoCodes);
+                        // TODO: Signalods.SetInvalid(InvalidType.AutoCodes);
                     }
                     if (numberFixed != 0 || verbose)
                     {
@@ -6682,7 +6682,7 @@ namespace OpenDentBusiness
                     if (PIn.Int(Db.GetCount(command)) == 0 && Preference.GetString(PreferenceName.AllergiesIndicateNone) != "")
                     {
                         Preference.Update(PreferenceName.AllergiesIndicateNone, "");
-                        Signalods.SetInvalid(InvalidType.Prefs);
+                        // TODO: Signalods.SetInvalid(InvalidType.Prefs);
                         log += Lans.g("FormDatabaseMaintenance", "Preference \"AllergyIndicatesNone\" set to blank due to an invalid value.") + "\r\n";
                     }
                     else if (verbose)
@@ -6719,7 +6719,7 @@ namespace OpenDentBusiness
                         command = "UPDATE preference SET ValueString=" + POut.Date(DateTime.Today.AddDays(-21))
                         + " WHERE PrefName='DateDepositsStarted'";
                         Db.NonQ(command);
-                        Signalods.SetInvalid(InvalidType.Prefs);
+                        // TODO: Signalods.SetInvalid(InvalidType.Prefs);
                         log += Lans.g("FormDatabaseMaintenance", "Deposit start date reset.") + "\r\n";
                     }
                     else if (verbose)
@@ -6783,7 +6783,7 @@ namespace OpenDentBusiness
                     if (PIn.Int(Db.GetCount(command)) == 0 && Preference.GetString(PreferenceName.MedicationsIndicateNone) != "")
                     {
                         Preference.Update(PreferenceName.MedicationsIndicateNone, "");
-                        Signalods.SetInvalid(InvalidType.Prefs);
+                        // TODO: Signalods.SetInvalid(InvalidType.Prefs);
                         log += Lans.g("FormDatabaseMaintenance", "Preference \"MedicationsIndicateNone\" set to blank due to an invalid value.") + "\r\n";
                     }
                     else if (verbose)
@@ -6818,7 +6818,7 @@ namespace OpenDentBusiness
                     if (PIn.Int(Db.GetCount(command)) == 0 && Preference.GetString(PreferenceName.ProblemsIndicateNone) != "")
                     {
                         Preference.Update(PreferenceName.ProblemsIndicateNone, "");
-                        Signalods.SetInvalid(InvalidType.Prefs);
+                        // TODO: Signalods.SetInvalid(InvalidType.Prefs);
                         log += Lans.g("FormDatabaseMaintenance", "Preference \"ProblemsIndicateNone\" set to blank due to an invalid value.") + "\r\n";
                     }
                     else if (verbose)
@@ -6850,7 +6850,7 @@ namespace OpenDentBusiness
                     if (Preference.GetInt(PreferenceName.TimeCardOvertimeFirstDayOfWeek) < 0 || Preference.GetInt(PreferenceName.TimeCardOvertimeFirstDayOfWeek) > 6)
                     {
                         Preference.Update(PreferenceName.TimeCardOvertimeFirstDayOfWeek, 0);//0==Sunday
-                        Signalods.SetInvalid(InvalidType.Prefs);
+                        // TODO: Signalods.SetInvalid(InvalidType.Prefs);
                         log += Lans.g("FormDatabaseMaintenance", "Preference \"TimeCardOvertimeFirstDayOfWeek\" set to Sunday due to an invalid value.") + "\r\n";
                     }
                     else if (verbose)
@@ -6921,7 +6921,7 @@ namespace OpenDentBusiness
                     long numberFixed = Db.NonQ(command);
                     if (numberFixed > 0)
                     {
-                        Signalods.SetInvalid(InvalidType.ProcButtons);
+                        // TODO: Signalods.SetInvalid(InvalidType.ProcButtons);
                     }
                     if (numberFixed > 0 || verbose)
                     {
@@ -6963,7 +6963,7 @@ namespace OpenDentBusiness
                     long numberfixed = Db.NonQ(command);
                     if (numberfixed > 0)
                     {
-                        Signalods.SetInvalid(InvalidType.ProcCodes);
+                        // TODO: Signalods.SetInvalid(InvalidType.ProcCodes);
                     }
                     if (numberfixed > 0 || verbose)
                     {
@@ -7865,7 +7865,7 @@ namespace OpenDentBusiness
                     long numberFixedTypes = listRecallTypeNums.Count;
                     if (numberFixedTypes > 0)
                     {
-                        Signalods.SetInvalid(InvalidType.RecallTypes);
+                        // TODO: Signalods.SetInvalid(InvalidType.RecallTypes);
                     }
                     if (numberFixed > 0 || verbose)
                     {
@@ -7900,7 +7900,7 @@ namespace OpenDentBusiness
                     long numberFixed = Db.NonQ(command);
                     if (numberFixed > 0)
                     {
-                        Signalods.SetInvalid(InvalidType.RecallTypes);
+                        // TODO: Signalods.SetInvalid(InvalidType.RecallTypes);
                     }
                     if (numberFixed > 0 || verbose)
                     {

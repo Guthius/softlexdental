@@ -502,10 +502,11 @@ namespace OpenDentBusiness{
 					else {
 						Preference.Update(PreferenceName.GlobalUpdateWriteOffLastClinicCompleted,clinicCur.ClinicNum);
 					}
-					Signalods.SetInvalid(InvalidType.Prefs);
-				}
-				#region Has Cancelled
-				if(progress.IsCanceled) {
+
+                    CacheManager.InvalidateEverywhere<Preference>();
+                }
+                #region Has Cancelled
+                if (progress.IsCanceled) {
 					break;
 				}
 				#endregion Has Cancelled
