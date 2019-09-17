@@ -46,7 +46,7 @@
             this.newPasswordLabel.Location = new System.Drawing.Point(13, 76);
             this.newPasswordLabel.Name = "newPasswordLabel";
             this.newPasswordLabel.Size = new System.Drawing.Size(149, 18);
-            this.newPasswordLabel.TabIndex = 4;
+            this.newPasswordLabel.TabIndex = 2;
             this.newPasswordLabel.Text = "New Password";
             this.newPasswordLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
@@ -56,7 +56,7 @@
             this.newPasswordTextBox.Name = "newPasswordTextBox";
             this.newPasswordTextBox.PasswordChar = '*';
             this.newPasswordTextBox.Size = new System.Drawing.Size(203, 23);
-            this.newPasswordTextBox.TabIndex = 5;
+            this.newPasswordTextBox.TabIndex = 3;
             // 
             // userNameTextBox
             // 
@@ -64,14 +64,14 @@
             this.userNameTextBox.Name = "userNameTextBox";
             this.userNameTextBox.ReadOnly = true;
             this.userNameTextBox.Size = new System.Drawing.Size(203, 23);
-            this.userNameTextBox.TabIndex = 1;
+            this.userNameTextBox.TabIndex = 8;
             // 
             // userLabel
             // 
             this.userLabel.Location = new System.Drawing.Point(13, 20);
             this.userLabel.Name = "userLabel";
             this.userLabel.Size = new System.Drawing.Size(149, 18);
-            this.userLabel.TabIndex = 0;
+            this.userLabel.TabIndex = 7;
             this.userLabel.Text = "User";
             this.userLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
@@ -81,14 +81,14 @@
             this.currentPasswordTextBox.Name = "currentPasswordTextBox";
             this.currentPasswordTextBox.PasswordChar = '*';
             this.currentPasswordTextBox.Size = new System.Drawing.Size(203, 23);
-            this.currentPasswordTextBox.TabIndex = 3;
+            this.currentPasswordTextBox.TabIndex = 1;
             // 
             // currentPasswordLabel
             // 
             this.currentPasswordLabel.Location = new System.Drawing.Point(13, 48);
             this.currentPasswordLabel.Name = "currentPasswordLabel";
             this.currentPasswordLabel.Size = new System.Drawing.Size(149, 18);
-            this.currentPasswordLabel.TabIndex = 2;
+            this.currentPasswordLabel.TabIndex = 0;
             this.currentPasswordLabel.Text = "Current Password";
             this.currentPasswordLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
@@ -98,10 +98,10 @@
             this.showCheckBox.Location = new System.Drawing.Point(168, 104);
             this.showCheckBox.Name = "showCheckBox";
             this.showCheckBox.Size = new System.Drawing.Size(55, 19);
-            this.showCheckBox.TabIndex = 6;
+            this.showCheckBox.TabIndex = 4;
             this.showCheckBox.Text = "Show";
             this.showCheckBox.UseVisualStyleBackColor = true;
-            this.showCheckBox.CheckedChanged += new System.EventHandler(this.showCheckBox_CheckedChanged);
+            this.showCheckBox.CheckedChanged += new System.EventHandler(this.ShowCheckBox_CheckedChanged);
             // 
             // acceptButton
             // 
@@ -109,9 +109,9 @@
             this.acceptButton.Location = new System.Drawing.Point(145, 158);
             this.acceptButton.Name = "acceptButton";
             this.acceptButton.Size = new System.Drawing.Size(110, 30);
-            this.acceptButton.TabIndex = 7;
+            this.acceptButton.TabIndex = 5;
             this.acceptButton.Text = "&OK";
-            this.acceptButton.Click += new System.EventHandler(this.acceptButton_Click);
+            this.acceptButton.Click += new System.EventHandler(this.AcceptButton_Click);
             // 
             // cancelButton
             // 
@@ -120,7 +120,7 @@
             this.cancelButton.Location = new System.Drawing.Point(261, 158);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(110, 30);
-            this.cancelButton.TabIndex = 8;
+            this.cancelButton.TabIndex = 6;
             this.cancelButton.Text = "&Cancel";
             // 
             // FormUserPassword

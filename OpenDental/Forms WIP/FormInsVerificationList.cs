@@ -275,8 +275,8 @@ namespace OpenDental {
 
 		private void PickUser(bool isAssigning) {
 			FormUserPick FormUP=new FormUserPick();
-			FormUP.IsSelectionmode=true;
-			FormUP.ListUserodsFiltered=_listUsersInRegion;
+			FormUP.IsSelectionMode=true;
+			FormUP.Users=_listUsersInRegion;
 			if(!isAssigning) {
 				FormUP.IsPickAllAllowed=true;
 			}
@@ -284,10 +284,10 @@ namespace OpenDental {
 			FormUP.ShowDialog();
 			if(FormUP.DialogResult==DialogResult.OK) {
 				if(isAssigning) {//Setting the user
-					_assignUserNum=FormUP.SelectedUserNum;
+					_assignUserNum=FormUP.SelectedUserId;
 				}
 				else {//Filter by user
-					_verifyUserNum=FormUP.SelectedUserNum;
+					_verifyUserNum=FormUP.SelectedUserId;
 				}
 				FillGrids();
 			}

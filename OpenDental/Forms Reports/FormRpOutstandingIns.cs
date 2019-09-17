@@ -1355,8 +1355,8 @@ namespace OpenDental {
 		///-2 represents a canceled selection</summary>
 		private long PickUser(bool isAssigning) {
 			FormUserPick FormUP=new FormUserPick();
-			FormUP.IsSelectionmode=true;
-			FormUP.ListUserodsFiltered=_listClaimSentEditUsers;
+			FormUP.IsSelectionMode=true;
+			FormUP.Users=_listClaimSentEditUsers;
 			if(!isAssigning) {
 				FormUP.IsPickAllAllowed=true;
 			}
@@ -1365,7 +1365,7 @@ namespace OpenDental {
 			if(FormUP.DialogResult!=DialogResult.OK) {
 				return -2;
 			}
-			return FormUP.SelectedUserNum;
+			return FormUP.SelectedUserId;
 		}
 
 		/// <summary>Sets date controls in both date tabs</summary>

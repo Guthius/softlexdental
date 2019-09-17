@@ -87,14 +87,14 @@ namespace OpenDental {
 
 		private void butUserPick_Click(object sender,EventArgs e) {
 			FormUserPick formUP=new FormUserPick();
-			formUP.IsSelectionmode=true;
-			formUP.ListUserodsFiltered=_listUsersInComboBox;
+			formUP.IsSelectionMode=true;
+			formUP.Users=_listUsersInComboBox;
 			formUP.IsPickAllAllowed=false;
 			formUP.ShowDialog();
 			if(formUP.DialogResult!=DialogResult.OK) {
 				return;
 			}
-			_selectedUserNum=formUP.SelectedUserNum;
+			_selectedUserNum=formUP.SelectedUserId;
 			FillComboBox();
 		}
 

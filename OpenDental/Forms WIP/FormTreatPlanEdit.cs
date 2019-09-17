@@ -544,16 +544,16 @@ namespace OpenDental{
 		private void butPickPresenter_Click(object sender,EventArgs e) {
 			FormUserPick FormUP=new FormUserPick();
 			List<User> listUsers= User.AllActive().FindAll(x => x.ClinicRestricted == false || x.ClinicId == Clinics.ClinicNum);
-			FormUP.ListUserodsFiltered=listUsers;
+			FormUP.Users=listUsers;
 			if(_presenterCur!=null) {
-				FormUP.SuggestedUserNum=_presenterCur.Id;
+				FormUP.SuggestedUserId=_presenterCur.Id;
 			}
 			FormUP.IsPickNoneAllowed=true;
 			FormUP.ShowDialog();
 			if(FormUP.DialogResult!=DialogResult.OK) {
 				return;
 			}
-			_presenterCur= User.GetById(FormUP.SelectedUserNum);//can be null
+			_presenterCur= User.GetById(FormUP.SelectedUserId);//can be null
 			if(_presenterCur!=null) {
 				textPresenter.Text=_presenterCur.UserName;
 			}

@@ -1,18 +1,32 @@
+/**
+ * Copyright (C) 2019 Dental Stars SRL
+ * Copyright (C) 2003-2019 Jordan S. Sparks, D.M.D.
+ * 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; If not, see <http://www.gnu.org/licenses/>
+ */
 using OpenDentBusiness;
 using System;
 using System.Windows.Forms;
 
 namespace OpenDental
 {
-    /// <summary>
-    /// Summary description for FormBasicTemplate.
-    /// </summary>
     public partial class FormUserPassword : FormBase
     {
-        public PasswordContainer LoginDetails;
+        private readonly bool isCreate;
+        private readonly bool isPasswordReset;
 
-        bool isCreate;
-        bool isPasswordReset;
+        public PasswordContainer LoginDetails { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this is a security window.
@@ -53,11 +67,11 @@ namespace OpenDental
         /// <summary>
         /// Loads the form.
         /// </summary>
-        void FormUserPassword_Load(object sender, EventArgs e)
+        private void FormUserPassword_Load(object sender, EventArgs e)
         {
             if (isCreate)
             {
-                Text = Translation.Language.lang_create_password;
+                Text = Translation.Language.CreatePassword;
             }
 
             if (IsInSecurityWindow)
@@ -68,8 +82,8 @@ namespace OpenDental
 
             if (isPasswordReset)
             {
-                currentPasswordLabel.Text = Translation.Language.lang_new_password;
-                newPasswordLabel.Text = Translation.Language.lang_re_enter_password;
+                currentPasswordLabel.Text = Translation.Language.NewPassword;
+                newPasswordLabel.Text = Translation.Language.ReEnterPassword;
                 cancelButton.Visible = false;
                 acceptButton.Location = cancelButton.Location;
 
@@ -80,11 +94,11 @@ namespace OpenDental
         /// <summary>
         /// Toggle between showing and hiding the password.
         /// </summary>
-        void showCheckBox_CheckedChanged(object sender, EventArgs e)
+        private void ShowCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             if (showCheckBox.Checked)
             {
-                newPasswordTextBox.PasswordChar = default(char);
+                newPasswordTextBox.PasswordChar = default;
             }
             else
             {
@@ -95,9 +109,7 @@ namespace OpenDental
         /// <summary>
         /// Validates whether a valid password was entered and if so closes the form.
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        void acceptButton_Click(object sender, System.EventArgs e)
+        private void AcceptButton_Click(object sender, EventArgs e)
         {
             if (isPasswordReset)
             {
@@ -137,7 +149,6 @@ namespace OpenDental
                 }
             }
 
-            // If the PasswordsMustBeStrong preference is off, still store whether or not the password is strong in case the preference is turned on later
             PasswordIsStrong = string.IsNullOrEmpty(explanation);
 
             LoginDetails = Authentication.GenerateLoginDetailsSHA512(newPasswordTextBox.Text);

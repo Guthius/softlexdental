@@ -418,7 +418,7 @@
     <Compile Include="Forms WIP\FormAccountingSetup.Designer.cs">
       <DependentUpon>FormAccountingSetup.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms WIP\FormAccountPick.Designer.cs">
+    <Compile Include="Forms\FormAccountPick.Designer.cs">
       <DependentUpon>FormAccountPick.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms WIP\FormAdjust.designer.cs">
@@ -590,7 +590,7 @@
     <Compile Include="Forms WIP\FormUpdateSetup.Designer.cs">
       <DependentUpon>FormUpdateSetup.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms WIP\FormUserPassword.Designer.cs">
+    <Compile Include="__WIP\FormUserPassword.Designer.cs">
       <DependentUpon>FormUserPassword.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms WIP\FormInsHistSetup.cs">
@@ -1834,7 +1834,7 @@
     <Compile Include="Forms WIP\FormTreatPlanDiscount.designer.cs">
       <DependentUpon>FormTreatPlanDiscount.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms WIP\FormUserGroupPicker.cs">
+    <Compile Include="__WIP\FormUserGroupPicker.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms WIP\FormDentalSchoolSetup.cs">
@@ -3016,10 +3016,10 @@
     <Compile Include="Forms WIP\FormCreditCardManage.designer.cs">
       <DependentUpon>FormCreditCardManage.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms WIP\FormUserPick.cs">
+    <Compile Include="__WIP\FormUserPick.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms WIP\FormUserPick.designer.cs">
+    <Compile Include="__WIP\FormUserPick.designer.cs">
       <DependentUpon>FormUserPick.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms WIP\FormTaskNoteEdit.cs">
@@ -3818,7 +3818,7 @@
     <Compile Include="Forms WIP\FormAccountingSetup.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms WIP\FormAccountPick.cs">
+    <Compile Include="Forms\FormAccountPick.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms WIP\FormAdjust.cs">
@@ -4385,10 +4385,10 @@
     <Compile Include="Forms WIP\FormUserEdit.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms WIP\FormUserGroupEdit.cs">
+    <Compile Include="__WIP\FormUserGroupEdit.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms WIP\FormUserPassword.cs">
+    <Compile Include="__WIP\FormUserPassword.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms WIP\FormZipCodeEdit.cs">
@@ -5483,7 +5483,7 @@
     <EmbeddedResource Include="Forms WIP\FormTreatPlanDiscount.resx">
       <DependentUpon>FormTreatPlanDiscount.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms WIP\FormUserGroupPicker.resx">
+    <EmbeddedResource Include="__WIP\FormUserGroupPicker.resx">
       <DependentUpon>FormUserGroupPicker.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -6166,7 +6166,7 @@
       <DependentUpon>FormCreditCardManage.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms WIP\FormUserPick.resx">
+    <EmbeddedResource Include="__WIP\FormUserPick.resx">
       <DependentUpon>FormUserPick.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -6549,7 +6549,7 @@
       <DependentUpon>FormAccountingSetup.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms WIP\FormAccountPick.resx">
+    <EmbeddedResource Include="Forms\FormAccountPick.resx">
       <DependentUpon>FormAccountPick.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -7301,11 +7301,11 @@
       <DependentUpon>FormUserEdit.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms WIP\FormUserGroupEdit.resx">
+    <EmbeddedResource Include="__WIP\FormUserGroupEdit.resx">
       <DependentUpon>FormUserGroupEdit.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms WIP\FormUserPassword.resx">
+    <EmbeddedResource Include="__WIP\FormUserPassword.resx">
       <DependentUpon>FormUserPassword.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>

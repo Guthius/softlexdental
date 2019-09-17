@@ -120,11 +120,11 @@ namespace OpenDental
         {
             using (var formUserPick = new FormUserPick())
             {
-                formUserPick.SuggestedUserNum = ((User)userTextBox.Tag)?.Id ?? 0;
+                formUserPick.SuggestedUserId = ((User)userTextBox.Tag)?.Id ?? 0;
 
                 if (formUserPick.ShowDialog() == DialogResult.OK)
                 {
-                    var user = User.GetById(formUserPick.SelectedUserNum);
+                    var user = User.GetById(formUserPick.SelectedUserId);
                     if (user.Id == (((User)userTextBox.Tag)?.Id ?? 0))
                     {
                         return;

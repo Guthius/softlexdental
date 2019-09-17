@@ -793,6 +793,15 @@ namespace OpenDental.Translation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create Password.
+        /// </summary>
+        public static string CreatePassword {
+            get {
+                return ResourceManager.GetString("CreatePassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Current password incorrect..
         /// </summary>
         public static string CurrentPasswordIncorrect {
@@ -991,38 +1000,11 @@ namespace OpenDental.Translation {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create Password.
-        /// </summary>
-        public static string lang_create_password {
-            get {
-                return ResourceManager.GetString("lang_create_password", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Last Saved.
         /// </summary>
         public static string lang_last_saved {
             get {
                 return ResourceManager.GetString("lang_last_saved", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to New Password.
-        /// </summary>
-        public static string lang_new_password {
-            get {
-                return ResourceManager.GetString("lang_new_password", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Re-Enter Password.
-        /// </summary>
-        public static string lang_re_enter_password {
-            get {
-                return ResourceManager.GetString("lang_re_enter_password", resourceCulture);
             }
         }
         
@@ -1077,6 +1059,15 @@ namespace OpenDental.Translation {
         public static string MailAddressAlreadyExistsForUser {
             get {
                 return ResourceManager.GetString("MailAddressAlreadyExistsForUser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New Password.
+        /// </summary>
+        public static string NewPassword {
+            get {
+                return ResourceManager.GetString("NewPassword", resourceCulture);
             }
         }
         
@@ -1392,6 +1383,15 @@ namespace OpenDental.Translation {
         public static string Purchased {
             get {
                 return ResourceManager.GetString("Purchased", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Re-Enter Password.
+        /// </summary>
+        public static string ReEnterPassword {
+            get {
+                return ResourceManager.GetString("ReEnterPassword", resourceCulture);
             }
         }
         
