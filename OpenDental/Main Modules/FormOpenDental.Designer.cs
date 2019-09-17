@@ -1196,7 +1196,6 @@
             // 
             this.menuItemCreateAtoZFolders.Index = 2;
             this.menuItemCreateAtoZFolders.Text = "Create A to Z Folders";
-            this.menuItemCreateAtoZFolders.Click += new System.EventHandler(this.menuItemCreateAtoZFolders_Click);
             // 
             // menuItemDatabaseMaintenancePat
             // 

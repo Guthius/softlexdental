@@ -5228,17 +5228,6 @@ namespace OpenDental
             //Security log entries are made from within the form.
         }
 
-        private void menuItemCreateAtoZFolders_Click(object sender, EventArgs e)
-        {
-            if (!Security.IsAuthorized(Permissions.Setup))
-            {
-                return;
-            }
-            FormAtoZFoldersCreate FormA = new FormAtoZFoldersCreate();
-            FormA.ShowDialog();
-            //Security log entries are made from within the form.
-        }
-
         private void menuItemDatabaseMaintenancePat_Click(object sender, EventArgs e)
         {
             //Purposefully not checking permissions.  All users need the ability to call patient specific DBMs ATM.
