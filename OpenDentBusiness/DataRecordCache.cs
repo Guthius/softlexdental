@@ -224,14 +224,37 @@ namespace OpenDentBusiness
         }
     }
 
+    /// <summary>
+    /// <para>
+    /// Maintains a list of every active <see cref="IDataRecordCache"/> instance. Instances of
+    /// <see cref="DataRecordCacheBase{TRecord}"/> register themselves automatically.
+    /// </para>
+    /// <para>
+    /// Custom implementations of <see cref="IDataRecordCache"/> must manually register themselves
+    /// using the <see cref="Register{T}(IDataRecordCacheBase{T})"/> method.
+    /// </para>
+    /// <para>
+    /// The <see cref="Invalidate{T}"/> and <see cref="Invalidate(Type)"/> methods can be used to 
+    /// notify the cache that a refresh is required. In most cases this will trigger an immediate
+    /// synchronous cache refill. When refreshing large caches from the UI thread, make sure to
+    /// wrap the <see cref="Invalidate{T}"/> calls in async tasks to prevent the UI from hanging
+    /// while the refresh is in progress.
+    /// </para>
+    /// <para>
+    /// In case the cache data needs to be refreshed on every workstation use 
+    /// <see cref="InvalidateEverywhere{T}"/> or <see cref="InvalidateEverywhere{T}(long)"/> 
+    /// instead. These methods write a <see cref="Signal"/> to the database that will trigger a
+    /// refresh on every active workstation. These refreshes will always occur in the background.
+    /// </para>
+    /// </summary>
     public static class CacheManager
     {
-        static readonly Dictionary<Type, List<IDataRecordCache>> dataRecordCaches = new Dictionary<Type, List<IDataRecordCache>>();
+        private static readonly Dictionary<Type, List<IDataRecordCache>> dataRecordCaches = new Dictionary<Type, List<IDataRecordCache>>();
 
         /// <summary>
         /// Invalidates the cache of record type <typeparamref name="T"/>.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="T">The data record type.</typeparam>
         public static void Invalidate<T>() where T : DataRecordBase
         {
             lock (dataRecordCaches)
@@ -244,6 +267,61 @@ namespace OpenDentBusiness
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Invalidates the cache of the record type identified by <paramref name="type"/>.
+        /// </summary>
+        /// <param name="type">The record type.</param>
+        public static void Invalidate(Type type)
+        {
+            if (type.IsClass && !type.IsAbstract && typeof(DataRecordBase).IsAssignableFrom(type))
+            {
+                lock (dataRecordCaches)
+                {
+                    if (dataRecordCaches.TryGetValue(type, out var dataRecordCacheList))
+                    {
+                        foreach (var dataRecordCache in dataRecordCacheList)
+                        {
+                            dataRecordCache.Refresh();
+                        }
+                    }
+                }
+            }
+
+            // TODO: Add support for invalidating and refreshing individual records...
+        }
+
+        /// <summary>
+        /// Invalidates the cache of record type <typeparamref name="T"/> on every active workstation.
+        /// </summary>
+        /// <typeparam name="T">The data record type.</typeparam>
+        public static void InvalidateEverywhere<T>() where T : DataRecordBase
+        {
+            Signal.Insert(new Signal
+            {
+                Name = SignalName.CacheInvalidate,
+                Param1 = typeof(T).FullName
+            });
+
+            Invalidate<T>();
+        }
+
+        /// <summary>
+        /// Invalidates the cache of record type <typeparamref name="T"/> on every active workstation.
+        /// </summary>
+        /// <typeparam name="T">The data record type.</typeparam>
+        /// <param name="recordId">The ID of the record to invalidate.</param>
+        public static void InvalidateEverywhere<T>(long recordId) where T : DataRecordBase
+        {
+            Signal.Insert(new Signal
+            {
+                Name = SignalName.CacheInvalidate,
+                Param1 = typeof(T).FullName,
+                ExternalId = recordId
+            });
+
+            Invalidate<T>();
         }
 
         /// <summary>

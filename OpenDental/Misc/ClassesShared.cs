@@ -46,6 +46,58 @@ namespace OpenDental
     /// </summary>
     [Obsolete] public class DataValid
     {
+        static void L(ValidEventArgs e)
+        {
+            string suffix = "Refreshing Caches: ";
+
+            ODEvent.Fire(ODEventType.Cache, suffix);
+            if (e.OnlyLocal)
+            {//Currently used after doing a restore from FormBackup so that the local cache is forcefully updated.
+                ODEvent.Fire(ODEventType.Cache, suffix + Lan.g(nameof(Cache), "PrefsStartup"));
+                if (!LoadPreferences())
+                {//??
+                    return;
+                }
+                ODEvent.Fire(ODEventType.Cache, suffix + Lan.g(nameof(Cache), "AllLocal"));
+                RefreshLocalData(InvalidType.AllLocal);//does local computer only
+                return;
+            }
+
+            if (!e.ITypes.Contains(InvalidType.Appointment) && 
+                !e.ITypes.Contains(InvalidType.Task) && 
+                !e.ITypes.Contains(InvalidType.TaskPopup))
+            {
+                RefreshLocalData(e.ITypes);
+            }
+
+            if (e.ITypes.Contains(InvalidType.Task) || 
+                e.ITypes.Contains(InvalidType.TaskPopup))
+            {
+                Plugin.Trigger(null, "FormOpenDental_DataBecameInvalid");
+                if (ContrChart2?.Visible ?? false)
+                {
+                    ODEvent.Fire(ODEventType.Cache, suffix + "Chart Module");
+                    ContrChart2.ModuleSelected(CurPatNum);
+                }
+                return;//All task signals should already be sent. Sending more Task signals here would cause unnecessary refreshes.
+            }
+
+            ODEvent.Fire(ODEventType.Cache, suffix + "Inserting Signals");
+
+            foreach (InvalidType iType in e.ITypes)
+            {
+                Signal sig = new Signal();
+                sig.IType = iType;
+                if (iType == InvalidType.Task || iType == InvalidType.TaskPopup)
+                {
+                    sig.ExternalId = e.TaskNum;
+                    sig.FKeyType = KeyType.Task;
+                }
+                Signalods.Insert(sig);
+            }
+        }
+
+
         /// <summary>
         /// Triggers an event that causes a signal to be sent to all other computers telling them what kind of locally stored data needs to be updated.
         /// Either supply a set of flags for the types, or supply a date if the appointment screen needs to be refreshed.

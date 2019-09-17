@@ -231,13 +231,13 @@ namespace OpenDental {
 		}
 
 		///<summary>Only subscribed to signal processing if NOT SimpleMode.  Only processes signals of type InvalidType.Kiosk.</summary>
-		public override void OnProcessSignals(List<Signalod> listSignals) {
+		public override void OnProcessSignals(List<Signal> listSignals) {
 			if(IsSimpleMode) { //Process signals ONLY if not simple mode.
 				return;
 			}
 			int processIdCur=Process.GetCurrentProcess().Id;
 			//load patient if any signals are Kiosk type either without a FKey or with a ProcessId different than this process
-			if(listSignals.Any(x => x.IType==InvalidType.Kiosk && (x.FKeyType!=KeyType.ProcessId || x.FKey!=processIdCur))) {
+			if(listSignals.Any(x => x.IType==InvalidType.Kiosk && (x.FKeyType!=KeyType.ProcessId || x.ExternalId!=processIdCur))) {
 				LoadPatient(false);//will load the current patient if PatNum>0, otherwise will force clearing/unloading the patient
 			}
 		}

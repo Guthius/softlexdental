@@ -6785,7 +6785,7 @@ namespace OpenDental
                         //Calling Signalods.RefreshTimed() was causing issues for large customers. This resulted in 100,000+ rows of signalod's returned.
                         //Now we only query for the specific signals we care about. Instead of using Signalods.SignalLastRefreshed we now use Signalods.ApptSignalLastRefreshed.
                         //Signalods.ApptSignalLastRefreshed mimics the behavior of Signalods.SignalLastRefreshed but is guaranteed to not be stale from inactive sessions.
-                        List<Signalod> listSignals = Signalods.RefreshTimed(Signalods.ApptSignalLastRefreshed, new List<InvalidType>() { InvalidType.Appointment, InvalidType.Schedules });
+                        List<Signal> listSignals = Signalods.RefreshTimed(Signalods.ApptSignalLastRefreshed, new List<InvalidType>() { InvalidType.Appointment, InvalidType.Schedules });
                         bool isApptRefresh = Signalods.IsApptRefreshNeeded(startDate, endDate, listSignals);
                         bool isSchedRefresh = Signalods.IsSchedRefreshNeeded(startDate, endDate, listSignals);
                         //either we have signals from other machines telling us to refresh, or we aren't using signals, in which case we still want to refresh

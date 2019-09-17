@@ -924,7 +924,7 @@ namespace OpenDental
         /// <summary>
         /// If someone else is sending emails on another workstation, this will update this form to reflect that.
         /// </summary>
-        public override void OnProcessSignals(List<Signalod> listSignals)
+        public override void OnProcessSignals(List<Signal> listSignals)
         {
             if (listSignals.Exists(x => x.IType == InvalidType.Email))
             {

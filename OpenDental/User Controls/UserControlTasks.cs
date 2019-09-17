@@ -94,11 +94,11 @@ namespace OpenDental {
 		}
 
 		private void UserControlTasks_Resize(object sender,EventArgs e) {
-			FillGrid(new List<Signalod>());//Refresh the gridMain height because the height of this control might have changed.  Does not run query.
+			FillGrid(new List<Signal>());//Refresh the gridMain height because the height of this control might have changed.  Does not run query.
 		}
 
 		///<summary>Calls RefreshTasks for all known instances of UserControlTasks for each instance which is visible and not disposed.</summary>
-		public static void RefreshTasksForAllInstances(List<Signalod> listSignals,UserControlTasksTab tabToRefresh=UserControlTasksTab.Invalid) {
+		public static void RefreshTasksForAllInstances(List<Signal> listSignals,UserControlTasksTab tabToRefresh=UserControlTasksTab.Invalid) {
 			foreach(UserControlTasks control in _listInstances) {
 				if(!control.Visible || control.IsDisposed) {
 					continue;
@@ -637,7 +637,7 @@ namespace OpenDental {
 				FillGrid();//For now, do a full refresh if we are drilled into a TaskList, or on the New for User tab, so sorting works properly.
 			}
 			else {
-				FillGrid(new List<Signalod>());//Invalidate view without calling db.
+				FillGrid(new List<Signal>());//Invalidate view without calling db.
 			}
 		}
 
@@ -653,9 +653,9 @@ namespace OpenDental {
 		}
 
 		///<summary>Removes any matching Signalod.SignalNums from this instance's list of sent Task/TaskList related signalnums.</summary>
-		private List<Signalod> RemoveSentSignalNums(List<Signalod> listReceivedSignals) {
+		private List<Signal> RemoveSentSignalNums(List<Signal> listReceivedSignals) {
 			if(listReceivedSignals==null || listReceivedSignals.Count==0) {
-				return new List<Signalod>();
+				return new List<Signal>();
 			}
 			for(int i=listReceivedSignals.Count-1;i>=0;i--) {
 				long receivedSignalNum=listReceivedSignals[i].Id;
@@ -686,7 +686,7 @@ namespace OpenDental {
 		///a task in _listTasks, the task is already refreshed in memory and only the one task is refreshed from the database.
 		///Otherwise, a full refresh will only be run when certain types of signals corresonding to the current selected tabs are found in listSignals.
 		///</summary>
-		private void FillGrid(List<Signalod> listSignals=null){
+		private void FillGrid(List<Signal> listSignals=null){
 			if(Security.CurrentUser==null) 
 			{
 				gridMain.BeginUpdate();
@@ -716,25 +716,25 @@ namespace OpenDental {
 				listSignals=RemoveSentSignalNums(listSignals.FindAll(x => x.IType.In(new List<InvalidType>()
 					{ InvalidType.Task,InvalidType.TaskList,InvalidType.TaskAuthor,InvalidType.TaskPatient })));
 				//User is observing a task list for which a TaskList signal is specified, or TaskList from signal is a sublist of current view.
-				if(listSignals.Exists(x => x.IType==InvalidType.TaskList && (x.FKey==parent || _listTaskLists.Exists(y => y.TaskListNum==x.FKey)))) {
+				if(listSignals.Exists(x => x.IType==InvalidType.TaskList && (x.ExternalId==parent || _listTaskLists.Exists(y => y.TaskListNum==x.ExternalId)))) {
 					RefreshMainLists(parent,date);
 				}
 				//User is observing the New Tasks tab and a TaskList signal is received for a TaskList the user is subscribed to.
-				else if(tabContr.SelectedTab==tabNew && listSignals.Exists(x => x.IType==InvalidType.TaskList && ListSubscribedTaskListNums.Contains(x.FKey))) {
+				else if(tabContr.SelectedTab==tabNew && listSignals.Exists(x => x.IType==InvalidType.TaskList && ListSubscribedTaskListNums.Contains(x.ExternalId))) {
 					RefreshMainLists(parent,date);
 				}
 				//User is observing the Open Tasks tab and a TaskAuthor signal is received with the current user specified in the FKey.
-				else if(tabContr.SelectedTab==tabOpenTickets && listSignals.Exists(x => x.IType==InvalidType.TaskAuthor && x.FKey==Security.CurrentUser.Id)) {
+				else if(tabContr.SelectedTab==tabOpenTickets && listSignals.Exists(x => x.IType==InvalidType.TaskAuthor && x.ExternalId==Security.CurrentUser.Id)) {
 					RefreshMainLists(parent,date);
 				}
 				//User is observing the Patient Tasks tab and a TaskPatient signal is received for the patient the user currently has selected.
-				else if(tabContr.SelectedTab==tabPatientTickets && listSignals.Exists(x => x.IType==InvalidType.TaskPatient && x.FKey==FormOpenDental.CurPatNum)) {
+				else if(tabContr.SelectedTab==tabPatientTickets && listSignals.Exists(x => x.IType==InvalidType.TaskPatient && x.ExternalId==FormOpenDental.CurPatNum)) {
 					RefreshMainLists(parent,date);
 				}
 				else {//Individual Task signals. Only refreshes if the task is in the currently displayed list of Tasks. Add/Remove is addressed with TaskList signals.
-					foreach(Signalod signal in listSignals) {
+					foreach(Signal signal in listSignals) {
 						if(signal.IType.In(InvalidType.Task,InvalidType.TaskPopup) && signal.FKeyType==KeyType.Task) {
-							if(_listTasks.Exists(x => x.TaskNum==signal.FKey)) {//A signal indicates that a task we are looking at has been modified.
+							if(_listTasks.Exists(x => x.TaskNum==signal.ExternalId)) {//A signal indicates that a task we are looking at has been modified.
 								RefreshMainLists(parent,date);//Full refresh.
 								break;
 							}

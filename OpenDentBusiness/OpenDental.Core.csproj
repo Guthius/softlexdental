@@ -310,8 +310,6 @@
     <Compile Include="Reports\RpDiscountPlan.cs" />
     <Compile Include="TableTypes\ClinicErx.cs" />
     <Compile Include="TableTypes\DatabaseMaintenance.cs" />
-    <Compile Include="TableTypes\TaskTaken.cs" />
-    <Compile Include="UI\ISignalProcessor.cs" />
     <Compile Include="Data Interface\Sites.cs" />
     <Compile Include="Data Interface\SmsBlockPhones.cs" />
     <Compile Include="Data Interface\SubstitutionLinks.cs" />
@@ -569,7 +567,7 @@
     <Compile Include="Crud\SigButDefCrud.cs" />
     <Compile Include="Crud\SigElementDefCrud.cs" />
     <Compile Include="Crud\SigMessageCrud.cs" />
-    <Compile Include="Crud\SignalodCrud.cs" />
+    <Compile Include="__WIP\SignalName.cs" />
     <Compile Include="Crud\SiteCrud.cs" />
     <Compile Include="Crud\StateAbbrCrud.cs" />
     <Compile Include="Crud\TreatPlanAttachCrud.cs" />
@@ -749,7 +747,6 @@
     <Compile Include="Data Interface\InsFilingCodeSubtypes.cs" />
     <Compile Include="Data Interface\RxNorms.cs" />
     <Compile Include="Data Interface\ScreenPats.cs" />
-    <Compile Include="Data Interface\Signalods.cs" />
     <Compile Include="Data Interface\TaskNotes.cs" />
     <Compile Include="Data Interface\TaskUnreads.cs" />
     <Compile Include="Cache\Cache.cs" />
@@ -1144,7 +1141,7 @@
     <Compile Include="TableTypes\Guardian.cs" />
     <Compile Include="TableTypes\ReminderRule.cs" />
     <Compile Include="TableTypes\RxNorm.cs" />
-    <Compile Include="TableTypes\Signalod.cs" />
+    <Compile Include="__WIP\Signal.cs" />
     <Compile Include="TableTypes\TaskNote.cs" />
     <Compile Include="TableTypes\TaskUnread.cs" />
     <Compile Include="TableTypes\Equipment.cs" />

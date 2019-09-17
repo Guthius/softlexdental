@@ -1532,7 +1532,7 @@ namespace OpenDental{
 			g.Dispose();
 		}
 	
-		public override void OnProcessSignals(List<Signalod> listSignals) {
+		public override void OnProcessSignals(List<Signal> listSignals) {
 			if(listSignals.Any(x => x.IType==InvalidType.WebSchedRecallReminders)) {
 				FillMain();
 			}

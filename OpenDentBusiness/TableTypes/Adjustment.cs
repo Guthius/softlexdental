@@ -11,22 +11,6 @@ namespace OpenDentBusiness
     /// </summary>
     public class Adjustment
     {
-        /*
-         id
-         date
-         amount
-         patient_id
-         adjustment_type_id
-         provider_id
-         note
-         procedure_date
-         procedure_id
-         clinic_id
-         statement_id
-         user_id
-             */
-
-
         ///<summary>Primary key.</summary>
         public long Id;
 

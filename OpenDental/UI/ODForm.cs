@@ -28,7 +28,7 @@ namespace OpenDental
     }
 
     ///<summary>Most OD forms extend this class. It does help and signal processing.</summary>
-    public class ODForm : ODFormAbs<Signalod>, ISignalProcessor
+    public class ODForm : ODFormAbs<Signal>, ISignalProcessor
     {
         string helpFormName;
 
@@ -115,12 +115,12 @@ namespace OpenDental
         }
 
         ///<summary>Override this if your form cares about signal processing.</summary>
-        public virtual void OnProcessSignals(List<Signalod> listObjs)
+        public virtual void OnProcessSignals(List<Signal> listObjs)
         {
         }
 
         ///<summary>Seal OnProcessObjects because it is too vague and our engineers are already used to overriding OnProcessSignals.</summary>
-        public sealed override void OnProcessObjects(List<Signalod> listObjs)
+        public sealed override void OnProcessObjects(List<Signal> listObjs)
         {
             OnProcessSignals(listObjs);
         }

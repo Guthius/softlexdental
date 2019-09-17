@@ -118,13 +118,13 @@ namespace OpenDental {
             {
                 //The patient has been successfully merged.
                 #region Refresh Patient's Tasks
-                List<Signalod> listSignals = new List<Signalod>();
+                List<Signal> listSignals = new List<Signal>();
                 foreach (Task task in listPatientTasks)
                 {
-                    Signalod signal = new Signalod();
+                    Signal signal = new Signal();
                     signal.IType = InvalidType.Task;
                     signal.FKeyType = KeyType.Task;
-                    signal.FKey = task.TaskNum;
+                    signal.ExternalId = task.TaskNum;
                     signal.DateViewing = DateTime.MinValue;//Mimics Signalods.SetInvalid()
                     listSignals.Add(signal);
                 }

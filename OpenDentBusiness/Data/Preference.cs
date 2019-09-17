@@ -222,6 +222,7 @@ namespace OpenDentBusiness
 
         /// <summary>
         /// Gets the date/time value of the preference with the specified name.
+        /// Returns <see cref="DateTime.MinValue"/> if no preference with the specified name exists.
         /// </summary>
         /// <param name="preferenceName">The preference name.</param>
         /// <returns>The preference value.</returns>

@@ -32,7 +32,7 @@ namespace OpenDental
                     {
                         //turn off signal reception for 5 seconds so this workstation will not shut down.
                         Signalods.SignalLastRefreshed = MiscData.GetNowDateTime().AddSeconds(5);
-                        Signalods.Insert(new Signalod
+                        Signalods.Insert(new Signal
                         {
                             IType = InvalidType.ShutDownNow
                         });

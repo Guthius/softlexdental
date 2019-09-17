@@ -274,12 +274,12 @@ namespace OpenDental {
 			FillPat();
 		}
 
-		public override void OnProcessSignals(List<Signalod> listSignals) {
+		public override void OnProcessSignals(List<Signal> listSignals) {
 			if(listSignals.Any(x => x.IType==InvalidType.Prefs)) {
 				textPassword.Text=Preference.GetString(PreferenceName.TerminalClosePassword);
 			}
 			int processIdCur=Process.GetCurrentProcess().Id;
-			if(listSignals.All(x => x.IType!=InvalidType.Kiosk || (x.FKeyType==KeyType.ProcessId && x.FKey==processIdCur))) {
+			if(listSignals.All(x => x.IType!=InvalidType.Kiosk || (x.FKeyType==KeyType.ProcessId && x.ExternalId==processIdCur))) {
 				return;
 			}
 			FillGrid();

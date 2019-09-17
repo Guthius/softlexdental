@@ -300,10 +300,6 @@ namespace OpenDentBusiness{
 		SmsTextMsgReceivedUnreadCount,
 		///<summary>61</summary>
 		ProviderErxs,
-        ///<summary>62. This is used internally by OD, refreshes the jobs windows in the Job Manager.</summary>
-        [Obsolete("OD HQ BS")] Jobs,
-        ///<summary>63. This is used internally by OD, refreshes the jobRoles</summary>
-        [Obsolete("OD HQ BS")] JobPermission,
 		///<summary>64. Caches the StateAbbrs used for helping prefill state fields and for state validations.</summary>
 		StateAbbrs,
 		///<summary>65</summary>
@@ -348,15 +344,8 @@ namespace OpenDentBusiness{
 		UserQueries,
 		///<summary>85. Schedules are not cached, but alerts other workstations if the schedules were changed</summary>
 		Schedules,
-        ///<summary>86. This is used internally by OD, refreshes the computer / extension linker table.</summary>
-        [Obsolete("OD HQ BS")] PhoneComps,
-        ///<summary>87. This is used internally by OD, refreshes the call center map.</summary>
-        [Obsolete("OD HQ BS")] PhoneMap,
 		///<summary>88.</summary>
 		SmsPhones,
-        ///<summary>89.  Chat support through our website at http://opendental.com/contact.html.
-        ///Used to indicate a new session has been created, an existing session has been destroyed, or messages inside the session have changed.</summary>
-        [Obsolete("OD HQ BS")] WebChatSessions,
 		///<summary>90. Used for tracking refreshes on tabs 'for [User]', 'New for [User]', 'Main', 'Reminders'.</summary>
 		TaskList,
 		///<summary>91. Used for tracking refreshes on tab 'Open Tasks'.</summary>
@@ -370,44 +359,7 @@ namespace OpenDentBusiness{
 		///<summary>95. Used for refreshing the ProviderClinicLink cache.</summary>
 		ProviderClinicLink,
 	}
-	//<summary></summary>
-	/*public enum ButtonType{
-		///<summary></summary>
-		ButPush,
-		///<summary></summary>
-		Text}*/
-	//DentalSpecialties are now a definition, user editable.
-	/////<summary></summary>
-	//public enum DentalSpecialty{
-	//	///<summary>0</summary>
-	//	General,
-	//	///<summary>1</summary>
-	//	Hygienist,
-	//	///<summary>2</summary>
-	//	Endodontics,
-	//	///<summary>3</summary>
-	//	Pediatric,
-	//	///<summary>4</summary>
-	//	Perio,
-	//	///<summary>5</summary>
-	//	Prosth,
-	//	///<summary>6</summary>
-	//	Ortho,
-	//	///<summary>7</summary>
-	//	Denturist,
-	//	///<summary>8</summary>
-	//	Surgery,
-	//	///<summary>9</summary>
-	//	Assistant,
-	//	///<summary>10</summary>
-	//	LabTech,
-	//	///<summary>11</summary>
-	//	Pathology,
-	//	///<summary>12</summary>
-	//	PublicHealth,
-	//	///<summary>13</summary>
-	//	Radiology
-	//}
+	
 	///<summary>Appointment status.</summary>
 	public enum ApptStatus{
 		///<summary>0- No appointment should ever have this status.</summary>

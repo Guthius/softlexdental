@@ -738,9 +738,9 @@ namespace OpenDental
             ComputerPrefs.UpdateLocalComputerOS();
             WikiPages.NavPageDelegate = S_WikiLoadPage;
             BeginCheckAlertsThread();
-            //We are about to start signal processing for the first time so set the initial refresh timestamp.
-            Signalods.SignalLastRefreshed = MiscData.GetNowDateTime();
-            Signalods.ApptSignalLastRefreshed = Signalods.SignalLastRefreshed;
+
+            Signal.StartProcessing();
+
             SetTimersAndThreads(true);
 
 
@@ -2309,7 +2309,7 @@ namespace OpenDental
 
         ///<summary>Set signalSmsCount to null if you want to query the db for the current value and send a signal.
         ///If responding to a signal then the structured data will be parsed from signalSmsCount.MsgValue and not new signal will be generated.</summary>
-        private void SetSmsNotificationText(Signalod signalSmsCount = null)
+        private void SetSmsNotificationText(Signal signalSmsCount = null)
         {
             if (_butText == null)
             {
@@ -2324,7 +2324,7 @@ namespace OpenDental
                 List<SmsFromMobiles.SmsNotification> listNotifications = null;
                 if (signalSmsCount != null)
                 { //Try to pull structured data out of the signal directly. We will get null back if this fails.
-                    listNotifications = SmsFromMobiles.SmsNotification.GetListFromJson(signalSmsCount.MsgValue);
+                    listNotifications = SmsFromMobiles.SmsNotification.GetListFromJson(signalSmsCount.Message);
                 }
                 if (listNotifications == null)
                 { //Notification not provided or signal was malformed. Either way recalculate and post a new signal.
@@ -2596,23 +2596,24 @@ namespace OpenDental
                 Plugin.Trigger(this, "FormOpenDental_DataBecameInvalid");
                 if (ContrChart2?.Visible ?? false)
                 {
-                    ODEvent.Fire(ODEventType.Cache, suffix + Lan.g(nameof(Cache), "Chart Module"));
+                    ODEvent.Fire(ODEventType.Cache, suffix + "Chart Module");
                     ContrChart2.ModuleSelected(CurPatNum);
                 }
                 return;//All task signals should already be sent. Sending more Task signals here would cause unnecessary refreshes.
             }
-            ODEvent.Fire(ODEventType.Cache, suffix + Lan.g(nameof(Cache), "Inserting Signals"));
-            foreach (InvalidType iType in e.ITypes)
-            {
-                Signalod sig = new Signalod();
-                sig.IType = iType;
-                if (iType == InvalidType.Task || iType == InvalidType.TaskPopup)
-                {
-                    sig.FKey = e.TaskNum;
-                    sig.FKeyType = KeyType.Task;
-                }
-                Signalods.Insert(sig);
-            }
+            ODEvent.Fire(ODEventType.Cache, suffix + "Inserting Signals");
+
+            //foreach (InvalidType iType in e.ITypes)
+            //{
+            //    Signal sig = new Signal();
+            //    sig.IType = iType;
+            //    if (iType == InvalidType.Task || iType == InvalidType.TaskPopup)
+            //    {
+            //        sig.ExternalId = e.TaskNum;
+            //        sig.FKeyType = KeyType.Task;
+            //    }
+            //    Signalods.Insert(sig);
+            //}
         }
 
         ///<summary>Referenced at least 40 times indirectly.</summary>
@@ -2809,7 +2810,7 @@ namespace OpenDental
              //Acknowledge all sigmessages in the database which correspond with the button that was just clicked.
              //Only acknowledge sigmessages which have a MessageDateTime prior to the last time we processed signals in the singal timer.
              //This is so that we don't accidentally acknowledge any sigmessages that we are currently unaware of.
-                SigMessages.AckButton(e.ButtonIndex + 1, Signalods.SignalLastRefreshed);
+                SigMessages.AckButton(e.ButtonIndex + 1, Signal.LastRefreshDate);
                 //Immediately update the signal button instead of waiting on our instance to process its own signals.
                 e.ActiveSignal.AckDateTime = DateTime.Now;
                 FillSignalButtons(new List<SigMessage>() { e.ActiveSignal });//Does not run query.
@@ -2832,11 +2833,10 @@ namespace OpenDental
             SigMessages.Insert(sigMessage);
             FillSignalButtons(new List<SigMessage>() { sigMessage });//Does not run query.
                                                                      //Let the other computers in the office know to refresh this specific light.
-            Signalod signal = new Signalod();
-            signal.IType = InvalidType.SigMessages;
-            signal.FKeyType = KeyType.SigMessage;
-            signal.FKey = sigMessage.SigMessageNum;
-            Signalods.Insert(signal);
+            Signal signal = new Signal();
+            signal.Name = "sig_message";
+            signal.ExternalId = sigMessage.SigMessageNum;
+            Signal.Insert(signal);
         }
 
         private void timerTimeIndic_Tick(object sender, System.EventArgs e)
@@ -2851,14 +2851,7 @@ namespace OpenDental
         ///<summary>Usually set at 4 to 6 second intervals.</summary>
         private void timerSignals_Tick(object sender, System.EventArgs e)
         {
-            try
-            {
-                SignalsTick();
-            }
-            catch (Exception ex)
-            {
-                SignalsTickExceptionHandler(ex);
-            }
+            SignalsTick();
         }
 
         ///<summary>Processes signals.</summary>
@@ -2866,7 +2859,7 @@ namespace OpenDental
         {
             try
             {
-                //This checks if any forms are open that make us want to continue processing signals even if inactive. Currently only FormTerminal.
+                // This checks if any forms are open that make us want to continue processing signals even if inactive. Currently only FormTerminal.
                 if (Application.OpenForms.OfType<Form>().All(x => x.Name != "FormTerminal"))
                 {
                     DateTime dtInactive = Security.DateTimeLastActivity + TimeSpan.FromMinutes((double)Preference.GetInt(PreferenceName.SignalInactiveMinutes));
@@ -2886,6 +2879,7 @@ namespace OpenDental
             {
                 //Currently do nothing.
             }
+
             #region Task Preprocessing
             if (_tasksUserNum != Security.CurrentUser.Id //The user has changed since the last signal tick was run (when logoff then logon),
                 || _listReminderTasks == null || _listNormalTaskNums == null)//or first time processing signals since the program started.
@@ -2930,19 +2924,21 @@ namespace OpenDental
             else if (_listReminderTasks.FindAll(x => x.DateTimeEntry <= DateTime.Now
                  && x.DateTimeEntry >= DateTime.Now.AddSeconds(-Preference.GetInt(PreferenceName.ProcessSigsIntervalInSecs))).Count > 0)
             {
-                List<Task> listDueReminderTasks = _listReminderTasks.FindAll(x => x.DateTimeEntry <= DateTime.Now
-                      && x.DateTimeEntry >= DateTime.Now.AddSeconds(-Preference.GetInt(PreferenceName.ProcessSigsIntervalInSecs)));
+                //List<Task> listDueReminderTasks = _listReminderTasks.FindAll(x => x.DateTimeEntry <= DateTime.Now
+                //      && x.DateTimeEntry >= DateTime.Now.AddSeconds(-Preference.GetInt(PreferenceName.ProcessSigsIntervalInSecs)));
 
-                List<Signalod> listSignals = new List<Signalod>();
-                foreach (Task task in listDueReminderTasks)
-                {
-                    Signalod sig = new Signalod();
-                    sig.IType = InvalidType.TaskList;
-                    sig.FKey = task.TaskListNum;
-                    sig.FKeyType = KeyType.Undefined;
-                    listSignals.Add(sig);
-                }
-                UserControlTasks.RefreshTasksForAllInstances(listSignals);
+                //List<Signal> listSignals = new List<Signal>();
+                //foreach (Task task in listDueReminderTasks)
+                //{
+                //    Signal sig = new Signal();
+                //    sig.IType = InvalidType.TaskList;
+                //    sig.ExternalId = task.TaskListNum;
+                //    sig.FKeyType = KeyType.Undefined;
+                //    listSignals.Add(sig);
+                //}
+                //UserControlTasks.RefreshTasksForAllInstances(listSignals);
+
+
                 //List<UserPreference> listBlockedTaskLists = UserOdPrefs.GetByUserAndFkeyType(Security.CurrentUser.Id, UserPreferenceName.TaskListBlock);
                 //foreach (Task reminderTask in listDueReminderTasks)
                 //{
@@ -2968,26 +2964,9 @@ namespace OpenDental
             }
             RefreshTasksNotification();
             #endregion Task Preprocessing
-            //Signal Processing
-            timerSignals.Stop();
-            var processSignalForms = new Action<List<ISignalProcessor>, List<Signalod>>((listISignalProcessors, listSignals) =>
-            {
-                //Broadcast to all subscribed signal processors.
-                this.Invoke((() =>
-                {
-                    listISignalProcessors.ToList().ForEach(x =>
-                    {
-                        try
-                        {
-                            x.ProcessObjects(listSignals);
-                        }
-                        catch
-                        {
-                        }
-                    });
-                }));
-            });
-            Signalods.SignalsTick(new Action(() => this.Invoke(OnShutdown)), processSignalForms, new Action(() => this.Invoke(timerSignals.Start)));
+
+
+
             //Be careful about doing anything that takes a long amount of computation time after the SignalsTick.
             //The UI will appear invalid for the time it takes any methods to process.
             //Post Signal Processing
@@ -2995,21 +2974,6 @@ namespace OpenDental
             //STOP! 
             //If you are trying to do something in FormOpenDental that uses a signal, you should use FormOpenDental.OnProcessSignals() instead.
             //This Function is only for processing things at regular intervals IF IT DOES NOT USE SIGNALS.
-        }
-
-        ///<summary>Catches an exception from signal processing and sends the first one to HQ.</summary>
-        private void SignalsTickExceptionHandler(Exception ex)
-        {
-            //If an exception happens during processing signals, we will not close the program because the user is not trying to do anything. We will
-            //send the first exception to HQ.
-            if (_signalsTickException == null)
-            {
-                _signalsTickException = new Exception("SignalsTick exception.", ex);
-                ODException.SwallowAnyException(() =>
-                {
-                    //BugSubmissions.SubmitException(_signalsTickException, patNumCur: CurPatNum, moduleName: GetSelectedModuleName());
-                });
-            }
         }
 
         ///<summary>Adds the alert items to the alert menu item.</summary>
@@ -3279,69 +3243,86 @@ namespace OpenDental
         }
 
         ///<summary>This only contains UI signal processing. See Signalods.SignalsTick() for cache updates.</summary>
-        public override void OnProcessSignals(List<Signalod> listSignals)
+        public override void OnProcessSignals(List<Signal> signals)
         {
-            if (listSignals.Exists(x => x.IType == InvalidType.Programs))
-            {
-                RefreshMenuReports();
-            }
-            #region SMS Notifications
-            Signalod signalSmsCount = listSignals.OrderByDescending(x => x.SigDateTime)
-                .FirstOrDefault(x => x.IType == InvalidType.SmsTextMsgReceivedUnreadCount && x.FKeyType == KeyType.SmsMsgUnreadCount);
-            if (signalSmsCount != null)
-            {
-                //Provide the pre-existing value here. This will act as a flag indicating that we should not resend the signal.  This would cause infinite signal loop.
-                SetSmsNotificationText(signalSmsCount);
-            }
-            #endregion SMS Notifications
-            #region Tasks
-            List<Signalod> listSignalTasks = listSignals.FindAll(x => x.IType == InvalidType.Task || x.IType == InvalidType.TaskPopup
-                  || x.IType == InvalidType.TaskList || x.IType == InvalidType.TaskAuthor || x.IType == InvalidType.TaskPatient);
-            List<long> listEditedTaskNums = listSignalTasks.FindAll(x => x.FKeyType == KeyType.Task).Select(x => x.FKey).ToList();
-            BeginTasksThread(listSignalTasks, listEditedTaskNums);
-            #endregion Tasks
-            #region Appointment Module
-            if (ContrAppt2.Visible)
-            {
-                bool isRefreshAppts = Signalods.IsApptRefreshNeeded(AppointmentL.DateSelected.Date, listSignals);
-                bool isRefreshScheds = Signalods.IsSchedRefreshNeeded(AppointmentL.DateSelected.Date, listSignals);
-                if (isRefreshAppts || isRefreshScheds)
-                {
-                    ContrAppt2.RefreshPeriod(false, isRefreshAppointments: isRefreshAppts, isRefreshSchedules: isRefreshScheds);
-                }
-            }
-            #endregion Appointment Module
-            #region Unfinalize Pay Menu Update
-            UpdateUnfinalizedPayCount(listSignals.FindAll(x => x.IType == InvalidType.UnfinalizedPayMenuUpdate));
-            #endregion Unfinalize Pay Menu Update
-            #region Refresh
-            InvalidType[] arrInvalidTypes = Signalods.GetInvalidTypes(listSignals);
-            if (arrInvalidTypes.Length > 0)
-            {
-                RefreshLocalDataPostCleanup(arrInvalidTypes);
-            }
-            #endregion Refresh
-            //Sig Messages must be the last code region to run in the process signals method because it changes the application icon.
-            #region Sig Messages (In the manual as "Internal Messages")
-            //Check to see if any signals are sigmessages.
-            List<long> listSigMessageNums = listSignals.FindAll(x => x.IType == InvalidType.SigMessages && x.FKeyType == KeyType.SigMessage).Select(x => x.FKey).ToList();
-            if (listSigMessageNums.Count > 0)
-            {
-                //Any SigMessage iType means we need to refresh our lights or buttons.
-                List<SigMessage> listSigMessages = SigMessages.GetSigMessages(listSigMessageNums);
-                ContrManage2.LogMsgs(listSigMessages);
-                FillSignalButtons(listSigMessages);
-                //Need to add a test to this: do not play messages that are over 2 minutes old.
-                BeginPlaySoundsThread(listSigMessages);
-            }
-            #endregion Sig Messages
+            //if (signals.Exists(x => x.Name == InvalidType.Programs))
+            //{
+            //    RefreshMenuReports();
+            //}
 
-            Plugin.Trigger(this, "FormOpenDental_ProcessSignals", listSignals);
+            //foreach (var signal in signals)
+            //{
+            //    if (signal.Name == SignalName.CacheInvalidate)
+            //    {
+                    
+            //    }
+            //}
+
+            //#region SMS Notifications
+
+            //var signalSmsCount =
+            //    signals
+            //        .OrderByDescending(signal => signal.Date)
+            //        .FirstOrDefault(
+            //            signal =>
+            //                signal.Name == "unread_sms");
+
+            //if (signalSmsCount != null)
+            //{
+            //    // Provide the pre-existing value here. This will act as a flag indicating that we should not resend the signal.  This would cause infinite signal loop.
+            //    SetSmsNotificationText(signalSmsCount);
+            //}
+
+            //#endregion SMS Notifications
+
+
+
+            //#region Tasks
+            //List<Signal> listSignalTasks = listSignals.FindAll(x => x.IType == InvalidType.Task || x.IType == InvalidType.TaskPopup
+            //      || x.IType == InvalidType.TaskList || x.IType == InvalidType.TaskAuthor || x.IType == InvalidType.TaskPatient);
+            //List<long> listEditedTaskNums = listSignalTasks.FindAll(x => x.FKeyType == KeyType.Task).Select(x => x.ExternalId).ToList();
+            //BeginTasksThread(listSignalTasks, listEditedTaskNums);
+            //#endregion Tasks
+            //#region Appointment Module
+            //if (ContrAppt2.Visible)
+            //{
+            //    bool isRefreshAppts = Signalods.IsApptRefreshNeeded(AppointmentL.DateSelected.Date, listSignals);
+            //    bool isRefreshScheds = Signalods.IsSchedRefreshNeeded(AppointmentL.DateSelected.Date, listSignals);
+            //    if (isRefreshAppts || isRefreshScheds)
+            //    {
+            //        ContrAppt2.RefreshPeriod(false, isRefreshAppointments: isRefreshAppts, isRefreshSchedules: isRefreshScheds);
+            //    }
+            //}
+            //#endregion Appointment Module
+            //#region Unfinalize Pay Menu Update
+            //UpdateUnfinalizedPayCount(listSignals.FindAll(x => x.IType == InvalidType.UnfinalizedPayMenuUpdate));
+            //#endregion Unfinalize Pay Menu Update
+            //#region Refresh
+            //InvalidType[] arrInvalidTypes = Signalods.GetInvalidTypes(listSignals);
+            //if (arrInvalidTypes.Length > 0)
+            //{
+            //    RefreshLocalDataPostCleanup(arrInvalidTypes);
+            //}
+            //#endregion Refresh
+            ////Sig Messages must be the last code region to run in the process signals method because it changes the application icon.
+            //#region Sig Messages (In the manual as "Internal Messages")
+            ////Check to see if any signals are sigmessages.
+            //List<long> listSigMessageNums = listSignals.FindAll(x => x.IType == InvalidType.SigMessages && x.FKeyType == KeyType.SigMessage).Select(x => x.ExternalId).ToList();
+            //if (listSigMessageNums.Count > 0)
+            //{
+            //    //Any SigMessage iType means we need to refresh our lights or buttons.
+            //    List<SigMessage> listSigMessages = SigMessages.GetSigMessages(listSigMessageNums);
+            //    ContrManage2.LogMsgs(listSigMessages);
+            //    FillSignalButtons(listSigMessages);
+            //    //Need to add a test to this: do not play messages that are over 2 minutes old.
+            //    BeginPlaySoundsThread(listSigMessages);
+            //}
+            //#endregion Sig Messages
         }
 
         ///<summary>Will invoke a refresh of tasks on the only instance of FormOpenDental. listRefreshedTaskNotes and listBlockedTaskLists are only used 
         ///for Popup tasks, only used if listRefreshedTasks includes at least one popup task.</summary>
-        public static void S_HandleRefreshedTasks(List<Signalod> listSignalTasks, List<long> listEditedTaskNums, List<Task> listRefreshedTasks,
+        public static void S_HandleRefreshedTasks(List<Signal> listSignalTasks, List<long> listEditedTaskNums, List<Task> listRefreshedTasks,
             List<TaskNote> listRefreshedTaskNotes, List<UserPreference> listBlockedTaskLists)
         {
             _formOpenDentalS.HandleRefreshedTasks(listSignalTasks, listEditedTaskNums, listRefreshedTasks, listRefreshedTaskNotes, listBlockedTaskLists);
@@ -3349,7 +3330,7 @@ namespace OpenDental
 
         ///<summary>Refreshes tasks and pops up as necessary. Invoked from thread callback in OnProcessSignals(). listRefreshedTaskNotes and 
         ///listBlockedTaskLists are only used for Popup tasks, only used if listRefreshedTasks includes at least one popup task.</summary>
-        private void HandleRefreshedTasks(List<Signalod> listSignalTasks, List<long> listEditedTaskNums, List<Task> listRefreshedTasks,
+        private void HandleRefreshedTasks(List<Signal> listSignalTasks, List<long> listEditedTaskNums, List<Task> listRefreshedTasks,
             List<TaskNote> listRefreshedTaskNotes, List<UserPreference> listBlockedTaskLists)
         {
             bool hasChangedReminders = UpdateTaskMetaData(listEditedTaskNums, listRefreshedTasks);
@@ -3423,52 +3404,52 @@ namespace OpenDental
             return hasChangedReminders;
         }
 
-        private void RefreshOpenTasksOrPopupNewTasks(List<Signalod> listSignalTasks, List<Task> listRefreshedTasks, List<TaskNote> listRefreshedTaskNotes,
+        private void RefreshOpenTasksOrPopupNewTasks(List<Signal> listSignalTasks, List<Task> listRefreshedTasks, List<TaskNote> listRefreshedTaskNotes,
             List<UserPreference> listBlockedTaskLists)
         {
-            if (listSignalTasks == null)
-            {
-                return;//Nothing to do if there was no signal sent which means no task has been flagged as needing to be refreshed.
-            }
-            List<long> listSignalTasksNums = listSignalTasks.Select(x => x.FKey).ToList();
-            List<long> listTaskNumsOpen = new List<long>();
-            for (int i = 0; i < Application.OpenForms.Count; i++)
-            {
-                Form form = Application.OpenForms[i];
-                if (!(form is FormTaskEdit))
-                {
-                    continue;
-                }
-                FormTaskEdit FormTE = (FormTaskEdit)form;
-                if (listSignalTasksNums.Contains(FormTE.TaskNumCur))
-                {
-                    FormTE.OnTaskEdited();
-                    listTaskNumsOpen.Add(FormTE.TaskNumCur);
-                }
-            }
-            List<Task> tasksPopup = new List<Task>();
-            if (listRefreshedTasks != null)
-            {
-                for (int i = 0; i < listRefreshedTasks.Count; i++)
-                {//Locate any popup tasks in the returned list of tasks.
-                 //Verify the current task is a popup task.
-                    if (!listSignalTasks.Exists(x => x.FKeyType == KeyType.Task && x.IType == InvalidType.TaskPopup && x.FKey == listRefreshedTasks[i].TaskNum)
-                        || listTaskNumsOpen.Contains(listRefreshedTasks[i].TaskNum))
-                    {
-                        continue;//Not a popup task or is already open.
-                    }
-                    tasksPopup.Add(listRefreshedTasks[i]);
-                }
-            }
-            for (int i = 0; i < tasksPopup.Count; i++)
-            {
-                //Reminders sent to a subscribed tasklist will pop up prior to the reminder date/time.
-                TaskPopupHelper(tasksPopup[i], listBlockedTaskLists, listRefreshedTaskNotes?.FindAll(x => x.TaskNum == tasksPopup[i].TaskNum));
-            }
-            if (listSignalTasks.Count > 0 || tasksPopup.Count > 0)
-            {
-                UserControlTasks.RefreshTasksForAllInstances(listSignalTasks);
-            }
+            //if (listSignalTasks == null)
+            //{
+            //    return;//Nothing to do if there was no signal sent which means no task has been flagged as needing to be refreshed.
+            //}
+            //List<long> listSignalTasksNums = listSignalTasks.Select(x => x.ExternalId).ToList();
+            //List<long> listTaskNumsOpen = new List<long>();
+            //for (int i = 0; i < Application.OpenForms.Count; i++)
+            //{
+            //    Form form = Application.OpenForms[i];
+            //    if (!(form is FormTaskEdit))
+            //    {
+            //        continue;
+            //    }
+            //    FormTaskEdit FormTE = (FormTaskEdit)form;
+            //    if (listSignalTasksNums.Contains(FormTE.TaskNumCur))
+            //    {
+            //        FormTE.OnTaskEdited();
+            //        listTaskNumsOpen.Add(FormTE.TaskNumCur);
+            //    }
+            //}
+            //List<Task> tasksPopup = new List<Task>();
+            //if (listRefreshedTasks != null)
+            //{
+            //    for (int i = 0; i < listRefreshedTasks.Count; i++)
+            //    {//Locate any popup tasks in the returned list of tasks.
+            //     //Verify the current task is a popup task.
+            //        if (!listSignalTasks.Exists(x => x.FKeyType == KeyType.Task && x.IType == InvalidType.TaskPopup && x.ExternalId == listRefreshedTasks[i].TaskNum)
+            //            || listTaskNumsOpen.Contains(listRefreshedTasks[i].TaskNum))
+            //        {
+            //            continue;//Not a popup task or is already open.
+            //        }
+            //        tasksPopup.Add(listRefreshedTasks[i]);
+            //    }
+            //}
+            //for (int i = 0; i < tasksPopup.Count; i++)
+            //{
+            //    //Reminders sent to a subscribed tasklist will pop up prior to the reminder date/time.
+            //    TaskPopupHelper(tasksPopup[i], listBlockedTaskLists, listRefreshedTaskNotes?.FindAll(x => x.TaskNum == tasksPopup[i].TaskNum));
+            //}
+            //if (listSignalTasks.Count > 0 || tasksPopup.Count > 0)
+            //{
+            //    UserControlTasks.RefreshTasksForAllInstances(listSignalTasks);
+            //}
         }
 
         ///<summary></summary>
@@ -5135,15 +5116,15 @@ namespace OpenDental
             formRp.ShowDialog();
         }
 
-        private void UpdateUnfinalizedPayCount(List<Signalod> listSignals)
+        private void UpdateUnfinalizedPayCount(List<Signal> listSignals)
         {
             if (listSignals.Count == 0)
             {
                 menuItemReportsUnfinalizedPay.Text = "Unfinalized Payments";
                 return;
             }
-            Signalod signal = listSignals.OrderByDescending(x => x.SigDateTime).First();
-            menuItemReportsUnfinalizedPay.Text = "Unfinalized Payments: " + signal.MsgValue;
+            Signal signal = listSignals.OrderByDescending(x => x.Date).First();
+            menuItemReportsUnfinalizedPay.Text = "Unfinalized Payments: " + signal.Message;
         }
 
         private void RefreshMenuReports()
@@ -5342,22 +5323,25 @@ namespace OpenDental
 
         private void menuItemShutdown_Click(object sender, EventArgs e)
         {
-            if (!Security.IsAuthorized(Permissions.Setup))
+            if (!Security.IsAuthorized(Permissions.Setup)) return;
+
+            using (var formShutdown = new FormShutdown())
             {
-                return;
+                if (formShutdown.ShowDialog() != DialogResult.OK)
+                {
+                    return;
+                }
             }
-            FormShutdown FormS = new FormShutdown();
-            FormS.ShowDialog();
-            if (FormS.DialogResult != DialogResult.OK)
+
+            // Turn off signal reception for 5 seconds so this workstation will not shut down.
+            Signal.SuspendProcessing(5);
+            Signal.Insert(new Signal
             {
-                return;
-            }
-            //turn off signal reception for 5 seconds so this workstation will not shut down.
-            Signalods.SignalLastRefreshed = MiscData.GetNowDateTime().AddSeconds(5);
-            Signalod sig = new Signalod();
-            sig.IType = InvalidType.ShutDownNow;
-            Signalods.Insert(sig);
-            Computer.ClearAllHeartBeats(Environment.MachineName);//always assume success
+                Name = SignalName.Shutdown
+            });
+
+            Computer.ClearAllHeartBeats(Environment.MachineName);
+
             SecurityLog.Write(SecurityLogEvents.Setup, "Shutdown all workstations.");
         }
 

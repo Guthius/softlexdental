@@ -798,7 +798,7 @@ namespace OpenDental
             Preference.Update(PreferenceName.ReplicationFailureAtServer_id, ReplicationServers.Server_id);
             //shut down all workstations on all servers
             Signalods.SignalLastRefreshed = MiscData.GetNowDateTime().AddSeconds(5);
-            Signalod sig = new Signalod();
+            Signal sig = new Signal();
             sig.IType = InvalidType.ShutDownNow;
             Signalods.Insert(sig);
             Computer.ClearAllHeartBeats(Environment.MachineName);//always assume success
@@ -845,7 +845,7 @@ namespace OpenDental
         #region TasksThread
 
         ///<summary>Begins a thread that handles all tasks from signals. Only call within signal processing.</summary>
-        private void BeginTasksThread(List<Signalod> listSignalTasks, List<long> listEditedTaskNums)
+        private void BeginTasksThread(List<Signal> listSignalTasks, List<long> listEditedTaskNums)
         {
             //Do not call IsThreadAlreadyRunning(FormODThreadNames.Tasks) here.
             //Allow this thread to re-enter in the rare case that a subsequent run is required while the first run is still busy.
