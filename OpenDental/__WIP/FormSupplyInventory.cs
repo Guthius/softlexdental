@@ -1,3 +1,20 @@
+/**
+ * Copyright (C) 2019 Dental Stars SRL
+ * Copyright (C) 2003-2019 Jordan S. Sparks, D.M.D.
+ * 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; If not, see <http://www.gnu.org/licenses/>
+ */
 using CodeBase;
 using OpenDental.UI;
 using OpenDentBusiness;
@@ -37,7 +54,7 @@ namespace OpenDental
         /// </summary>
         void LoadSuppliesNeeded()
         {
-            suppliesList = SupplyNeededs.CreateObjects();
+            suppliesList = SupplyNeeded.All();
 
             suppliesGrid.BeginUpdate();
             suppliesGrid.Columns.Clear();
@@ -60,9 +77,8 @@ namespace OpenDental
         /// </summary>
         void SuppliesGrid_CellDoubleClick(object sender, ODGridClickEventArgs e)
         {
-            using (var formSupplyNeededEdit = new FormSupplyNeededEdit())
+            using (var formSupplyNeededEdit = new FormSupplyNeededEdit(suppliesList[e.Row]))
             {
-                formSupplyNeededEdit.Supp = suppliesList[e.Row];
                 if (formSupplyNeededEdit.ShowDialog(this) == DialogResult.OK)
                 {
                     LoadSuppliesNeeded();
@@ -82,7 +98,7 @@ namespace OpenDental
                 formDefinitions.ShowDialog(this);
             }
 
-            SecurityLog.Write(Permissions.Setup, 0, Translation.LanguageSecurity.DefinitionsAccessed);
+            SecurityLog.Write(SecurityLogEvents.Setup, Translation.LanguageSecurity.DefinitionsAccessed);
         }
 
         /// <summary>
@@ -136,15 +152,8 @@ namespace OpenDental
         /// </summary>
         void AddNeededButton_Click(object sender, EventArgs e)
         {
-            var supplyNeeded = new SupplyNeeded
+            using (var formSupplyNeededEdit = new FormSupplyNeededEdit(new SupplyNeeded()))
             {
-                IsNew       = true,
-                DateAdded   = DateTime.Today
-            };
-
-            using (var formSupplyNeededEdit = new FormSupplyNeededEdit())
-            {
-                formSupplyNeededEdit.Supp = supplyNeeded;
                 if (formSupplyNeededEdit.ShowDialog(this) == DialogResult.OK)
                 {
                     LoadSuppliesNeeded();
@@ -169,33 +178,39 @@ namespace OpenDental
         void PrintPage(object sender, PrintPageEventArgs e)
         {
             Rectangle bounds = e.MarginBounds;
-            Graphics g = e.Graphics;
-            string text;
-            Font headingFont = new Font("Arial", 13, FontStyle.Bold);
-            int yPos = bounds.Top;
-            int center = bounds.X + bounds.Width / 2;
+  
+            using (var font = new Font("Arial", 13, FontStyle.Bold))
+            {
+                int y = bounds.Top;
+                int center = bounds.X + bounds.Width / 2;
 
-            if (!headingPrinted)
-            {
-                text = Translation.Language.SuppliesNeeded;
-                g.DrawString(text, headingFont, Brushes.Black, center - g.MeasureString(text, headingFont).Width / 2, yPos);
-                yPos += (int)g.MeasureString(text, headingFont).Height;
-                yPos += 20;
-                headingPrinted = true;
-                headingPrintHeight = yPos;
-            }
+                if (!headingPrinted)
+                {
+                    var text = Translation.Language.SuppliesNeeded;
+                    var textSize = e.Graphics.MeasureString(text, font);
 
-            yPos = suppliesGrid.PrintPage(g, pagesPrinted, bounds, headingPrintHeight);
-            pagesPrinted++;
-            if (yPos == -1)
-            {
-                e.HasMorePages = true;
+                   
+                    e.Graphics.DrawString(text, font, Brushes.Black, center - textSize.Width / 2, y);
+
+                    y += (int)e.Graphics.MeasureString(text, font).Height;
+                    y += 20;
+
+                    headingPrinted = true;
+                    headingPrintHeight = y;
+                }
+
+                y = suppliesGrid.PrintPage(e.Graphics, pagesPrinted, bounds, headingPrintHeight);
+
+                pagesPrinted++;
+                if (y == -1)
+                {
+                    e.HasMorePages = true;
+                }
+                else
+                {
+                    e.HasMorePages = false;
+                }
             }
-            else
-            {
-                e.HasMorePages = false;
-            }
-            g.Dispose();
         }
 
         /// <summary>

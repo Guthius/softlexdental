@@ -69,7 +69,7 @@ namespace OpenDental
 
             try
             {
-                Suppliers.DeleteObject(Supplier);
+                Supplier.Delete(Supplier);
             }
             catch (Exception exception)
             {
@@ -112,11 +112,11 @@ namespace OpenDental
 
             if (Supplier.Id == 0)
             {
-                Suppliers.Insert(Supplier);
+                Supplier.Insert(Supplier);
             }
             else
             {
-                Suppliers.Update(Supplier);
+                Supplier.Update(Supplier);
             }
 
             DialogResult = DialogResult.OK;

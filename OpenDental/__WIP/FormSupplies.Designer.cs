@@ -33,8 +33,6 @@ namespace OpenDental
             this.infoLabel = new System.Windows.Forms.Label();
             this.showShoppingListCheckBox = new System.Windows.Forms.CheckBox();
             this.searchTextBox = new System.Windows.Forms.TextBox();
-            this.upButton = new System.Windows.Forms.Button();
-            this.downButton = new System.Windows.Forms.Button();
             this.acceptButton = new System.Windows.Forms.Button();
             this.cancelButton = new System.Windows.Forms.Button();
             this.printButton = new System.Windows.Forms.Button();
@@ -89,26 +87,6 @@ namespace OpenDental
             this.searchTextBox.Size = new System.Drawing.Size(168, 23);
             this.searchTextBox.TabIndex = 1;
             this.searchTextBox.TextChanged += new System.EventHandler(this.SearchTextBox_TextChanged);
-            // 
-            // upButton
-            // 
-            this.upButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.upButton.Image = global::OpenDental.Properties.Resources.IconBulletArrowUp;
-            this.upButton.Location = new System.Drawing.Point(13, 598);
-            this.upButton.Name = "upButton";
-            this.upButton.Size = new System.Drawing.Size(40, 30);
-            this.upButton.TabIndex = 5;
-            this.upButton.Click += new System.EventHandler(this.UpButton_Click);
-            // 
-            // downButton
-            // 
-            this.downButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.downButton.Image = global::OpenDental.Properties.Resources.IconBulletArrowDown;
-            this.downButton.Location = new System.Drawing.Point(59, 598);
-            this.downButton.Name = "downButton";
-            this.downButton.Size = new System.Drawing.Size(40, 30);
-            this.downButton.TabIndex = 6;
-            this.downButton.Click += new System.EventHandler(this.DownButton_Click);
             // 
             // acceptButton
             // 
@@ -233,8 +211,6 @@ namespace OpenDental
             this.Controls.Add(this.infoLabel);
             this.Controls.Add(this.showShoppingListCheckBox);
             this.Controls.Add(this.searchTextBox);
-            this.Controls.Add(this.upButton);
-            this.Controls.Add(this.downButton);
             this.Controls.Add(this.acceptButton);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.printButton);
@@ -268,8 +244,6 @@ namespace OpenDental
         private System.Windows.Forms.Button printButton;
         private System.Windows.Forms.Button acceptButton;
         private System.Windows.Forms.Button cancelButton;
-        private System.Windows.Forms.Button upButton;
-        private System.Windows.Forms.Button downButton;
         private System.Windows.Forms.CheckBox showShoppingListCheckBox;
         private System.Windows.Forms.Label infoLabel;
         private System.Windows.Forms.Button addToOrderButton;

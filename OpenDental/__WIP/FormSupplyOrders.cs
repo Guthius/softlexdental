@@ -1,3 +1,20 @@
+/**
+ * Copyright (C) 2019 Dental Stars SRL
+ * Copyright (C) 2003-2019 Jordan S. Sparks, D.M.D.
+ * 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; If not, see <http://www.gnu.org/licenses/>
+ */
 using OpenDental.UI;
 using OpenDentBusiness;
 using System;
@@ -12,13 +29,13 @@ namespace OpenDental
 {
     public partial class FormSupplyOrders : FormBase
     {
-        List<Supplier> suppliersList;
-        List<SupplyOrder> allOrdersList;
-        List<SupplyOrder> ordersList;
-        DataTable orderItemsTable;
-        int pagesPrinted;
-        bool headingPrinted;
-        int headingPrintHeight;
+        private List<Supplier> suppliers;
+        private List<SupplyOrder> allOrders;
+        private List<SupplyOrder> orders;
+        private DataTable orderItemsTable;
+        private int pagesPrinted;
+        private bool headingPrinted;
+        private int headingPrintHeight;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FormSupplyOrders"/> class.
@@ -30,8 +47,8 @@ namespace OpenDental
         /// </summary>
         void FormSupplyOrders_Load(object sender, EventArgs e)
         {
-            allOrdersList = SupplyOrders.GetAll();
-            ordersList = new List<SupplyOrder>();
+            allOrders = SupplyOrder.All();
+            orders = new List<SupplyOrder>();
 
             LoadSuppliers();
             LoadOrders();
@@ -44,15 +61,15 @@ namespace OpenDental
         /// </summary>
         void LoadSuppliers()
         {
-            suppliersList = Suppliers.GetAll();
+            suppliers = Supplier.All();
 
             supplierComboBox.Items.Clear();
             supplierComboBox.Items.Add(Translation.Language.All);
             supplierComboBox.SelectedIndex = 0;
 
-            for (int i = 0; i < suppliersList.Count; i++)
+            for (int i = 0; i < suppliers.Count; i++)
             {
-                supplierComboBox.Items.Add(suppliersList[i].Name);
+                supplierComboBox.Items.Add(suppliers[i].Name);
             }
         }
 
@@ -73,36 +90,17 @@ namespace OpenDental
             ordersGrid.Columns.Add(new ODGridColumn(Translation.Language.ColumnPlacedBy, 100));
             ordersGrid.Rows.Clear();
 
-            for (int i = 0; i < ordersList.Count; i++)
+            foreach (var order in orders)
             {
                 var row = new ODGridRow();
 
-                bool isPending = ordersList[i].DatePlaced.Year > 2200;
-
-                if (isPending)
-                {
-                    row.Cells.Add(Translation.Language.Pending.ToLower());
-                }
-                else
-                {
-                    row.Cells.Add(ordersList[i].DatePlaced.ToShortDateString());
-                }
-
-                row.Cells.Add(ordersList[i].AmountTotal.ToString("c"));
-                row.Cells.Add(ordersList[i].ShippingCharge.ToString("c"));
-                row.Cells.Add(Suppliers.GetName(suppliersList, ordersList[i].SupplierId));
-                row.Cells.Add(ordersList[i].Note);
-
-                if (isPending || ordersList[i].UserId == 0)
-                {
-                    row.Cells.Add("");
-                }
-                else
-                {
-                    row.Cells.Add(User.GetName(ordersList[i].UserId));
-                }
-
-                row.Tag = ordersList[i];
+                row.Cells.Add(order.DatePlaced?.ToShortDateString() ?? Translation.Language.Pending.ToLower());
+                row.Cells.Add(order.AmountTotal.ToString("c"));
+                row.Cells.Add(order.ShippingCharge.ToString("c"));
+                row.Cells.Add(Supplier.GetName(suppliers, order.SupplierId));
+                row.Cells.Add(order.Note);
+                row.Cells.Add(order.UserId.HasValue ? User.GetName(order.UserId.Value) : "");
+                row.Tag = order;
 
                 ordersGrid.Rows.Add(row);
             }
@@ -114,13 +112,13 @@ namespace OpenDental
         /// </summary>
         void LoadOrderItems()
         {
-            long orderNum = 0;
+            long orderId = 0;
             if (ordersGrid.GetSelectedIndex() != -1)
             {
-                orderNum = ordersList[ordersGrid.GetSelectedIndex()].Id;
+                orderId = orders[ordersGrid.GetSelectedIndex()].Id;
             }
 
-            orderItemsTable = SupplyOrderItems.GetItemsForOrder(orderNum);
+            orderItemsTable = SupplyOrderItem.GetOrderLines(orderId);
 
             orderItemsGrid.BeginUpdate();
             orderItemsGrid.Columns.Clear();
@@ -133,12 +131,12 @@ namespace OpenDental
 
             for (int i = 0; i < orderItemsTable.Rows.Count; i++)
             {
-                int.TryParse(orderItemsTable.Rows[i]["Qty"].ToString(), out int qty);
-                double.TryParse(orderItemsTable.Rows[i]["Price"].ToString(), out double price);
+                int.TryParse(orderItemsTable.Rows[i]["quantity"].ToString(), out int qty);
+                double.TryParse(orderItemsTable.Rows[i]["price"].ToString(), out double price);
 
                 var row = new ODGridRow();
-                row.Cells.Add(orderItemsTable.Rows[i]["CatalogNumber"].ToString());
-                row.Cells.Add(orderItemsTable.Rows[i]["Descript"].ToString());
+                row.Cells.Add(orderItemsTable.Rows[i]["catalog_number"].ToString());
+                row.Cells.Add(orderItemsTable.Rows[i]["description"].ToString());
                 row.Cells.Add(qty.ToString());
                 row.Cells.Add(price.ToString("n"));
                 row.Cells.Add((qty * price).ToString("n"));
@@ -154,19 +152,19 @@ namespace OpenDental
         /// </summary>
         void FilterListOrder()
         {
-            ordersList.Clear();
+            orders.Clear();
 
-            long supplierNum = (supplierComboBox.SelectedIndex > 0) ? suppliersList[supplierComboBox.SelectedIndex - 1].Id : 0;
+            long supplierNum = (supplierComboBox.SelectedIndex > 0) ? suppliers[supplierComboBox.SelectedIndex - 1].Id : 0;
 
-            foreach (var supplyOrder in allOrdersList)
+            foreach (var supplyOrder in allOrders)
             {
                 if (supplierNum == 0)
                 {
-                    ordersList.Add(supplyOrder);
+                    orders.Add(supplyOrder);
                 }
                 else if (supplyOrder.SupplierId == supplierNum)
                 {
-                    ordersList.Add(supplyOrder);
+                    orders.Add(supplyOrder);
                 }
             }
         }
@@ -187,9 +185,9 @@ namespace OpenDental
                 return;
             }
 
-            for (int i = 0; i < ordersList.Count; i++)
+            foreach (var order in orders)
             {
-                if (ordersList[i].DatePlaced.Year > 2200)
+                if (!order.DatePlaced.HasValue)
                 {
                     MessageBox.Show(
                         Translation.Language.NotAllowedToAddNewOrderWhenOneIsPending,
@@ -208,20 +206,20 @@ namespace OpenDental
             }
             else
             {
-                supplyOrder.SupplierId = suppliersList[supplierComboBox.SelectedIndex - 1].Id;//SelectedIndex-1 because "All" is first option.
+                supplyOrder.SupplierId = suppliers[supplierComboBox.SelectedIndex - 1].Id;//SelectedIndex-1 because "All" is first option.
             }
-            supplyOrder.IsNew = true;
+
             supplyOrder.DatePlaced = new DateTime(2500, 1, 1);
             supplyOrder.Note = "";
             supplyOrder.UserId = 0;
 
-            SupplyOrders.Insert(supplyOrder);
+            SupplyOrder.Insert(supplyOrder);
 
-            allOrdersList = SupplyOrders.GetAll();
+            allOrders = SupplyOrder.All();
 
             LoadOrders();
 
-            ordersGrid.SetSelected(ordersList.Count - 1, true);
+            ordersGrid.SetSelected(orders.Count - 1, true);
             ordersGrid.ScrollToEnd();
 
             LoadOrderItems();
@@ -251,14 +249,15 @@ namespace OpenDental
         {
             using (var formSupplyOrderEdit = new FormSupplyOrderEdit())
             {
-                formSupplyOrderEdit.ListSupplier = suppliersList;
-                formSupplyOrderEdit.Order = ordersList[e.Row];
+                formSupplyOrderEdit.Suppliers = suppliers;
+                formSupplyOrderEdit.Order = orders[e.Row];
+
                 if (formSupplyOrderEdit.ShowDialog(this) != DialogResult.OK)
                 {
                     return;
                 }
 
-                allOrdersList = SupplyOrders.GetAll();
+                allOrders = SupplyOrder.All();
 
                 LoadOrders();
                 LoadOrderItems();
@@ -284,28 +283,28 @@ namespace OpenDental
             using (var formSupplies = new FormSupplies())
             {
                 formSupplies.IsSelectionMode = true;
-                formSupplies.SelectedSupplierId = ordersList[ordersGrid.GetSelectedIndex()].SupplierId;
+                formSupplies.SelectedSupplierId = orders[ordersGrid.GetSelectedIndex()].SupplierId;
                 if (formSupplies.ShowDialog(this) != DialogResult.OK)
                 {
                     return;
                 }
 
-                for (int i = 0; i < formSupplies.SelectedSupplies.Count; i++)
+                foreach (var supply in formSupplies.SelectedSupplies)
                 {	
-                    if (orderItemsTable.Rows.OfType<DataRow>().Any(x => PIn.Long(x["SupplyNum"].ToString()) == formSupplies.SelectedSupplies[i].Id))
+                    if (orderItemsTable.Rows.OfType<DataRow>().Any(x => (long)x["supply_id"] == supply.Id))
                     {
                         continue;
                     }
 
                     var supplyOrderItem = new SupplyOrderItem
                     {
-                        SupplyId       = formSupplies.SelectedSupplies[i].Id,
-                        Quantity             = 1,
-                        Price           = formSupplies.SelectedSupplies[i].Price,
-                        SupplyOrderId  = ordersList[ordersGrid.GetSelectedIndex()].Id
+                        SupplyId = supply.Id,
+                        SupplyOrderId = orders[ordersGrid.GetSelectedIndex()].Id,
+                        Quantity = 1,
+                        Price = supply.Price
                     };
 
-                    SupplyOrderItems.Insert(supplyOrderItem);
+                    SupplyOrderItem.Insert(supplyOrderItem);
                 }
 
                 UpdatePriceAndRefresh();
@@ -319,15 +318,15 @@ namespace OpenDental
         {
             using (var formSupplyOrderItemEdit = new FormSupplyOrderItemEdit())
             {
-                formSupplyOrderItemEdit.ItemCur = SupplyOrderItems.CreateObject(PIn.Long(orderItemsTable.Rows[e.Row]["SupplyOrderItemNum"].ToString()));
-                formSupplyOrderItemEdit.ListSupplier = Suppliers.GetAll();
+                formSupplyOrderItemEdit.SupplyOrderItem = SupplyOrderItem.GetById((long)orderItemsTable.Rows[e.Row]["supply_order_item_id"]);
+                formSupplyOrderItemEdit.Suppliers = Supplier.All();
 
                 if (formSupplyOrderItemEdit.ShowDialog(this) != DialogResult.OK)
                 {
                     return;
                 }
 
-                SupplyOrderItems.Update(formSupplyOrderItemEdit.ItemCur);
+                SupplyOrderItem.Update(formSupplyOrderItemEdit.SupplyOrderItem);
 
                 UpdatePriceAndRefresh();
             }
@@ -342,12 +341,12 @@ namespace OpenDental
             int.TryParse(orderItemsGrid.Rows[e.Row].Cells[2].Text, out int qtyNew);
             double.TryParse(orderItemsGrid.Rows[e.Row].Cells[3].Text, out double priceNew);
 
-            var supplyOrderItem = SupplyOrderItems.CreateObject(PIn.Long(orderItemsTable.Rows[e.Row]["SupplyOrderItemNum"].ToString()));
-            supplyOrderItem.Qty = qtyNew;
+            var supplyOrderItem = SupplyOrderItem.GetById((long)orderItemsTable.Rows[e.Row]["supply_order_item_id"]);
+            supplyOrderItem.Quantity = qtyNew;
             supplyOrderItem.Price = priceNew;
 
-            SupplyOrderItems.Update(supplyOrderItem);
-            SupplyOrders.UpdateOrderPrice(supplyOrderItem.SupplyOrderId);
+            SupplyOrderItem.Update(supplyOrderItem);
+            SupplyOrder.UpdateOrderPrice(supplyOrderItem.SupplyOrderId);
 
             orderItemsGrid.Rows[e.Row].Cells[2].Text = qtyNew.ToString();
             orderItemsGrid.Rows[e.Row].Cells[3].Text = priceNew.ToString("n");
@@ -355,7 +354,7 @@ namespace OpenDental
             orderItemsGrid.Invalidate();
 
             int selectedIndex = ordersGrid.GetSelectedIndex();
-            allOrdersList = SupplyOrders.GetAll();
+            allOrders = SupplyOrder.All();
 
             LoadOrders();
 
@@ -385,7 +384,7 @@ namespace OpenDental
                 PrintPage,
                 string.Format(
                     Translation.LanguageSecurity.SuppliesOrderFromDatePrinted, 
-                    ordersList[ordersGrid.GetSelectedIndex()].DatePlaced.ToShortDateString()),
+                    orders[ordersGrid.GetSelectedIndex()].DatePlaced?.ToShortDateString() ?? "N/A"),
                 margins: new Margins(50, 50, 40, 30)
             );
         }
@@ -403,13 +402,13 @@ namespace OpenDental
                 text = Translation.Language.SupplyList;
                 g.DrawString(text, headingFont, Brushes.Black, 425 - g.MeasureString(text, headingFont).Width / 2, yPos);
                 yPos += (int)g.MeasureString(text, headingFont).Height;
-                text = Translation.Language.OrderNumber + ": " + ordersList[ordersGrid.SelectedIndices[0]].Id;
+                text = Translation.Language.OrderNumber + ": " + orders[ordersGrid.SelectedIndices[0]].Id;
                 g.DrawString(text, subHeadingFont, Brushes.Black, 425 - g.MeasureString(text, subHeadingFont).Width / 2, yPos);
                 yPos += (int)g.MeasureString(text, subHeadingFont).Height;
-                text = Translation.Language.Date + ": " + ordersList[ordersGrid.SelectedIndices[0]].DatePlaced.ToShortDateString();
+                text = Translation.Language.Date + ": " + orders[ordersGrid.SelectedIndices[0]].DatePlaced?.ToShortDateString() ?? "N/A";
                 g.DrawString(text, subHeadingFont, Brushes.Black, 425 - g.MeasureString(text, subHeadingFont).Width / 2, yPos);
                 yPos += (int)g.MeasureString(text, subHeadingFont).Height;
-                Supplier supCur = Suppliers.GetOne(ordersList[ordersGrid.SelectedIndices[0]].SupplierId);
+                Supplier supCur = Supplier.GetById(orders[ordersGrid.SelectedIndices[0]].SupplierId);
                 text = supCur.Name;
                 g.DrawString(text, subHeadingFont, Brushes.Black, 425 - g.MeasureString(text, subHeadingFont).Width / 2, yPos);
                 yPos += (int)g.MeasureString(text, subHeadingFont).Height;
@@ -442,9 +441,9 @@ namespace OpenDental
         void UpdatePriceAndRefresh()
         {
             var supplyOrder = ordersGrid.SelectedTag<SupplyOrder>();
-            SupplyOrders.UpdateOrderPrice(ordersList[ordersGrid.GetSelectedIndex()].Id);
+            SupplyOrder.UpdateOrderPrice(orders[ordersGrid.GetSelectedIndex()].Id);
 
-            allOrdersList = SupplyOrders.GetAll();
+            allOrders = SupplyOrder.All();
 
             LoadOrders();
 

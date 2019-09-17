@@ -24,8 +24,7 @@ namespace OpenDental
 {
     public partial class FormSupplyEdit : FormBase
     {
-        private List<Definition> supplyCategoriesList;
-        private long categoryInitialVal;
+        private List<Definition> supplyCategories;
 
         /// <summary>
         /// Gets or sets the supply.
@@ -38,21 +37,20 @@ namespace OpenDental
 
         private void FormSupplyEdit_Load(object sender, EventArgs e)
         {
-            supplierTextBox.Text = OpenDentBusiness.Suppliers.GetName(Suppliers, Supply.SupplierId);
+            supplierTextBox.Text = Supplier.GetName(Suppliers, Supply.SupplierId);
 
-            supplyCategoriesList = Definition.GetByCategory(DefinitionCategory.SupplyCats);;
-            for (int i = 0; i < supplyCategoriesList.Count; i++)
+            supplyCategories = Definition.GetByCategory(DefinitionCategory.SupplyCats);;
+            foreach (var supplyCategory in supplyCategories)
             {
-                categoryComboBox.Items.Add(supplyCategoriesList[i].Description);
-                if (Supply.CategoryId == supplyCategoriesList[i].Id)
+                categoryComboBox.Items.Add(supplyCategory);
+                if (Supply.CategoryId == supplyCategory.Id)
                 {
-                    categoryComboBox.SelectedIndex = i;
+                    categoryComboBox.SelectedItem = supplyCategory;
                 }
             }
 
             if (categoryComboBox.SelectedIndex == -1) categoryComboBox.SelectedIndex = 0;
 
-            categoryInitialVal = Supply.CategoryId;
             catalogNumberTextBox.Text = Supply.CatalogNumber;
             descriptionTextBox.Text = Supply.Description;
 
@@ -93,7 +91,7 @@ namespace OpenDental
 
             try
             {
-                Supplies.DeleteObject(Supply);
+                Supply.Delete(Supply);
             }
             catch (Exception exception)
             {
@@ -124,7 +122,8 @@ namespace OpenDental
                 return;
             }
 
-            if (descriptionTextBox.Text == "")
+            var description = descriptionTextBox.Text.Trim();
+            if (description.Length == 0)
             {
                 MessageBox.Show(
                     Translation.Language.PleaseEnterADescription,
@@ -135,18 +134,13 @@ namespace OpenDental
                 return;
             }
 
-            Supply.CategoryId = supplyCategoriesList[categoryComboBox.SelectedIndex].Id;
+            Supply.CategoryId = supplyCategories[categoryComboBox.SelectedIndex].Id;
             Supply.CatalogNumber = catalogNumberTextBox.Text;
             Supply.Description = descriptionTextBox.Text;
             Supply.LevelDesired = PIn.Float(levelDesiredTextBox.Text);
             Supply.LevelOnHand = PIn.Float(levelOnHandTextBox.Text);
             Supply.Price = priceTextBox.Value;
             Supply.Hidden = hiddenCheckBox.Checked;
-
-            if (Supply.CategoryId != categoryInitialVal)
-            {
-                Supply.SortOrder = int.MaxValue;
-            }
 
             DialogResult = DialogResult.OK;
         }

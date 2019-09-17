@@ -86,7 +86,7 @@ namespace OpenDentBusiness
         /// </summary>
         /// <param name="supplierId">The ID of the supplier.</param>
         /// <returns>The supplier with the specified ID.</returns>
-        public static Supplier GetOne(long supplierId) =>
+        public static Supplier GetById(long supplierId) =>
             SelectOne("SELECT * FROM `suppliers` WHERE `id` = " + supplierId, FromReader);
 
         /// <summary>

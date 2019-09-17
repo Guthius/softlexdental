@@ -33,7 +33,7 @@ namespace OpenDental
 
         private void LoadSuppliers()
         {
-            suppliers = Suppliers.GetAll();
+            suppliers = Supplier.All();
 
             suppliersGrid.BeginUpdate();
             suppliersGrid.Columns.Clear();

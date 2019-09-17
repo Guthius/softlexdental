@@ -27,7 +27,7 @@ namespace OpenDentBusiness
     public class SupplyNeeded : DataRecord
     {
         public string Description;
-        public DateTime DateAdded;
+        public DateTime DateAdded = DateTime.Today;
 
         /// <summary>
         /// Constructs a new instance of the <see cref="SupplyNeeded"/> class.

@@ -1,3 +1,20 @@
+/**
+ * Copyright (C) 2019 Dental Stars SRL
+ * Copyright (C) 2003-2019 Jordan S. Sparks, D.M.D.
+ * 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; If not, see <http://www.gnu.org/licenses/>
+ */
 using CodeBase;
 using OpenDentBusiness;
 using System;
@@ -10,8 +27,9 @@ namespace OpenDental
 {
     public partial class FormSupplyOrderEdit : FormBase
     {
-        public SupplyOrder Order;
-        public List<Supplier> ListSupplier;
+        public SupplyOrder Order { get; set; }
+
+        public List<Supplier> Suppliers { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FormSupplyOrderEdit"/> class.
@@ -23,16 +41,17 @@ namespace OpenDental
         /// </summary>
         void FormSupplyOrderEdit_Load(object sender, EventArgs e)
         {
-            supplierTextBox.Text = Suppliers.GetName(ListSupplier, Order.SupplierId);
+            supplierTextBox.Text = Supplier.GetName(Suppliers, Order.SupplierId);
 
-            if (Order.DatePlaced.Year > 2200)
+            if (!Order.DatePlaced.HasValue)
             {
                 datePlacedTextBox.Text = DateTime.Today.ToShortDateString();
+
                 Order.UserId = Security.CurrentUser.Id;
             }
             else
             {
-                datePlacedTextBox.Text = Order.DatePlaced.ToShortDateString();
+                datePlacedTextBox.Text = Order.DatePlaced.Value.ToShortDateString();
             }
 
             totalTextBox.Value = Order.AmountTotal;
@@ -40,10 +59,10 @@ namespace OpenDental
             noteTextBox.Text = Order.Note;
 
             userComboBox.Items.Clear();
-            userComboBox.Items.Add(new ODBoxItem<User>(Translation.Language.None, new User()));
+            userComboBox.Items.Add(Translation.Language.None);
 
-            var usersList = User.All().FindAll(x => !x.Hidden);
-            foreach (var user in usersList)
+            var users = User.All().Where(x => !x.Hidden);
+            foreach (var user in users)
             {
                 var userBoxItem = new ODBoxItem<User>(user.UserName, user);
 
@@ -54,12 +73,10 @@ namespace OpenDental
                 }
             }
 
-            if (!usersList.Select(x => x.Id).Contains(Order.UserId))
+            if (userComboBox.SelectedIndex == -1 && 
+                userComboBox.Items.Count > 0)
             {
-                userComboBox.IndexSelectOrSetText(-1, () =>
-                {
-                    return User.GetName(Order.UserId);
-                });
+                userComboBox.SelectedIndex = 0;
             }
         }
 
@@ -88,7 +105,7 @@ namespace OpenDental
 
             if (result == DialogResult.Cancel) return;
 
-            SupplyOrders.DeleteObject(Order);
+            SupplyOrder.Delete(Order);
 
             DialogResult = DialogResult.OK;
         }
@@ -111,8 +128,7 @@ namespace OpenDental
 
             if (datePlacedTextBox.Text == "")
             {
-                Order.DatePlaced = new DateTime(2500, 1, 1);
-                Order.UserId = 0; // Even if they had set a user, set it back because the order hasn't been placed. 
+                Order.DatePlaced = null;
             }
             else
             {
@@ -127,7 +143,7 @@ namespace OpenDental
             Order.Note = noteTextBox.Text;
             Order.ShippingCharge = shippingChargeTextBox.Value;
 
-            SupplyOrders.Update(Order);
+            SupplyOrder.Update(Order);
 
             DialogResult = DialogResult.OK;
         }
