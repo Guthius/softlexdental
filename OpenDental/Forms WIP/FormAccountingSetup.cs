@@ -295,9 +295,9 @@ namespace OpenDental
                     formAccountPick.IsQuickBooks = true;
                     if (formAccountPick.ShowDialog() == DialogResult.OK)
                     {
-                        if (formAccountPick.SelectedAccountsQB != null)
+                        if (formAccountPick.SelectedQuickBookAccounts != null)
                         {
-                            return formAccountPick.SelectedAccountsQB;
+                            return formAccountPick.SelectedQuickBookAccounts;
                         }
                     }
                 }

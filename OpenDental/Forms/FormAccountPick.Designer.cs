@@ -26,21 +26,12 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormAccountPick));
-            this.imageListMain = new System.Windows.Forms.ImageList(this.components);
             this.checkInactive = new System.Windows.Forms.CheckBox();
             this.accountsGrid = new OpenDental.UI.ODGrid();
             this.cancelButton = new System.Windows.Forms.Button();
             this.acceptButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
-            // 
-            // imageListMain
-            // 
-            this.imageListMain.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageListMain.ImageStream")));
-            this.imageListMain.TransparentColor = System.Drawing.Color.Transparent;
-            this.imageListMain.Images.SetKeyName(0, "Add.gif");
-            this.imageListMain.Images.SetKeyName(1, "editPencil.gif");
             // 
             // checkInactive
             // 
@@ -120,6 +111,5 @@
         private System.Windows.Forms.CheckBox checkInactive;
         private System.Windows.Forms.Button cancelButton;
         private System.Windows.Forms.Button acceptButton;
-        private System.Windows.Forms.ImageList imageListMain;
     }
 }

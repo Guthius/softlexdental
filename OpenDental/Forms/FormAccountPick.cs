@@ -27,9 +27,20 @@ namespace OpenDental
 {
     public partial class FormAccountPick : FormBase
     {
-        public Account SelectedAccount;
-        public bool IsQuickBooks;
-        public List<string> SelectedAccountsQB;
+        /// <summary>
+        /// Gets the selected account.
+        /// </summary>
+        public Account SelectedAccount { get; private set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to select quick book accounts.
+        /// </summary>
+        public bool IsQuickBooks { get; set; }
+
+        /// <summary>
+        /// Gets the selected QuickBook accounts.
+        /// </summary>
+        public List<string> SelectedQuickBookAccounts { get; } = new List<string>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FormAccountPick"/> class.
@@ -43,7 +54,6 @@ namespace OpenDental
         {
             if (IsQuickBooks)
             {
-                SelectedAccountsQB = new List<string>();
                 checkInactive.Visible = false;
 
                 LoadAccountsQuickBooks();
@@ -70,39 +80,40 @@ namespace OpenDental
             accountsGrid.Columns.Add(new ODGridColumn(Translation.Language.ColumnInactive, 70));
             accountsGrid.Rows.Clear();
 
-            var listAccounts = Account.All();
-            for (int i = 0; i < listAccounts.Count; i++)
+            var accounts = Account.All();
+            for (int i = 0; i < accounts.Count; i++)
             {
-                if (!checkInactive.Checked && listAccounts[i].Inactive)
+                if (!checkInactive.Checked && accounts[i].Inactive)
                 {
                     continue;
                 }
 
                 var row = new ODGridRow();
-                row.Cells.Add(listAccounts[i].Type.ToString());
-                row.Cells.Add(listAccounts[i].Description);
-                if (listAccounts[i].Type == AccountType.Asset)
+                row.Cells.Add(accounts[i].Type.ToString());
+                row.Cells.Add(accounts[i].Description);
+                if (accounts[i].Type == AccountType.Asset)
                 {
-                    row.Cells.Add(Account.GetBalance(listAccounts[i].Id, listAccounts[i].Type).ToString("N"));
+                    row.Cells.Add(Account.GetBalance(accounts[i].Id, accounts[i].Type).ToString("N"));
                 }
                 else
                 {
                     row.Cells.Add("");
                 }
 
-                row.Cells.Add(listAccounts[i].BankNumber);
-                row.Cells.Add(listAccounts[i].Inactive ? "X" : "");
+                row.Cells.Add(accounts[i].BankNumber);
+                row.Cells.Add(accounts[i].Inactive ? "X" : "");
 
-                if (i < listAccounts.Count - 1 && listAccounts[i].Type != listAccounts[i + 1].Type)
+                if (i < accounts.Count - 1 && accounts[i].Type != accounts[i + 1].Type)
                 {
                     row.ColorLborder = Color.Black;
                 }
 
-                row.Tag = listAccounts[i];
-                row.BackColor = listAccounts[i].Color;
+                row.Tag = accounts[i];
+                row.BackColor = accounts[i].Color;
 
                 accountsGrid.Rows.Add(row);
             }
+
             accountsGrid.EndUpdate();
         }
 
@@ -123,12 +134,17 @@ namespace OpenDental
             {
                 accountList = QuickBooks.GetListOfAccounts();
             }
-            catch (Exception e)
+            catch (Exception exception)
             {
-                MessageBox.Show(e.Message);
+                MessageBox.Show(
+                    exception.Message,
+                    Translation.Language.PickAccount, 
+                    MessageBoxButtons.OK, 
+                    MessageBoxIcon.Error);
             }
 
             Cursor.Current = Cursors.Default;
+
             for (int i = 0; i < accountList.Count; i++)
             {
                 var row = new ODGridRow();
@@ -138,6 +154,7 @@ namespace OpenDental
 
                 accountsGrid.Rows.Add(row);
             }
+
             accountsGrid.EndUpdate();
         }
 
@@ -148,7 +165,7 @@ namespace OpenDental
         {
             if (IsQuickBooks)
             {
-                SelectedAccountsQB.Add((string)accountsGrid.Rows[e.Row].Tag);
+                SelectedQuickBookAccounts.Add((string)accountsGrid.Rows[e.Row].Tag);
             }
             else
             {
@@ -182,7 +199,7 @@ namespace OpenDental
             {
                 for (int i = 0; i < accountsGrid.SelectedIndices.Length; i++)
                 {
-                    SelectedAccountsQB.Add((string)(accountsGrid.Rows[accountsGrid.SelectedIndices[i]].Tag));
+                    SelectedQuickBookAccounts.Add((string)(accountsGrid.Rows[accountsGrid.SelectedIndices[i]].Tag));
                 }
             }
             else
