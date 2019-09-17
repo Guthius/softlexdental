@@ -292,6 +292,10 @@ namespace OpenDentBusiness
         public static string ExecuteString(string commandText, params MySqlParameter[] parameters) =>
             Convert.ToString(ExecuteScalar(commandText, parameters));
 
+        public static double ExecuteDouble(string commandText, params MySqlParameter[] parameters) =>
+            Convert.ToDouble(ExecuteScalar(commandText, parameters));
+
+
         /// <summary>
         /// Executes a scalar query and returns the resulting scalar value.
         /// </summary>

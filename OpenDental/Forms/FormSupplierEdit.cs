@@ -52,7 +52,7 @@ namespace OpenDental
         /// </summary>
         void DeleteButton_Click(object sender, EventArgs e)
         {
-            if (Supplier.SupplierNum == 0)
+            if (Supplier.Id == 0)
             {
                 DialogResult = DialogResult.Cancel;
                 return;
@@ -110,7 +110,7 @@ namespace OpenDental
             Supplier.Password = passwordTextBox.Text;
             Supplier.Note = noteTextBox.Text;
 
-            if (Supplier.SupplierNum == 0)
+            if (Supplier.Id == 0)
             {
                 Suppliers.Insert(Supplier);
             }

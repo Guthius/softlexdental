@@ -73,7 +73,7 @@ namespace OpenDental
             for (int i = 0; i < suppliers.Count; i++)
             {
                 supplierComboBox.Items.Add(suppliers[i].Name);
-                if (suppliers[i].SupplierNum == SelectedSupplierId)
+                if (suppliers[i].Id == SelectedSupplierId)
                 {
                     supplierComboBox.SelectedItem = suppliers[i].Name;
                 }
@@ -114,9 +114,9 @@ namespace OpenDental
                 var row = new ODGridRow();
 
                 // Add the new category header in this row if it doesn't match the previous row's category.
-                if (suppliesGrid.Rows.Count == 0 || (suppliesGrid.Rows.Count > 0 && supply.Category != ((Supply)suppliesGrid.Rows[suppliesGrid.Rows.Count - 1].Tag).Category))
+                if (suppliesGrid.Rows.Count == 0 || (suppliesGrid.Rows.Count > 0 && supply.CategoryId != ((Supply)suppliesGrid.Rows[suppliesGrid.Rows.Count - 1].Tag).CategoryId))
                 {
-                    row.Cells.Add(Defs.GetName(DefinitionCategory.SupplyCats, supply.Category)); 
+                    row.Cells.Add(Defs.GetName(DefinitionCategory.SupplyCats, supply.CategoryId)); 
                 }
                 else
                 {
@@ -124,12 +124,12 @@ namespace OpenDental
                 }
 
                 row.Cells.Add(supply.CatalogNumber);
-                row.Cells.Add(Suppliers.GetName(suppliers, supply.SupplierNum));
-                row.Cells.Add(supply.Descript);
+                row.Cells.Add(Suppliers.GetName(suppliers, supply.SupplierId));
+                row.Cells.Add(supply.Description);
                 row.Cells.Add(supply.Price == 0 ? "" : supply.Price.ToString("n"));
                 row.Cells.Add(supply.LevelDesired == 0 ? "" : supply.LevelDesired.ToString());
                 row.Cells.Add(supply.LevelOnHand.ToString());
-                row.Cells.Add(supply.IsHidden ? "X" : "");
+                row.Cells.Add(supply.Hidden ? "X" : "");
                 row.Tag = supply;
 
                 suppliesGrid.Rows.Add(row);
@@ -156,25 +156,25 @@ namespace OpenDental
         /// <returns>True if the supply matches criteria; otherwise, false.</returns>
         bool MatchesFilterCriteria(Supply supply)
         {
-            if (!showHiddenCheckBox.Checked && supply.IsHidden)
+            if (!showHiddenCheckBox.Checked && supply.Hidden)
                 return false;
 
-            if (SelectedSupplierId != 0 && supply.SupplierNum != SelectedSupplierId)
+            if (SelectedSupplierId != 0 && supply.SupplierId != SelectedSupplierId)
                 return false;
 
-            if (supplierComboBox.SelectedIndex != 0 && suppliers[supplierComboBox.SelectedIndex - 1].SupplierNum != supply.SupplierNum)
+            if (supplierComboBox.SelectedIndex != 0 && suppliers[supplierComboBox.SelectedIndex - 1].Id != supply.SupplierId)
                 return false;
 
             if (showShoppingListCheckBox.Checked && supply.LevelOnHand >= supply.LevelDesired)
                 return false;
 
             if (!string.IsNullOrEmpty(searchTextBox.Text) &&
-                !supply.Descript.ToUpper().Contains(searchTextBox.Text.ToUpper()) &&
+                !supply.Description.ToUpper().Contains(searchTextBox.Text.ToUpper()) &&
                 !supply.CatalogNumber.ToString().ToUpper().Contains(searchTextBox.Text.ToUpper()) &&
-                !Defs.GetName(DefinitionCategory.SupplyCats, supply.Category).ToUpper().Contains(searchTextBox.Text.ToUpper()) &&
+                !Defs.GetName(DefinitionCategory.SupplyCats, supply.CategoryId).ToUpper().Contains(searchTextBox.Text.ToUpper()) &&
                 !supply.LevelDesired.ToString().Contains(searchTextBox.Text) &&
                 !supply.Price.ToString().ToUpper().Contains(searchTextBox.Text.ToUpper()) &&
-                !supply.SupplierNum.ToString().Contains(searchTextBox.Text))
+                !supply.SupplierId.ToString().Contains(searchTextBox.Text))
             {
                 return false;
             }
@@ -214,12 +214,12 @@ namespace OpenDental
             var supply = new Supply
             {
                 IsNew = true,
-                SupplierNum = suppliers[supplierComboBox.SelectedIndex - 1].SupplierNum//Selected index -1 to account for ALL being at the top of the list.
+                SupplierId = suppliers[supplierComboBox.SelectedIndex - 1].Id//Selected index -1 to account for ALL being at the top of the list.
             };
 
             if (suppliesGrid.GetSelectedIndex() > -1)
             {
-                supply.Category = ((Supply)suppliesGrid.Rows[suppliesGrid.GetSelectedIndex()].Tag).Category;
+                supply.CategoryId = ((Supply)suppliesGrid.Rows[suppliesGrid.GetSelectedIndex()].Tag).CategoryId;
             }
 
             using (var formSupplyEdit = new FormSupplyEdit())
@@ -234,12 +234,12 @@ namespace OpenDental
 
                 if (formSupplyEdit.Supply == null) return;
                 
-                formSupplyEdit.Supply.ItemOrder = supplies.FindAll(x => x.Category == formSupplyEdit.Supply.Category)
-                    .Select(x => x.ItemOrder)
+                formSupplyEdit.Supply.SortOrder = supplies.FindAll(x => x.CategoryId == formSupplyEdit.Supply.CategoryId)
+                    .Select(x => x.SortOrder)
                     .OrderByDescending(x => x)
                     .FirstOrDefault() + 1; // Last item in the category.
 
-                int idx = supplies.FindLastIndex(x => x.Category == formSupplyEdit.Supply.Category);
+                int idx = supplies.FindLastIndex(x => x.CategoryId == formSupplyEdit.Supply.CategoryId);
                 if (idx == -1)
                 {
                     supplies.Add(formSupplyEdit.Supply);//new category, add to bottom of list
@@ -285,7 +285,7 @@ namespace OpenDental
             }
 
             Supply selectedSupply = (Supply)suppliesGrid.Rows[e.Row].Tag;
-            long oldCategoryDefNum = selectedSupply.Category;
+            long oldCategoryDefNum = selectedSupply.CategoryId;
 
             using (var formSupplyEdit = new FormSupplyEdit())
             {
@@ -301,15 +301,15 @@ namespace OpenDental
                 {
                     supplies.Remove(selectedSupply);
                 }
-                else if (selectedSupply.Category != oldCategoryDefNum)
+                else if (selectedSupply.CategoryId != oldCategoryDefNum)
                 {//If category changed
                  //Send supply to the bottom the new category
                     supplies.Remove(selectedSupply);//Remove so we can reinsert where it needs to be.
-                    selectedSupply.ItemOrder = supplies.FindAll(x => x.Category == selectedSupply.Category)
-                        .Select(x => x.ItemOrder)
+                    selectedSupply.SortOrder = supplies.FindAll(x => x.CategoryId == selectedSupply.CategoryId)
+                        .Select(x => x.SortOrder)
                         .OrderByDescending(x => x)
                         .FirstOrDefault() + 1;//Last item in the category.
-                    int idx = supplies.FindLastIndex(x => x.Category == selectedSupply.Category);
+                    int idx = supplies.FindLastIndex(x => x.CategoryId == selectedSupply.CategoryId);
                     if (idx == -1)
                     {
                         supplies.Add(selectedSupply);//new category, add to bottom of list
@@ -350,7 +350,7 @@ namespace OpenDental
                 Supply supplySource = (Supply)suppliesGrid.Rows[indexSource].Tag;
                 Supply supplyDest = (Supply)suppliesGrid.Rows[indexDest].Tag;//Incorrect. 
                                                                              //Top of category---------------------------------------------------------------------------------------
-                if (supplySource.Category != supplyDest.Category)
+                if (supplySource.CategoryId != supplyDest.CategoryId)
                 {
                     continue;//already top of category
                 }
@@ -390,7 +390,7 @@ namespace OpenDental
                 Supply supplySource = (Supply)suppliesGrid.Rows[indexSource].Tag;
                 Supply supplyDest = (Supply)suppliesGrid.Rows[indexDest].Tag;
                 //Bottom of category---------------------------------------------------------------------------------------
-                if (supplySource.Category != supplyDest.Category)
+                if (supplySource.CategoryId != supplyDest.CategoryId)
                 {
                     continue;//already bottom of category
                 }
@@ -453,7 +453,7 @@ namespace OpenDental
 
             for (int i = 0; i < listOrders.Count; i++)
             {
-                if (listOrders[i].DatePlaced.Year > 2200 && listOrders[i].SupplierNum == suppliers[supplierComboBox.SelectedIndex - 1].SupplierNum)
+                if (listOrders[i].DatePlaced.Year > 2200 && listOrders[i].SupplierId == suppliers[supplierComboBox.SelectedIndex - 1].Id)
                 {
                     MessageBox.Show(
                         Translation.Language.ThereIsAPendingOrderForThisSupplier,
@@ -469,11 +469,11 @@ namespace OpenDental
 
             var supplyOrder = new SupplyOrder
             {
-                SupplierNum = suppliers[supplierComboBox.SelectedIndex - 1].SupplierNum,
+                SupplierId = suppliers[supplierComboBox.SelectedIndex - 1].Id,
                 IsNew       = true,
                 DatePlaced  = new DateTime(2500, 1, 1), //date used for new 'pending' orders. // TODO: DatePlaced should become nullable, where null == pending
                 Note        = "",
-                UserNum     = Security.CurrentUser.Id
+                UserId     = Security.CurrentUser.Id
             };
 
             var supplyOrderNum = SupplyOrders.Insert(supplyOrder);
@@ -481,10 +481,10 @@ namespace OpenDental
             {
                 var supplyOrderItem = new SupplyOrderItem
                 {
-                    SupplyNum       = displayedSupplies[i].SupplyNum,
-                    Qty             = (int)displayedSupplies[i].LevelDesired - (int)displayedSupplies[i].LevelOnHand,
+                    SupplyId       = displayedSupplies[i].Id,
+                    Quantity             = (int)displayedSupplies[i].LevelDesired - (int)displayedSupplies[i].LevelOnHand,
                     Price           = displayedSupplies[i].Price,
-                    SupplyOrderNum  = supplyOrderNum
+                    SupplyOrderId  = supplyOrderNum
                 };
                 SupplyOrderItems.Insert(supplyOrderItem);
             }
@@ -602,11 +602,11 @@ namespace OpenDental
             int itemOrder = 0;
             for (int i = 0; i < supplies.Count; i++)
             {
-                if (i > 0 && supplies[i - 1].Category != supplies[i].Category)
+                if (i > 0 && supplies[i - 1].CategoryId != supplies[i].CategoryId)
                 {
                     itemOrder = 0;
                 }
-                supplies[i].ItemOrder = itemOrder;
+                supplies[i].SortOrder = itemOrder;
                 itemOrder++;
             }
             //Nuances of concurency using this sync are, 
@@ -615,14 +615,14 @@ namespace OpenDental
             //Added supplies are unaffected by concurency
             List<Supply> listUpdated = Supplies.Sync(supplies, suppliesOld);
             //SupplyNums will only be 0 if not using MiddleTier, since they get passed by reference and only MiddleTier breaks that reference.
-            foreach (Supply supplyAdded in supplies.FindAll(x => x.SupplyNum == 0))
+            foreach (Supply supplyAdded in supplies.FindAll(x => x.Id == 0))
             {
                 //Each supply is uniquely identified by ItemOrder and Category, because of the logic performed on the middle tier server side.
                 //We can use this information to match primary keys.
-                Supply supplyUpdated = listUpdated.FirstOrDefault(x => x.ItemOrder == supplyAdded.ItemOrder && x.Category == supplyAdded.Category);
+                Supply supplyUpdated = listUpdated.FirstOrDefault(x => x.SortOrder == supplyAdded.SortOrder && x.CategoryId == supplyAdded.CategoryId);
                 //This primary key copying is necessary for middle tier to transfer the key values to the local list from the server.
                 //This pattern is unusual because of how supplies are added in the UI.
-                supplyAdded.SupplyNum = supplyUpdated.SupplyNum;
+                supplyAdded.Id = supplyUpdated.Id;
             }
         }
 

@@ -38,13 +38,13 @@ namespace OpenDental
 
         private void FormSupplyEdit_Load(object sender, EventArgs e)
         {
-            supplierTextBox.Text = OpenDentBusiness.Suppliers.GetName(Suppliers, Supply.SupplierNum);
+            supplierTextBox.Text = OpenDentBusiness.Suppliers.GetName(Suppliers, Supply.SupplierId);
 
             supplyCategoriesList = Definition.GetByCategory(DefinitionCategory.SupplyCats);;
             for (int i = 0; i < supplyCategoriesList.Count; i++)
             {
                 categoryComboBox.Items.Add(supplyCategoriesList[i].Description);
-                if (Supply.Category == supplyCategoriesList[i].Id)
+                if (Supply.CategoryId == supplyCategoriesList[i].Id)
                 {
                     categoryComboBox.SelectedIndex = i;
                 }
@@ -52,9 +52,9 @@ namespace OpenDental
 
             if (categoryComboBox.SelectedIndex == -1) categoryComboBox.SelectedIndex = 0;
 
-            categoryInitialVal = Supply.Category;
+            categoryInitialVal = Supply.CategoryId;
             catalogNumberTextBox.Text = Supply.CatalogNumber;
-            descriptionTextBox.Text = Supply.Descript;
+            descriptionTextBox.Text = Supply.Description;
 
             if (Supply.LevelDesired != 0)
             {
@@ -71,7 +71,7 @@ namespace OpenDental
                 priceTextBox.Value = Supply.Price;
             }
 
-            hiddenCheckBox.Checked = Supply.IsHidden;
+            hiddenCheckBox.Checked = Supply.Hidden;
         }
 
         private void DeleteButton_Click(object sender, EventArgs e)
@@ -135,17 +135,17 @@ namespace OpenDental
                 return;
             }
 
-            Supply.Category = supplyCategoriesList[categoryComboBox.SelectedIndex].Id;
+            Supply.CategoryId = supplyCategoriesList[categoryComboBox.SelectedIndex].Id;
             Supply.CatalogNumber = catalogNumberTextBox.Text;
-            Supply.Descript = descriptionTextBox.Text;
+            Supply.Description = descriptionTextBox.Text;
             Supply.LevelDesired = PIn.Float(levelDesiredTextBox.Text);
             Supply.LevelOnHand = PIn.Float(levelOnHandTextBox.Text);
             Supply.Price = priceTextBox.Value;
-            Supply.IsHidden = hiddenCheckBox.Checked;
+            Supply.Hidden = hiddenCheckBox.Checked;
 
-            if (Supply.Category != categoryInitialVal)
+            if (Supply.CategoryId != categoryInitialVal)
             {
-                Supply.ItemOrder = int.MaxValue;
+                Supply.SortOrder = int.MaxValue;
             }
 
             DialogResult = DialogResult.OK;

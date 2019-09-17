@@ -24,13 +24,13 @@ namespace OpenDental
         /// </summary>
         void FormSupplyOrderItemEdit_Load(object sender, EventArgs e)
         {
-            supply = Supplies.GetSupply(ItemCur.SupplyNum);
+            supply = Supplies.GetSupply(ItemCur.SupplyId);
 
-            supplierTextBox.Text = Suppliers.GetName(ListSupplier, supply.SupplierNum);
-            categoryTextBox.Text = Defs.GetName(DefinitionCategory.SupplyCats, supply.Category);
+            supplierTextBox.Text = Suppliers.GetName(ListSupplier, supply.SupplierId);
+            categoryTextBox.Text = Defs.GetName(DefinitionCategory.SupplyCats, supply.CategoryId);
             catalogNumberTextBox.Text = supply.CatalogNumber;
-            descriptionTextBox.Text = supply.Descript;
-            quantityTextBox.Text = (quantity = ItemCur.Qty).ToString();
+            descriptionTextBox.Text = supply.Description;
+            quantityTextBox.Text = (quantity = ItemCur.Quantity).ToString();
             priceTextBox.Value = ItemCur.Price;
         }
 
@@ -124,7 +124,7 @@ namespace OpenDental
                 return;
             }
 
-            ItemCur.Qty = quantity;
+            ItemCur.Quantity = quantity;
             ItemCur.Price = priceTextBox.Value;
 
             SupplyOrderItems.Update(ItemCur);

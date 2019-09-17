@@ -23,12 +23,12 @@ namespace OpenDental
         /// </summary>
         void FormSupplyOrderEdit_Load(object sender, EventArgs e)
         {
-            supplierTextBox.Text = Suppliers.GetName(ListSupplier, Order.SupplierNum);
+            supplierTextBox.Text = Suppliers.GetName(ListSupplier, Order.SupplierId);
 
             if (Order.DatePlaced.Year > 2200)
             {
                 datePlacedTextBox.Text = DateTime.Today.ToShortDateString();
-                Order.UserNum = Security.CurrentUser.Id;
+                Order.UserId = Security.CurrentUser.Id;
             }
             else
             {
@@ -48,17 +48,17 @@ namespace OpenDental
                 var userBoxItem = new ODBoxItem<User>(user.UserName, user);
 
                 userComboBox.Items.Add(userBoxItem);
-                if (Order.UserNum == user.Id)
+                if (Order.UserId == user.Id)
                 {
                     userComboBox.SelectedItem = userBoxItem;
                 }
             }
 
-            if (!usersList.Select(x => x.Id).Contains(Order.UserNum))
+            if (!usersList.Select(x => x.Id).Contains(Order.UserId))
             {
                 userComboBox.IndexSelectOrSetText(-1, () =>
                 {
-                    return User.GetName(Order.UserNum);
+                    return User.GetName(Order.UserId);
                 });
             }
         }
@@ -112,14 +112,14 @@ namespace OpenDental
             if (datePlacedTextBox.Text == "")
             {
                 Order.DatePlaced = new DateTime(2500, 1, 1);
-                Order.UserNum = 0; // Even if they had set a user, set it back because the order hasn't been placed. 
+                Order.UserId = 0; // Even if they had set a user, set it back because the order hasn't been placed. 
             }
             else
             {
                 Order.DatePlaced = DateTime.Parse(datePlacedTextBox.Text);
                 if (userComboBox.SelectedIndex > -1)
                 {
-                    Order.UserNum = userComboBox.SelectedTag<User>().Id;
+                    Order.UserId = userComboBox.SelectedTag<User>().Id;
                 }
             }
 
