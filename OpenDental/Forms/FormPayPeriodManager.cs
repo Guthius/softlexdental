@@ -101,27 +101,18 @@ namespace OpenDental
         {
             payPeriodGrid.BeginUpdate();
             payPeriodGrid.Columns.Clear();
-            payPeriodGrid.Columns.Add(new ODGridColumn("Start Date", 80));
-            payPeriodGrid.Columns.Add(new ODGridColumn("End Date", 80));
-            payPeriodGrid.Columns.Add(new ODGridColumn("Paycheck Date", 100));
+            payPeriodGrid.Columns.Add(new ODGridColumn(Translation.Language.ColumnStartDate, 80));
+            payPeriodGrid.Columns.Add(new ODGridColumn(Translation.Language.ColumnEndDate, 80));
+            payPeriodGrid.Columns.Add(new ODGridColumn(Translation.Language.ColumnPaycheckDate, 100));
             payPeriodGrid.Rows.Clear();
 
             foreach (var payPeriod in payPeriods)
             {
-                var row = new ODGridRow();
-                row.Cells.Add(payPeriod.DateStart.ToShortDateString());
-                row.Cells.Add(payPeriod.DateEnd.ToShortDateString());
-
-                if (payPeriod.DatePaycheck.Year < 1880)
-                {
-                    row.Cells.Add("");
-                }
-                else
-                {
-                    row.Cells.Add(payPeriod.DatePaycheck.ToShortDateString());
-                }
-
-                payPeriodGrid.Rows.Add(row);
+                payPeriodGrid.Rows.Add(
+                    new ODGridRow(
+                        payPeriod.DateStart.ToShortDateString(),
+                        payPeriod.DateEnd.ToShortDateString(),
+                        payPeriod.DatePaycheck.HasValue ? payPeriod.DatePaycheck.Value.ToShortDateString() : ""));
             }
 
             payPeriodGrid.EndUpdate();
@@ -142,8 +133,8 @@ namespace OpenDental
             if (int.TryParse(numPayPeriodsTextBox.Text, out var numPayPeriods) || numPayPeriods <= 0)
             {
                 MessageBox.Show(
-                    "The number of payment periods to generate must be above 0.",
-                    "Pay Period Manager",
+                    Translation.Language.NumberOfPayPeriodsMustBeAboveZero,
+                    Translation.Language.PayPeriodManager,
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 
@@ -158,8 +149,8 @@ namespace OpenDental
                 if (!int.TryParse(numDaysAfterTextBox.Text, out numDaysAfter) || numDaysAfter <= 0)
                 {
                     MessageBox.Show(
-                        "The number of days after pay period cannot be zero.",
-                        "Pay Period Manager",
+                        Translation.Language.NumberOfDaysAfterPayPeriodCannotBeZero,
+                        Translation.Language.PayPeriodManager,
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Error);
 
@@ -211,9 +202,11 @@ namespace OpenDental
                 if (dayComboBox.Enabled) payPeriod.DatePaycheck = GetDateOfDay(payPeriod.DateEnd, (DayOfWeek)(dayComboBox.SelectedIndex - 1));
                 else
                 {
-                    payPeriod.DatePaycheck = payPeriod.DateEnd.AddDays(numDaysAfter);
+                    var paycheckDate = payPeriod.DateEnd.AddDays(numDaysAfter);
 
-                    if (excludeWeekendsCheckBox.Checked && (payPeriod.DatePaycheck.DayOfWeek == DayOfWeek.Saturday || payPeriod.DatePaycheck.DayOfWeek == DayOfWeek.Sunday))
+                    payPeriod.DatePaycheck = paycheckDate;
+
+                    if (excludeWeekendsCheckBox.Checked && (paycheckDate.DayOfWeek == DayOfWeek.Saturday || paycheckDate.DayOfWeek == DayOfWeek.Sunday))
                     {
                         if (payBeforeRadioButton.Checked)
                         {
@@ -222,17 +215,17 @@ namespace OpenDental
                             // If the friday is within the pay period we instead move forward and 
                             // use next monday as the paycheck date instead.
 
-                            var paycheckDate = GetDateOfDay(payPeriod.DatePaycheck, DayOfWeek.Friday, -1);
+                            paycheckDate = GetDateOfDay(paycheckDate, DayOfWeek.Friday, -1);
                             if (paycheckDate <= payPeriod.DateEnd)
                             {
-                                paycheckDate = GetDateOfDay(payPeriod.DatePaycheck, DayOfWeek.Monday);
+                                paycheckDate = GetDateOfDay(paycheckDate, DayOfWeek.Monday);
                             }
 
                             payPeriod.DatePaycheck = paycheckDate;
                         }
                         else
                         {
-                            payPeriod.DatePaycheck = GetDateOfDay(payPeriod.DatePaycheck, DayOfWeek.Monday);
+                            payPeriod.DatePaycheck = GetDateOfDay(paycheckDate, DayOfWeek.Monday);
                         }
                     }
                 }
@@ -317,8 +310,8 @@ namespace OpenDental
             if (payPeriodGrid.Rows.Count == 0)
             {
                 MessageBox.Show(
-                    "Pay periods must be generated first.",
-                    "Pay Period Manager",
+                    Translation.Language.PayPeriodsMustBeGeneratedFirst,
+                    Translation.Language.PayPeriodManager,
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Information);
 
@@ -329,8 +322,8 @@ namespace OpenDental
             if (numDaysAfterText.Length == 0 || !int.TryParse(numDaysAfterText, out int numDaysAfter) || numDaysAfter <= 0)
             {
                 MessageBox.Show(
-                    "You must specify a valid day.",
-                    "Pay Period Manager",
+                    Translation.Language.YouMustSpecifyAValidDay,
+                    Translation.Language.PayPeriodManager,
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 
@@ -342,8 +335,8 @@ namespace OpenDental
             if (PayPeriod.AreAnyOverlapping(PayPeriod.All(), payPeriods))
             {
                 MessageBox.Show(
-                    "You have created pay periods that would overlap with existing pay periods. Please fix those pay periods first.",
-                    "Pay Period Manager", 
+                    Translation.Language.PayPeriodsWouldOverlap,
+                    Translation.Language.PayPeriodManager, 
                     MessageBoxButtons.OK, 
                     MessageBoxIcon.Warning);
 
@@ -368,15 +361,7 @@ namespace OpenDental
             Preference.Update(PreferenceName.PayPeriodPayDay, dayComboBox.SelectedIndex);
             Preference.Update(PreferenceName.PayPeriodPayAfterNumberOfDays, numDaysAfter);
             Preference.Update(PreferenceName.PayPeriodPayDateExcludesWeekends, excludeWeekendsCheckBox.Checked);
-
-            if (payBeforeRadioButton.Checked)
-            {
-                Preference.Update(PreferenceName.PayPeriodPayDateBeforeWeekend, true);
-            }
-            else if (payAfterRadioButton.Checked)
-            {
-                Preference.Update(PreferenceName.PayPeriodPayDateBeforeWeekend, false);
-            }
+            Preference.Update(PreferenceName.PayPeriodPayDateBeforeWeekend, payBeforeRadioButton.Checked);
 
             DialogResult = DialogResult.OK;
         }

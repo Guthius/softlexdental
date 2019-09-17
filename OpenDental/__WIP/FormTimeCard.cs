@@ -651,11 +651,11 @@ namespace OpenDental{
 		private void FillPayPeriod(){
 			textDateStart.Text=_listPayPeriods[payPeriodIndex].DateStart.ToShortDateString();
 			textDateStop.Text=_listPayPeriods[payPeriodIndex].DateEnd.ToShortDateString();
-			if(_listPayPeriods[payPeriodIndex].DatePaycheck.Year<1880){
+			if(!_listPayPeriods[payPeriodIndex].DatePaycheck.HasValue){
 				textDatePaycheck.Text="";
 			}
 			else{
-				textDatePaycheck.Text=_listPayPeriods[payPeriodIndex].DatePaycheck.ToShortDateString();
+				textDatePaycheck.Text=_listPayPeriods[payPeriodIndex].DatePaycheck.Value.ToShortDateString();
 			}
 			//fill the note for the pay period
 			_timeAdjustNote=GetOrCreatePayPeriodNote();

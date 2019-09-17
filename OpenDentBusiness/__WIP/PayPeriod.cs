@@ -46,7 +46,7 @@ namespace OpenDentBusiness
         /// <summary>
         /// The date that paychecks will be dated. A few days after the <see cref="DateEnd"/>.
         /// </summary>
-        public DateTime DatePaycheck;
+        public DateTime? DatePaycheck;
 
         /// <summary>
         /// Constructs a new instance of the <see cref="PayPeriod"/> class.
@@ -57,10 +57,10 @@ namespace OpenDentBusiness
         {
             return new PayPeriod
             {
-                Id = Convert.ToInt64(dataReader["id"]),
-                DateStart = Convert.ToDateTime(dataReader["date_start"]),
-                DateEnd = Convert.ToDateTime(dataReader["date_end"]),
-                DatePaycheck = Convert.ToDateTime(dataReader["date_paycheck"])
+                Id = (long)dataReader["id"],
+                DateStart = (DateTime)dataReader["date_start"],
+                DateEnd = (DateTime)dataReader["date_end"],
+                DatePaycheck = dataReader["date_paycheck"] as DateTime?
             };
         }
 

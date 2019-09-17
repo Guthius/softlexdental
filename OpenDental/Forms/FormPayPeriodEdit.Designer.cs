@@ -80,6 +80,7 @@
             this.dateStartTextBox.Name = "dateStartTextBox";
             this.dateStartTextBox.Size = new System.Drawing.Size(100, 23);
             this.dateStartTextBox.TabIndex = 1;
+            this.dateStartTextBox.Validating += new System.ComponentModel.CancelEventHandler(this.ValidateDateTime);
             // 
             // dateStartLabel
             // 
@@ -98,6 +99,7 @@
             this.dateEndTextBox.Name = "dateEndTextBox";
             this.dateEndTextBox.Size = new System.Drawing.Size(100, 23);
             this.dateEndTextBox.TabIndex = 3;
+            this.dateEndTextBox.Validating += new System.ComponentModel.CancelEventHandler(this.ValidateDateTime);
             // 
             // dateEndLabel
             // 
@@ -115,6 +117,7 @@
             this.datePaycheckTextBox.Name = "datePaycheckTextBox";
             this.datePaycheckTextBox.Size = new System.Drawing.Size(100, 23);
             this.datePaycheckTextBox.TabIndex = 5;
+            this.datePaycheckTextBox.Validating += new System.ComponentModel.CancelEventHandler(this.DatePaycheckTextBox_Validating);
             // 
             // datePaycheckLabel
             // 

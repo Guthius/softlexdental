@@ -18,6 +18,7 @@
 using OpenDentBusiness;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Windows.Forms;
 
 namespace OpenDental
@@ -35,14 +36,40 @@ namespace OpenDental
 
         private void FormPayPeriodEdit_Load(object sender, EventArgs e)
         {
-            if (payPeriod.DateStart.Year > 1880)
-                dateStartTextBox.Text = payPeriod.DateStart.ToShortDateString();
+            dateStartTextBox.Text = payPeriod.DateStart.ToShortDateString();
+            dateEndTextBox.Text = payPeriod.DateEnd.ToShortDateString();
 
-            if (payPeriod.DateEnd.Year > 1880)
-                dateEndTextBox.Text = payPeriod.DateEnd.ToShortDateString();
+            if (payPeriod.DatePaycheck.HasValue)
+            {
+                datePaycheckTextBox.Text = payPeriod.DatePaycheck.Value.ToShortDateString();
+            }
+        }
 
-            if (payPeriod.DatePaycheck.Year > 1880)
-                datePaycheckTextBox.Text = payPeriod.DatePaycheck.ToShortDateString();
+        private void ValidateDateTime(object sender, CancelEventArgs e)
+        {
+            if (sender is TextBox textBox)
+            {
+                if (DateTime.TryParse(textBox.Text, out var dateTime))
+                {
+                    textBox.Text = dateTime.ToShortDateString();
+                }
+                else
+                {
+                    e.Cancel = true;
+                }
+            }
+        }
+
+        private void DatePaycheckTextBox_Validating(object sender, CancelEventArgs e)
+        {
+            if (DateTime.TryParse(datePaycheckTextBox.Text, out var paycheckDateTime))
+            {
+                datePaycheckTextBox.Text = paycheckDateTime.ToShortDateString();
+            }
+            else
+            {
+                datePaycheckTextBox.Text = "";
+            }
         }
 
         private void DeleteButton_Click(object sender, EventArgs e)
@@ -63,12 +90,13 @@ namespace OpenDental
         {
             var dateStartText = dateStartTextBox.Text.Trim();
             var dateEndText = dateEndTextBox.Text.Trim();
+            var datePaycheckText = datePaycheckTextBox.Text.Trim();
 
             if (dateStartText.Length == 0 || dateEndText.Length == 0)
             {
                 MessageBox.Show(
-                    "Start and end dates are required.",
-                    "Pay Period",
+                     Translation.Language.StartAndEndDatesRequired,
+                     Translation.Language.PayPeriod,
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 
@@ -76,29 +104,46 @@ namespace OpenDental
             }
 
             if (!DateTime.TryParse(dateStartText, out var dateStart) ||
-                !DateTime.TryParse(dateEndText, out var dateEnd) ||
-                !DateTime.TryParse(datePaycheckTextBox.Text, out var datePaycheck))
+                !DateTime.TryParse(dateEndText, out var dateEnd))
             {
                 MessageBox.Show(
-                    "Please fix data entry errors first.",
-                    "Pay Period", 
+                    Translation.Language.PleaseFixDataEntryErrors,
+                    Translation.Language.PayPeriod, 
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 
                 return;
             }
 
+            if (DateTime.TryParse(datePaycheckText, out var datePaycheck))
+            {
+                if (datePaycheck <= dateEnd)
+                {
+                    MessageBox.Show(
+                        Translation.Language.PaycheckDateCannotBeOnOrBeforeEndDate,
+                        Translation.Language.PayPeriod, 
+                        MessageBoxButtons.OK, 
+                        MessageBoxIcon.Error);
+
+                    return;
+                }
+                payPeriod.DatePaycheck = datePaycheck;
+            }
+            else
+            {
+                payPeriod.DatePaycheck = null;
+            }
+
             payPeriod.DateStart = dateStart;
             payPeriod.DateEnd = dateEnd;
-            payPeriod.DatePaycheck = datePaycheck;
 
             CacheManager.Invalidate<PayPeriod>();
 
             if (PayPeriod.AreAnyOverlapping(PayPeriod.All(), new List<PayPeriod>() { payPeriod }))
             {
                 MessageBox.Show(
-                    "This pay period overlaps with existing pay periods. Please fix this pay period first.",
-                    "Pay Period",
+                    Translation.Language.PayPeriodIsOverlapping,
+                    Translation.Language.PayPeriod,
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 

@@ -828,4 +828,43 @@ Click 'Skip' if you do not wish to finish setting this section up at this time.<
   <data name="UserGroup" xml:space="preserve">
     <value>User Group</value>
   </data>
+  <data name="PaycheckDateCannotBeOnOrBeforeEndDate" xml:space="preserve">
+    <value>The paycheck date cannot be on or before the end date of the pay period.</value>
+  </data>
+  <data name="PayPeriod" xml:space="preserve">
+    <value>Pay Period</value>
+  </data>
+  <data name="PayPeriodIsOverlapping" xml:space="preserve">
+    <value>This pay period overlaps with existing pay periods. Please fix this pay period first.</value>
+  </data>
+  <data name="StartAndEndDatesRequired" xml:space="preserve">
+    <value>Start and end dates are required.</value>
+  </data>
+  <data name="ColumnEndDate" xml:space="preserve">
+    <value>End Date</value>
+  </data>
+  <data name="ColumnPaycheckDate" xml:space="preserve">
+    <value>Paycheck Date</value>
+  </data>
+  <data name="ColumnStartDate" xml:space="preserve">
+    <value>Start Date</value>
+  </data>
+  <data name="NumberOfDaysAfterPayPeriodCannotBeZero" xml:space="preserve">
+    <value>The number of days after pay period cannot be zero.</value>
+  </data>
+  <data name="NumberOfPayPeriodsMustBeAboveZero" xml:space="preserve">
+    <value>The number of payment periods to generate must be above 0.</value>
+  </data>
+  <data name="PayPeriodManager" xml:space="preserve">
+    <value>Pay Period Manager</value>
+  </data>
+  <data name="PayPeriodsMustBeGeneratedFirst" xml:space="preserve">
+    <value>Pay periods must be generated first.</value>
+  </data>
+  <data name="PayPeriodsWouldOverlap" xml:space="preserve">
+    <value>You have created pay periods that would overlap with existing pay periods. Please fix those pay periods first.</value>
+  </data>
+  <data name="YouMustSpecifyAValidDay" xml:space="preserve">
+    <value>You must specify a valid day.</value>
+  </data>
 </root>

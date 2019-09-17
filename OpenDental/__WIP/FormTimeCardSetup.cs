@@ -70,7 +70,7 @@ namespace OpenDental
                 var row = new ODGridRow();
                 row.Cells.Add(payPeriod.DateStart.ToShortDateString());
                 row.Cells.Add(payPeriod.DateEnd.ToShortDateString());
-                row.Cells.Add(payPeriod.DatePaycheck.Year < 1880 ? "" : payPeriod.DatePaycheck.ToShortDateString());
+                row.Cells.Add(payPeriod.DatePaycheck?.ToShortDateString() ?? "");
                 row.Tag = payPeriod;
 
                 if (payPeriod.DateStart <= DateTimeOD.Today && payPeriod.DateEnd >= DateTimeOD.Today)

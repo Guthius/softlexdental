@@ -451,6 +451,15 @@ namespace OpenDental.Translation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to End Date.
+        /// </summary>
+        public static string ColumnEndDate {
+            get {
+                return ResourceManager.GetString("ColumnEndDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Est Value.
         /// </summary>
         public static string ColumnEstValue {
@@ -577,6 +586,15 @@ namespace OpenDental.Translation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Paycheck Date.
+        /// </summary>
+        public static string ColumnPaycheckDate {
+            get {
+                return ResourceManager.GetString("ColumnPaycheckDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Permission.
         /// </summary>
         public static string ColumnPermission {
@@ -663,6 +681,15 @@ namespace OpenDental.Translation {
         public static string ColumnShipping {
             get {
                 return ResourceManager.GetString("ColumnShipping", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start Date.
+        /// </summary>
+        public static string ColumnStartDate {
+            get {
+                return ResourceManager.GetString("ColumnStartDate", resourceCulture);
             }
         }
         
@@ -1144,6 +1171,24 @@ namespace OpenDental.Translation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The number of days after pay period cannot be zero..
+        /// </summary>
+        public static string NumberOfDaysAfterPayPeriodCannotBeZero {
+            get {
+                return ResourceManager.GetString("NumberOfDaysAfterPayPeriodCannotBeZero", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The number of payment periods to generate must be above 0..
+        /// </summary>
+        public static string NumberOfPayPeriodsMustBeAboveZero {
+            get {
+                return ResourceManager.GetString("NumberOfPayPeriodsMustBeAboveZero", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Open Dental.
         /// </summary>
         public static string OpenDental {
@@ -1167,6 +1212,60 @@ namespace OpenDental.Translation {
         public static string PasswordsMustMatchAndNotBeEmpty {
             get {
                 return ResourceManager.GetString("PasswordsMustMatchAndNotBeEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The paycheck date cannot be on or before the end date of the pay period..
+        /// </summary>
+        public static string PaycheckDateCannotBeOnOrBeforeEndDate {
+            get {
+                return ResourceManager.GetString("PaycheckDateCannotBeOnOrBeforeEndDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pay Period.
+        /// </summary>
+        public static string PayPeriod {
+            get {
+                return ResourceManager.GetString("PayPeriod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This pay period overlaps with existing pay periods. Please fix this pay period first..
+        /// </summary>
+        public static string PayPeriodIsOverlapping {
+            get {
+                return ResourceManager.GetString("PayPeriodIsOverlapping", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pay Period Manager.
+        /// </summary>
+        public static string PayPeriodManager {
+            get {
+                return ResourceManager.GetString("PayPeriodManager", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pay periods must be generated first..
+        /// </summary>
+        public static string PayPeriodsMustBeGeneratedFirst {
+            get {
+                return ResourceManager.GetString("PayPeriodsMustBeGeneratedFirst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have created pay periods that would overlap with existing pay periods. Please fix those pay periods first..
+        /// </summary>
+        public static string PayPeriodsWouldOverlap {
+            get {
+                return ResourceManager.GetString("PayPeriodsWouldOverlap", resourceCulture);
             }
         }
         
@@ -1502,6 +1601,15 @@ namespace OpenDental.Translation {
         public static string Sold {
             get {
                 return ResourceManager.GetString("Sold", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start and end dates are required..
+        /// </summary>
+        public static string StartAndEndDatesRequired {
+            get {
+                return ResourceManager.GetString("StartAndEndDatesRequired", resourceCulture);
             }
         }
         
@@ -2168,6 +2276,15 @@ namespace OpenDental.Translation {
         public static string YouMustSelectAnEmailToForward {
             get {
                 return ResourceManager.GetString("YouMustSelectAnEmailToForward", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You must specify a valid day..
+        /// </summary>
+        public static string YouMustSpecifyAValidDay {
+            get {
+                return ResourceManager.GetString("YouMustSpecifyAValidDay", resourceCulture);
             }
         }
         

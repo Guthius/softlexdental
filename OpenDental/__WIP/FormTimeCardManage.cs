@@ -206,8 +206,7 @@ namespace OpenDental
             X_DateEnd = selectedPayPeriod.DateEnd;
 
             datePaycheckTextBox.Text =
-                selectedPayPeriod.DatePaycheck.Year >= 1880 ?
-                    selectedPayPeriod.DatePaycheck.ToShortDateString() : "";
+                selectedPayPeriod.DatePaycheck?.ToShortDateString() ?? "";
         }
 
         private void Grid_CellDoubleClick(object sender, ODGridClickEventArgs e)
