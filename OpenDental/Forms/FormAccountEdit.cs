@@ -23,7 +23,7 @@ namespace OpenDental
 {
     public partial class FormAccountEdit : FormBase
     {
-        readonly Account account;
+        private readonly Account account;
 
         public FormAccountEdit(Account account)
         {
@@ -73,10 +73,10 @@ namespace OpenDental
             {
                 Account.Delete(account);
             }
-            catch (DataException ex)
+            catch (DataException exception)
             {
                 MessageBox.Show(
-                    ex.Message,
+                    exception.Message,
                     Translation.Language.Account, 
                     MessageBoxButtons.OK, 
                     MessageBoxIcon.Error);
@@ -89,7 +89,8 @@ namespace OpenDental
 
         void AcceptButton_Click(object sender, EventArgs e)
         {
-            if (descriptionTextBox.Text == "")
+            var description = descriptionTextBox.Text.Trim();
+            if (description.Length == 0)
             {
                 MessageBox.Show(
                     Translation.Language.PleaseEnterADescription,
@@ -100,7 +101,7 @@ namespace OpenDental
                 return;
             }
 
-            if (account.Description != descriptionTextBox.Text)
+            if (account.Description != description)
             {
                 var result =
                     MessageBox.Show(
@@ -115,13 +116,13 @@ namespace OpenDental
                 }
             }
 
-            account.Description = descriptionTextBox.Text;
+            account.Description = description;
             account.Type = (AccountType)typeListBox.SelectedIndex;
             account.BankNumber = bankNumberTextBox.Text;
             account.Inactive = inactiveCheckBox.Checked;
             account.Color = colorButton.BackColor;
 
-            if (account.Id == 0)
+            if (account.IsNew)
             {
                 Account.Insert(account);
             }

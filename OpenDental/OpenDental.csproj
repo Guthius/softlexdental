@@ -406,7 +406,7 @@
     <Compile Include="Forms Reports\FormRpProcOverpaid.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms WIP\FormAccountEdit.Designer.cs">
+    <Compile Include="Forms\FormAccountEdit.Designer.cs">
       <DependentUpon>FormAccountEdit.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms WIP\FormAccountingAutoPayEdit.Designer.cs">
@@ -3806,7 +3806,7 @@
     <Compile Include="Forms WIP\FormLanguagesUsed.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms WIP\FormAccountEdit.cs">
+    <Compile Include="Forms\FormAccountEdit.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms WIP\FormAccounting.cs">
@@ -6529,7 +6529,7 @@
       <DependentUpon>FormLanguagesUsed.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms WIP\FormAccountEdit.resx">
+    <EmbeddedResource Include="Forms\FormAccountEdit.resx">
       <DependentUpon>FormAccountEdit.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
