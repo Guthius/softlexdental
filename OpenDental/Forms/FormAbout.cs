@@ -33,8 +33,6 @@ namespace OpenDental
         /// </summary>
         void FormAbout_Load(object sender, EventArgs e)
         {
-            string softwareName = Preference.GetString(PreferenceName.SoftwareName);
-
             versionLabel.Text = "Version: " + Application.ProductVersion;
 
             var updateHistory = UpdateHistories.GetForVersion(Application.ProductVersion);
@@ -43,7 +41,6 @@ namespace OpenDental
                 versionLabel.Text += "  Since: " + updateHistory.DateTimeUpdated.ToShortDateString();
             }
 
-            copyrightLabel.Text = softwareName + " Copyright 2003-" + DateTime.Now.ToString("yyyy") + ", Jordan S. Sparks, D.M.D.";
             copyrightMySqlLabel.Text = "MySQL - Copyright 1995-" + DateTime.Now.ToString("yyyy") + ", www.mysql.com";
 
             var serviceList = Computer.GetServiceInfo();

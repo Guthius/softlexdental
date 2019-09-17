@@ -78,7 +78,7 @@
             this.copyrightLabel.Name = "copyrightLabel";
             this.copyrightLabel.Size = new System.Drawing.Size(608, 20);
             this.copyrightLabel.TabIndex = 6;
-            this.copyrightLabel.Text = "This program Copyright 2003-2007, Jordan S. Sparks, D.M.D.";
+            this.copyrightLabel.Text = "This program Copyright 2003-2007 Jordan S. Sparks, D.M.D., 2019 Dental Stars SRL";
             this.copyrightLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // copyrightMySqlLabel
