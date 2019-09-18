@@ -712,35 +712,35 @@ namespace OpenDental {
 				RefreshMainLists(parent,date);
 			}
 			else {
-				//Remove any Task related signals that originated from this instance of OpenDental.
-				listSignals=RemoveSentSignalNums(listSignals.FindAll(x => x.IType.In(new List<InvalidType>()
-					{ InvalidType.Task,InvalidType.TaskList,InvalidType.TaskAuthor,InvalidType.TaskPatient })));
-				//User is observing a task list for which a TaskList signal is specified, or TaskList from signal is a sublist of current view.
-				if(listSignals.Exists(x => x.IType==InvalidType.TaskList && (x.ExternalId==parent || _listTaskLists.Exists(y => y.TaskListNum==x.ExternalId)))) {
-					RefreshMainLists(parent,date);
-				}
-				//User is observing the New Tasks tab and a TaskList signal is received for a TaskList the user is subscribed to.
-				else if(tabContr.SelectedTab==tabNew && listSignals.Exists(x => x.IType==InvalidType.TaskList && ListSubscribedTaskListNums.Contains(x.ExternalId))) {
-					RefreshMainLists(parent,date);
-				}
-				//User is observing the Open Tasks tab and a TaskAuthor signal is received with the current user specified in the FKey.
-				else if(tabContr.SelectedTab==tabOpenTickets && listSignals.Exists(x => x.IType==InvalidType.TaskAuthor && x.ExternalId==Security.CurrentUser.Id)) {
-					RefreshMainLists(parent,date);
-				}
-				//User is observing the Patient Tasks tab and a TaskPatient signal is received for the patient the user currently has selected.
-				else if(tabContr.SelectedTab==tabPatientTickets && listSignals.Exists(x => x.IType==InvalidType.TaskPatient && x.ExternalId==FormOpenDental.CurPatNum)) {
-					RefreshMainLists(parent,date);
-				}
-				else {//Individual Task signals. Only refreshes if the task is in the currently displayed list of Tasks. Add/Remove is addressed with TaskList signals.
-					foreach(Signal signal in listSignals) {
-						if(signal.IType.In(InvalidType.Task,InvalidType.TaskPopup) && signal.FKeyType==KeyType.Task) {
-							if(_listTasks.Exists(x => x.TaskNum==signal.ExternalId)) {//A signal indicates that a task we are looking at has been modified.
-								RefreshMainLists(parent,date);//Full refresh.
-								break;
-							}
-						}
-					}
-				}
+				////Remove any Task related signals that originated from this instance of OpenDental.
+				//listSignals=RemoveSentSignalNums(listSignals.FindAll(x => x.IType.In(new List<InvalidType>()
+				//	{ InvalidType.Task,InvalidType.TaskList,InvalidType.TaskAuthor,InvalidType.TaskPatient })));
+				////User is observing a task list for which a TaskList signal is specified, or TaskList from signal is a sublist of current view.
+				//if(listSignals.Exists(x => x.IType==InvalidType.TaskList && (x.ExternalId==parent || _listTaskLists.Exists(y => y.TaskListNum==x.ExternalId)))) {
+				//	RefreshMainLists(parent,date);
+				//}
+				////User is observing the New Tasks tab and a TaskList signal is received for a TaskList the user is subscribed to.
+				//else if(tabContr.SelectedTab==tabNew && listSignals.Exists(x => x.IType==InvalidType.TaskList && ListSubscribedTaskListNums.Contains(x.ExternalId))) {
+				//	RefreshMainLists(parent,date);
+				//}
+				////User is observing the Open Tasks tab and a TaskAuthor signal is received with the current user specified in the FKey.
+				//else if(tabContr.SelectedTab==tabOpenTickets && listSignals.Exists(x => x.IType==InvalidType.TaskAuthor && x.ExternalId==Security.CurrentUser.Id)) {
+				//	RefreshMainLists(parent,date);
+				//}
+				////User is observing the Patient Tasks tab and a TaskPatient signal is received for the patient the user currently has selected.
+				//else if(tabContr.SelectedTab==tabPatientTickets && listSignals.Exists(x => x.IType==InvalidType.TaskPatient && x.ExternalId==FormOpenDental.CurPatNum)) {
+				//	RefreshMainLists(parent,date);
+				//}
+				//else {//Individual Task signals. Only refreshes if the task is in the currently displayed list of Tasks. Add/Remove is addressed with TaskList signals.
+				//	foreach(Signal signal in listSignals) {
+				//		if(signal.IType.In(InvalidType.Task,InvalidType.TaskPopup) && signal.FKeyType==KeyType.Task) {
+				//			if(_listTasks.Exists(x => x.TaskNum==signal.ExternalId)) {//A signal indicates that a task we are looking at has been modified.
+				//				RefreshMainLists(parent,date);//Full refresh.
+				//				break;
+				//			}
+				//		}
+				//	}
+				//}
 			}
 			#region dated trunk automation
 			//dated trunk automation-----------------------------------------------------------------------------
@@ -1360,8 +1360,8 @@ namespace OpenDental {
 			FormTaskListEdit FormT=new FormTaskListEdit(taskList);
 			FormT.IsNew=true;
 			if(FormT.ShowDialog()==DialogResult.OK) {
-				long signalNum=Signalods.SetInvalid(InvalidType.TaskList,KeyType.Undefined,taskList.Parent);//Signal for source parent tasklist.
-				RefillLocalTaskGrids(taskList,listSentSignalNums:new List<long>() { signalNum });
+				//long signalNum=Signalods.SetInvalid(InvalidType.TaskList,KeyType.Undefined,taskList.Parent);//Signal for source parent tasklist.
+				//RefillLocalTaskGrids(taskList,listSentSignalNums:new List<long>() { signalNum });
 			}
 		}
 
@@ -1479,16 +1479,16 @@ namespace OpenDental {
 			TaskHist taskHist=new TaskHist(oldTask);
 			taskHist.UserNumHist=Security.CurrentUser.Id;
 			TaskHists.Insert(taskHist);
-			long signalNum=Signalods.SetInvalid(InvalidType.Task,KeyType.Task,task.TaskNum);//Only needs to send signal for the one task.
-			RefillLocalTaskGrids(task,_listTaskNotes.FindAll(x => x.TaskNum==task.TaskNum),new List<long>() { signalNum });//No db call.
+			//long signalNum=Signalods.SetInvalid(InvalidType.Task,KeyType.Task,task.TaskNum);//Only needs to send signal for the one task.
+			//RefillLocalTaskGrids(task,_listTaskNotes.FindAll(x => x.TaskNum==task.TaskNum),new List<long>() { signalNum });//No db call.
 		}
 
 		private void Edit_Clicked() {
 			if(_clickedI < _listTaskLists.Count) {//is list
 				FormTaskListEdit FormT=new FormTaskListEdit(_listTaskLists[_clickedI]);
 				FormT.ShowDialog();
-				long signalNum=Signalods.SetInvalid(InvalidType.TaskList,KeyType.Undefined,_listTaskLists[_clickedI].Parent);//Signal for source parent tasklist.
-				RefillLocalTaskGrids(_listTaskLists[_clickedI],new List<long>() { signalNum });//No db call.
+				//long signalNum=Signalods.SetInvalid(InvalidType.TaskList,KeyType.Undefined,_listTaskLists[_clickedI].Parent);//Signal for source parent tasklist.
+				//RefillLocalTaskGrids(_listTaskLists[_clickedI],new List<long>() { signalNum });//No db call.
 			}
 			else {//task
 				FormTaskEdit FormT=new FormTaskEdit(_clickedTask);//Handles signals for this task edit.
@@ -1626,13 +1626,13 @@ namespace OpenDental {
 					}
 				}
 				List<long> listSignalNums=new List<long>();
-				if(clipTlParentNum!=0) {
-					listSignalNums.Add(Signalods.SetInvalid(InvalidType.TaskList,KeyType.Undefined,clipTlParentNum));//Signal for source parent tasklist.
-				}
-				if(newTL.Parent!=0) {
-					listSignalNums.Add(Signalods.SetInvalid(InvalidType.TaskList,KeyType.Undefined,newTL.Parent));//Signal for destination parent tasklist.
-				}
-				RefillLocalTaskGrids(newTL,listSignalNums);//No db call.
+				//if(clipTlParentNum!=0) {
+				//	listSignalNums.Add(Signalods.SetInvalid(InvalidType.TaskList,KeyType.Undefined,clipTlParentNum));//Signal for source parent tasklist.
+				//}
+				//if(newTL.Parent!=0) {
+				//	listSignalNums.Add(Signalods.SetInvalid(InvalidType.TaskList,KeyType.Undefined,newTL.Parent));//Signal for destination parent tasklist.
+				//}
+				//RefillLocalTaskGrids(newTL,listSignalNums);//No db call.
 			}
 			else if(_clipTask!=null) {//a task is on the clipboard
 				Task newT=_clipTask.Copy();
@@ -1720,13 +1720,13 @@ namespace OpenDental {
 					noteList=TaskNotes.GetForTask(newT.TaskNum);
 					histDescript="This task was cut from task list "+TaskLists.GetFullPath(_clipTask.TaskListNum)+" and pasted into "+TaskLists.GetFullPath(newT.TaskListNum);
 					Tasks.Update(newT,_clipTask);
-					listSignalNums.Add(Signalods.SetInvalid(InvalidType.TaskList,KeyType.Undefined,clipTaskTaskListNum));//Signal for source tasklist.
-					listSignalNums.Add(Signalods.SetInvalid(InvalidType.Task,KeyType.Task,_clipTask.TaskNum));//Signal for current task.
-				}
-				else { //copied
+                    // TODO: listSignalNums.Add(Signalods.SetInvalid(InvalidType.TaskList,KeyType.Undefined,clipTaskTaskListNum));//Signal for source tasklist.
+                    // TODO: listSignalNums.Add(Signalods.SetInvalid(InvalidType.Task,KeyType.Task,_clipTask.TaskNum));//Signal for current task.
+                }
+                else { //copied
 					noteList=TaskNotes.GetForTask(newT.TaskNum);
 					newT.TaskNum=Tasks.Insert(newT);//Creates a new PK for newT  Copy, no need to signal source.
-					listSignalNums.Add(Signalods.SetInvalid(InvalidType.Task,KeyType.Task,newT.TaskNum));//Signal for new task.
+					// TODO: listSignalNums.Add(Signalods.SetInvalid(InvalidType.Task,KeyType.Task,newT.TaskNum));//Signal for new task.
 					histDescript="This task was copied from task "+_clipTask.TaskNum+" in task list "+TaskLists.GetFullPath(_clipTask.TaskListNum);
 					for(int t=0;t<noteList.Count;t++) {
 						noteList[t].TaskNum=newT.TaskNum;
@@ -1738,10 +1738,10 @@ namespace OpenDental {
 				hist.Descript=histDescript;
 				hist.UserNum=Security.CurrentUser.Id;
 				TaskHists.Insert(hist);
-				Signalods.SetInvalid(InvalidType.TaskPopup,KeyType.Task,newT.TaskNum);//Popup
-				TaskUnreads.AddUnreads(newT,Security.CurrentUser.Id);//we also need to tell the database about all the users with unread tasks
-				listSignalNums.Add(Signalods.SetInvalid(InvalidType.TaskList,KeyType.Undefined,newT.TaskListNum));//Signal for destination tasklist.
-				RefillLocalTaskGrids(newT,noteList,listSignalNums);//No db call.
+                // TODO: Signalods.SetInvalid(InvalidType.TaskPopup,KeyType.Task,newT.TaskNum);//Popup
+                TaskUnreads.AddUnreads(newT,Security.CurrentUser.Id);//we also need to tell the database about all the users with unread tasks
+				// TODO: listSignalNums.Add(Signalods.SetInvalid(InvalidType.TaskList,KeyType.Undefined,newT.TaskListNum));//Signal for destination tasklist.
+				// TODO: RefillLocalTaskGrids(newT,noteList,listSignalNums);//No db call.
 			}
 			//Turn the cut into a copy once the users has pasted at least once.
 			_wasCut=false;
@@ -1765,10 +1765,10 @@ namespace OpenDental {
 				TaskHist taskHist=new TaskHist(oldTask);
 				taskHist.UserNumHist=Security.CurrentUser.Id;
 				TaskHists.Insert(taskHist);
-				listSignalNums.Add(Signalods.SetInvalid(InvalidType.TaskList,KeyType.Undefined,oldTask.TaskListNum));//Signal for old TaskList containing this Task.
-				listSignalNums.Add(Signalods.SetInvalid(InvalidType.TaskList,KeyType.Undefined,task.TaskListNum));//Signal for new tasklist.
-				listSignalNums.Add(Signalods.SetInvalid(InvalidType.Task,KeyType.Task,task.TaskNum));//Signal for task.
-				RefillLocalTaskGrids(task,_listTaskNotes.FindAll(x => x.TaskNum==task.TaskNum),listSignalNums);
+                // TODO: listSignalNums.Add(Signalods.SetInvalid(InvalidType.TaskList,KeyType.Undefined,oldTask.TaskListNum));//Signal for old TaskList containing this Task.
+                // TODO:  listSignalNums.Add(Signalods.SetInvalid(InvalidType.TaskList,KeyType.Undefined,task.TaskListNum));//Signal for new tasklist.
+                // TODO:  listSignalNums.Add(Signalods.SetInvalid(InvalidType.Task,KeyType.Task,task.TaskNum));//Signal for task.
+                RefillLocalTaskGrids(task,_listTaskNotes.FindAll(x => x.TaskNum==task.TaskNum),listSignalNums);
 				Cursor=Cursors.Default;
 				FormTaskEdit FormT=new FormTaskEdit(task,task.Copy());
 				FormT.IsPopup=true;
@@ -1852,8 +1852,8 @@ namespace OpenDental {
 						TaskUnreads.SetRead(Security.CurrentUser.Id,markedTask);//Takes care of Db.
 					}
 				}
-				long signalNum=Signalods.SetInvalid(InvalidType.Task,KeyType.Task,markedTask.TaskNum);//Signal for markedTask.
-				RefillLocalTaskGrids(markedTask,_listTaskNotes.FindAll(x => x.TaskNum==markedTask.TaskNum),new List<long>() { signalNum });
+				//long signalNum=Signalods.SetInvalid(InvalidType.Task,KeyType.Task,markedTask.TaskNum);//Signal for markedTask.
+				//RefillLocalTaskGrids(markedTask,_listTaskNotes.FindAll(x => x.TaskNum==markedTask.TaskNum),new List<long>() { signalNum });
 				//if already read, nothing else to do.  If done, nothing to do
 			}
 			else {
@@ -1863,8 +1863,8 @@ namespace OpenDental {
 					task.TaskStatus=TaskStatusEnum.Viewed;
 					try {
 						Tasks.Update(task,taskOld);
-						long signalNum=Signalods.SetInvalid(InvalidType.Task,KeyType.Task,task.TaskNum);//Send signal for this task.
-						RefillLocalTaskGrids(task,_listTaskNotes.FindAll(x => x.TaskNum==task.TaskNum),new List<long>() { signalNum });
+						//long signalNum=Signalods.SetInvalid(InvalidType.Task,KeyType.Task,task.TaskNum);//Send signal for this task.
+						//RefillLocalTaskGrids(task,_listTaskNotes.FindAll(x => x.TaskNum==task.TaskNum),new List<long>() { signalNum });
 					}
 					catch(Exception ex) {
 						MessageBox.Show(ex.Message);
@@ -2008,8 +2008,8 @@ namespace OpenDental {
 				}
 				TaskSubscriptions.UpdateTaskListSubs(taskListToDelete.TaskListNum,0);
 				TaskLists.Delete(taskListToDelete);
-				long signalNum=Signalods.SetInvalid(InvalidType.TaskList,KeyType.Undefined,taskListToDelete.Parent);//Signal for source tasklist.
-				RefillLocalTaskGrids(taskListToDelete,new List<long>() { signalNum },false);//No db calls.
+				//long signalNum=Signalods.SetInvalid(InvalidType.TaskList,KeyType.Undefined,taskListToDelete.Parent);//Signal for source tasklist.
+				//RefillLocalTaskGrids(taskListToDelete,new List<long>() { signalNum },false);//No db calls.
 			}
 			else {//Is task
 				//This security logic should match FormTaskEdit for when we enable the delete button.
@@ -2058,8 +2058,8 @@ namespace OpenDental {
 				}
 				Tasks.Delete(_clickedTask.TaskNum);//always do it this way to clean up all four tables
 				List<long> listSignalNums=new List<long>();
-				listSignalNums.Add(Signalods.SetInvalid(InvalidType.TaskList,KeyType.Undefined,_clickedTask.TaskListNum));//Signal for source tasklist.
-				listSignalNums.Add(Signalods.SetInvalid(InvalidType.Task,KeyType.Task,_clickedTask.TaskNum));//Signal for current task.
+				//listSignalNums.Add(Signalods.SetInvalid(InvalidType.TaskList,KeyType.Undefined,_clickedTask.TaskListNum));//Signal for source tasklist.
+				//listSignalNums.Add(Signalods.SetInvalid(InvalidType.Task,KeyType.Task,_clickedTask.TaskNum));//Signal for current task.
 				RefillLocalTaskGrids(_clickedTask,_listTaskNotes.FindAll(x => x.TaskNum==_clickedTask.TaskNum),listSignalNums,false);
 				TaskHist taskHistory = new TaskHist(_clickedTask);
 				taskHistory.IsNoteChange=false;
@@ -2335,8 +2335,8 @@ namespace OpenDental {
 			foreach(MenuItem menuItem in gridMain.ContextMenu.MenuItems) { //disable ContextMenu options
 				menuItem.Enabled=false;
 			}
-			Signalods.SetInvalid(InvalidType.TaskList,KeyType.Undefined,_clickedTask.TaskListNum);
-			FillGrid();//Full Refresh.
+            // TODO: Signalods.SetInvalid(InvalidType.TaskList,KeyType.Undefined,_clickedTask.TaskListNum);
+            FillGrid();//Full Refresh.
 		}
 
 		private void OnSubscribe_Click(){
@@ -2418,10 +2418,10 @@ namespace OpenDental {
 				TaskHist taskHist=new TaskHist(task);
 				taskHist.UserNumHist=Security.CurrentUser.Id;
 				TaskHists.Insert(taskHist);
-				long signalNum=Signalods.SetInvalid(InvalidType.Task,KeyType.Task,taskNew.TaskNum);
-				RefillLocalTaskGrids(taskNew,_listTaskNotes.FindAll(x => x.TaskNum==taskNew.TaskNum),new List<long>() { signalNum });
-			}
-			catch(Exception ex) {//Happens when two users edit the same task at the same time.
+                // TODO: long signalNum=Signalods.SetInvalid(InvalidType.Task,KeyType.Task,taskNew.TaskNum);
+                // TODO: RefillLocalTaskGrids(taskNew,_listTaskNotes.FindAll(x => x.TaskNum==taskNew.TaskNum),new List<long>() { signalNum });
+            }
+            catch (Exception ex) {//Happens when two users edit the same task at the same time.
 				MessageBox.Show(ex.Message);
 			}
 		}

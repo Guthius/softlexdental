@@ -1284,8 +1284,8 @@ namespace OpenDental{
 			}
 			SecurityLog.Write(SecurityLogEvents.AgingRan,"Aging Ran Automatically - Billing Options Form, Create List");
 			Preference.Update(PreferenceName.AgingBeginDateTime,POut.DateT(dtNow,false));//get lock on pref to block others
-			Signalods.SetInvalid(InvalidType.Prefs);//signal a cache refresh so other computers will have the updated pref as quickly as possible
-			Cursor=Cursors.WaitCursor;
+            CacheManager.InvalidateEverywhere<Preference>();
+            Cursor =Cursors.WaitCursor;
 			string msgText=Lan.g(this,"Calculating enterprise aging for all patients as of")+" "+dtToday.ToShortDateString()+"...";
 			bool result=true;
 			ODProgress.ShowAction(() => {
@@ -1300,8 +1300,8 @@ namespace OpenDental{
 			);
 			Cursor=Cursors.Default;
 			Preference.Update(PreferenceName.AgingBeginDateTime,"");//clear lock on pref whether aging was successful or not
-			Signalods.SetInvalid(InvalidType.Prefs);
-			return result;
+            CacheManager.InvalidateEverywhere<Preference>();
+            return result;
 		}
 
 		///<summary>Returns the mode for the statement.</summary>

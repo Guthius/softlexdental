@@ -49,13 +49,29 @@ namespace OpenDental
         {
             StartPosition = FormStartPosition.CenterScreen;
 
-            Shown += new EventHandler((o, e) =>
-            {
-                Signal.Process += OnProcessSignals;
-
-            });
-
             InitializeHelp();
+        }
+
+        protected override void OnShown(EventArgs e)
+        {
+            Signal.Process += OnProcessSignals;
+
+            CacheManager.CacheRefreshed += OnDataCacheRefresh;
+
+            base.OnShown(e);
+        }
+
+        protected override void OnFormClosed(FormClosedEventArgs e)
+        {
+            Signal.Process -= OnProcessSignals;
+
+            CacheManager.CacheRefreshed -= OnDataCacheRefresh;
+
+            base.OnFormClosed(e);
+        }
+
+        protected virtual void OnDataCacheRefresh(Type type, IDataRecordCache dataRecordCache)
+        {
         }
 
         /// <summary>

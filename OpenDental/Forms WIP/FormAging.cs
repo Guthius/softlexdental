@@ -111,7 +111,8 @@ namespace OpenDental
             SecurityLog.Write(SecurityLogEvents.AgingRan, "Aging Ran - Aging Form");
 
             Preference.Update(PreferenceName.AgingBeginDateTime, MiscData.GetNowDateTime());
-            Signalods.SetInvalid(InvalidType.Prefs); // Signal a cache refresh so other computers will have the updated pref as quickly as possible
+
+            CacheManager.InvalidateEverywhere<Preference>();
 
             Cursor = Cursors.WaitCursor;
             {
@@ -135,7 +136,8 @@ namespace OpenDental
                 Cursor = Cursors.Default;
 
                 Preference.Update(PreferenceName.AgingBeginDateTime, ""); // Clear lock on pref whether aging was successful or not
-                Signalods.SetInvalid(InvalidType.Prefs);
+
+                CacheManager.InvalidateEverywhere<Preference>();
 
                 return result;
             }
@@ -194,7 +196,7 @@ namespace OpenDental
 
                 if (Preference.Update(PreferenceName.DateLastAging, calculateDate))
                 {
-                    DataValid.SetInvalid(InvalidType.Prefs);
+                    CacheManager.InvalidateEverywhere<Preference>();
                 }
             }
 

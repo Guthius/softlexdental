@@ -1055,7 +1055,7 @@ namespace OpenDental{
 				string secLogText="Referral '"+RefCur.LName+", "+RefCur.FName+"' created";
 				SecurityLog.Write(Permissions.ReferralAdd,RefCur.PatNum,secLogText);
 				Referrals.Insert(RefCur);
-				Signalods.SetInvalid(InvalidType.Referral);//Make sure other instances have the new referral in their cache.
+				// TODO: Signalods.SetInvalid(InvalidType.Referral);//Make sure other instances have the new referral in their cache.
 			}
 			else{
 				string secLogText="Referral '"+RefCur.LName+", "+RefCur.FName+"' edited";

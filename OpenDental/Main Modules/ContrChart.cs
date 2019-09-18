@@ -12640,8 +12640,8 @@ namespace OpenDental
                     TaskHist taskHist = new TaskHist(taskOld);
                     taskHist.UserNumHist = Security.CurrentUser.Id;
                     TaskHists.Insert(taskHist);
-                    long signalNum = Signalods.SetInvalid(InvalidType.Task, KeyType.Task, taskCur.TaskNum);
-                    UserControlTasks.RefillLocalTaskGrids(taskCur, TaskNotes.GetForTask(taskCur.TaskNum), new List<long>() { signalNum });
+                    // TODO: long signalNum = Signalods.SetInvalid(InvalidType.Task, KeyType.Task, taskCur.TaskNum);
+                    // TODO: UserControlTasks.RefillLocalTaskGrids(taskCur, TaskNotes.GetForTask(taskCur.TaskNum), new List<long>() { signalNum });
                     ModuleSelected(PatCur.PatNum);
                 }
                 return;
@@ -13270,7 +13270,7 @@ namespace OpenDental
             }
             if (hasDeletedRows)
             {
-                Signalods.SetInvalid(InvalidType.ProcMultiVisits);
+                // TODO: Signalods.SetInvalid(InvalidType.ProcMultiVisits);
                 ProcMultiVisits.RefreshCache();
                 FillProgNotes(retainToothSelection: true, doRefreshData: false);//Refresh to show potential status change.
             }

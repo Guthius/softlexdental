@@ -47,5 +47,8 @@ namespace OpenDentBusiness
         /// <para>Indicates something related to the scheduling requires a refresh.</para>
         /// </summary>
         public const string ScheduleChanged = "schedule_changed";
+
+
+        public const string EmailAddressesChanged = "email_addresses_changed";
     }
 }

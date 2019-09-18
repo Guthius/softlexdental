@@ -274,16 +274,16 @@ namespace OpenDental {
 			FillPat();
 		}
 
-		public override void OnProcessSignals(List<Signal> listSignals) {
-			if(listSignals.Any(x => x.IType==InvalidType.Prefs)) {
-				textPassword.Text=Preference.GetString(PreferenceName.TerminalClosePassword);
-			}
-			int processIdCur=Process.GetCurrentProcess().Id;
-			if(listSignals.All(x => x.IType!=InvalidType.Kiosk || (x.FKeyType==KeyType.ProcessId && x.ExternalId==processIdCur))) {
-				return;
-			}
-			FillGrid();
-			FillPat();//fill patient, to refill sheets in case there are new ones added.  Pat name label will not be updated from db unless pat changes.
+		public override void OnProcessSignals(IEnumerable<Signal> listSignals) {
+			//if(listSignals.Any(x => x.IType==InvalidType.Prefs)) {
+			//	textPassword.Text=Preference.GetString(PreferenceName.TerminalClosePassword);
+			//}
+			//int processIdCur=Process.GetCurrentProcess().Id;
+			//if(listSignals.All(x => x.IType!=InvalidType.Kiosk || (x.FKeyType==KeyType.ProcessId && x.ExternalId==processIdCur))) {
+			//	return;
+			//}
+			//FillGrid();
+			//FillPat();//fill patient, to refill sheets in case there are new ones added.  Pat name label will not be updated from db unless pat changes.
 		}
 
 		private void FillGrid(){
@@ -355,8 +355,8 @@ namespace OpenDental {
 			}
 			TerminalActive selectedTerm=_terminalList[gridMain.GetSelectedIndex()];
 			TerminalActives.DeleteForCmptrSessionAndId(selectedTerm.ComputerName,selectedTerm.SessionId,processId:selectedTerm.ProcessId);
-			Signalods.SetInvalid(InvalidType.Kiosk,KeyType.ProcessId,Process.GetCurrentProcess().Id);
-			FillGrid();
+            // TODO: Signalods.SetInvalid(InvalidType.Kiosk,KeyType.ProcessId,Process.GetCurrentProcess().Id);
+            FillGrid();
 			FillPat();
 		}
 
@@ -375,8 +375,8 @@ namespace OpenDental {
 				return;
 			}
 			TerminalActives.SetPatNum(terminal.TerminalActiveNum,0);
-			Signalods.SetInvalid(InvalidType.Kiosk,KeyType.ProcessId,Process.GetCurrentProcess().Id);
-			FillGrid();
+            // TODO: Signalods.SetInvalid(InvalidType.Kiosk,KeyType.ProcessId,Process.GetCurrentProcess().Id);
+            FillGrid();
 			FillPat();
 		}
 
@@ -397,16 +397,16 @@ namespace OpenDental {
 				return;
 			}
 			TerminalActives.SetPatNum(terminal.TerminalActiveNum,_patNumCur);
-			Signalods.SetInvalid(InvalidType.Kiosk,KeyType.ProcessId,Process.GetCurrentProcess().Id);
-			FillGrid();
+            // TODO: Signalods.SetInvalid(InvalidType.Kiosk,KeyType.ProcessId,Process.GetCurrentProcess().Id);
+            FillGrid();
 			FillPat();
 		}
 
 		private void butSave_Click(object sender,EventArgs e) {
 			if(Preference.Update(PreferenceName.TerminalClosePassword,textPassword.Text)){
-				Signalods.SetInvalid(InvalidType.Prefs);
-			}
-			MsgBox.Show(this,"Done.");
+                // TODO: Signalods.SetInvalid(InvalidType.Prefs);
+            }
+            MsgBox.Show(this,"Done.");
 		}
 
 		private void butClose_Click(object sender,EventArgs e) {
@@ -416,9 +416,9 @@ namespace OpenDental {
 		private void FormTerminalManager_FormClosing(object sender,FormClosingEventArgs e) {
 			PatientChangedEvent.Fired-=PatientChangedEvent_Fired;
 			if(Preference.Update(PreferenceName.TerminalClosePassword,textPassword.Text)){
-				Signalods.SetInvalid(InvalidType.Prefs);
-			}
-		}
+                // TODO: Signalods.SetInvalid(InvalidType.Prefs);
+            }
+        }
 
 	}
 }

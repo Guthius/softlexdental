@@ -118,22 +118,22 @@ namespace OpenDental {
             {
                 //The patient has been successfully merged.
                 #region Refresh Patient's Tasks
-                List<Signal> listSignals = new List<Signal>();
-                foreach (Task task in listPatientTasks)
-                {
-                    Signal signal = new Signal();
-                    signal.IType = InvalidType.Task;
-                    signal.FKeyType = KeyType.Task;
-                    signal.ExternalId = task.TaskNum;
-                    signal.DateViewing = DateTime.MinValue;//Mimics Signalods.SetInvalid()
-                    listSignals.Add(signal);
-                }
-                Signalods.SetInvalid(InvalidType.TaskPatient, KeyType.Undefined, _patTo.PatNum);//Ensure anyone viewing Patient tab of new pat gets refreshed.
-                Signalods.Insert(listSignals.ToArray());//Refreshes existing tasks in all other tabs.
-                                                        //Causes Task area and open Task Edit windows to refresh immediately.  No popups, alright to pass empty lists for listRefreshedTaskNotes and 
-                                                        //listBlockedTaskLists.
-                FormOpenDental.S_HandleRefreshedTasks(listSignals, listPatientTasks.Select(x => x.TaskNum).ToList(), listPatientTasks, new List<TaskNote>()
-                    , new List<UserPreference>());
+                //List<Signal> listSignals = new List<Signal>();
+                //foreach (Task task in listPatientTasks)
+                //{
+                //    Signal signal = new Signal();
+                //    signal.IType = InvalidType.Task;
+                //    signal.FKeyType = KeyType.Task;
+                //    signal.ExternalId = task.TaskNum;
+                //    signal.DateViewing = DateTime.MinValue;//Mimics Signalods.SetInvalid()
+                //    listSignals.Add(signal);
+                //}
+                //Signalods.SetInvalid(InvalidType.TaskPatient, KeyType.Undefined, _patTo.PatNum);//Ensure anyone viewing Patient tab of new pat gets refreshed.
+                //Signalods.Insert(listSignals.ToArray());//Refreshes existing tasks in all other tabs.
+                //                                        //Causes Task area and open Task Edit windows to refresh immediately.  No popups, alright to pass empty lists for listRefreshedTaskNotes and 
+                //                                        //listBlockedTaskLists.
+                //FormOpenDental.S_HandleRefreshedTasks(listSignals, listPatientTasks.Select(x => x.TaskNum).ToList(), listPatientTasks, new List<TaskNote>()
+                //    , new List<UserPreference>());
                 #endregion
                 //Now copy the physical images from the old patient to the new if they are using an AtoZ image share.
                 //This has to happen in the UI because the middle tier server might not have access to the image share.

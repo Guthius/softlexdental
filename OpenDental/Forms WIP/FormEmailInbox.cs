@@ -755,7 +755,7 @@ namespace OpenDental
 
                     CurrentView?.Refresh();
 
-                    Signalods.SetInvalid(InvalidType.EmailMessages);
+                    CacheManager.InvalidateEverywhere<EmailMessage>();
 
                     Cursor = Cursors.Default;
 
@@ -921,19 +921,17 @@ namespace OpenDental
             formEmailMessageEdit.Show();
         }
 
-        /// <summary>
-        /// If someone else is sending emails on another workstation, this will update this form to reflect that.
-        /// </summary>
-        public override void OnProcessSignals(List<Signal> listSignals)
+        protected override void OnDataCacheRefresh(Type type, IDataRecordCache dataRecordCache)
         {
-            if (listSignals.Exists(x => x.IType == InvalidType.Email))
+            // TODO: Thread synchronization...
+
+            if (type == typeof(EmailAddress))
             {
                 Cursor = Cursors.WaitCursor;
 
                 LoadEmailAddresses();
             }
-
-            if (listSignals.Exists(x => x.IType == InvalidType.EmailMessages))
+            else if (type == typeof(EmailMessage))
             {
                 Cursor = Cursors.WaitCursor;
 
@@ -986,7 +984,7 @@ namespace OpenDental
 
             CurrentView.Refresh();
 
-            Signalods.SetInvalid(InvalidType.EmailMessages);
+            CacheManager.InvalidateEverywhere<EmailMessage>();
 
             Cursor = Cursors.Default;
         }

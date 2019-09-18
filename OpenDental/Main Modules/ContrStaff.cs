@@ -1021,7 +1021,7 @@ namespace OpenDental
             listExtras.SelectedIndex = -1;
             listMessages.SelectedIndex = -1;
             ShowSendingLabel();
-            Signalods.SetInvalid(InvalidType.SigMessages, KeyType.SigMessage, sigMessage.SigMessageNum);
+            // TODO: Signalods.SetInvalid(InvalidType.SigMessages, KeyType.SigMessage, sigMessage.SigMessageNum);
         }
 
         private void listMessages_Click(object sender, EventArgs e)
@@ -1057,7 +1057,7 @@ namespace OpenDental
             listExtras.SelectedIndex = -1;
             listMessages.SelectedIndex = -1;
             ShowSendingLabel();
-            Signalods.SetInvalid(InvalidType.SigMessages, KeyType.SigMessage, sigMessage.SigMessageNum);
+            // TODO: Signalods.SetInvalid(InvalidType.SigMessages, KeyType.SigMessage, sigMessage.SigMessageNum);
         }
 
         ///<summary>Shows the sending label for 1 second.</summary>
@@ -1125,7 +1125,7 @@ namespace OpenDental
                         //do nothing
                     }
                 }
-                Signalods.SetInvalid(InvalidType.SigMessages, KeyType.SigMessage, sigMessage.SigMessageNum);
+                // TODO: Signalods.SetInvalid(InvalidType.SigMessages, KeyType.SigMessage, sigMessage.SigMessageNum);
             }
             gridMessages.SetSelected(false);
         }

@@ -264,6 +264,8 @@ namespace OpenDentBusiness
                     foreach (var dataRecordCache in dataRecordCacheList)
                     {
                         dataRecordCache.Refresh();
+
+                        OnCacheRefreshed(typeof(T), dataRecordCache);
                     }
                 }
             }
@@ -284,6 +286,8 @@ namespace OpenDentBusiness
                         foreach (var dataRecordCache in dataRecordCacheList)
                         {
                             dataRecordCache.Refresh();
+
+                            OnCacheRefreshed(type, dataRecordCache);
                         }
                     }
                 }
@@ -291,6 +295,28 @@ namespace OpenDentBusiness
 
             // TODO: Add support for invalidating and refreshing individual records...
         }
+
+        /// <summary>
+        /// Represents a method for respoding to cache refreshes.
+        /// </summary>
+        /// <param name="type">The data record type.</param>
+        /// <param name="dataRecordCache">The cache.</param>
+        public delegate void CacheRefreshHandler(Type type, IDataRecordCache dataRecordCache);
+
+        /// <summary>
+        /// <para>Raised whenever a cache has been refreshed.</para>
+        /// <para>
+        /// This event is not gauranteed to be raised on the UI thread. 
+        /// </para>
+        /// </summary>
+        public static event CacheRefreshHandler CacheRefreshed = delegate { };
+
+        /// <summary>
+        /// Raises the <see cref="CacheRefreshed"/> event.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="dataRecordCache"></param>
+        private static void OnCacheRefreshed(Type type, IDataRecordCache dataRecordCache) => CacheRefreshed.Invoke(type, dataRecordCache);
 
         /// <summary>
         /// Invalidates the cache of record type <typeparamref name="T"/> on every active workstation.

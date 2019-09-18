@@ -1252,7 +1252,7 @@ namespace OpenDental{
 				changed=true;
 			}
 			if(changed) {
-				Signalods.SetInvalid(InvalidType.Providers);
+				// TODO: Signalods.SetInvalid(InvalidType.Providers);
 			}
 			_listProvs=listProvsAll;
 			FillGrid();

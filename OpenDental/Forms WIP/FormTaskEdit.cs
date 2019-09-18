@@ -1587,8 +1587,8 @@ namespace OpenDental {
 				checkDone.Checked=false;
 			}
 			FillGrid();
-			Signalods.SetInvalid(InvalidType.TaskPopup,KeyType.Task,_taskCur.TaskNum);//popup
-			TaskUnreads.AddUnreads(_taskCur,Security.CurrentUser.Id);//we also need to tell the database about all the users with unread tasks
+            // TODO: Signalods.SetInvalid(InvalidType.TaskPopup,KeyType.Task,_taskCur.TaskNum);//popup
+            TaskUnreads.AddUnreads(_taskCur,Security.CurrentUser.Id);//we also need to tell the database about all the users with unread tasks
 			SendSignalsRefillLocal(_taskCur);
 		}
 
@@ -1611,8 +1611,8 @@ namespace OpenDental {
 				_statusChanged=true;
 				_mightNeedSetRead=false;//so that the automation won't happen again
 			}
-			Signalods.SetInvalid(InvalidType.TaskPopup,KeyType.Task,_taskCur.TaskNum);//popup
-			TaskUnreads.AddUnreads(_taskCur,Security.CurrentUser.Id);//we also need to tell the database about all the users with unread tasks
+            // TODO: Signalods.SetInvalid(InvalidType.TaskPopup,KeyType.Task,_taskCur.TaskNum);//popup
+            TaskUnreads.AddUnreads(_taskCur,Security.CurrentUser.Id);//we also need to tell the database about all the users with unread tasks
 			SendSignalsRefillLocal(_taskCur);
 		}
 
@@ -2219,8 +2219,8 @@ namespace OpenDental {
 			if(!SaveCur()) {
 				return;
 			}
-			Signalods.SetInvalid(InvalidType.TaskPopup,KeyType.Task,_taskCur.TaskNum);//popup
-			TaskUnreads.AddUnreads(_taskCur,Security.CurrentUser.Id);//we also need to tell the database about all the users with unread tasks
+            // TODO: Signalods.SetInvalid(InvalidType.TaskPopup,KeyType.Task,_taskCur.TaskNum);//popup
+            TaskUnreads.AddUnreads(_taskCur,Security.CurrentUser.Id);//we also need to tell the database about all the users with unread tasks
 			//Both tasklistnums are different, since SaveCur() returned true.  Thereore, send signals for both task lists.
 			SendSignalsRefillLocal(_taskCur,taskListNumCur);
 			DialogResult=DialogResult.OK;
@@ -2238,8 +2238,8 @@ namespace OpenDental {
 			if(!SaveCur()) {
 				return;
 			}
-			Signalods.SetInvalid(InvalidType.TaskPopup,KeyType.Task,_taskCur.TaskNum);//popup
-			TaskUnreads.AddUnreads(_taskCur,Security.CurrentUser.Id);//we also need to tell the database about all the users with unread tasks
+            // TODO: Signalods.SetInvalid(InvalidType.TaskPopup,KeyType.Task,_taskCur.TaskNum);//popup
+            TaskUnreads.AddUnreads(_taskCur,Security.CurrentUser.Id);//we also need to tell the database about all the users with unread tasks
 			SendSignalsRefillLocal(_taskCur,taskListNumCur);
 			DialogResult=DialogResult.OK;
 			Close();
@@ -2268,8 +2268,8 @@ namespace OpenDental {
 			SaveCopy(FormT.ListSelectedLists.Skip(1).ToList());//Copies/Inserts task and sends to inboxes if multiple lists were selected.
 			//Check for changes.  If something changed, send a signal.
 			if(NotesChanged || !_taskCur.Equals(_taskOld) || _statusChanged) {
-				Signalods.SetInvalid(InvalidType.TaskPopup,KeyType.Task,_taskCur.TaskNum);//popup
-				TaskUnreads.AddUnreads(_taskCur,Security.CurrentUser.Id);//we also need to tell the database about all the users with unread tasks
+                // TODO: Signalods.SetInvalid(InvalidType.TaskPopup,KeyType.Task,_taskCur.TaskNum);//popup
+                TaskUnreads.AddUnreads(_taskCur,Security.CurrentUser.Id);//we also need to tell the database about all the users with unread tasks
 			}
 			SendSignalsRefillLocal(_taskCur,taskListNumCur);
 			DialogResult=DialogResult.OK;
@@ -2306,10 +2306,10 @@ namespace OpenDental {
 				}
 				else {//Sent to someone else. Task should popup for that user.
 					TaskUnreads.AddUnreads(taskCopy,Security.CurrentUser.Id);//Tell the database about all the users with unread tasks prior to sending signals.
-					Signalods.SetInvalid(InvalidType.TaskPopup,KeyType.Task,taskCopy.TaskNum);//popup
-					Signalods.SetInvalid(InvalidType.TaskList,KeyType.Undefined,taskCopy.TaskListNum);//signal so all instances of UserControlTasks refreshes.
-				}
-			}
+                                                                             // TODO: Signalods.SetInvalid(InvalidType.TaskPopup,KeyType.Task,taskCopy.TaskNum);//popup
+                                                                             // TODO: Signalods.SetInvalid(InvalidType.TaskList,KeyType.Undefined,taskCopy.TaskListNum);//signal so all instances of UserControlTasks refreshes.
+                }
+            }
 			return true;
 		}
 		
@@ -2353,9 +2353,9 @@ namespace OpenDental {
 			if(IsNew || textDescript.Text!=_taskCur.Descript //notes or descript changed
 				|| (NotesChanged && _taskOld.TaskStatus==TaskStatusEnum.Done) //Because the taskunread would not have been inserted when saving the note
 				|| (_taskOld.ReminderType==TaskReminderType.NoReminder && _taskCur.ReminderType!=TaskReminderType.NoReminder)) //Add taskunread for when "due"
-			{ 
-				Signalods.SetInvalid(InvalidType.TaskPopup,KeyType.Task,_taskCur.TaskNum);//popup
-				TaskUnreads.AddUnreads(_taskCur,Security.CurrentUser.Id);//we also need to tell the database about all the users with unread tasks
+			{
+                // TODO: Signalods.SetInvalid(InvalidType.TaskPopup,KeyType.Task,_taskCur.TaskNum);//popup
+                TaskUnreads.AddUnreads(_taskCur,Security.CurrentUser.Id);//we also need to tell the database about all the users with unread tasks
 			}
 			SendSignalsRefillLocal(_taskCur);
 			DialogResult=DialogResult.OK;
@@ -2364,29 +2364,29 @@ namespace OpenDental {
 
 		///<summary>Determines which signals need to be sent, and sends them.  Pass in taskListNumOld if the taskListNum has possibly changed.</summary>
 		private void SendSignalsRefillLocal(Task task,long taskListNumOld=-1,bool canKeepTask=true) {
-			List<long> listSignalNums=new List<long>();
-			listSignalNums.Add(Signalods.SetInvalid(InvalidType.TaskList,KeyType.Undefined,task.TaskListNum));//Signal for current tasklist.
-			listSignalNums.Add(Signalods.SetInvalid(InvalidType.Task,KeyType.Task,task.TaskNum));//Signal for current task.
-			if(taskListNumOld!=-1 && task.TaskListNum!=taskListNumOld) {
-				listSignalNums.Add(Signalods.SetInvalid(InvalidType.TaskList,KeyType.Undefined,taskListNumOld));//Signal for old tasklist.
-			}
-			if(_userNumFrom!=task.UserNum) {//From User has changed.
-				if(_userNumFrom!=0) {//Should never be 0, but might be 0 in much older databases?
-					listSignalNums.Add(Signalods.SetInvalid(InvalidType.TaskAuthor,KeyType.Undefined,_userNumFrom));//Signal for previous From User.
-				}
-				if(task.UserNum!=0) {//Should never be 0, but might be 0 in much older databases?
-					listSignalNums.Add(Signalods.SetInvalid(InvalidType.TaskAuthor,KeyType.Undefined,task.UserNum));//Signal for new From User.
-				}
-			}
-			if(_patientPatNum!=task.KeyNum) {//Attached patient changed.
-				if(_patientPatNum!=0) {//Previous Object was a Patient
-					listSignalNums.Add(Signalods.SetInvalid(InvalidType.TaskPatient,KeyType.Undefined,_patientPatNum));//Signal for previous Patient.
-				}
-				if(_taskCur.ObjectType==TaskObjectType.Patient && task.KeyNum!=0) {//New Object is a Patient
-					listSignalNums.Add(Signalods.SetInvalid(InvalidType.TaskPatient,KeyType.Undefined,task.KeyNum));//Signal for new Patient.
-				}
-			}
-			UserControlTasks.RefillLocalTaskGrids(_taskCur,_listTaskNotes,listSignalNums,canKeepTask);
+			//List<long> listSignalNums=new List<long>();
+			//listSignalNums.Add(Signalods.SetInvalid(InvalidType.TaskList,KeyType.Undefined,task.TaskListNum));//Signal for current tasklist.
+			//listSignalNums.Add(Signalods.SetInvalid(InvalidType.Task,KeyType.Task,task.TaskNum));//Signal for current task.
+			//if(taskListNumOld!=-1 && task.TaskListNum!=taskListNumOld) {
+			//	listSignalNums.Add(Signalods.SetInvalid(InvalidType.TaskList,KeyType.Undefined,taskListNumOld));//Signal for old tasklist.
+			//}
+			//if(_userNumFrom!=task.UserNum) {//From User has changed.
+			//	if(_userNumFrom!=0) {//Should never be 0, but might be 0 in much older databases?
+			//		listSignalNums.Add(Signalods.SetInvalid(InvalidType.TaskAuthor,KeyType.Undefined,_userNumFrom));//Signal for previous From User.
+			//	}
+			//	if(task.UserNum!=0) {//Should never be 0, but might be 0 in much older databases?
+			//		listSignalNums.Add(Signalods.SetInvalid(InvalidType.TaskAuthor,KeyType.Undefined,task.UserNum));//Signal for new From User.
+			//	}
+			//}
+			//if(_patientPatNum!=task.KeyNum) {//Attached patient changed.
+			//	if(_patientPatNum!=0) {//Previous Object was a Patient
+			//		listSignalNums.Add(Signalods.SetInvalid(InvalidType.TaskPatient,KeyType.Undefined,_patientPatNum));//Signal for previous Patient.
+			//	}
+			//	if(_taskCur.ObjectType==TaskObjectType.Patient && task.KeyNum!=0) {//New Object is a Patient
+			//		listSignalNums.Add(Signalods.SetInvalid(InvalidType.TaskPatient,KeyType.Undefined,task.KeyNum));//Signal for new Patient.
+			//	}
+			//}
+			//UserControlTasks.RefillLocalTaskGrids(_taskCur,_listTaskNotes,listSignalNums,canKeepTask);
 		}
 
 		private void butCancel_Click(object sender,System.EventArgs e) {
@@ -2444,8 +2444,8 @@ namespace OpenDental {
 				catch {
 					return;//Silently leave because the user could be trying to cancel out of a task that had been edited by another user.
 				}
-				Signalods.SetInvalid(InvalidType.TaskPopup,KeyType.Task,_taskCur.TaskNum);//popup
-				TaskUnreads.AddUnreads(_taskCur,Security.CurrentUser.Id);//we also need to tell the database about all the users with unread tasks
+                // TODO: Signalods.SetInvalid(InvalidType.TaskPopup,KeyType.Task,_taskCur.TaskNum);//popup
+                TaskUnreads.AddUnreads(_taskCur,Security.CurrentUser.Id);//we also need to tell the database about all the users with unread tasks
 				SendSignalsRefillLocal(_taskCur);
 			}
 		}

@@ -31,10 +31,10 @@ namespace OpenDental
                     if (formShutdown.ShowDialog() == DialogResult.OK)
                     {
                         //turn off signal reception for 5 seconds so this workstation will not shut down.
-                        Signalods.SignalLastRefreshed = MiscData.GetNowDateTime().AddSeconds(5);
-                        Signalods.Insert(new Signal
+                        Signal.LastRefreshDate = MiscData.GetNowDateTime().AddSeconds(5);
+                        Signal.Insert(new Signal
                         {
-                            IType = InvalidType.ShutDownNow
+                            Name = SignalName.Shutdown
                         });
 
                         Computer.ClearAllHeartBeats(Environment.MachineName);

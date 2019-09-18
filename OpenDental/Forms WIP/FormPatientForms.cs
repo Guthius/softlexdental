@@ -135,7 +135,7 @@ namespace OpenDental {
 			if(FormS.TerminalSend) {
 				//do not show a dialog now.  User will need to click the terminal button.
 				FillGrid();
-				Signalods.SetInvalid(InvalidType.Kiosk);
+				// TODO: Signalods.SetInvalid(InvalidType.Kiosk);
 			}
 			else{
 				FormSheetFillEdit.ShowForm(sheet,FormSheetFillEdit_FormClosing);

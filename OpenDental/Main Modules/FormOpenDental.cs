@@ -501,7 +501,7 @@ namespace OpenDental
             DataConnectionEvent.Fired += DataConnection_ConnectionLost;//Hook up the connection lost event. Nothing prior to this point will have LostConnection events fired.
 
             RefreshLocalData(InvalidType.Prefs);//should only refresh preferences so that SignalLastClearedDate preference can be used in ClearOldSignals()
-            Signalods.ClearOldSignals();
+            Signal.ClearOldSignals();
             //We no longer do this shotgun approach because it can slow the loading time.
             //RefreshLocalData(InvalidType.AllLocal);
             List<InvalidType> invalidTypes = new List<InvalidType>();
@@ -3242,21 +3242,18 @@ namespace OpenDental
             return;
         }
 
-        ///<summary>This only contains UI signal processing. See Signalods.SignalsTick() for cache updates.</summary>
-        public override void OnProcessSignals(List<Signal> signals)
+        protected override void OnDataCacheRefresh(Type type, IDataRecordCache dataRecordCache)
         {
-            //if (signals.Exists(x => x.Name == InvalidType.Programs))
-            //{
-            //    RefreshMenuReports();
-            //}
+            if (type == typeof(Program))
+            {
+                RefreshMenuReports();
+            }
+        }
 
-            //foreach (var signal in signals)
-            //{
-            //    if (signal.Name == SignalName.CacheInvalidate)
-            //    {
-                    
-            //    }
-            //}
+
+        ///<summary>This only contains UI signal processing. See Signalods.SignalsTick() for cache updates.</summary>
+        public override void OnProcessSignals(IEnumerable<Signal> signals)
+        {
 
             //#region SMS Notifications
 

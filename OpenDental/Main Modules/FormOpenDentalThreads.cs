@@ -797,10 +797,10 @@ namespace OpenDental
             //No workstations will be able to connect to this single server while this flag is set.
             Preference.Update(PreferenceName.ReplicationFailureAtServer_id, ReplicationServers.Server_id);
             //shut down all workstations on all servers
-            Signalods.SignalLastRefreshed = MiscData.GetNowDateTime().AddSeconds(5);
-            Signal sig = new Signal();
-            sig.IType = InvalidType.ShutDownNow;
-            Signalods.Insert(sig);
+            //Signalods.SignalLastRefreshed = MiscData.GetNowDateTime().AddSeconds(5);
+            //Signal sig = new Signal();
+            //sig.IType = InvalidType.ShutDownNow;
+            //Signalods.Insert(sig);
             Computer.ClearAllHeartBeats(Environment.MachineName);//always assume success
             o.QuitAsync();//Quitting the thread here will quit it once this method exits (after the invoke returns).
             this.Invoke(() =>

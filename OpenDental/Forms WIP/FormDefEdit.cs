@@ -745,8 +745,8 @@ namespace OpenDental {
 				}
 				string remindString=string.Join(",",_listExcludeRemindNums.Distinct().OrderBy(x => x));
 				Preference.Update(PreferenceName.ApptConfirmExcludeERemind,remindString);
-				Signalods.SetInvalid(InvalidType.Prefs);
-			}
+                CacheManager.InvalidateEverywhere<Preference>();
+            }
 			DialogResult=DialogResult.OK;
 		}
 

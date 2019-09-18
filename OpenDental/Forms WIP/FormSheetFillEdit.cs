@@ -1353,7 +1353,7 @@ namespace OpenDental {
 				SheetFields.Sync(listSheetFields,SheetCur.SheetNum,true);
 			}
 			if(SheetCur.ShowInTerminal>0) {
-				Signalods.SetInvalid(InvalidType.Kiosk);
+				// TODO: Signalods.SetInvalid(InvalidType.Kiosk);
 			}
 			return true;
 		}
@@ -1684,7 +1684,7 @@ namespace OpenDental {
 			SecurityLog.Write(SheetCur.PatNum,Permissions.SheetEdit,SheetCur.Description
 				+" "+Lan.g(this,"deleted from")+" "+SheetCur.DateTimeSheet.ToShortDateString());
 			if(SheetCur.ShowInTerminal>0) {
-				Signalods.SetInvalid(InvalidType.Kiosk);
+				// TODO: Signalods.SetInvalid(InvalidType.Kiosk);
 			}
 			SheetCur=null;
 			OkClose();

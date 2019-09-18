@@ -614,12 +614,15 @@ namespace OpenDental
             if (templatesChanged)
             {
                 DataValid.SetInvalid(InvalidType.Email);
+
+
             }
 
             EmailSaveEvent.Fired -= EmailSaveEvent_Fired;
             if (HasEmailChanged)
             {
-                Signalods.SetInvalid(InvalidType.EmailMessages);
+                CacheManager.InvalidateEverywhere<EmailMessage>();
+
                 return;
             }
         }

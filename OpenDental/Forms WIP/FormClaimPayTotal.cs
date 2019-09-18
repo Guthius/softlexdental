@@ -600,7 +600,7 @@ namespace OpenDental {
 				invalidFeeSchedNums.Add(FeeCur.FeeSched);
 			}
 			foreach(long feeSchedNum in invalidFeeSchedNums.Distinct()) {
-				Signalods.SetInvalid(InvalidType.Fees,KeyType.FeeSched,feeSchedNum);
+				// TODO: Signalods.SetInvalid(InvalidType.Fees,KeyType.FeeSched,feeSchedNum);
 			}
 		}
 

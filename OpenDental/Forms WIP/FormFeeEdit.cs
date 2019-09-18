@@ -203,7 +203,7 @@ namespace OpenDental{
 
 		private void FormFeeEdit_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
 			if(DialogResult==DialogResult.OK) {
-				Signalods.SetInvalid(InvalidType.Fees,KeyType.FeeSched,FeeCur.FeeSched);
+				// TODO: Signalods.SetInvalid(InvalidType.Fees,KeyType.FeeSched,FeeCur.FeeSched);
 				return;
 			}
 			if(IsNew){

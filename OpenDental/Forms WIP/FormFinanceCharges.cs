@@ -563,7 +563,7 @@ namespace OpenDental{
 			if(isOnLoad && dateLastAging.Date==dtToday) {
 				return true;//this is prior to inserting/deleting charges and aging has already been run for this date
 			}
-			Preference.Refresh();
+            CacheManager.InvalidateEverywhere<Preference>();
 			DateTime dateTAgingBeganPref=Preference.GetDateTime(PreferenceName.AgingBeginDateTime);
 			if(dateTAgingBeganPref>DateTime.MinValue) {
 				if(isOnLoad) {
@@ -576,8 +576,8 @@ namespace OpenDental{
 			}
 			SecurityLog.Write(SecurityLogEvents.AgingRan,"Aging Ran - Finance Charges Form");
 			Preference.Update(PreferenceName.AgingBeginDateTime,POut.DateT(dtNow,false));//get lock on pref to block others
-			Signalods.SetInvalid(InvalidType.Prefs);//signal a cache refresh so other computers will have the updated pref as quickly as possible
-			bool result=true;
+            CacheManager.InvalidateEverywhere<Preference>();
+            bool result=true;
 			Cursor=Cursors.WaitCursor;
 			ODProgress.ShowAction(() => {
 					Ledgers.ComputeAging(0,dtToday);

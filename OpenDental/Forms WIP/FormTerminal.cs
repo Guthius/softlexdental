@@ -221,8 +221,8 @@ namespace OpenDental {
 			terminal.SessionName=clientName;
 			terminal.ProcessId=processCur.Id;
 			TerminalActives.Insert(terminal);//tell the database that a terminal is newly active on this computer
-			Signalods.SetInvalid(InvalidType.Kiosk,KeyType.ProcessId,processCur.Id);//signal FormTerminalManager to re-fill grids
-			timer1.Enabled=true;
+                                             // TODO: Signalods.SetInvalid(InvalidType.Kiosk,KeyType.ProcessId,processCur.Id);//signal FormTerminalManager to re-fill grids
+            timer1.Enabled=true;
 		}
 
 		private void FormTerminal_Shown(object sender,EventArgs e) {
@@ -231,15 +231,15 @@ namespace OpenDental {
 		}
 
 		///<summary>Only subscribed to signal processing if NOT SimpleMode.  Only processes signals of type InvalidType.Kiosk.</summary>
-		public override void OnProcessSignals(List<Signal> listSignals) {
+		public override void OnProcessSignals(IEnumerable<Signal> listSignals) {
 			if(IsSimpleMode) { //Process signals ONLY if not simple mode.
 				return;
 			}
-			int processIdCur=Process.GetCurrentProcess().Id;
-			//load patient if any signals are Kiosk type either without a FKey or with a ProcessId different than this process
-			if(listSignals.Any(x => x.IType==InvalidType.Kiosk && (x.FKeyType!=KeyType.ProcessId || x.ExternalId!=processIdCur))) {
-				LoadPatient(false);//will load the current patient if PatNum>0, otherwise will force clearing/unloading the patient
-			}
+			//int processIdCur=Process.GetCurrentProcess().Id;
+			////load patient if any signals are Kiosk type either without a FKey or with a ProcessId different than this process
+			//if(listSignals.Any(x => x.IType==InvalidType.Kiosk && (x.FKeyType!=KeyType.ProcessId || x.ExternalId!=processIdCur))) {
+			//	LoadPatient(false);//will load the current patient if PatNum>0, otherwise will force clearing/unloading the patient
+			//}
 		}
 
 		///<summary>Only in nonSimpleMode.  Occurs every 4 seconds. Checks the database to verify that this kiosk should still be running and that the
@@ -310,7 +310,7 @@ namespace OpenDental {
 					butDone.Visible=false;
 					if(terminal.PatNum>0) {//pat loaded but no sheets to show, unload pat, update db, send signal
 						TerminalActives.SetPatNum(terminal.TerminalActiveNum,0);
-						Signalods.SetInvalid(InvalidType.Kiosk,KeyType.ProcessId,processCur.Id);
+						// TODO: Signalods.SetInvalid(InvalidType.Kiosk,KeyType.ProcessId,processCur.Id);
 					}
 					PatNum=0;
 					if(_formSheetFillEdit!=null && !_formSheetFillEdit.IsDisposed) {
@@ -335,7 +335,7 @@ namespace OpenDental {
 				if(_formSheetFillEdit!=null && !_formSheetFillEdit.IsDisposed) {
 					_formSheetFillEdit.ForceClose();
 				}
-				Signalods.SetInvalid(InvalidType.Kiosk,KeyType.ProcessId,processCur.Id);
+				// TODO: Signalods.SetInvalid(InvalidType.Kiosk,KeyType.ProcessId,processCur.Id);
 			}
 			if(!isRefreshOnly) {
 				AutoShowSheets();
@@ -404,9 +404,9 @@ namespace OpenDental {
 				TerminalActives.SetPatNum(terminal.TerminalActiveNum,0);
 				PatNum=0;
 				_listSheets=new List<Sheet>();
-				Signalods.SetInvalid(InvalidType.Kiosk,KeyType.ProcessId,processCur.Id);//signal the terminal manager to refresh its grid
-			}
-		}
+                // TODO: Signalods.SetInvalid(InvalidType.Kiosk,KeyType.ProcessId,processCur.Id);//signal the terminal manager to refresh its grid
+            }
+        }
 
 		private void panelClose_Click(object sender,EventArgs e) {
 			//It's fairly safe to not have a password, because the program will exit in remote mode, and in simple mode, the patient is usually supervised.
@@ -443,9 +443,9 @@ namespace OpenDental {
 				//if either fail, do nothing, the terminalactives will be cleaned up the next time the kiosk mode is enabled for this computer
 			}
 			finally {
-				Signalods.SetInvalid(InvalidType.Kiosk,KeyType.ProcessId,processCur.Id);
-			}
-		}
+                // TODO: Signalods.SetInvalid(InvalidType.Kiosk,KeyType.ProcessId,processCur.Id);
+            }
+        }
 
 
 
