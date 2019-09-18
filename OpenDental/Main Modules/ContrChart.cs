@@ -6241,7 +6241,7 @@ namespace OpenDental
                         {
                             _loadData.ListAllergies = Allergies.GetAll(PatCur.PatNum, false);
                         }
-                        List<Allergy> allergyList = _loadData.ListAllergies;
+                        List<PatientAllergy> allergyList = _loadData.ListAllergies;
                         row = new ODGridRow();
                         cell = new ODGridCell();
                         if (fieldCur.Description == "")
@@ -6268,7 +6268,7 @@ namespace OpenDental
                         for (int i = 0; allergyList.Count > i; i++)
                         {
                             row = new ODGridRow();
-                            cell = new ODGridCell(AllergyDefs.GetOne(allergyList[i].AllergyDefNum).Description);
+                            cell = new ODGridCell(AllergyDefs.GetOne(allergyList[i].AllergyId).Description);
                             cell.Bold = true;
                             cell.ColorText = Color.Red;
                             row.Cells.Add(cell);
@@ -9939,7 +9939,7 @@ namespace OpenDental
             foreach (long autoCodeNum in autoCodeList)
             {
                 AutoCode autoCode = AutoCodes.GetOne(autoCodeNum);
-                if (AutoCodeItems.GetListForCode(autoCode.AutoCodeNum).Count == 0)
+                if (AutoCodeItems.GetListForCode(autoCode.Id).Count == 0)
                 {
                     //AutoCode is not setup correctly.
                     MessageBox.Show(this, Lan.g(this, "The following AutoCode has no associated Procedure Codes: ") + "\r\n" + autoCode.Description + "\r\n"
@@ -10497,22 +10497,22 @@ namespace OpenDental
                         AutoCodeItem autoCode = null;
                         if (AutoCodeItems.GetContainsKey(ProcCur.CodeNum))
                         {
-                            autoCode = AutoCodeItems.GetListForCode(AutoCodeItems.GetOne(ProcCur.CodeNum).AutoCodeNum)
-                                .FirstOrDefault(x => x.CodeNum == ProcCur.CodeNum);
+                            autoCode = AutoCodeItems.GetListForCode(AutoCodeItems.GetOne(ProcCur.CodeNum).AutoCodeId)
+                                .FirstOrDefault(x => x.ProcedureCodeId == ProcCur.CodeNum);
                         }
                         List<AutoCodeCond> condList = new List<AutoCodeCond>();
                         if (autoCode != null)
                         {
-                            condList = AutoCodeConds.GetListForItem(autoCode.AutoCodeItemNum);
+                            condList = AutoCodeConds.GetListForItem(autoCode.Id);
                         }
                         ProcCur.Surf = "";
                         if (condList.Count == 1)
                         {
-                            if (condList[0].Cond == AutoCondition.Maxillary)
+                            if (condList[0].Condition == AutoCondition.Maxillary)
                             {
                                 ProcCur.Surf = "U";
                             }
-                            else if (condList[0].Cond == AutoCondition.Mandibular)
+                            else if (condList[0].Condition == AutoCondition.Mandibular)
                             {
                                 ProcCur.Surf = "L";
                             }

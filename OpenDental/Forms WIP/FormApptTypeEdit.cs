@@ -25,10 +25,10 @@ namespace OpenDental {
 		}
 
 		private void FormApptTypeEdit_Load(object sender,EventArgs e) {
-			textName.Text=AppointmentTypeCur.AppointmentTypeName;
-			butColor.BackColor=AppointmentTypeCur.AppointmentTypeColor;
-			checkIsHidden.Checked=AppointmentTypeCur.IsHidden;
-			_listProcCodes=ProcedureCodes.GetFromCommaDelimitedList(AppointmentTypeCur.CodeStr);
+			textName.Text=AppointmentTypeCur.Name;
+			butColor.BackColor=AppointmentTypeCur.Color;
+			checkIsHidden.Checked=AppointmentTypeCur.Hidden;
+			_listProcCodes=ProcedureCodes.GetFromCommaDelimitedList(AppointmentTypeCur.ProcedureCodes);
 			_provColor=Color.Blue;
 			_strBTime=new StringBuilder();
 			if(AppointmentTypeCur.Pattern!=null) { //logic copied from FormApptEdit
@@ -55,7 +55,7 @@ namespace OpenDental {
 				return;
 			}
 			else {
-				string msg=AppointmentTypes.CheckInUse(AppointmentTypeCur.AppointmentTypeNum);
+				string msg=AppointmentTypes.CheckInUse(AppointmentTypeCur.Id);
 				if(!string.IsNullOrWhiteSpace(msg)) {
 					MsgBox.Show(this,msg);
 					return;
@@ -163,10 +163,10 @@ namespace OpenDental {
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
-			AppointmentTypeCur.AppointmentTypeName=textName.Text;
-			AppointmentTypeCur.AppointmentTypeColor=butColor.BackColor;
-			AppointmentTypeCur.IsHidden=checkIsHidden.Checked;
-			AppointmentTypeCur.CodeStr=String.Join(",",_listProcCodes.Select(x => x.ProcCode));
+			AppointmentTypeCur.Name=textName.Text;
+			AppointmentTypeCur.Color=butColor.BackColor;
+			AppointmentTypeCur.Hidden=checkIsHidden.Checked;
+			AppointmentTypeCur.ProcedureCodes=String.Join(",",_listProcCodes.Select(x => x.ProcCode));
 			if(_strBTime.Length>0) {
 				AppointmentTypeCur.Pattern=Appointments.ConvertPatternTo5(_strBTime.ToString());
 			}

@@ -81,11 +81,11 @@ namespace OpenDentBusiness{
 			//If this is an error and the EConnectorError alert is not already present, create it now.
 			if(eServiceSignal.Severity==eServiceSignalSeverity.Error && AlertItems.RefreshForType(AlertType.EConnectorError).Count==0) {
 				//Create an alert.
-				AlertItems.Insert(new AlertItem {
+				AlertItems.Insert(new Alert {
 					//Do not allow delete. The only way for this alert to be deleted is to open the eConnector form and ACK the error(s).
-					Actions=ActionType.MarkAsRead | ActionType.OpenForm,
+					Actions=AlertActionType.MarkAsRead | AlertActionType.OpenForm,
 					Description=Lans.g("EConnector","eConnector has posted an error."),
-					Severity=SeverityType.Low,
+					Severity=AlertSeverityType.Low,
 					Type=AlertType.EConnectorError,
 					FormToOpen=FormType.FormEServicesEConnector,
 				});

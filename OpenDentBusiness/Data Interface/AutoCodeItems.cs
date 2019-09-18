@@ -50,7 +50,7 @@ namespace OpenDentBusiness{
 				AutoCodeItems.GetTableFromCache(false);
 			}
 			protected override long GetDictKey(AutoCodeItem autoCodeItem) {
-				return autoCodeItem.CodeNum;
+				return autoCodeItem.ProcedureCodeId;
 			}
 			protected override AutoCodeItem GetDictValue(AutoCodeItem autoCodeItem) {
 				return autoCodeItem;
@@ -105,7 +105,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static void Delete(AutoCodeItem Cur){
 			string command= "DELETE FROM autocodeitem WHERE AutoCodeItemNum = '"
-				+POut.Long(Cur.AutoCodeItemNum)+"'";
+				+POut.Long(Cur.Id)+"'";
 			Db.NonQ(command);
 		}
 
@@ -119,7 +119,7 @@ namespace OpenDentBusiness{
 		///<summary>Gets from cache.  No call to db.</summary>
 		public static List<AutoCodeItem> GetListForCode(long autoCodeNum) {
 			//No need to check RemotingRole; no call to db.
-			return _autoCodeItemCache.GetWhereFromList(x => x.AutoCodeNum==autoCodeNum);
+			return _autoCodeItemCache.GetWhereFromList(x => x.AutoCodeId==autoCodeNum);
 		}
 
 		//-----
@@ -135,18 +135,18 @@ namespace OpenDentBusiness{
 			//bool willBeMissing=Procedures.WillBeMissing(toothNum,patNum);//moved this out so that this method has no db call
 			List<AutoCodeCond> condList;
 			for(int i=0;i<listForCode.Count;i++) {
-				condList=AutoCodeConds.GetListForItem(listForCode[i].AutoCodeItemNum);
+				condList=AutoCodeConds.GetListForItem(listForCode[i].Id);
 				allCondsMet=true;
 				for(int j=0;j<condList.Count;j++) {
-					if(!AutoCodeConds.ConditionIsMet(condList[j].Cond,toothNum,surf,isAdditional,willBeMissing,age)) {
+					if(!AutoCodeConds.ConditionIsMet(condList[j].Condition,toothNum,surf,isAdditional,willBeMissing,age)) {
 						allCondsMet=false;
 					}
 				}
 				if(allCondsMet) {
-					return listForCode[i].CodeNum;
+					return listForCode[i].ProcedureCodeId;
 				}
 			}
-			return listForCode[0].CodeNum;//if couldn't find a better match
+			return listForCode[0].ProcedureCodeId;//if couldn't find a better match
 		}
 
 		///<summary>Only called when closing the procedure edit window. Usually returns the supplied CodeNum, unless a better match is found.</summary>
@@ -158,26 +158,26 @@ namespace OpenDentBusiness{
 			if(!GetContainsKey(codeNum)) {
 				return codeNum;
 			}
-			if(!AutoCodes.GetContainsKey(GetOne(codeNum).AutoCodeNum)) {
+			if(!AutoCodes.GetContainsKey(GetOne(codeNum).AutoCodeId)) {
 				return codeNum;//just in case.
 			}
-			AutoCodeCur=AutoCodes.GetOne(GetOne(codeNum).AutoCodeNum);
+			AutoCodeCur=AutoCodes.GetOne(GetOne(codeNum).AutoCodeId);
 			if(AutoCodeCur.LessIntrusive) {
 				return codeNum;
 			}
 			bool willBeMissing=Procedures.WillBeMissing(toothNum,patNum);
-			List<AutoCodeItem> listForCode=AutoCodeItems.GetListForCode(GetOne(codeNum).AutoCodeNum);
+			List<AutoCodeItem> listForCode=AutoCodeItems.GetListForCode(GetOne(codeNum).AutoCodeId);
 			List<AutoCodeCond> condList;
 			for(int i=0;i<listForCode.Count;i++) {
-				condList=AutoCodeConds.GetListForItem(listForCode[i].AutoCodeItemNum);
+				condList=AutoCodeConds.GetListForItem(listForCode[i].Id);
 				allCondsMet=true;
 				for(int j=0;j<condList.Count;j++) {
-					if(!AutoCodeConds.ConditionIsMet(condList[j].Cond,toothNum,surf,isAdditional,willBeMissing,age)) {
+					if(!AutoCodeConds.ConditionIsMet(condList[j].Condition,toothNum,surf,isAdditional,willBeMissing,age)) {
 						allCondsMet=false;
 					}
 				}
 				if(allCondsMet) {
-					return listForCode[i].CodeNum;
+					return listForCode[i].ProcedureCodeId;
 				}
 			}
 			return codeNum;//if couldn't find a better match

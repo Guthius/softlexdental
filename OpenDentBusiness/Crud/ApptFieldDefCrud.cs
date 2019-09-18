@@ -42,7 +42,7 @@ namespace OpenDentBusiness.Crud{
 			ApptFieldDef apptFieldDef;
 			foreach(DataRow row in table.Rows) {
 				apptFieldDef=new ApptFieldDef();
-				apptFieldDef.ApptFieldDefNum= PIn.Long  (row["ApptFieldDefNum"].ToString());
+				apptFieldDef.Id= PIn.Long  (row["ApptFieldDefNum"].ToString());
 				apptFieldDef.FieldName      = PIn.String(row["FieldName"].ToString());
 				apptFieldDef.FieldType      = (OpenDentBusiness.ApptFieldType)PIn.Int(row["FieldType"].ToString());
 				apptFieldDef.PickList       = PIn.String(row["PickList"].ToString());
@@ -63,7 +63,7 @@ namespace OpenDentBusiness.Crud{
 			table.Columns.Add("PickList");
 			foreach(ApptFieldDef apptFieldDef in listApptFieldDefs) {
 				table.Rows.Add(new object[] {
-					POut.Long  (apptFieldDef.ApptFieldDefNum),
+					POut.Long  (apptFieldDef.Id),
 					            apptFieldDef.FieldName,
 					POut.Int   ((int)apptFieldDef.FieldType),
 					            apptFieldDef.PickList,
@@ -80,7 +80,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Inserts one ApptFieldDef into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(ApptFieldDef apptFieldDef,bool useExistingPK) {
 			if(!useExistingPK && Preferences.RandomKeys) {
-				apptFieldDef.ApptFieldDefNum=ReplicationServers.GetKey("apptfielddef","ApptFieldDefNum");
+				apptFieldDef.Id=ReplicationServers.GetKey("apptfielddef","ApptFieldDefNum");
 			}
 			string command="INSERT INTO apptfielddef (";
 			if(useExistingPK || Preferences.RandomKeys) {
@@ -88,7 +88,7 @@ namespace OpenDentBusiness.Crud{
 			}
 			command+="FieldName,FieldType,PickList) VALUES(";
 			if(useExistingPK || Preferences.RandomKeys) {
-				command+=POut.Long(apptFieldDef.ApptFieldDefNum)+",";
+				command+=POut.Long(apptFieldDef.Id)+",";
 			}
 			command+=
 				 "'"+POut.String(apptFieldDef.FieldName)+"',"
@@ -102,9 +102,9 @@ namespace OpenDentBusiness.Crud{
 				Db.NonQ(command,paramPickList);
 			}
 			else {
-				apptFieldDef.ApptFieldDefNum=Db.NonQ(command,true,"ApptFieldDefNum","apptFieldDef",paramPickList);
+				apptFieldDef.Id=Db.NonQ(command,true,"ApptFieldDefNum","apptFieldDef",paramPickList);
 			}
-			return apptFieldDef.ApptFieldDefNum;
+			return apptFieldDef.Id;
 		}
 
 		///<summary>Inserts one ApptFieldDef into the database.  Returns the new priKey.  Doesn't use the cache.</summary>
@@ -117,14 +117,14 @@ namespace OpenDentBusiness.Crud{
 			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO apptfielddef (";
 			if(!useExistingPK && isRandomKeys) {
-				apptFieldDef.ApptFieldDefNum=ReplicationServers.GetKeyNoCache("apptfielddef","ApptFieldDefNum");
+				apptFieldDef.Id=ReplicationServers.GetKeyNoCache("apptfielddef","ApptFieldDefNum");
 			}
 			if(isRandomKeys || useExistingPK) {
 				command+="ApptFieldDefNum,";
 			}
 			command+="FieldName,FieldType,PickList) VALUES(";
 			if(isRandomKeys || useExistingPK) {
-				command+=POut.Long(apptFieldDef.ApptFieldDefNum)+",";
+				command+=POut.Long(apptFieldDef.Id)+",";
 			}
 			command+=
 				 "'"+POut.String(apptFieldDef.FieldName)+"',"
@@ -138,9 +138,9 @@ namespace OpenDentBusiness.Crud{
 				Db.NonQ(command,paramPickList);
 			}
 			else {
-				apptFieldDef.ApptFieldDefNum=Db.NonQ(command,true,"ApptFieldDefNum","apptFieldDef",paramPickList);
+				apptFieldDef.Id=Db.NonQ(command,true,"ApptFieldDefNum","apptFieldDef",paramPickList);
 			}
-			return apptFieldDef.ApptFieldDefNum;
+			return apptFieldDef.Id;
 		}
 
 		///<summary>Updates one ApptFieldDef in the database.</summary>
@@ -149,7 +149,7 @@ namespace OpenDentBusiness.Crud{
 				+"FieldName      = '"+POut.String(apptFieldDef.FieldName)+"', "
 				+"FieldType      =  "+POut.Int   ((int)apptFieldDef.FieldType)+", "
 				+"PickList       =  "+DbHelper.ParamChar+"paramPickList "
-				+"WHERE ApptFieldDefNum = "+POut.Long(apptFieldDef.ApptFieldDefNum);
+				+"WHERE ApptFieldDefNum = "+POut.Long(apptFieldDef.Id);
 			if(apptFieldDef.PickList==null) {
 				apptFieldDef.PickList="";
 			}
@@ -180,7 +180,7 @@ namespace OpenDentBusiness.Crud{
 			}
 			OdSqlParameter paramPickList=new OdSqlParameter("paramPickList",OdDbType.Text,POut.StringParam(apptFieldDef.PickList));
 			command="UPDATE apptfielddef SET "+command
-				+" WHERE ApptFieldDefNum = "+POut.Long(apptFieldDef.ApptFieldDefNum);
+				+" WHERE ApptFieldDefNum = "+POut.Long(apptFieldDef.Id);
 			Db.NonQ(command,paramPickList);
 			return true;
 		}

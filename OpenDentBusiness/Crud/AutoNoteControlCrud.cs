@@ -42,8 +42,8 @@ namespace OpenDentBusiness.Crud{
 			AutoNoteControl autoNoteControl;
 			foreach(DataRow row in table.Rows) {
 				autoNoteControl=new AutoNoteControl();
-				autoNoteControl.AutoNoteControlNum= PIn.Long  (row["AutoNoteControlNum"].ToString());
-				autoNoteControl.Descript          = PIn.String(row["Descript"].ToString());
+				autoNoteControl.Id= PIn.Long  (row["AutoNoteControlNum"].ToString());
+				autoNoteControl.Description          = PIn.String(row["Descript"].ToString());
 				autoNoteControl.ControlType       = PIn.String(row["ControlType"].ToString());
 				autoNoteControl.ControlLabel      = PIn.String(row["ControlLabel"].ToString());
 				autoNoteControl.ControlOptions    = PIn.String(row["ControlOptions"].ToString());
@@ -65,8 +65,8 @@ namespace OpenDentBusiness.Crud{
 			table.Columns.Add("ControlOptions");
 			foreach(AutoNoteControl autoNoteControl in listAutoNoteControls) {
 				table.Rows.Add(new object[] {
-					POut.Long  (autoNoteControl.AutoNoteControlNum),
-					            autoNoteControl.Descript,
+					POut.Long  (autoNoteControl.Id),
+					            autoNoteControl.Description,
 					            autoNoteControl.ControlType,
 					            autoNoteControl.ControlLabel,
 					            autoNoteControl.ControlOptions,
@@ -83,7 +83,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Inserts one AutoNoteControl into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(AutoNoteControl autoNoteControl,bool useExistingPK) {
 			if(!useExistingPK && Preferences.RandomKeys) {
-				autoNoteControl.AutoNoteControlNum=ReplicationServers.GetKey("autonotecontrol","AutoNoteControlNum");
+				autoNoteControl.Id=ReplicationServers.GetKey("autonotecontrol","AutoNoteControlNum");
 			}
 			string command="INSERT INTO autonotecontrol (";
 			if(useExistingPK || Preferences.RandomKeys) {
@@ -91,10 +91,10 @@ namespace OpenDentBusiness.Crud{
 			}
 			command+="Descript,ControlType,ControlLabel,ControlOptions) VALUES(";
 			if(useExistingPK || Preferences.RandomKeys) {
-				command+=POut.Long(autoNoteControl.AutoNoteControlNum)+",";
+				command+=POut.Long(autoNoteControl.Id)+",";
 			}
 			command+=
-				 "'"+POut.String(autoNoteControl.Descript)+"',"
+				 "'"+POut.String(autoNoteControl.Description)+"',"
 				+"'"+POut.String(autoNoteControl.ControlType)+"',"
 				+"'"+POut.String(autoNoteControl.ControlLabel)+"',"
 				+    DbHelper.ParamChar+"paramControlOptions)";
@@ -106,9 +106,9 @@ namespace OpenDentBusiness.Crud{
 				Db.NonQ(command,paramControlOptions);
 			}
 			else {
-				autoNoteControl.AutoNoteControlNum=Db.NonQ(command,true,"AutoNoteControlNum","autoNoteControl",paramControlOptions);
+				autoNoteControl.Id=Db.NonQ(command,true,"AutoNoteControlNum","autoNoteControl",paramControlOptions);
 			}
-			return autoNoteControl.AutoNoteControlNum;
+			return autoNoteControl.Id;
 		}
 
 		///<summary>Inserts one AutoNoteControl into the database.  Returns the new priKey.  Doesn't use the cache.</summary>
@@ -121,17 +121,17 @@ namespace OpenDentBusiness.Crud{
 			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO autonotecontrol (";
 			if(!useExistingPK && isRandomKeys) {
-				autoNoteControl.AutoNoteControlNum=ReplicationServers.GetKeyNoCache("autonotecontrol","AutoNoteControlNum");
+				autoNoteControl.Id=ReplicationServers.GetKeyNoCache("autonotecontrol","AutoNoteControlNum");
 			}
 			if(isRandomKeys || useExistingPK) {
 				command+="AutoNoteControlNum,";
 			}
 			command+="Descript,ControlType,ControlLabel,ControlOptions) VALUES(";
 			if(isRandomKeys || useExistingPK) {
-				command+=POut.Long(autoNoteControl.AutoNoteControlNum)+",";
+				command+=POut.Long(autoNoteControl.Id)+",";
 			}
 			command+=
-				 "'"+POut.String(autoNoteControl.Descript)+"',"
+				 "'"+POut.String(autoNoteControl.Description)+"',"
 				+"'"+POut.String(autoNoteControl.ControlType)+"',"
 				+"'"+POut.String(autoNoteControl.ControlLabel)+"',"
 				+    DbHelper.ParamChar+"paramControlOptions)";
@@ -143,19 +143,19 @@ namespace OpenDentBusiness.Crud{
 				Db.NonQ(command,paramControlOptions);
 			}
 			else {
-				autoNoteControl.AutoNoteControlNum=Db.NonQ(command,true,"AutoNoteControlNum","autoNoteControl",paramControlOptions);
+				autoNoteControl.Id=Db.NonQ(command,true,"AutoNoteControlNum","autoNoteControl",paramControlOptions);
 			}
-			return autoNoteControl.AutoNoteControlNum;
+			return autoNoteControl.Id;
 		}
 
 		///<summary>Updates one AutoNoteControl in the database.</summary>
 		public static void Update(AutoNoteControl autoNoteControl) {
 			string command="UPDATE autonotecontrol SET "
-				+"Descript          = '"+POut.String(autoNoteControl.Descript)+"', "
+				+"Descript          = '"+POut.String(autoNoteControl.Description)+"', "
 				+"ControlType       = '"+POut.String(autoNoteControl.ControlType)+"', "
 				+"ControlLabel      = '"+POut.String(autoNoteControl.ControlLabel)+"', "
 				+"ControlOptions    =  "+DbHelper.ParamChar+"paramControlOptions "
-				+"WHERE AutoNoteControlNum = "+POut.Long(autoNoteControl.AutoNoteControlNum);
+				+"WHERE AutoNoteControlNum = "+POut.Long(autoNoteControl.Id);
 			if(autoNoteControl.ControlOptions==null) {
 				autoNoteControl.ControlOptions="";
 			}
@@ -166,9 +166,9 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Updates one AutoNoteControl in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.  Returns true if an update occurred.</summary>
 		public static bool Update(AutoNoteControl autoNoteControl,AutoNoteControl oldAutoNoteControl) {
 			string command="";
-			if(autoNoteControl.Descript != oldAutoNoteControl.Descript) {
+			if(autoNoteControl.Description != oldAutoNoteControl.Description) {
 				if(command!="") { command+=",";}
-				command+="Descript = '"+POut.String(autoNoteControl.Descript)+"'";
+				command+="Descript = '"+POut.String(autoNoteControl.Description)+"'";
 			}
 			if(autoNoteControl.ControlType != oldAutoNoteControl.ControlType) {
 				if(command!="") { command+=",";}
@@ -190,7 +190,7 @@ namespace OpenDentBusiness.Crud{
 			}
 			OdSqlParameter paramControlOptions=new OdSqlParameter("paramControlOptions",OdDbType.Text,POut.StringParam(autoNoteControl.ControlOptions));
 			command="UPDATE autonotecontrol SET "+command
-				+" WHERE AutoNoteControlNum = "+POut.Long(autoNoteControl.AutoNoteControlNum);
+				+" WHERE AutoNoteControlNum = "+POut.Long(autoNoteControl.Id);
 			Db.NonQ(command,paramControlOptions);
 			return true;
 		}
@@ -198,7 +198,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Returns true if Update(AutoNoteControl,AutoNoteControl) would make changes to the database.
 		///Does not make any changes to the database and can be called before remoting role is checked.</summary>
 		public static bool UpdateComparison(AutoNoteControl autoNoteControl,AutoNoteControl oldAutoNoteControl) {
-			if(autoNoteControl.Descript != oldAutoNoteControl.Descript) {
+			if(autoNoteControl.Description != oldAutoNoteControl.Description) {
 				return true;
 			}
 			if(autoNoteControl.ControlType != oldAutoNoteControl.ControlType) {

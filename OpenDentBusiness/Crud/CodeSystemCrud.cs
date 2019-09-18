@@ -42,7 +42,7 @@ namespace OpenDentBusiness.Crud{
 			CodeSystem codeSystem;
 			foreach(DataRow row in table.Rows) {
 				codeSystem=new CodeSystem();
-				codeSystem.CodeSystemNum = PIn.Long  (row["CodeSystemNum"].ToString());
+				codeSystem.Id = PIn.Long  (row["CodeSystemNum"].ToString());
 				codeSystem.CodeSystemName= PIn.String(row["CodeSystemName"].ToString());
 				codeSystem.VersionCur    = PIn.String(row["VersionCur"].ToString());
 				codeSystem.VersionAvail  = PIn.String(row["VersionAvail"].ToString());
@@ -67,7 +67,7 @@ namespace OpenDentBusiness.Crud{
 			table.Columns.Add("Note");
 			foreach(CodeSystem codeSystem in listCodeSystems) {
 				table.Rows.Add(new object[] {
-					POut.Long  (codeSystem.CodeSystemNum),
+					POut.Long  (codeSystem.Id),
 					            codeSystem.CodeSystemName,
 					            codeSystem.VersionCur,
 					            codeSystem.VersionAvail,
@@ -86,7 +86,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Inserts one CodeSystem into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(CodeSystem codeSystem,bool useExistingPK) {
 			if(!useExistingPK && Preferences.RandomKeys) {
-				codeSystem.CodeSystemNum=ReplicationServers.GetKey("codesystem","CodeSystemNum");
+				codeSystem.Id=ReplicationServers.GetKey("codesystem","CodeSystemNum");
 			}
 			string command="INSERT INTO codesystem (";
 			if(useExistingPK || Preferences.RandomKeys) {
@@ -94,7 +94,7 @@ namespace OpenDentBusiness.Crud{
 			}
 			command+="CodeSystemName,VersionCur,VersionAvail,HL7OID,Note) VALUES(";
 			if(useExistingPK || Preferences.RandomKeys) {
-				command+=POut.Long(codeSystem.CodeSystemNum)+",";
+				command+=POut.Long(codeSystem.Id)+",";
 			}
 			command+=
 				 "'"+POut.String(codeSystem.CodeSystemName)+"',"
@@ -106,9 +106,9 @@ namespace OpenDentBusiness.Crud{
 				Db.NonQ(command);
 			}
 			else {
-				codeSystem.CodeSystemNum=Db.NonQ(command,true,"CodeSystemNum","codeSystem");
+				codeSystem.Id=Db.NonQ(command,true,"CodeSystemNum","codeSystem");
 			}
-			return codeSystem.CodeSystemNum;
+			return codeSystem.Id;
 		}
 
 		///<summary>Inserts one CodeSystem into the database.  Returns the new priKey.  Doesn't use the cache.</summary>
@@ -121,14 +121,14 @@ namespace OpenDentBusiness.Crud{
 			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO codesystem (";
 			if(!useExistingPK && isRandomKeys) {
-				codeSystem.CodeSystemNum=ReplicationServers.GetKeyNoCache("codesystem","CodeSystemNum");
+				codeSystem.Id=ReplicationServers.GetKeyNoCache("codesystem","CodeSystemNum");
 			}
 			if(isRandomKeys || useExistingPK) {
 				command+="CodeSystemNum,";
 			}
 			command+="CodeSystemName,VersionCur,VersionAvail,HL7OID,Note) VALUES(";
 			if(isRandomKeys || useExistingPK) {
-				command+=POut.Long(codeSystem.CodeSystemNum)+",";
+				command+=POut.Long(codeSystem.Id)+",";
 			}
 			command+=
 				 "'"+POut.String(codeSystem.CodeSystemName)+"',"
@@ -140,9 +140,9 @@ namespace OpenDentBusiness.Crud{
 				Db.NonQ(command);
 			}
 			else {
-				codeSystem.CodeSystemNum=Db.NonQ(command,true,"CodeSystemNum","codeSystem");
+				codeSystem.Id=Db.NonQ(command,true,"CodeSystemNum","codeSystem");
 			}
-			return codeSystem.CodeSystemNum;
+			return codeSystem.Id;
 		}
 
 		///<summary>Updates one CodeSystem in the database.</summary>
@@ -153,7 +153,7 @@ namespace OpenDentBusiness.Crud{
 				+"VersionAvail  = '"+POut.String(codeSystem.VersionAvail)+"', "
 				+"HL7OID        = '"+POut.String(codeSystem.HL7OID)+"', "
 				+"Note          = '"+POut.String(codeSystem.Note)+"' "
-				+"WHERE CodeSystemNum = "+POut.Long(codeSystem.CodeSystemNum);
+				+"WHERE CodeSystemNum = "+POut.Long(codeSystem.Id);
 			Db.NonQ(command);
 		}
 
@@ -184,7 +184,7 @@ namespace OpenDentBusiness.Crud{
 				return false;
 			}
 			command="UPDATE codesystem SET "+command
-				+" WHERE CodeSystemNum = "+POut.Long(codeSystem.CodeSystemNum);
+				+" WHERE CodeSystemNum = "+POut.Long(codeSystem.Id);
 			Db.NonQ(command);
 			return true;
 		}

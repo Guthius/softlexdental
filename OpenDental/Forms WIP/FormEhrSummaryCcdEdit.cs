@@ -79,8 +79,8 @@ namespace OpenDental {
 				return;
 			}
 			FormReconcileAllergy formRA=new FormReconcileAllergy(_patCur);
-			formRA.ListAllergyNew=new List<Allergy>();
-			formRA.ListAllergyDefNew=new List<AllergyDef>();
+			formRA.ListAllergyNew=new List<PatientAllergy>();
+			formRA.ListAllergyDefNew=new List<Allergy>();
 			EhrCCD.GetListAllergies(xmlDocCcd,formRA.ListAllergyNew,formRA.ListAllergyDefNew);
 			formRA.ShowDialog();
 		}

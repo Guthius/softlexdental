@@ -24,7 +24,7 @@ namespace OpenDental
 {
     public partial class FormAllergyDefEdit : FormBase
     {
-        public AllergyDef AllergyDefCur;
+        public Allergy AllergyDefCur;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FormAllergyDefEdit"/> class.
@@ -39,7 +39,7 @@ namespace OpenDental
             descriptionTextBox.Text = AllergyDefCur?.Description ?? "";
             if (AllergyDefCur.Id > 0)
             {
-                hiddenCheckBox.Checked = AllergyDefCur.IsHidden;
+                hiddenCheckBox.Checked = AllergyDefCur.Hidden;
             }
 
             for (int i = 0; i < Enum.GetNames(typeof(SnomedAllergy)).Length; i++)
@@ -48,7 +48,7 @@ namespace OpenDental
             }
             allergyTypeComboBox.SelectedIndex = (int)AllergyDefCur.SnomedType;
 
-            medicationTextBox.Text = Medication.GetDescription(AllergyDefCur.MedicationNum);
+            medicationTextBox.Text = Medication.GetDescription(AllergyDefCur.MedicationId);
             uniiTextBox.Text = AllergyDefCur.UniiCode;
         }
 
@@ -81,9 +81,9 @@ namespace OpenDental
                     return;
                 }
 
-                AllergyDefCur.MedicationNum = formMedications.SelectedMedicationNum;
+                AllergyDefCur.MedicationId = formMedications.SelectedMedicationNum;
 
-                medicationTextBox.Text = Medication.GetDescription(AllergyDefCur.MedicationNum);
+                medicationTextBox.Text = Medication.GetDescription(AllergyDefCur.MedicationId);
             }
         }
 
@@ -92,7 +92,7 @@ namespace OpenDental
         /// </summary>
         void MedicationNoneButton_Click(object sender, EventArgs e)
         {
-            AllergyDefCur.MedicationNum = 0;
+            AllergyDefCur.MedicationId = 0;
             medicationTextBox.Text = "";
         }
 
@@ -192,7 +192,7 @@ namespace OpenDental
             }
 
             AllergyDefCur.Description = description;
-            AllergyDefCur.IsHidden = hiddenCheckBox.Checked;
+            AllergyDefCur.Hidden = hiddenCheckBox.Checked;
             AllergyDefCur.SnomedType = (SnomedAllergy)allergyTypeComboBox.SelectedIndex;
             AllergyDefCur.UniiCode = uniiCode;
 

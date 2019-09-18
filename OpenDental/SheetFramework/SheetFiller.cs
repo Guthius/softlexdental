@@ -922,12 +922,12 @@ namespace OpenDental{
 					}
 					activeProblems+=DiseaseDef.GetName(listDiseases[i].DiseaseDefNum);
 				}
-				List<Allergy> listAllergies=data.ListAllergies;
+				List<PatientAllergy> listAllergies=data.ListAllergies;
 				for(int i=0;i<listAllergies.Count;i++) {
 					if(activeAllergies!="") {
 						activeAllergies+=", ";
 					}
-					activeAllergies+=AllergyDefs.GetDescription(listAllergies[i].AllergyDefNum);
+					activeAllergies+=AllergyDefs.GetDescription(listAllergies[i].AllergyId);
 				}
 				#endregion
 				#region Medication
@@ -2398,13 +2398,13 @@ namespace OpenDental{
 				}
 				if(field.FieldType==SheetFieldType.CheckBox) {
 					if(field.FieldName.StartsWith("allergy:")) {//"allergy:Pen"
-						List<Allergy> allergies=Allergies.GetAll(pat.PatNum,true);
+						List<PatientAllergy> allergies=Allergies.GetAll(pat.PatNum,true);
 						for(int i=0;i<allergies.Count;i++) {
-							if(AllergyDefs.GetDescription(allergies[i].AllergyDefNum)==field.FieldName.Remove(0,8)) {
-								if(allergies[i].StatusIsActive && field.RadioButtonValue=="Y") {
+							if(AllergyDefs.GetDescription(allergies[i].AllergyId)==field.FieldName.Remove(0,8)) {
+								if(allergies[i].Active && field.RadioButtonValue=="Y") {
 									field.FieldValue="X";
 								}
-								else if(!allergies[i].StatusIsActive && field.RadioButtonValue=="N") {
+								else if(!allergies[i].Active && field.RadioButtonValue=="N") {
 									field.FieldValue="X";
 								}
 								break;

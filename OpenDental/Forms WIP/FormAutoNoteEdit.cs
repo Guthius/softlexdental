@@ -41,7 +41,7 @@ namespace OpenDental
                 promptsGrid.CellDoubleClick += new EventHandler<ODGridClickEventArgs>(promptsGrid_CellDoubleClick);
             }
 
-            nameTextBox.Text = AutoNoteCur.AutoNoteName;
+            nameTextBox.Text = AutoNoteCur.Name;
             textMain.Text = AutoNoteCur.MainText;
 
             LoadAutoNotePrompts();
@@ -63,7 +63,7 @@ namespace OpenDental
             for (int i = 0; i < autoNoteControlsList.Count; i++)
             {
                 var row = new ODGridRow();
-                row.Cells.Add(autoNoteControlsList[i].Descript);
+                row.Cells.Add(autoNoteControlsList[i].Description);
                 promptsGrid.Rows.Add(row);
             }
 
@@ -121,7 +121,7 @@ namespace OpenDental
                 return;
             }
 
-            string fieldStr = autoNoteControlsList[promptsGrid.GetSelectedIndex()].Descript;
+            string fieldStr = autoNoteControlsList[promptsGrid.GetSelectedIndex()].Description;
             if (textSelectionStart < textMain.Text.Length - 1)
             {
                 textMain.Text = textMain.Text.Substring(0, textSelectionStart)
@@ -165,7 +165,7 @@ namespace OpenDental
                 return;
             }
 
-            AutoNotes.Delete(AutoNoteCur.AutoNoteNum);
+            AutoNotes.Delete(AutoNoteCur.Id);
             DataValid.SetInvalid(InvalidType.AutoNotes);
             DialogResult = DialogResult.OK;
         }
@@ -175,7 +175,7 @@ namespace OpenDental
         /// </summary>
         void acceptButton_Click(object sender, EventArgs e)
         {
-            AutoNoteCur.AutoNoteName = nameTextBox.Text;
+            AutoNoteCur.Name = nameTextBox.Text;
             AutoNoteCur.MainText = textMain.Text;
 
             if (IsNew)

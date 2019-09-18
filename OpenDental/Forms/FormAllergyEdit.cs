@@ -24,13 +24,13 @@ namespace OpenDental
 {
     public partial class FormAllergyEdit : FormBase
     {
-        private List<AllergyDef> allergies;
+        private List<Allergy> allergies;
         private Snomed snomedReaction;
 
         /// <summary>
         /// Gets or sets the allergy being edited.
         /// </summary>
-        public Allergy Allergy { get; set; }
+        public PatientAllergy Allergy { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FormAllergyEdit"/> class.
@@ -60,7 +60,7 @@ namespace OpenDental
             for (int i = 0; i < allergies.Count; i++)
             {
                 allergyComboBox.Items.Add(allergies[i].Description);
-                if (!Allergy.IsNew && allergies[i].Id == Allergy.AllergyDefNum)
+                if (!Allergy.IsNew && allergies[i].Id == Allergy.AllergyId)
                 {
                     allergyIndex = i;
                 }
@@ -85,7 +85,7 @@ namespace OpenDental
                 }
                 allergyComboBox.SelectedIndex = allergyIndex;
                 reactionTextBox.Text = Allergy.Reaction;
-                activeCheckBox.Checked = Allergy.StatusIsActive;
+                activeCheckBox.Checked = Allergy.Active;
             }
             else
             {
@@ -140,14 +140,14 @@ namespace OpenDental
 
             if (result == DialogResult.Cancel) return;
 
-            Allergies.Delete(Allergy.AllergyNum);
+            Allergies.Delete(Allergy.Id);
 
             SecurityLog.Write(
-                Allergy.PatNum,
+                Allergy.PatientId,
                 SecurityLogEvents.PatientAlergyListEdited, 
                 string.Format(
                     Translation.LanguageSecurity.GenericItemDeleted, 
-                    AllergyDefs.GetDescription(Allergy.AllergyDefNum)));
+                    AllergyDefs.GetDescription(Allergy.AllergyId)));
 
             DialogResult = DialogResult.OK;
         }
@@ -173,32 +173,32 @@ namespace OpenDental
             }
 
             Allergy.DateAdverseReaction = dateTime;
-            Allergy.AllergyDefNum = allergies[allergyComboBox.SelectedIndex].Id;
+            Allergy.AllergyId = allergies[allergyComboBox.SelectedIndex].Id;
             Allergy.Reaction = reactionTextBox.Text;
             Allergy.SnomedReaction = snomedReaction?.SnomedCode ?? "";
-            Allergy.StatusIsActive = activeCheckBox.Checked;
+            Allergy.Active = activeCheckBox.Checked;
 
             if (Allergy.IsNew)
             {
                 Allergies.Insert(Allergy);
 
                 SecurityLog.Write(
-                    Allergy.PatNum,
+                    Allergy.PatientId,
                     SecurityLogEvents.PatientAlergyListEdited,
                     string.Format(
                         Translation.LanguageSecurity.GenericItemAdded,
-                        AllergyDefs.GetDescription(Allergy.AllergyDefNum)));
+                        AllergyDefs.GetDescription(Allergy.AllergyId)));
             }
             else
             {
                 Allergies.Update(Allergy);
 
                 SecurityLog.Write(
-                    Allergy.PatNum,
+                    Allergy.PatientId,
                     SecurityLogEvents.PatientAlergyListEdited,
                     string.Format(
                         Translation.LanguageSecurity.GenericItemModified,
-                        AllergyDefs.GetDescription(Allergy.AllergyDefNum)));
+                        AllergyDefs.GetDescription(Allergy.AllergyId)));
             }
 
             DialogResult = DialogResult.OK;

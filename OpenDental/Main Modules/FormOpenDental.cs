@@ -160,7 +160,7 @@ namespace OpenDental
         ///<summary>List of AlerReads for the current User.</summary>
         List<AlertRead> _listAlertReads = new List<AlertRead>();
         ///<summary>List of AlertItems for the current user and clinic.</summary>
-        List<AlertItem> _listAlertItems = new List<AlertItem>();
+        List<Alert> _listAlertItems = new List<Alert>();
 
         private FormXWebTransactions FormXWT;
 
@@ -2999,22 +2999,22 @@ namespace OpenDental
                 {//Never want to remove these MenuItems.
                     continue;
                 }
-                if (_listAlertItems.Any(x => x.AlertItemNum == ((AlertItem)menuItem.Tag).AlertItemNum))
+                if (_listAlertItems.Any(x => x.Id == ((Alert)menuItem.Tag).Id))
                 {
                     continue;//A menu item already exists for this alert. May update the description later.
                 }
                 menuItemAlerts.MenuItems.Remove(menuItem);//New MenuItem needed for new AlertItem.
                 doRedrawMenu = true;
             }
-            List<ActionType> listActionTypes = Enum.GetValues(typeof(ActionType)).Cast<ActionType>().ToList();
-            listActionTypes.Sort(AlertItem.CompareActionType);
+            List<AlertActionType> listActionTypes = Enum.GetValues(typeof(AlertActionType)).Cast<AlertActionType>().ToList();
+            listActionTypes.Sort(Alert.CompareActionType);
             //Loop through the _listAlertItems to either update or create our MenuItems.
-            foreach (AlertItem alertItemCur in _listAlertItems)
+            foreach (Alert alertItemCur in _listAlertItems)
             {
                 string alertItemKey = alertItemCur.Type.ToString();
                 string alertDescriptNew = AlertMenuItemHelper(alertItemCur) + alertItemCur.Description;
                 MenuItem menuItem = listMenuItem.Where(x => x != menuItemAlerts && x != menuItemNoAlerts)
-                    .FirstOrDefault(x => alertItemCur.AlertItemNum == ((AlertItem)x.Tag).AlertItemNum);
+                    .FirstOrDefault(x => alertItemCur.Id == ((Alert)x.Tag).Id);
                 if (menuItem != null)
                 {//Menu already has an item for this alert, so update text if needed.
                     if (menuItem.Text != alertDescriptNew)
@@ -3026,9 +3026,9 @@ namespace OpenDental
                 }
                 //A List of sub menuitems based off of the available actions for the current AlertItem.
                 List<MenuItem> listSubMenuItems = new List<MenuItem>();
-                foreach (ActionType actionTypeCur in listActionTypes)
+                foreach (AlertActionType actionTypeCur in listActionTypes)
                 {
-                    if (actionTypeCur == ActionType.None || //This should never be shown to the user. Simply a default ActionType.
+                    if (actionTypeCur == AlertActionType.None || //This should never be shown to the user. Simply a default ActionType.
                         !alertItemCur.Actions.HasFlag(actionTypeCur))//Current AlertItem does not have this ActionType associated with it.
                     {
                         continue;
@@ -3056,7 +3056,7 @@ namespace OpenDental
         }
 
         ///<summary>Helper function to translate the title for the given alertItem.</summary>
-        private string AlertMenuItemHelper(AlertItem alertItem)
+        private string AlertMenuItemHelper(Alert alertItem)
         {
             string value = "";
             switch (alertItem.Type)
@@ -3066,9 +3066,6 @@ namespace OpenDental
                     break;
                 case AlertType.OnlinePaymentsPending:
                     value += Lan.g(this, "Pending Online Payments") + ": ";
-                    break;
-                case AlertType.VoiceMailMonitor:
-                    value += Lan.g(this, "Voice Mail Monitor") + ": ";
                     break;
                 case AlertType.RadiologyProcedures:
                     value += Lan.g(this, "Radiology Orders") + ": ";
@@ -3087,9 +3084,6 @@ namespace OpenDental
                     break;
                 case AlertType.WebSchedASAPApptCreated:
                     value += Lan.g(this, "New Web Sched ASAP Appointment") + ": ";
-                    break;
-                case AlertType.AsteriskServerMonitor:
-                    value += Lan.g(this, "Phone Tracking Server") + ": ";
                     break;
                 case AlertType.WebSchedRecallApptCreated:
                     value += Lan.g(this, "New Web Sched Recall Appointment") + ": ";
@@ -3112,24 +3106,24 @@ namespace OpenDental
         }
 
         ///<summary>Helper function to translate the title for the given alerttype and alertItem.</summary>
-        private string AlertSubMenuItemHelper(ActionType actionType, AlertItem parentAlertItem)
+        private string AlertSubMenuItemHelper(AlertActionType actionType, Alert parentAlertItem)
         {
             string value = "";
             switch (actionType)
             {
-                case ActionType.None://This should never happen.
+                case AlertActionType.None://This should never happen.
                     value += Lan.g(this, "None");
                     break;
-                case ActionType.MarkAsRead:
+                case AlertActionType.MarkAsRead:
                     value += Lan.g(this, "Mark As Read");
                     break;
-                case ActionType.OpenForm:
+                case AlertActionType.OpenForm:
                     value += Lan.g(this, "Open " + parentAlertItem.FormToOpen.GetDescription());
                     break;
-                case ActionType.Delete:
+                case AlertActionType.Delete:
                     value += Lan.g(this, "Delete Alert");
                     break;
-                case ActionType.ShowItemValue:
+                case AlertActionType.ShowItemValue:
                     value += Lan.g(this, "View Details");
                     break;
             }
@@ -5780,20 +5774,20 @@ namespace OpenDental
         private void menuItemAlerts_DrawItem(object sender, DrawItemEventArgs e)
         {
             MenuItem menuItem = (MenuItem)sender;
-            AlertItem alertItem = ((AlertItem)menuItem.Tag);//Can be Null
+            Alert alertItem = ((Alert)menuItem.Tag);//Can be Null
             Color colorText = SystemColors.MenuText;
             Color backGroundColor = SystemColors.Control;
             if (menuItem == menuItemAlerts)
             {
                 if (_listAlertItems != null && _listAlertReads != null)
                 {
-                    List<long> listAlertItemNums = _listAlertItems.Select(x => x.AlertItemNum).ToList();//All alert nums for current alertItems.
-                    List<long> listAlertReadItemNums = _listAlertReads.Select(x => x.AlertItemNum).ToList();//All alert nums for read alertItems.
+                    List<long> listAlertItemNums = _listAlertItems.Select(x => x.Id).ToList();//All alert nums for current alertItems.
+                    List<long> listAlertReadItemNums = _listAlertReads.Select(x => x.AlertItemId).ToList();//All alert nums for read alertItems.
                     if (!menuItemNoAlerts.Visible && //menuItemNoAlerts is only Visible when there are no AlertItems to show.
                             !listAlertItemNums.All(x => listAlertReadItemNums.Contains(x)))
                     {
                         //Max SeverityType for all unread AlertItems.
-                        SeverityType maxSeverity = _listAlertItems.FindAll(x => !listAlertReadItemNums.Contains(x.AlertItemNum)).Select(x => x.Severity).Max();
+                        AlertSeverityType maxSeverity = _listAlertItems.FindAll(x => !listAlertReadItemNums.Contains(x.Id)).Select(x => x.Severity).Max();
                         backGroundColor = AlertBackgroudColorHelper(maxSeverity);
                         colorText = AlertTextColorHelper(maxSeverity);
                     }
@@ -5809,7 +5803,7 @@ namespace OpenDental
             }
             else
             {//This is an alert menuItem.
-                if (!_listAlertReads.Exists(x => x.AlertItemNum == alertItem.AlertItemNum))
+                if (!_listAlertReads.Exists(x => x.AlertItemId == alertItem.Id))
                 {//User has not acknowleged alert yet.
                     backGroundColor = AlertBackgroudColorHelper(alertItem.Severity);
                     colorText = AlertTextColorHelper(alertItem.Severity);
@@ -5868,30 +5862,30 @@ namespace OpenDental
         }
 
         ///<summary>Helper function to determin backgroud color of an AlertItem.</summary>
-        private Color AlertBackgroudColorHelper(SeverityType type)
+        private Color AlertBackgroudColorHelper(AlertSeverityType type)
         {
             switch (type)
             {
                 default:
-                case SeverityType.Normal:
+                case AlertSeverityType.Normal:
                     return SystemColors.Control;
-                case SeverityType.Low:
+                case AlertSeverityType.Low:
                     return Color.LightGoldenrodYellow;
-                case SeverityType.Medium:
+                case AlertSeverityType.Medium:
                     return Color.DarkOrange;
-                case SeverityType.High:
+                case AlertSeverityType.High:
                     return Color.OrangeRed;
             }
         }
 
         ///<summary>Helper function to determin text color of an AlertItem.</summary>
-        private Color AlertTextColorHelper(SeverityType type)
+        private Color AlertTextColorHelper(AlertSeverityType type)
         {
             switch (type)
             {
                 default:
                     return Color.White;
-                case SeverityType.Low:
+                case AlertSeverityType.Low:
                     return Color.Black;
             }
         }
@@ -5912,24 +5906,24 @@ namespace OpenDental
         private void menuItemAlerts_Click(object sender, EventArgs e)
         {
             MenuItem menuItem = (MenuItem)sender;
-            AlertItem alertItem = (AlertItem)menuItem.Tag;
-            if (menuItem.Name == ActionType.MarkAsRead.ToString())
+            Alert alertItem = (Alert)menuItem.Tag;
+            if (menuItem.Name == AlertActionType.MarkAsRead.ToString())
             {
                 alertReadsHelper(alertItem);
                 BeginCheckAlertsThread(false);
                 return;
             }
-            if (menuItem.Name == ActionType.Delete.ToString())
+            if (menuItem.Name == AlertActionType.Delete.ToString())
             {
                 if (!MsgBox.Show(this, MsgBoxButtons.OKCancel, "This will delete the alert for all users. Are you sure you want to delete it?"))
                 {
                     return;
                 }
-                AlertItems.Delete(alertItem.AlertItemNum);
+                AlertItems.Delete(alertItem.Id);
                 BeginCheckAlertsThread(false);
                 return;
             }
-            if (menuItem.Name == ActionType.OpenForm.ToString())
+            if (menuItem.Name == AlertActionType.OpenForm.ToString())
             {
                 alertReadsHelper(alertItem);
                 switch (alertItem.FormToOpen)
@@ -6008,10 +6002,10 @@ namespace OpenDental
                         break;
                 }
             }
-            if (menuItem.Name == ActionType.ShowItemValue.ToString())
+            if (menuItem.Name == AlertActionType.ShowItemValue.ToString())
             {
                 alertReadsHelper(alertItem);
-                MsgBoxCopyPaste msgBCP = new MsgBoxCopyPaste(alertItem.ItemValue);
+                MsgBoxCopyPaste msgBCP = new MsgBoxCopyPaste(alertItem.Details);
                 msgBCP.Show();
             }
         }
@@ -6025,13 +6019,13 @@ namespace OpenDental
         }
 
         ///<summary>Refreshes AlertReads for current user and creates a new one if one does not exist for given alertItem.</summary>
-        private void alertReadsHelper(AlertItem alertItem)
+        private void alertReadsHelper(Alert alertItem)
         {
-            if (_listAlertReads.Exists(x => x.AlertItemNum == alertItem.AlertItemNum))
+            if (_listAlertReads.Exists(x => x.AlertItemId == alertItem.Id))
             {//User has already read this alertitem.
                 return;
             }
-            AlertReads.Insert(new AlertRead(alertItem.AlertItemNum, Security.CurrentUser.Id));
+            AlertReads.Insert(new AlertRead(alertItem.Id, Security.CurrentUser.Id));
         }
         #endregion Alerts
 

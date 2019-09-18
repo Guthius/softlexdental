@@ -174,10 +174,10 @@ namespace OpenDental
                         }
                         aptOld = aptNew.Copy();
                         aptNew.AppointmentTypeNum = listAutomations[i].AppointmentTypeNum;
-                        AppointmentType aptTypeCur = AppointmentTypes.GetFirstOrDefault(x => x.AppointmentTypeNum == aptNew.AppointmentTypeNum);
+                        AppointmentType aptTypeCur = AppointmentTypes.GetFirstOrDefault(x => x.Id == aptNew.AppointmentTypeNum);
                         if (aptTypeCur != null)
                         {
-                            aptNew.ColorOverride = aptTypeCur.AppointmentTypeColor;
+                            aptNew.ColorOverride = aptTypeCur.Color;
                         }
                         Appointments.Update(aptNew, aptOld);//Appointments S-Class handles Signalods
                         continue;
@@ -410,13 +410,13 @@ namespace OpenDental
 
         private static bool AllergyComparison(AutomationCondition autoCond, long patNum)
         {
-            List<Allergy> allergyList = Allergies.GetAll(patNum, false);
+            List<PatientAllergy> allergyList = Allergies.GetAll(patNum, false);
             switch (autoCond.Comparison)
             {
                 case AutoCondComparison.Equals:
                     for (int i = 0; i < allergyList.Count; i++)
                     {
-                        if (AllergyDefs.GetOne(allergyList[i].AllergyDefNum).Description == autoCond.CompareString)
+                        if (AllergyDefs.GetOne(allergyList[i].AllergyId).Description == autoCond.CompareString)
                         {
                             return true;
                         }
@@ -425,7 +425,7 @@ namespace OpenDental
                 case AutoCondComparison.Contains:
                     for (int i = 0; i < allergyList.Count; i++)
                     {
-                        if (AllergyDefs.GetOne(allergyList[i].AllergyDefNum).Description.ToLower().Contains(autoCond.CompareString.ToLower()))
+                        if (AllergyDefs.GetOne(allergyList[i].AllergyId).Description.ToLower().Contains(autoCond.CompareString.ToLower()))
                         {
                             return true;
                         }

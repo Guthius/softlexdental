@@ -58,7 +58,7 @@ namespace OpenDentBusiness
         ///<summary>Set each time GenerateCCD() is called. Used by helper functions to avoid sending the patient as a parameter to each helper function.</summary>
         private Patient _patOutCcd = null;
         ///<summary>Set each time ValidateAll and ValidateAllergy is called.</summary>
-        private static List<Allergy> _listAllergiesFiltered;
+        private static List<PatientAllergy> _listAllergiesFiltered;
         ///<summary>Set each time ValidateAll and ValidateEncounter is called.</summary>
         private static List<Encounter> _listEncountersFiltered;
         ///<summary>Set each time ValidateAll and ValidateFunctionalStatus is called.</summary>
@@ -468,11 +468,11 @@ Body
 =====================================================================================================
 Allergies
 =====================================================================================================");
-            AllergyDef allergyDef;
-            List<Allergy> listAllergiesFiltered = new List<Allergy>();
+            Allergy allergyDef;
+            List<PatientAllergy> listAllergiesFiltered = new List<PatientAllergy>();
             if (!hasAllergy)
             {
-                listAllergiesFiltered = new List<Allergy>();
+                listAllergiesFiltered = new List<PatientAllergy>();
             }
             else
             {
@@ -499,14 +499,14 @@ Allergies
                 Start("tbody");
                 for (int i = 0; i < listAllergiesFiltered.Count; i++)
                 {
-                    Allergy allergy = listAllergiesFiltered[i];
-                    if (allergy.PatNum == 0)
+                    PatientAllergy allergy = listAllergiesFiltered[i];
+                    if (allergy.PatientId == 0)
                     {
-                        allergyDef = new AllergyDef();
+                        allergyDef = new Allergy();
                     }
                     else
                     {
-                        allergyDef = AllergyDefs.GetOne(allergy.AllergyDefNum);
+                        allergyDef = Allergy.GetById(allergy.AllergyId);
                     }
                     Start("tr");
                     //if(allergyDef.SnomedAllergyTo!="") {//Is Snomed allergy.
@@ -515,7 +515,7 @@ Allergies
                     //}
                     //else {//Medication allergy
                     Medication med;
-                    if (allergyDef.MedicationNum == 0)
+                    if (!allergyDef.MedicationId.HasValue)
                     {
                         if (allergyDef.UniiCode == "")
                         {
@@ -528,13 +528,13 @@ Allergies
                     }
                     else
                     {
-                        med = Medication.GetById(allergyDef.MedicationNum);
+                        med = Medication.GetById(allergyDef.MedicationId.Value);
                         _w.WriteElementString("td", med.RxCui.ToString() + " - " + med.Description);
                     }
                     //}
                     _w.WriteElementString("td", allergy.Reaction);
-                    _w.WriteElementString("td", AllergyDefs.GetSnomedAllergyDesc(allergyDef.SnomedType));
-                    _w.WriteElementString("td", allergy.StatusIsActive ? "Active" : "Inactive");
+                    _w.WriteElementString("td", Allergy.GetSnomedAllergyDesc(allergyDef.SnomedType));
+                    _w.WriteElementString("td", allergy.Active ? "Active" : "Inactive");
                     End("tr");
                 }
                 End("tbody");
@@ -547,19 +547,19 @@ Allergies
             End("text");
             if (listAllergiesFiltered.Count == 0)
             {//If there are no entries in the filtered list, then we want to add a dummy entry since at least one is required.
-                Allergy al = new Allergy();
+                PatientAllergy al = new PatientAllergy();
                 listAllergiesFiltered.Add(al);
             }
             for (int i = 0; i < listAllergiesFiltered.Count; i++)
             {
-                Allergy allergy = listAllergiesFiltered[i];
-                if (allergy.PatNum == 0)
+                PatientAllergy allergy = listAllergiesFiltered[i];
+                if (allergy.PatientId == 0)
                 {
-                    allergyDef = new AllergyDef();
+                    allergyDef = new Allergy();
                 }
                 else
                 {
-                    allergyDef = AllergyDefs.GetOne(allergy.AllergyDefNum);
+                    allergyDef = Allergy.GetById(allergy.AllergyId);
                 }
                 string allergyType = "";
                 string allergyTypeName = "";
@@ -621,7 +621,7 @@ Allergies
                 Guid();
                 StartAndEnd("code", "code", "48765-2", "codeSystem", strCodeSystemLoinc, "codeSystemName", strCodeSystemNameLoinc, "displayName", "Allergies and adverse reactions");
                 //statusCode values allowed: active, suspended, aborted, completed.
-                if (allergy.StatusIsActive)
+                if (allergy.Active)
                 {
                     StartAndEnd("statusCode", "code", "active");
                 }
@@ -635,7 +635,7 @@ Allergies
                     StartAndEnd("low", "nullFlavor", "UNK");
                     StartAndEnd("high", "nullFlavor", "UNK");
                 }
-                else if (allergy.StatusIsActive)
+                else if (allergy.Active)
                 {
                     StartAndEnd("low", "value", allergy.DateTStamp.ToString("yyyyMMdd"));
                     StartAndEnd("high", "nullFlavor", "UNK");
@@ -673,7 +673,7 @@ Allergies
                 //Or the ValueSet 2.16.840.1.113883.3.88.12.80.17 Medication Clinical Drug (code system: RxNorm 2.16.840.1.113883.6.88). Example: 313850	RxNorm	Amoxicillin 40 MG/ML Oral Suspensionv 
                 //In an allergy to a class of medications the code SHALL be selected from the ValueSet 2.16.840.1.113883.3.88.12.80.18 Medication Drug Class (code system: NDF-RT 2.16.840.1.113883.3.26.1.5). Example: 2-Propanol, Inhibitors
                 //In an allergy to a food or other substance the code SHALL be selected from the ValueSet 2.16.840.1.113883.3.88.12.80.20 Ingredient Name (code system: Unique Ingredient Identifier (UNII) 2.16.840.1.113883.4.9). Example: Peanut, Red 40
-                if (allergyDef.MedicationNum == 0)
+                if (!allergyDef.MedicationId.HasValue)
                 {//Unique Ingredient Identifier (UNII codes)
                     if (allergyDef.UniiCode == "")
                     {
@@ -695,7 +695,7 @@ Allergies
                 //}
                 else
                 {//Medication Brand Name or Medication Clinical Drug (RxNorm codes)
-                    Medication med = Medication.GetById(allergyDef.MedicationNum);
+                    Medication med = Medication.GetById(allergyDef.MedicationId.Value);
                     StartAndEnd("code", "code", med.RxCui.ToString(), "displayName", med.Description, "codeSystem", strCodeSystemRxNorm, "codeSystemName", strCodeSystemNameRxNorm);
                 }
                 End("playingEntity");
@@ -707,8 +707,8 @@ Allergies
                 TemplateId("2.16.840.1.113883.10.20.22.4.28");
                 StartAndEnd("code", "code", "33999-4", "codeSystem", strCodeSystemLoinc, "codeSystemName", strCodeSystemNameLoinc, "displayName", "Status");
                 StartAndEnd("statusCode", "code", "completed");//fixed value (required)
-                string status = allergy.StatusIsActive ? "Active" : "Inactive";
-                if (allergy.AllergyNum == 0)
+                string status = allergy.Active ? "Active" : "Inactive";
+                if (allergy.Id == 0)
                 {
                     Start("value");
                     _w.WriteAttributeString("xsi", "type", null, "CE");
@@ -743,7 +743,7 @@ Allergies
                 {
                     StartAndEnd("low", "nullFlavor", "UNK");
                 }
-                else if (allergy.StatusIsActive)
+                else if (allergy.Active)
                 {
                     StartAndEnd("low", "value", allergy.DateTStamp.ToString("yyyyMMdd"));
                 }
@@ -3075,16 +3075,16 @@ Vital Signs
         private static void FilterAllergy(Patient patCur)
         {
             //TODO: Add validation for UNII codes once the table has been implemented.
-            AllergyDef allergyDef;
-            List<Allergy> listAllergiesAll = Allergies.Refresh(patCur.PatNum);
-            List<Allergy> listAllergiesFiltered = new List<Allergy>();
+            Allergy allergyDef;
+            List<PatientAllergy> listAllergiesAll = Allergies.Refresh(patCur.PatNum);
+            List<PatientAllergy> listAllergiesFiltered = new List<PatientAllergy>();
             for (int i = 0; i < listAllergiesAll.Count; i++)
             {
-                allergyDef = AllergyDefs.GetOne(listAllergiesAll[i].AllergyDefNum);
+                allergyDef = Allergy.GetById(listAllergiesAll[i].AllergyId);
                 bool isMedAllergy = false;
-                if (allergyDef.MedicationNum != 0)
+                if (allergyDef.MedicationId.HasValue)
                 {
-                    Medication med = Medication.GetById(allergyDef.MedicationNum);
+                    Medication med = Medication.GetById(allergyDef.MedicationId.Value);
                     if (!string.IsNullOrEmpty(med.RxCui))
                     {
                         isMedAllergy = true;
@@ -3716,7 +3716,7 @@ Vital Signs
         }
 
         ///<summary>Fills listAllergies and listAllergyDefs using the information found in the CCD document xmlDocCcd.  Inserts a medication in the db corresponding to the allergy.</summary>
-        public static void GetListAllergies(XmlDocument xmlDocCcd, List<Allergy> listAllergies, List<AllergyDef> listAllergyDefs)
+        public static void GetListAllergies(XmlDocument xmlDocCcd, List<PatientAllergy> listAllergies, List<Allergy> listAllergyDefs)
         {
             //The length of listAllergies and listAllergyDefs will be the same. The information in listAllergyDefs might have duplicates.
             //Neither list of objects will be inserted into the db, so there will be no primary or foreign keys.
@@ -3773,12 +3773,11 @@ Vital Signs
                     {
                         continue;//We can only import Snomeds
                     }
-                    Allergy allergy = new Allergy();
-                    allergy.IsNew = true;//Needed for reconcile window to know this record is not in the db yet.
+                    PatientAllergy allergy = new PatientAllergy();
                     allergy.SnomedReaction = PIn.String(strCodeReaction);
                     allergy.Reaction = PIn.String(strAlgStatusDescript);
                     allergy.DateAdverseReaction = dateTimeEffectiveLow;
-                    allergy.StatusIsActive = isActive;
+                    allergy.Active = isActive;
                     listAllergies.Add(allergy);
                 }
                 #endregion
@@ -3838,17 +3837,17 @@ Vital Signs
                     {
                         continue;//We can only import Snomeds
                     }
-                    AllergyDef allergyDef = new AllergyDef();
+                    Allergy allergyDef = new Allergy();
                     if (med.Id != 0)
                     {
-                        allergyDef.MedicationNum = med.Id;
+                        allergyDef.MedicationId = med.Id;
                     }
                     //else {TODO: Change to Unii
                     //	allergyDef.SnomedAllergyTo=PIn.String(strCode);
                     //}
                     allergyDef.Description = allergyDefName;
-                    allergyDef.IsHidden = false;
-                    allergyDef.MedicationNum = allergyMeds[j].Id;
+                    allergyDef.Hidden = false;
+                    allergyDef.MedicationId = allergyMeds[j].Id;
                     #region Snomed type determination
                     if (strCode == "419511003")
                     {

@@ -1,58 +1,39 @@
-using System;
-using System.Collections;
 using System.Drawing;
-using System.Xml.Serialization;
 
-namespace OpenDentBusiness{
-	
-	///<summary>Appointment type is used to override appointment color.  Might control other properties on appointments in the future.</summary>
-	[Serializable()]
-	[ODTable(IsSynchable=true)]
-	public class AppointmentType:ODTable{
-		///<summary>Primary key.</summary>
-		[ODTableColumn(PrimaryKey=true)]
-		public long AppointmentTypeNum;
-		///<summary></summary>
-		public string AppointmentTypeName;
-		///<summary></summary>
-		[XmlIgnore]
-		public Color AppointmentTypeColor;
-		///<summary>0 based</summary>
-		public int ItemOrder;
-		///<summary></summary>
-		public bool IsHidden;
-		///<summary>Time pattern, X for Dr time, / for assist time. Stored in 5 minute increments.
-		///Convert as needed to 10 or 15 minute representations for display.
-		///Will be blank if the pattern should be dynamically calculated via the procedures found in CodeStr.</summary>
-		public string Pattern;
-		///<summary>Comma delimited list of procedure codes.  E.g. T1234,T4321,N3214</summary>
-		public string CodeStr;
+namespace OpenDentBusiness
+{
+    /// <summary>
+    /// Appointment type is used to override appointment color. 
+    /// Might control other properties on appointments in the future.
+    /// </summary>
+    public class AppointmentType : DataRecord
+    {
+        public string Name;
 
+        public Color Color;
 
-		[XmlElement("AppointmentTypeColor")]
-		public int AppointmentTypeColorAsArgb {
-			get { return AppointmentTypeColor.ToArgb(); }
-			set { AppointmentTypeColor = Color.FromArgb(value); }
-		}
+        /// <summary>
+        /// <para>Time pattern, 'X' for doctor time, '/' for assist time.</para>
+        /// <para>
+        /// Stored in 5 minute increments. Convert as needed to 10 or 15 minute representations for
+        /// display. Will be blank if the pattern should be dynamically calculated via the 
+        /// procedures specified by <see cref="ProcedureCodes"/>.
+        /// </para>
+        /// </summary>
+        public string Pattern;
 
-		///<summary>Returns a copy of the appointment.</summary>
-		public AppointmentType Copy() {
-			return (AppointmentType)this.MemberwiseClone();
-		}
+        /// <summary>
+        /// Comma delimited list of procedure codes.  E.g. T1234,T4321,N3214
+        /// </summary>
+        public string ProcedureCodes;
 
-		
-	}
-	
-	
+        public int SortOrder;
 
+        public bool Hidden;
 
+        public AppointmentType Copy()
+        {
+            return (AppointmentType)MemberwiseClone();
+        }
+    }
 }
-
-
-
-
-
-
-
-
-

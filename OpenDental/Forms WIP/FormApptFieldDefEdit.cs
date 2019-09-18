@@ -241,7 +241,7 @@ namespace OpenDental{
 			}
 			try{
 				ApptFieldDefs.Delete(FieldDef);//Throws if in use.
-				FieldDefLinks.DeleteForFieldDefNum(FieldDef.ApptFieldDefNum,FieldDefTypes.Appointment);//Delete any FieldDefLinks to this ApptFieldDef
+				FieldDefLinks.DeleteForFieldDefNum(FieldDef.Id,FieldDefTypes.Appointment);//Delete any FieldDefLinks to this ApptFieldDef
 				DialogResult=DialogResult.OK;
 			}
 			catch(ApplicationException ex){

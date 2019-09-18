@@ -43,8 +43,8 @@ namespace OpenDentBusiness.Crud{
 			ApptReminderSent apptReminderSent;
 			foreach(DataRow row in table.Rows) {
 				apptReminderSent=new ApptReminderSent();
-				apptReminderSent.ApptReminderSentNum= PIn.Long  (row["ApptReminderSentNum"].ToString());
-				apptReminderSent.ApptNum            = PIn.Long  (row["ApptNum"].ToString());
+				apptReminderSent.Id= PIn.Long  (row["ApptReminderSentNum"].ToString());
+				apptReminderSent.AppointmentId            = PIn.Long  (row["ApptNum"].ToString());
 				apptReminderSent.ApptDateTime       = PIn.DateT (row["ApptDateTime"].ToString());
 				apptReminderSent.DateTimeSent       = PIn.DateT (row["DateTimeSent"].ToString());
 				apptReminderSent.TSPrior            = TimeSpan.FromTicks(PIn.Long(row["TSPrior"].ToString()));
@@ -72,8 +72,8 @@ namespace OpenDentBusiness.Crud{
 			table.Columns.Add("IsEmailSent");
 			foreach(ApptReminderSent apptReminderSent in listApptReminderSents) {
 				table.Rows.Add(new object[] {
-					POut.Long  (apptReminderSent.ApptReminderSentNum),
-					POut.Long  (apptReminderSent.ApptNum),
+					POut.Long  (apptReminderSent.Id),
+					POut.Long  (apptReminderSent.AppointmentId),
 					POut.DateT (apptReminderSent.ApptDateTime,false),
 					POut.DateT (apptReminderSent.DateTimeSent,false),
 					POut.Long (apptReminderSent.TSPrior.Ticks),
@@ -93,7 +93,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Inserts one ApptReminderSent into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(ApptReminderSent apptReminderSent,bool useExistingPK) {
 			if(!useExistingPK && Preferences.RandomKeys) {
-				apptReminderSent.ApptReminderSentNum=ReplicationServers.GetKey("apptremindersent","ApptReminderSentNum");
+				apptReminderSent.Id=ReplicationServers.GetKey("apptremindersent","ApptReminderSentNum");
 			}
 			string command="INSERT INTO apptremindersent (";
 			if(useExistingPK || Preferences.RandomKeys) {
@@ -101,10 +101,10 @@ namespace OpenDentBusiness.Crud{
 			}
 			command+="ApptNum,ApptDateTime,DateTimeSent,TSPrior,ApptReminderRuleNum,IsSmsSent,IsEmailSent) VALUES(";
 			if(useExistingPK || Preferences.RandomKeys) {
-				command+=POut.Long(apptReminderSent.ApptReminderSentNum)+",";
+				command+=POut.Long(apptReminderSent.Id)+",";
 			}
 			command+=
-				     POut.Long  (apptReminderSent.ApptNum)+","
+				     POut.Long  (apptReminderSent.AppointmentId)+","
 				+    POut.DateT (apptReminderSent.ApptDateTime)+","
 				+    POut.DateT (apptReminderSent.DateTimeSent)+","
 				+"'"+POut.Long  (apptReminderSent.TSPrior.Ticks)+"',"
@@ -115,9 +115,9 @@ namespace OpenDentBusiness.Crud{
 				Db.NonQ(command);
 			}
 			else {
-				apptReminderSent.ApptReminderSentNum=Db.NonQ(command);
+				apptReminderSent.Id=Db.NonQ(command);
 			}
-			return apptReminderSent.ApptReminderSentNum;
+			return apptReminderSent.Id;
 		}
 
 		///<summary>Inserts many ApptReminderSents into the database.</summary>
@@ -151,9 +151,9 @@ namespace OpenDentBusiness.Crud{
 						hasComma=true;
 					}
 					if(useExistingPK) {
-						sbRow.Append(POut.Long(apptReminderSent.ApptReminderSentNum)); sbRow.Append(",");
+						sbRow.Append(POut.Long(apptReminderSent.Id)); sbRow.Append(",");
 					}
-					sbRow.Append(POut.Long(apptReminderSent.ApptNum)); sbRow.Append(",");
+					sbRow.Append(POut.Long(apptReminderSent.AppointmentId)); sbRow.Append(",");
 					sbRow.Append(POut.DateT(apptReminderSent.ApptDateTime)); sbRow.Append(",");
 					sbRow.Append(POut.DateT(apptReminderSent.DateTimeSent)); sbRow.Append(",");
 					sbRow.Append("'"+POut.Long  (apptReminderSent.TSPrior.Ticks)+"'"); sbRow.Append(",");
@@ -188,17 +188,17 @@ namespace OpenDentBusiness.Crud{
 			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO apptremindersent (";
 			if(!useExistingPK && isRandomKeys) {
-				apptReminderSent.ApptReminderSentNum=ReplicationServers.GetKeyNoCache("apptremindersent","ApptReminderSentNum");
+				apptReminderSent.Id=ReplicationServers.GetKeyNoCache("apptremindersent","ApptReminderSentNum");
 			}
 			if(isRandomKeys || useExistingPK) {
 				command+="ApptReminderSentNum,";
 			}
 			command+="ApptNum,ApptDateTime,DateTimeSent,TSPrior,ApptReminderRuleNum,IsSmsSent,IsEmailSent) VALUES(";
 			if(isRandomKeys || useExistingPK) {
-				command+=POut.Long(apptReminderSent.ApptReminderSentNum)+",";
+				command+=POut.Long(apptReminderSent.Id)+",";
 			}
 			command+=
-				     POut.Long  (apptReminderSent.ApptNum)+","
+				     POut.Long  (apptReminderSent.AppointmentId)+","
 				+    POut.DateT (apptReminderSent.ApptDateTime)+","
 				+    POut.DateT (apptReminderSent.DateTimeSent)+","
 				+"'"+POut.Long(apptReminderSent.TSPrior.Ticks)+"',"
@@ -209,31 +209,31 @@ namespace OpenDentBusiness.Crud{
 				Db.NonQ(command);
 			}
 			else {
-				apptReminderSent.ApptReminderSentNum=Db.NonQ(command);
+				apptReminderSent.Id=Db.NonQ(command);
 			}
-			return apptReminderSent.ApptReminderSentNum;
+			return apptReminderSent.Id;
 		}
 
 		///<summary>Updates one ApptReminderSent in the database.</summary>
 		public static void Update(ApptReminderSent apptReminderSent) {
 			string command="UPDATE apptremindersent SET "
-				+"ApptNum            =  "+POut.Long  (apptReminderSent.ApptNum)+", "
+				+"ApptNum            =  "+POut.Long  (apptReminderSent.AppointmentId)+", "
 				+"ApptDateTime       =  "+POut.DateT (apptReminderSent.ApptDateTime)+", "
 				+"DateTimeSent       =  "+POut.DateT (apptReminderSent.DateTimeSent)+", "
 				+"TSPrior            =  "+POut.Long  (apptReminderSent.TSPrior.Ticks)+", "
 				+"ApptReminderRuleNum=  "+POut.Long  (apptReminderSent.ApptReminderRuleNum)+", "
 				+"IsSmsSent          =  "+POut.Bool  (apptReminderSent.IsSmsSent)+", "
 				+"IsEmailSent        =  "+POut.Bool  (apptReminderSent.IsEmailSent)+" "
-				+"WHERE ApptReminderSentNum = "+POut.Long(apptReminderSent.ApptReminderSentNum);
+				+"WHERE ApptReminderSentNum = "+POut.Long(apptReminderSent.Id);
 			Db.NonQ(command);
 		}
 
 		///<summary>Updates one ApptReminderSent in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.  Returns true if an update occurred.</summary>
 		public static bool Update(ApptReminderSent apptReminderSent,ApptReminderSent oldApptReminderSent) {
 			string command="";
-			if(apptReminderSent.ApptNum != oldApptReminderSent.ApptNum) {
+			if(apptReminderSent.AppointmentId != oldApptReminderSent.AppointmentId) {
 				if(command!="") { command+=",";}
-				command+="ApptNum = "+POut.Long(apptReminderSent.ApptNum)+"";
+				command+="ApptNum = "+POut.Long(apptReminderSent.AppointmentId)+"";
 			}
 			if(apptReminderSent.ApptDateTime != oldApptReminderSent.ApptDateTime) {
 				if(command!="") { command+=",";}
@@ -263,7 +263,7 @@ namespace OpenDentBusiness.Crud{
 				return false;
 			}
 			command="UPDATE apptremindersent SET "+command
-				+" WHERE ApptReminderSentNum = "+POut.Long(apptReminderSent.ApptReminderSentNum);
+				+" WHERE ApptReminderSentNum = "+POut.Long(apptReminderSent.Id);
 			Db.NonQ(command);
 			return true;
 		}
@@ -271,7 +271,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Returns true if Update(ApptReminderSent,ApptReminderSent) would make changes to the database.
 		///Does not make any changes to the database and can be called before remoting role is checked.</summary>
 		public static bool UpdateComparison(ApptReminderSent apptReminderSent,ApptReminderSent oldApptReminderSent) {
-			if(apptReminderSent.ApptNum != oldApptReminderSent.ApptNum) {
+			if(apptReminderSent.AppointmentId != oldApptReminderSent.AppointmentId) {
 				return true;
 			}
 			if(apptReminderSent.ApptDateTime != oldApptReminderSent.ApptDateTime) {

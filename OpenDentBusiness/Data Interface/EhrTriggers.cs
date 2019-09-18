@@ -62,7 +62,7 @@ namespace OpenDentBusiness
         }
 
         ///<summary>This is the first step of automation, this checks to see if the passed in object matches any related trigger conditions.</summary>
-        public static List<CDSIntervention> TriggerMatch(AllergyDef allergyDef, Patient patCur)
+        public static List<CDSIntervention> TriggerMatch(Allergy allergyDef, Patient patCur)
         {
             return TriggerMatch((object)allergyDef, patCur);
         }
@@ -104,7 +104,7 @@ namespace OpenDentBusiness
             Medication medication;
             RxNorm rxNorm;
             CVX cvx;
-            AllergyDef allergyDef;
+            Allergy allergyDef;
             EhrLabResult ehrLabResult;
             Patient pat;
             Vitalsign vitalsign;
@@ -189,7 +189,7 @@ namespace OpenDentBusiness
                     + " WHERE CvxList LIKE '% " + POut.String(cvx.Code) + " %'";// '% <code> %' so that we can get exact matches.
                     break;
                 case "AllergyDef":
-                    allergyDef = (AllergyDef)triggerObject;
+                    allergyDef = (Allergy)triggerObject;
                     //TODO: TriggerObjectMessage
                     command = "SELECT * FROM ehrtrigger"
                     + " WHERE AllergyDefNumList LIKE '% " + POut.String(allergyDef.Id.ToString()) + " %'";// '% <code> %' so that we can get exact matches.
@@ -463,16 +463,16 @@ namespace OpenDentBusiness
                 listInterventions.Add(cdsi);
             }
             //Fill object lists to be checked---------------------------------------------------------------------------------------------------------------
-            List<Allergy> listAllergies = Allergies.GetAll(patCur.PatNum, false);
+            List<PatientAllergy> listAllergies = Allergies.GetAll(patCur.PatNum, false);
             List<Disease> listDiseases = Diseases.Refresh(patCur.PatNum, true);
             List<DiseaseDef> listDiseaseDefs = new List<DiseaseDef>();
             List<EhrLab> listEhrLabs = EhrLabs.GetAllForPat(patCur.PatNum);
             //List<EhrLabResult> ListEhrLabResults=null;//Lab results are stored in a list in the EhrLab object.
             List<MedicationPat> listMedicationPats = MedicationPats.Refresh(patCur.PatNum, false);
-            List<AllergyDef> listAllergyDefs = new List<AllergyDef>();
+            List<Allergy> listAllergyDefs = new List<Allergy>();
             for (int i = 0; i < listAllergies.Count; i++)
             {
-                listAllergyDefs.Add(AllergyDefs.GetOne(listAllergies[i].AllergyDefNum));
+                listAllergyDefs.Add(AllergyDefs.GetOne(listAllergies[i].AllergyId));
             }
             for (int i = 0; i < listDiseases.Count; i++)
             {
@@ -495,7 +495,7 @@ namespace OpenDentBusiness
 
         ///<summary>Adds interventions for all cardinalities except "One".</summary>
         private static void AddCDSIforOneOfEachTwoOrMoreAll(object triggerObject, string triggerMessage, Patient patCur, EhrTrigger ehrTrig,
-            ref List<CDSIntervention> listInterventions, List<MedicationPat> listMedicationPats, List<Allergy> listAllergies,
+            ref List<CDSIntervention> listInterventions, List<MedicationPat> listMedicationPats, List<PatientAllergy> listAllergies,
             List<DiseaseDef> listDiseaseDefs, List<EhrLab> listEhrLabs)
         {
             //No remoting call; already checked before calling this method
@@ -586,9 +586,9 @@ namespace OpenDentBusiness
             //Allergy
             for (int a = 0; a < listAllergies.Count; a++)
             {
-                if (ehrTrig.AllergyDefNumList.Contains(" " + listAllergies[a].AllergyDefNum + " "))
+                if (ehrTrig.AllergyDefNumList.Contains(" " + listAllergies[a].AllergyId + " "))
                 {
-                    AllergyDef allergyDefCur = AllergyDefs.GetOne(listAllergies[a].AllergyDefNum);
+                    Allergy allergyDefCur = AllergyDefs.GetOne(listAllergies[a].AllergyId);
                     if (allergyDefCur != null)
                     {
                         listObjectMatches.Add(allergyDefCur);
@@ -991,8 +991,8 @@ namespace OpenDentBusiness
             string[] arrayAllergyDefNums = ehrTrig.AllergyDefNumList.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
             for (int c = 0; c < arrayAllergyDefNums.Length; c++)
             {
-                if (listObjectMatches.FindAll(x => x is AllergyDef)
-                    .Exists(x => ((AllergyDef)x).Id.ToString() == arrayAllergyDefNums[c]))
+                if (listObjectMatches.FindAll(x => x is Allergy)
+                    .Exists(x => ((Allergy)x).Id.ToString() == arrayAllergyDefNums[c]))
                 {
                     continue;//found required code
                 }
@@ -1059,7 +1059,7 @@ namespace OpenDentBusiness
             if (ehrTrigger.AllergyDefNumList.Trim() != "")
             {
                 //Allergy condition exists
-                if (!listObjectMatches.Any(x => x is AllergyDef))
+                if (!listObjectMatches.Any(x => x is Allergy))
                 {
                     return false;
                 }
@@ -1259,7 +1259,7 @@ namespace OpenDentBusiness
                     break;
                 case "AllergyDef":
                     cdsTrig = new KnowledgeRequest();
-                    AllergyDef allergyObj = (AllergyDef)objectMatch;
+                    Allergy allergyObj = (Allergy)objectMatch;
                     cdsTrig.Type = "Allergy";
                     cdsTrig.Code = POut.Long(allergyObj.Id);
                     cdsTrig.CodeSystem = CodeSyst.AllergyDef;

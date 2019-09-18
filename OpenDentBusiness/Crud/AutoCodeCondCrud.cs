@@ -42,9 +42,9 @@ namespace OpenDentBusiness.Crud{
 			AutoCodeCond autoCodeCond;
 			foreach(DataRow row in table.Rows) {
 				autoCodeCond=new AutoCodeCond();
-				autoCodeCond.AutoCodeCondNum= PIn.Long  (row["AutoCodeCondNum"].ToString());
-				autoCodeCond.AutoCodeItemNum= PIn.Long  (row["AutoCodeItemNum"].ToString());
-				autoCodeCond.Cond           = (OpenDentBusiness.AutoCondition)PIn.Int(row["Cond"].ToString());
+				autoCodeCond.Id= PIn.Long  (row["AutoCodeCondNum"].ToString());
+				autoCodeCond.AutoCodeItemId= PIn.Long  (row["AutoCodeItemNum"].ToString());
+				autoCodeCond.Condition           = (OpenDentBusiness.AutoCondition)PIn.Int(row["Cond"].ToString());
 				retVal.Add(autoCodeCond);
 			}
 			return retVal;
@@ -61,9 +61,9 @@ namespace OpenDentBusiness.Crud{
 			table.Columns.Add("Cond");
 			foreach(AutoCodeCond autoCodeCond in listAutoCodeConds) {
 				table.Rows.Add(new object[] {
-					POut.Long  (autoCodeCond.AutoCodeCondNum),
-					POut.Long  (autoCodeCond.AutoCodeItemNum),
-					POut.Int   ((int)autoCodeCond.Cond),
+					POut.Long  (autoCodeCond.Id),
+					POut.Long  (autoCodeCond.AutoCodeItemId),
+					POut.Int   ((int)autoCodeCond.Condition),
 				});
 			}
 			return table;
@@ -77,7 +77,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Inserts one AutoCodeCond into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(AutoCodeCond autoCodeCond,bool useExistingPK) {
 			if(!useExistingPK && Preferences.RandomKeys) {
-				autoCodeCond.AutoCodeCondNum=ReplicationServers.GetKey("autocodecond","AutoCodeCondNum");
+				autoCodeCond.Id=ReplicationServers.GetKey("autocodecond","AutoCodeCondNum");
 			}
 			string command="INSERT INTO autocodecond (";
 			if(useExistingPK || Preferences.RandomKeys) {
@@ -85,18 +85,18 @@ namespace OpenDentBusiness.Crud{
 			}
 			command+="AutoCodeItemNum,Cond) VALUES(";
 			if(useExistingPK || Preferences.RandomKeys) {
-				command+=POut.Long(autoCodeCond.AutoCodeCondNum)+",";
+				command+=POut.Long(autoCodeCond.Id)+",";
 			}
 			command+=
-				     POut.Long  (autoCodeCond.AutoCodeItemNum)+","
-				+    POut.Int   ((int)autoCodeCond.Cond)+")";
+				     POut.Long  (autoCodeCond.AutoCodeItemId)+","
+				+    POut.Int   ((int)autoCodeCond.Condition)+")";
 			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {
-				autoCodeCond.AutoCodeCondNum=Db.NonQ(command,true,"AutoCodeCondNum","autoCodeCond");
+				autoCodeCond.Id=Db.NonQ(command,true,"AutoCodeCondNum","autoCodeCond");
 			}
-			return autoCodeCond.AutoCodeCondNum;
+			return autoCodeCond.Id;
 		}
 
 		///<summary>Inserts one AutoCodeCond into the database.  Returns the new priKey.  Doesn't use the cache.</summary>
@@ -109,52 +109,52 @@ namespace OpenDentBusiness.Crud{
 			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO autocodecond (";
 			if(!useExistingPK && isRandomKeys) {
-				autoCodeCond.AutoCodeCondNum=ReplicationServers.GetKeyNoCache("autocodecond","AutoCodeCondNum");
+				autoCodeCond.Id=ReplicationServers.GetKeyNoCache("autocodecond","AutoCodeCondNum");
 			}
 			if(isRandomKeys || useExistingPK) {
 				command+="AutoCodeCondNum,";
 			}
 			command+="AutoCodeItemNum,Cond) VALUES(";
 			if(isRandomKeys || useExistingPK) {
-				command+=POut.Long(autoCodeCond.AutoCodeCondNum)+",";
+				command+=POut.Long(autoCodeCond.Id)+",";
 			}
 			command+=
-				     POut.Long  (autoCodeCond.AutoCodeItemNum)+","
-				+    POut.Int   ((int)autoCodeCond.Cond)+")";
+				     POut.Long  (autoCodeCond.AutoCodeItemId)+","
+				+    POut.Int   ((int)autoCodeCond.Condition)+")";
 			if(useExistingPK || isRandomKeys) {
 				Db.NonQ(command);
 			}
 			else {
-				autoCodeCond.AutoCodeCondNum=Db.NonQ(command,true,"AutoCodeCondNum","autoCodeCond");
+				autoCodeCond.Id=Db.NonQ(command,true,"AutoCodeCondNum","autoCodeCond");
 			}
-			return autoCodeCond.AutoCodeCondNum;
+			return autoCodeCond.Id;
 		}
 
 		///<summary>Updates one AutoCodeCond in the database.</summary>
 		public static void Update(AutoCodeCond autoCodeCond) {
 			string command="UPDATE autocodecond SET "
-				+"AutoCodeItemNum=  "+POut.Long  (autoCodeCond.AutoCodeItemNum)+", "
-				+"Cond           =  "+POut.Int   ((int)autoCodeCond.Cond)+" "
-				+"WHERE AutoCodeCondNum = "+POut.Long(autoCodeCond.AutoCodeCondNum);
+				+"AutoCodeItemNum=  "+POut.Long  (autoCodeCond.AutoCodeItemId)+", "
+				+"Cond           =  "+POut.Int   ((int)autoCodeCond.Condition)+" "
+				+"WHERE AutoCodeCondNum = "+POut.Long(autoCodeCond.Id);
 			Db.NonQ(command);
 		}
 
 		///<summary>Updates one AutoCodeCond in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.  Returns true if an update occurred.</summary>
 		public static bool Update(AutoCodeCond autoCodeCond,AutoCodeCond oldAutoCodeCond) {
 			string command="";
-			if(autoCodeCond.AutoCodeItemNum != oldAutoCodeCond.AutoCodeItemNum) {
+			if(autoCodeCond.AutoCodeItemId != oldAutoCodeCond.AutoCodeItemId) {
 				if(command!="") { command+=",";}
-				command+="AutoCodeItemNum = "+POut.Long(autoCodeCond.AutoCodeItemNum)+"";
+				command+="AutoCodeItemNum = "+POut.Long(autoCodeCond.AutoCodeItemId)+"";
 			}
-			if(autoCodeCond.Cond != oldAutoCodeCond.Cond) {
+			if(autoCodeCond.Condition != oldAutoCodeCond.Condition) {
 				if(command!="") { command+=",";}
-				command+="Cond = "+POut.Int   ((int)autoCodeCond.Cond)+"";
+				command+="Cond = "+POut.Int   ((int)autoCodeCond.Condition)+"";
 			}
 			if(command=="") {
 				return false;
 			}
 			command="UPDATE autocodecond SET "+command
-				+" WHERE AutoCodeCondNum = "+POut.Long(autoCodeCond.AutoCodeCondNum);
+				+" WHERE AutoCodeCondNum = "+POut.Long(autoCodeCond.Id);
 			Db.NonQ(command);
 			return true;
 		}
@@ -162,10 +162,10 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Returns true if Update(AutoCodeCond,AutoCodeCond) would make changes to the database.
 		///Does not make any changes to the database and can be called before remoting role is checked.</summary>
 		public static bool UpdateComparison(AutoCodeCond autoCodeCond,AutoCodeCond oldAutoCodeCond) {
-			if(autoCodeCond.AutoCodeItemNum != oldAutoCodeCond.AutoCodeItemNum) {
+			if(autoCodeCond.AutoCodeItemId != oldAutoCodeCond.AutoCodeItemId) {
 				return true;
 			}
-			if(autoCodeCond.Cond != oldAutoCodeCond.Cond) {
+			if(autoCodeCond.Condition != oldAutoCodeCond.Condition) {
 				return true;
 			}
 			return false;

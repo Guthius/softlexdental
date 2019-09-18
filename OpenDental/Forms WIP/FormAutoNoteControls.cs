@@ -45,7 +45,7 @@ namespace OpenDental {
 			ODGridRow row;
 			for(int i=0;i<_listAutoNoteControls.Count;i++){
 				row=new ODGridRow();
-				row.Cells.Add(_listAutoNoteControls[i].Descript);
+				row.Cells.Add(_listAutoNoteControls[i].Description);
 				row.Cells.Add(_listAutoNoteControls[i].ControlType);
 				row.Cells.Add(_listAutoNoteControls[i].ControlLabel);
 				row.Cells.Add(_listAutoNoteControls[i].ControlOptions);
@@ -88,7 +88,7 @@ namespace OpenDental {
 				MsgBox.Show(this,"Please select an item first.");
 				return;
 			}
-			SelectedControlNum=_listAutoNoteControls[gridMain.GetSelectedIndex()].AutoNoteControlNum;
+			SelectedControlNum=_listAutoNoteControls[gridMain.GetSelectedIndex()].Id;
 			DialogResult=DialogResult.OK;
 		}
 

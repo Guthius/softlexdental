@@ -231,6 +231,7 @@
     <Compile Include="DataException.cs" />
     <Compile Include="DataRecord.cs" />
     <Compile Include="DataRecordCache.cs" />
+    <Compile Include="Data\AlertType.cs" />
     <Compile Include="Data\GradingScaleType.cs" />
     <Compile Include="Data\PreferenceName.cs" />
     <Compile Include="Db Multi Table\ApptSearch.cs" />
@@ -344,11 +345,9 @@
     <Compile Include="Eclaims\x270Controller.cs" />
     <Compile Include="Eclaims\x837Controller.cs" />
     <Compile Include="Crud\AdjustmentCrud.cs" />
-    <Compile Include="Crud\AlertItemCrud.cs" />
-    <Compile Include="Crud\AlertReadCrud.cs" />
-    <Compile Include="Crud\AlertSubCrud.cs" />
-    <Compile Include="Crud\AllergyCrud.cs" />
-    <Compile Include="Crud\AllergyDefCrud.cs" />
+    <Compile Include="__WIP\AlertActionType.cs" />
+    <Compile Include="__WIP\AlertSeverityType.cs" />
+    <Compile Include="__WIP\AllergyCrud.cs" />
     <Compile Include="Crud\AppointmentCrud.cs" />
     <Compile Include="Crud\AppointmentRuleCrud.cs" />
     <Compile Include="Crud\AppointmentTypeCrud.cs" />
@@ -574,9 +573,6 @@
     <Compile Include="Crud\UpdateHistoryCrud.cs" />
     <Compile Include="Crud\UserWebCrud.cs" />
     <Compile Include="Crud\XWebResponseCrud.cs" />
-    <Compile Include="Data Interface\AlertItems.cs" />
-    <Compile Include="Data Interface\AlertReads.cs" />
-    <Compile Include="Data Interface\AlertSubs.cs" />
     <Compile Include="Data Interface\ApptReminderRules.cs" />
     <Compile Include="Data Interface\ApptReminderSents.cs" />
     <Compile Include="Data Interface\ClaimSnapshots.cs" />
@@ -638,8 +634,7 @@
     <Compile Include="Crud\WikiPageHistCrud.cs" />
     <Compile Include="Crud\XChargeTransactionCrud.cs" />
     <Compile Include="Crud\ZipCodeCrud.cs" />
-    <Compile Include="Data Interface\Allergies.cs" />
-    <Compile Include="Data Interface\AllergyDefs.cs" />
+    <Compile Include="__WIP\Allergies.cs" />
     <Compile Include="Data Interface\AppointmentTypes.cs" />
     <Compile Include="Data Interface\ApptFieldDefs.cs" />
     <Compile Include="Data Interface\ApptFields.cs" />
@@ -750,7 +745,6 @@
     <Compile Include="Data Interface\TaskNotes.cs" />
     <Compile Include="Data Interface\TaskUnreads.cs" />
     <Compile Include="Cache\Cache.cs" />
-    <Compile Include="Data\AlertType.cs" />
     <Compile Include="Data\Preferences.cs" />
     <Compile Include="Data Interface\ToothGridCells.cs" />
     <Compile Include="Data Interface\ToothGridCols.cs" />
@@ -989,9 +983,9 @@
     <Compile Include="TableTypes\FamAging.cs" />
     <Compile Include="TableTypes\FieldDefLink.cs" />
     <Compile Include="TableTypes\ClinicPref.cs" />
-    <Compile Include="TableTypes\AlertItem.cs" />
-    <Compile Include="TableTypes\AlertRead.cs" />
-    <Compile Include="TableTypes\AlertSub.cs" />
+    <Compile Include="__WIP\Alert.cs" />
+    <Compile Include="__WIP\AlertRead.cs" />
+    <Compile Include="__WIP\AlertSubscription.cs" />
     <Compile Include="TableTypes\ApptReminderSent.cs" />
     <Compile Include="TableTypes\ApptReminderRule.cs" />
     <Compile Include="TableTypes\ConfirmationRequest.cs" />
@@ -1071,8 +1065,8 @@
     <Compile Include="TableTypes\ApptField.cs" />
     <Compile Include="TableTypes\AutomationCondition.cs" />
     <Compile Include="TableTypes\ChartView.cs" />
-    <Compile Include="TableTypes\AllergyDef.cs" />
-    <Compile Include="TableTypes\Allergy.cs" />
+    <Compile Include="__WIP\Allergy.cs" />
+    <Compile Include="TableTypes\PatientAllergy.cs" />
     <Compile Include="TableTypes\CentralConnection.cs" />
     <Compile Include="TableTypes\CodeSystem.cs" />
     <Compile Include="TableTypes\Cdcrec.cs" />

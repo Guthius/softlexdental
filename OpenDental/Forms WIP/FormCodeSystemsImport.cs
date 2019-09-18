@@ -622,7 +622,7 @@ If the master term dictionary or software program containing the UCUM table, UCU
             ///<summary>Thread list manager needs this to remove threads. Required for List.Contains.</summary>
             public override bool Equals(object obj)
             {
-                return ((UpdateCodeSystemThread)obj)._codeSystem.CodeSystemNum == _codeSystem.CodeSystemNum;
+                return ((UpdateCodeSystemThread)obj)._codeSystem.Id == _codeSystem.Id;
             }
 
             ///<summary>Just to prevent a VS warning.</summary>

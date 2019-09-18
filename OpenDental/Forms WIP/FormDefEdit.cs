@@ -495,7 +495,7 @@ namespace OpenDental {
 				return;
 			}
 			bool isAutoNoteRefresh=false;
-			if(DefCur.Category==DefinitionCategory.AutoNoteCats && AutoNotes.GetExists(x => x.Category==DefCur.Id)) {
+			if(DefCur.Category==DefinitionCategory.AutoNoteCats && AutoNotes.GetExists(x => x.CategoryId==DefCur.Id)) {
 				if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"Deleting this Auto Note Category will uncategorize some auto notes.  Delete anyway?")) {
 					return;
 				}

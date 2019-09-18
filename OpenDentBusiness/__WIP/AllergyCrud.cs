@@ -9,10 +9,10 @@ using System.Drawing;
 namespace OpenDentBusiness.Crud{
 	public class AllergyCrud {
 		///<summary>Gets one Allergy object from the database using the primary key.  Returns null if not found.</summary>
-		public static Allergy SelectOne(long allergyNum) {
+		public static PatientAllergy SelectOne(long allergyNum) {
 			string command="SELECT * FROM allergy "
 				+"WHERE AllergyNum = "+POut.Long(allergyNum);
-			List<Allergy> list=TableToList(Db.GetTable(command));
+			List<PatientAllergy> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;
 			}
@@ -20,9 +20,9 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one Allergy object from the database using a query.</summary>
-		public static Allergy SelectOne(string command) {
+		public static PatientAllergy SelectOne(string command) {
 			
-			List<Allergy> list=TableToList(Db.GetTable(command));
+			List<PatientAllergy> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;
 			}
@@ -30,23 +30,23 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of Allergy objects from the database using a query.</summary>
-		public static List<Allergy> SelectMany(string command) {
+		public static List<PatientAllergy> SelectMany(string command) {
 			
-			List<Allergy> list=TableToList(Db.GetTable(command));
+			List<PatientAllergy> list=TableToList(Db.GetTable(command));
 			return list;
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		public static List<Allergy> TableToList(DataTable table) {
-			List<Allergy> retVal=new List<Allergy>();
-			Allergy allergy;
+		public static List<PatientAllergy> TableToList(DataTable table) {
+			List<PatientAllergy> retVal=new List<PatientAllergy>();
+			PatientAllergy allergy;
 			foreach(DataRow row in table.Rows) {
-				allergy=new Allergy();
-				allergy.AllergyNum         = PIn.Long  (row["AllergyNum"].ToString());
-				allergy.AllergyDefNum      = PIn.Long  (row["AllergyDefNum"].ToString());
-				allergy.PatNum             = PIn.Long  (row["PatNum"].ToString());
+				allergy=new PatientAllergy();
+				allergy.Id         = PIn.Long  (row["AllergyNum"].ToString());
+				allergy.AllergyId      = PIn.Long  (row["AllergyDefNum"].ToString());
+				allergy.PatientId             = PIn.Long  (row["PatNum"].ToString());
 				allergy.Reaction           = PIn.String(row["Reaction"].ToString());
-				allergy.StatusIsActive     = PIn.Bool  (row["StatusIsActive"].ToString());
+				allergy.Active     = PIn.Bool  (row["StatusIsActive"].ToString());
 				allergy.DateTStamp         = PIn.DateT (row["DateTStamp"].ToString());
 				allergy.DateAdverseReaction= PIn.Date  (row["DateAdverseReaction"].ToString());
 				allergy.SnomedReaction     = PIn.String(row["SnomedReaction"].ToString());
@@ -56,7 +56,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a list of Allergy into a DataTable.</summary>
-		public static DataTable ListToTable(List<Allergy> listAllergys,string tableName="") {
+		public static DataTable ListToTable(List<PatientAllergy> listAllergys,string tableName="") {
 			if(string.IsNullOrEmpty(tableName)) {
 				tableName="Allergy";
 			}
@@ -69,13 +69,13 @@ namespace OpenDentBusiness.Crud{
 			table.Columns.Add("DateTStamp");
 			table.Columns.Add("DateAdverseReaction");
 			table.Columns.Add("SnomedReaction");
-			foreach(Allergy allergy in listAllergys) {
+			foreach(PatientAllergy allergy in listAllergys) {
 				table.Rows.Add(new object[] {
-					POut.Long  (allergy.AllergyNum),
-					POut.Long  (allergy.AllergyDefNum),
-					POut.Long  (allergy.PatNum),
+					POut.Long  (allergy.Id),
+					POut.Long  (allergy.AllergyId),
+					POut.Long  (allergy.PatientId),
 					            allergy.Reaction,
-					POut.Bool  (allergy.StatusIsActive),
+					POut.Bool  (allergy.Active),
 					POut.DateT (allergy.DateTStamp,false),
 					POut.DateT (allergy.DateAdverseReaction,false),
 					            allergy.SnomedReaction,
@@ -85,14 +85,14 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Allergy into the database.  Returns the new priKey.</summary>
-		public static long Insert(Allergy allergy) {
+		public static long Insert(PatientAllergy allergy) {
 			return Insert(allergy,false);
 		}
 
 		///<summary>Inserts one Allergy into the database.  Provides option to use the existing priKey.</summary>
-		public static long Insert(Allergy allergy,bool useExistingPK) {
+		public static long Insert(PatientAllergy allergy,bool useExistingPK) {
 			if(!useExistingPK && Preferences.RandomKeys) {
-				allergy.AllergyNum=ReplicationServers.GetKey("allergy","AllergyNum");
+				allergy.Id=ReplicationServers.GetKey("allergy","AllergyNum");
 			}
 			string command="INSERT INTO allergy (";
 			if(useExistingPK || Preferences.RandomKeys) {
@@ -100,13 +100,13 @@ namespace OpenDentBusiness.Crud{
 			}
 			command+="AllergyDefNum,PatNum,Reaction,StatusIsActive,DateAdverseReaction,SnomedReaction) VALUES(";
 			if(useExistingPK || Preferences.RandomKeys) {
-				command+=POut.Long(allergy.AllergyNum)+",";
+				command+=POut.Long(allergy.Id)+",";
 			}
 			command+=
-				     POut.Long  (allergy.AllergyDefNum)+","
-				+    POut.Long  (allergy.PatNum)+","
+				     POut.Long  (allergy.AllergyId)+","
+				+    POut.Long  (allergy.PatientId)+","
 				+"'"+POut.String(allergy.Reaction)+"',"
-				+    POut.Bool  (allergy.StatusIsActive)+","
+				+    POut.Bool  (allergy.Active)+","
 				//DateTStamp can only be set by MySQL
 				+    POut.Date  (allergy.DateAdverseReaction)+","
 				+"'"+POut.String(allergy.SnomedReaction)+"')";
@@ -114,35 +114,35 @@ namespace OpenDentBusiness.Crud{
 				Db.NonQ(command);
 			}
 			else {
-				allergy.AllergyNum=Db.NonQ(command,true,"AllergyNum","allergy");
+				allergy.Id=Db.NonQ(command,true,"AllergyNum","allergy");
 			}
-			return allergy.AllergyNum;
+			return allergy.Id;
 		}
 
 		///<summary>Inserts one Allergy into the database.  Returns the new priKey.  Doesn't use the cache.</summary>
-		public static long InsertNoCache(Allergy allergy) {
+		public static long InsertNoCache(PatientAllergy allergy) {
 			return InsertNoCache(allergy,false);
 		}
 
 		///<summary>Inserts one Allergy into the database.  Provides option to use the existing priKey.  Doesn't use the cache.</summary>
-		public static long InsertNoCache(Allergy allergy,bool useExistingPK) {
+		public static long InsertNoCache(PatientAllergy allergy,bool useExistingPK) {
 			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO allergy (";
 			if(!useExistingPK && isRandomKeys) {
-				allergy.AllergyNum=ReplicationServers.GetKeyNoCache("allergy","AllergyNum");
+				allergy.Id=ReplicationServers.GetKeyNoCache("allergy","AllergyNum");
 			}
 			if(isRandomKeys || useExistingPK) {
 				command+="AllergyNum,";
 			}
 			command+="AllergyDefNum,PatNum,Reaction,StatusIsActive,DateAdverseReaction,SnomedReaction) VALUES(";
 			if(isRandomKeys || useExistingPK) {
-				command+=POut.Long(allergy.AllergyNum)+",";
+				command+=POut.Long(allergy.Id)+",";
 			}
 			command+=
-				     POut.Long  (allergy.AllergyDefNum)+","
-				+    POut.Long  (allergy.PatNum)+","
+				     POut.Long  (allergy.AllergyId)+","
+				+    POut.Long  (allergy.PatientId)+","
 				+"'"+POut.String(allergy.Reaction)+"',"
-				+    POut.Bool  (allergy.StatusIsActive)+","
+				+    POut.Bool  (allergy.Active)+","
 				//DateTStamp can only be set by MySQL
 				+    POut.Date  (allergy.DateAdverseReaction)+","
 				+"'"+POut.String(allergy.SnomedReaction)+"')";
@@ -150,43 +150,43 @@ namespace OpenDentBusiness.Crud{
 				Db.NonQ(command);
 			}
 			else {
-				allergy.AllergyNum=Db.NonQ(command,true,"AllergyNum","allergy");
+				allergy.Id=Db.NonQ(command,true,"AllergyNum","allergy");
 			}
-			return allergy.AllergyNum;
+			return allergy.Id;
 		}
 
 		///<summary>Updates one Allergy in the database.</summary>
-		public static void Update(Allergy allergy) {
+		public static void Update(PatientAllergy allergy) {
 			string command="UPDATE allergy SET "
-				+"AllergyDefNum      =  "+POut.Long  (allergy.AllergyDefNum)+", "
-				+"PatNum             =  "+POut.Long  (allergy.PatNum)+", "
+				+"AllergyDefNum      =  "+POut.Long  (allergy.AllergyId)+", "
+				+"PatNum             =  "+POut.Long  (allergy.PatientId)+", "
 				+"Reaction           = '"+POut.String(allergy.Reaction)+"', "
-				+"StatusIsActive     =  "+POut.Bool  (allergy.StatusIsActive)+", "
+				+"StatusIsActive     =  "+POut.Bool  (allergy.Active)+", "
 				//DateTStamp can only be set by MySQL
 				+"DateAdverseReaction=  "+POut.Date  (allergy.DateAdverseReaction)+", "
 				+"SnomedReaction     = '"+POut.String(allergy.SnomedReaction)+"' "
-				+"WHERE AllergyNum = "+POut.Long(allergy.AllergyNum);
+				+"WHERE AllergyNum = "+POut.Long(allergy.Id);
 			Db.NonQ(command);
 		}
 
 		///<summary>Updates one Allergy in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.  Returns true if an update occurred.</summary>
-		public static bool Update(Allergy allergy,Allergy oldAllergy) {
+		public static bool Update(PatientAllergy allergy,PatientAllergy oldAllergy) {
 			string command="";
-			if(allergy.AllergyDefNum != oldAllergy.AllergyDefNum) {
+			if(allergy.AllergyId != oldAllergy.AllergyId) {
 				if(command!="") { command+=",";}
-				command+="AllergyDefNum = "+POut.Long(allergy.AllergyDefNum)+"";
+				command+="AllergyDefNum = "+POut.Long(allergy.AllergyId)+"";
 			}
-			if(allergy.PatNum != oldAllergy.PatNum) {
+			if(allergy.PatientId != oldAllergy.PatientId) {
 				if(command!="") { command+=",";}
-				command+="PatNum = "+POut.Long(allergy.PatNum)+"";
+				command+="PatNum = "+POut.Long(allergy.PatientId)+"";
 			}
 			if(allergy.Reaction != oldAllergy.Reaction) {
 				if(command!="") { command+=",";}
 				command+="Reaction = '"+POut.String(allergy.Reaction)+"'";
 			}
-			if(allergy.StatusIsActive != oldAllergy.StatusIsActive) {
+			if(allergy.Active != oldAllergy.Active) {
 				if(command!="") { command+=",";}
-				command+="StatusIsActive = "+POut.Bool(allergy.StatusIsActive)+"";
+				command+="StatusIsActive = "+POut.Bool(allergy.Active)+"";
 			}
 			//DateTStamp can only be set by MySQL
 			if(allergy.DateAdverseReaction.Date != oldAllergy.DateAdverseReaction.Date) {
@@ -201,24 +201,24 @@ namespace OpenDentBusiness.Crud{
 				return false;
 			}
 			command="UPDATE allergy SET "+command
-				+" WHERE AllergyNum = "+POut.Long(allergy.AllergyNum);
+				+" WHERE AllergyNum = "+POut.Long(allergy.Id);
 			Db.NonQ(command);
 			return true;
 		}
 
 		///<summary>Returns true if Update(Allergy,Allergy) would make changes to the database.
 		///Does not make any changes to the database and can be called before remoting role is checked.</summary>
-		public static bool UpdateComparison(Allergy allergy,Allergy oldAllergy) {
-			if(allergy.AllergyDefNum != oldAllergy.AllergyDefNum) {
+		public static bool UpdateComparison(PatientAllergy allergy,PatientAllergy oldAllergy) {
+			if(allergy.AllergyId != oldAllergy.AllergyId) {
 				return true;
 			}
-			if(allergy.PatNum != oldAllergy.PatNum) {
+			if(allergy.PatientId != oldAllergy.PatientId) {
 				return true;
 			}
 			if(allergy.Reaction != oldAllergy.Reaction) {
 				return true;
 			}
-			if(allergy.StatusIsActive != oldAllergy.StatusIsActive) {
+			if(allergy.Active != oldAllergy.Active) {
 				return true;
 			}
 			//DateTStamp can only be set by MySQL

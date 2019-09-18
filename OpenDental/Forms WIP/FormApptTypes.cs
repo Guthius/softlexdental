@@ -49,10 +49,10 @@ namespace OpenDental
             foreach (AppointmentType appointmentType in appointmentTypeList)
             {
                 var row = new ODGridRow();
-                row.Cells.Add(appointmentType.AppointmentTypeName);
+                row.Cells.Add(appointmentType.Name);
                 row.Cells.Add(""); //color row, no text.
-                row.Cells[1].CellColor = appointmentType.AppointmentTypeColor;
-                row.Cells.Add(appointmentType.IsHidden ? "X" : "");
+                row.Cells[1].CellColor = appointmentType.Color;
+                row.Cells.Add(appointmentType.Hidden ? "X" : "");
                 row.Tag = appointmentType;
                 typesGrid.Rows.Add(row);
             }
@@ -111,7 +111,7 @@ namespace OpenDental
                 for (int i = 0; i < typesGrid.Rows.Count; i++)
                 {
                     if (((AppointmentType)typesGrid.Rows[i].Tag) != null //The "None" option will always be null
-                        && ListSelectedApptTypes.Any(x => x.AppointmentTypeNum == ((AppointmentType)typesGrid.Rows[i].Tag).AppointmentTypeNum))
+                        && ListSelectedApptTypes.Any(x => x.Id == ((AppointmentType)typesGrid.Rows[i].Tag).Id))
                     {
                         typesGrid.SetSelected(i, true);
                     }
@@ -130,7 +130,7 @@ namespace OpenDental
 
                     for (int i = 0; i < appointmentTypeList.Count; i++)
                     {
-                        appointmentTypeList[i].ItemOrder = i;
+                        appointmentTypeList[i].SortOrder = i;
                     }
                     AppointmentTypes.Sync(appointmentTypeList, _listApptTypesOld);
 
@@ -160,8 +160,8 @@ namespace OpenDental
 
             hasChanged = true;
 
-            appointmentTypeList[index - 1].ItemOrder += 1;
-            appointmentTypeList[index].ItemOrder -= 1;
+            appointmentTypeList[index - 1].SortOrder += 1;
+            appointmentTypeList[index].SortOrder -= 1;
 
             LoadAppointmentTypes();
 
@@ -189,8 +189,8 @@ namespace OpenDental
 
             hasChanged = true;
 
-            appointmentTypeList[index + 1].ItemOrder -= 1;
-            appointmentTypeList[index].ItemOrder += 1;
+            appointmentTypeList[index + 1].SortOrder -= 1;
+            appointmentTypeList[index].SortOrder += 1;
 
             LoadAppointmentTypes();
 
@@ -240,9 +240,9 @@ namespace OpenDental
             {
                 formApptTypeEdit.AppointmentTypeCur = new AppointmentType
                 {
-                    ItemOrder = appointmentTypeList.Count,
+                    SortOrder = appointmentTypeList.Count,
                     IsNew = true,
-                    AppointmentTypeColor = Color.White
+                    Color = Color.White
                 };
 
                 if (formApptTypeEdit.ShowDialog() != DialogResult.OK)

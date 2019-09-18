@@ -42,9 +42,9 @@ namespace OpenDentBusiness.Crud{
 			AutoCode autoCode;
 			foreach(DataRow row in table.Rows) {
 				autoCode=new AutoCode();
-				autoCode.AutoCodeNum  = PIn.Long  (row["AutoCodeNum"].ToString());
+				autoCode.Id  = PIn.Long  (row["AutoCodeNum"].ToString());
 				autoCode.Description  = PIn.String(row["Description"].ToString());
-				autoCode.IsHidden     = PIn.Bool  (row["IsHidden"].ToString());
+				autoCode.Hidden     = PIn.Bool  (row["IsHidden"].ToString());
 				autoCode.LessIntrusive= PIn.Bool  (row["LessIntrusive"].ToString());
 				retVal.Add(autoCode);
 			}
@@ -63,9 +63,9 @@ namespace OpenDentBusiness.Crud{
 			table.Columns.Add("LessIntrusive");
 			foreach(AutoCode autoCode in listAutoCodes) {
 				table.Rows.Add(new object[] {
-					POut.Long  (autoCode.AutoCodeNum),
+					POut.Long  (autoCode.Id),
 					            autoCode.Description,
-					POut.Bool  (autoCode.IsHidden),
+					POut.Bool  (autoCode.Hidden),
 					POut.Bool  (autoCode.LessIntrusive),
 				});
 			}
@@ -80,7 +80,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Inserts one AutoCode into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(AutoCode autoCode,bool useExistingPK) {
 			if(!useExistingPK && Preferences.RandomKeys) {
-				autoCode.AutoCodeNum=ReplicationServers.GetKey("autocode","AutoCodeNum");
+				autoCode.Id=ReplicationServers.GetKey("autocode","AutoCodeNum");
 			}
 			string command="INSERT INTO autocode (";
 			if(useExistingPK || Preferences.RandomKeys) {
@@ -88,19 +88,19 @@ namespace OpenDentBusiness.Crud{
 			}
 			command+="Description,IsHidden,LessIntrusive) VALUES(";
 			if(useExistingPK || Preferences.RandomKeys) {
-				command+=POut.Long(autoCode.AutoCodeNum)+",";
+				command+=POut.Long(autoCode.Id)+",";
 			}
 			command+=
 				 "'"+POut.String(autoCode.Description)+"',"
-				+    POut.Bool  (autoCode.IsHidden)+","
+				+    POut.Bool  (autoCode.Hidden)+","
 				+    POut.Bool  (autoCode.LessIntrusive)+")";
 			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {
-				autoCode.AutoCodeNum=Db.NonQ(command,true,"AutoCodeNum","autoCode");
+				autoCode.Id=Db.NonQ(command,true,"AutoCodeNum","autoCode");
 			}
-			return autoCode.AutoCodeNum;
+			return autoCode.Id;
 		}
 
 		///<summary>Inserts one AutoCode into the database.  Returns the new priKey.  Doesn't use the cache.</summary>
@@ -113,35 +113,35 @@ namespace OpenDentBusiness.Crud{
 			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO autocode (";
 			if(!useExistingPK && isRandomKeys) {
-				autoCode.AutoCodeNum=ReplicationServers.GetKeyNoCache("autocode","AutoCodeNum");
+				autoCode.Id=ReplicationServers.GetKeyNoCache("autocode","AutoCodeNum");
 			}
 			if(isRandomKeys || useExistingPK) {
 				command+="AutoCodeNum,";
 			}
 			command+="Description,IsHidden,LessIntrusive) VALUES(";
 			if(isRandomKeys || useExistingPK) {
-				command+=POut.Long(autoCode.AutoCodeNum)+",";
+				command+=POut.Long(autoCode.Id)+",";
 			}
 			command+=
 				 "'"+POut.String(autoCode.Description)+"',"
-				+    POut.Bool  (autoCode.IsHidden)+","
+				+    POut.Bool  (autoCode.Hidden)+","
 				+    POut.Bool  (autoCode.LessIntrusive)+")";
 			if(useExistingPK || isRandomKeys) {
 				Db.NonQ(command);
 			}
 			else {
-				autoCode.AutoCodeNum=Db.NonQ(command,true,"AutoCodeNum","autoCode");
+				autoCode.Id=Db.NonQ(command,true,"AutoCodeNum","autoCode");
 			}
-			return autoCode.AutoCodeNum;
+			return autoCode.Id;
 		}
 
 		///<summary>Updates one AutoCode in the database.</summary>
 		public static void Update(AutoCode autoCode) {
 			string command="UPDATE autocode SET "
 				+"Description  = '"+POut.String(autoCode.Description)+"', "
-				+"IsHidden     =  "+POut.Bool  (autoCode.IsHidden)+", "
+				+"IsHidden     =  "+POut.Bool  (autoCode.Hidden)+", "
 				+"LessIntrusive=  "+POut.Bool  (autoCode.LessIntrusive)+" "
-				+"WHERE AutoCodeNum = "+POut.Long(autoCode.AutoCodeNum);
+				+"WHERE AutoCodeNum = "+POut.Long(autoCode.Id);
 			Db.NonQ(command);
 		}
 
@@ -152,9 +152,9 @@ namespace OpenDentBusiness.Crud{
 				if(command!="") { command+=",";}
 				command+="Description = '"+POut.String(autoCode.Description)+"'";
 			}
-			if(autoCode.IsHidden != oldAutoCode.IsHidden) {
+			if(autoCode.Hidden != oldAutoCode.Hidden) {
 				if(command!="") { command+=",";}
-				command+="IsHidden = "+POut.Bool(autoCode.IsHidden)+"";
+				command+="IsHidden = "+POut.Bool(autoCode.Hidden)+"";
 			}
 			if(autoCode.LessIntrusive != oldAutoCode.LessIntrusive) {
 				if(command!="") { command+=",";}
@@ -164,7 +164,7 @@ namespace OpenDentBusiness.Crud{
 				return false;
 			}
 			command="UPDATE autocode SET "+command
-				+" WHERE AutoCodeNum = "+POut.Long(autoCode.AutoCodeNum);
+				+" WHERE AutoCodeNum = "+POut.Long(autoCode.Id);
 			Db.NonQ(command);
 			return true;
 		}
@@ -175,7 +175,7 @@ namespace OpenDentBusiness.Crud{
 			if(autoCode.Description != oldAutoCode.Description) {
 				return true;
 			}
-			if(autoCode.IsHidden != oldAutoCode.IsHidden) {
+			if(autoCode.Hidden != oldAutoCode.Hidden) {
 				return true;
 			}
 			if(autoCode.LessIntrusive != oldAutoCode.LessIntrusive) {

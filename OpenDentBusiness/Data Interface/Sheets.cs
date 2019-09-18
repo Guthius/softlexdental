@@ -65,7 +65,7 @@ namespace OpenDentBusiness
             public List<Appointment> ListAppts;
             public List<Appointment> ListFutureApptsForFam;
             public List<Disease> ListDiseases;
-            public List<Allergy> ListAllergies;
+            public List<PatientAllergy> ListAllergies;
             public List<MedicationPat> ListMedicationPats;
             public List<Popup> ListFamPopups;
             ///<summary>Only contains the procedures for the code nums passed in.</summary>

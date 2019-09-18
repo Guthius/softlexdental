@@ -132,7 +132,7 @@ namespace OpenDental{
 			listAutoCodes.Items.Clear();
 			_listAutoCodes=AutoCodes.GetListDeep();
 			foreach(AutoCode autoCode in _listAutoCodes) {
-				if(autoCode.IsHidden) {
+				if(autoCode.Hidden) {
 					listAutoCodes.Items.Add(autoCode.Description+"(hidden)");
 				}
 				else {

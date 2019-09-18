@@ -892,8 +892,8 @@ namespace OpenDental{
 			displayedAvailableApptFieldDefs=new List<long>();
 			List<ApptFieldDef> listApptFieldDefs=ApptFieldDefs.GetDeepCopy();
 			for(int i=0;i<listApptFieldDefs.Count;i++) {
-				if(!ApptFieldIsDisplayed(listApptFieldDefs[i].ApptFieldDefNum)) {
-					displayedAvailableApptFieldDefs.Add(listApptFieldDefs[i].ApptFieldDefNum);
+				if(!ApptFieldIsDisplayed(listApptFieldDefs[i].Id)) {
+					displayedAvailableApptFieldDefs.Add(listApptFieldDefs[i].Id);
 					row=new ODGridRow();
 					row.Cells.Add(listApptFieldDefs[i].FieldName);
 					gridApptFieldDefs.Rows.Add(row);

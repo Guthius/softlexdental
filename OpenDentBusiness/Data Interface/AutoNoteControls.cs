@@ -88,7 +88,7 @@ namespace OpenDentBusiness
         ///<summary>Will return null if can't match.</summary>
         public static AutoNoteControl GetByDescript(string descript)
         {
-            return GetFirstOrDefault(x => x.Descript == descript);
+            return GetFirstOrDefault(x => x.Description == descript);
         }
     }
 }

@@ -16,7 +16,7 @@ namespace OpenDental {
 			alertList=RxAlerts.Refresh(rxDefNum);//for Rx
 			//}
 			List<Disease> diseases=Diseases.Refresh(patNum);
-			List<Allergy> allergies=Allergies.Refresh(patNum);
+			List<PatientAllergy> allergies=Allergies.Refresh(patNum);
 			List<MedicationPat> medicationPats=MedicationPats.Refresh(patNum,false);//Exclude discontinued, only active meds.
 			List<string> diseaseMatches=new List<string>();
 			List<string> allergiesMatches=new List<string>();
@@ -36,7 +36,7 @@ namespace OpenDental {
 					}
 				}
 				for(int j=0;j<allergies.Count;j++) {
-					if(alertList[i].AllergyDefNum==allergies[j].AllergyDefNum && allergies[j].StatusIsActive) {
+					if(alertList[i].AllergyDefNum==allergies[j].AllergyId && allergies[j].Active) {
 						if(alertList[i].NotificationMsg=="") {
 							allergiesMatches.Add(AllergyDefs.GetOne(alertList[i].AllergyDefNum).Description);
 						}

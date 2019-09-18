@@ -42,10 +42,10 @@ namespace OpenDentBusiness.Crud{
 			AutoCodeItem autoCodeItem;
 			foreach(DataRow row in table.Rows) {
 				autoCodeItem=new AutoCodeItem();
-				autoCodeItem.AutoCodeItemNum= PIn.Long  (row["AutoCodeItemNum"].ToString());
-				autoCodeItem.AutoCodeNum    = PIn.Long  (row["AutoCodeNum"].ToString());
+				autoCodeItem.Id= PIn.Long  (row["AutoCodeItemNum"].ToString());
+				autoCodeItem.AutoCodeId    = PIn.Long  (row["AutoCodeNum"].ToString());
 				autoCodeItem.OldCode        = PIn.String(row["OldCode"].ToString());
-				autoCodeItem.CodeNum        = PIn.Long  (row["CodeNum"].ToString());
+				autoCodeItem.ProcedureCodeId        = PIn.Long  (row["CodeNum"].ToString());
 				retVal.Add(autoCodeItem);
 			}
 			return retVal;
@@ -63,10 +63,10 @@ namespace OpenDentBusiness.Crud{
 			table.Columns.Add("CodeNum");
 			foreach(AutoCodeItem autoCodeItem in listAutoCodeItems) {
 				table.Rows.Add(new object[] {
-					POut.Long  (autoCodeItem.AutoCodeItemNum),
-					POut.Long  (autoCodeItem.AutoCodeNum),
+					POut.Long  (autoCodeItem.Id),
+					POut.Long  (autoCodeItem.AutoCodeId),
 					            autoCodeItem.OldCode,
-					POut.Long  (autoCodeItem.CodeNum),
+					POut.Long  (autoCodeItem.ProcedureCodeId),
 				});
 			}
 			return table;
@@ -80,7 +80,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Inserts one AutoCodeItem into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(AutoCodeItem autoCodeItem,bool useExistingPK) {
 			if(!useExistingPK && Preferences.RandomKeys) {
-				autoCodeItem.AutoCodeItemNum=ReplicationServers.GetKey("autocodeitem","AutoCodeItemNum");
+				autoCodeItem.Id=ReplicationServers.GetKey("autocodeitem","AutoCodeItemNum");
 			}
 			string command="INSERT INTO autocodeitem (";
 			if(useExistingPK || Preferences.RandomKeys) {
@@ -88,19 +88,19 @@ namespace OpenDentBusiness.Crud{
 			}
 			command+="AutoCodeNum,OldCode,CodeNum) VALUES(";
 			if(useExistingPK || Preferences.RandomKeys) {
-				command+=POut.Long(autoCodeItem.AutoCodeItemNum)+",";
+				command+=POut.Long(autoCodeItem.Id)+",";
 			}
 			command+=
-				     POut.Long  (autoCodeItem.AutoCodeNum)+","
+				     POut.Long  (autoCodeItem.AutoCodeId)+","
 				+"'"+POut.String(autoCodeItem.OldCode)+"',"
-				+    POut.Long  (autoCodeItem.CodeNum)+")";
+				+    POut.Long  (autoCodeItem.ProcedureCodeId)+")";
 			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {
-				autoCodeItem.AutoCodeItemNum=Db.NonQ(command,true,"AutoCodeItemNum","autoCodeItem");
+				autoCodeItem.Id=Db.NonQ(command,true,"AutoCodeItemNum","autoCodeItem");
 			}
-			return autoCodeItem.AutoCodeItemNum;
+			return autoCodeItem.Id;
 		}
 
 		///<summary>Inserts one AutoCodeItem into the database.  Returns the new priKey.  Doesn't use the cache.</summary>
@@ -113,58 +113,58 @@ namespace OpenDentBusiness.Crud{
 			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO autocodeitem (";
 			if(!useExistingPK && isRandomKeys) {
-				autoCodeItem.AutoCodeItemNum=ReplicationServers.GetKeyNoCache("autocodeitem","AutoCodeItemNum");
+				autoCodeItem.Id=ReplicationServers.GetKeyNoCache("autocodeitem","AutoCodeItemNum");
 			}
 			if(isRandomKeys || useExistingPK) {
 				command+="AutoCodeItemNum,";
 			}
 			command+="AutoCodeNum,OldCode,CodeNum) VALUES(";
 			if(isRandomKeys || useExistingPK) {
-				command+=POut.Long(autoCodeItem.AutoCodeItemNum)+",";
+				command+=POut.Long(autoCodeItem.Id)+",";
 			}
 			command+=
-				     POut.Long  (autoCodeItem.AutoCodeNum)+","
+				     POut.Long  (autoCodeItem.AutoCodeId)+","
 				+"'"+POut.String(autoCodeItem.OldCode)+"',"
-				+    POut.Long  (autoCodeItem.CodeNum)+")";
+				+    POut.Long  (autoCodeItem.ProcedureCodeId)+")";
 			if(useExistingPK || isRandomKeys) {
 				Db.NonQ(command);
 			}
 			else {
-				autoCodeItem.AutoCodeItemNum=Db.NonQ(command,true,"AutoCodeItemNum","autoCodeItem");
+				autoCodeItem.Id=Db.NonQ(command,true,"AutoCodeItemNum","autoCodeItem");
 			}
-			return autoCodeItem.AutoCodeItemNum;
+			return autoCodeItem.Id;
 		}
 
 		///<summary>Updates one AutoCodeItem in the database.</summary>
 		public static void Update(AutoCodeItem autoCodeItem) {
 			string command="UPDATE autocodeitem SET "
-				+"AutoCodeNum    =  "+POut.Long  (autoCodeItem.AutoCodeNum)+", "
+				+"AutoCodeNum    =  "+POut.Long  (autoCodeItem.AutoCodeId)+", "
 				+"OldCode        = '"+POut.String(autoCodeItem.OldCode)+"', "
-				+"CodeNum        =  "+POut.Long  (autoCodeItem.CodeNum)+" "
-				+"WHERE AutoCodeItemNum = "+POut.Long(autoCodeItem.AutoCodeItemNum);
+				+"CodeNum        =  "+POut.Long  (autoCodeItem.ProcedureCodeId)+" "
+				+"WHERE AutoCodeItemNum = "+POut.Long(autoCodeItem.Id);
 			Db.NonQ(command);
 		}
 
 		///<summary>Updates one AutoCodeItem in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.  Returns true if an update occurred.</summary>
 		public static bool Update(AutoCodeItem autoCodeItem,AutoCodeItem oldAutoCodeItem) {
 			string command="";
-			if(autoCodeItem.AutoCodeNum != oldAutoCodeItem.AutoCodeNum) {
+			if(autoCodeItem.AutoCodeId != oldAutoCodeItem.AutoCodeId) {
 				if(command!="") { command+=",";}
-				command+="AutoCodeNum = "+POut.Long(autoCodeItem.AutoCodeNum)+"";
+				command+="AutoCodeNum = "+POut.Long(autoCodeItem.AutoCodeId)+"";
 			}
 			if(autoCodeItem.OldCode != oldAutoCodeItem.OldCode) {
 				if(command!="") { command+=",";}
 				command+="OldCode = '"+POut.String(autoCodeItem.OldCode)+"'";
 			}
-			if(autoCodeItem.CodeNum != oldAutoCodeItem.CodeNum) {
+			if(autoCodeItem.ProcedureCodeId != oldAutoCodeItem.ProcedureCodeId) {
 				if(command!="") { command+=",";}
-				command+="CodeNum = "+POut.Long(autoCodeItem.CodeNum)+"";
+				command+="CodeNum = "+POut.Long(autoCodeItem.ProcedureCodeId)+"";
 			}
 			if(command=="") {
 				return false;
 			}
 			command="UPDATE autocodeitem SET "+command
-				+" WHERE AutoCodeItemNum = "+POut.Long(autoCodeItem.AutoCodeItemNum);
+				+" WHERE AutoCodeItemNum = "+POut.Long(autoCodeItem.Id);
 			Db.NonQ(command);
 			return true;
 		}
@@ -172,13 +172,13 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Returns true if Update(AutoCodeItem,AutoCodeItem) would make changes to the database.
 		///Does not make any changes to the database and can be called before remoting role is checked.</summary>
 		public static bool UpdateComparison(AutoCodeItem autoCodeItem,AutoCodeItem oldAutoCodeItem) {
-			if(autoCodeItem.AutoCodeNum != oldAutoCodeItem.AutoCodeNum) {
+			if(autoCodeItem.AutoCodeId != oldAutoCodeItem.AutoCodeId) {
 				return true;
 			}
 			if(autoCodeItem.OldCode != oldAutoCodeItem.OldCode) {
 				return true;
 			}
-			if(autoCodeItem.CodeNum != oldAutoCodeItem.CodeNum) {
+			if(autoCodeItem.ProcedureCodeId != oldAutoCodeItem.ProcedureCodeId) {
 				return true;
 			}
 			return false;

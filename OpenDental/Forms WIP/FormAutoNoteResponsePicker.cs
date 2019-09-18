@@ -38,7 +38,7 @@ namespace OpenDental
             foreach (var autoNote in listAutoNotes)
             {
                 var row = new ODGridRow();
-                row.Cells.Add(autoNote.AutoNoteName);
+                row.Cells.Add(autoNote.Name);
                 row.Tag = autoNote;
                 autoNotesGrid.Rows.Add(row);
             }
@@ -91,7 +91,7 @@ namespace OpenDental
             // This format is needed so the text processing logic can parse through it correctly.
             // If this format changes, we need to change the logic in FormAutoNoteCompose.PromptForAutoNotes()
             // If this format changes, you will also need to modify FormAutoNoteCompose.GetAutoNoteName() and FormAutoNoteCompose.GetAutoNoteResponseText
-            AutoNoteResponseText = responseTextBox.Text + " : {" + autoNoteSelected.AutoNoteName + "}";
+            AutoNoteResponseText = responseTextBox.Text + " : {" + autoNoteSelected.Name + "}";
             DialogResult = DialogResult.OK;
         }
     }

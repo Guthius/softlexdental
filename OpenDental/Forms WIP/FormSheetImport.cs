@@ -1180,7 +1180,7 @@ namespace OpenDental {
 			else if(SheetCur.SheetType==SheetTypeEnum.MedicalHistory) {
 				Rows=new List<SheetImportRow>();
 				string fieldVal="";
-				List<Allergy> allergies=null;
+				List<PatientAllergy> allergies=null;
 				List<Disease> diseases=null;
 				SheetImportRow row;
 				Rows.Add(CreateSeparator("Personal"));
@@ -1238,8 +1238,8 @@ namespace OpenDental {
 					row.OldValObj=null;
 					//Check if allergy exists.
 					for(int j=0;j<allergies.Count;j++) {
-						if(AllergyDefs.GetDescription(allergies[j].AllergyDefNum)==allergyList[i].FieldName.Remove(0,8)) {
-							if(allergies[j].StatusIsActive) {
+						if(AllergyDefs.GetDescription(allergies[j].AllergyId)==allergyList[i].FieldName.Remove(0,8)) {
+							if(allergies[j].Active) {
 								row.OldValDisplay="Y";
 							}
 							else {
@@ -1257,7 +1257,7 @@ namespace OpenDental {
 							row.NewValObj=allergyList[i];
 							row.ImpValDisplay="";
 							row.ImpValObj="";
-							row.ObjType=typeof(Allergy);
+							row.ObjType=typeof(PatientAllergy);
 							Rows.Add(row);
 							if(oppositeBox!=null) {
 								allergyList.Remove(oppositeBox);//Removes possible duplicate entry.
@@ -1288,7 +1288,7 @@ namespace OpenDental {
 					row.NewValObj=allergyList[i];
 					row.ImpValDisplay=row.NewValDisplay;
 					row.ImpValObj=typeof(string);
-					row.ObjType=typeof(Allergy);
+					row.ObjType=typeof(PatientAllergy);
 					if(row.OldValDisplay!=row.NewValDisplay && !(row.OldValDisplay=="" && row.NewValDisplay=="N")) {
 						row.DoImport=true;
 					}
@@ -1797,7 +1797,7 @@ namespace OpenDental {
 			#endregion
 			#region Medication, Allergy or Disease
 			else if(Rows[e.Row].ObjType==typeof(MedicationPat)
-				|| Rows[e.Row].ObjType==typeof(Allergy)
+				|| Rows[e.Row].ObjType==typeof(PatientAllergy)
 				|| Rows[e.Row].ObjType==typeof(Disease)) 
 			{
 				//User entered medications will have a MedicationNum as the ImpValObj.
@@ -2435,15 +2435,15 @@ namespace OpenDental {
 						continue;
 					}
 					#region Allergies
-					if(Rows[i].ObjType==typeof(Allergy)) {
+					if(Rows[i].ObjType==typeof(PatientAllergy)) {
 						//Patient has this allergy in the db so just update the value.
 						if(Rows[i].OldValObj!=null) {
-							Allergy oldAllergy=(Allergy)Rows[i].OldValObj;
+							PatientAllergy oldAllergy=(PatientAllergy)Rows[i].OldValObj;
 							if(hasValue==YN.Yes) {
-								oldAllergy.StatusIsActive=true;
+								oldAllergy.Active=true;
 							}
 							else {
-								oldAllergy.StatusIsActive=false;
+								oldAllergy.Active=false;
 							}
 							Allergies.Update(oldAllergy);
 							continue;
@@ -2452,15 +2452,15 @@ namespace OpenDental {
 							continue;
 						}
 						//Allergy does not exist for this patient yet so create one.
-						List<AllergyDef> allergyList=AllergyDefs.GetAll(false);
+						List<Allergy> allergyList=AllergyDefs.GetAll(false);
 						SheetField allergySheet=(SheetField)Rows[i].NewValObj;
 						//Find what allergy user wants to import.
 						for(int j=0;j<allergyList.Count;j++) {
 							if(allergyList[j].Description==allergySheet.FieldName.Remove(0,8)) {
-								Allergy newAllergy=new Allergy();
-								newAllergy.AllergyDefNum=allergyList[j].Id;
-								newAllergy.PatNum=PatCur.PatNum;
-								newAllergy.StatusIsActive=true;
+								PatientAllergy newAllergy=new PatientAllergy();
+								newAllergy.AllergyId=allergyList[j].Id;
+								newAllergy.PatientId=PatCur.PatNum;
+								newAllergy.Active=true;
 								Allergies.Insert(newAllergy);
 								break;
 							}

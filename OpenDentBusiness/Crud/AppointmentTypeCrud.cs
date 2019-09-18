@@ -42,13 +42,13 @@ namespace OpenDentBusiness.Crud{
 			AppointmentType appointmentType;
 			foreach(DataRow row in table.Rows) {
 				appointmentType=new AppointmentType();
-				appointmentType.AppointmentTypeNum  = PIn.Long  (row["AppointmentTypeNum"].ToString());
-				appointmentType.AppointmentTypeName = PIn.String(row["AppointmentTypeName"].ToString());
-				appointmentType.AppointmentTypeColor= Color.FromArgb(PIn.Int(row["AppointmentTypeColor"].ToString()));
-				appointmentType.ItemOrder           = PIn.Int   (row["ItemOrder"].ToString());
-				appointmentType.IsHidden            = PIn.Bool  (row["IsHidden"].ToString());
+				appointmentType.Id  = PIn.Long  (row["AppointmentTypeNum"].ToString());
+				appointmentType.Name = PIn.String(row["AppointmentTypeName"].ToString());
+				appointmentType.Color= Color.FromArgb(PIn.Int(row["AppointmentTypeColor"].ToString()));
+				appointmentType.SortOrder           = PIn.Int   (row["ItemOrder"].ToString());
+				appointmentType.Hidden            = PIn.Bool  (row["IsHidden"].ToString());
 				appointmentType.Pattern             = PIn.String(row["Pattern"].ToString());
-				appointmentType.CodeStr             = PIn.String(row["CodeStr"].ToString());
+				appointmentType.ProcedureCodes             = PIn.String(row["CodeStr"].ToString());
 				retVal.Add(appointmentType);
 			}
 			return retVal;
@@ -69,13 +69,13 @@ namespace OpenDentBusiness.Crud{
 			table.Columns.Add("CodeStr");
 			foreach(AppointmentType appointmentType in listAppointmentTypes) {
 				table.Rows.Add(new object[] {
-					POut.Long  (appointmentType.AppointmentTypeNum),
-					            appointmentType.AppointmentTypeName,
-					POut.Int   (appointmentType.AppointmentTypeColor.ToArgb()),
-					POut.Int   (appointmentType.ItemOrder),
-					POut.Bool  (appointmentType.IsHidden),
+					POut.Long  (appointmentType.Id),
+					            appointmentType.Name,
+					POut.Int   (appointmentType.Color.ToArgb()),
+					POut.Int   (appointmentType.SortOrder),
+					POut.Bool  (appointmentType.Hidden),
 					            appointmentType.Pattern,
-					            appointmentType.CodeStr,
+					            appointmentType.ProcedureCodes,
 				});
 			}
 			return table;
@@ -89,7 +89,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Inserts one AppointmentType into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(AppointmentType appointmentType,bool useExistingPK) {
 			if(!useExistingPK && Preferences.RandomKeys) {
-				appointmentType.AppointmentTypeNum=ReplicationServers.GetKey("appointmenttype","AppointmentTypeNum");
+				appointmentType.Id=ReplicationServers.GetKey("appointmenttype","AppointmentTypeNum");
 			}
 			string command="INSERT INTO appointmenttype (";
 			if(useExistingPK || Preferences.RandomKeys) {
@@ -97,22 +97,22 @@ namespace OpenDentBusiness.Crud{
 			}
 			command+="AppointmentTypeName,AppointmentTypeColor,ItemOrder,IsHidden,Pattern,CodeStr) VALUES(";
 			if(useExistingPK || Preferences.RandomKeys) {
-				command+=POut.Long(appointmentType.AppointmentTypeNum)+",";
+				command+=POut.Long(appointmentType.Id)+",";
 			}
 			command+=
-				 "'"+POut.String(appointmentType.AppointmentTypeName)+"',"
-				+    POut.Int   (appointmentType.AppointmentTypeColor.ToArgb())+","
-				+    POut.Int   (appointmentType.ItemOrder)+","
-				+    POut.Bool  (appointmentType.IsHidden)+","
+				 "'"+POut.String(appointmentType.Name)+"',"
+				+    POut.Int   (appointmentType.Color.ToArgb())+","
+				+    POut.Int   (appointmentType.SortOrder)+","
+				+    POut.Bool  (appointmentType.Hidden)+","
 				+"'"+POut.String(appointmentType.Pattern)+"',"
-				+"'"+POut.String(appointmentType.CodeStr)+"')";
+				+"'"+POut.String(appointmentType.ProcedureCodes)+"')";
 			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {
-				appointmentType.AppointmentTypeNum=Db.NonQ(command,true,"AppointmentTypeNum","appointmentType");
+				appointmentType.Id=Db.NonQ(command,true,"AppointmentTypeNum","appointmentType");
 			}
-			return appointmentType.AppointmentTypeNum;
+			return appointmentType.Id;
 		}
 
 		///<summary>Inserts one AppointmentType into the database.  Returns the new priKey.  Doesn't use the cache.</summary>
@@ -125,76 +125,76 @@ namespace OpenDentBusiness.Crud{
 			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO appointmenttype (";
 			if(!useExistingPK && isRandomKeys) {
-				appointmentType.AppointmentTypeNum=ReplicationServers.GetKeyNoCache("appointmenttype","AppointmentTypeNum");
+				appointmentType.Id=ReplicationServers.GetKeyNoCache("appointmenttype","AppointmentTypeNum");
 			}
 			if(isRandomKeys || useExistingPK) {
 				command+="AppointmentTypeNum,";
 			}
 			command+="AppointmentTypeName,AppointmentTypeColor,ItemOrder,IsHidden,Pattern,CodeStr) VALUES(";
 			if(isRandomKeys || useExistingPK) {
-				command+=POut.Long(appointmentType.AppointmentTypeNum)+",";
+				command+=POut.Long(appointmentType.Id)+",";
 			}
 			command+=
-				 "'"+POut.String(appointmentType.AppointmentTypeName)+"',"
-				+    POut.Int   (appointmentType.AppointmentTypeColor.ToArgb())+","
-				+    POut.Int   (appointmentType.ItemOrder)+","
-				+    POut.Bool  (appointmentType.IsHidden)+","
+				 "'"+POut.String(appointmentType.Name)+"',"
+				+    POut.Int   (appointmentType.Color.ToArgb())+","
+				+    POut.Int   (appointmentType.SortOrder)+","
+				+    POut.Bool  (appointmentType.Hidden)+","
 				+"'"+POut.String(appointmentType.Pattern)+"',"
-				+"'"+POut.String(appointmentType.CodeStr)+"')";
+				+"'"+POut.String(appointmentType.ProcedureCodes)+"')";
 			if(useExistingPK || isRandomKeys) {
 				Db.NonQ(command);
 			}
 			else {
-				appointmentType.AppointmentTypeNum=Db.NonQ(command,true,"AppointmentTypeNum","appointmentType");
+				appointmentType.Id=Db.NonQ(command,true,"AppointmentTypeNum","appointmentType");
 			}
-			return appointmentType.AppointmentTypeNum;
+			return appointmentType.Id;
 		}
 
 		///<summary>Updates one AppointmentType in the database.</summary>
 		public static void Update(AppointmentType appointmentType) {
 			string command="UPDATE appointmenttype SET "
-				+"AppointmentTypeName = '"+POut.String(appointmentType.AppointmentTypeName)+"', "
-				+"AppointmentTypeColor=  "+POut.Int   (appointmentType.AppointmentTypeColor.ToArgb())+", "
-				+"ItemOrder           =  "+POut.Int   (appointmentType.ItemOrder)+", "
-				+"IsHidden            =  "+POut.Bool  (appointmentType.IsHidden)+", "
+				+"AppointmentTypeName = '"+POut.String(appointmentType.Name)+"', "
+				+"AppointmentTypeColor=  "+POut.Int   (appointmentType.Color.ToArgb())+", "
+				+"ItemOrder           =  "+POut.Int   (appointmentType.SortOrder)+", "
+				+"IsHidden            =  "+POut.Bool  (appointmentType.Hidden)+", "
 				+"Pattern             = '"+POut.String(appointmentType.Pattern)+"', "
-				+"CodeStr             = '"+POut.String(appointmentType.CodeStr)+"' "
-				+"WHERE AppointmentTypeNum = "+POut.Long(appointmentType.AppointmentTypeNum);
+				+"CodeStr             = '"+POut.String(appointmentType.ProcedureCodes)+"' "
+				+"WHERE AppointmentTypeNum = "+POut.Long(appointmentType.Id);
 			Db.NonQ(command);
 		}
 
 		///<summary>Updates one AppointmentType in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.  Returns true if an update occurred.</summary>
 		public static bool Update(AppointmentType appointmentType,AppointmentType oldAppointmentType) {
 			string command="";
-			if(appointmentType.AppointmentTypeName != oldAppointmentType.AppointmentTypeName) {
+			if(appointmentType.Name != oldAppointmentType.Name) {
 				if(command!="") { command+=",";}
-				command+="AppointmentTypeName = '"+POut.String(appointmentType.AppointmentTypeName)+"'";
+				command+="AppointmentTypeName = '"+POut.String(appointmentType.Name)+"'";
 			}
-			if(appointmentType.AppointmentTypeColor != oldAppointmentType.AppointmentTypeColor) {
+			if(appointmentType.Color != oldAppointmentType.Color) {
 				if(command!="") { command+=",";}
-				command+="AppointmentTypeColor = "+POut.Int(appointmentType.AppointmentTypeColor.ToArgb())+"";
+				command+="AppointmentTypeColor = "+POut.Int(appointmentType.Color.ToArgb())+"";
 			}
-			if(appointmentType.ItemOrder != oldAppointmentType.ItemOrder) {
+			if(appointmentType.SortOrder != oldAppointmentType.SortOrder) {
 				if(command!="") { command+=",";}
-				command+="ItemOrder = "+POut.Int(appointmentType.ItemOrder)+"";
+				command+="ItemOrder = "+POut.Int(appointmentType.SortOrder)+"";
 			}
-			if(appointmentType.IsHidden != oldAppointmentType.IsHidden) {
+			if(appointmentType.Hidden != oldAppointmentType.Hidden) {
 				if(command!="") { command+=",";}
-				command+="IsHidden = "+POut.Bool(appointmentType.IsHidden)+"";
+				command+="IsHidden = "+POut.Bool(appointmentType.Hidden)+"";
 			}
 			if(appointmentType.Pattern != oldAppointmentType.Pattern) {
 				if(command!="") { command+=",";}
 				command+="Pattern = '"+POut.String(appointmentType.Pattern)+"'";
 			}
-			if(appointmentType.CodeStr != oldAppointmentType.CodeStr) {
+			if(appointmentType.ProcedureCodes != oldAppointmentType.ProcedureCodes) {
 				if(command!="") { command+=",";}
-				command+="CodeStr = '"+POut.String(appointmentType.CodeStr)+"'";
+				command+="CodeStr = '"+POut.String(appointmentType.ProcedureCodes)+"'";
 			}
 			if(command=="") {
 				return false;
 			}
 			command="UPDATE appointmenttype SET "+command
-				+" WHERE AppointmentTypeNum = "+POut.Long(appointmentType.AppointmentTypeNum);
+				+" WHERE AppointmentTypeNum = "+POut.Long(appointmentType.Id);
 			Db.NonQ(command);
 			return true;
 		}
@@ -202,22 +202,22 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Returns true if Update(AppointmentType,AppointmentType) would make changes to the database.
 		///Does not make any changes to the database and can be called before remoting role is checked.</summary>
 		public static bool UpdateComparison(AppointmentType appointmentType,AppointmentType oldAppointmentType) {
-			if(appointmentType.AppointmentTypeName != oldAppointmentType.AppointmentTypeName) {
+			if(appointmentType.Name != oldAppointmentType.Name) {
 				return true;
 			}
-			if(appointmentType.AppointmentTypeColor != oldAppointmentType.AppointmentTypeColor) {
+			if(appointmentType.Color != oldAppointmentType.Color) {
 				return true;
 			}
-			if(appointmentType.ItemOrder != oldAppointmentType.ItemOrder) {
+			if(appointmentType.SortOrder != oldAppointmentType.SortOrder) {
 				return true;
 			}
-			if(appointmentType.IsHidden != oldAppointmentType.IsHidden) {
+			if(appointmentType.Hidden != oldAppointmentType.Hidden) {
 				return true;
 			}
 			if(appointmentType.Pattern != oldAppointmentType.Pattern) {
 				return true;
 			}
-			if(appointmentType.CodeStr != oldAppointmentType.CodeStr) {
+			if(appointmentType.ProcedureCodes != oldAppointmentType.ProcedureCodes) {
 				return true;
 			}
 			return false;
@@ -237,8 +237,8 @@ namespace OpenDentBusiness.Crud{
 			List<AppointmentType> listUpdNew =new List<AppointmentType>();
 			List<AppointmentType> listUpdDB  =new List<AppointmentType>();
 			List<AppointmentType> listDel    =new List<AppointmentType>();
-			listNew.Sort((AppointmentType x,AppointmentType y) => { return x.AppointmentTypeNum.CompareTo(y.AppointmentTypeNum); });//Anonymous function, sorts by compairing PK.  Lambda expressions are not allowed, this is the one and only exception.  JS approved.
-			listDB.Sort((AppointmentType x,AppointmentType y) => { return x.AppointmentTypeNum.CompareTo(y.AppointmentTypeNum); });//Anonymous function, sorts by compairing PK.  Lambda expressions are not allowed, this is the one and only exception.  JS approved.
+			listNew.Sort((AppointmentType x,AppointmentType y) => { return x.Id.CompareTo(y.Id); });//Anonymous function, sorts by compairing PK.  Lambda expressions are not allowed, this is the one and only exception.  JS approved.
+			listDB.Sort((AppointmentType x,AppointmentType y) => { return x.Id.CompareTo(y.Id); });//Anonymous function, sorts by compairing PK.  Lambda expressions are not allowed, this is the one and only exception.  JS approved.
 			int idxNew=0;
 			int idxDB=0;
 			int rowsUpdatedCount=0;
@@ -266,12 +266,12 @@ namespace OpenDentBusiness.Crud{
 					idxDB++;
 					continue;
 				}
-				else if(fieldNew.AppointmentTypeNum<fieldDB.AppointmentTypeNum) {//newPK less than dbPK, newItem is 'next'
+				else if(fieldNew.Id<fieldDB.Id) {//newPK less than dbPK, newItem is 'next'
 					listIns.Add(fieldNew);
 					idxNew++;
 					continue;
 				}
-				else if(fieldNew.AppointmentTypeNum>fieldDB.AppointmentTypeNum) {//dbPK less than newPK, dbItem is 'next'
+				else if(fieldNew.Id>fieldDB.Id) {//dbPK less than newPK, dbItem is 'next'
 					listDel.Add(fieldDB);
 					idxDB++;
 					continue;
@@ -292,7 +292,7 @@ namespace OpenDentBusiness.Crud{
 				}
 			}
 			for(int i=0;i<listDel.Count;i++) {
-				Delete(listDel[i].AppointmentTypeNum);
+				Delete(listDel[i].Id);
 			}
 			if(rowsUpdatedCount>0 || listIns.Count>0 || listDel.Count>0) {
 				return true;

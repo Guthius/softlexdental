@@ -444,12 +444,12 @@ namespace OpenDental
                 return;
             }
             //Create an alert.
-            AlertItems.Insert(new AlertItem
+            AlertItems.Insert(new Alert
             {
                 //Do not allow delete. The only way for this alert to be deleted is for the eConnector to insert a heartbeat, which will in-turn delete this alert.
-                Actions = ActionType.MarkAsRead | ActionType.OpenForm,
+                Actions = AlertActionType.MarkAsRead | AlertActionType.OpenForm,
                 Description = Lans.g("EConnector", "eConnector needs to be restarted"),
-                Severity = SeverityType.High,
+                Severity = AlertSeverityType.High,
                 Type = AlertType.EConnectorDown,
                 FormToOpen = FormType.FormEServicesEConnector,
             });

@@ -75,23 +75,23 @@ namespace OpenDental{
 				Preference.Update(PreferenceName.EasyNoClinics,!checkEnableClinics.Checked);
 				DataValid.SetInvalid(InvalidType.Prefs);
 				//Create an alert for the user to know they may need to restart the eConnector if they are subscribed to eServices
-				AlertItems.Insert(new AlertItem()
+				AlertItems.Insert(new Alert()
 				{
 					Description=Lan.g(this,"Clinic Feature Changed, you may need to restart the eConnector if you are subscribed to eServices"),
 					Type=AlertType.ClinicsChanged,
-					Severity=SeverityType.Low,
-					Actions=ActionType.OpenForm | ActionType.MarkAsRead | ActionType.Delete,
+					Severity=AlertSeverityType.Low,
+					Actions=AlertActionType.OpenForm | AlertActionType.MarkAsRead | AlertActionType.Delete,
 					FormToOpen=FormType.FormEServicesEConnector,
-					ItemValue="Clinics turned "+(checkEnableClinics.Checked ? "On":"Off")
+					Details="Clinics turned "+(checkEnableClinics.Checked ? "On":"Off")
 				});
 				//Create an alert for the eConnector to perform the clinic conversion as needed.
-				AlertItems.Insert(new AlertItem()
+				AlertItems.Insert(new Alert()
 				{
 					Description="Clinics Changed",
 					Type=AlertType.ClinicsChangedInternal,
-					Severity=SeverityType.Normal,
-					Actions=ActionType.None,
-					ItemValue=checkEnableClinics.Checked ? "On":"Off"
+					Severity=AlertSeverityType.Normal,
+					Actions=AlertActionType.None,
+					Details=checkEnableClinics.Checked ? "On":"Off"
 				});
 				return true;
 			}

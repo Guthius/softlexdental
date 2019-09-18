@@ -42,7 +42,7 @@ namespace OpenDental {
 					DialogResult=DialogResult.Cancel;
 					return;
 				}
-				ApptFields.Delete(Field.ApptFieldNum);
+				ApptFields.Delete(Field.Id);
 				DialogResult=DialogResult.OK;
 				return;
 			}

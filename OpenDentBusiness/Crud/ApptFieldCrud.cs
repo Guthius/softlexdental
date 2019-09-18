@@ -42,8 +42,8 @@ namespace OpenDentBusiness.Crud{
 			ApptField apptField;
 			foreach(DataRow row in table.Rows) {
 				apptField=new ApptField();
-				apptField.ApptFieldNum= PIn.Long  (row["ApptFieldNum"].ToString());
-				apptField.AptNum      = PIn.Long  (row["AptNum"].ToString());
+				apptField.Id= PIn.Long  (row["ApptFieldNum"].ToString());
+				apptField.AppointmentId      = PIn.Long  (row["AptNum"].ToString());
 				apptField.FieldName   = PIn.String(row["FieldName"].ToString());
 				apptField.FieldValue  = PIn.String(row["FieldValue"].ToString());
 				retVal.Add(apptField);
@@ -63,8 +63,8 @@ namespace OpenDentBusiness.Crud{
 			table.Columns.Add("FieldValue");
 			foreach(ApptField apptField in listApptFields) {
 				table.Rows.Add(new object[] {
-					POut.Long  (apptField.ApptFieldNum),
-					POut.Long  (apptField.AptNum),
+					POut.Long  (apptField.Id),
+					POut.Long  (apptField.AppointmentId),
 					            apptField.FieldName,
 					            apptField.FieldValue,
 				});
@@ -80,7 +80,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Inserts one ApptField into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(ApptField apptField,bool useExistingPK) {
 			if(!useExistingPK && Preferences.RandomKeys) {
-				apptField.ApptFieldNum=ReplicationServers.GetKey("apptfield","ApptFieldNum");
+				apptField.Id=ReplicationServers.GetKey("apptfield","ApptFieldNum");
 			}
 			string command="INSERT INTO apptfield (";
 			if(useExistingPK || Preferences.RandomKeys) {
@@ -88,10 +88,10 @@ namespace OpenDentBusiness.Crud{
 			}
 			command+="AptNum,FieldName,FieldValue) VALUES(";
 			if(useExistingPK || Preferences.RandomKeys) {
-				command+=POut.Long(apptField.ApptFieldNum)+",";
+				command+=POut.Long(apptField.Id)+",";
 			}
 			command+=
-				     POut.Long  (apptField.AptNum)+","
+				     POut.Long  (apptField.AppointmentId)+","
 				+"'"+POut.String(apptField.FieldName)+"',"
 				+    DbHelper.ParamChar+"paramFieldValue)";
 			if(apptField.FieldValue==null) {
@@ -102,9 +102,9 @@ namespace OpenDentBusiness.Crud{
 				Db.NonQ(command,paramFieldValue);
 			}
 			else {
-				apptField.ApptFieldNum=Db.NonQ(command,true,"ApptFieldNum","apptField",paramFieldValue);
+				apptField.Id=Db.NonQ(command,true,"ApptFieldNum","apptField",paramFieldValue);
 			}
-			return apptField.ApptFieldNum;
+			return apptField.Id;
 		}
 
 		///<summary>Inserts one ApptField into the database.  Returns the new priKey.  Doesn't use the cache.</summary>
@@ -117,17 +117,17 @@ namespace OpenDentBusiness.Crud{
 			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO apptfield (";
 			if(!useExistingPK && isRandomKeys) {
-				apptField.ApptFieldNum=ReplicationServers.GetKeyNoCache("apptfield","ApptFieldNum");
+				apptField.Id=ReplicationServers.GetKeyNoCache("apptfield","ApptFieldNum");
 			}
 			if(isRandomKeys || useExistingPK) {
 				command+="ApptFieldNum,";
 			}
 			command+="AptNum,FieldName,FieldValue) VALUES(";
 			if(isRandomKeys || useExistingPK) {
-				command+=POut.Long(apptField.ApptFieldNum)+",";
+				command+=POut.Long(apptField.Id)+",";
 			}
 			command+=
-				     POut.Long  (apptField.AptNum)+","
+				     POut.Long  (apptField.AppointmentId)+","
 				+"'"+POut.String(apptField.FieldName)+"',"
 				+    DbHelper.ParamChar+"paramFieldValue)";
 			if(apptField.FieldValue==null) {
@@ -138,18 +138,18 @@ namespace OpenDentBusiness.Crud{
 				Db.NonQ(command,paramFieldValue);
 			}
 			else {
-				apptField.ApptFieldNum=Db.NonQ(command,true,"ApptFieldNum","apptField",paramFieldValue);
+				apptField.Id=Db.NonQ(command,true,"ApptFieldNum","apptField",paramFieldValue);
 			}
-			return apptField.ApptFieldNum;
+			return apptField.Id;
 		}
 
 		///<summary>Updates one ApptField in the database.</summary>
 		public static void Update(ApptField apptField) {
 			string command="UPDATE apptfield SET "
-				+"AptNum      =  "+POut.Long  (apptField.AptNum)+", "
+				+"AptNum      =  "+POut.Long  (apptField.AppointmentId)+", "
 				+"FieldName   = '"+POut.String(apptField.FieldName)+"', "
 				+"FieldValue  =  "+DbHelper.ParamChar+"paramFieldValue "
-				+"WHERE ApptFieldNum = "+POut.Long(apptField.ApptFieldNum);
+				+"WHERE ApptFieldNum = "+POut.Long(apptField.Id);
 			if(apptField.FieldValue==null) {
 				apptField.FieldValue="";
 			}
@@ -160,9 +160,9 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Updates one ApptField in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.  Returns true if an update occurred.</summary>
 		public static bool Update(ApptField apptField,ApptField oldApptField) {
 			string command="";
-			if(apptField.AptNum != oldApptField.AptNum) {
+			if(apptField.AppointmentId != oldApptField.AppointmentId) {
 				if(command!="") { command+=",";}
-				command+="AptNum = "+POut.Long(apptField.AptNum)+"";
+				command+="AptNum = "+POut.Long(apptField.AppointmentId)+"";
 			}
 			if(apptField.FieldName != oldApptField.FieldName) {
 				if(command!="") { command+=",";}
@@ -180,7 +180,7 @@ namespace OpenDentBusiness.Crud{
 			}
 			OdSqlParameter paramFieldValue=new OdSqlParameter("paramFieldValue",OdDbType.Text,POut.StringParam(apptField.FieldValue));
 			command="UPDATE apptfield SET "+command
-				+" WHERE ApptFieldNum = "+POut.Long(apptField.ApptFieldNum);
+				+" WHERE ApptFieldNum = "+POut.Long(apptField.Id);
 			Db.NonQ(command,paramFieldValue);
 			return true;
 		}
@@ -188,7 +188,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Returns true if Update(ApptField,ApptField) would make changes to the database.
 		///Does not make any changes to the database and can be called before remoting role is checked.</summary>
 		public static bool UpdateComparison(ApptField apptField,ApptField oldApptField) {
-			if(apptField.AptNum != oldApptField.AptNum) {
+			if(apptField.AppointmentId != oldApptField.AppointmentId) {
 				return true;
 			}
 			if(apptField.FieldName != oldApptField.FieldName) {

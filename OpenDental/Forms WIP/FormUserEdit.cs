@@ -49,7 +49,7 @@ namespace OpenDental{
 		private TabPage tabAlertSubs;
 		private ListBox listAlertSubMulti;
 		private Label label7;
-		private List<AlertSub> _listUserAlertTypesOld;
+		private List<AlertSubscription> _listUserAlertTypesOld;
 		private Label labelAlertClinic;
 		private ListBox listAlertSubsClinicsMulti;
 		private List<Clinic> _listClinics;
@@ -605,12 +605,12 @@ namespace OpenDental{
 			}
 			_listClinics=Clinics.GetDeepCopy(true);
 			_listUserAlertTypesOld=AlertSubs.GetAllForUser(UserCur.Id);
-			List<long> listSubscribedClinics=_listUserAlertTypesOld.Select(x => x.ClinicNum).Distinct().ToList();
-			List<long> listAlertCatNums=_listUserAlertTypesOld.Select(x => x.AlertCategoryNum).Distinct().ToList();
+			List<long> listSubscribedClinics=_listUserAlertTypesOld.Select(x => x.ClinicId).Distinct().ToList();
+			List<long> listAlertCatNums=_listUserAlertTypesOld.Select(x => x.AlertCategoryId).Distinct().ToList();
 			bool isAllClinicsSubscribed=listSubscribedClinics.Count==_listClinics.Count+1;//Plus 1 for HQ
 			listAlertSubMulti.Items.Clear();
 			_listAlertCategories=AlertCategory.All();
-			List<long> listUserAlertCatNums=_listUserAlertTypesOld.Select(x => x.AlertCategoryNum).ToList();
+			List<long> listUserAlertCatNums=_listUserAlertTypesOld.Select(x => x.AlertCategoryId).ToList();
 			foreach(AlertCategory cat in _listAlertCategories) {
 				int index=listAlertSubMulti.Items.Add(Lan.g(this,cat.Description));
 				listAlertSubMulti.SetSelected(index,listUserAlertCatNums.Contains(cat.Id));
@@ -646,7 +646,7 @@ namespace OpenDental{
 					if(UserCur.ClinicId!=0 && listUserClinics.Exists(x => x.ClinicId==_listClinics[i].ClinicNum)) {
 						listClinicMulti.SetSelected(i,true);//No "All" option, don't select i+1
 					}
-					if(!isAllClinicsSubscribed && _listUserAlertTypesOld.Exists(x => x.ClinicNum==_listClinics[i].ClinicNum)) {
+					if(!isAllClinicsSubscribed && _listUserAlertTypesOld.Exists(x => x.ClinicId==_listClinics[i].ClinicNum)) {
 						listAlertSubsClinicsMulti.SetSelected(i+2,true);//All+HQ
 					}
 				}
@@ -932,22 +932,22 @@ namespace OpenDental{
 				Clinic clinic=_listClinics[index-2];//Subtract 2 for 'All' and 'HQ'
 				listClinics.Add(clinic.ClinicNum);
 			}
-            List<AlertSub> _listUserAlertTypesNew = new List<AlertSub>(_listUserAlertTypesOld);
+            List<AlertSubscription> _listUserAlertTypesNew = new List<AlertSubscription>(_listUserAlertTypesOld);
 			//Remove AlertTypes that have been deselected through either deslecting the type or clinic.
-			_listUserAlertTypesNew.RemoveAll(x => !listUserAlertCats.Contains(x.AlertCategoryNum));
+			_listUserAlertTypesNew.RemoveAll(x => !listUserAlertCats.Contains(x.AlertCategoryId));
 			if(Preferences.HasClinicsEnabled) {
-				_listUserAlertTypesNew.RemoveAll(x => !listClinics.Contains(x.ClinicNum));
+				_listUserAlertTypesNew.RemoveAll(x => !listClinics.Contains(x.ClinicId));
 			}
 			foreach(long alertCatNum in listUserAlertCats) {
 				if(!Preferences.HasClinicsEnabled) {
-					if(!_listUserAlertTypesOld.Exists(x => x.AlertCategoryNum==alertCatNum)) {//Was not subscribed to type.
-						_listUserAlertTypesNew.Add(new AlertSub(UserCur.Id,0,alertCatNum));
+					if(!_listUserAlertTypesOld.Exists(x => x.AlertCategoryId==alertCatNum)) {//Was not subscribed to type.
+						_listUserAlertTypesNew.Add(new AlertSubscription(UserCur.Id,0,alertCatNum));
 					}
 				}
 				else {//Clinics enabled.
 					foreach(long clinicNumCur in listClinics) {
-						if(!_listUserAlertTypesOld.Exists(x => x.ClinicNum==clinicNumCur && x.AlertCategoryNum==alertCatNum)) {//Was not subscribed to type.
-							_listUserAlertTypesNew.Add(new AlertSub(UserCur.Id,clinicNumCur,alertCatNum));
+						if(!_listUserAlertTypesOld.Exists(x => x.ClinicId==clinicNumCur && x.AlertCategoryId==alertCatNum)) {//Was not subscribed to type.
+							_listUserAlertTypesNew.Add(new AlertSubscription(UserCur.Id,clinicNumCur,alertCatNum));
 							continue;
 						}
 					}

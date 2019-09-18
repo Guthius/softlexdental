@@ -103,7 +103,7 @@ namespace OpenDentBusiness
         public static string GetByTitle(string autoNoteTitle)
         {
             //No need to check RemotingRole; no call to db.
-            AutoNote autoNote = GetFirstOrDefault(x => x.AutoNoteName == autoNoteTitle);
+            AutoNote autoNote = GetFirstOrDefault(x => x.Name == autoNoteTitle);
             return (autoNote == null ? "" : autoNote.MainText);
         }
 
@@ -111,7 +111,7 @@ namespace OpenDentBusiness
         public static bool IsValidAutoNote(string autoNoteTitle)
         {
             //No need to check RemotingRole; no call to db.
-            AutoNote autoNote = GetFirstOrDefault(x => x.AutoNoteName == autoNoteTitle);
+            AutoNote autoNote = GetFirstOrDefault(x => x.Name == autoNoteTitle);
             return autoNote != null;
         }
 

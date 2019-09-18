@@ -87,7 +87,7 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Delete(AutoCodeCond Cur){
-			string command="DELETE from autocodecond WHERE autocodecondnum = '"+POut.Long(Cur.AutoCodeCondNum)+"'";
+			string command="DELETE from autocodecond WHERE autocodecondnum = '"+POut.Long(Cur.Id)+"'";
 			Db.NonQ(command);
 		}
 
@@ -101,7 +101,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static List<AutoCodeCond> GetListForItem(long autoCodeItemNum) {
 			//No need to check RemotingRole; no call to db.
-			return GetWhere(x => x.AutoCodeItemNum==autoCodeItemNum);
+			return GetWhere(x => x.AutoCodeItemId==autoCodeItemNum);
 		}
 
 		///<summary></summary>

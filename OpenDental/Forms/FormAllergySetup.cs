@@ -25,7 +25,7 @@ namespace OpenDental
 {
     public partial class FormAllergySetup : FormBase
     {
-        List<AllergyDef> allergiesList;
+        List<Allergy> allergiesList;
         
         /// <summary>
         /// Gets or sets a value indicating whether the form is in selection mode.
@@ -72,7 +72,7 @@ namespace OpenDental
             {
                 var row = new ODGridRow();
                 row.Cells.Add(allergiesList[i].Description);
-                if (allergiesList[i].IsHidden)
+                if (allergiesList[i].Hidden)
                 {
                     row.Cells.Add("X");
                 }
@@ -121,7 +121,7 @@ namespace OpenDental
         {
             using (var formAllergyDefEdit = new FormAllergyDefEdit())
             {
-                formAllergyDefEdit.AllergyDefCur = new AllergyDef();
+                formAllergyDefEdit.AllergyDefCur = new Allergy();
 
                 if (formAllergyDefEdit.ShowDialog(this) == DialogResult.OK)
                 {

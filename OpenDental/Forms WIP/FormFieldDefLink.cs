@@ -64,7 +64,7 @@ namespace OpenDental {
 					break;
 				case FieldLocations.AppointmentEdit://AppointmentEdit is the only place where ApptFields are used.
 					foreach(ApptFieldDef apptField in _listApptFieldDefs) {
-						if(_listFieldDefLinks.Exists(x => x.FieldDefNum==apptField.ApptFieldDefNum 
+						if(_listFieldDefLinks.Exists(x => x.FieldDefNum==apptField.Id 
 							&& x.FieldLocation==(FieldLocations)comboFieldLocation.SelectedIndex 
 							&& x.FieldDefType==FieldDefTypes.Appointment)) 
 						{
@@ -108,7 +108,7 @@ namespace OpenDental {
 						gridHidden.Rows.Add(row);
 					break;
 					case FieldDefTypes.Appointment:
-						ApptFieldDef apptFieldDef=_listApptFieldDefs.Find(x => x.ApptFieldDefNum==fieldDefLink.FieldDefNum);
+						ApptFieldDef apptFieldDef=_listApptFieldDefs.Find(x => x.Id==fieldDefLink.FieldDefNum);
 						if(apptFieldDef==null) {//orphaned FK link to deleted ApptFieldDef
 							listLinksToDelete.Add(fieldDefLink);//orphaned FK link to deleted ApptFieldDef
 							continue;
@@ -153,7 +153,7 @@ namespace OpenDental {
 				case FieldLocations.AppointmentEdit://AppointmentEdit is the only place where ApptFields are used.
 					ApptFieldDef apptFieldDef=(ApptFieldDef)gridDisplayed.Rows[gridDisplayed.GetSelectedIndex()].Tag;
 					fieldDefLink=new FieldDefLink();
-					fieldDefLink.FieldDefNum=apptFieldDef.ApptFieldDefNum;
+					fieldDefLink.FieldDefNum=apptFieldDef.Id;
 					fieldDefLink.FieldDefType=FieldDefTypes.Appointment;
 					fieldDefLink.FieldLocation=(FieldLocations)comboFieldLocation.SelectedIndex;
 					_listFieldDefLinks.Add(fieldDefLink);

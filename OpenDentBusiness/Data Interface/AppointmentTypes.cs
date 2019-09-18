@@ -17,10 +17,10 @@ namespace OpenDentBusiness
         public static string GetName(long AppointmentTypeNum)
         {
             string retVal = "";
-            AppointmentType appointmentType = GetFirstOrDefault(x => x.AppointmentTypeNum == AppointmentTypeNum);
+            AppointmentType appointmentType = GetFirstOrDefault(x => x.Id == AppointmentTypeNum);
             if (appointmentType != null)
             {
-                retVal = appointmentType.AppointmentTypeName + (appointmentType.IsHidden ? " (hidden)" : "");
+                retVal = appointmentType.Name + (appointmentType.Hidden ? " (hidden)" : "");
             }
             return retVal;
         }
@@ -36,7 +36,7 @@ namespace OpenDentBusiness
             if (string.IsNullOrEmpty(appointmentType.Pattern))
             {
                 // Dynamically calculate the timePattern from the procedure codes associated to the appointment type passed in.
-                List<string> listProcCodeStrings = appointmentType.CodeStr.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+                List<string> listProcCodeStrings = appointmentType.ProcedureCodes.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries).ToList();
 
                 List<ProcedureCode> listProcCodes = ProcedureCodes.GetProcCodes(listProcCodeStrings);
 
@@ -63,7 +63,7 @@ namespace OpenDentBusiness
                 return null;
             }
 
-            return AppointmentTypes.GetFirstOrDefault(x => x.AppointmentTypeNum == defLink.FKey, true);
+            return AppointmentTypes.GetFirstOrDefault(x => x.Id == defLink.FKey, true);
         }
 
         private class AppointmentTypeCache : CacheListAbs<AppointmentType>
@@ -84,7 +84,7 @@ namespace OpenDentBusiness
 
             protected override void FillCacheIfNeeded() => AppointmentTypes.GetTableFromCache(false);
 
-            protected override bool IsInListShort(AppointmentType appointmentType) => !appointmentType.IsHidden;
+            protected override bool IsInListShort(AppointmentType appointmentType) => !appointmentType.Hidden;
         }
 
         static AppointmentTypeCache _appointmentTypeCache = new AppointmentTypeCache();
@@ -129,7 +129,7 @@ namespace OpenDentBusiness
         /// Gets one AppointmentType from the cache.
         /// Returns null if no match found.
         /// </summary>
-        public static AppointmentType GetOne(long appointmentTypeNum) => GetFirstOrDefault(x => x.AppointmentTypeNum == appointmentTypeNum);
+        public static AppointmentType GetOne(long appointmentTypeNum) => GetFirstOrDefault(x => x.Id == appointmentTypeNum);
 
         public static long Insert(AppointmentType appointmentType) => Crud.AppointmentTypeCrud.Insert(appointmentType);
 
@@ -175,11 +175,11 @@ namespace OpenDentBusiness
 
         public static int SortItemOrder(AppointmentType a1, AppointmentType a2)
         {
-            if (a1.ItemOrder != a2.ItemOrder)
+            if (a1.SortOrder != a2.SortOrder)
             {
-                return a1.ItemOrder.CompareTo(a2.ItemOrder);
+                return a1.SortOrder.CompareTo(a2.SortOrder);
             }
-            return a1.AppointmentTypeNum.CompareTo(a2.AppointmentTypeNum);
+            return a1.Id.CompareTo(a2.Id);
         }
 
         /// <summary>
@@ -187,10 +187,10 @@ namespace OpenDentBusiness
         /// </summary>
         public static bool Compare(AppointmentType a1, AppointmentType a2)
         {
-            if (a1.AppointmentTypeColor == a2.AppointmentTypeColor && 
-                a1.AppointmentTypeName == a2.AppointmentTypeName && 
-                a1.IsHidden == a2.IsHidden && 
-                a1.ItemOrder == a2.ItemOrder)
+            if (a1.Color == a2.Color && 
+                a1.Name == a2.Name && 
+                a1.Hidden == a2.Hidden && 
+                a1.SortOrder == a2.SortOrder)
             {
                 return true;
             }

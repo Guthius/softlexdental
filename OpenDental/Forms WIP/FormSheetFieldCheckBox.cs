@@ -14,7 +14,7 @@ namespace OpenDental {
 		///<summary>We need access to a few other fields of the sheetDef.</summary>
 		private SheetDef _sheetDefCur;
 		private List<string> radioButtonValues;
-		private List<AllergyDef> _listAllergies;
+		private List<Allergy> _listAllergies;
 		///<summary>True if the sheet type is MedicalHistory.</summary>
 		private bool _isMedHistSheet {
 			get { return _sheetDefCur.SheetType==SheetTypeEnum.MedicalHistory; }
@@ -36,8 +36,8 @@ namespace OpenDental {
 				if(!_hasSelectedMedicalItem) {
 					return "";
 				}
-				if(listMedical.HasSelectedTag<AllergyDef>()) {
-					return listMedical.SelectedTag<AllergyDef>().Description;
+				if(listMedical.HasSelectedTag<Allergy>()) {
+					return listMedical.SelectedTag<Allergy>().Description;
 				}
 				if(listMedical.HasSelectedTag<DiseaseDef>()) {
 					return listMedical.SelectedTag<DiseaseDef>().Name;
@@ -282,7 +282,7 @@ namespace OpenDental {
 
 		private void AddAllergy(SheetFieldDef SheetFieldDefCur) {
 			FormAllergyDefEdit formADE=new FormAllergyDefEdit();
-			formADE.AllergyDefCur=new AllergyDef();
+			formADE.AllergyDefCur=new Allergy();
 			formADE.AllergyDefCur.Description=SheetFieldDefCur?.FieldName.Replace("allergy:","")??"";
 			formADE.ShowDialog();
 			if(formADE.DialogResult!=DialogResult.OK) {

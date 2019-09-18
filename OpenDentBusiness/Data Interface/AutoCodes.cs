@@ -50,10 +50,10 @@ namespace OpenDentBusiness{
 				AutoCodes.GetTableFromCache(false);
 			}
 			protected override bool IsInDictShort(AutoCode autoCode) {
-				return !autoCode.IsHidden;
+				return !autoCode.Hidden;
 			}
 			protected override long GetDictKey(AutoCode autoCode) {
-				return autoCode.AutoCodeNum;
+				return autoCode.Id;
 			}
 			protected override AutoCode GetDictValue(AutoCode autoCode) {
 				return autoCode;
@@ -118,7 +118,7 @@ namespace OpenDentBusiness{
 			for(int i=0;i<listProcButtons.Count;i++) {
 				for(int j=0;j<listProcButtonItems.Count;j++) {
 					if(listProcButtonItems[j].ProcButtonNum==listProcButtons[i].ProcButtonNum 
-						&& listProcButtonItems[j].AutoCodeNum==autoCodeCur.AutoCodeNum) 
+						&& listProcButtonItems[j].AutoCodeNum==autoCodeCur.Id) 
 					{
 						if(strInUse!="") {
 							strInUse+="; ";
@@ -132,20 +132,20 @@ namespace OpenDentBusiness{
 			if(strInUse!="") {
 				throw new ApplicationException(Lans.g("AutoCodes","Not allowed to delete autocode because it is in use.  Procedure buttons using this autocode include ")+strInUse);
 			}
-			List<AutoCodeItem> listAutoCodeItems=AutoCodeItems.GetListForCode(autoCodeCur.AutoCodeNum);
+			List<AutoCodeItem> listAutoCodeItems=AutoCodeItems.GetListForCode(autoCodeCur.Id);
 			for(int i=0;i<listAutoCodeItems.Count;i++) {
 				AutoCodeItem AutoCodeItemCur=listAutoCodeItems[i];
-        AutoCodeConds.DeleteForItemNum(AutoCodeItemCur.AutoCodeItemNum);
+        AutoCodeConds.DeleteForItemNum(AutoCodeItemCur.Id);
         AutoCodeItems.Delete(AutoCodeItemCur);
       }
-			Crud.AutoCodeCrud.Delete(autoCodeCur.AutoCodeNum);
+			Crud.AutoCodeCrud.Delete(autoCodeCur.Id);
 		}
 
 		///<summary>Used in ProcButtons.SetToDefault.  Returns 0 if the given autocode does not exist.</summary>
 		public static long GetNumFromDescript(string descript) {
 			//No need to check RemotingRole; no call to db.
 			AutoCode autoCode=_autoCodeCache.GetFirstOrDefault(x => x.Description==descript,true);
-			return (autoCode==null) ? 0 : autoCode.AutoCodeNum;
+			return (autoCode==null) ? 0 : autoCode.Id;
 		}
 
 		//------

@@ -7,10 +7,8 @@ namespace OpenDentBusiness
     /// anterior.  Autocodes also enforce and suggest changes to a procedure
     /// code if the number of surfaces or other properties change.
     /// </summary>
-    public class AutoCode
+    public class AutoCode : DataRecord
     {
-        public long AutoCodeNum;
-
         /// <summary>
         /// Displays meaningful decription, like "Amalgam".
         /// </summary>
@@ -19,7 +17,7 @@ namespace OpenDentBusiness
         /// <summary>
         /// User can hide autocodes
         /// </summary>
-        public bool IsHidden;
+        public bool Hidden;
         
         /// <summary>
         /// This will be true if user no longer wants to see this autocode
@@ -30,7 +28,7 @@ namespace OpenDentBusiness
 
         public AutoCode Copy()
         {
-            return (AutoCode)this.MemberwiseClone();
+            return (AutoCode)MemberwiseClone();
         }
     }
 }

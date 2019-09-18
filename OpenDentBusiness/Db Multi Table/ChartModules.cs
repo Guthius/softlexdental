@@ -43,7 +43,7 @@ namespace OpenDentBusiness
             [XmlIgnore]
             public DataTable TableMeds;
             public List<MedicationPat> ListMedPats;
-            public List<Allergy> ListAllergies;
+            public List<PatientAllergy> ListAllergies;
             public bool HasPatientPortalAccess;
             public List<FieldDefLink> ListFieldDefLinks;
             public List<EhrMeasureEvent> ListTobaccoStatuses;
@@ -74,7 +74,7 @@ namespace OpenDentBusiness
                 this.ListDiseases = new List<Disease>();
                 this.TableMeds = new DataTable();
                 this.ListMedPats = new List<MedicationPat>();
-                this.ListAllergies = new List<Allergy>();
+                this.ListAllergies = new List<PatientAllergy>();
                 this.HasPatientPortalAccess = false;
                 this.ListFieldDefLinks = new List<FieldDefLink>();
                 this.ListTobaccoStatuses = new List<EhrMeasureEvent>();

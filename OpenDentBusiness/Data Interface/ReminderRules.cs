@@ -42,7 +42,7 @@ namespace OpenDentBusiness
             List<ReminderRule> retVal = new List<ReminderRule>();
             List<Disease> listProblems = Diseases.Refresh(PatCur.PatNum);
             List<Medication> listMedications = Medication.GetByPatient(PatCur.PatNum);
-            List<Allergy> listAllergies = Allergies.Refresh(PatCur.PatNum);
+            List<PatientAllergy> listAllergies = Allergies.Refresh(PatCur.PatNum);
             List<LabResult> listLabResults = LabResults.GetAllForPatient(PatCur.PatNum);
             for (int i = 0; i < fullListReminders.Count; i++)
             {
@@ -71,7 +71,7 @@ namespace OpenDentBusiness
                     case EhrCriterion.Allergy:
                         for (int j = 0; j < listAllergies.Count; j++)
                         {
-                            if (fullListReminders[i].CriterionFK == listAllergies[j].AllergyDefNum)
+                            if (fullListReminders[i].CriterionFK == listAllergies[j].AllergyId)
                             {
                                 retVal.Add(fullListReminders[i]);
                                 break;

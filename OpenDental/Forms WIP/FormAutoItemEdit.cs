@@ -164,7 +164,7 @@ namespace OpenDental{
 			}
 			else{ 
 				this.Text=Lan.g(this,"Edit Auto Code Item");
-				textADA.Text=ProcedureCodes.GetStringProcCode(AutoCodeItemCur.CodeNum);    
+				textADA.Text=ProcedureCodes.GetStringProcCode(AutoCodeItemCur.ProcedureCodeId);    
 			}
 			FillList();
 		}
@@ -174,9 +174,9 @@ namespace OpenDental{
 			foreach(string s in Enum.GetNames(typeof(AutoCondition))) {
 				listConditions.Items.Add(Lan.g("enumAutoConditions",s));
 			}
-			List<AutoCodeCond> listAutoCodeConds=AutoCodeConds.GetWhere(x => x.AutoCodeItemNum==AutoCodeItemCur.AutoCodeItemNum);
+			List<AutoCodeCond> listAutoCodeConds=AutoCodeConds.GetWhere(x => x.AutoCodeItemId==AutoCodeItemCur.Id);
 			for(int i=0;i<listAutoCodeConds.Count;i++) {
-				listConditions.SetSelected((int)listAutoCodeConds[i].Cond,true);
+				listConditions.SetSelected((int)listAutoCodeConds[i].Condition,true);
 			}
 		}
 
@@ -187,18 +187,18 @@ namespace OpenDental{
 				FillList();
 				return;
 			}
-			AutoCodeItemCur.CodeNum=ProcedureCodes.GetCodeNum(textADA.Text);
+			AutoCodeItemCur.ProcedureCodeId=ProcedureCodes.GetCodeNum(textADA.Text);
 			if(IsNew) {
 				AutoCodeItems.Insert(AutoCodeItemCur);
 			}
 			else {
 				AutoCodeItems.Update(AutoCodeItemCur);
 			}
-			AutoCodeConds.DeleteForItemNum(AutoCodeItemCur.AutoCodeItemNum);
+			AutoCodeConds.DeleteForItemNum(AutoCodeItemCur.Id);
 			for(int i=0;i<listConditions.SelectedIndices.Count;i++) {
 				AutoCodeCond AutoCodeCondCur=new AutoCodeCond();
-				AutoCodeCondCur.AutoCodeItemNum=AutoCodeItemCur.AutoCodeItemNum;
-				AutoCodeCondCur.Cond=(AutoCondition)listConditions.SelectedIndices[i];
+				AutoCodeCondCur.AutoCodeItemId=AutoCodeItemCur.Id;
+				AutoCodeCondCur.Condition=(AutoCondition)listConditions.SelectedIndices[i];
 				AutoCodeConds.Insert(AutoCodeCondCur);
 			}
 			DialogResult=DialogResult.OK;
@@ -209,20 +209,20 @@ namespace OpenDental{
 			FormP.IsSelectionMode=true;
 			FormP.ShowDialog();
 			if(FormP.DialogResult==DialogResult.Cancel) {
-				textADA.Text=ProcedureCodes.GetStringProcCode(AutoCodeItemCur.CodeNum);
+				textADA.Text=ProcedureCodes.GetStringProcCode(AutoCodeItemCur.ProcedureCodeId);
 				return;
 			}
 			if(AutoCodeItems.GetContainsKey(FormP.SelectedCodeNum)
-				&& AutoCodeItems.GetOne(FormP.SelectedCodeNum).AutoCodeNum != AutoCodeItemCur.AutoCodeNum) 
+				&& AutoCodeItems.GetOne(FormP.SelectedCodeNum).AutoCodeId != AutoCodeItemCur.AutoCodeId) 
 			{
 				//This section is a fix for an old bug that did not cause items to get deleted properly
-				if(!AutoCodes.GetContainsKey(AutoCodeItems.GetOne(FormP.SelectedCodeNum).AutoCodeNum)) {
+				if(!AutoCodes.GetContainsKey(AutoCodeItems.GetOne(FormP.SelectedCodeNum).AutoCodeId)) {
 					AutoCodeItems.Delete(AutoCodeItems.GetOne(FormP.SelectedCodeNum));
 					textADA.Text=ProcedureCodes.GetStringProcCode(FormP.SelectedCodeNum);
 				}
 				else {
 					MessageBox.Show(Lan.g(this,"That procedure code is already in use in a different Auto Code.  Not allowed to use it here."));
-					textADA.Text=ProcedureCodes.GetStringProcCode(AutoCodeItemCur.CodeNum);
+					textADA.Text=ProcedureCodes.GetStringProcCode(AutoCodeItemCur.ProcedureCodeId);
 				}
 			}
 			else {

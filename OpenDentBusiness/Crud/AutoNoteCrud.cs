@@ -42,10 +42,10 @@ namespace OpenDentBusiness.Crud{
 			AutoNote autoNote;
 			foreach(DataRow row in table.Rows) {
 				autoNote=new AutoNote();
-				autoNote.AutoNoteNum = PIn.Long  (row["AutoNoteNum"].ToString());
-				autoNote.AutoNoteName= PIn.String(row["AutoNoteName"].ToString());
+				autoNote.Id = PIn.Long  (row["AutoNoteNum"].ToString());
+				autoNote.Name= PIn.String(row["AutoNoteName"].ToString());
 				autoNote.MainText    = PIn.String(row["MainText"].ToString());
-				autoNote.Category    = PIn.Long  (row["Category"].ToString());
+				autoNote.CategoryId    = PIn.Long  (row["Category"].ToString());
 				retVal.Add(autoNote);
 			}
 			return retVal;
@@ -63,10 +63,10 @@ namespace OpenDentBusiness.Crud{
 			table.Columns.Add("Category");
 			foreach(AutoNote autoNote in listAutoNotes) {
 				table.Rows.Add(new object[] {
-					POut.Long  (autoNote.AutoNoteNum),
-					            autoNote.AutoNoteName,
+					POut.Long  (autoNote.Id),
+					            autoNote.Name,
 					            autoNote.MainText,
-					POut.Long  (autoNote.Category),
+					POut.Long  (autoNote.CategoryId),
 				});
 			}
 			return table;
@@ -80,7 +80,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Inserts one AutoNote into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(AutoNote autoNote,bool useExistingPK) {
 			if(!useExistingPK && Preferences.RandomKeys) {
-				autoNote.AutoNoteNum=ReplicationServers.GetKey("autonote","AutoNoteNum");
+				autoNote.Id=ReplicationServers.GetKey("autonote","AutoNoteNum");
 			}
 			string command="INSERT INTO autonote (";
 			if(useExistingPK || Preferences.RandomKeys) {
@@ -88,12 +88,12 @@ namespace OpenDentBusiness.Crud{
 			}
 			command+="AutoNoteName,MainText,Category) VALUES(";
 			if(useExistingPK || Preferences.RandomKeys) {
-				command+=POut.Long(autoNote.AutoNoteNum)+",";
+				command+=POut.Long(autoNote.Id)+",";
 			}
 			command+=
-				 "'"+POut.String(autoNote.AutoNoteName)+"',"
+				 "'"+POut.String(autoNote.Name)+"',"
 				+    DbHelper.ParamChar+"paramMainText,"
-				+    POut.Long  (autoNote.Category)+")";
+				+    POut.Long  (autoNote.CategoryId)+")";
 			if(autoNote.MainText==null) {
 				autoNote.MainText="";
 			}
@@ -102,9 +102,9 @@ namespace OpenDentBusiness.Crud{
 				Db.NonQ(command,paramMainText);
 			}
 			else {
-				autoNote.AutoNoteNum=Db.NonQ(command,true,"AutoNoteNum","autoNote",paramMainText);
+				autoNote.Id=Db.NonQ(command,true,"AutoNoteNum","autoNote",paramMainText);
 			}
-			return autoNote.AutoNoteNum;
+			return autoNote.Id;
 		}
 
 		///<summary>Inserts one AutoNote into the database.  Returns the new priKey.  Doesn't use the cache.</summary>
@@ -117,19 +117,19 @@ namespace OpenDentBusiness.Crud{
 			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO autonote (";
 			if(!useExistingPK && isRandomKeys) {
-				autoNote.AutoNoteNum=ReplicationServers.GetKeyNoCache("autonote","AutoNoteNum");
+				autoNote.Id=ReplicationServers.GetKeyNoCache("autonote","AutoNoteNum");
 			}
 			if(isRandomKeys || useExistingPK) {
 				command+="AutoNoteNum,";
 			}
 			command+="AutoNoteName,MainText,Category) VALUES(";
 			if(isRandomKeys || useExistingPK) {
-				command+=POut.Long(autoNote.AutoNoteNum)+",";
+				command+=POut.Long(autoNote.Id)+",";
 			}
 			command+=
-				 "'"+POut.String(autoNote.AutoNoteName)+"',"
+				 "'"+POut.String(autoNote.Name)+"',"
 				+    DbHelper.ParamChar+"paramMainText,"
-				+    POut.Long  (autoNote.Category)+")";
+				+    POut.Long  (autoNote.CategoryId)+")";
 			if(autoNote.MainText==null) {
 				autoNote.MainText="";
 			}
@@ -138,18 +138,18 @@ namespace OpenDentBusiness.Crud{
 				Db.NonQ(command,paramMainText);
 			}
 			else {
-				autoNote.AutoNoteNum=Db.NonQ(command,true,"AutoNoteNum","autoNote",paramMainText);
+				autoNote.Id=Db.NonQ(command,true,"AutoNoteNum","autoNote",paramMainText);
 			}
-			return autoNote.AutoNoteNum;
+			return autoNote.Id;
 		}
 
 		///<summary>Updates one AutoNote in the database.</summary>
 		public static void Update(AutoNote autoNote) {
 			string command="UPDATE autonote SET "
-				+"AutoNoteName= '"+POut.String(autoNote.AutoNoteName)+"', "
+				+"AutoNoteName= '"+POut.String(autoNote.Name)+"', "
 				+"MainText    =  "+DbHelper.ParamChar+"paramMainText, "
-				+"Category    =  "+POut.Long  (autoNote.Category)+" "
-				+"WHERE AutoNoteNum = "+POut.Long(autoNote.AutoNoteNum);
+				+"Category    =  "+POut.Long  (autoNote.CategoryId)+" "
+				+"WHERE AutoNoteNum = "+POut.Long(autoNote.Id);
 			if(autoNote.MainText==null) {
 				autoNote.MainText="";
 			}
@@ -160,17 +160,17 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Updates one AutoNote in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.  Returns true if an update occurred.</summary>
 		public static bool Update(AutoNote autoNote,AutoNote oldAutoNote) {
 			string command="";
-			if(autoNote.AutoNoteName != oldAutoNote.AutoNoteName) {
+			if(autoNote.Name != oldAutoNote.Name) {
 				if(command!="") { command+=",";}
-				command+="AutoNoteName = '"+POut.String(autoNote.AutoNoteName)+"'";
+				command+="AutoNoteName = '"+POut.String(autoNote.Name)+"'";
 			}
 			if(autoNote.MainText != oldAutoNote.MainText) {
 				if(command!="") { command+=",";}
 				command+="MainText = "+DbHelper.ParamChar+"paramMainText";
 			}
-			if(autoNote.Category != oldAutoNote.Category) {
+			if(autoNote.CategoryId != oldAutoNote.CategoryId) {
 				if(command!="") { command+=",";}
-				command+="Category = "+POut.Long(autoNote.Category)+"";
+				command+="Category = "+POut.Long(autoNote.CategoryId)+"";
 			}
 			if(command=="") {
 				return false;
@@ -180,7 +180,7 @@ namespace OpenDentBusiness.Crud{
 			}
 			OdSqlParameter paramMainText=new OdSqlParameter("paramMainText",OdDbType.Text,POut.StringParam(autoNote.MainText));
 			command="UPDATE autonote SET "+command
-				+" WHERE AutoNoteNum = "+POut.Long(autoNote.AutoNoteNum);
+				+" WHERE AutoNoteNum = "+POut.Long(autoNote.Id);
 			Db.NonQ(command,paramMainText);
 			return true;
 		}
@@ -188,13 +188,13 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Returns true if Update(AutoNote,AutoNote) would make changes to the database.
 		///Does not make any changes to the database and can be called before remoting role is checked.</summary>
 		public static bool UpdateComparison(AutoNote autoNote,AutoNote oldAutoNote) {
-			if(autoNote.AutoNoteName != oldAutoNote.AutoNoteName) {
+			if(autoNote.Name != oldAutoNote.Name) {
 				return true;
 			}
 			if(autoNote.MainText != oldAutoNote.MainText) {
 				return true;
 			}
-			if(autoNote.Category != oldAutoNote.Category) {
+			if(autoNote.CategoryId != oldAutoNote.CategoryId) {
 				return true;
 			}
 			return false;

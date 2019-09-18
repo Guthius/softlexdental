@@ -70,7 +70,7 @@ namespace OpenDentBusiness
             string command =
                 "SELECT COUNT(*) FROM apptfielddef " +
                 "WHERE FieldName='" + POut.String(apptFieldDef.FieldName) + "' " +
-                "AND ApptFieldDefNum != " + POut.Long(apptFieldDef.ApptFieldDefNum);
+                "AND ApptFieldDefNum != " + POut.Long(apptFieldDef.Id);
 
             if (Db.GetCount(command) != "0")
             {
@@ -123,12 +123,12 @@ namespace OpenDentBusiness
                 }
                 throw new ApplicationException(s);
             }
-            Db.NonQ("DELETE FROM apptfielddef WHERE ApptFieldDefNum =" + POut.Long(apptFieldDef.ApptFieldDefNum));
+            Db.NonQ("DELETE FROM apptfielddef WHERE ApptFieldDefNum =" + POut.Long(apptFieldDef.Id));
         }
 
         public static string GetFieldName(long apptFieldDefNum)
         {
-            ApptFieldDef apptFieldDef = GetFirstOrDefault(x => x.ApptFieldDefNum == apptFieldDefNum);
+            ApptFieldDef apptFieldDef = GetFirstOrDefault(x => x.Id == apptFieldDefNum);
             return (apptFieldDef == null ? "" : apptFieldDef.FieldName);
         }
 

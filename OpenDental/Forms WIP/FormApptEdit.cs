@@ -604,21 +604,21 @@ namespace OpenDental
                 butText.Enabled = true;//TxtMsgOk checking performed on button click.
             }
             //AppointmentType
-            _listAppointmentType = AppointmentTypes.GetWhere(x => !x.IsHidden || x.AppointmentTypeNum == AptCur.AppointmentTypeNum);
+            _listAppointmentType = AppointmentTypes.GetWhere(x => !x.Hidden || x.Id == AptCur.AppointmentTypeNum);
             comboApptType.Items.Add(Lan.g(this, "None"));
             comboApptType.SelectedIndex = 0;
             foreach (AppointmentType aptType in _listAppointmentType)
             {
-                comboApptType.Items.Add(aptType.AppointmentTypeName);
+                comboApptType.Items.Add(aptType.Name);
             }
             int selectedIndex = -1;
             if (IsNew && _selectedAptType != null)
             { //selectedAptType will be null if they didn't select anything.
-                selectedIndex = _listAppointmentType.FindIndex(x => x.AppointmentTypeNum == _selectedAptType.AppointmentTypeNum);
+                selectedIndex = _listAppointmentType.FindIndex(x => x.Id == _selectedAptType.Id);
             }
             else
             {
-                selectedIndex = _listAppointmentType.FindIndex(x => x.AppointmentTypeNum == AptCur.AppointmentTypeNum);
+                selectedIndex = _listAppointmentType.FindIndex(x => x.Id == AptCur.AppointmentTypeNum);
             }
             comboApptType.SelectedIndex = selectedIndex + 1;//+1 for none
             _aptTypeIndex = comboApptType.SelectedIndex;
@@ -1659,7 +1659,7 @@ namespace OpenDental
             if (field == null)
             {
                 field = new ApptField();
-                field.AptNum = AptCur.AptNum;
+                field.AppointmentId = AptCur.AptNum;
                 field.FieldName = _tableFields.Rows[e.Row]["FieldName"].ToString();
                 ApptFieldDef fieldDef = ApptFieldDefs.GetFieldDefByFieldName(field.FieldName);
                 if (fieldDef == null)
@@ -2055,7 +2055,7 @@ namespace OpenDental
             }
             else
             {
-                AptCur.AppointmentTypeNum = _listAppointmentType[comboApptType.SelectedIndex - 1].AppointmentTypeNum;
+                AptCur.AppointmentTypeNum = _listAppointmentType[comboApptType.SelectedIndex - 1].Id;
             }
             #endregion Set AptCur Fields
             #region Update ProcDescript for Appt
@@ -2589,7 +2589,7 @@ namespace OpenDental
                 return true;//Patient notes can't have procedures associated to them.
             }
             AppointmentType aptTypeCur = _listAppointmentType[comboApptType.SelectedIndex - 1];
-            List<ProcedureCode> listAptTypeProcs = ProcedureCodes.GetFromCommaDelimitedList(aptTypeCur.CodeStr);
+            List<ProcedureCode> listAptTypeProcs = ProcedureCodes.GetFromCommaDelimitedList(aptTypeCur.ProcedureCodes);
             if (listAptTypeProcs.Count > 0)
             {//AppointmentType is associated to procs.
                 List<Procedure> listSelectedProcs = gridProc.Rows.Cast<ODGridRow>()
@@ -2630,7 +2630,7 @@ namespace OpenDental
                     }
                 }
             }
-            butColor.BackColor = aptTypeCur.AppointmentTypeColor;
+            butColor.BackColor = aptTypeCur.Color;
             if (aptTypeCur.Pattern != null && aptTypeCur.Pattern != "")
             {
                 timeBar.Pattern = aptTypeCur.Pattern;

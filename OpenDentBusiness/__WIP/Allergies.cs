@@ -8,16 +8,16 @@ namespace OpenDentBusiness
 {
     public class Allergies
     {
-        public static List<Allergy> Refresh(long patNum)
+        public static List<PatientAllergy> Refresh(long patNum)
         {
             return Crud.AllergyCrud.SelectMany("SELECT * FROM allergy WHERE PatNum = " + POut.Long(patNum));
         }
 
-        public static Allergy GetOne(long allergyNum) => Crud.AllergyCrud.SelectOne(allergyNum);
+        public static PatientAllergy GetOne(long allergyNum) => Crud.AllergyCrud.SelectOne(allergyNum);
 
-        public static long Insert(Allergy allergy) => Crud.AllergyCrud.Insert(allergy);
+        public static long Insert(PatientAllergy allergy) => Crud.AllergyCrud.Insert(allergy);
 
-        public static void Update(Allergy allergy) => Crud.AllergyCrud.Update(allergy);
+        public static void Update(PatientAllergy allergy) => Crud.AllergyCrud.Update(allergy);
 
         public static void Delete(long allergyNum)
         {
@@ -27,7 +27,7 @@ namespace OpenDentBusiness
         /// <summary>
         /// Gets all allergies for patient whether active or not.
         /// </summary>
-        public static List<Allergy> GetAll(long patNum, bool showInactive)
+        public static List<PatientAllergy> GetAll(long patNum, bool showInactive)
         {
             string command = "SELECT * FROM allergy WHERE PatNum = " + POut.Long(patNum);
             if (!showInactive)
@@ -52,7 +52,7 @@ namespace OpenDentBusiness
         /// <summary>
         /// Used along with GetChangedSinceAllergyNums
         /// </summary>
-        public static List<Allergy> GetMultAllergies(List<long> allergyNums)
+        public static List<PatientAllergy> GetMultAllergies(List<long> allergyNums)
         {
             string strAllergyNums = "";
             DataTable table;
@@ -73,8 +73,8 @@ namespace OpenDentBusiness
             {
                 table = new DataTable();
             }
-            Allergy[] multAllergies = Crud.AllergyCrud.TableToList(table).ToArray();
-            List<Allergy> allergyList = new List<Allergy>(multAllergies);
+            PatientAllergy[] multAllergies = Crud.AllergyCrud.TableToList(table).ToArray();
+            List<PatientAllergy> allergyList = new List<PatientAllergy>(multAllergies);
             return allergyList;
         }
 

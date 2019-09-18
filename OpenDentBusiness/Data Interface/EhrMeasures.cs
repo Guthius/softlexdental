@@ -1953,7 +1953,7 @@ namespace OpenDentBusiness
                     #endregion
                     #region AllergyList
                     case EhrMeasureType.AllergyList:
-                        List<Allergy> listAllergies = Allergies.Refresh(pat.PatNum);
+                        List<PatientAllergy> listAllergies = Allergies.Refresh(pat.PatNum);
                         if (listAllergies.Count == 0)
                         {
                             mu.Details = "No allergies entered.";
@@ -1962,7 +1962,7 @@ namespace OpenDentBusiness
                         {
                             mu.Met = MuMet.True;
                             bool allergiesNone = false;
-                            if (listAllergies.Count == 1 && listAllergies[0].AllergyDefNum == Preference.GetLong(PreferenceName.AllergiesIndicateNone))
+                            if (listAllergies.Count == 1 && listAllergies[0].AllergyId == Preference.GetLong(PreferenceName.AllergiesIndicateNone))
                             {
                                 allergiesNone = true;
                             }
@@ -6341,7 +6341,7 @@ namespace OpenDentBusiness
                     #endregion
                     #region AllergyList
                     case EhrMeasureType.AllergyList:
-                        List<Allergy> listAllergies = Allergies.Refresh(pat.PatNum);
+                        List<PatientAllergy> listAllergies = Allergies.Refresh(pat.PatNum);
                         if (listAllergies.Count == 0)
                         {
                             mu.Details = "No allergies entered.";
@@ -6350,7 +6350,7 @@ namespace OpenDentBusiness
                         {
                             mu.Met = MuMet.True;
                             bool allergiesNone = false;
-                            if (listAllergies.Count == 1 && listAllergies[0].AllergyDefNum == Preference.GetLong(PreferenceName.AllergiesIndicateNone))
+                            if (listAllergies.Count == 1 && listAllergies[0].AllergyId == Preference.GetLong(PreferenceName.AllergiesIndicateNone))
                             {
                                 allergiesNone = true;
                             }

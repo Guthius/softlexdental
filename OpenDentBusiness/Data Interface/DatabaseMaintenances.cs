@@ -1085,10 +1085,10 @@ namespace OpenDentBusiness
                     for (int i = 0; i < table.Rows.Count; i++)
                     {
                         AutoCode autoCode = new AutoCode();
-                        autoCode.AutoCodeNum = PIn.Long(table.Rows[i]["AutoCodeNum"].ToString());
+                        autoCode.Id = PIn.Long(table.Rows[i]["AutoCodeNum"].ToString());
                         autoCode.Description = "UNKNOWN";
                         Crud.AutoCodeCrud.Insert(autoCode, true);
-                        listDbmLogs.Add(new DbmLog(Security.CurrentUser.Id, autoCode.AutoCodeNum, DbmLogFKeyType.AutoCode, DbmLogActionType.Insert, methodName,
+                        listDbmLogs.Add(new DbmLog(Security.CurrentUser.Id, autoCode.Id, DbmLogFKeyType.AutoCode, DbmLogActionType.Insert, methodName,
                             "Added a new AutoCode from AutoCodeItemsWithNoAutoCode"));
                     }
                     if (numFixed > 0)
@@ -1129,7 +1129,7 @@ namespace OpenDentBusiness
                     command = @"DELETE FROM autocode WHERE NOT EXISTS(
 						SELECT * FROM autocodeitem WHERE autocodeitem.AutoCodeNum=autocode.AutoCodeNum)";
                     long numberFixed = Db.NonQ(command);
-                    listAutoCodes.ForEach(x => listDbmLogs.Add(new DbmLog(Security.CurrentUser.Id, x.AutoCodeNum, DbmLogFKeyType.AutoCode,
+                    listAutoCodes.ForEach(x => listDbmLogs.Add(new DbmLog(Security.CurrentUser.Id, x.Id, DbmLogFKeyType.AutoCode,
                         DbmLogActionType.Delete, methodName, "Deleted AutoCode:" + x.Description + " from AutoCodesDeleteWithNoItems")));
                     if (numberFixed > 0)
                     {

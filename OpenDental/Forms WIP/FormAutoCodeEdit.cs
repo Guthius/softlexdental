@@ -230,7 +230,7 @@ namespace OpenDental{
       else{
         this.Text=Lan.g(this,"Edit Auto Code");
         textDescript.Text=AutoCodeCur.Description;
-        checkHidden.Checked=AutoCodeCur.IsHidden;
+        checkHidden.Checked=AutoCodeCur.Hidden;
 				checkLessIntrusive.Checked=AutoCodeCur.LessIntrusive;
       }
 		  FillTable();
@@ -241,20 +241,20 @@ namespace OpenDental{
 			AutoCodeItems.RefreshCache();
 			AutoCodeConds.RefreshCache();
 			_listAutoCodeConds=AutoCodeConds.GetDeepCopy();
-			listForCode=AutoCodeItems.GetListForCode(AutoCodeCur.AutoCodeNum);
+			listForCode=AutoCodeItems.GetListForCode(AutoCodeCur.Id);
 			tbAutoItem.ResetRows(listForCode.Count);
 			tbAutoItem.SetGridColor(Color.Gray);
 			tbAutoItem.SetBackGColor(Color.White);
 			for(int i=0;i<listForCode.Count;i++) {
-        tbAutoItem.Cell[0,i]=ProcedureCodes.GetProcCode(listForCode[i].CodeNum).ProcCode;
-				tbAutoItem.Cell[1,i]=ProcedureCodes.GetProcCode(listForCode[i].CodeNum).Descript;
+        tbAutoItem.Cell[0,i]=ProcedureCodes.GetProcCode(listForCode[i].ProcedureCodeId).ProcCode;
+				tbAutoItem.Cell[1,i]=ProcedureCodes.GetProcCode(listForCode[i].ProcedureCodeId).Descript;
         count=0;
         for(int j=0;j<_listAutoCodeConds.Count;j++){
-          if(_listAutoCodeConds[j].AutoCodeItemNum==listForCode[i].AutoCodeItemNum){
+          if(_listAutoCodeConds[j].AutoCodeItemId==listForCode[i].Id){
 						if(count!=0){
 							tbAutoItem.Cell[2,i]+=", ";
 						}
-						tbAutoItem.Cell[2,i]+=_listAutoCodeConds[j].Cond.ToString();
+						tbAutoItem.Cell[2,i]+=_listAutoCodeConds[j].Condition.ToString();
             count++;
           }
         }
@@ -274,7 +274,7 @@ namespace OpenDental{
 		  FormAutoItemEdit FormAIE=new FormAutoItemEdit();
       FormAIE.IsNew=true;
 			FormAIE.AutoCodeItemCur=new AutoCodeItem();
-			FormAIE.AutoCodeItemCur.AutoCodeNum=AutoCodeCur.AutoCodeNum;
+			FormAIE.AutoCodeItemCur.AutoCodeId=AutoCodeCur.Id;
       FormAIE.ShowDialog();
       FillTable();
 		}
@@ -285,7 +285,7 @@ namespace OpenDental{
         return;
 			}
 			AutoCodeItem AutoCodeItemCur=listForCode[tbAutoItem.SelectedRow];
-      AutoCodeConds.DeleteForItemNum(AutoCodeItemCur.AutoCodeItemNum);
+      AutoCodeConds.DeleteForItemNum(AutoCodeItemCur.Id);
       AutoCodeItems.Delete(AutoCodeItemCur);
 			FillTable();
 		}  
@@ -301,7 +301,7 @@ namespace OpenDental{
 				return;
 			}
       AutoCodeCur.Description=textDescript.Text;
-      AutoCodeCur.IsHidden=checkHidden.Checked;
+      AutoCodeCur.Hidden=checkHidden.Checked;
 			AutoCodeCur.LessIntrusive=checkLessIntrusive.Checked;
 			AutoCodes.Update(AutoCodeCur);
       DialogResult=DialogResult.OK;
@@ -333,34 +333,34 @@ namespace OpenDental{
 			AutoCodeItems.RefreshCache();
 			AutoCodeConds.RefreshCache();
 			for(int i=0;i<listForCode.Count;i++) {//Attach the conditions to the items for better organization
-				listForCode[i].ListConditions=new List<AutoCodeCond>();
+				listForCode[i].Conditions=new List<AutoCodeCond>();
         for(int j=0;j<_listAutoCodeConds.Count;j++){//Fill conditions for this AutoCodeItem
-          if(_listAutoCodeConds[j].AutoCodeItemNum==listForCode[i].AutoCodeItemNum){
-						listForCode[i].ListConditions.Add(_listAutoCodeConds[j]);
+          if(_listAutoCodeConds[j].AutoCodeItemId==listForCode[i].Id){
+						listForCode[i].Conditions.Add(_listAutoCodeConds[j]);
           }
         }
 			}
 			//Must have same number of conditions for each AutoCodeItem.----------------------------------------------------------------------------------
 			for(int i=1;i<listForCode.Count;i++) {//start at 1 and compare to the 0 index.
-				if(listForCode[i].ListConditions.Count!=listForCode[0].ListConditions.Count) {
+				if(listForCode[i].Conditions.Count!=listForCode[0].Conditions.Count) {
 					MsgBox.Show(this,"All AutoCode items must have the same number of conditions.");
 					e.Cancel=true;
 					return;
 				}
 			}
-			if(listForCode[0].ListConditions.Count==0) {//Rest of the checks assume at least one condition.
+			if(listForCode[0].Conditions.Count==0) {//Rest of the checks assume at least one condition.
 				return;
 			}
 			//Check for duplicate AutoCodeItem condition lists.-------------------------------------------------------------------------------------------
 			for(int i=1;i<listForCode.Count;i++) {//start at 1
 				for(int j=0;j<i;j++) {//loop through the lower-indexed entries
 					int matches=0;
-					for(int k=0;k<listForCode[i].ListConditions.Count;k++) {//For each condition in i, check for matches with conditions in j
-						if(listForCode[i].ListConditions[k].Cond==listForCode[j].ListConditions[k].Cond) {//if the same condition is in both rows.
+					for(int k=0;k<listForCode[i].Conditions.Count;k++) {//For each condition in i, check for matches with conditions in j
+						if(listForCode[i].Conditions[k].Condition==listForCode[j].Conditions[k].Condition) {//if the same condition is in both rows.
 							matches++;
 						}
 					}
-					if(matches==listForCode[i].ListConditions.Count) {//If the number of matches equals the number of conditions on this row
+					if(matches==listForCode[i].Conditions.Count) {//If the number of matches equals the number of conditions on this row
 						MsgBox.Show(this,"Cannot have two AutoCode Items with duplicate conditions.");
 						e.Cancel=true;
 						return;
@@ -378,51 +378,51 @@ namespace OpenDental{
 			bool isPontRet=false;
 			for(int i=0;i<listForCode.Count;i++) {
 				//If the item matches the category, set the boolean to true.
-				for(int j=0;j<listForCode[i].ListConditions.Count;j++) {
-					if(listForCode[i].ListConditions[j].Cond==AutoCondition.Anterior) {
+				for(int j=0;j<listForCode[i].Conditions.Count;j++) {
+					if(listForCode[i].Conditions[j].Condition==AutoCondition.Anterior) {
 						isAnt=true;
 						//We want to also set either isAntPost or isAntPreMol, but we don't have enough information yet to set that.
 						continue;
 					}
-					if(listForCode[i].ListConditions[j].Cond==AutoCondition.Posterior) {
+					if(listForCode[i].Conditions[j].Condition==AutoCondition.Posterior) {
 						isAntPost=true;
 						continue;
 					}
-					if(listForCode[i].ListConditions[j].Cond==AutoCondition.Premolar
-						|| listForCode[i].ListConditions[j].Cond==AutoCondition.Molar
+					if(listForCode[i].Conditions[j].Condition==AutoCondition.Premolar
+						|| listForCode[i].Conditions[j].Condition==AutoCondition.Molar
 						) {
 						isAntPreMol=true;
 						continue;
 					}
-					if(listForCode[i].ListConditions[j].Cond==AutoCondition.One_Surf
-						|| listForCode[i].ListConditions[j].Cond==AutoCondition.Two_Surf
-						|| listForCode[i].ListConditions[j].Cond==AutoCondition.Three_Surf
-						|| listForCode[i].ListConditions[j].Cond==AutoCondition.Four_Surf
-						|| listForCode[i].ListConditions[j].Cond==AutoCondition.Five_Surf
+					if(listForCode[i].Conditions[j].Condition==AutoCondition.One_Surf
+						|| listForCode[i].Conditions[j].Condition==AutoCondition.Two_Surf
+						|| listForCode[i].Conditions[j].Condition==AutoCondition.Three_Surf
+						|| listForCode[i].Conditions[j].Condition==AutoCondition.Four_Surf
+						|| listForCode[i].Conditions[j].Condition==AutoCondition.Five_Surf
 						) {
 						isNumSurf=true;
 						continue;
 					}
-					if(listForCode[i].ListConditions[j].Cond==AutoCondition.First
-						|| listForCode[i].ListConditions[j].Cond==AutoCondition.EachAdditional
+					if(listForCode[i].Conditions[j].Condition==AutoCondition.First
+						|| listForCode[i].Conditions[j].Condition==AutoCondition.EachAdditional
 						) {
 						isFirstEachAdd=true;
 						continue;
 					}
-					if(listForCode[i].ListConditions[j].Cond==AutoCondition.Maxillary
-						|| listForCode[i].ListConditions[j].Cond==AutoCondition.Mandibular
+					if(listForCode[i].Conditions[j].Condition==AutoCondition.Maxillary
+						|| listForCode[i].Conditions[j].Condition==AutoCondition.Mandibular
 						) {
 						isMaxMand=true;
 						continue;
 					}
-					if(listForCode[i].ListConditions[j].Cond==AutoCondition.Primary
-						|| listForCode[i].ListConditions[j].Cond==AutoCondition.Permanent
+					if(listForCode[i].Conditions[j].Condition==AutoCondition.Primary
+						|| listForCode[i].Conditions[j].Condition==AutoCondition.Permanent
 						) {
 						isPriPerm=true;
 						continue;
 					}
-					if(listForCode[i].ListConditions[j].Cond==AutoCondition.Pontic
-						|| listForCode[i].ListConditions[j].Cond==AutoCondition.Retainer
+					if(listForCode[i].Conditions[j].Condition==AutoCondition.Pontic
+						|| listForCode[i].Conditions[j].Condition==AutoCondition.Retainer
 						) {
 						isPontRet=true;
 						continue;
@@ -465,9 +465,9 @@ namespace OpenDental{
 			if(isPontRet) {
 				numCategories++;
 			}
-			if(numCategories!=listForCode[0].ListConditions.Count) {//Every row has to have the same number of conditions
-				MessageBox.Show(Lan.g(this,"When using ")+listForCode[0].ListConditions.Count+Lan.g(this," condition(s), you must use conditions from ")											
-					+listForCode[0].ListConditions.Count+Lan.g(this," logical categories. You are using conditions from ")+numCategories+Lan.g(this," logical categories."));
+			if(numCategories!=listForCode[0].Conditions.Count) {//Every row has to have the same number of conditions
+				MessageBox.Show(Lan.g(this,"When using ")+listForCode[0].Conditions.Count+Lan.g(this," condition(s), you must use conditions from ")											
+					+listForCode[0].Conditions.Count+Lan.g(this," logical categories. You are using conditions from ")+numCategories+Lan.g(this," logical categories."));
 				e.Cancel=true;
 				return;
 			}

@@ -27,7 +27,7 @@ namespace OpenDental {
 			List<DefLink> listDefLinks=DefLinks.GetDefLinksByType(DefLinkType.AppointmentType);
 			DefLink defLink=listDefLinks.FirstOrDefault(x => x.DefNum==_defCur.Id);
 			if(defLink!=null) {
-				_apptTypeCur=AppointmentTypes.GetFirstOrDefault(x => x.AppointmentTypeNum==defLink.FKey);
+				_apptTypeCur=AppointmentTypes.GetFirstOrDefault(x => x.Id==defLink.FKey);
 			}
 			FillTextValue();
 		}
@@ -35,7 +35,7 @@ namespace OpenDental {
 		private void FillTextValue() {
 			textValue.Clear();
 			if(_apptTypeCur!=null) {
-				textValue.Text=_apptTypeCur.AppointmentTypeName;
+				textValue.Text=_apptTypeCur.Name;
 			}
 		}
 
@@ -72,7 +72,7 @@ namespace OpenDental {
 			else {
                 Definition.Update(_defCur);
 			}
-			DefLinks.SetFKeyForDef(_defCur.Id,_apptTypeCur.AppointmentTypeNum,DefLinkType.AppointmentType);
+			DefLinks.SetFKeyForDef(_defCur.Id,_apptTypeCur.Id,DefLinkType.AppointmentType);
 			DialogResult=DialogResult.OK;
 		}
 

@@ -20,7 +20,7 @@ namespace OpenDental {
 		}
 
 		private void FormAutoNoteControlEdit_Load(object sender,EventArgs e) {
-			textBoxControlDescript.Text=ControlCur.Descript;
+			textBoxControlDescript.Text=ControlCur.Description;
 			textBoxControlLabel.Text=ControlCur.ControlLabel;
 			comboType.Items.Clear();
 			comboType.Items.Add("Text");
@@ -190,7 +190,7 @@ namespace OpenDental {
 			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Completely delete this prompt?  It will not be available from any AutoNote.")) {
 				return;
 			}
-			AutoNoteControls.Delete(ControlCur.AutoNoteControlNum);
+			AutoNoteControls.Delete(ControlCur.Id);
 			DialogResult=DialogResult.OK;
 		}
 		
@@ -211,7 +211,7 @@ namespace OpenDental {
 				MsgBox.Show(this,"The description can only contain letters, numbers, underscore, and space.");
 				return;
 			}
-			ControlCur.Descript=textBoxControlDescript.Text.ToString();
+			ControlCur.Description=textBoxControlDescript.Text.ToString();
 			ControlCur.ControlLabel=textBoxControlLabel.Text.ToString();
 			ControlCur.ControlType=comboType.SelectedItem.ToString();
 			ControlCur.ControlOptions=textOptions.Text;

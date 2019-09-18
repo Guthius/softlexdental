@@ -768,23 +768,23 @@ namespace OpenDentBusiness.HL7 {
 					+strAllergenType+"'.",EventLogEntryType.Information);
 				return;//not able to assign drug allergy if not given a valid rxnorm or allergen type is not a drug allergy
 			}
-			AllergyDef allergyDefCur=AllergyDefs.GetAllergyDefFromRxnorm(rxnorm);
+			Allergy allergyDefCur=AllergyDefs.GetAllergyDefFromRxnorm(rxnorm);
 			if(allergyDefCur==null) {
 				EventLog.WriteEntry("OpenDentHL7","A drug allergy was not added for patient "+pat.GetNameFLnoPref()+
 					".  There is not a drug allergy in the database with an RxNorm code of "+rxnorm.ToString()+".",EventLogEntryType.Information);
 				return;//no allergydef for this rxnorm exists
 			}
 			//see if there is already an active allergy with this AllergyDefNum for this patient
-			List<Allergy> listAllergForPat=Allergies.GetAll(pat.PatNum,false);
+			List<PatientAllergy> listAllergForPat=Allergies.GetAll(pat.PatNum,false);
 			for(int i=0;i<listAllergForPat.Count;i++) {
-				if(listAllergForPat[i].AllergyDefNum==allergyDefCur.Id) {
+				if(listAllergForPat[i].AllergyId==allergyDefCur.Id) {
 					return;//already an active allergy with this AllergyDefNum
 				}
 			}
-			Allergy allergyCur=new Allergy();
-			allergyCur.AllergyDefNum=allergyDefCur.Id;
-			allergyCur.PatNum=pat.PatNum;
-			allergyCur.StatusIsActive=true;
+			PatientAllergy allergyCur=new PatientAllergy();
+			allergyCur.AllergyId=allergyDefCur.Id;
+			allergyCur.PatientId=pat.PatNum;
+			allergyCur.Active=true;
 			Allergies.Insert(allergyCur);
 			if(_isVerboseLogging) {
 				EventLog.WriteEntry("OpenDentHL7","Inserted a new allergy for patient "+pat.GetNameFLnoPref()+" due to an incoming AL1 segment.",EventLogEntryType.Information);

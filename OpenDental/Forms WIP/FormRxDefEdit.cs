@@ -461,7 +461,7 @@ namespace OpenDental{
 					listAlerts.Items.Add(DiseaseDef.GetName(RxAlertList[i].DiseaseDefNum));
 				}
 				if(RxAlertList[i].AllergyDefNum>0) {
-					AllergyDef allergyDef=AllergyDefs.GetOne(RxAlertList[i].AllergyDefNum);
+					Allergy allergyDef=AllergyDefs.GetOne(RxAlertList[i].AllergyDefNum);
 					if(allergyDef!=null) {
 						listAlerts.Items.Add(allergyDef.Description);
 					}

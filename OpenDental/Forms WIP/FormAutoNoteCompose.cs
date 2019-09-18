@@ -55,8 +55,8 @@ namespace OpenDental
             _listAutoNoteCatDefs.FindAll(x => string.IsNullOrWhiteSpace(x.Value) || !listCatDefNums.Contains(PIn.Long(x.Value)))
                 .ForEach(x => treeListMain.Nodes.Add(CreateNodeAndChildren(x)));//child cats and categorized auto notes added in recursive function
                                                                                 //add any uncategorized auto notes after the categorized ones and only for the root nodes
-            AutoNotes.GetWhere(x => x.Category == 0 || !listCatDefNums.Contains(x.Category))
-                .ForEach(x => treeListMain.Nodes.Add(new TreeNode(x.AutoNoteName, 1, 1) { Tag = x }));
+            AutoNotes.GetWhere(x => x.CategoryId == 0 || !listCatDefNums.Contains(x.CategoryId))
+                .ForEach(x => treeListMain.Nodes.Add(new TreeNode(x.Name, 1, 1) { Tag = x }));
             if (listExpandedDefNums.Count > 0)
             {
                 treeListMain.Nodes.OfType<TreeNode>().SelectMany(x => GetNodeAndChildren(x))
@@ -74,8 +74,8 @@ namespace OpenDental
             List<TreeNode> listChildNodes = _listAutoNoteCatDefs
                 .Where(x => !string.IsNullOrWhiteSpace(x.Value) && x.Value == defCur.Id.ToString())
                 .Select(CreateNodeAndChildren).ToList();
-            listChildNodes.AddRange(AutoNotes.GetWhere(x => x.Category == defCur.Id)
-                .Select(x => new TreeNode(x.AutoNoteName, 1, 1) { Tag = x }));
+            listChildNodes.AddRange(AutoNotes.GetWhere(x => x.CategoryId == defCur.Id)
+                .Select(x => new TreeNode(x.Name, 1, 1) { Tag = x }));
             return new TreeNode(defCur.Description, 0, 0, listChildNodes.OrderBy(x => x.Tag is AutoNote).ThenBy(x => x.Name).ToArray()) { Tag = defCur };
         }
 
