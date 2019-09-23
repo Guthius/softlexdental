@@ -43,7 +43,7 @@ namespace OpenDentBusiness
             data.ListAppts = Appointments.GetListForPat(pat.PatNum);
             data.ListFutureApptsForFam = Appointments.GetFutureSchedApts(fam.Members.Select(x => x.PatNum).ToList());
             data.ListDiseases = Diseases.Refresh(pat.PatNum, true);
-            data.ListAllergies = Allergies.GetAll(pat.PatNum, false);
+            data.ListAllergies = PatientAllergy.GetByPatient(pat.PatNum, false);
             data.ListMedicationPats = MedicationPats.Refresh(pat.PatNum, false);
             data.ListFamPopups = Popups.GetForFamily(pat);
             data.ListProceduresSome = Procedures.RefreshForProcCodeNums(pat.PatNum, listProcCodeNums);

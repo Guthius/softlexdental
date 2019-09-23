@@ -42,7 +42,7 @@ namespace OpenDentBusiness
             List<ReminderRule> retVal = new List<ReminderRule>();
             List<Disease> listProblems = Diseases.Refresh(PatCur.PatNum);
             List<Medication> listMedications = Medication.GetByPatient(PatCur.PatNum);
-            List<PatientAllergy> listAllergies = Allergies.Refresh(PatCur.PatNum);
+            List<PatientAllergy> listAllergies = PatientAllergy.GetByPatient(PatCur.PatNum);
             List<LabResult> listLabResults = LabResults.GetAllForPatient(PatCur.PatNum);
             for (int i = 0; i < fullListReminders.Count; i++)
             {

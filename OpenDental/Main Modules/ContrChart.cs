@@ -10500,7 +10500,7 @@ namespace OpenDental
                             autoCode = AutoCodeItems.GetListForCode(AutoCodeItems.GetOne(ProcCur.CodeNum).AutoCodeId)
                                 .FirstOrDefault(x => x.ProcedureCodeId == ProcCur.CodeNum);
                         }
-                        List<AutoCodeCond> condList = new List<AutoCodeCond>();
+                        List<AutoCodeCondition> condList = new List<AutoCodeCondition>();
                         if (autoCode != null)
                         {
                             condList = AutoCodeConds.GetListForItem(autoCode.Id);
@@ -10508,11 +10508,11 @@ namespace OpenDental
                         ProcCur.Surf = "";
                         if (condList.Count == 1)
                         {
-                            if (condList[0].Condition == AutoCondition.Maxillary)
+                            if (condList[0].Condition == AutoCodeConditionType.Maxillary)
                             {
                                 ProcCur.Surf = "U";
                             }
-                            else if (condList[0].Condition == AutoCondition.Mandibular)
+                            else if (condList[0].Condition == AutoCodeConditionType.Mandibular)
                             {
                                 ProcCur.Surf = "L";
                             }

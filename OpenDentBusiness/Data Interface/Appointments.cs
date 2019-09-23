@@ -3684,23 +3684,6 @@ namespace OpenDentBusiness
                 .ToList();
         }
 
-        //private static FilterBlockouts(Appointment )
-        /// <summary>Called to move existing appointments from the web.
-        /// Will only attempt to move to given operatory.</summary>
-        public static void TryMoveApptWebHelper(Appointment appt, DateTime apptDateTimeNew, long opNumNew, string secLogSource = SecurityLogSource.MobileWeb)
-        {
-            Appointment apptOld = GetOneApt(appt.AptNum);//Will always exist since you can not move a non inserted appointment.
-            Patient pat = Patients.GetPat(appt.PatNum);
-            Operatory op = Operatories.GetOperatory(opNumNew);
-            List<Schedule> listSchedules = Schedules.ConvertTableToList(Schedules.GetPeriodSchedule(apptDateTimeNew.Date, apptDateTimeNew.Date));
-            List<Operatory> listOps = new List<Operatory> { op };//List of ops to attempt to move appt to, only consider 1.
-            bool provChangedNotUsed = false;//Since we are not skipping validation, let function identify prov change itself.
-            bool hygChangedNotUsed = false;//Since we are not skipping validation, let function identify hyg change itself.
-            TryMoveAppointment(appt, apptOld, pat, op, listSchedules, listOps, apptDateTimeNew,
-                doValidation: true, doSetArriveEarly: true, doProvChange: false, doUpdatePattern: false, doAllowFreqConflicts: true, doResetConfirmationStatus: true, doUpdatePatStatus: true,
-                provChanged: provChangedNotUsed, hygChanged: hygChangedNotUsed, timeWasMoved: (appt.AptDateTime != apptDateTimeNew), isOpChanged: (appt.Op != opNumNew), secLogSource: secLogSource);
-        }
-
         ///<summary>Throws exception. Called when moving an appt in the appt module on mouse up after validation and user input.</summary>
         public static void MoveValidatedAppointment(Appointment apt, Appointment aptOld, Patient patCur, Operatory curOp,
             List<Schedule> schedListPeriod, List<Operatory> listOps, bool provChanged, bool hygChanged, bool timeWasMoved, bool isOpChanged, bool isOpUpdate = false)
@@ -4015,11 +3998,11 @@ namespace OpenDentBusiness
             newAppt.AptDateTime = aptDateTime;
             newAppt.Op = opNum;
             Appointments.Insert(newAppt);//now, aptnum is different.
-            listApptFields = listApptFields ?? ApptFields.GetForAppt(plannedApt.PatNum);
+            listApptFields = listApptFields ?? ApptField.GetByAppointment(plannedApt.PatNum); // TODO: Huh ????? Why patnum and not apptnum??
             foreach (ApptField apptField in listApptFields)
             {
                 apptField.AppointmentId = newAppt.AptNum;
-                ApptFields.Insert(apptField);
+                ApptField.Insert(apptField);
             }
             #region HL7
             //If there is an existing HL7 def enabled, send a SIU message if there is an outbound SIU message defined
@@ -4377,112 +4360,6 @@ namespace OpenDentBusiness
                 return null;
             }
             return Crud.AppointmentCrud.TableToList(table)[0];
-        }
-
-        ///<summary>Used by web to insert or update a given appt.
-        ///Dynamically charts procs based on appt.AppointmentTypeNum when created or changed.
-        ///This logic is attempting to mimic FormApptEdit when interacting with a new or existing appointment.</summary>
-        public static void UpsertApptFromWeb(Appointment appt, bool canUpdateApptPattern = false, string secLogSource = SecurityLogSource.MobileWeb)
-        {
-            Patient pat = Patients.GetPat(appt.PatNum);
-            List<Procedure> listProcsForApptEdit = Procedures.GetProcsForApptEdit(appt);//List of all procedures that would show in FormApptEdit.cs
-            List<PatPlan> listPatPlans = PatPlans.GetPatPlansForPat(pat.PatNum);
-            List<InsSub> listInsSubs = new List<InsSub>();
-            List<InsPlan> listInsPlans = new List<InsPlan>();
-            if (listPatPlans.Count > 0)
-            {
-                listInsSubs = InsSubs.GetMany(listPatPlans.Select(x => x.InsSubNum).ToList());
-                listInsPlans = InsPlans.GetByInsSubs(listInsSubs.Select(x => x.InsSubNum).ToList());
-            }
-            AppointmentType apptTypeCur = AppointmentType.GetById(appt.AppointmentTypeNum);//When AppointmentTypeNum=0 this will be null.
-            Appointment apptOld = GetOneApt(appt.AptNum);//When inserting a new appt this will be null.
-            appt.IsNew = (apptOld == null);
-            long apptTypeNumOld = (apptOld == null ? 0 : apptOld.AppointmentTypeNum);
-            List<Procedure> listProcsOnAppt;//Subset of listProcsForApptEdit. All procs associated to the given appt. Some aptNums may not be set yet.
-            if (apptTypeCur != null && apptTypeCur.Id != apptTypeNumOld)
-            {//Appointment type set and changed.
-             //Dynamically added procs will exist in listProcsForApptEdit.
-                listProcsOnAppt = ApptTypeMissingProcHelper(appt, apptTypeCur, listProcsForApptEdit, pat, canUpdateApptPattern, listPatPlans, listInsSubs, listInsPlans);
-            }
-            else
-            {
-                listProcsOnAppt = listProcsForApptEdit.FindAll(x => x.AptNum != 0 && x.AptNum == appt.AptNum).Select(x => x.Copy()).ToList();
-            }
-            listProcsOnAppt.Sort(ProcedureLogic.CompareProcedures);//Mimic FormApptEdit
-            #region Appointment insert or update
-            #region Appt.ProcDescript
-            //Mimics FormApptEdit.UpdateListAndDB(...)
-            List<Procedure> listProcsForDescript = listProcsOnAppt.Select(x => x.Copy()).ToList();
-            foreach (Procedure proc in listProcsForDescript)
-            {
-                //This allows Appointments.SetProcDescript(...) to associate all the passed in procs into AptCur.ProcDescript
-                proc.AptNum = appt.AptNum;
-                proc.PlannedAptNum = appt.AptNum;
-            }
-            Appointments.SetProcDescript(appt, listProcsForDescript);
-            #endregion
-            if (appt.IsNew)
-            {
-                #region Set Appt fields
-                appt.InsPlan1 = (listInsPlans.Count >= 1 ? listInsPlans[0].PlanNum : 0);
-                appt.InsPlan2 = (listInsPlans.Count >= 2 ? listInsPlans[1].PlanNum : 0);
-                appt.DateTimeArrived = appt.AptDateTime.Date;
-                appt.DateTimeSeated = appt.AptDateTime.Date;
-                appt.DateTimeDismissed = appt.AptDateTime.Date;
-                #endregion
-                Insert(appt, appt.SecUserNumEntry);//Inserts the invalid signal
-                SecurityLog.Insert(new SecurityLog()
-                {
-                    Event = Permissions.AppointmentCreate,
-                    UserId = appt.SecUserNumEntry,
-                    LogDate = DateTime.Now,
-                    LogMessage = "New appointment created from MobileWeb by " + User.GetById(appt.SecUserNumEntry).UserName,
-                    PatientId = appt.PatNum,
-                    ExternalId = appt.AptNum,
-                    Source = SecurityLogSource.MobileWeb,
-                    ExternalDate = appt.SecDateEntry,
-                    ComputerName = Security.CurrentComputerName
-                });
-            }
-            else
-            {
-                Update(appt, apptOld);//Inserts the invalid signal
-                SecurityLog.Insert(new SecurityLog()
-                {
-                    Event = Permissions.AppointmentEdit,
-                    UserId = appt.SecUserNumEntry,
-                    LogDate = DateTime.Now,
-                    LogMessage = "Appointment updated from MobileWeb by " + User.GetById(appt.SecUserNumEntry).UserName,
-                    PatientId = appt.PatNum,
-                    ExternalId = appt.AptNum,
-                    Source = SecurityLogSource.MobileWeb,
-                    ExternalDate = appt.SecDateEntry,
-                    ComputerName = Security.CurrentComputerName,
-                });
-            }
-            #endregion
-            #region Mimic FormApptEdit proc selection logic
-            //At this point all pertinent procs have been charted or existed as a TPed proc already.
-            //The below logic is attempting to mimic how FormApptEdit would make proc selections.
-            List<int> listProcSelectedIndices = new List<int>();//Equivalent to current proc selections in FormApptEdit.
-            List<long> listProcNumsAttachedStart = new List<long>();//Equivalent to OnLoad proc selections in FormApptEdit.
-            foreach (Procedure proc in listProcsOnAppt)
-            {
-                //All procs in listProcsOnAppt are treated like the user selected them in FormApptEdit.
-                listProcSelectedIndices.Add(listProcsForApptEdit.FindIndex(x => x.ProcNum == proc.ProcNum));
-                if (!appt.IsNew && proc.AptNum == appt.AptNum)
-                {
-                    //When updating an existing appt some procs might have already been associated to the given appt.
-                    //Procs that have an AptNum=appt.AptNum were already set prior to this function.
-                    //This is equivalent to FormApptEdit loading and some procs being pre selected, used to identify attaching and detaching logic in below method calls.
-                    listProcNumsAttachedStart.Add(proc.ProcNum);
-                }
-            }
-            #endregion
-            List<Appointment> listAppointments = Appointments.GetForPat(appt.PatNum).ToList();
-            Procedures.ProcsAptNumHelper(listProcsForApptEdit, appt, listAppointments, listProcSelectedIndices, listProcNumsAttachedStart, (appt.AptStatus == ApptStatus.Planned), secLogSource);
-            Procedures.UpdateProcsInApptHelper(listProcsForApptEdit, pat, appt, apptOld, listInsPlans, listInsSubs, listProcSelectedIndices, true, false, secLogSource);
-            //No need to create an invalid appt signal, the call to either Insert or Update will have already done so.
         }
 
         ///<summary>Charts missing procedures for given appt and apptType.

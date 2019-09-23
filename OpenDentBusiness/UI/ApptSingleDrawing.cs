@@ -272,7 +272,7 @@ namespace OpenDentBusiness.UI
             }
             if (apptRows[elementI].ApptFieldDefNum > 0)
             {
-                string fieldName = ApptFieldDefs.GetFieldName(apptRows[elementI].ApptFieldDefNum);
+                string fieldName = ApptFieldDef.GetFieldName(apptRows[elementI].ApptFieldDefNum);
                 for (int i = 0; i < tableApptFields.Rows.Count; i++)
                 {
                     if (tableApptFields.Rows[i]["AptNum"].ToString() != dataRoww["AptNum"].ToString())

@@ -42,7 +42,7 @@ namespace OpenDental
             }
 
             nameTextBox.Text = AutoNoteCur.Name;
-            textMain.Text = AutoNoteCur.MainText;
+            textMain.Text = AutoNoteCur.Content;
 
             LoadAutoNotePrompts();
         }
@@ -176,7 +176,7 @@ namespace OpenDental
         void acceptButton_Click(object sender, EventArgs e)
         {
             AutoNoteCur.Name = nameTextBox.Text;
-            AutoNoteCur.MainText = textMain.Text;
+            AutoNoteCur.Content = textMain.Text;
 
             if (IsNew)
             {

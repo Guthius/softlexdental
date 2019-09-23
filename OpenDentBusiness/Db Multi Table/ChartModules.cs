@@ -119,7 +119,7 @@ namespace OpenDentBusiness
                 switch (field.InternalName)
                 {
                     case "Allergies":
-                        data.ListAllergies = Allergies.GetAll(patNum, false);
+                        data.ListAllergies = PatientAllergy.GetByPatient(patNum, false);
                         break;
                     case "Medications":
                         //data.TableMeds = Medication.Refresh();

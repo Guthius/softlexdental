@@ -1,3 +1,23 @@
+/**
+ * Copyright (C) 2019 Dental Stars SRL
+ * Copyright (C) 2003-2019 Jordan S. Sparks, D.M.D.
+ * 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; If not, see <http://www.gnu.org/licenses/>
+ */
+using MySql.Data.MySqlClient;
+using System.Linq;
+
 namespace OpenDentBusiness
 {
     /// <summary>
@@ -5,8 +25,18 @@ namespace OpenDentBusiness
     /// </summary>
     public class AutoNote : DataRecord
     {
+        private static readonly DataRecordCache<AutoNote> cache = 
+            new DataRecordCache<AutoNote>("SELECT * FROM `auto_notes` ORDER BY `name`", FromReader);
+
+        /// <summary>
+        /// The name of the auto note.
+        /// </summary>
         public string Name;
-        public string MainText;
+
+        /// <summary>
+        /// The content of the auto note.
+        /// </summary>
+        public string Content;
 
         /// <summary>
         /// FK to definition.DefNum.
@@ -15,121 +45,70 @@ namespace OpenDentBusiness
         /// </summary>
         public long? CategoryId;
 
-        public AutoNote Copy()
+        /// <summary>
+        /// Constructs a new instance of the <see cref="AutoNote"/> class.
+        /// </summary>
+        /// <param name="dataReader">The data reader containing record data.</param>
+        /// <returns>A <see cref="AutoNote"/> instance.</returns>
+        private static AutoNote FromReader(MySqlDataReader dataReader)
         {
-            return (AutoNote)this.MemberwiseClone();
-        }
-
-        #region Cache Pattern
-
-        private class AutoNoteCache : CacheListAbs<AutoNote>
-        {
-            protected override List<AutoNote> GetCacheFromDb()
+            return new AutoNote
             {
-                string command = "SELECT * FROM autonote ORDER BY AutoNoteName";
-                return Crud.AutoNoteCrud.SelectMany(command);
-            }
-            protected override List<AutoNote> TableToList(DataTable table)
-            {
-                return Crud.AutoNoteCrud.TableToList(table);
-            }
-            protected override AutoNote Copy(AutoNote autoNote)
-            {
-                return autoNote.Copy();
-            }
-            protected override DataTable ListToTable(List<AutoNote> listAutoNotes)
-            {
-                return Crud.AutoNoteCrud.ListToTable(listAutoNotes, "AutoNote");
-            }
-            protected override void FillCacheIfNeeded()
-            {
-                AutoNotes.GetTableFromCache(false);
-            }
+                Id = (long)dataReader["id"],
+                Name = (string)dataReader["name"],
+                Content = (string)dataReader["content"]
+            };
         }
 
-        ///<summary>The object that accesses the cache in a thread-safe manner.</summary>
-        private static AutoNoteCache _autoNoteCache = new AutoNoteCache();
+        /// <summary>
+        /// Inserts the specified auto note into the database.
+        /// </summary>
+        /// <param name="autoNote">The auto note.</param>
+        /// <returns>The ID assigned to the auto note.</returns>
+        public static long Insert(AutoNote autoNote) =>
+            autoNote.Id = DataConnection.ExecuteInsert(
+                "INSERT INTO `auto_notes` (`name`, `content`) VALUES (?name, ?content)",
+                    new MySqlParameter("name", autoNote.Name ?? ""),
+                    new MySqlParameter("content", autoNote.Content ?? ""));
 
-        public static List<AutoNote> GetDeepCopy(bool isShort = false)
-        {
-            return _autoNoteCache.GetDeepCopy(isShort);
-        }
+        /// <summary>
+        /// Updates the specified auto note in the database.
+        /// </summary>
+        /// <param name="autoNote">The auto note.</param>
+        public static void Update(AutoNote autoNote) =>
+             DataConnection.ExecuteInsert(
+                "UPDATE `auto_notes` SET `name` = ?name, `content` = ?content WHERE `id` = ?id",
+                    new MySqlParameter("name", autoNote.Name ?? ""),
+                    new MySqlParameter("content", autoNote.Content ?? ""),
+                    new MySqlParameter("id", autoNote.Id));
 
-        public static List<AutoNote> GetWhere(Predicate<AutoNote> match, bool isShort = false)
-        {
-            return _autoNoteCache.GetWhere(match, isShort);
-        }
+        /// <summary>
+        /// Deletes the specified auto note from the database.
+        /// </summary>
+        /// <param name="autoNoteId"></param>
+        public static void Delete(long autoNoteId) =>
+            DataConnection.ExecuteNonQuery("DELETE FROM `auto_notes` WHERE `id` = " + autoNoteId);
 
-        public static bool GetExists(Predicate<AutoNote> match, bool isShort = false)
-        {
-            return _autoNoteCache.GetExists(match, isShort);
-        }
+        /// <summary>
+        /// Gets the text of the auto note with the specified name.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static string GetByName(string name) =>
+            cache.SelectOne(autoNote => autoNote.Name == name)?.Content ?? "";
 
-        private static AutoNote GetFirstOrDefault(Func<AutoNote, bool> match, bool isShort = false)
-        {
-            return _autoNoteCache.GetFirstOrDefault(match, isShort);
-        }
+        /// <summary>
+        /// Returns true if there is a valid AutoNote for the passed in AutoNoteName.
+        /// </summary>
+        public static bool IsValidAutoNote(string name) =>
+            cache.Any(autoNote => autoNote.Name == name);
 
-        ///<summary>Refreshes the cache and returns it as a DataTable. This will refresh the ClientWeb's cache and the ServerWeb's cache.</summary>
-        public static DataTable RefreshCache()
-        {
-            return GetTableFromCache(true);
-        }
+        /// <summary>
+        /// Sets the autonote.Category=0 for the autonote category DefNum provided.  Returns the number of rows updated.
+        /// </summary>
+        public static long RemoveFromCategory(long autoNoteCatDefId) =>
+            DataConnection.ExecuteNonQuery("UPDATE `auto_notes` SET `category_id` = NULL WHERE `category_id` = " + autoNoteCatDefId);
 
-        ///<summary>Fills the local cache with the passed in DataTable.</summary>
-        public static void FillCacheFromTable(DataTable table)
-        {
-            _autoNoteCache.FillCacheFromTable(table);
-        }
-
-        ///<summary>Always refreshes the ClientWeb's cache.</summary>
-        public static DataTable GetTableFromCache(bool doRefreshCache)
-        {
-            return _autoNoteCache.GetTableFromCache(doRefreshCache);
-        }
-
-        #endregion Cache Pattern
-
-        ///<summary></summary>
-        public static long Insert(AutoNote autonote)
-        {
-            return Crud.AutoNoteCrud.Insert(autonote);
-        }
-
-        ///<summary></summary>
-        public static void Update(AutoNote autonote)
-        {
-            Crud.AutoNoteCrud.Update(autonote);
-        }
-
-        ///<summary></summary>
-        public static void Delete(long autoNoteNum)
-        {
-            string command = "DELETE FROM autonote "
-                + "WHERE AutoNoteNum = " + POut.Long(autoNoteNum);
-            Db.NonQ(command);
-        }
-
-        public static string GetByTitle(string autoNoteTitle)
-        {
-            //No need to check RemotingRole; no call to db.
-            AutoNote autoNote = GetFirstOrDefault(x => x.Name == autoNoteTitle);
-            return (autoNote == null ? "" : autoNote.MainText);
-        }
-
-        ///<summary>Returns true if there is a valid AutoNote for the passed in AutoNoteName.</summary>
-        public static bool IsValidAutoNote(string autoNoteTitle)
-        {
-            //No need to check RemotingRole; no call to db.
-            AutoNote autoNote = GetFirstOrDefault(x => x.Name == autoNoteTitle);
-            return autoNote != null;
-        }
-
-        ///<summary>Sets the autonote.Category=0 for the autonote category DefNum provided.  Returns the number of rows updated.</summary>
-        public static long RemoveFromCategory(long autoNoteCatDefNum)
-        {
-            string command = "UPDATE autonote SET Category=0 WHERE Category=" + POut.Long(autoNoteCatDefNum);
-            return Db.NonQ(command);
-        }
+        public AutoNote Copy() => (AutoNote)MemberwiseClone();
     }
 }

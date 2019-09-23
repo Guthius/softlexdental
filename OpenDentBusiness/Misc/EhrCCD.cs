@@ -3076,7 +3076,7 @@ Vital Signs
         {
             //TODO: Add validation for UNII codes once the table has been implemented.
             Allergy allergyDef;
-            List<PatientAllergy> listAllergiesAll = Allergies.Refresh(patCur.PatNum);
+            List<PatientAllergy> listAllergiesAll = PatientAllergy.GetByPatient(patCur.PatNum);
             List<PatientAllergy> listAllergiesFiltered = new List<PatientAllergy>();
             for (int i = 0; i < listAllergiesAll.Count; i++)
             {

@@ -211,7 +211,8 @@ namespace OpenDentBusiness
                     break;//Users can delete AcctProcQuickCharge entries.  Nothing has an FKey to a AcctProcQuickCharge Def so no need to check anything.
 
                 case DefinitionCategory.AutoNoteCats:
-                    AutoNotes.RemoveFromCategory(def.Id);//set any autonotes assinged to this category to 0 (unassigned), user already warned about this
+                    // TODO: should be removed from category through fk contraint...
+                    AutoNote.RemoveFromCategory(def.Id);//set any autonotes assinged to this category to 0 (unassigned), user already warned about this
                     commandList.Add("SELECT COUNT(*) FROM autonote WHERE Category=" + def.Id);//just in case update failed or concurrency issue
                     break;
 

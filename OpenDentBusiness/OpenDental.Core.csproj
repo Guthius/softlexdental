@@ -350,13 +350,10 @@
     <Compile Include="Crud\AppointmentCrud.cs" />
     <Compile Include="Crud\AppointmentRuleCrud.cs" />
     <Compile Include="Crud\ApptReminderRuleCrud.cs" />
-    <Compile Include="__WIP\ApptReminderSentCrud.cs" />
     <Compile Include="Crud\ApptViewCrud.cs" />
     <Compile Include="Crud\ApptViewItemCrud.cs" />
-    <Compile Include="Crud\AutoCodeCondCrud.cs" />
     <Compile Include="Crud\AutomationConditionCrud.cs" />
     <Compile Include="Crud\AutomationCrud.cs" />
-    <Compile Include="Crud\AutoNoteControlCrud.cs" />
     <Compile Include="Crud\CDSPermissionCrud.cs" />
     <Compile Include="Crud\ClaimSnapshotCrud.cs" />
     <Compile Include="Crud\ClinicPrefCrud.cs" />
@@ -395,7 +392,6 @@
     <Compile Include="Crud\ClaimValCodeLogCrud.cs" />
     <Compile Include="Crud\ClearinghouseCrud.cs" />
     <Compile Include="Crud\ClinicCrud.cs" />
-    <Compile Include="Crud\CodeSystemCrud.cs" />
     <Compile Include="Crud\CommlogCrud.cs" />
     <Compile Include="Crud\ComputerPrefCrud.cs" />
     <Compile Include="Crud\CountyCrud.cs" />
@@ -528,6 +524,7 @@
     <Compile Include="Crud\QuestionDefCrud.cs" />
     <Compile Include="Crud\QuickPasteCatCrud.cs" />
     <Compile Include="Crud\QuickPasteNoteCrud.cs" />
+    <Compile Include="__WIP\AutoCodeConditionType.cs" />
     <Compile Include="__WIP\RecallCrud.cs" />
     <Compile Include="Crud\RecallTriggerCrud.cs" />
     <Compile Include="Crud\RecallTypeCrud.cs" />
@@ -566,7 +563,6 @@
     <Compile Include="Crud\UserWebCrud.cs" />
     <Compile Include="Crud\XWebResponseCrud.cs" />
     <Compile Include="Data Interface\ApptReminderRules.cs" />
-    <Compile Include="__WIP\ApptReminderSents.cs" />
     <Compile Include="Data Interface\ClaimSnapshots.cs" />
     <Compile Include="Data Interface\ClinicPrefs.cs" />
     <Compile Include="Data Interface\ConfirmationRequests.cs" />
@@ -649,7 +645,6 @@
     <Compile Include="Data Interface\Cdcrecs.cs" />
     <Compile Include="Data Interface\CentralConnections.cs" />
     <Compile Include="Data Interface\ChartViews.cs" />
-    <Compile Include="Data Interface\CodeSystems.cs" />
     <Compile Include="Data Interface\Cpts.cs" />
     <Compile Include="Data Interface\EhrAmendments.cs" />
     <Compile Include="Data Interface\EhrCodes.cs" />
@@ -775,8 +770,6 @@
     <Compile Include="Data Interface\AppointmentRules.cs" />
     <Compile Include="Data Interface\ApptViewItems.cs" />
     <Compile Include="Data Interface\ApptViews.cs" />
-    <Compile Include="Data Interface\AutoCodeConds.cs" />
-    <Compile Include="Data Interface\AutoNoteControls.cs" />
     <Compile Include="Data Interface\Benefits.cs" />
     <Compile Include="Data Interface\CanadianNetworks.cs" />
     <Compile Include="Data Interface\Carriers.cs" />
@@ -970,7 +963,7 @@
     <Compile Include="__WIP\Alert.cs" />
     <Compile Include="__WIP\AlertRead.cs" />
     <Compile Include="__WIP\AlertSubscription.cs" />
-    <Compile Include="TableTypes\ApptReminderSent.cs" />
+    <Compile Include="__WIP\ApptReminderSent.cs" />
     <Compile Include="TableTypes\ApptReminderRule.cs" />
     <Compile Include="TableTypes\ConfirmationRequest.cs" />
     <Compile Include="TableTypes\FHIRContactPoint.cs" />
@@ -1051,7 +1044,7 @@
     <Compile Include="__WIP\Allergy.cs" />
     <Compile Include="__WIP\PatientAllergy.cs" />
     <Compile Include="TableTypes\CentralConnection.cs" />
-    <Compile Include="TableTypes\CodeSystem.cs" />
+    <Compile Include="__WIP\CodeSystem.cs" />
     <Compile Include="TableTypes\Cdcrec.cs" />
     <Compile Include="TableTypes\Cpt.cs" />
     <Compile Include="TableTypes\Encounter.cs" />
@@ -1149,8 +1142,6 @@
     <Compile Include="WebBridges\Sftp.cs" />
     <Compile Include="WebTypes\Shared\XWeb\XWeb.cs" />
     <Compile Include="WebTypes\Shared\XWeb\XWebs.cs" />
-    <Compile Include="WebTypes\WebSched\TimeSlot\TimeSlot.cs" />
-    <Compile Include="WebTypes\WebSched\TimeSlot\TimeSlots.cs" />
     <Compile Include="X12\X12Segment.cs" />
     <Compile Include="X12\X12Seperators.cs" />
     <Compile Include="X12\X834.cs" />
@@ -1203,10 +1194,10 @@
     <Compile Include="TableTypes\ApptView.cs" />
     <Compile Include="TableTypes\ApptViewItem.cs" />
     <Compile Include="__WIP\AutoCode.cs" />
-    <Compile Include="TableTypes\AutoCodeCond.cs" />
+    <Compile Include="__WIP\AutoCodeCondition.cs" />
     <Compile Include="__WIP\AutoCodeItem.cs" />
     <Compile Include="__WIP\AutoNote.cs" />
-    <Compile Include="TableTypes\AutoNoteControl.cs" />
+    <Compile Include="__WIP\AutoNoteControl.cs" />
     <Compile Include="TableTypes\Benefit.cs" />
     <Compile Include="TableTypes\Carrier.cs" />
     <Compile Include="TableTypes\Claim.cs" />

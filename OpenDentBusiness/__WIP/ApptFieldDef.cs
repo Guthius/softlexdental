@@ -123,7 +123,7 @@ namespace OpenDentBusiness
             {
                 if (table.Rows.Count > 0)
                 {
-                    var message = "Not allowed to delete. Already in use by " + table.Rows.Count.ToString() + " appointments, including\r\n";
+                    var message = "Unable to delete field definition. Already in use by " + table.Rows.Count.ToString() + " appointments, including\r\n";
 
                     for (int i = 0; i < table.Rows.Count; i++)
                     {

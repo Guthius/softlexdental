@@ -26,7 +26,7 @@ namespace OpenDental{
 		///<summary>Set this before opening the form.</summary>
 		public AutoCode AutoCodeCur;
 		List<AutoCodeItem> listForCode;
-		private List<AutoCodeCond> _listAutoCodeConds;
+		private List<AutoCodeCondition> _listAutoCodeConds;
 
 		///<summary></summary>
 		public FormAutoCodeEdit(){
@@ -333,7 +333,7 @@ namespace OpenDental{
 			AutoCodeItems.RefreshCache();
 			AutoCodeConds.RefreshCache();
 			for(int i=0;i<listForCode.Count;i++) {//Attach the conditions to the items for better organization
-				listForCode[i].Conditions=new List<AutoCodeCond>();
+				listForCode[i].Conditions=new List<AutoCodeCondition>();
         for(int j=0;j<_listAutoCodeConds.Count;j++){//Fill conditions for this AutoCodeItem
           if(_listAutoCodeConds[j].AutoCodeItemId==listForCode[i].Id){
 						listForCode[i].Conditions.Add(_listAutoCodeConds[j]);
@@ -379,50 +379,50 @@ namespace OpenDental{
 			for(int i=0;i<listForCode.Count;i++) {
 				//If the item matches the category, set the boolean to true.
 				for(int j=0;j<listForCode[i].Conditions.Count;j++) {
-					if(listForCode[i].Conditions[j].Condition==AutoCondition.Anterior) {
+					if(listForCode[i].Conditions[j].Condition==AutoCodeConditionType.Anterior) {
 						isAnt=true;
 						//We want to also set either isAntPost or isAntPreMol, but we don't have enough information yet to set that.
 						continue;
 					}
-					if(listForCode[i].Conditions[j].Condition==AutoCondition.Posterior) {
+					if(listForCode[i].Conditions[j].Condition==AutoCodeConditionType.Posterior) {
 						isAntPost=true;
 						continue;
 					}
-					if(listForCode[i].Conditions[j].Condition==AutoCondition.Premolar
-						|| listForCode[i].Conditions[j].Condition==AutoCondition.Molar
+					if(listForCode[i].Conditions[j].Condition==AutoCodeConditionType.Premolar
+						|| listForCode[i].Conditions[j].Condition==AutoCodeConditionType.Molar
 						) {
 						isAntPreMol=true;
 						continue;
 					}
-					if(listForCode[i].Conditions[j].Condition==AutoCondition.One_Surf
-						|| listForCode[i].Conditions[j].Condition==AutoCondition.Two_Surf
-						|| listForCode[i].Conditions[j].Condition==AutoCondition.Three_Surf
-						|| listForCode[i].Conditions[j].Condition==AutoCondition.Four_Surf
-						|| listForCode[i].Conditions[j].Condition==AutoCondition.Five_Surf
+					if(listForCode[i].Conditions[j].Condition==AutoCodeConditionType.OneSurface
+						|| listForCode[i].Conditions[j].Condition==AutoCodeConditionType.TwoSurfaces
+						|| listForCode[i].Conditions[j].Condition==AutoCodeConditionType.ThreeSurfaces
+						|| listForCode[i].Conditions[j].Condition==AutoCodeConditionType.FourSurfaces
+						|| listForCode[i].Conditions[j].Condition==AutoCodeConditionType.FiveSurfaces
 						) {
 						isNumSurf=true;
 						continue;
 					}
-					if(listForCode[i].Conditions[j].Condition==AutoCondition.First
-						|| listForCode[i].Conditions[j].Condition==AutoCondition.EachAdditional
+					if(listForCode[i].Conditions[j].Condition==AutoCodeConditionType.First
+						|| listForCode[i].Conditions[j].Condition==AutoCodeConditionType.EachAdditional
 						) {
 						isFirstEachAdd=true;
 						continue;
 					}
-					if(listForCode[i].Conditions[j].Condition==AutoCondition.Maxillary
-						|| listForCode[i].Conditions[j].Condition==AutoCondition.Mandibular
+					if(listForCode[i].Conditions[j].Condition==AutoCodeConditionType.Maxillary
+						|| listForCode[i].Conditions[j].Condition==AutoCodeConditionType.Mandibular
 						) {
 						isMaxMand=true;
 						continue;
 					}
-					if(listForCode[i].Conditions[j].Condition==AutoCondition.Primary
-						|| listForCode[i].Conditions[j].Condition==AutoCondition.Permanent
+					if(listForCode[i].Conditions[j].Condition==AutoCodeConditionType.Primary
+						|| listForCode[i].Conditions[j].Condition==AutoCodeConditionType.Permanent
 						) {
 						isPriPerm=true;
 						continue;
 					}
-					if(listForCode[i].Conditions[j].Condition==AutoCondition.Pontic
-						|| listForCode[i].Conditions[j].Condition==AutoCondition.Retainer
+					if(listForCode[i].Conditions[j].Condition==AutoCodeConditionType.Pontic
+						|| listForCode[i].Conditions[j].Condition==AutoCodeConditionType.Retainer
 						) {
 						isPontRet=true;
 						continue;

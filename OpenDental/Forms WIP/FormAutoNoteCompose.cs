@@ -99,7 +99,7 @@ namespace OpenDental
                 return;
             }
 
-            PromptForAutoNotes(autoNote.MainText, new List<AutoNoteListItem>());
+            PromptForAutoNotes(autoNote.Content, new List<AutoNoteListItem>());
 
             if (!IsDisplosedOrClosed(this))
             {

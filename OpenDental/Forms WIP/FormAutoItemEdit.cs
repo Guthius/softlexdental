@@ -171,10 +171,10 @@ namespace OpenDental{
 
 		private void FillList() {
 			listConditions.Items.Clear();
-			foreach(string s in Enum.GetNames(typeof(AutoCondition))) {
+			foreach(string s in Enum.GetNames(typeof(AutoCodeConditionType))) {
 				listConditions.Items.Add(Lan.g("enumAutoConditions",s));
 			}
-			List<AutoCodeCond> listAutoCodeConds=AutoCodeConds.GetWhere(x => x.AutoCodeItemId==AutoCodeItemCur.Id);
+			List<AutoCodeCondition> listAutoCodeConds=AutoCodeConds.GetWhere(x => x.AutoCodeItemId==AutoCodeItemCur.Id);
 			for(int i=0;i<listAutoCodeConds.Count;i++) {
 				listConditions.SetSelected((int)listAutoCodeConds[i].Condition,true);
 			}
@@ -196,9 +196,9 @@ namespace OpenDental{
 			}
 			AutoCodeConds.DeleteForItemNum(AutoCodeItemCur.Id);
 			for(int i=0;i<listConditions.SelectedIndices.Count;i++) {
-				AutoCodeCond AutoCodeCondCur=new AutoCodeCond();
+				AutoCodeCondition AutoCodeCondCur=new AutoCodeCondition();
 				AutoCodeCondCur.AutoCodeItemId=AutoCodeItemCur.Id;
-				AutoCodeCondCur.Condition=(AutoCondition)listConditions.SelectedIndices[i];
+				AutoCodeCondCur.Condition=(AutoCodeConditionType)listConditions.SelectedIndices[i];
 				AutoCodeConds.Insert(AutoCodeCondCur);
 			}
 			DialogResult=DialogResult.OK;

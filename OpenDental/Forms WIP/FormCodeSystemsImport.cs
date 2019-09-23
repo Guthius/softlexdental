@@ -64,12 +64,12 @@ namespace OpenDental {
 			ODGridRow row;
 			for(int i=0;i<_listCodeSystems.Count;i++){
 				row=new ODGridRow();
-				row.Cells.Add(_listCodeSystems[i].CodeSystemName);
-				row.Cells.Add(_listCodeSystems[i].VersionCur);
+				row.Cells.Add(_listCodeSystems[i].Name);
+				row.Cells.Add(_listCodeSystems[i].Version);
 				row.Cells.Add(_listCodeSystems[i].VersionAvail);
 				//Initialize with the status which may have been set during pre-download in butDownload_Click. This cell will be updated on download progress updates.
 				string status="";
-				_mapCodeSystemStatus.TryGetValue(_listCodeSystems[i].CodeSystemName,out status);
+				_mapCodeSystemStatus.TryGetValue(_listCodeSystems[i].Name,out status);
 				row.Cells.Add(status);
 				row.Tag=_listCodeSystems[i];
 				gridMain.Rows.Add(row);
@@ -535,7 +535,7 @@ If the master term dictionary or software program containing the UCUM table, UCU
 			for(int i=0;i<gridMain.Rows.Count;i++) {
 				if(gridMain.Rows[i].Tag==null 
 					|| !(gridMain.Rows[i].Tag is CodeSystem)
-					|| !(((CodeSystem)gridMain.Rows[i].Tag).CodeSystemName==codeSystem.CodeSystemName)) {
+					|| !(((CodeSystem)gridMain.Rows[i].Tag).Name==codeSystem.Name)) {
 					continue;
 				}
 				string cellText=((int)percentDone)+"%"+" -- "+status;
@@ -616,7 +616,7 @@ If the master term dictionary or software program containing the UCUM table, UCU
             ///<summary>Provide a nice ledgible identifier.</summary>
             public override string ToString()
             {
-                return _codeSystem.CodeSystemName;
+                return _codeSystem.Name;
             }
 
             ///<summary>Thread list manager needs this to remove threads. Required for List.Contains.</summary>
@@ -733,7 +733,7 @@ If the master term dictionary or software program containing the UCUM table, UCU
                         throw new Exception(failText);
                     }
                     //set current version=available version
-                    if (_codeSystem.CodeSystemName == "CPT")
+                    if (_codeSystem.Name == "CPT")
                     {
                         CodeSystems.UpdateCurrentVersion(_codeSystem, _versionID);
                     }
@@ -760,7 +760,7 @@ If the master term dictionary or software program containing the UCUM table, UCU
                     //Local file will only be provided for CPT code system.
                     if (string.IsNullOrEmpty(_localFilePath))
                     {
-                        string result = SendAndReceiveDownloadXml(_codeSystem.CodeSystemName);
+                        string result = SendAndReceiveDownloadXml(_codeSystem.Name);
                         XmlDocument doc = new XmlDocument();
                         doc.LoadXml(result);
                         string strError = WebServiceRequest.CheckForErrors(doc);
@@ -771,7 +771,7 @@ If the master term dictionary or software program containing the UCUM table, UCU
                         XmlNode node = doc.SelectSingleNode("//CodeSystemURL");
                         if (node == null)
                         {
-                            throw new Exception(Lan.g("CodeSystemImporter", "Code System URL is empty for ") + ": " + _codeSystem.CodeSystemName);
+                            throw new Exception(Lan.g("CodeSystemImporter", "Code System URL is empty for ") + ": " + _codeSystem.Name);
                         }
                         //Node's inner text contains the URL
                         _localFilePath = DownloadFileHelper(node.InnerText);
@@ -780,7 +780,7 @@ If the master term dictionary or software program containing the UCUM table, UCU
                     {
                         throw new Exception(Lan.g("CodeSystemImporter", "Local file not found ") + ": " + _localFilePath);
                     }
-                    switch (_codeSystem.CodeSystemName)
+                    switch (_codeSystem.Name)
                     {
                         case "CDCREC":
                             CodeSystems.ImportCdcrec(_localFilePath, new CodeSystems.ProgressArgs(ImportProgress), ref _quit, ref numCodesImported, ref numCodesUpdated,
@@ -829,7 +829,7 @@ If the master term dictionary or software program containing the UCUM table, UCU
                         case "CDT":  //import not supported
                         case "AdministrativeSex":  //import not supported
                         default:  //new code system perhaps?
-                            throw new Exception(Lan.g("CodeSystemImporter", "Unsupported Code System") + ": " + _codeSystem.CodeSystemName);
+                            throw new Exception(Lan.g("CodeSystemImporter", "Unsupported Code System") + ": " + _codeSystem.Name);
                     }
                     //Import succeded so delete the import file where necessary.
                     DeleteImportFileIfNecessary();

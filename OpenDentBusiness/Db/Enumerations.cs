@@ -533,43 +533,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		DataDump}*/
 	///<summary></summary>
-  public enum AutoCondition{
-		///<summary>0</summary>
-		Anterior,
-		///<summary>1</summary>
-		Posterior,
-		///<summary>2</summary>
-		Premolar,
-		///<summary>3</summary>
-		Molar,
-		///<summary>4</summary>
-		One_Surf,
-		///<summary>5</summary>
-		Two_Surf,
-		///<summary>6</summary>
-		Three_Surf,
-		///<summary>7</summary>
-		Four_Surf,
-		///<summary>8</summary>
-		Five_Surf,
-		///<summary>9</summary>
-		First,
-		///<summary>10</summary>
-		EachAdditional,
-		///<summary>11</summary>
-		Maxillary,
-		///<summary>12</summary>
-		Mandibular,
-		///<summary>13</summary>
-		Primary,
-		///<summary>14</summary>
-		Permanent,
-		///<summary>15</summary>
-		Pontic,
-		///<summary>16</summary>
-		Retainer,
-		///<summary>17</summary>
-		AgeOver18}
+
 	///<Summary>Used for insurance substitutions conditions of procedurecodes.  Mostly for posterior composites.</Summary>
 	public enum SubstitutionCondition{
 		///<Summary>0</Summary>

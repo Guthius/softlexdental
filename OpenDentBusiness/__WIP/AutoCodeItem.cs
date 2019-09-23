@@ -1,4 +1,23 @@
+/**
+ * Copyright (C) 2019 Dental Stars SRL
+ * Copyright (C) 2003-2019 Jordan S. Sparks, D.M.D.
+ * 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; If not, see <http://www.gnu.org/licenses/>
+ */
+using MySql.Data.MySqlClient;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace OpenDentBusiness
 {
@@ -9,166 +28,186 @@ namespace OpenDentBusiness
     /// </summary>
     public class AutoCodeItem : DataRecord
     {
-        /// <summary>FK to autocode.AutoCodeNum</summary>
+        private static readonly DataRecordCache<AutoCodeItem> cache =
+            new DataRecordCache<AutoCodeItem>("SELECT * FROM `auto_code_items`", FromReader);
+
         public long AutoCodeId;
-
-        /// <summary>Do not use</summary>
-        public string OldCode;
-
-        /// <summary>FK to procedurecode.CodeNum</summary>
         public long ProcedureCodeId;
 
         /// <summary>
         /// Only used in the validation section when closing FormAutoCodeEdit.
         /// Will normally be empty.
         /// </summary>
-        public List<AutoCodeCond> Conditions;
+        public List<AutoCodeCondition> Conditions;
 
-
-
-        public static long Insert(AutoCodeItem Cur)
+        /// <summary>
+        /// Constructs a new instance of the <see cref="AutoCodeItem"/> class.
+        /// </summary>
+        /// <param name="dataReader">The data reader containing record data.</param>
+        /// <returns>A <see cref="AutoCodeItem"/> instance.</returns>
+        private static AutoCodeItem FromReader(MySqlDataReader dataReader)
         {
-            return Crud.AutoCodeItemCrud.Insert(Cur);
+            return new AutoCodeItem
+            {
+                Id = (long)dataReader["id"],
+                AutoCodeId = (long)dataReader["auto_code_id"],
+                ProcedureCodeId = (long)dataReader["procedure_code_id"]
+            };
         }
 
+        /// <summary>
+        /// Inserts the specified auto code item into the database.
+        /// </summary>
+        /// <param name="autoCodeItem">The auto code item.</param>
+        /// <returns>The ID assigned to the auto code item.</returns>
+        public static long Insert(AutoCodeItem autoCodeItem) =>
+            autoCodeItem.Id = DataConnection.ExecuteInsert(
+                "INSERT INTO `auto_code_items` (`auto_code_id`, `procedure_code_id`) VALUES (?auto_code_id, ?procedure_code_id)",
+                    new MySqlParameter("auto_code_id", autoCodeItem.AutoCodeId),
+                    new MySqlParameter("procedure_code_id", autoCodeItem.ProcedureCodeId));
 
-        public static void Update(AutoCodeItem Cur)
-        {
-            Crud.AutoCodeItemCrud.Update(Cur);
-        }
-
-
-        public static void Delete(AutoCodeItem Cur)
-        {
+        /// <summary>
+        /// Updates the specified auto code item in the database.
+        /// </summary>
+        /// <param name="autoCodeItem">The auto code item.</param>
+        public static void Update(AutoCodeItem autoCodeItem) =>
             DataConnection.ExecuteNonQuery(
-                "DELETE FROM auto_code_items WHERE id = " + Cur.Id);
-        }
+                "UPDATE `auto_code_items` SET `auto_code_id` = ?auto_code_id, `procedure_code_id` = ?procedure_code_id WHERE `id` = ?id",
+                    new MySqlParameter("auto_code_id", autoCodeItem.AutoCodeId),
+                    new MySqlParameter("procedure_code_id", autoCodeItem.ProcedureCodeId),
+                    new MySqlParameter("id", autoCodeItem.Id));
 
-        ///<summary>Gets from cache.  No call to db.</summary>
-        public static List<AutoCodeItem> GetListForCode(long autoCodeNum)
+        /// <summary>
+        /// Deletes the specified auto code item.
+        /// </summary>
+        /// <param name="autoCodeItem">The auto code item.</param>
+        public static void Delete(AutoCodeItem autoCodeItem) =>
+            DataConnection.ExecuteNonQuery(
+                "DELETE FROM `auto_code_items` WHERE `id` = " + autoCodeItem.Id);
+
+        /// <summary>
+        /// Gets a list of auto code items assigned to the specified auto code.
+        /// </summary>
+        /// <param name="autoCodeId">The ID of the auto code.</param>
+        /// <returns>A list of auto code items.</returns>
+        public static List<AutoCodeItem> GetByAutoCode(long autoCodeId) =>
+            cache.Where(autoCodeItem => autoCodeItem.AutoCodeId == autoCodeId).ToList();
+
+        public static long GetCodeNum(long autoCodeId, string toothNumber, string surface, bool isAdditional, long patientId, int age, bool willBeMissing)
         {
-            //No need to check RemotingRole; no call to db.
-            return _autoCodeItemCache.GetWhereFromList(x => x.AutoCodeId == autoCodeNum);
-        }
-
-        //-----
-
-        ///<summary>Only called from ContrChart.listProcButtons_Click.  Called once for each tooth selected and for each autocode item attached to the button.</summary>
-        public static long GetCodeNum(long autoCodeNum, string toothNum, string surf, bool isAdditional, long patNum, int age, bool willBeMissing)
-        {
-            //No need to check RemotingRole; no call to db.
-            bool allCondsMet;
-            List<AutoCodeItem> listForCode = AutoCodeItems.GetListForCode(autoCodeNum);
-            if (listForCode.Count == 0)
-            {
+            var autoCodeItems = GetByAutoCode(autoCodeId);
+            if (autoCodeItems.Count == 0)
                 return 0;
-            }
-            //bool willBeMissing=Procedures.WillBeMissing(toothNum,patNum);//moved this out so that this method has no db call
-            List<AutoCodeCond> condList;
-            for (int i = 0; i < listForCode.Count; i++)
+            
+
+            foreach (var autoCodeItem in autoCodeItems)
             {
-                condList = AutoCodeConds.GetListForItem(listForCode[i].Id);
-                allCondsMet = true;
-                for (int j = 0; j < condList.Count; j++)
+                var autoCodeConditions = AutoCodeCondition.GetByAutoCodeItem(autoCodeItem.Id);
+
+                var conditionsMet = true;
+                foreach (var autoCodeCondition in autoCodeConditions)
                 {
-                    if (!AutoCodeConds.ConditionIsMet(condList[j].Condition, toothNum, surf, isAdditional, willBeMissing, age))
+                    if (!AutoCodeCondition.CheckCondition(autoCodeCondition.Condition, toothNumber, surface, isAdditional, willBeMissing, age))
                     {
-                        allCondsMet = false;
+                        conditionsMet = false;
+
+                        break;
                     }
                 }
-                if (allCondsMet)
-                {
-                    return listForCode[i].ProcedureCodeId;
-                }
+
+                if (conditionsMet) return autoCodeItem.ProcedureCodeId;
             }
-            return listForCode[0].ProcedureCodeId;//if couldn't find a better match
+
+            return autoCodeItems[0].ProcedureCodeId;
         }
 
-        ///<summary>Only called when closing the procedure edit window. Usually returns the supplied CodeNum, unless a better match is found.</summary>
-        public static long VerifyCode(long codeNum, string toothNum, string surf, bool isAdditional, long patNum, int age,
-            out AutoCode AutoCodeCur)
+        public static long VerifyCode(long procedureCodeId, string toothNumber, string surface, bool isAdditional, long patientId, int age, out AutoCode autoCode)
         {
-            //No need to check RemotingRole; no call to db.
-            bool allCondsMet;
-            AutoCodeCur = null;
-            if (!GetContainsKey(codeNum))
+            // TODO: Rework this??
+
+            autoCode = null;
+
+            var tempAutoCodeItem = cache.FirstOrDefault(x => x.ProcedureCodeId == procedureCodeId);
+            if (tempAutoCodeItem == null)
+                return procedureCodeId;
+            
+            autoCode = AutoCode.GetById(tempAutoCodeItem.AutoCodeId);
+            if (autoCode == null || autoCode.LessIntrusive)
+                return procedureCodeId;
+
+            bool willBeMissing = Procedures.WillBeMissing(toothNumber, patientId);
+
+            var autoCodeItems = GetByAutoCode(tempAutoCodeItem.AutoCodeId);
+            foreach (var autoCodeItem in autoCodeItems)
             {
-                return codeNum;
-            }
-            if (!AutoCodes.GetContainsKey(GetOne(codeNum).AutoCodeId))
-            {
-                return codeNum;//just in case.
-            }
-            AutoCodeCur = AutoCodes.GetOne(GetOne(codeNum).AutoCodeId);
-            if (AutoCodeCur.LessIntrusive)
-            {
-                return codeNum;
-            }
-            bool willBeMissing = Procedures.WillBeMissing(toothNum, patNum);
-            List<AutoCodeItem> listForCode = AutoCodeItems.GetListForCode(GetOne(codeNum).AutoCodeId);
-            List<AutoCodeCond> condList;
-            for (int i = 0; i < listForCode.Count; i++)
-            {
-                condList = AutoCodeConds.GetListForItem(listForCode[i].Id);
-                allCondsMet = true;
-                for (int j = 0; j < condList.Count; j++)
+                var autoCodeConditions = AutoCodeCondition.GetByAutoCodeItem(autoCodeItem.Id);
+
+                var conditionsMet = true;
+                foreach (var autoCodeCondition in autoCodeConditions)
                 {
-                    if (!AutoCodeConds.ConditionIsMet(condList[j].Condition, toothNum, surf, isAdditional, willBeMissing, age))
+                    if (!AutoCodeCondition.CheckCondition(autoCodeCondition.Condition, toothNumber, surface, isAdditional, willBeMissing, age))
                     {
-                        allCondsMet = false;
+                        conditionsMet = false;
+
+                        break;
                     }
                 }
-                if (allCondsMet)
-                {
-                    return listForCode[i].ProcedureCodeId;
-                }
+
+                if (conditionsMet) return autoCodeItem.ProcedureCodeId;
             }
-            return codeNum;//if couldn't find a better match
+
+            return procedureCodeId;
         }
 
-        ///<summary>Checks inputs and determines if user should be prompted to pick a more applicable procedure code.</summary>
-        ///<param name="verifyCode">This is the recommended code based on input. If it matches procCode return value will be false.</param>
-        public static bool ShouldPromptForCodeChange(Procedure proc, ProcedureCode procCode, Patient pat, bool isMandibular,
-            List<ClaimProc> claimProcsForProc, out long verifyCode)
+        /// <summary>
+        /// Checks inputs and determines if user should be prompted to pick a more applicable procedure code.
+        /// </summary>
+        /// <param name="verifyCode">This is the recommended code based on input. If it matches procCode return value will be false.</param>
+        public static bool ShouldPromptForCodeChange(Procedure procedure, ProcedureCode procedureCode, Patient patient, bool isMandibular, List<ClaimProc> claimProcsForProc, out long verifyCode)
         {
-            //No remoting role check; no call to db and method utilizes an out parameter.
-            verifyCode = proc.CodeNum;
-            //these areas have no autocodes
-            if (procCode.TreatArea == TreatmentArea.Mouth
-                || procCode.TreatArea == TreatmentArea.Quad
-                || procCode.TreatArea == TreatmentArea.Sextant
-                || Procedures.IsAttachedToClaim(proc, claimProcsForProc))
+            verifyCode = procedure.CodeNum;
+
+            if (procedureCode.TreatArea == TreatmentArea.Mouth || 
+                procedureCode.TreatArea == TreatmentArea.Quad || 
+                procedureCode.TreatArea == TreatmentArea.Sextant || 
+                Procedures.IsAttachedToClaim(procedure, claimProcsForProc))
             {
                 return false;
             }
-            //this represents the suggested code based on the autocodes set up.
-            AutoCode AutoCodeCur = null;
-            if (procCode.TreatArea == TreatmentArea.Arch)
+
+            if (procedureCode.TreatArea == TreatmentArea.Arch)
             {
-                if (string.IsNullOrEmpty(proc.Surf))
-                {
-                    return false;
-                }
-                if (proc.Surf == "U")
-                {
-                    verifyCode = AutoCodeItems.VerifyCode(procCode.CodeNum, "1", "", proc.IsAdditional, pat.PatNum, pat.Age, out AutoCodeCur);//max
-                }
-                else
-                {
-                    verifyCode = AutoCodeItems.VerifyCode(procCode.CodeNum, "32", "", proc.IsAdditional, pat.PatNum, pat.Age, out AutoCodeCur);//mand
-                }
+                if (string.IsNullOrEmpty(procedure.Surf)) return false;
+
+                verifyCode =
+                    procedure.Surf == "U" ?
+                        VerifyCode(procedureCode.CodeNum, "1", "", procedure.IsAdditional, patient.PatNum, patient.Age, out _) ://max
+                        VerifyCode(procedureCode.CodeNum, "32", "", procedure.IsAdditional, patient.PatNum, patient.Age, out _);//mand
             }
-            else if (procCode.TreatArea == TreatmentArea.ToothRange)
+            else if (procedureCode.TreatArea == TreatmentArea.ToothRange)
             {
-                //test for max or mand.
-                verifyCode = AutoCodeItems.VerifyCode(procCode.CodeNum, (isMandibular) ? "32" : "1", "", proc.IsAdditional, pat.PatNum, pat.Age, out AutoCodeCur);
+                verifyCode = VerifyCode(
+                    procedureCode.CodeNum, 
+                    isMandibular ? "32" : "1", 
+                    "",
+                    procedure.IsAdditional, 
+                    patient.PatNum, 
+                    patient.Age, 
+                    out _);
             }
             else
-            {//surf or tooth
-                string claimSurf = Tooth.SurfTidyForClaims(proc.Surf, proc.ToothNum);
-                verifyCode = AutoCodeItems.VerifyCode(procCode.CodeNum, proc.ToothNum, claimSurf, proc.IsAdditional, pat.PatNum, pat.Age, out AutoCodeCur);
+            {
+                verifyCode = VerifyCode(
+                    procedureCode.CodeNum, 
+                    procedure.ToothNum,
+                    Tooth.SurfTidyForClaims(procedure.Surf, procedure.ToothNum), 
+                    procedure.IsAdditional, 
+                    patient.PatNum, 
+                    patient.Age, 
+                    out _);
             }
-            return procCode.CodeNum != verifyCode;
+
+            return procedureCode.CodeNum != verifyCode;
         }
     }
 }

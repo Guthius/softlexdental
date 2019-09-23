@@ -1058,90 +1058,42 @@ namespace OpenDentBusiness
         }
 
         [DatabaseMaintenanceAttribute]
-        public static string AutoCodeItemsWithNoAutoCode(bool verbose, DatabaseMaintenanceMode modeCur)
-        {
-            string log = "";
-            string command;
-            DataTable table;
-            switch (modeCur)
-            {
-                case DatabaseMaintenanceMode.Check:
-                    command = @"SELECT DISTINCT AutoCodeNum FROM autocodeitem WHERE NOT EXISTS(
-						SELECT * FROM autocode WHERE autocodeitem.AutoCodeNum=autocode.AutoCodeNum)";
-                    table = Db.GetTable(command);
-                    int numFound = table.Rows.Count;
-                    if (numFound != 0 || verbose)
-                    {
-                        log += Lans.g("FormDatabaseMaintenance", "Auto codes missing due to invalid auto code items") + ": " + numFound.ToString() + "\r\n";
-                    }
-                    break;
-                case DatabaseMaintenanceMode.Fix:
-                    List<DbmLog> listDbmLogs = new List<DbmLog>();
-                    string methodName = MethodBase.GetCurrentMethod().Name;
-                    command = @"SELECT DISTINCT AutoCodeNum FROM autocodeitem WHERE NOT EXISTS(
-						SELECT * FROM autocode WHERE autocodeitem.AutoCodeNum=autocode.AutoCodeNum)";
-                    table = Db.GetTable(command);
-                    int numFixed = table.Rows.Count;
-                    for (int i = 0; i < table.Rows.Count; i++)
-                    {
-                        AutoCode autoCode = new AutoCode();
-                        autoCode.Id = PIn.Long(table.Rows[i]["AutoCodeNum"].ToString());
-                        autoCode.Description = "UNKNOWN";
-                        Crud.AutoCodeCrud.Insert(autoCode, true);
-                        listDbmLogs.Add(new DbmLog(Security.CurrentUser.Id, autoCode.Id, DbmLogFKeyType.AutoCode, DbmLogActionType.Insert, methodName,
-                            "Added a new AutoCode from AutoCodeItemsWithNoAutoCode"));
-                    }
-                    if (numFixed > 0)
-                    {
-                        // TODO: Signalods.SetInvalid(InvalidType.AutoCodes);
-                    }
-                    if (numFixed != 0 || verbose)
-                    {
-                        Crud.DbmLogCrud.InsertMany(listDbmLogs);
-                        log += Lans.g("FormDatabaseMaintenance", "Auto codes created due to invalid auto code items") + ": " + numFixed.ToString() + "\r\n";
-                    }
-                    break;
-            }
-            return log;
-        }
-
-        [DatabaseMaintenanceAttribute]
         public static string AutoCodesDeleteWithNoItems(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
-            string command;
-            switch (modeCur)
-            {
-                case DatabaseMaintenanceMode.Check:
-                    command = @"SELECT COUNT(*) FROM autocode WHERE NOT EXISTS(
-						SELECT * FROM autocodeitem WHERE autocodeitem.AutoCodeNum=autocode.AutoCodeNum)";
-                    int numFound = PIn.Int(Db.GetCount(command));
-                    if (numFound != 0 || verbose)
-                    {
-                        log += Lans.g("FormDatabaseMaintenance", "Autocodes found with no items: ") + numFound + "\r\n";
-                    }
-                    break;
-                case DatabaseMaintenanceMode.Fix:
-                    command = @"SELECT * FROM autocode WHERE NOT EXISTS(SELECT * FROM autocodeitem WHERE autocodeitem.AutoCodeNum=autocode.AutoCodeNum)";
-                    List<AutoCode> listAutoCodes = Crud.AutoCodeCrud.SelectMany(command);
-                    List<DbmLog> listDbmLogs = new List<DbmLog>();
-                    string methodName = MethodBase.GetCurrentMethod().Name;
-                    command = @"DELETE FROM autocode WHERE NOT EXISTS(
-						SELECT * FROM autocodeitem WHERE autocodeitem.AutoCodeNum=autocode.AutoCodeNum)";
-                    long numberFixed = Db.NonQ(command);
-                    listAutoCodes.ForEach(x => listDbmLogs.Add(new DbmLog(Security.CurrentUser.Id, x.Id, DbmLogFKeyType.AutoCode,
-                        DbmLogActionType.Delete, methodName, "Deleted AutoCode:" + x.Description + " from AutoCodesDeleteWithNoItems")));
-                    if (numberFixed > 0)
-                    {
-                        // TODO: Signalods.SetInvalid(InvalidType.AutoCodes);
-                    }
-                    if (numberFixed != 0 || verbose)
-                    {
-                        Crud.DbmLogCrud.InsertMany(listDbmLogs);
-                        log += Lans.g("FormDatabaseMaintenance", "Autocodes deleted due to no items: ") + numberFixed.ToString() + "\r\n";
-                    }
-                    break;
-            }
+      //      string command;
+      //      switch (modeCur)
+      //      {
+      //          case DatabaseMaintenanceMode.Check:
+      //              command = @"SELECT COUNT(*) FROM autocode WHERE NOT EXISTS(
+						//SELECT * FROM autocodeitem WHERE autocodeitem.AutoCodeNum=autocode.AutoCodeNum)";
+      //              int numFound = PIn.Int(Db.GetCount(command));
+      //              if (numFound != 0 || verbose)
+      //              {
+      //                  log += Lans.g("FormDatabaseMaintenance", "Autocodes found with no items: ") + numFound + "\r\n";
+      //              }
+      //              break;
+      //          case DatabaseMaintenanceMode.Fix:
+      //              command = @"SELECT * FROM autocode WHERE NOT EXISTS(SELECT * FROM autocodeitem WHERE autocodeitem.AutoCodeNum=autocode.AutoCodeNum)";
+      //              List<AutoCode> listAutoCodes = Crud.AutoCodeCrud.SelectMany(command);
+      //              List<DbmLog> listDbmLogs = new List<DbmLog>();
+      //              string methodName = MethodBase.GetCurrentMethod().Name;
+      //              command = @"DELETE FROM autocode WHERE NOT EXISTS(
+						//SELECT * FROM autocodeitem WHERE autocodeitem.AutoCodeNum=autocode.AutoCodeNum)";
+      //              long numberFixed = Db.NonQ(command);
+      //              listAutoCodes.ForEach(x => listDbmLogs.Add(new DbmLog(Security.CurrentUser.Id, x.Id, DbmLogFKeyType.AutoCode,
+      //                  DbmLogActionType.Delete, methodName, "Deleted AutoCode:" + x.Description + " from AutoCodesDeleteWithNoItems")));
+      //              if (numberFixed > 0)
+      //              {
+      //                  // TODO: Signalods.SetInvalid(InvalidType.AutoCodes);
+      //              }
+      //              if (numberFixed != 0 || verbose)
+      //              {
+      //                  Crud.DbmLogCrud.InsertMany(listDbmLogs);
+      //                  log += Lans.g("FormDatabaseMaintenance", "Autocodes deleted due to no items: ") + numberFixed.ToString() + "\r\n";
+      //              }
+      //              break;
+      //      }
             return log;
         }
 
