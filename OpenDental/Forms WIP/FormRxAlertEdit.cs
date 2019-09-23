@@ -27,7 +27,7 @@ namespace OpenDental {
 			}
 			if(RxAlertCur.AllergyDefNum>0) {
 				labelName.Text=Lan.g(this,"If the patient already has this Allergy");
-				textName.Text=AllergyDefs.GetOne(RxAlertCur.AllergyDefNum).Description;
+				textName.Text= Allergy.GetById(RxAlertCur.AllergyDefNum).Description;
 			}
 			if(RxAlertCur.MedicationNum>0) {
 				labelName.Text=Lan.g(this,"If the patient is already taking this medication");

@@ -64,49 +64,7 @@ namespace OpenDental{
 			checkEnableClinics.Checked=_isClinicsEnabledInDb;
 		}
 
-		///<summary>Validates that PrefName.EasyNoClinics is ok to be changed and changes it when necessary. Sends an alert to eConnector to perform the conversion.
-		///If fails then restores checkEnableClinics to original value when form was opened.</summary>
-		private bool IsClinicCheckBoxOk() {
-			try {
-				if(!_hasClinicsEnabledChanged) { //No change.
-					return true;
-				}
-				//Turn clinics on/off locally and send the signal to other workstations. This must happen before we call HQ so we tell HQ the new value.
-				Preference.Update(PreferenceName.EasyNoClinics,!checkEnableClinics.Checked);
-				DataValid.SetInvalid(InvalidType.Prefs);
-				//Create an alert for the user to know they may need to restart the eConnector if they are subscribed to eServices
-				AlertItems.Insert(new Alert()
-				{
-					Description=Lan.g(this,"Clinic Feature Changed, you may need to restart the eConnector if you are subscribed to eServices"),
-					Type=AlertType.ClinicsChanged,
-					Severity=AlertSeverityType.Low,
-					Actions=AlertActionType.OpenForm | AlertActionType.MarkAsRead | AlertActionType.Delete,
-					FormToOpen=FormType.FormEServicesEConnector,
-					Details="Clinics turned "+(checkEnableClinics.Checked ? "On":"Off")
-				});
-				//Create an alert for the eConnector to perform the clinic conversion as needed.
-				AlertItems.Insert(new Alert()
-				{
-					Description="Clinics Changed",
-					Type=AlertType.ClinicsChangedInternal,
-					Severity=AlertSeverityType.Normal,
-					Actions=AlertActionType.None,
-					Details=checkEnableClinics.Checked ? "On":"Off"
-				});
-				return true;
-			}
-			catch(Exception ex) {
-				//Change it back to what the db has.
-				RestoreClinicCheckBox();
-				MessageBox.Show(ex.Message);
-				return false;
-			}	
-		}
-
 		private void butOK_Click(object sender, System.EventArgs e) {
-			if(!IsClinicCheckBoxOk()) {
-				return;
-			}
 			if(AutoSave()) {
 				DataValid.SetInvalid(InvalidType.Prefs);
 			}

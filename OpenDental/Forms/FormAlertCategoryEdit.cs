@@ -20,13 +20,14 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace OpenDental
 {
     public partial class FormAlertCategoryEdit : FormBase
     {
-        private List<AlertType> alertTypes;
+        private List<string> alertTypes;
         private List<AlertCategoryLink> oldAlertCategoryLinks;
 
         public AlertCategory Category { get; }
@@ -42,7 +43,13 @@ namespace OpenDental
         {
             descriptionTextBox.Text = Category.Description;
 
-            alertTypes = Enum.GetValues(typeof(AlertType)).OfType<AlertType>().ToList();
+            alertTypes = 
+                typeof(AlertType)
+                    .GetFields(BindingFlags.Public | BindingFlags.Static |  BindingFlags.FlattenHierarchy)
+                    .Where(fi => fi.IsLiteral && !fi.IsInitOnly && fi.FieldType == typeof(string))
+                    .Select(fi => (string)fi.GetRawConstantValue())
+                    .ToList();
+
             if (Category.Locked)
             {
                 descriptionTextBox.Enabled = false;
@@ -106,7 +113,7 @@ namespace OpenDental
             Category.Description = descriptionTextBox.Text;
 
             var newAlertCategoryLinks = new List<AlertCategoryLink>();
-            foreach (AlertType alertType in alertTypesListBox.SelectedItems)
+            foreach (string alertType in alertTypesListBox.SelectedItems)
             {
                 newAlertCategoryLinks.Add(
                     new AlertCategoryLink

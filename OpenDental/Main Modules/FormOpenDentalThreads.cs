@@ -43,9 +43,7 @@ namespace OpenDental
                 //Threads
                 BeginClaimReportThread();
                 BeginCanadianItransCarrierThread();
-                BeginEServiceMonitorThread();
                 BeginLogOffThread();
-                BeginODServiceMonitorThread();
                 BeginReplicationMonitorThread();
                 BeginUpdateFormTextThread();
                 BeginWebSyncThread();
@@ -393,71 +391,6 @@ namespace OpenDental
         }
 
         #endregion
-        #region EServiceMonitorThread
-
-        ///<summary>Starts the eService monitoring thread that will run once a minute.  Only runs if the user currently logged in has the eServices permission.</summary>
-        private void BeginEServiceMonitorThread()
-        {
-            if (IsThreadAlreadyRunning(FormODThreadNames.EServiceMonitoring))
-            {
-                return;
-            }
-            //If the user currently logged in has permission to view eService settings, turn on the listener monitor.
-            if (Security.CurrentUser == null || !Security.IsAuthorized(Permissions.EServicesSetup, true))
-            {
-                return;//Do not start the listener service monitor for users without permission.
-            }
-            //Process any Error signals that happened due to an update:
-            EServiceSignals.ProcessErrorSignalsAroundTime(Preference.GetDateTime(PreferenceName.ProgramVersionLastUpdated));
-            //Create a separate thread that will run every 60 seconds to monitor eService signals.
-            ODThread odThread = new ODThread(60000, EServiceMonitorWorker);
-            //Currently we don't want to do anything if the eService signal processing fails.  Simply try again in a minute.  
-            //Most likely cause for exceptions will be database IO when computers are just sitting around not doing anything.
-            //Implementing this delegate allows us to NOT litter ProcessEServiceSignals() with try catches.  
-            odThread.GroupName = FormODThreadNames.EServiceMonitoring.GetDescription();
-            odThread.Name = FormODThreadNames.EServiceMonitoring.GetDescription();
-            odThread.Start();
-        }
-
-        ///<summary>Worker method for eServiceMonitorThread.  Call BeginEServiceMonitorThread() to start monitoring eService signals instead of calling 
-        ///this method directly. This thread's only job is to check to see if the eConnector's current status is critical and if it is critical, 
-        ///create a High severity alert.</summary>
-        private void EServiceMonitorWorker(ODThread odThread)
-        {
-            //The listener service will have a local heartbeat every 5 minutes so it's overkill to check every time timerSignals_Tick fires.
-            //Only check the Listener Service status once a minute.
-            //The downside to doing this is that the menu item will stay red up to one minute when a user wants to stop monitoring the service.
-            eServiceSignalSeverity listenerStatus = EServiceSignals.GetListenerServiceStatus();
-            if (listenerStatus == eServiceSignalSeverity.None)
-            {
-                //This office has never had a valid listener service running and does not have more than 5 patients set up to use the listener service.
-                //Quit the thread so that this computer does not waste its time sending queries to the server every minute.
-                odThread.QuitAsync();
-                return;
-            }
-            if (listenerStatus != eServiceSignalSeverity.Critical)
-            { //Not a critical event so no need to continue.
-                return;
-            }
-            if (AlertItems.RefreshForType(AlertType.EConnectorDown).Count > 0)
-            { //Alert already exists to no need to continue.
-                return;
-            }
-            //Create an alert.
-            AlertItems.Insert(new Alert
-            {
-                //Do not allow delete. The only way for this alert to be deleted is for the eConnector to insert a heartbeat, which will in-turn delete this alert.
-                Actions = AlertActionType.MarkAsRead | AlertActionType.OpenForm,
-                Description = Lans.g("EConnector", "eConnector needs to be restarted"),
-                Severity = AlertSeverityType.High,
-                Type = AlertType.EConnectorDown,
-                FormToOpen = FormType.FormEServicesEConnector,
-            });
-            //We just inserted an alert so update the alert menu.
-            this.Invoke((Action)(() => BeginCheckAlertsThread()));
-        }
-
-        #endregion
         #region LogOffThread
 
         ///<summary>Begins the thread that checks for a forced log off.</summary>
@@ -583,23 +516,6 @@ namespace OpenDental
                 });
             });
             thread.Start();
-        }
-
-        #endregion
-        #region ODServiceMonitorThread
-
-        ///<summary>Begins a thread that monitor's the Open Dental Service heartbeat and alerts the user if the service is not running.</summary>
-        private void BeginODServiceMonitorThread()
-        {
-            if (IsThreadAlreadyRunning(FormODThreadNames.ODServiceMonitor))
-            {
-                return;
-            }
-            ODThread threadOpenDentalServiceCheck = new ODThread((int)TimeSpan.FromMinutes(10).TotalMilliseconds,
-                (o) => { AlertItems.CheckODServiceHeartbeat(); });
-            threadOpenDentalServiceCheck.GroupName = FormODThreadNames.ODServiceMonitor.GetDescription();
-            threadOpenDentalServiceCheck.Name = FormODThreadNames.ODServiceMonitor.GetDescription();
-            threadOpenDentalServiceCheck.Start();
         }
 
         #endregion

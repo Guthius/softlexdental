@@ -3007,7 +3007,7 @@ namespace OpenDental
                 doRedrawMenu = true;
             }
             List<AlertActionType> listActionTypes = Enum.GetValues(typeof(AlertActionType)).Cast<AlertActionType>().ToList();
-            listActionTypes.Sort(Alert.CompareActionType);
+
             //Loop through the _listAlertItems to either update or create our MenuItems.
             foreach (Alert alertItemCur in _listAlertItems)
             {
@@ -3062,44 +3062,29 @@ namespace OpenDental
             switch (alertItem.Type)
             {
                 case AlertType.Generic:
-                case AlertType.ClinicsChangedInternal:
                     break;
+
                 case AlertType.OnlinePaymentsPending:
-                    value += Lan.g(this, "Pending Online Payments") + ": ";
+                    value += "Pending Online Payments: ";
                     break;
+
                 case AlertType.RadiologyProcedures:
-                    value += Lan.g(this, "Radiology Orders") + ": ";
+                    value += "Radiology Orders: ";
                     break;
+
                 case AlertType.CallbackRequested:
-                    value += Lan.g(this, "Patient would like a callback regarding this appointment") + ": ";
+                    value += "Patient would like a callback regarding this appointment: ";
                     break;
-                case AlertType.WebSchedNewPat:
-                    value += Lan.g(this, "eServices") + ": ";
-                    break;
-                case AlertType.WebSchedNewPatApptCreated:
-                    value += Lan.g(this, "New Web Sched New Patient Appointment") + ": ";
-                    break;
+
                 case AlertType.MaxConnectionsMonitor:
-                    value += Lan.g(this, "MySQL Max Connections") + ": ";
+                    value += "MySQL Max Connections: ";
                     break;
-                case AlertType.WebSchedASAPApptCreated:
-                    value += Lan.g(this, "New Web Sched ASAP Appointment") + ": ";
-                    break;
-                case AlertType.WebSchedRecallApptCreated:
-                    value += Lan.g(this, "New Web Sched Recall Appointment") + ": ";
-                    break;
-                case AlertType.WebMailRecieved:
-                    value += Lan.g(this, "Unread Web Mails") + ": ";
-                    break;
+
                 case AlertType.NumberBarredFromTexting:
-                case AlertType.MultipleEConnectors:
-                case AlertType.EConnectorDown:
-                case AlertType.EConnectorError:
                 case AlertType.DoseSpotProviderRegistered:
                 case AlertType.DoseSpotClinicRegistered:
-                case AlertType.ClinicsChanged:
                 default:
-                    value += Lan.g(this, alertItem.Type.GetDescription()) + ": ";
+                    value += alertItem.Type + ": ";
                     break;
             }
             return value;
@@ -3112,19 +3097,19 @@ namespace OpenDental
             switch (actionType)
             {
                 case AlertActionType.None://This should never happen.
-                    value += Lan.g(this, "None");
+                    value += "None";
                     break;
                 case AlertActionType.MarkAsRead:
-                    value += Lan.g(this, "Mark As Read");
+                    value += "Mark As Read";
                     break;
-                case AlertActionType.OpenForm:
-                    value += Lan.g(this, "Open " + parentAlertItem.FormToOpen.GetDescription());
-                    break;
+                //case AlertActionType.OpenForm:
+                //    value += "Open " + parentAlertItem.FormToOpen.GetDescription();
+                //    break;
                 case AlertActionType.Delete:
-                    value += Lan.g(this, "Delete Alert");
+                    value += "Delete Alert";
                     break;
                 case AlertActionType.ShowItemValue:
-                    value += Lan.g(this, "View Details");
+                    value += "View Details";
                     break;
             }
             return value;
@@ -5919,88 +5904,88 @@ namespace OpenDental
                 {
                     return;
                 }
-                AlertItems.Delete(alertItem.Id);
+                Alert.Delete(alertItem.Id);
                 BeginCheckAlertsThread(false);
                 return;
             }
             if (menuItem.Name == AlertActionType.OpenForm.ToString())
             {
                 alertReadsHelper(alertItem);
-                switch (alertItem.FormToOpen)
-                {
-                    case FormType.FormPendingPayments:
-                        FormPendingPayments FormPP = new FormPendingPayments();
-                        FormPP.Show();//Non-modal so the user can view the patient's account
-                        FormPP.FormClosed += this.alertFormClosingHelper;
-                        break;
-                    case FormType.FormEServicesWebSchedRecall:
-                        //ShowEServicesSetup(FormEServicesSetup.EService.WebSched);
-                        break;
-                    case FormType.FormRadOrderList:
-                        List<FormRadOrderList> listFormROLs = Application.OpenForms.OfType<FormRadOrderList>().ToList();
-                        if (listFormROLs.Count > 0)
-                        {
-                            listFormROLs[0].RefreshRadOrdersForUser(Security.CurrentUser);
-                            listFormROLs[0].BringToFront();
-                        }
-                        else
-                        {
-                            FormRadOrderList FormROL = new FormRadOrderList(Security.CurrentUser);
-                            FormROL.Show();
-                            FormROL.FormClosed += this.alertFormClosingHelper;
-                        }
-                        break;
-                    case FormType.FormEServicesSignupPortal:
-                        //ShowEServicesSetup(FormEServicesSetup.EService.SignupPortal);
-                        break;
-                    case FormType.FormEServicesWebSchedNewPat:
-                        //ShowEServicesSetup(FormEServicesSetup.EService.WebSchedNewPat);
-                        break;
-                    case FormType.FormEServicesEConnector:
-                        //ShowEServicesSetup(FormEServicesSetup.EService.ListenerService);
-                        break;
-                    case FormType.FormApptEdit:
-                        Appointment appt = Appointments.GetOneApt(alertItem.FKey);
-                        Patient pat = Patients.GetPat(appt.PatNum);
-                        S_Contr_PatientSelected(pat, false);
-                        FormApptEdit FormAE = new FormApptEdit(appt.AptNum);
-                        FormAE.ShowDialog();
-                        break;
-                    case FormType.FormWebSchedAppts:
-                        FormWebSchedAppts FormWebSchedAppts = new FormWebSchedAppts(alertItem.Type == AlertType.WebSchedNewPatApptCreated,
-                            alertItem.Type == AlertType.WebSchedRecallApptCreated, alertItem.Type == AlertType.WebSchedASAPApptCreated);
-                        FormWebSchedAppts.Show();
-                        break;
-                    case FormType.FormPatientEdit:
-                        pat = Patients.GetPat(alertItem.FKey);
-                        Family fam = Patients.GetFamily(pat.PatNum);
-                        S_Contr_PatientSelected(pat, false);
-                        FormPatientEdit FormPE = new FormPatientEdit(pat, fam);
-                        FormPE.ShowDialog();
-                        break;
-                    case FormType.FormDoseSpotAssignUserId:
-                        if (!Security.IsAuthorized(Permissions.SecurityAdmin))
-                        {
-                            break;
-                        }
-                        FormDoseSpotAssignUserId FormAU = new FormDoseSpotAssignUserId(alertItem.FKey);
-                        FormAU.ShowDialog();
-                        break;
-                    case FormType.FormDoseSpotAssignClinicId:
-                        if (!Security.IsAuthorized(Permissions.SecurityAdmin))
-                        {
-                            break;
-                        }
-                        FormDoseSpotAssignClinicId FormACI = new FormDoseSpotAssignClinicId(alertItem.FKey);
-                        FormACI.ShowDialog();
-                        break;
-                    case FormType.FormEmailInbox:
-                        //Will open the email inbox form and set the current inbox to "WebMail".
-                        FormEmailInbox FormEI = new FormEmailInbox("WebMail");
-                        FormEI.FormClosed += this.alertFormClosingHelper;
-                        FormEI.Show();
-                        break;
-                }
+                //switch (alertItem.FormToOpen)
+                //{
+                //    case FormType.FormPendingPayments:
+                //        FormPendingPayments FormPP = new FormPendingPayments();
+                //        FormPP.Show();//Non-modal so the user can view the patient's account
+                //        FormPP.FormClosed += this.alertFormClosingHelper;
+                //        break;
+                //    case FormType.FormEServicesWebSchedRecall:
+                //        //ShowEServicesSetup(FormEServicesSetup.EService.WebSched);
+                //        break;
+                //    case FormType.FormRadOrderList:
+                //        List<FormRadOrderList> listFormROLs = Application.OpenForms.OfType<FormRadOrderList>().ToList();
+                //        if (listFormROLs.Count > 0)
+                //        {
+                //            listFormROLs[0].RefreshRadOrdersForUser(Security.CurrentUser);
+                //            listFormROLs[0].BringToFront();
+                //        }
+                //        else
+                //        {
+                //            FormRadOrderList FormROL = new FormRadOrderList(Security.CurrentUser);
+                //            FormROL.Show();
+                //            FormROL.FormClosed += this.alertFormClosingHelper;
+                //        }
+                //        break;
+                //    case FormType.FormEServicesSignupPortal:
+                //        //ShowEServicesSetup(FormEServicesSetup.EService.SignupPortal);
+                //        break;
+                //    case FormType.FormEServicesWebSchedNewPat:
+                //        //ShowEServicesSetup(FormEServicesSetup.EService.WebSchedNewPat);
+                //        break;
+                //    case FormType.FormEServicesEConnector:
+                //        //ShowEServicesSetup(FormEServicesSetup.EService.ListenerService);
+                //        break;
+                //    case FormType.FormApptEdit:
+                //        Appointment appt = Appointments.GetOneApt(alertItem.FKey);
+                //        Patient pat = Patients.GetPat(appt.PatNum);
+                //        S_Contr_PatientSelected(pat, false);
+                //        FormApptEdit FormAE = new FormApptEdit(appt.AptNum);
+                //        FormAE.ShowDialog();
+                //        break;
+                //    case FormType.FormWebSchedAppts:
+                //        FormWebSchedAppts FormWebSchedAppts = new FormWebSchedAppts(alertItem.Type == AlertType.WebSchedNewPatApptCreated,
+                //            alertItem.Type == AlertType.WebSchedRecallApptCreated, alertItem.Type == AlertType.WebSchedASAPApptCreated);
+                //        FormWebSchedAppts.Show();
+                //        break;
+                //    case FormType.FormPatientEdit:
+                //        pat = Patients.GetPat(alertItem.FKey);
+                //        Family fam = Patients.GetFamily(pat.PatNum);
+                //        S_Contr_PatientSelected(pat, false);
+                //        FormPatientEdit FormPE = new FormPatientEdit(pat, fam);
+                //        FormPE.ShowDialog();
+                //        break;
+                //    case FormType.FormDoseSpotAssignUserId:
+                //        if (!Security.IsAuthorized(Permissions.SecurityAdmin))
+                //        {
+                //            break;
+                //        }
+                //        FormDoseSpotAssignUserId FormAU = new FormDoseSpotAssignUserId(alertItem.FKey);
+                //        FormAU.ShowDialog();
+                //        break;
+                //    case FormType.FormDoseSpotAssignClinicId:
+                //        if (!Security.IsAuthorized(Permissions.SecurityAdmin))
+                //        {
+                //            break;
+                //        }
+                //        FormDoseSpotAssignClinicId FormACI = new FormDoseSpotAssignClinicId(alertItem.FKey);
+                //        FormACI.ShowDialog();
+                //        break;
+                //    case FormType.FormEmailInbox:
+                //        //Will open the email inbox form and set the current inbox to "WebMail".
+                //        FormEmailInbox FormEI = new FormEmailInbox("WebMail");
+                //        FormEI.FormClosed += this.alertFormClosingHelper;
+                //        FormEI.Show();
+                //        break;
+                //}
             }
             if (menuItem.Name == AlertActionType.ShowItemValue.ToString())
             {
@@ -6025,7 +6010,7 @@ namespace OpenDental
             {//User has already read this alertitem.
                 return;
             }
-            AlertReads.Insert(new AlertRead(alertItem.Id, Security.CurrentUser.Id));
+            AlertRead.Insert(new AlertRead(alertItem.Id, Security.CurrentUser.Id));
         }
         #endregion Alerts
 

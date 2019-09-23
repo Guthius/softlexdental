@@ -43,7 +43,8 @@ namespace OpenDental
         private void FormAllergyEdit_Load(object sender, EventArgs e)
         {
             int allergyIndex = 0;
-            allergies = AllergyDefs.GetAll(false);
+
+            allergies = OpenDentBusiness.Allergy.All(false);
 
             if (allergies.Count < 1)
             {
@@ -140,14 +141,14 @@ namespace OpenDental
 
             if (result == DialogResult.Cancel) return;
 
-            Allergies.Delete(Allergy.Id);
+            PatientAllergy.Delete(Allergy.Id);
 
             SecurityLog.Write(
                 Allergy.PatientId,
                 SecurityLogEvents.PatientAlergyListEdited, 
                 string.Format(
-                    Translation.LanguageSecurity.GenericItemDeleted, 
-                    AllergyDefs.GetDescription(Allergy.AllergyId)));
+                    Translation.LanguageSecurity.GenericItemDeleted,
+                    OpenDentBusiness.Allergy.GetDescription(Allergy.AllergyId)));
 
             DialogResult = DialogResult.OK;
         }
@@ -180,25 +181,25 @@ namespace OpenDental
 
             if (Allergy.IsNew)
             {
-                Allergies.Insert(Allergy);
+                PatientAllergy.Insert(Allergy);
 
                 SecurityLog.Write(
                     Allergy.PatientId,
                     SecurityLogEvents.PatientAlergyListEdited,
                     string.Format(
                         Translation.LanguageSecurity.GenericItemAdded,
-                        AllergyDefs.GetDescription(Allergy.AllergyId)));
+                        OpenDentBusiness.Allergy.GetDescription(Allergy.AllergyId)));
             }
             else
             {
-                Allergies.Update(Allergy);
+                PatientAllergy.Update(Allergy);
 
                 SecurityLog.Write(
                     Allergy.PatientId,
                     SecurityLogEvents.PatientAlergyListEdited,
                     string.Format(
                         Translation.LanguageSecurity.GenericItemModified,
-                        AllergyDefs.GetDescription(Allergy.AllergyId)));
+                        OpenDentBusiness.Allergy.GetDescription(Allergy.AllergyId)));
             }
 
             DialogResult = DialogResult.OK;

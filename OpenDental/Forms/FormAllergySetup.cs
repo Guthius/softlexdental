@@ -60,7 +60,7 @@ namespace OpenDental
         /// </summary>
         void LoadAllergies()
         {
-            allergiesList = AllergyDefs.GetAll(showHiddenCheckBox.Checked);
+            allergiesList = Allergy.All(showHiddenCheckBox.Checked);
 
             allergiesGrid.BeginUpdate();
             allergiesGrid.Columns.Clear();

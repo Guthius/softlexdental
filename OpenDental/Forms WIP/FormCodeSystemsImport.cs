@@ -48,7 +48,7 @@ namespace OpenDental {
 		}
 		
 		private void FillGrid() {
-			_listCodeSystems=CodeSystems.GetForCurrentVersion(_isMemberNation);
+			_listCodeSystems=CodeSystem.GetForCurrentVersion(_isMemberNation);
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col;
@@ -735,11 +735,11 @@ If the master term dictionary or software program containing the UCUM table, UCU
                     //set current version=available version
                     if (_codeSystem.Name == "CPT")
                     {
-                        CodeSystems.UpdateCurrentVersion(_codeSystem, _versionID);
+                        CodeSystem.UpdateCurrentVersion(_codeSystem, _versionID);
                     }
                     else
                     {
-                        CodeSystems.UpdateCurrentVersion(_codeSystem);
+                        CodeSystem.UpdateCurrentVersion(_codeSystem);
                     }
                     //All good!
                     Done(Lan.g("CodeSystemImporter", "Import Complete"), true, _numCodesImported, numCodesUpdated);
@@ -783,47 +783,47 @@ If the master term dictionary or software program containing the UCUM table, UCU
                     switch (_codeSystem.Name)
                     {
                         case "CDCREC":
-                            CodeSystems.ImportCdcrec(_localFilePath, new CodeSystems.ProgressArgs(ImportProgress), ref _quit, ref numCodesImported, ref numCodesUpdated,
+                            CodeSystem.ImportCdcrec(_localFilePath, new CodeSystem.ProgressArgs(ImportProgress), ref _quit, ref numCodesImported, ref numCodesUpdated,
                                 _updateExisting);
                             break;
                         case "CVX":
-                            CodeSystems.ImportCvx(_localFilePath, new CodeSystems.ProgressArgs(ImportProgress), ref _quit, ref numCodesImported, ref numCodesUpdated,
+                            CodeSystem.ImportCvx(_localFilePath, new CodeSystem.ProgressArgs(ImportProgress), ref _quit, ref numCodesImported, ref numCodesUpdated,
                                 _updateExisting);
                             break;
                         case "HCPCS":
-                            CodeSystems.ImportHcpcs(_localFilePath, new CodeSystems.ProgressArgs(ImportProgress), ref _quit, ref numCodesImported, ref numCodesUpdated,
+                            CodeSystem.ImportHcpcs(_localFilePath, new CodeSystem.ProgressArgs(ImportProgress), ref _quit, ref numCodesImported, ref numCodesUpdated,
                                 _updateExisting);
                             break;
                         case "ICD10CM":
-                            CodeSystems.ImportIcd10(_localFilePath, new CodeSystems.ProgressArgs(ImportProgress), ref _quit, ref numCodesImported, ref numCodesUpdated,
+                            CodeSystem.ImportIcd10(_localFilePath, new CodeSystem.ProgressArgs(ImportProgress), ref _quit, ref numCodesImported, ref numCodesUpdated,
                                 _updateExisting);
                             break;
                         case "ICD9CM":
-                            CodeSystems.ImportIcd9(_localFilePath, new CodeSystems.ProgressArgs(ImportProgress), ref _quit, ref numCodesImported, ref numCodesUpdated,
+                            CodeSystem.ImportIcd9(_localFilePath, new CodeSystem.ProgressArgs(ImportProgress), ref _quit, ref numCodesImported, ref numCodesUpdated,
                                 _updateExisting);
                             break;
                         case "LOINC":
-                            CodeSystems.ImportLoinc(_localFilePath, new CodeSystems.ProgressArgs(ImportProgress), ref _quit, ref numCodesImported, ref numCodesUpdated,
+                            CodeSystem.ImportLoinc(_localFilePath, new CodeSystem.ProgressArgs(ImportProgress), ref _quit, ref numCodesImported, ref numCodesUpdated,
                                 _updateExisting);
                             break;
                         case "RXNORM":
-                            CodeSystems.ImportRxNorm(_localFilePath, new CodeSystems.ProgressArgs(ImportProgress), ref _quit, ref numCodesImported, ref numCodesUpdated,
+                            CodeSystem.ImportRxNorm(_localFilePath, new CodeSystem.ProgressArgs(ImportProgress), ref _quit, ref numCodesImported, ref numCodesUpdated,
                                 _updateExisting);
                             break;
                         case "SNOMEDCT":
-                            CodeSystems.ImportSnomed(_localFilePath, new CodeSystems.ProgressArgs(ImportProgress), ref _quit, ref numCodesImported, ref numCodesUpdated,
+                            CodeSystem.ImportSnomed(_localFilePath, new CodeSystem.ProgressArgs(ImportProgress), ref _quit, ref numCodesImported, ref numCodesUpdated,
                                 _updateExisting);
                             break;
                         case "SOP":
-                            CodeSystems.ImportSop(_localFilePath, new CodeSystems.ProgressArgs(ImportProgress), ref _quit, ref numCodesImported, ref numCodesUpdated,
+                            CodeSystem.ImportSop(_localFilePath, new CodeSystem.ProgressArgs(ImportProgress), ref _quit, ref numCodesImported, ref numCodesUpdated,
                                 _updateExisting);
                             break;
                         case "UCUM":
-                            CodeSystems.ImportUcum(_localFilePath, new CodeSystems.ProgressArgs(ImportProgress), ref _quit, ref numCodesImported, ref numCodesUpdated,
+                            CodeSystem.ImportUcum(_localFilePath, new CodeSystem.ProgressArgs(ImportProgress), ref _quit, ref numCodesImported, ref numCodesUpdated,
                                 _updateExisting);
                             break;
                         case "CPT":
-                            CodeSystems.ImportCpt(_localFilePath, new CodeSystems.ProgressArgs(ImportProgress), ref _quit, ref numCodesImported, ref numCodesUpdated,
+                            CodeSystem.ImportCpt(_localFilePath, new CodeSystem.ProgressArgs(ImportProgress), ref _quit, ref numCodesImported, ref numCodesUpdated,
                                 _versionID);
                             break;
                         case "CDT":  //import not supported

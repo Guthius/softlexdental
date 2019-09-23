@@ -365,7 +365,7 @@ namespace OpenDental{
 			#region Auto Codes
 			if(checkAutocodes.Checked) {
 				//checking for any AutoCodes and prompting the user if they exist
-				if(AutoCodes.GetCount() > 0) {
+				if(AutoCode.GetCount() > 0) {
 					string msgText=Lan.g(this,"This tool will delete all current autocodes and then add in the default autocodes.")+"\r\n";
 					//If the proc tool isn't going to put the procedure buttons back to default, warn them that they will need to reassociate them.
 					if(!checkProcButtons.Checked) {
@@ -373,7 +373,7 @@ namespace OpenDental{
 					}
 					msgText+=Lan.g(this,"Continue?");
 					if(MsgBox.Show(this,MsgBoxButtons.YesNo,msgText)) {
-						AutoCodes.SetToDefault();
+						AutoCode.SetToDefault();
 						Changed=true;
 						DataValid.SetInvalid(InvalidType.AutoCodes);
 					}
@@ -383,7 +383,7 @@ namespace OpenDental{
 				}
 				//If there are no autocodes then add the defaults
 				else {
-					AutoCodes.SetToDefault();
+					AutoCode.SetToDefault();
 					Changed=true;
 					DataValid.SetInvalid(InvalidType.AutoCodes);
 				}

@@ -6239,7 +6239,7 @@ namespace OpenDental
                     case "Allergies":
                         if (doRefreshData || _loadData.ListAllergies == null)
                         {
-                            _loadData.ListAllergies = Allergies.GetAll(PatCur.PatNum, false);
+                            _loadData.ListAllergies = PatientAllergy.GetByPatient(PatCur.PatNum, false);
                         }
                         List<PatientAllergy> allergyList = _loadData.ListAllergies;
                         row = new ODGridRow();
@@ -6268,7 +6268,7 @@ namespace OpenDental
                         for (int i = 0; allergyList.Count > i; i++)
                         {
                             row = new ODGridRow();
-                            cell = new ODGridCell(AllergyDefs.GetOne(allergyList[i].AllergyId).Description);
+                            cell = new ODGridCell(Allergy.GetById(allergyList[i].AllergyId).Description);
                             cell.Bold = true;
                             cell.ColorText = Color.Red;
                             row.Cells.Add(cell);
@@ -9461,7 +9461,7 @@ namespace OpenDental
             {
                 isMandibular = ProcCur.ToothRange.Split(',').Any(x => !Tooth.IsMaxillary(x));
             }
-            if (AutoCodeItems.ShouldPromptForCodeChange(ProcCur, procCodeCur, PatCur, isMandibular, listClaimProcs, out verifyCode))
+            if (AutoCodeItem.ShouldPromptForCodeChange(ProcCur, procCodeCur, PatCur, isMandibular, listClaimProcs, out verifyCode))
             {
                 FormAutoCodeLessIntrusive FormACLI = new FormAutoCodeLessIntrusive(PatCur, ProcCur, procCodeCur, verifyCode, PatPlanList, SubList, PlanList,
                     BenefitList, listClaimProcs);
@@ -9938,8 +9938,8 @@ namespace OpenDental
             }
             foreach (long autoCodeNum in autoCodeList)
             {
-                AutoCode autoCode = AutoCodes.GetOne(autoCodeNum);
-                if (AutoCodeItems.GetListForCode(autoCode.Id).Count == 0)
+                AutoCode autoCode = AutoCode.GetById(autoCodeNum);
+                if (AutoCodeItem.GetByAutoCode(autoCode.Id).Count == 0)
                 {
                     //AutoCode is not setup correctly.
                     MessageBox.Show(this, Lan.g(this, "The following AutoCode has no associated Procedure Codes: ") + "\r\n" + autoCode.Description + "\r\n"
@@ -9964,7 +9964,7 @@ namespace OpenDental
                     if (textSurf.Text == "5" && CultureInfo.CurrentCulture.Name.EndsWith("CA")) surf = "V"; else surf = Tooth.SurfTidyForClaims(textSurf.Text, toothNum);
                     bool isAdditional = n > 0;
                     //bool willBeMissing=Procedures.WillBeMissing(toothNum,PatCur.PatNum);//db call
-                    long codeNum = AutoCodeItems.GetCodeNum(autoCodeList[i], toothNum, surf, isAdditional, PatCur.PatNum, PatCur.Age, true);
+                    long codeNum = AutoCodeItem.GetCodeNum(autoCodeList[i], toothNum, surf, isAdditional, PatCur.PatNum, PatCur.Age, true);
                     listProcedureCodes.Add(ProcedureCodes.GetProcCode(codeNum));
                 }
             }
@@ -10183,7 +10183,7 @@ namespace OpenDental
                     }
                     ProcCur.IsAdditional = n > 0;   //This is used for determining the correct autocode in a little bit.
                     bool willBeMissing = Procedures.WillBeMissing(toothNum, PatCur.PatNum);
-                    ProcCur.CodeNum = AutoCodeItems.GetCodeNum(autoCodeList[i], toothNum, surf, ProcCur.IsAdditional, PatCur.PatNum, PatCur.Age, willBeMissing);
+                    ProcCur.CodeNum = AutoCodeItem.GetCodeNum(autoCodeList[i], toothNum, surf, ProcCur.IsAdditional, PatCur.PatNum, PatCur.Age, willBeMissing);
                     tArea = ProcedureCodes.GetProcCode(ProcCur.CodeNum).TreatArea;
                     if ((tArea == TreatmentArea.Arch
                         || tArea == TreatmentArea.Mouth
@@ -10495,15 +10495,15 @@ namespace OpenDental
                     if (toothChart.SelectedTeeth.Count == 0)
                     {
                         AutoCodeItem autoCode = null;
-                        if (AutoCodeItems.GetContainsKey(ProcCur.CodeNum))
+                        if (AutoCodeItem.GetContainsKey(ProcCur.CodeNum))
                         {
-                            autoCode = AutoCodeItems.GetListForCode(AutoCodeItems.GetOne(ProcCur.CodeNum).AutoCodeId)
+                            autoCode = AutoCodeItem.GetByAutoCode(AutoCodeItem.GetOne(ProcCur.CodeNum).AutoCodeId)
                                 .FirstOrDefault(x => x.ProcedureCodeId == ProcCur.CodeNum);
                         }
                         List<AutoCodeCondition> condList = new List<AutoCodeCondition>();
                         if (autoCode != null)
                         {
-                            condList = AutoCodeConds.GetListForItem(autoCode.Id);
+                            condList = AutoCodeCondition.GetByAutoCodeItem(autoCode.Id);
                         }
                         ProcCur.Surf = "";
                         if (condList.Count == 1)

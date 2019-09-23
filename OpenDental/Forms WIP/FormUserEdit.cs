@@ -604,8 +604,8 @@ namespace OpenDental{
 				}
 			}
 			_listClinics=Clinics.GetDeepCopy(true);
-			_listUserAlertTypesOld=AlertSubs.GetAllForUser(UserCur.Id);
-			List<long> listSubscribedClinics=_listUserAlertTypesOld.Select(x => x.ClinicId).Distinct().ToList();
+			_listUserAlertTypesOld=AlertSubscription.GetByUser(UserCur.Id);
+			List<long> listSubscribedClinics=_listUserAlertTypesOld.Where(x => x.ClinicId.HasValue).Select(x => x.ClinicId.Value).Distinct().ToList();
 			List<long> listAlertCatNums=_listUserAlertTypesOld.Select(x => x.AlertCategoryId).Distinct().ToList();
 			bool isAllClinicsSubscribed=listSubscribedClinics.Count==_listClinics.Count+1;//Plus 1 for HQ
 			listAlertSubMulti.Items.Clear();
@@ -936,7 +936,7 @@ namespace OpenDental{
 			//Remove AlertTypes that have been deselected through either deslecting the type or clinic.
 			_listUserAlertTypesNew.RemoveAll(x => !listUserAlertCats.Contains(x.AlertCategoryId));
 			if(Preferences.HasClinicsEnabled) {
-				_listUserAlertTypesNew.RemoveAll(x => !listClinics.Contains(x.ClinicId));
+				_listUserAlertTypesNew.RemoveAll(x => !listClinics.Contains(x.ClinicId.GetValueOrDefault()));
 			}
 			foreach(long alertCatNum in listUserAlertCats) {
 				if(!Preferences.HasClinicsEnabled) {
@@ -953,7 +953,7 @@ namespace OpenDental{
 					}
 				}
 			}
-			AlertSubs.Sync(_listUserAlertTypesNew,_listUserAlertTypesOld);
+			// TODO: AlertSubs.Sync(_listUserAlertTypesNew,_listUserAlertTypesOld);
 			//UserOdPrefs.Sync(_listDoseSpotUserPrefNew,_listDoseSpotUserPrefOld);
 			DialogResult=DialogResult.OK;
 		}

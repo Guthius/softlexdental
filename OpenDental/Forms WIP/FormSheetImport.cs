@@ -1230,7 +1230,7 @@ namespace OpenDental {
 				for(int i=0;i<allergyList.Count;i++) {
 					fieldVal="";
 					if(i<1) {
-						allergies=Allergies.GetAll(PatCur.PatNum,true);
+						allergies=PatientAllergy.GetByPatient(PatCur.PatNum,true);
 					}
 					row=new SheetImportRow();
 					row.FieldName=allergyList[i].FieldName.Remove(0,8);
@@ -1238,7 +1238,7 @@ namespace OpenDental {
 					row.OldValObj=null;
 					//Check if allergy exists.
 					for(int j=0;j<allergies.Count;j++) {
-						if(AllergyDefs.GetDescription(allergies[j].AllergyId)==allergyList[i].FieldName.Remove(0,8)) {
+						if(Allergy.GetDescription(allergies[j].AllergyId)==allergyList[i].FieldName.Remove(0,8)) {
 							if(allergies[j].Active) {
 								row.OldValDisplay="Y";
 							}
@@ -2445,14 +2445,14 @@ namespace OpenDental {
 							else {
 								oldAllergy.Active=false;
 							}
-							Allergies.Update(oldAllergy);
+							PatientAllergy.Update(oldAllergy);
 							continue;
 						}
 						if(hasValue==YN.No) {//We never import allergies with inactive status.
 							continue;
 						}
 						//Allergy does not exist for this patient yet so create one.
-						List<Allergy> allergyList=AllergyDefs.GetAll(false);
+						List<Allergy> allergyList=Allergy.All(false);
 						SheetField allergySheet=(SheetField)Rows[i].NewValObj;
 						//Find what allergy user wants to import.
 						for(int j=0;j<allergyList.Count;j++) {
@@ -2461,7 +2461,7 @@ namespace OpenDental {
 								newAllergy.AllergyId=allergyList[j].Id;
 								newAllergy.PatientId=PatCur.PatNum;
 								newAllergy.Active=true;
-								Allergies.Insert(newAllergy);
+								PatientAllergy.Insert(newAllergy);
 								break;
 							}
 						}

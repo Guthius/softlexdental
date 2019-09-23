@@ -65,14 +65,6 @@ namespace OpenDental{
 		private UI.ComboBoxMulti comboUnearnedTypes;
 		private Label label2;
 
-		///<summary>The eService that this procedure is associated to if it associated to one.</summary>
-		private eServiceCode _eService;
-
-		private bool _isForZipwhip {
-			get {
-				return _eService.In(eServiceCode.IntegratedTexting,eServiceCode.ConfirmationRequest);
-			}
-		}
 
 		///<summary>Already in a comma-delimited string that can be stored in the db.</summary>
 		private string _selectedUnearnedTypes {
@@ -858,8 +850,7 @@ namespace OpenDental{
 			if(textChargeAmt.errorProvider1.GetError(textChargeAmt)!=""
 				|| textDateStart.errorProvider1.GetError(textDateStart)!=""
 				|| textDateStop.errorProvider1.GetError(textDateStop)!=""
-				|| textBillingDay.errorProvider1.GetError(textBillingDay)!=""
-				|| (_isForZipwhip && !textZipwhipChargeAmount.IsValid)) 
+				|| textBillingDay.errorProvider1.GetError(textBillingDay)!="") 
 			{
 				MsgBox.Show(this,"Please fix data entry errors first.");
 				return false;
@@ -891,10 +882,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Invalid ErxAccountId.");
 				return false;
 			}
-			if(_isForZipwhip && RepeatCur.ChargeAmtAlt.IsGreaterThan(-1) && textZipwhipChargeAmount.Text.Trim()=="") {
-				MsgBox.Show(this,"Zipwhip Amount must not blank when it was previously set.");
-				return false;
-			}
+
 			repeatCharge.ProcCode=textCode.Text;
 			repeatCharge.ChargeAmt=PIn.Double(textChargeAmt.Text);
 			repeatCharge.DateStart=PIn.Date(textDateStart.Text);
@@ -908,9 +896,7 @@ namespace OpenDental{
 			repeatCharge.CreatesClaim=checkCreatesClaim.Checked;
 			repeatCharge.UsePrepay=checkUseUnearned.Checked;
 			repeatCharge.UnearnedTypes=_selectedUnearnedTypes;
-			if(_isForZipwhip && textZipwhipChargeAmount.Text.Trim()!="") {
-				repeatCharge.ChargeAmtAlt=PIn.Double(textZipwhipChargeAmount.Text);
-			}
+
 			return true;
 		}
 

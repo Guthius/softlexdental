@@ -27,114 +27,41 @@ namespace OpenDentBusiness
         /// <summary>
         /// Generic. Informational, has no action associated with it.
         /// </summary>
-        public const string Generic = "";
+        public const string Generic = "default";
 
         /// <summary>
         /// Opens the Online Payments Window when clicked.
         /// </summary>
-        public const string OnlinePaymentsPending = "";
-
-        /// <summary>
-        /// Only used by Open Dental HQ. The server monitoring incoming voicemails is not working.
-        /// </summary>
-        [Obsolete]
-        public const string VoiceMailMonitor = "";
+        public const string OnlinePaymentsPending = "online_payments-pending";
 
         /// <summary>
         /// Opens the Radiology Order List window when clicked.
         /// </summary>
-        public const string RadiologyProcedures = "";
+        public const string RadiologyProcedures = "radiology_procedures";
 
         /// <summary>
         /// A patient has clicked "Request Callback" on an e-Confirmation.
         /// </summary>
-        public const string CallbackRequested = "";
-
-        /// <summary>
-        /// Alerts related to the Web Sched New Pat eService.
-        /// </summary>
-        public const string WebSchedNewPat = "";
-
-        /// <summary>
-        /// Alerts related to Web Sched New Patient Appointments.
-        /// </summary>
-        public const string WebSchedNewPatApptCreated = "";
+        public const string CallbackRequested = "callback_requested";
 
         /// <summary>
         /// A number is not able to receive text messages.
         /// </summary>
-        public const string NumberBarredFromTexting = "";
+        public const string NumberBarredFromTexting = "number_barred_from_texting";
 
         /// <summary>
         /// The number of MySQL connections to the server has exceeded half the allowed number of connections.
         /// </summary>
-        public const string MaxConnectionsMonitor = "";
-
-        /// <summary>
-        /// Alerts related to new ASAP appointments via web sched.
-        /// </summary>
-        public const string WebSchedASAPApptCreated = "";
-
-        /// <summary>
-        /// Only used by Open Dental HQ. The Asterisk Server is not processing messages or is getting all blank payloads.
-        /// </summary>
-        [Obsolete]
-        public const string AsteriskServerMonitor = "";
-
-        /// <summary>
-        /// Multiple computers are running eConnector services. There should only ever be one.
-        /// </summary>
-        public const string MultipleEConnectors = "";
-
-        /// <summary>
-        /// The eConnector is in a critical state and not currently turned on. There should only ever be one.
-        /// </summary>
-        public const string EConnectorDown = "";
-
-        /// <summary>
-        /// The eConnector has an error that is not critical but is worth looking into. There should only ever be one.
-        /// </summary>
-        public const string EConnectorError = "";
+        public const string MaxConnectionsMonitor = "max_connections_monitor";
 
         /// <summary>
         /// Alerts related to DoseSpot provider registration.
         /// </summary>
-        public const string DoseSpotProviderRegistered = "";
+        public const string DoseSpotProviderRegistered = "dose_spot_provider_registered";
 
         /// <summary>
         /// Alerts related to DoseSpot clinic registration.
         /// </summary>
-        public const string DoseSpotClinicRegistered = "";
-
-        ///<summary>
-        ///An appointment has been created via Web Sched Recall.
-        ///</summary>
-        public const string WebSchedRecallApptCreated = "";
-
-        /// <summary>
-        /// Alerts related to turning clinics on or off for eServices.
-        /// </summary>
-        public const string ClinicsChanged = "";
-
-        /// <summary>
-        /// Alerts related to turning clinics on or off for eServices. Internal, not displayed to the customer.
-        /// Will be processed by the eConnector and then deleted.
-        /// </summary>
-        public const string ClinicsChangedInternal = "";
-
-        /// <summary>
-        /// Multiple computers are running OpenDentalServices. There should only ever be one.
-        /// </summary>
-        public const string MultipleOpenDentalServices = "";
-
-        /// <summary>
-        /// OpenDentalService is down.
-        /// </summary>
-        public const string OpenDentalServiceDown = "";
-
-        /// <summary>
-        /// Triggered when a new WebMail is recieved from the patient portal.
-        /// </summary>
-        public const string WebMailRecieved = "";
+        public const string DoseSpotClinicRegistered = "dose_spot_clinic_registered";
     }
 }

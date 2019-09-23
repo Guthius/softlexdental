@@ -48,7 +48,11 @@ namespace OpenDental
             }
             allergyTypeComboBox.SelectedIndex = (int)AllergyDefCur.SnomedType;
 
-            medicationTextBox.Text = Medication.GetDescription(AllergyDefCur.MedicationId);
+            if (AllergyDefCur.MedicationId.HasValue)
+            {
+                medicationTextBox.Text = Medication.GetDescription(AllergyDefCur.MedicationId.Value);
+            }
+
             uniiTextBox.Text = AllergyDefCur.UniiCode;
         }
 
@@ -83,7 +87,10 @@ namespace OpenDental
 
                 AllergyDefCur.MedicationId = formMedications.SelectedMedicationNum;
 
-                medicationTextBox.Text = Medication.GetDescription(AllergyDefCur.MedicationId);
+                if (AllergyDefCur.MedicationId.HasValue)
+                {
+                    medicationTextBox.Text = Medication.GetDescription(AllergyDefCur.MedicationId.Value);
+                }
             }
         }
 
@@ -103,7 +110,7 @@ namespace OpenDental
         {
             if (AllergyDefCur.Id > 0)
             {
-                if (!AllergyDefs.DefIsInUse(AllergyDefCur.Id))
+                if (!Allergy.IsInUse(AllergyDefCur.Id))
                 {
                     var result = 
                         MessageBox.Show(
@@ -114,7 +121,7 @@ namespace OpenDental
 
                     if (result == DialogResult.Cancel) return;
 
-                    AllergyDefs.Delete(AllergyDefCur.Id);
+                    Allergy.Delete(AllergyDefCur.Id);
                 }
                 else
                 {
@@ -198,13 +205,13 @@ namespace OpenDental
 
             // TODO: Do UNII check once the table is added
 
-            if (AllergyDefCur.Id == 0)
+            if (AllergyDefCur.IsNew)
             {
-                AllergyDefs.Insert(AllergyDefCur);
+                Allergy.Insert(AllergyDefCur);
             }
             else
             {
-                AllergyDefs.Update(AllergyDefCur);
+                Allergy.Update(AllergyDefCur);
             }
 
             DialogResult = DialogResult.OK;
