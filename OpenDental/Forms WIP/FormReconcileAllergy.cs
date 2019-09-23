@@ -264,7 +264,7 @@ namespace OpenDental {
 				row=new ODGridRow();
 				ald=new Allergy();
 				ald=AllergyDefs.GetOne(_listAllergyCur[i].AllergyId,_listAllergyDefCur);
-				row.Cells.Add(_listAllergyCur[i].DateTStamp.ToShortDateString());
+				row.Cells.Add(_listAllergyCur[i].DateModified.ToShortDateString());
 				if(ald.Description==null) {
 					row.Cells.Add("");
 				}

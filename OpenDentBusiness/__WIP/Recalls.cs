@@ -2102,17 +2102,16 @@ namespace OpenDentBusiness
                     }
                     //There is no need to make security logs for anything other than the appointment.  That is how the recall list system currently does it.
                     Recalls.SynchScheduledApptFull(aptCur.PatNum);//Synch the recalls so that the appointment will disappear from the recall list.
-                    Alert alert = new Alert()
+
+                    Alert.Insert(new Alert()
                     {
                         ClinicId = aptCur.ClinicNum,
                         Description = aptCur.AptDateTime.ToString(),
                         Type = AlertType.WebSchedRecallApptCreated,
                         Actions = AlertActionType.MarkAsRead | AlertActionType.OpenForm | AlertActionType.Delete,
-                        FormToOpen = FormType.FormWebSchedAppts,
                         Severity = AlertSeverityType.Low,
-                        FKey = aptCur.AptNum
-                    };
-                    AlertItems.Insert(alert);
+                        ForeignKey = aptCur.AptNum
+                    });
                 });
                 thread.Name = "FinishWebSchedRecallAppt";
                 thread.Start(true);

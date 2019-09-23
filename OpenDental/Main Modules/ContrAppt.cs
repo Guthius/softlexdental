@@ -2518,7 +2518,7 @@ namespace OpenDental
                         {
                             ApptField apptField = new ApptField();
                             apptField.FieldName = PIn.String(pinBoard.SelectedAppt.TableApptFields.Rows[i]["FieldName"].ToString());
-                            apptField.FieldValue = PIn.String(pinBoard.SelectedAppt.TableApptFields.Rows[i]["FieldValue"].ToString());
+                            apptField.Value = PIn.String(pinBoard.SelectedAppt.TableApptFields.Rows[i]["FieldValue"].ToString());
                             listApptFields.Add(apptField);
                         }
                     }

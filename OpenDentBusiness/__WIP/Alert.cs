@@ -53,6 +53,11 @@ namespace OpenDentBusiness
         public AlertActionType Actions;
 
         /// <summary>
+        /// The foreign key of the record the alert is linked to (optional).
+        /// </summary>
+        public long? ForeignKey;
+
+        /// <summary>
         /// Constructs a new instance of the <see cref="AlertRead"/> class.
         /// </summary>
         /// <param name="dataReader">The data reader containing record data.</param>
@@ -69,20 +74,22 @@ namespace OpenDentBusiness
                 Details = (string)dataReader["details"],
                 Severity = (AlertSeverityType)Convert.ToInt32(dataReader["severity"]),
                 Actions = (AlertActionType)Convert.ToInt32(dataReader["actions"]),
+                ForeignKey = dataReader["foreign_key"] as long?
             };
         }
 
         public override bool Equals(object obj)
         {
-            if (obj is Alert alertItem)
+            if (obj is Alert alert)
             {
                 return
-                    alertItem.Id == Id &&
-                    alertItem.ClinicId == ClinicId &&
-                    alertItem.Description == Description &&
-                    alertItem.Type == Type &&
-                    alertItem.Severity == Severity &&
-                    alertItem.Actions == Actions;
+                    alert.Id == Id &&
+                    alert.ClinicId == ClinicId &&
+                    alert.Description == Description &&
+                    alert.Type == Type &&
+                    alert.Severity == Severity &&
+                    alert.Actions == Actions &&
+                    alert.ForeignKey == ForeignKey;
             }
             return false;
         }
@@ -159,15 +166,16 @@ namespace OpenDentBusiness
         /// <returns>The ID assigned to the alert.</returns>
         public static long Insert(Alert alert) =>
             alert.Id = DataConnection.ExecuteInsert(
-                "INSERT INTO `alerts` (`user_id`, `clinic_id`, `type`, `description`, `details`, `severity`, `actions`) " +
-                "VALUES (?user_id, ?clinic_id, ?type, ?description, ?details, ?severity, ?actions)",
+                "INSERT INTO `alerts` (`user_id`, `clinic_id`, `type`, `description`, `details`, `severity`, `actions`, `foreign_key`) " +
+                "VALUES (?user_id, ?clinic_id, ?type, ?description, ?details, ?severity, ?actions, ?foreign_key)",
                     new MySqlParameter("user_id", alert.UserId.HasValue ? (object)alert.UserId.Value : DBNull.Value),
                     new MySqlParameter("clinic_id", alert.ClinicId.HasValue ? (object)alert.ClinicId.Value : DBNull.Value),
                     new MySqlParameter("type", alert.Type ?? AlertType.Generic),
                     new MySqlParameter("description", alert.Description ?? ""),
                     new MySqlParameter("details", alert.Details ?? ""),
                     new MySqlParameter("severity", (int)alert.Severity),
-                    new MySqlParameter("actions", (int)alert.Actions));
+                    new MySqlParameter("actions", (int)alert.Actions),
+                    new MySqlParameter("foreign_key", alert.ForeignKey.HasValue ? (object)alert.ForeignKey.Value : DBNull.Value));
 
         /// <summary>
         /// Updates the specified alert in the database.
@@ -176,7 +184,7 @@ namespace OpenDentBusiness
         public static void Update(Alert alert) =>
              DataConnection.ExecuteNonQuery(
                 "UPDATE `alerts` SET `user_id` = ?user_id, `clinic_id` = ?clinic_id, `type` = ?type, `description` = ?description, " +
-                 "`details` = ?details, `severity` = ?severity, `actions` = ?actions WHERE `id` = ?id",
+                 "`details` = ?details, `severity` = ?severity, `actions` = ?actions, `foreign_key` = ?foreign_key WHERE `id` = ?id",
                     new MySqlParameter("user_id", alert.UserId.HasValue ? (object)alert.UserId.Value : DBNull.Value),
                     new MySqlParameter("clinic_id", alert.ClinicId.HasValue ? (object)alert.ClinicId.Value : DBNull.Value),
                     new MySqlParameter("type", alert.Type ?? AlertType.Generic),
@@ -184,6 +192,7 @@ namespace OpenDentBusiness
                     new MySqlParameter("details", alert.Details ?? ""),
                     new MySqlParameter("severity", (int)alert.Severity),
                     new MySqlParameter("actions", (int)alert.Actions),
+                    new MySqlParameter("foreign_key", alert.ForeignKey.HasValue ? (object)alert.ForeignKey.Value : DBNull.Value),
                     new MySqlParameter("id", alert.Id));
 
         /// <summary>
@@ -193,7 +202,17 @@ namespace OpenDentBusiness
         public static void DeleteByType(string type) =>
             DataConnection.ExecuteNonQuery(
                 "DELETE FROM `alerts` WHERE `type` = '" + MySqlHelper.EscapeString(type) + "'");
-        
+
+        /// <summary>
+        /// Deletes all alerts of the specifeid type with the specified foreign key(s) from the database.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="foreignKeys"></param>
+        public static void DeleteByType(string type, params long[] foreignKeys) =>
+            DataConnection.ExecuteNonQuery(
+                "DELETE FROM `alerts` WHERE `type` = '" + MySqlHelper.EscapeString(type) + "' " +
+                "AND `foreign_key` IN(" + string.Join(", ", foreignKeys) + ")");
+
         /// <summary>
         /// Alerts the specified alert from the database.
         /// </summary>

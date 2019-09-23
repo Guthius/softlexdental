@@ -27,7 +27,7 @@ namespace OpenDental {
 				listBoxPick.Items.Add(s);
 			}
 			if(!IsNew) {
-				listBoxPick.SelectedItem=Field.FieldValue;
+				listBoxPick.SelectedItem=Field.Value;
 			}
 		}
 
@@ -36,8 +36,8 @@ namespace OpenDental {
 				MsgBox.Show(this,"Please select an item in the list first.");
 				return;
 			}
-			Field.FieldValue=listBoxPick.SelectedItem.ToString();
-			if(Field.FieldValue=="") {//If blank, then delete
+			Field.Value=listBoxPick.SelectedItem.ToString();
+			if(Field.Value=="") {//If blank, then delete
 				if(IsNew) {
 					DialogResult=DialogResult.Cancel;
 					return;

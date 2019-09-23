@@ -463,7 +463,7 @@ namespace OpenDentBusiness
                 listInterventions.Add(cdsi);
             }
             //Fill object lists to be checked---------------------------------------------------------------------------------------------------------------
-            List<PatientAllergy> listAllergies = Allergies.GetAll(patCur.PatNum, false);
+            List<PatientAllergy> listAllergies = PatientAllergy.GetByPatient(patCur.PatNum, false);
             List<Disease> listDiseases = Diseases.Refresh(patCur.PatNum, true);
             List<DiseaseDef> listDiseaseDefs = new List<DiseaseDef>();
             List<EhrLab> listEhrLabs = EhrLabs.GetAllForPat(patCur.PatNum);
@@ -472,7 +472,7 @@ namespace OpenDentBusiness
             List<Allergy> listAllergyDefs = new List<Allergy>();
             for (int i = 0; i < listAllergies.Count; i++)
             {
-                listAllergyDefs.Add(AllergyDefs.GetOne(listAllergies[i].AllergyId));
+                listAllergyDefs.Add(Allergy.GetById(listAllergies[i].AllergyId));
             }
             for (int i = 0; i < listDiseases.Count; i++)
             {
@@ -588,7 +588,7 @@ namespace OpenDentBusiness
             {
                 if (ehrTrig.AllergyDefNumList.Contains(" " + listAllergies[a].AllergyId + " "))
                 {
-                    Allergy allergyDefCur = AllergyDefs.GetOne(listAllergies[a].AllergyId);
+                    Allergy allergyDefCur = Allergy.GetById(listAllergies[a].AllergyId);
                     if (allergyDefCur != null)
                     {
                         listObjectMatches.Add(allergyDefCur);
@@ -1263,7 +1263,7 @@ namespace OpenDentBusiness
                     cdsTrig.Type = "Allergy";
                     cdsTrig.Code = POut.Long(allergyObj.Id);
                     cdsTrig.CodeSystem = CodeSyst.AllergyDef;
-                    cdsTrig.Description = AllergyDefs.GetOne(allergyObj.Id).Description;
+                    cdsTrig.Description = Allergy.GetById(allergyObj.Id).Description;
                     listCDSTrigs.Add(cdsTrig);
                     break;
                 default:

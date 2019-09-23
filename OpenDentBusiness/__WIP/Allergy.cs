@@ -44,6 +44,11 @@ namespace OpenDentBusiness
         /// </summary>
         public bool Hidden;
 
+        /// <summary>
+        /// Constructs a new instance of the <see cref="Allergy"/> class.
+        /// </summary>
+        /// <param name="dataReader">The data reader containing record data.</param>
+        /// <returns>A <see cref="Allergy"/> instance.</returns>
         private static Allergy FromReader(MySqlDataReader dataReader)
         {
             return new Allergy
@@ -100,32 +105,42 @@ namespace OpenDentBusiness
             SelectOne("SELECT * FROM `allergies` WHERE `description` = ?description", FromReader, 
                 new MySqlParameter("description", allergyDescription));
 
-
-        public static long Insert(Allergy allergyDef) =>
-            allergyDef.Id = DataConnection.ExecuteInsert(
+        /// <summary>
+        /// Inserts the specified allergy into the database.
+        /// </summary>
+        /// <param name="allergy">The allergy.</param>
+        /// <returns>The ID assigned to the allergy.</returns>
+        public static long Insert(Allergy allergy) =>
+            allergy.Id = DataConnection.ExecuteInsert(
                 "INSERT INTO `allergies` (`description`, `snomed_type`, `medication_id`, `unii_code`, `date_modified`, `hidden`) " +
                 "VALUES (?description, ?snomed_type, ?medication_id, ?unii_code, ?date_modified, ?hidden)",
-                    new MySqlParameter("description", allergyDef.Description ?? ""),
-                    new MySqlParameter("snomed_type", (int)allergyDef.SnomedType),
-                    new MySqlParameter("medication_id", allergyDef.MedicationId.HasValue ? (object)allergyDef.MedicationId.Value : DBNull.Value),
-                    new MySqlParameter("unii_code", allergyDef.UniiCode ?? ""),
-                    new MySqlParameter("date_modified", allergyDef.DateModified),
-                    new MySqlParameter("hidden", allergyDef.Hidden));
+                    new MySqlParameter("description", allergy.Description ?? ""),
+                    new MySqlParameter("snomed_type", (int)allergy.SnomedType),
+                    new MySqlParameter("medication_id", allergy.MedicationId.HasValue ? (object)allergy.MedicationId.Value : DBNull.Value),
+                    new MySqlParameter("unii_code", allergy.UniiCode ?? ""),
+                    new MySqlParameter("date_modified", allergy.DateModified),
+                    new MySqlParameter("hidden", allergy.Hidden));
 
-        public static void Update(Allergy allergyDef)
-        {
+        /// <summary>
+        /// Updates the specified allergy in the database.
+        /// </summary>
+        /// <param name="allergy">The allergy.</param>
+        public static void Update(Allergy allergy) =>
             DataConnection.ExecuteNonQuery(
                 "UPDATE `allergies` SET `description` = ?description, `snomed_type` = ?snomed_type, `medication_id` = ?medication_id, " +
                 "`unii_code` = ?unii_code, `date_modified` = ?date_modified, `hidden` = ?hidden WHERE `id` = ?id",
-                    new MySqlParameter("description", allergyDef.Description ?? ""),
-                    new MySqlParameter("snomed_type", (int)allergyDef.SnomedType),
-                    new MySqlParameter("medication_id", allergyDef.MedicationId.HasValue ? (object)allergyDef.MedicationId.Value : DBNull.Value),
-                    new MySqlParameter("unii_code", allergyDef.UniiCode ?? ""),
-                    new MySqlParameter("date_modified", allergyDef.DateModified),
-                    new MySqlParameter("hidden", allergyDef.Hidden),
-                    new MySqlParameter("id", allergyDef.Id));
-        }
-
+                    new MySqlParameter("description", allergy.Description ?? ""),
+                    new MySqlParameter("snomed_type", (int)allergy.SnomedType),
+                    new MySqlParameter("medication_id", allergy.MedicationId.HasValue ? (object)allergy.MedicationId.Value : DBNull.Value),
+                    new MySqlParameter("unii_code", allergy.UniiCode ?? ""),
+                    new MySqlParameter("date_modified", allergy.DateModified),
+                    new MySqlParameter("hidden", allergy.Hidden),
+                    new MySqlParameter("id", allergy.Id));
+        
+        /// <summary>
+        /// Deletes the specified allergy from the database.
+        /// </summary>
+        /// <param name="allergyId">The ID of the allergy.</param>
         public static void Delete(long allergyId) =>
             DataConnection.ExecuteNonQuery(
                 "DELETE FROM `allergies` WHERE `id` = " + allergyId);

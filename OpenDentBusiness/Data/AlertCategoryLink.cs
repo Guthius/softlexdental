@@ -25,15 +25,14 @@ namespace OpenDentBusiness
     public class AlertCategoryLink : DataRecordBase
     {
         public long AlertCategoryId;
-
-        public AlertType AlertType;
+        public string AlertType;
 
         static AlertCategoryLink FromReader(MySqlDataReader dataReader)
         {
             return new AlertCategoryLink
             {
-                AlertCategoryId = Convert.ToInt64(dataReader["alert_category_id"]),
-                AlertType = (AlertType)Convert.ToInt32(dataReader["alert_type"])
+                AlertCategoryId = (long)dataReader["alert_category_id"],
+                AlertType = (string)dataReader["alert_type"]
             };
         }
 
@@ -41,7 +40,7 @@ namespace OpenDentBusiness
         {
         }
 
-        public AlertCategoryLink(long alertCategoryId, AlertType alertType)
+        public AlertCategoryLink(long alertCategoryId, string alertType)
         {
             AlertCategoryId = alertCategoryId;
             AlertType = alertType;
@@ -54,13 +53,13 @@ namespace OpenDentBusiness
             DataConnection.ExecuteNonQuery(
                 "INSERT IGNORE INTO `alert_category_links` (`alert_category_id`, `alert_type`) VALUES (?alert_category_id, ?alert_type)",
                     new MySqlParameter("alert_category_id", alertCategoryLink.AlertCategoryId),
-                    new MySqlParameter("alert_type", (int)alertCategoryLink.AlertType));
+                    new MySqlParameter("alert_type", alertCategoryLink.AlertType ?? ""));
 
         public static void Delete(AlertCategoryLink alertCategoryLink) =>
             DataConnection.ExecuteNonQuery(
                 "DELETE FROM `alert_category_links` WHERE `alert_category_id` = ?alert_category_id AND alert_type = ?alert_type",
                     new MySqlParameter("alert_category_id", alertCategoryLink.AlertCategoryId), 
-                    new MySqlParameter("alert_type",alertCategoryLink.AlertType));
+                    new MySqlParameter("alert_type",alertCategoryLink.AlertType ?? ""));
 
         public static void Synchronize(List<AlertCategoryLink> newAlertCategoryLinks, List<AlertCategoryLink> oldAlertCategoryLinks)
         {

@@ -630,20 +630,20 @@ Allergies
                     StartAndEnd("statusCode", "code", "completed");
                 }
                 Start("effectiveTime");
-                if (allergy.DateTStamp.Year < 1880)
+                if (allergy.DateModified.Year < 1880)
                 {
                     StartAndEnd("low", "nullFlavor", "UNK");
                     StartAndEnd("high", "nullFlavor", "UNK");
                 }
                 else if (allergy.Active)
                 {
-                    StartAndEnd("low", "value", allergy.DateTStamp.ToString("yyyyMMdd"));
+                    StartAndEnd("low", "value", allergy.DateModified.ToString("yyyyMMdd"));
                     StartAndEnd("high", "nullFlavor", "UNK");
                 }
                 else
                 {
                     StartAndEnd("low", "nullFlavor", "UNK");
-                    StartAndEnd("high", "value", allergy.DateTStamp.ToString("yyyyMMdd"));
+                    StartAndEnd("high", "value", allergy.DateModified.ToString("yyyyMMdd"));
                 }
                 End("effectiveTime");
                 Start("entryRelationship", "typeCode", "SUBJ");
@@ -739,13 +739,13 @@ Allergies
                 StartAndEnd("code", "code", "ASSERTION", "codeSystem", "2.16.840.1.113883.5.4");
                 StartAndEnd("statusCode", "code", "completed");//fixed value (required)
                 Start("effectiveTime");
-                if (allergy.DateTStamp.Year < 1880)
+                if (allergy.DateModified.Year < 1880)
                 {
                     StartAndEnd("low", "nullFlavor", "UNK");
                 }
                 else if (allergy.Active)
                 {
-                    StartAndEnd("low", "value", allergy.DateTStamp.ToString("yyyyMMdd"));
+                    StartAndEnd("low", "value", allergy.DateModified.ToString("yyyyMMdd"));
                 }
                 else
                 {

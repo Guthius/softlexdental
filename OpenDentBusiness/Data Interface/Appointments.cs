@@ -870,7 +870,7 @@ namespace OpenDentBusiness
             Dictionary<long, string> dictCarrierColors = tableCarriers.Select().ToDictionary(x => PIn.Long(x["PlanNum"].ToString()), x => x["CarrierColor"].ToString());
             Dictionary<long, string> dictDiscountPlans = DiscountPlans.GetAll(true).ToDictionary(x => x.DiscountPlanNum, x => x.Description);
             List<long> listPatsWithDisease = Diseases.GetPatientsWithDisease(listPatNums);
-            List<long> listPatsWithAllergy = Allergies.GetPatientsWithAllergy(listPatNums);
+            List<long> listPatsWithAllergy = PatientAllergy.GetPatientsWithAllergy(listPatNums);
             Dictionary<long, string> dictRefFromPatNums = new Dictionary<long, string>();//Only contains FROM referrals 
             Dictionary<long, string> dictRefToPatNums = new Dictionary<long, string>();//Only contains TO referrals
             List<long> listRefNums = new List<long>();
@@ -2807,7 +2807,7 @@ namespace OpenDentBusiness
             Db.NonQ(command);
             if (newStatus != ApptStatus.Scheduled)
             {
-                AlertItems.DeleteFor(AlertType.CallbackRequested, new List<long> { appt.AptNum });
+                Alert.DeleteByType(AlertType.CallbackRequested, appt.AptNum);
             }
             // TODO: Signalods.SetInvalidAppt(appt);
             if (newStatus != ApptStatus.Scheduled)
@@ -2831,7 +2831,7 @@ namespace OpenDentBusiness
                 + "InsPlan2=" + POut.Long(planNum2) + " "
                 + "WHERE AptNum=" + POut.Long(appt.AptNum);
             Db.NonQ(command);
-            AlertItems.DeleteFor(AlertType.CallbackRequested, new List<long> { appt.AptNum });
+            Alert.DeleteByType(AlertType.CallbackRequested, appt.AptNum);
             // TODO: Signalods.SetInvalidAppt(appt);
             HistAppointments.CreateHistoryEntry(appt.AptNum, HistAppointmentAction.Changed);
         }
@@ -2873,7 +2873,7 @@ namespace OpenDentBusiness
             Db.NonQ(command);
             if (newStatus != Preference.GetLong(PreferenceName.ApptEConfirmStatusDeclined))
             {//now the status is not 'Callback'
-                AlertItems.DeleteFor(AlertType.CallbackRequested, new List<long> { appt.AptNum });
+                Alert.DeleteByType(AlertType.CallbackRequested, appt.AptNum);
             }
             // TODO: Signalods.SetInvalidAppt(appt);
 
@@ -2916,7 +2916,7 @@ namespace OpenDentBusiness
                 && appointment.Confirmed != Preference.GetLong(PreferenceName.ApptEConfirmStatusDeclined))  //and now the status is not 'Callback'.
                 || appointment.AptStatus != ApptStatus.Scheduled)                        //Or the appointment is no longer scheduled.
             {
-                AlertItems.DeleteFor(AlertType.CallbackRequested, new List<long> { appointment.AptNum });
+                Alert.DeleteByType(AlertType.CallbackRequested, appointment.AptNum);
             }
             return retval;
         }
@@ -3227,7 +3227,7 @@ namespace OpenDentBusiness
             command = "SELECT * FROM appointment WHERE AptNum = " + POut.Long(aptNum);
             Appointment apt = Crud.AppointmentCrud.SelectOne(command);
             HistAppointments.CreateHistoryEntry(apt, HistAppointmentAction.Deleted);
-            AlertItems.DeleteFor(AlertType.CallbackRequested, new List<long> { aptNum });
+            Alert.DeleteByType(AlertType.CallbackRequested, aptNum);
             Appointments.ClearFkey(aptNum);//Zero securitylog FKey column for row to be deleted.
                                            //we will not reset item orders here
             command = "DELETE FROM appointment WHERE AptNum = " + POut.Long(aptNum);
@@ -3319,7 +3319,7 @@ namespace OpenDentBusiness
             command = "SELECT * FROM appointment WHERE AptNum IN(" + String.Join(",", listAllAptNums) + ")";
             List<Appointment> listApts = Crud.AppointmentCrud.SelectMany(command);
             listApts.ForEach(x => HistAppointments.CreateHistoryEntry(x, HistAppointmentAction.Deleted));
-            AlertItems.DeleteFor(AlertType.CallbackRequested, listApts.Select(x => x.AptNum).ToList());
+            Alert.DeleteByType(AlertType.CallbackRequested, listApts.Select(x => x.AptNum).ToArray());
 
             Db.NonQ("DELETE FROM appointment WHERE AptNum IN(" + String.Join(",", listAllAptNums) + ")");
             // TODO: Signalods.SetInvalid(InvalidType.Appointment);
@@ -4394,7 +4394,7 @@ namespace OpenDentBusiness
                 listInsSubs = InsSubs.GetMany(listPatPlans.Select(x => x.InsSubNum).ToList());
                 listInsPlans = InsPlans.GetByInsSubs(listInsSubs.Select(x => x.InsSubNum).ToList());
             }
-            AppointmentType apptTypeCur = AppointmentTypes.GetOne(appt.AppointmentTypeNum);//When AppointmentTypeNum=0 this will be null.
+            AppointmentType apptTypeCur = AppointmentType.GetById(appt.AppointmentTypeNum);//When AppointmentTypeNum=0 this will be null.
             Appointment apptOld = GetOneApt(appt.AptNum);//When inserting a new appt this will be null.
             appt.IsNew = (apptOld == null);
             long apptTypeNumOld = (apptOld == null ? 0 : apptOld.AppointmentTypeNum);

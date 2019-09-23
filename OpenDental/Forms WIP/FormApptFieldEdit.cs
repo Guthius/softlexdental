@@ -136,7 +136,7 @@ namespace OpenDental{
 
 		private void FormApptFieldEdit_Load(object sender, System.EventArgs e) {
 			labelName.Text=Field.FieldName;
-			textValue.Text=Field.FieldValue;
+			textValue.Text=Field.Value;
 		}
 
 		/*private void buttonDelete_Click(object sender,EventArgs e) {
@@ -144,8 +144,8 @@ namespace OpenDental{
 		}*/
 
 		private void butOK_Click(object sender, System.EventArgs e) {
-			Field.FieldValue=textValue.Text;
-			if(Field.FieldValue==""){//if blank, then delete
+			Field.Value=textValue.Text;
+			if(Field.Value==""){//if blank, then delete
 				if(IsNew) {
 					DialogResult=DialogResult.Cancel;
 					return;

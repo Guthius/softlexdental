@@ -347,23 +347,16 @@
     <Compile Include="Crud\AdjustmentCrud.cs" />
     <Compile Include="__WIP\AlertActionType.cs" />
     <Compile Include="__WIP\AlertSeverityType.cs" />
-    <Compile Include="__WIP\AllergyCrud.cs" />
     <Compile Include="Crud\AppointmentCrud.cs" />
     <Compile Include="Crud\AppointmentRuleCrud.cs" />
-    <Compile Include="Crud\AppointmentTypeCrud.cs" />
-    <Compile Include="Crud\ApptFieldCrud.cs" />
-    <Compile Include="Crud\ApptFieldDefCrud.cs" />
     <Compile Include="Crud\ApptReminderRuleCrud.cs" />
-    <Compile Include="Crud\ApptReminderSentCrud.cs" />
+    <Compile Include="__WIP\ApptReminderSentCrud.cs" />
     <Compile Include="Crud\ApptViewCrud.cs" />
     <Compile Include="Crud\ApptViewItemCrud.cs" />
     <Compile Include="Crud\AutoCodeCondCrud.cs" />
-    <Compile Include="Crud\AutoCodeCrud.cs" />
-    <Compile Include="Crud\AutoCodeItemCrud.cs" />
     <Compile Include="Crud\AutomationConditionCrud.cs" />
     <Compile Include="Crud\AutomationCrud.cs" />
     <Compile Include="Crud\AutoNoteControlCrud.cs" />
-    <Compile Include="Crud\AutoNoteCrud.cs" />
     <Compile Include="Crud\CDSPermissionCrud.cs" />
     <Compile Include="Crud\ClaimSnapshotCrud.cs" />
     <Compile Include="Crud\ClinicPrefCrud.cs" />
@@ -439,7 +432,6 @@
     <Compile Include="Crud\EobAttachCrud.cs" />
     <Compile Include="Crud\EquipmentCrud.cs" />
     <Compile Include="Crud\ErxLogCrud.cs" />
-    <Compile Include="Crud\EServiceSignalCrud.cs" />
     <Compile Include="Crud\EtransCrud.cs" />
     <Compile Include="Crud\EtransMessageTextCrud.cs" />
     <Compile Include="Crud\EvaluationCriterionCrud.cs" />
@@ -536,7 +528,7 @@
     <Compile Include="Crud\QuestionDefCrud.cs" />
     <Compile Include="Crud\QuickPasteCatCrud.cs" />
     <Compile Include="Crud\QuickPasteNoteCrud.cs" />
-    <Compile Include="Crud\RecallCrud.cs" />
+    <Compile Include="__WIP\RecallCrud.cs" />
     <Compile Include="Crud\RecallTriggerCrud.cs" />
     <Compile Include="Crud\RecallTypeCrud.cs" />
     <Compile Include="Crud\RefAttachCrud.cs" />
@@ -574,7 +566,7 @@
     <Compile Include="Crud\UserWebCrud.cs" />
     <Compile Include="Crud\XWebResponseCrud.cs" />
     <Compile Include="Data Interface\ApptReminderRules.cs" />
-    <Compile Include="Data Interface\ApptReminderSents.cs" />
+    <Compile Include="__WIP\ApptReminderSents.cs" />
     <Compile Include="Data Interface\ClaimSnapshots.cs" />
     <Compile Include="Data Interface\ClinicPrefs.cs" />
     <Compile Include="Data Interface\ConfirmationRequests.cs" />
@@ -634,10 +626,6 @@
     <Compile Include="Crud\WikiPageHistCrud.cs" />
     <Compile Include="Crud\XChargeTransactionCrud.cs" />
     <Compile Include="Crud\ZipCodeCrud.cs" />
-    <Compile Include="__WIP\Allergies.cs" />
-    <Compile Include="Data Interface\AppointmentTypes.cs" />
-    <Compile Include="Data Interface\ApptFieldDefs.cs" />
-    <Compile Include="Data Interface\ApptFields.cs" />
     <Compile Include="Data Interface\AutomationConditions.cs" />
     <Compile Include="Data Interface\Automations.cs" />
     <Compile Include="Data Interface\CDSPermissions.cs" />
@@ -669,7 +657,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Data Interface\Encounters.cs" />
-    <Compile Include="Data Interface\EServiceSignals.cs" />
     <Compile Include="Data Interface\EvaluationCriterionDefs.cs" />
     <Compile Include="Data Interface\EvaluationCriterions.cs" />
     <Compile Include="Data Interface\EvaluationDefs.cs" />
@@ -789,10 +776,7 @@
     <Compile Include="Data Interface\ApptViewItems.cs" />
     <Compile Include="Data Interface\ApptViews.cs" />
     <Compile Include="Data Interface\AutoCodeConds.cs" />
-    <Compile Include="Data Interface\AutoCodeItems.cs" />
-    <Compile Include="Data Interface\AutoCodes.cs" />
     <Compile Include="Data Interface\AutoNoteControls.cs" />
-    <Compile Include="Data Interface\AutoNotes.cs" />
     <Compile Include="Data Interface\Benefits.cs" />
     <Compile Include="Data Interface\CanadianNetworks.cs" />
     <Compile Include="Data Interface\Carriers.cs" />
@@ -853,7 +837,7 @@
     <Compile Include="Data Interface\Questions.cs" />
     <Compile Include="Data Interface\QuickPasteCats.cs" />
     <Compile Include="Data Interface\QuickPasteNotes.cs" />
-    <Compile Include="Data Interface\Recalls.cs" />
+    <Compile Include="__WIP\Recalls.cs" />
     <Compile Include="Data Interface\RecallTriggers.cs" />
     <Compile Include="Data Interface\RecallTypes.cs" />
     <Compile Include="Data Interface\DeletedObjects.cs" />
@@ -1004,7 +988,7 @@
     <Compile Include="TableTypes\TsiTransLog.cs" />
     <Compile Include="TableTypes\UpdateHistory.cs" />
     <Compile Include="TableTypes\CDSPermission.cs" />
-    <Compile Include="TableTypes\AppointmentType.cs" />
+    <Compile Include="__WIP\AppointmentType.cs" />
     <Compile Include="TableTypes\ConnGroupAttach.cs" />
     <Compile Include="TableTypes\ClaimSnapshot.cs" />
     <Compile Include="TableTypes\DashboardCell.cs" />
@@ -1015,7 +999,6 @@
     <Compile Include="TableTypes\TreatPlanAttach.cs" />
     <Compile Include="TableTypes\Ebill.cs" />
     <Compile Include="Data\EmailAutograph.cs" />
-    <Compile Include="TableTypes\EServiceSignal.cs" />
     <Compile Include="TableTypes\ProviderErx.cs" />
     <Compile Include="TableTypes\RequiredField.cs" />
     <Compile Include="TableTypes\RequiredFieldCondition.cs" />
@@ -1061,12 +1044,12 @@
     <Compile Include="TableTypes\MapArea.cs" />
     <Compile Include="TableTypes\EhrAmendment.cs" />
     <Compile Include="TableTypes\Automation.cs" />
-    <Compile Include="TableTypes\ApptFieldDef.cs" />
-    <Compile Include="TableTypes\ApptField.cs" />
+    <Compile Include="__WIP\ApptFieldDef.cs" />
+    <Compile Include="__WIP\ApptField.cs" />
     <Compile Include="TableTypes\AutomationCondition.cs" />
     <Compile Include="TableTypes\ChartView.cs" />
     <Compile Include="__WIP\Allergy.cs" />
-    <Compile Include="TableTypes\PatientAllergy.cs" />
+    <Compile Include="__WIP\PatientAllergy.cs" />
     <Compile Include="TableTypes\CentralConnection.cs" />
     <Compile Include="TableTypes\CodeSystem.cs" />
     <Compile Include="TableTypes\Cdcrec.cs" />
@@ -1219,10 +1202,10 @@
     <Compile Include="TableTypes\AppointmentRule.cs" />
     <Compile Include="TableTypes\ApptView.cs" />
     <Compile Include="TableTypes\ApptViewItem.cs" />
-    <Compile Include="TableTypes\AutoCode.cs" />
+    <Compile Include="__WIP\AutoCode.cs" />
     <Compile Include="TableTypes\AutoCodeCond.cs" />
-    <Compile Include="TableTypes\AutoCodeItem.cs" />
-    <Compile Include="TableTypes\AutoNote.cs" />
+    <Compile Include="__WIP\AutoCodeItem.cs" />
+    <Compile Include="__WIP\AutoNote.cs" />
     <Compile Include="TableTypes\AutoNoteControl.cs" />
     <Compile Include="TableTypes\Benefit.cs" />
     <Compile Include="TableTypes\Carrier.cs" />
@@ -1323,7 +1306,7 @@
     <Compile Include="TableTypes\QuestionDef.cs" />
     <Compile Include="TableTypes\QuickPasteCat.cs" />
     <Compile Include="TableTypes\QuickPasteNote.cs" />
-    <Compile Include="TableTypes\Recall.cs" />
+    <Compile Include="__WIP\Recall.cs" />
     <Compile Include="Data\Reconciliation.cs" />
     <Compile Include="TableTypes\RefAttach.cs" />
     <Compile Include="TableTypes\Referral.cs" />
