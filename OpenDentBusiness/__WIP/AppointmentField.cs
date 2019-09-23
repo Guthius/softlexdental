@@ -20,7 +20,7 @@ using System.Collections.Generic;
 
 namespace OpenDentBusiness
 {
-    public class ApptField : DataRecord
+    public class AppointmentField : DataRecord
     {
         public long AppointmentId;
 
@@ -38,13 +38,13 @@ namespace OpenDentBusiness
         public string Value;
 
         /// <summary>
-        /// Constructs a new instance of the <see cref="ApptField"/> class.
+        /// Constructs a new instance of the <see cref="AppointmentField"/> class.
         /// </summary>
         /// <param name="dataReader">The data reader containing record data.</param>
-        /// <returns>A <see cref="ApptField"/> instance.</returns>
-        private static ApptField FromReader(MySqlDataReader dataReader)
+        /// <returns>A <see cref="AppointmentField"/> instance.</returns>
+        private static AppointmentField FromReader(MySqlDataReader dataReader)
         {
-            return new ApptField
+            return new AppointmentField
             {
                 Id = (long)dataReader["id"],
                 AppointmentId = (long)dataReader["appointment_id"],
@@ -58,7 +58,7 @@ namespace OpenDentBusiness
         /// </summary>
         /// <param name="apptFieldId">The ID of the appointment field.</param>
         /// <returns>The appointment field.</returns>
-        public static ApptField GetById(long apptFieldId) =>
+        public static AppointmentField GetById(long apptFieldId) =>
             SelectOne("SELECT * FROM `appointment_fields` WHERE `id` = " + apptFieldId, FromReader);
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace OpenDentBusiness
         /// </summary>
         /// <param name="appointmentId">The ID of the appointment.</param>
         /// <returns>A list of appointment fields.</returns>
-        public static List<ApptField> GetByAppointment(long appointmentId) =>
+        public static List<AppointmentField> GetByAppointment(long appointmentId) =>
             SelectMany("SELECT * FROM `appointment_fields` WHERE `appointment_id` = " + appointmentId, FromReader);
 
         /// <summary>
@@ -74,7 +74,7 @@ namespace OpenDentBusiness
         /// </summary>
         /// <param name="apptField"></param>
         /// <returns></returns>
-        public static long Insert(ApptField apptField) =>
+        public static long Insert(AppointmentField apptField) =>
             apptField.Id = DataConnection.ExecuteInsert(
                 "INSERT INTO `appointment_fields` (`appointment_id`, `field_name`, `value`) WHERE (?appointment_id, ?field_name, ?value)",
                     new MySqlParameter("?appointment_id", apptField.AppointmentId),
@@ -85,7 +85,7 @@ namespace OpenDentBusiness
         /// Updates the specified appointment field in the database.
         /// </summary>
         /// <param name="apptField">The appointment field.</param>
-        public static void Update(ApptField apptField) =>
+        public static void Update(AppointmentField apptField) =>
             DataConnection.ExecuteNonQuery(
                 "UPDATE `appointment_fields` SET `appointment_id` = ?appointment_id, `field_name` = ?field_name, `value` = ?value WHERE `id` = ?id",
                     new MySqlParameter("?appointment_id", apptField.AppointmentId),

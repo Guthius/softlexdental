@@ -21,13 +21,13 @@ namespace OpenDental {
 
 		private void FormAutoNoteControlEdit_Load(object sender,EventArgs e) {
 			textBoxControlDescript.Text=ControlCur.Description;
-			textBoxControlLabel.Text=ControlCur.ControlLabel;
+			textBoxControlLabel.Text=ControlCur.Label;
 			comboType.Items.Clear();
 			comboType.Items.Add("Text");
 			comboType.Items.Add("OneResponse");
 			comboType.Items.Add("MultiResponse");
-			comboType.SelectedItem=ControlCur.ControlType;
-			textOptions.Text=ControlCur.ControlOptions;
+			comboType.SelectedItem=ControlCur.Type;
+			textOptions.Text=ControlCur.Options;
 		}
 
 		private void comboType_SelectedIndexChanged(object sender,EventArgs e) {
@@ -212,9 +212,9 @@ namespace OpenDental {
 				return;
 			}
 			ControlCur.Description=textBoxControlDescript.Text.ToString();
-			ControlCur.ControlLabel=textBoxControlLabel.Text.ToString();
-			ControlCur.ControlType=comboType.SelectedItem.ToString();
-			ControlCur.ControlOptions=textOptions.Text;
+			ControlCur.Label=textBoxControlLabel.Text.ToString();
+			ControlCur.Type=comboType.SelectedItem.ToString();
+			ControlCur.Options=textOptions.Text;
 			if(IsNew) {
 				AutoNoteControls.Insert(ControlCur);
 			}

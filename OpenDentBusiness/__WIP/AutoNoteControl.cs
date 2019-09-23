@@ -36,18 +36,18 @@ namespace OpenDentBusiness
         /// <summary>
         /// 'Text', 'OneResponse', or 'MultiResponse'.  More types to be added later.
         /// </summary>
-        public string ControlType;
+        public string Type;
 
         /// <summary>
         /// The prompt text.
         /// </summary>
-        public string ControlLabel;
+        public string Label;
 
         /// <summary>
         /// For TextBox, this is the default text.
         /// For a ComboBox, this is the list of possible responses, one per line.
         /// </summary>
-        public string ControlOptions;
+        public string Options;
 
         /// <summary>
         /// Constructs a new instance of the <see cref="AutoNoteControl"/> class.
@@ -59,9 +59,10 @@ namespace OpenDentBusiness
             return new AutoNoteControl
             {
                 Id = (long)dataReader["id"],
-                ControlType = (string)dataReader["type"],
-                ControlLabel = (string)dataReader["label"],
-                ControlOptions = (string)dataReader["options"]
+                Description = (string)dataReader["description"],
+                Type = (string)dataReader["type"],
+                Label = (string)dataReader["label"],
+                Options = (string)dataReader["options"]
             };
         }
 
@@ -80,10 +81,11 @@ namespace OpenDentBusiness
         /// <returns>The ID assigned to the auto note control.</returns>
         public static long Insert(AutoNoteControl autoNoteControl) =>
             autoNoteControl.Id = DataConnection.ExecuteInsert(
-                "INSERT INTO `auto_note_controls` (`type`, `label`, `options`) VALUES (?type, ?label, ?options)",
-                    new MySqlParameter("type", autoNoteControl.ControlType ?? ""),
-                    new MySqlParameter("label", autoNoteControl.ControlLabel ?? ""),
-                    new MySqlParameter("options", autoNoteControl.ControlOptions ?? ""));
+                "INSERT INTO `auto_note_controls` (`description`, `type`, `label`, `options`) VALUES (?description, ?type, ?label, ?options)",
+                    new MySqlParameter("description", autoNoteControl.Description ?? ""),
+                    new MySqlParameter("type", autoNoteControl.Type ?? ""),
+                    new MySqlParameter("label", autoNoteControl.Label ?? ""),
+                    new MySqlParameter("options", autoNoteControl.Options ?? ""));
         
         /// <summary>
         /// Updates the specified auto note control in the database.
@@ -91,10 +93,11 @@ namespace OpenDentBusiness
         /// <param name="autoNoteControl">The auto note control.</param>
         public static void Update(AutoNoteControl autoNoteControl) =>
             DataConnection.ExecuteInsert(
-                "UPDATE `auto_note_controls` SET `type` = ?type, `label` = ?label, `options` = ?options WHERE `id` = ?id",
-                    new MySqlParameter("type", autoNoteControl.ControlType ?? ""),
-                    new MySqlParameter("label", autoNoteControl.ControlLabel ?? ""),
-                    new MySqlParameter("options", autoNoteControl.ControlOptions ?? ""),
+                "UPDATE `auto_note_controls` SET `description` = ?description, `type` = ?type, `label` = ?label, `options` = ?options WHERE `id` = ?id",
+                    new MySqlParameter("description", autoNoteControl.Description ?? ""),
+                    new MySqlParameter("type", autoNoteControl.Type ?? ""),
+                    new MySqlParameter("label", autoNoteControl.Label ?? ""),
+                    new MySqlParameter("options", autoNoteControl.Options ?? ""),
                     new MySqlParameter("options", autoNoteControl.Id));
 
         /// <summary>

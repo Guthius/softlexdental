@@ -65,6 +65,7 @@ namespace OpenDentBusiness
             return new CodeSystem
             {
                 Id = (long)dataReader["id"],
+                Name = (string)dataReader["name"],
                 Version = (string)dataReader["version"],
                 VersionAvail = (string)dataReader["version_available"],
                 HL7OID = (string)dataReader["hl7_oid"],
@@ -88,6 +89,7 @@ namespace OpenDentBusiness
         /// <param name="codeSystem">The code system.</param>
         public static void Update(CodeSystem codeSystem)
         {
+            // TODO: Implement me.
         }
 
         /// <summary>

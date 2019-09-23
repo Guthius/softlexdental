@@ -36,29 +36,24 @@ namespace OpenDentBusiness
         public DateTime AppointmentDate;
         
         /// <summary>
-        /// Once sent, this was the date and time that the reminder was sent out on.
+        /// Yhe date and time that the reminder was sent out on.
         /// </summary>
-        public DateTime DateTimeSent;
+        public DateTime Date;
         
-        /// <summary>
-        /// This was the TSPrior used to send this reminder.
-        /// </summary>
-        public TimeSpan TSPrior;
-
         /// <summary>
         /// FK to apptreminderrule.ApptReminderRuleNum. Allows us to look up the rules to determine how to send this apptcomm out.
         /// </summary>
-        public long ApptReminderRuleId;
+        public long AppointmentReminderRuleId;
         
         /// <summary>
         /// Indicates if an SMS message was succesfully sent.
         /// </summary>
-        public bool IsSmsSent;
+        public bool SentSms;
         
         /// <summary>
         /// Indicates if an email was succesfully sent.
         /// </summary>
-        public bool IsEmailSent;
+        public bool SentEmail;
 
         /// <summary>
         /// Constructs a new instance of the <see cref="ApptReminderSent"/> class.
@@ -72,10 +67,10 @@ namespace OpenDentBusiness
                 Id = (long)dataReader["id"],
                 AppointmentId = (long)dataReader["appointment_id"],
                 AppointmentDate = (DateTime)dataReader["appointment_date"],
-                TSPrior = (TimeSpan)dataReader["prior"],
-                ApptReminderRuleId = (long)dataReader["appointment_reminder_rule_id"],
-                IsSmsSent = Convert.ToBoolean(dataReader["sent_sms"]),
-                IsEmailSent = Convert.ToBoolean(dataReader["sent_email"])
+                Date = (DateTime)dataReader["date"],
+                AppointmentReminderRuleId = (long)dataReader["appointment_reminder_rule_id"],
+                SentSms = Convert.ToBoolean(dataReader["sent_sms"]),
+                SentEmail = Convert.ToBoolean(dataReader["sent_email"])
             };
         }
 
@@ -94,15 +89,15 @@ namespace OpenDentBusiness
         /// <returns>The ID assigned to the sent appointment reminder.</returns>
         public static long Insert(ApptReminderSent apptReminderSent) =>
             apptReminderSent.Id = DataConnection.ExecuteInsert(
-                "INSERT INTO `appointment_sent_reminders` (`appointment_id`, `appointment_date`, `prior`, `appointment_reminder_rule_id`, " +
-                "`sent_sms`, `sent_email`) VALUES (?appointment_id, ?appointment_date, ?prior, ?appointment_reminder_rule_id, " +
+                "INSERT INTO `appointment_sent_reminders` (`appointment_id`, `appointment_date`, `date`, `appointment_reminder_rule_id`, " +
+                "`sent_sms`, `sent_email`) VALUES (?appointment_id, ?appointment_date, ?date, ?appointment_reminder_rule_id, " +
                 "?sent_sms, ?sent_email)",
                     new MySqlParameter("appointment_id", apptReminderSent.AppointmentId),
                     new MySqlParameter("appointment_date", apptReminderSent.AppointmentDate),
-                    new MySqlParameter("prior", apptReminderSent.TSPrior),
-                    new MySqlParameter("appointment_reminder_rule_id", apptReminderSent.ApptReminderRuleId),
-                    new MySqlParameter("sent_sms", apptReminderSent.IsSmsSent),
-                    new MySqlParameter("sent_email", apptReminderSent.IsEmailSent));
+                    new MySqlParameter("date", apptReminderSent.Date),
+                    new MySqlParameter("appointment_reminder_rule_id", apptReminderSent.AppointmentReminderRuleId),
+                    new MySqlParameter("sent_sms", apptReminderSent.SentSms),
+                    new MySqlParameter("sent_email", apptReminderSent.SentEmail));
 
         /// <summary>
         /// Inserts the specified sent appointment reminders into the database.
@@ -118,14 +113,14 @@ namespace OpenDentBusiness
         public static void Update(ApptReminderSent apptReminderSent) =>
             DataConnection.ExecuteInsert(
                 "UPDATE `appointment_sent_reminders` SET `appointment_id` = ?appointment_id, `appointment_date` = ?appointment_date, " +
-                "`prior` = ?prior, `appointment_reminder_rule_id` = ?appointment_reminder_rule_id, `sent_sms` = ?sent_sms, " +
+                "`date` = ?date, `appointment_reminder_rule_id` = ?appointment_reminder_rule_id, `sent_sms` = ?sent_sms, " +
                 "`sent_email` = ?sent_email WHERE `id` = ?id",
                     new MySqlParameter("appointment_id", apptReminderSent.AppointmentId),
                     new MySqlParameter("appointment_date", apptReminderSent.AppointmentDate),
-                    new MySqlParameter("prior", apptReminderSent.TSPrior),
-                    new MySqlParameter("appointment_reminder_rule_id", apptReminderSent.ApptReminderRuleId),
-                    new MySqlParameter("sent_sms", apptReminderSent.IsSmsSent),
-                    new MySqlParameter("sent_email", apptReminderSent.IsEmailSent),
+                    new MySqlParameter("date", apptReminderSent.Date),
+                    new MySqlParameter("appointment_reminder_rule_id", apptReminderSent.AppointmentReminderRuleId),
+                    new MySqlParameter("sent_sms", apptReminderSent.SentSms),
+                    new MySqlParameter("sent_email", apptReminderSent.SentEmail),
                     new MySqlParameter("id", apptReminderSent.Id));
 
         /// <summary>

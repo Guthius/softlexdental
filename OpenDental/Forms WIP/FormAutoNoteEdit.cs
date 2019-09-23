@@ -79,7 +79,7 @@ namespace OpenDental
             {
                 var control = new AutoNoteControl
                 {
-                    ControlType = "Text"
+                    Type = "Text"
                 };
 
                 formAutoNoteControlEdit.ControlCur = control;

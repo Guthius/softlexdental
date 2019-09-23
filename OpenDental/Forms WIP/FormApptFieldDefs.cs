@@ -18,7 +18,7 @@ namespace OpenDental{
 		private MainMenu mainMenu1;
 		private MenuItem menuItemSetup;
 		private System.Windows.Forms.ToolTip toolTip1;
-		private List<ApptFieldDef> _listApptFieldDefs;
+		private List<AppointmentFieldDefinition> _listApptFieldDefs;
 
 		///<summary></summary>
 		public FormApptFieldDefs()
@@ -175,7 +175,7 @@ namespace OpenDental{
 		}
 
 		private void butAdd_Click(object sender, System.EventArgs e) {
-			ApptFieldDef def=new ApptFieldDef();
+			AppointmentFieldDefinition def=new AppointmentFieldDefinition();
 			FormApptFieldDefEdit FormP=new FormApptFieldDefEdit(def);
 			FormP.IsNew=true;
 			FormP.ShowDialog();

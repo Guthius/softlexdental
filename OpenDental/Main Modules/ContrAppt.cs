@@ -2511,12 +2511,12 @@ namespace OpenDental
                 if (aptCur.AptStatus == ApptStatus.Planned)
                 {//if Planned appt is on pinboard
                     #region Planned appointment
-                    List<ApptField> listApptFields = new List<ApptField>();
+                    List<AppointmentField> listApptFields = new List<AppointmentField>();
                     for (int i = 0; i < pinBoard.SelectedAppt.TableApptFields.Rows.Count; i++)
                     {//Duplicate the appointment fields.
                         if (aptOld.AptNum == PIn.Long(pinBoard.SelectedAppt.TableApptFields.Rows[i]["AptNum"].ToString()))
                         {
-                            ApptField apptField = new ApptField();
+                            AppointmentField apptField = new AppointmentField();
                             apptField.FieldName = PIn.String(pinBoard.SelectedAppt.TableApptFields.Rows[i]["FieldName"].ToString());
                             apptField.Value = PIn.String(pinBoard.SelectedAppt.TableApptFields.Rows[i]["FieldValue"].ToString());
                             listApptFields.Add(apptField);

@@ -1655,26 +1655,26 @@ namespace OpenDental
                 MsgBox.Show(this, "There are duplicate appointment field defs, go rename or delete the duplicates.");
                 return;
             }
-            ApptField field = ApptFields.GetOne(PIn.Long(_tableFields.Rows[e.Row]["ApptFieldNum"].ToString()));
+            AppointmentField field = ApptFields.GetOne(PIn.Long(_tableFields.Rows[e.Row]["ApptFieldNum"].ToString()));
             if (field == null)
             {
-                field = new ApptField();
+                field = new AppointmentField();
                 field.AppointmentId = AptCur.AptNum;
                 field.FieldName = _tableFields.Rows[e.Row]["FieldName"].ToString();
-                ApptFieldDef fieldDef = ApptFieldDefs.GetFieldDefByFieldName(field.FieldName);
+                AppointmentFieldDefinition fieldDef = ApptFieldDefs.GetFieldDefByFieldName(field.FieldName);
                 if (fieldDef == null)
                 {//This could happen if the field def was deleted while the appointment window was open.
                     MsgBox.Show(this, "This Appointment Field Def no longer exists.");
                 }
                 else
                 {
-                    if (fieldDef.FieldType == ApptFieldType.Text)
+                    if (fieldDef.FieldType == AppointmentFieldType.Text)
                     {
                         FormApptFieldEdit formAF = new FormApptFieldEdit(field);
                         formAF.IsNew = true;
                         formAF.ShowDialog();
                     }
-                    else if (fieldDef.FieldType == ApptFieldType.PickList)
+                    else if (fieldDef.FieldType == AppointmentFieldType.PickList)
                     {
                         FormApptFieldPickEdit formAF = new FormApptFieldPickEdit(field);
                         formAF.IsNew = true;
@@ -1684,12 +1684,12 @@ namespace OpenDental
             }
             else if (ApptFieldDefs.GetFieldDefByFieldName(field.FieldName) != null)
             {
-                if (ApptFieldDefs.GetFieldDefByFieldName(field.FieldName).FieldType == ApptFieldType.Text)
+                if (ApptFieldDefs.GetFieldDefByFieldName(field.FieldName).FieldType == AppointmentFieldType.Text)
                 {
                     FormApptFieldEdit formAF = new FormApptFieldEdit(field);
                     formAF.ShowDialog();
                 }
-                else if (ApptFieldDefs.GetFieldDefByFieldName(field.FieldName).FieldType == ApptFieldType.PickList)
+                else if (ApptFieldDefs.GetFieldDefByFieldName(field.FieldName).FieldType == AppointmentFieldType.PickList)
                 {
                     FormApptFieldPickEdit formAF = new FormApptFieldPickEdit(field);
                     formAF.ShowDialog();

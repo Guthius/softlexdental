@@ -18,12 +18,12 @@ namespace OpenDental{
 		private System.ComponentModel.Container components = null;
 		///<summary></summary>
 		public bool IsNew;
-		private ApptField Field;
+		private AppointmentField Field;
 		private Label labelName;
 		private TextBox textValue;
 
 		///<summary></summary>
-		public FormApptFieldEdit(ApptField field)
+		public FormApptFieldEdit(AppointmentField field)
 		{
 			//
 			// Required for Windows Form Designer support

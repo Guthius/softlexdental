@@ -75,6 +75,7 @@ namespace OpenDentBusiness
             return new AppointmentType
             {
                 Id = (long)dataReader["id"],
+                Name = (string)dataReader["name"],
                 Color = ColorTranslator.FromHtml((string)dataReader["color"]),
                 Pattern = (string)dataReader["pattern"],
                 ProcedureCodes = (string)dataReader["procedure_codes"],

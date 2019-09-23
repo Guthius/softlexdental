@@ -10,9 +10,9 @@ using OpenDentBusiness;
 namespace OpenDental {
 	public partial class FormApptFieldPickEdit:ODForm {
 		public bool IsNew;
-		private ApptField Field;
+		private AppointmentField Field;
 
-		public FormApptFieldPickEdit(ApptField field) {
+		public FormApptFieldPickEdit(AppointmentField field) {
 			InitializeComponent();
 			
 			Field=field;

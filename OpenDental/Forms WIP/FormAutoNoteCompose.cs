@@ -181,11 +181,11 @@ namespace OpenDental
                 autoNoteDescript = listPrompts[i].Value.Substring(9, listPrompts[i].Value.Length - 11);
                 control = AutoNoteControls.GetByDescript(autoNoteDescript);//should never be null since we removed nulls above
                 promptResponse = "";
-                if (control.ControlType == "Text")
+                if (control.Type == "Text")
                 {//Response just inserts text. No choosing options here.
                     FormAutoNotePromptText FormT = new FormAutoNotePromptText(autoNoteDescript);
-                    FormT.PromptText = control.ControlLabel;
-                    FormT.ResultText = control.ControlOptions;
+                    FormT.PromptText = control.Label;
+                    FormT.ResultText = control.Options;
                     isAutoNote = false;
                     if (i > 0)
                     {
@@ -231,11 +231,11 @@ namespace OpenDental
                         return -1;
                     }
                 }
-                else if (control.ControlType == "OneResponse")
+                else if (control.Type == "OneResponse")
                 {
                     FormAutoNotePromptOneResp FormOR = new FormAutoNotePromptOneResp(autoNoteDescript);
-                    FormOR.PromptText = control.ControlLabel;
-                    FormOR.PromptOptions = control.ControlOptions;
+                    FormOR.PromptText = control.Label;
+                    FormOR.PromptOptions = control.Options;
                     if (i > 0)
                     {
                         FormOR.IsGoBack = true;//user can go back if at least one item in the list exist
@@ -330,11 +330,11 @@ namespace OpenDental
                         return -1;
                     }
                 }
-                else if (control.ControlType == "MultiResponse")
+                else if (control.Type == "MultiResponse")
                 {
                     FormAutoNotePromptMultiResp FormMR = new FormAutoNotePromptMultiResp(autoNoteDescript);
-                    FormMR.PromptText = control.ControlLabel;
-                    FormMR.PromptOptions = control.ControlOptions;
+                    FormMR.PromptText = control.Label;
+                    FormMR.PromptOptions = control.Options;
                     isAutoNote = false;
                     if (i > 0)
                     {

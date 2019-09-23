@@ -46,9 +46,9 @@ namespace OpenDental {
 			for(int i=0;i<_listAutoNoteControls.Count;i++){
 				row=new ODGridRow();
 				row.Cells.Add(_listAutoNoteControls[i].Description);
-				row.Cells.Add(_listAutoNoteControls[i].ControlType);
-				row.Cells.Add(_listAutoNoteControls[i].ControlLabel);
-				row.Cells.Add(_listAutoNoteControls[i].ControlOptions);
+				row.Cells.Add(_listAutoNoteControls[i].Type);
+				row.Cells.Add(_listAutoNoteControls[i].Label);
+				row.Cells.Add(_listAutoNoteControls[i].Options);
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();

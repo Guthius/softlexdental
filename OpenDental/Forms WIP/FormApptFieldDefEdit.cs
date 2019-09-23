@@ -20,7 +20,7 @@ namespace OpenDental{
 		///<summary></summary>
 		public bool IsNew;
 		private OpenDental.UI.Button buttonDelete;
-		private ApptFieldDef FieldDef;
+		private AppointmentFieldDefinition FieldDef;
 		private Label labelStatus;
 		private Label labelWarning;
 		private TextBox textPickList;
@@ -29,7 +29,7 @@ namespace OpenDental{
 		private string OldFieldName;
 
 		///<summary></summary>
-		public FormApptFieldDefEdit(ApptFieldDef fieldDef)
+		public FormApptFieldDefEdit(AppointmentFieldDefinition fieldDef)
 		{
 			//
 			// Required for Windows Form Designer support
@@ -213,12 +213,12 @@ namespace OpenDental{
 			textName.Text=FieldDef.FieldName;
 			textPickList.Visible=false;
 			comboFieldType.Items.Clear();
-			comboFieldType.Items.AddRange(Enum.GetNames(typeof(ApptFieldType)));
+			comboFieldType.Items.AddRange(Enum.GetNames(typeof(AppointmentFieldType)));
 			comboFieldType.SelectedIndex=(int)FieldDef.FieldType;
 			if(!IsNew){
 				OldFieldName=FieldDef.FieldName;
 			}
-			if(comboFieldType.SelectedIndex==(int)ApptFieldType.PickList) {
+			if(comboFieldType.SelectedIndex==(int)AppointmentFieldType.PickList) {
 				textPickList.Visible=true;
 				labelWarning.Visible=true;
 				textPickList.Text=FieldDef.PickList;
@@ -228,7 +228,7 @@ namespace OpenDental{
 		private void comboFieldType_SelectedIndexChanged(object sender,EventArgs e) {
 			textPickList.Visible=false;
 			labelWarning.Visible=false;
-			if(comboFieldType.SelectedIndex==(int)ApptFieldType.PickList) {
+			if(comboFieldType.SelectedIndex==(int)AppointmentFieldType.PickList) {
 				textPickList.Visible=true;
 				labelWarning.Visible=true;
 			}
@@ -257,8 +257,8 @@ namespace OpenDental{
 				}
 			}
 			FieldDef.FieldName=textName.Text;
-			FieldDef.FieldType=(ApptFieldType)comboFieldType.SelectedIndex;
-			if(FieldDef.FieldType==ApptFieldType.PickList) {
+			FieldDef.FieldType=(AppointmentFieldType)comboFieldType.SelectedIndex;
+			if(FieldDef.FieldType==AppointmentFieldType.PickList) {
 			  if(textPickList.Text=="") {
 			    MsgBox.Show(this,"List cannot be blank.");
 			    return;

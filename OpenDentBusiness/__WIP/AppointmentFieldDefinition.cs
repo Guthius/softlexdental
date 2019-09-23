@@ -23,9 +23,9 @@ namespace OpenDentBusiness
     /// <summary>
     /// These are the definitions for the custom patient fields added and managed by the user.
     /// </summary>
-    public class ApptFieldDef : DataRecord
+    public class AppointmentFieldDefinition : DataRecord
     {
-        private static readonly DataRecordCache<ApptFieldDef> cache = new DataRecordCache<ApptFieldDef>(
+        private static readonly DataRecordCache<AppointmentFieldDefinition> cache = new DataRecordCache<AppointmentFieldDefinition>(
             "SELECT * FROM `appointment_field_defintions` ORDER BY `name`", FromReader);
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace OpenDentBusiness
         /// <summary>
         /// Enum:ApptFieldType Text=0,PickList=1
         /// </summary>
-        public ApptFieldType FieldType;
+        public AppointmentFieldType FieldType;
 
         /// <summary>
         /// The text that contains pick list values.  Length 4000.
@@ -44,17 +44,17 @@ namespace OpenDentBusiness
         public string PickList;
 
         /// <summary>
-        /// Constructs a new instance of the <see cref="ApptFieldDef"/> class.
+        /// Constructs a new instance of the <see cref="AppointmentFieldDefinition"/> class.
         /// </summary>
         /// <param name="dataReader">The data reader containing record data.</param>
-        /// <returns>A <see cref="ApptFieldDef"/> instance.</returns>
-        private static ApptFieldDef FromReader(MySqlDataReader dataReader)
+        /// <returns>A <see cref="AppointmentFieldDefinition"/> instance.</returns>
+        private static AppointmentFieldDefinition FromReader(MySqlDataReader dataReader)
         {
-            return new ApptFieldDef
+            return new AppointmentFieldDefinition
             {
                 Id = (long)dataReader["id"],
                 FieldName = (string)dataReader["name"],
-                FieldType = (ApptFieldType)Convert.ToInt32(dataReader["type"]),
+                FieldType = (AppointmentFieldType)Convert.ToInt32(dataReader["type"]),
                 PickList = (string)dataReader["pick_list"]
             };
         }
@@ -64,7 +64,7 @@ namespace OpenDentBusiness
         /// </summary>
         /// <param name="apptFieldDef">The appointment field defintion.</param>
         /// <exception cref="Exception">If the name of the field is already in use by another field.</exception>
-        public static void Update(ApptFieldDef apptFieldDef)
+        public static void Update(AppointmentFieldDefinition apptFieldDef)
         {
             var count = DataConnection.ExecuteLong(
                 "SELECT COUNT(*) FROM `appointment_field_defintions` " +
@@ -89,7 +89,7 @@ namespace OpenDentBusiness
         /// <param name="apptFieldDef">The appointment field defintion.</param>
         /// <returns>The ID assigned to the appointment field definition.</returns>
         /// <exception cref="Exception">If the name of the field is already in use by another field.</exception>
-        public static long Insert(ApptFieldDef apptFieldDef)
+        public static long Insert(AppointmentFieldDefinition apptFieldDef)
         {
             var count = DataConnection.ExecuteLong(
                 "SELECT COUNT(*) FROM `appointment_field_defintions` " +
@@ -110,7 +110,7 @@ namespace OpenDentBusiness
         /// </summary>
         /// <param name="apptFieldDef">The appointment field definition.</param>
         /// <exception cref="Exception">If the appointment field definition is use and cannot be deleted.</exception>
-        public static void Delete(ApptFieldDef apptFieldDef)
+        public static void Delete(AppointmentFieldDefinition apptFieldDef)
         {
             var commandText =
                 "SELECT `lastname`, `firstname`, `appointment_date` " +
@@ -158,7 +158,7 @@ namespace OpenDentBusiness
         /// </summary>
         /// <param name="fieldName">The field name.</param>
         /// <returns>The field definition with the specified name.</returns>
-        public static ApptFieldDef GetByFieldName(string fieldName) => 
+        public static AppointmentFieldDefinition GetByFieldName(string fieldName) => 
             cache.SelectOne(apptFieldDef => apptFieldDef.FieldName == fieldName);
 
         /// <summary>
@@ -168,9 +168,5 @@ namespace OpenDentBusiness
             GetByFieldName(fieldName)?.PickList ?? "";
     }
 
-    public enum ApptFieldType
-    {
-        Text,
-        PickList
-    }
+
 }

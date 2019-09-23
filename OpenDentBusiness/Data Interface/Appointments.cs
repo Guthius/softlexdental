@@ -3989,7 +3989,7 @@ namespace OpenDentBusiness
         ///</summary>
         ///<param name="listApptFields">This can be null. The fields will just be fetched from the database.</param>
         ///<returns>The newly scheduled appointment and a boolean indicating whether at least one attached procedure was already attached to another appointment.</returns>
-        public static Tuple<Appointment, bool> SchedulePlannedApt(Appointment plannedApt, Patient pat, List<ApptField> listApptFields, DateTime aptDateTime, long opNum)
+        public static Tuple<Appointment, bool> SchedulePlannedApt(Appointment plannedApt, Patient pat, List<AppointmentField> listApptFields, DateTime aptDateTime, long opNum)
         {
             Appointment newAppt = plannedApt.Copy();
             newAppt.NextAptNum = plannedApt.AptNum;
@@ -3998,11 +3998,11 @@ namespace OpenDentBusiness
             newAppt.AptDateTime = aptDateTime;
             newAppt.Op = opNum;
             Appointments.Insert(newAppt);//now, aptnum is different.
-            listApptFields = listApptFields ?? ApptField.GetByAppointment(plannedApt.PatNum); // TODO: Huh ????? Why patnum and not apptnum??
-            foreach (ApptField apptField in listApptFields)
+            listApptFields = listApptFields ?? AppointmentField.GetByAppointment(plannedApt.PatNum); // TODO: Huh ????? Why patnum and not apptnum??
+            foreach (AppointmentField apptField in listApptFields)
             {
                 apptField.AppointmentId = newAppt.AptNum;
-                ApptField.Insert(apptField);
+                AppointmentField.Insert(apptField);
             }
             #region HL7
             //If there is an existing HL7 def enabled, send a SIU message if there is an outbound SIU message defined

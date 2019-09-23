@@ -50,7 +50,7 @@ namespace OpenDentBusiness
         /// <summary>
         /// The historical date that the patient had the adverse reaction to this agent.
         /// </summary>
-        public DateTime DateAdverseReaction;
+        public DateTime? DateAdverseReaction;
         
         /// <summary>
         /// True if still an active allergy.
@@ -73,7 +73,7 @@ namespace OpenDentBusiness
                 Reaction = (string)dataReader["reaction"],
                 SnomedReaction = (string)dataReader["snomed_reaction"],
                 DateModified = (DateTime)dataReader["date_modified"],
-                DateAdverseReaction = (DateTime)dataReader["date_adverse_reaction"],
+                DateAdverseReaction = dataReader["date_adverse_reaction"] as DateTime?,
                 Active = Convert.ToBoolean(dataReader["active"])
             };
         }
@@ -117,38 +117,38 @@ namespace OpenDentBusiness
         /// <summary>
         /// Inserts the specified patient allergy into the database.
         /// </summary>
-        /// <param name="allergy">The patient allergy.</param>
+        /// <param name="patientAllergy">The patient allergy.</param>
         /// <returns>The ID assigned to the patient allergy.</returns>
-        public static long Insert(PatientAllergy allergy) =>
-            allergy.Id = DataConnection.ExecuteInsert(
+        public static long Insert(PatientAllergy patientAllergy) =>
+            patientAllergy.Id = DataConnection.ExecuteInsert(
                 "INSERT INTO `patient_allergies` (`allergy_id`, `patient_id`, `reaction`, `snomed_reaction`, `date_modified`, " +
                 "`date_adverse_reaction`, `active`) VALUES (?allergy_id, ?patient_id, ?reaction, ?snomed_reaction, ?date_modified, " +
                 "?date_adverse_reaction, ?active)",
-                    new MySqlParameter("allergy_id", allergy.AllergyId),
-                    new MySqlParameter("patient_id", allergy.PatientId),
-                    new MySqlParameter("reaction", allergy.Reaction ?? ""),
-                    new MySqlParameter("snomed_reaction", allergy.SnomedReaction ?? ""),
-                    new MySqlParameter("date_modified", allergy.DateModified),
-                    new MySqlParameter("date_adverse_reaction", allergy.DateAdverseReaction),
-                    new MySqlParameter("active", allergy.Active));
+                    new MySqlParameter("allergy_id", patientAllergy.AllergyId),
+                    new MySqlParameter("patient_id", patientAllergy.PatientId),
+                    new MySqlParameter("reaction", patientAllergy.Reaction ?? ""),
+                    new MySqlParameter("snomed_reaction", patientAllergy.SnomedReaction ?? ""),
+                    new MySqlParameter("date_modified", patientAllergy.DateModified),
+                    new MySqlParameter("date_adverse_reaction", patientAllergy.DateAdverseReaction.HasValue ? (object)patientAllergy.DateAdverseReaction : DBNull.Value),
+                    new MySqlParameter("active", patientAllergy.Active));
 
         /// <summary>
         /// Updates the specified patient allergy in the database.
         /// </summary>
-        /// <param name="allergy">The patient allergy.</param>
-        public static void Update(PatientAllergy allergy) =>
+        /// <param name="patientAllergy">The patient allergy.</param>
+        public static void Update(PatientAllergy patientAllergy) =>
             DataConnection.ExecuteNonQuery(
                 "UPDATE `patient_allergies` SET `allergy_id` = ?allergy_id, `patient_id` = ?patient_id, `reaction` = ?reaction, " +
                 "`snomed_reaction` = ?snomed_reaction, `date_modified` = ?date_modified, `date_adverse_reacion` = ?date_adverse_reaction, " +
                 "`active` = ?active WHERE `id` = ?id",
-                    new MySqlParameter("allergy_id", allergy.AllergyId),
-                    new MySqlParameter("patient_id", allergy.PatientId),
-                    new MySqlParameter("reaction", allergy.Reaction ?? ""),
-                    new MySqlParameter("snomed_reaction", allergy.SnomedReaction ?? ""),
-                    new MySqlParameter("date_modified", allergy.DateModified),
-                    new MySqlParameter("date_adverse_reaction", allergy.DateAdverseReaction),
-                    new MySqlParameter("active", allergy.Active),
-                    new MySqlParameter("id", allergy.Id));
+                    new MySqlParameter("allergy_id", patientAllergy.AllergyId),
+                    new MySqlParameter("patient_id", patientAllergy.PatientId),
+                    new MySqlParameter("reaction", patientAllergy.Reaction ?? ""),
+                    new MySqlParameter("snomed_reaction", patientAllergy.SnomedReaction ?? ""),
+                    new MySqlParameter("date_modified", patientAllergy.DateModified),
+                    new MySqlParameter("date_adverse_reaction", patientAllergy.DateAdverseReaction.HasValue ? (object)patientAllergy.DateAdverseReaction : DBNull.Value),
+                    new MySqlParameter("active", patientAllergy.Active),
+                    new MySqlParameter("id", patientAllergy.Id));
 
         /// <summary>
         /// Deletes the specified patient allergy from the database.
