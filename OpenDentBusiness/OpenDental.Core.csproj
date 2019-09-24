@@ -524,6 +524,9 @@
     <Compile Include="Crud\QuestionDefCrud.cs" />
     <Compile Include="Crud\QuickPasteCatCrud.cs" />
     <Compile Include="Crud\QuickPasteNoteCrud.cs" />
+    <Compile Include="__WIP\AppointmentField.cs" />
+    <Compile Include="__WIP\AppointmentFieldDefinition.cs" />
+    <Compile Include="__WIP\AppointmentFieldType.cs" />
     <Compile Include="__WIP\AutoCodeConditionType.cs" />
     <Compile Include="__WIP\RecallCrud.cs" />
     <Compile Include="Crud\RecallTriggerCrud.cs" />
@@ -1037,8 +1040,6 @@
     <Compile Include="TableTypes\MapArea.cs" />
     <Compile Include="TableTypes\EhrAmendment.cs" />
     <Compile Include="TableTypes\Automation.cs" />
-    <Compile Include="__WIP\ApptFieldDef.cs" />
-    <Compile Include="__WIP\ApptField.cs" />
     <Compile Include="TableTypes\AutomationCondition.cs" />
     <Compile Include="TableTypes\ChartView.cs" />
     <Compile Include="__WIP\Allergy.cs" />
