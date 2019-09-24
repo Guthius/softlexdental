@@ -238,10 +238,13 @@ namespace OpenDental{
 
     private void FillTable(){
       int count=0;
-			AutoCodeItems.RefreshCache();
-			AutoCodeConds.RefreshCache();
-			_listAutoCodeConds=AutoCodeConds.GetDeepCopy();
-			listForCode=AutoCodeItems.GetListForCode(AutoCodeCur.Id);
+
+            CacheManager.Invalidate<AutoCodeItem>();
+            CacheManager.Invalidate<AutoCodeCondition>();
+
+
+			_listAutoCodeConds= AutoCodeCondition.All();
+			listForCode= AutoCodeItem.GetByAutoCode(AutoCodeCur.Id);
 			tbAutoItem.ResetRows(listForCode.Count);
 			tbAutoItem.SetGridColor(Color.Gray);
 			tbAutoItem.SetBackGColor(Color.White);
@@ -285,8 +288,7 @@ namespace OpenDental{
         return;
 			}
 			AutoCodeItem AutoCodeItemCur=listForCode[tbAutoItem.SelectedRow];
-      AutoCodeConds.DeleteForItemNum(AutoCodeItemCur.Id);
-      AutoCodeItems.Delete(AutoCodeItemCur);
+            AutoCodeItem.Delete(AutoCodeItemCur);
 			FillTable();
 		}  
 
@@ -303,7 +305,7 @@ namespace OpenDental{
       AutoCodeCur.Description=textDescript.Text;
       AutoCodeCur.Hidden=checkHidden.Checked;
 			AutoCodeCur.LessIntrusive=checkLessIntrusive.Checked;
-			AutoCodes.Update(AutoCodeCur);
+			AutoCode.Update(AutoCodeCur);
       DialogResult=DialogResult.OK;
 		}
 
@@ -315,7 +317,7 @@ namespace OpenDental{
 			if(DialogResult!=DialogResult.OK) {
 				if(IsNew) {
 					try {
-						AutoCodes.Delete(AutoCodeCur);
+						AutoCode.Delete(AutoCodeCur);
 					}
 					catch(ApplicationException ex) {
 						//should never happen
@@ -330,8 +332,10 @@ namespace OpenDental{
 					return;
 				}
 			}
-			AutoCodeItems.RefreshCache();
-			AutoCodeConds.RefreshCache();
+
+            CacheManager.Invalidate<AutoCodeItem>();
+            CacheManager.Invalidate<AutoCodeCondition>();
+
 			for(int i=0;i<listForCode.Count;i++) {//Attach the conditions to the items for better organization
 				listForCode[i].Conditions=new List<AutoCodeCondition>();
         for(int j=0;j<_listAutoCodeConds.Count;j++){//Fill conditions for this AutoCodeItem

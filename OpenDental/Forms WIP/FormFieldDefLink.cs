@@ -26,7 +26,7 @@ namespace OpenDental {
 				}
 			}
 			_listFieldDefLinks=FieldDefLinks.GetAll();
-			_listApptFieldDefs=ApptFieldDefs.GetDeepCopy();
+			_listApptFieldDefs=AppointmentFieldDefinition.All();
 			_listPatFieldDefs=PatFieldDefs.GetDeepCopy(true);
 			FillGridDisplayed();
 			FillGridHidden();

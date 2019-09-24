@@ -810,11 +810,11 @@ namespace OpenDental {
 		///<summary>Loops through textNotes.Text and will insert auto notes and prompt them for prompting auto notes.</summary>
 		private void PromptForAutoNotes() {
 			List<Match> listMatches=Regex.Matches(textNotes.Text,@"\[\[.+?\]\]").OfType<Match>().ToList();
-			listMatches.RemoveAll(x => AutoNotes.GetByTitle(x.Value.TrimStart('[').TrimEnd(']'))=="");//remove matches that are not autonotes.
+			listMatches.RemoveAll(x => AutoNote.GetByName(x.Value.TrimStart('[').TrimEnd(']'))=="");//remove matches that are not autonotes.
 			int loc=0;
 			foreach(Match match in listMatches) {
 				string autoNoteTitle=match.Value.TrimStart('[').TrimEnd(']');
-				string note=AutoNotes.GetByTitle(autoNoteTitle);
+				string note=AutoNote.GetByName(autoNoteTitle);
 				int matchloc=textNotes.Text.IndexOf(match.Value,loc);
 				FormAutoNoteCompose FormA=new FormAutoNoteCompose();
 				FormA.MainTextNote=note;
@@ -3264,7 +3264,7 @@ namespace OpenDental {
 				//Only check auto codes if the procedure is not complete or the user has permission to edit completed procedures.
 				long verifyCode;
 				bool isMandibular=(listBoxTeeth.SelectedIndices.Count < 1);
-				if(AutoCodeItems.ShouldPromptForCodeChange(_procCur,_procedureCode2,_patCur,isMandibular,_listClaimProcsForProc,out verifyCode)) {
+				if(AutoCodeItem.ShouldPromptForCodeChange(_procCur,_procedureCode2,_patCur,isMandibular,_listClaimProcsForProc,out verifyCode)) {
 					FormAutoCodeLessIntrusive FormACLI=new FormAutoCodeLessIntrusive(_patCur,_procCur,_procedureCode2,verifyCode,_listPatPlans,_listInsSubs,_listInsPlans,
 						_listBenefits,_listClaimProcsForProc,listBoxTeeth.Text);
 					if(FormACLI.ShowDialog() != DialogResult.OK

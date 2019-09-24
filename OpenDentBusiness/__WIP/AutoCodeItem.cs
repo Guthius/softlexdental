@@ -55,6 +55,9 @@ namespace OpenDentBusiness
             };
         }
 
+        public static AutoCodeItem GetByProcedureCode(long procedureCodeId) =>
+            cache.SelectOne(autoCodeItem => autoCodeItem.ProcedureCodeId == procedureCodeId);
+
         /// <summary>
         /// Inserts the specified auto code item into the database.
         /// </summary>

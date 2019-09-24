@@ -159,7 +159,7 @@ namespace OpenDental {
 				row.Cells.Add("Allergy");
 				row.Cells.Add(arrayString[i]);
 				row.Cells.Add("Allergy Def");
-				row.Cells.Add(AllergyDefs.GetOne(PIn.Long(arrayString[i])).Description);
+				row.Cells.Add(Allergy.GetById(PIn.Long(arrayString[i])).Description);
 				gridMain.Rows.Add(row);
 			}
 			//EhrTriggerCur.DemographicsList

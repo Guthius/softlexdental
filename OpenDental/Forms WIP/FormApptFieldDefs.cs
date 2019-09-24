@@ -150,8 +150,8 @@ namespace OpenDental{
 		}
 
 		private void FillGrid(){
-			ApptFieldDefs.RefreshCache();
-			_listApptFieldDefs=ApptFieldDefs.GetDeepCopy();
+            CacheManager.Invalidate<AppointmentFieldDefinition>();
+			_listApptFieldDefs= AppointmentFieldDefinition.All();
 			listMain.Items.Clear();
 			for(int i=0;i<_listApptFieldDefs.Count;i++) {
 				listMain.Items.Add(_listApptFieldDefs[i].FieldName);

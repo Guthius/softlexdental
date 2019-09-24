@@ -27,14 +27,14 @@ namespace OpenDental
         /// </summary>
         void LoadAutoNotes()
         {
-            AutoNotes.RefreshCache();
+            CacheManager.Invalidate<AutoNote>();
 
             autoNotesGrid.BeginUpdate();
             autoNotesGrid.Columns.Clear();
             autoNotesGrid.Columns.Add(new ODGridColumn("", 100));
             autoNotesGrid.Rows.Clear();
 
-            var listAutoNotes = AutoNotes.GetDeepCopy();
+            var listAutoNotes = AutoNote.All();
             foreach (var autoNote in listAutoNotes)
             {
                 var row = new ODGridRow();

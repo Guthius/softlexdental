@@ -17,6 +17,8 @@
  */
 using MySql.Data.MySqlClient;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace OpenDentBusiness
 {
@@ -58,6 +60,13 @@ namespace OpenDentBusiness
                 PickList = (string)dataReader["pick_list"]
             };
         }
+
+        /// <summary>
+        /// Gets a list of all appointment field definitions.
+        /// </summary>
+        /// <returns>A list of appointment field definitions.</returns>
+        public static List<AppointmentFieldDefinition> All() =>
+            cache.All().ToList();
 
         /// <summary>
         /// Updates the specified appointment field defintiion in the database.

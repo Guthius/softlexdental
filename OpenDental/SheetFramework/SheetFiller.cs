@@ -2400,7 +2400,7 @@ namespace OpenDental{
 					if(field.FieldName.StartsWith("allergy:")) {//"allergy:Pen"
 						List<PatientAllergy> allergies=PatientAllergy.GetByPatient(pat.PatNum,true);
 						for(int i=0;i<allergies.Count;i++) {
-							if(AllergyDefs.GetDescription(allergies[i].AllergyId)==field.FieldName.Remove(0,8)) {
+							if(Allergy.GetDescription(allergies[i].AllergyId)==field.FieldName.Remove(0,8)) {
 								if(allergies[i].Active && field.RadioButtonValue=="Y") {
 									field.FieldValue="X";
 								}

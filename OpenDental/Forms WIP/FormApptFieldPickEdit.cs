@@ -21,7 +21,7 @@ namespace OpenDental {
 		private void FormApptFieldPickEdit_Load(object sender,EventArgs e) {
 			labelName.Text=Field.FieldName;
 			string value="";
-			value=ApptFieldDefs.GetPickListByFieldName(Field.FieldName);
+			value=AppointmentFieldDefinition.GetPickListByFieldName(Field.FieldName);
 			string[] valueArray=value.Split(new string[] { "\r\n" },StringSplitOptions.None);
 			foreach(string s in valueArray) {
 				listBoxPick.Items.Add(s);
@@ -42,15 +42,15 @@ namespace OpenDental {
 					DialogResult=DialogResult.Cancel;
 					return;
 				}
-				ApptFields.Delete(Field.Id);
+				AppointmentField.Delete(Field.Id);
 				DialogResult=DialogResult.OK;
 				return;
 			}
 			if(IsNew) {
-				ApptFields.Insert(Field);
+                AppointmentField.Insert(Field);
 			}
 			else {
-				ApptFields.Update(Field);
+                AppointmentField.Update(Field);
 			}
 			DialogResult=DialogResult.OK;
 		}

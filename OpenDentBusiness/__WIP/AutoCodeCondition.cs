@@ -57,6 +57,13 @@ namespace OpenDentBusiness
         }
 
         /// <summary>
+        /// Gets a list of all auto code conditions.
+        /// </summary>
+        /// <returns>A list of auto code conditions.</returns>
+        public static List<AutoCodeCondition> All() =>
+            cache.All().ToList();
+
+        /// <summary>
         /// Inserts the specified auto code condition into the database.
         /// </summary>
         /// <param name="autoCodeCondition">The auto code condition.</param>

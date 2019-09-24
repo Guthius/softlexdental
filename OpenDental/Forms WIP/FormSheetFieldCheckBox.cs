@@ -157,7 +157,7 @@ namespace OpenDental {
 			switch(medListType) {
 				case MedicalListType.allergy:
 					if(_listAllergies==null) {
-						_listAllergies= Allergy.GetById(false);
+                        _listAllergies = Allergy.All(false);
 					}
 					listMedical.SetItems(_listAllergies,(item) => item.Description,(item) => item.Description==medSelection);
 					break;

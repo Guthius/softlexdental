@@ -190,7 +190,7 @@ namespace OpenDental {
 			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Completely delete this prompt?  It will not be available from any AutoNote.")) {
 				return;
 			}
-			AutoNoteControls.Delete(ControlCur.Id);
+			AutoNoteControl.Delete(ControlCur.Id);
 			DialogResult=DialogResult.OK;
 		}
 		
@@ -216,10 +216,10 @@ namespace OpenDental {
 			ControlCur.Type=comboType.SelectedItem.ToString();
 			ControlCur.Options=textOptions.Text;
 			if(IsNew) {
-				AutoNoteControls.Insert(ControlCur);
+				AutoNoteControl.Insert(ControlCur);
 			}
 			else {
-				AutoNoteControls.Update(ControlCur);
+				AutoNoteControl.Update(ControlCur);
 			}
 			DialogResult=DialogResult.OK;
 		}

@@ -18,7 +18,7 @@ namespace OpenDental {
 
 		private void FormApptViewItemEdit_Load(object sender,EventArgs e) {
 			if(ApptVItem.ApptFieldDefNum>0) {
-				textDesc.Text=ApptFieldDefs.GetFieldName(ApptVItem.ApptFieldDefNum);
+				textDesc.Text=AppointmentFieldDefinition.GetFieldName(ApptVItem.ApptFieldDefNum);
 			}
 			else {
 				textDesc.Text=ApptVItem.ElementDesc;

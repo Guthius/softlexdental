@@ -17,6 +17,7 @@
  */
 using MySql.Data.MySqlClient;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 
@@ -66,6 +67,13 @@ namespace OpenDentBusiness
                 LessIntrusive = Convert.ToBoolean(dataReader["less_intrusive"])
             };
         }
+
+        /// <summary>
+        /// Gets a list of all auto codes.
+        /// </summary>
+        /// <returns>A list of auto codes.</returns>
+        public static List<AutoCode> All() =>
+            cache.All().ToList();
 
         /// <summary>
         /// Gets the auto code with the specified ID.

@@ -4947,7 +4947,7 @@ namespace OpenDental{
 			//checkToothChartMoveMenuToRight.Checked=PrefC.GetBool(PrefName.ToothChartMoveMenuToRight);
 			textProblemsIndicateNone.Text		=DiseaseDef.GetName(Preference.GetLong(PreferenceName.ProblemsIndicateNone)); //DB maint to fix corruption
 			textMedicationsIndicateNone.Text=Medication.GetDescription((int)Preference.GetLong(PreferenceName.MedicationsIndicateNone)); //DB maint to fix corruption
-			textAllergiesIndicateNone.Text	=AllergyDefs.GetDescription(Preference.GetLong(PreferenceName.AllergiesIndicateNone)); //DB maint to fix corruption
+			textAllergiesIndicateNone.Text	=Allergy.GetDescription(Preference.GetLong(PreferenceName.AllergiesIndicateNone)); //DB maint to fix corruption
 			checkProcGroupNoteDoesAggregate.Checked= Preference.GetBool(PreferenceName.ProcGroupNoteDoesAggregate);
 			checkChartNonPatientWarn.Checked= Preference.GetBool(PreferenceName.ChartNonPatientWarn);
 			//checkChartAddProcNoRefreshGrid.Checked=PrefC.GetBool(PrefName.ChartAddProcNoRefreshGrid);//Not implemented.  May revisit some day.
@@ -5147,7 +5147,7 @@ namespace OpenDental{
 			if(Preference.Update(PreferenceName.AllergiesIndicateNone,formA.SelectedAllergyDefNum)) {
 				_changed=true;
 			}
-			textAllergiesIndicateNone.Text=AllergyDefs.GetOne(formA.SelectedAllergyDefNum).Description;
+			textAllergiesIndicateNone.Text= Allergy.GetById(formA.SelectedAllergyDefNum).Description;
 		}
 
 		private void butColor_Click(object sender,EventArgs e) {

@@ -174,7 +174,7 @@ namespace OpenDental
                         }
                         aptOld = aptNew.Copy();
                         aptNew.AppointmentTypeNum = listAutomations[i].AppointmentTypeNum;
-                        AppointmentType aptTypeCur = AppointmentType.GetFirstOrDefault(x => x.Id == aptNew.AppointmentTypeNum);
+                        AppointmentType aptTypeCur = AppointmentType.All().FirstOrDefault(x => x.Id == aptNew.AppointmentTypeNum);
                         if (aptTypeCur != null)
                         {
                             aptNew.ColorOverride = aptTypeCur.Color;

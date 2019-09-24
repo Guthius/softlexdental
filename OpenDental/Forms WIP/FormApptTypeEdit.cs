@@ -55,13 +55,13 @@ namespace OpenDental {
 				return;
 			}
 			else {
-				string msg=AppointmentTypes.CheckInUse(AppointmentTypeCur.Id);
-				if(!string.IsNullOrWhiteSpace(msg)) {
-					MsgBox.Show(this,msg);
-					return;
-				}
-				AppointmentTypeCur=null;
-				DialogResult=DialogResult.OK;
+				//string msg=AppointmentType.CheckInUse(AppointmentTypeCur.Id);
+				//if(!string.IsNullOrWhiteSpace(msg)) {
+				//	MsgBox.Show(this,msg);
+				//	return;
+				//}
+				//AppointmentTypeCur=null;
+				//DialogResult=DialogResult.OK;
 			}
 		}
 

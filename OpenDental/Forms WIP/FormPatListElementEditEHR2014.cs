@@ -400,7 +400,7 @@ namespace OpenDental {
 						MsgBox.Show(this,"Please enter a valid allergy.");
 						return false;
 					}
-					if(AllergyDefs.GetByDescription(textCompareString.Text)==null) {
+					if(Allergy.GetByDescription(textCompareString.Text)==null) {
 						MsgBox.Show(this,"Allergy does not exist in database, pick from list.");
 						return false;
 					}
@@ -491,7 +491,7 @@ namespace OpenDental {
 					if(FormAS.DialogResult!=DialogResult.OK) {
 						return;
 					}
-					textCompareString.Text=AllergyDefs.GetDescription(FormAS.SelectedAllergyDefNum);
+					textCompareString.Text=Allergy.GetDescription(FormAS.SelectedAllergyDefNum);
 					break;
 				default://should never happen
 					break;

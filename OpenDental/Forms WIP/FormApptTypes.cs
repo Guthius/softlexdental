@@ -45,7 +45,7 @@ namespace OpenDental
             typesGrid.Columns.Add(new ODGridColumn("Hidden", 0, HorizontalAlignment.Center));
             typesGrid.Rows.Clear();
 
-            appointmentTypeList.Sort(AppointmentTypes.SortItemOrder);
+            appointmentTypeList.Sort(AppointmentType.SortItemOrder);
             foreach (AppointmentType appointmentType in appointmentTypeList)
             {
                 var row = new ODGridRow();
@@ -97,8 +97,8 @@ namespace OpenDental
             promptCheckBox.Checked = Preference.GetBool(PreferenceName.AppointmentTypeShowPrompt);
             warnCheckBox.Checked = Preference.GetBool(PreferenceName.AppointmentTypeShowWarning);
             //don't show hidden appointment types in selection mode
-            appointmentTypeList = AppointmentTypes.GetDeepCopy(IsSelectionMode);
-            _listApptTypesOld = AppointmentTypes.GetDeepCopy();
+            appointmentTypeList = AppointmentType.All().Where(at => !IsSelectionMode || !at.Hidden).ToList();
+            _listApptTypesOld = AppointmentType.All();
             LoadAppointmentTypes();
 
             //Preselect the corresponding appointment type(s) once on load.  Do not do this within FillMain().
@@ -132,7 +132,7 @@ namespace OpenDental
                     {
                         appointmentTypeList[i].SortOrder = i;
                     }
-                    AppointmentTypes.Sync(appointmentTypeList, _listApptTypesOld);
+                    // TODO: AppointmentType.Sync(appointmentTypeList, _listApptTypesOld);
 
                     DataValid.SetInvalid(InvalidType.AppointmentTypes);
                     DataValid.SetInvalid(InvalidType.Prefs);
@@ -241,7 +241,6 @@ namespace OpenDental
                 formApptTypeEdit.AppointmentTypeCur = new AppointmentType
                 {
                     SortOrder = appointmentTypeList.Count,
-                    IsNew = true,
                     Color = Color.White
                 };
 

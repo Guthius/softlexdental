@@ -76,14 +76,7 @@ namespace OpenDental
 
             if (!Allergy.IsNew)
             {
-                if (Allergy.DateAdverseReaction < DateTime.Parse("01-01-1880"))
-                {
-                    dateTextBox.Text = "";
-                }
-                else
-                {
-                    dateTextBox.Text = Allergy.DateAdverseReaction.ToShortDateString();
-                }
+                dateTextBox.Text = Allergy.DateAdverseReaction?.ToShortDateString() ?? "";
                 allergyComboBox.SelectedIndex = allergyIndex;
                 reactionTextBox.Text = Allergy.Reaction;
                 activeCheckBox.Checked = Allergy.Active;

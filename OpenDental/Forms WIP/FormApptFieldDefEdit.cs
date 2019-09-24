@@ -240,7 +240,7 @@ namespace OpenDental{
 				return;
 			}
 			try{
-				ApptFieldDefs.Delete(FieldDef);//Throws if in use.
+				AppointmentFieldDefinition.Delete(FieldDef);//Throws if in use.
 				FieldDefLinks.DeleteForFieldDefNum(FieldDef.Id,FieldDefTypes.Appointment);//Delete any FieldDefLinks to this ApptFieldDef
 				DialogResult=DialogResult.OK;
 			}
@@ -251,7 +251,7 @@ namespace OpenDental{
 
 		private void butOK_Click(object sender, System.EventArgs e) {
 			if(OldFieldName!=textName.Text) {
-				if(ApptFieldDefs.GetExists(x => x.FieldName==textName.Text)) {
+				if(AppointmentFieldDefinition.All().Exists(x => x.FieldName==textName.Text)) {
 					MsgBox.Show(this,"Field name currently being used.");
 					return;
 				}
@@ -266,10 +266,10 @@ namespace OpenDental{
 			  FieldDef.PickList=textPickList.Text;
 			}
 			if(IsNew) {
-			  ApptFieldDefs.Insert(FieldDef);
+                AppointmentFieldDefinition.Insert(FieldDef);
 			}
 			else {
-			  ApptFieldDefs.Update(FieldDef,OldFieldName);
+                AppointmentFieldDefinition.Update(FieldDef);
 			}
 			DialogResult=DialogResult.OK;
 		}

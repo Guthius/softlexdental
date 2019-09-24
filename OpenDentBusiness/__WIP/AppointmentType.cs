@@ -85,6 +85,13 @@ namespace OpenDentBusiness
         }
 
         /// <summary>
+        /// Gets a list of all appointment types.
+        /// </summary>
+        /// <returns>A list of appointment types.</returns>
+        public static List<AppointmentType> All() =>
+            cache.All().ToList();
+
+        /// <summary>
         /// Gets the name of the specified appointment type. Appends ' (hidden)'  to the end of a
         /// appointment type name when the appointment type has been hidden.
         /// </summary>

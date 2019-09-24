@@ -10494,31 +10494,31 @@ namespace OpenDental
                 {
                     if (toothChart.SelectedTeeth.Count == 0)
                     {
-                        AutoCodeItem autoCode = null;
-                        if (AutoCodeItem.GetContainsKey(ProcCur.CodeNum))
-                        {
-                            autoCode = AutoCodeItem.GetByAutoCode(AutoCodeItem.GetOne(ProcCur.CodeNum).AutoCodeId)
-                                .FirstOrDefault(x => x.ProcedureCodeId == ProcCur.CodeNum);
-                        }
-                        List<AutoCodeCondition> condList = new List<AutoCodeCondition>();
-                        if (autoCode != null)
-                        {
-                            condList = AutoCodeCondition.GetByAutoCodeItem(autoCode.Id);
-                        }
-                        ProcCur.Surf = "";
-                        if (condList.Count == 1)
-                        {
-                            if (condList[0].Condition == AutoCodeConditionType.Maxillary)
-                            {
-                                ProcCur.Surf = "U";
-                            }
-                            else if (condList[0].Condition == AutoCodeConditionType.Mandibular)
-                            {
-                                ProcCur.Surf = "L";
-                            }
-                        }
-                        AddProcedure(ProcCur, listFees);
-                        continue;
+                        //AutoCodeItem autoCode = null;
+                        //if (AutoCodeItem.GetContainsKey(ProcCur.CodeNum))
+                        //{
+                        //    autoCode = AutoCodeItem.GetByAutoCode(AutoCodeItem.GetOne(ProcCur.CodeNum).AutoCodeId)
+                        //        .FirstOrDefault(x => x.ProcedureCodeId == ProcCur.CodeNum);
+                        //}
+                        //List<AutoCodeCondition> condList = new List<AutoCodeCondition>();
+                        //if (autoCode != null)
+                        //{
+                        //    condList = AutoCodeCondition.GetByAutoCodeItem(autoCode.Id);
+                        //}
+                        //ProcCur.Surf = "";
+                        //if (condList.Count == 1)
+                        //{
+                        //    if (condList[0].Condition == AutoCodeConditionType.Maxillary)
+                        //    {
+                        //        ProcCur.Surf = "U";
+                        //    }
+                        //    else if (condList[0].Condition == AutoCodeConditionType.Mandibular)
+                        //    {
+                        //        ProcCur.Surf = "L";
+                        //    }
+                        //}
+                        //AddProcedure(ProcCur, listFees);
+                        //continue;
                     }
                     foreach (string arch in Tooth.GetArchesForTeeth(toothChart.SelectedTeeth))
                     {

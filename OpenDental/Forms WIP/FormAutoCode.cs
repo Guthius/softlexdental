@@ -128,9 +128,9 @@ namespace OpenDental{
 		}
 
 		private void FillList() {
-			AutoCodes.RefreshCache();
+            CacheManager.Invalidate<AutoCode>();
 			listAutoCodes.Items.Clear();
-			_listAutoCodes=AutoCodes.GetListDeep();
+			_listAutoCodes=AutoCode.All();
 			foreach(AutoCode autoCode in _listAutoCodes) {
 				if(autoCode.Hidden) {
 					listAutoCodes.Items.Add(autoCode.Description+"(hidden)");
@@ -145,7 +145,7 @@ namespace OpenDental{
 			FormAutoCodeEdit FormACE=new FormAutoCodeEdit();
 			FormACE.IsNew=true;
 			FormACE.AutoCodeCur=new AutoCode();
-			AutoCodes.Insert(FormACE.AutoCodeCur);
+			AutoCode.Insert(FormACE.AutoCodeCur);
 			FormACE.ShowDialog();
 			if(FormACE.DialogResult!=DialogResult.OK) {
 				return;
@@ -180,7 +180,7 @@ namespace OpenDental{
 			}
 			AutoCode autoCodeCur=_listAutoCodes[listAutoCodes.SelectedIndex];
 			try {
-				AutoCodes.Delete(autoCodeCur);
+				AutoCode.Delete(autoCodeCur);
 			}
 			catch(ApplicationException ex) {
 				MessageBox.Show(ex.Message);

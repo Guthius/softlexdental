@@ -786,7 +786,7 @@ namespace OpenDental{
 			for(int i=0;i<displayedElementsMain.Count;i++){
 				row=new ODGridRow();
 				if(displayedElementsMain[i].ApptFieldDefNum>0){
-					row.Cells.Add(ApptFieldDefs.GetFieldName(displayedElementsMain[i].ApptFieldDefNum));
+					row.Cells.Add(AppointmentFieldDefinition.GetFieldName(displayedElementsMain[i].ApptFieldDefNum));
 				}
 				else if(displayedElementsMain[i].PatFieldDefNum>0){
 					row.Cells.Add(PatFieldDefs.GetFieldName(displayedElementsMain[i].PatFieldDefNum));
@@ -816,7 +816,7 @@ namespace OpenDental{
 			for(int i=0;i<displayedElementsUR.Count;i++) {
 				row=new ODGridRow();
 				if(displayedElementsUR[i].ApptFieldDefNum>0) {
-					row.Cells.Add(ApptFieldDefs.GetFieldName(displayedElementsUR[i].ApptFieldDefNum));
+					row.Cells.Add(AppointmentFieldDefinition.GetFieldName(displayedElementsUR[i].ApptFieldDefNum));
 				}
 				else if(displayedElementsUR[i].PatFieldDefNum>0) {
 					row.Cells.Add(PatFieldDefs.GetFieldName(displayedElementsUR[i].PatFieldDefNum));
@@ -846,7 +846,7 @@ namespace OpenDental{
 			for(int i=0;i<displayedElementsLR.Count;i++) {
 				row=new ODGridRow();
 				if(displayedElementsLR[i].ApptFieldDefNum>0) {
-					row.Cells.Add(ApptFieldDefs.GetFieldName(displayedElementsLR[i].ApptFieldDefNum));
+					row.Cells.Add(AppointmentFieldDefinition.GetFieldName(displayedElementsLR[i].ApptFieldDefNum));
 				}
 				else if(displayedElementsLR[i].PatFieldDefNum>0) {
 					row.Cells.Add(PatFieldDefs.GetFieldName(displayedElementsLR[i].PatFieldDefNum));
@@ -890,7 +890,7 @@ namespace OpenDental{
 			gridApptFieldDefs.Columns.Add(col);
 			gridApptFieldDefs.Rows.Clear();
 			displayedAvailableApptFieldDefs=new List<long>();
-			List<AppointmentFieldDefinition> listApptFieldDefs=ApptFieldDefs.GetDeepCopy();
+			List<AppointmentFieldDefinition> listApptFieldDefs= AppointmentFieldDefinition.All();
 			for(int i=0;i<listApptFieldDefs.Count;i++) {
 				if(!ApptFieldIsDisplayed(listApptFieldDefs[i].Id)) {
 					displayedAvailableApptFieldDefs.Add(listApptFieldDefs[i].Id);

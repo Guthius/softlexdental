@@ -1046,7 +1046,7 @@ namespace OpenDental {
 			if(FormA.DialogResult!=DialogResult.OK) {
 				return;
 			}
-			EhrTriggers.ConvertToKnowledgeRequests(AllergyDefs.GetOne(FormA.SelectedAllergyDefNum)).ForEach(x => _listKnowledgeRequests.Add(x));
+			EhrTriggers.ConvertToKnowledgeRequests(Allergy.GetById(FormA.SelectedAllergyDefNum)).ForEach(x => _listKnowledgeRequests.Add(x));
 			fillKnowledgeRequestitems();
 		}
 

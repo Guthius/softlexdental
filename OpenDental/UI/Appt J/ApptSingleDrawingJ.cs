@@ -227,7 +227,7 @@ namespace OpenDental.UI {
 				isGraphic=true;
 			}
 			if(apptRows[elementI].ApptFieldDefNum>0) {
-				string fieldName=ApptFieldDefs.GetFieldName(apptRows[elementI].ApptFieldDefNum);
+				string fieldName=AppointmentFieldDefinition.GetFieldName(apptRows[elementI].ApptFieldDefNum);
 				for(int i=0;i<tableApptFields.Rows.Count;i++) {
 					if(tableApptFields.Rows[i]["AptNum"].ToString()!=dataRoww["AptNum"].ToString()) {
 						continue;

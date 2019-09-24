@@ -400,10 +400,10 @@ namespace OpenDental
             {
                 comboPatients.SelectedIndex = 0;
             }
-            Allergy alD = AllergyDefs.GetAllergyDefFromMedication(MedicationCur.Id);
+            Allergy alD = Allergy.GetAllergyDefFromMedication(MedicationCur.Id);
             if (alD != null)
             {
-                _patNameAllergies = Allergies.GetPatNamesForAllergy(alD.Id);
+                _patNameAllergies = PatientAllergy.GetPatNamesForAllergy(alD.Id);
                 comboPatientAllergy.Items.Clear();
                 comboPatientAllergy.Items.AddRange(_patNameAllergies);
                 if (_patNameAllergies.Length > 0)

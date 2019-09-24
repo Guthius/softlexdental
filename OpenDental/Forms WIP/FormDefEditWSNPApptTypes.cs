@@ -27,7 +27,7 @@ namespace OpenDental {
 			List<DefLink> listDefLinks=DefLinks.GetDefLinksByType(DefLinkType.AppointmentType);
 			DefLink defLink=listDefLinks.FirstOrDefault(x => x.DefNum==_defCur.Id);
 			if(defLink!=null) {
-				_apptTypeCur=AppointmentTypes.GetFirstOrDefault(x => x.Id==defLink.FKey);
+				_apptTypeCur=AppointmentType.All().FirstOrDefault(x => x.Id==defLink.FKey);
 			}
 			FillTextValue();
 		}

@@ -52,8 +52,9 @@ namespace OpenDental
         /// </summary>
         void LoadAutoNotePrompts()
         {
-            AutoNoteControls.RefreshCache();
-            autoNoteControlsList = AutoNoteControls.GetDeepCopy(false);
+            CacheManager.Invalidate<AutoNoteControl>();
+
+            autoNoteControlsList = AutoNoteControl.All();
 
             promptsGrid.BeginUpdate();
             promptsGrid.Columns.Clear();
@@ -165,8 +166,10 @@ namespace OpenDental
                 return;
             }
 
-            AutoNotes.Delete(AutoNoteCur.Id);
+            AutoNote.Delete(AutoNoteCur.Id);
+
             DataValid.SetInvalid(InvalidType.AutoNotes);
+
             DialogResult = DialogResult.OK;
         }
 
@@ -180,14 +183,15 @@ namespace OpenDental
 
             if (IsNew)
             {
-                AutoNotes.Insert(AutoNoteCur);
+                AutoNote.Insert(AutoNoteCur);
             }
             else
             {
-                AutoNotes.Update(AutoNoteCur);
+                AutoNote.Update(AutoNoteCur);
             }
 
             DataValid.SetInvalid(InvalidType.AutoNotes);
+
             DialogResult = DialogResult.OK;
         }
     }

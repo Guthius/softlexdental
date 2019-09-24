@@ -196,7 +196,7 @@ namespace OpenDental {
 			treeNotes.Nodes.Clear();//clear current tree contents
 			_dictChildNodesForDefNum=Definition.GetByCategory(DefinitionCategory.AutoNoteCats).GroupBy(x => x.Value??"0")
 				.ToDictionary(x => PIn.Long(x.Key),x => new NodeChildren() { ListChildDefNodes=x.Select(y => new TreeNode(y.Description,0,0) { Tag=y }).ToList() });
-			Dictionary<long,List<TreeNode>> dictDefNumAutoNotes=AutoNotes.GetDeepCopy().GroupBy(x => x.CategoryId)
+			var dictDefNumAutoNotes=AutoNote.All().GroupBy(x => x.CategoryId.GetValueOrDefault())
 				.ToDictionary(x => x.Key,x => x.Select(y => new TreeNode(y.Name,1,1) { Tag=y }).ToList());
 			foreach(KeyValuePair<long,List<TreeNode>> kvp in dictDefNumAutoNotes) {
 				if(_dictChildNodesForDefNum.ContainsKey(kvp.Key)) {
@@ -409,7 +409,7 @@ namespace OpenDental {
 				DataValid.SetInvalid(InvalidType.Defs);
 			}
 			else {//must be an AutoNote
-				AutoNotes.Update((AutoNote)sourceNode.Tag);
+				AutoNote.Update((AutoNote)sourceNode.Tag);
 				DataValid.SetInvalid(InvalidType.AutoNotes);
 			}
 			treeNotes.TopNode=topNodeCur;//if sourceNode was the TopNode and was moved, make the TopNode the previous visible node
@@ -451,8 +451,8 @@ namespace OpenDental {
 			if(treeNotes.SelectedNode?.Tag is Definition) {
 				selectedDefNum=((Definition)treeNotes.SelectedNode.Tag).Id;
 			}
-			else if(treeNotes.SelectedNode?.Tag is AutoNote) {
-				selectedDefNum=((AutoNote)treeNotes.SelectedNode.Tag).CategoryId;
+			else if(treeNotes.SelectedNode?.Tag is AutoNote autoNote && autoNote.CategoryId.HasValue) {
+				selectedDefNum= autoNote.CategoryId.Value;
 			}
 			FormAutoNoteEdit FormA=new FormAutoNoteEdit();
 			FormA.IsNew=true;

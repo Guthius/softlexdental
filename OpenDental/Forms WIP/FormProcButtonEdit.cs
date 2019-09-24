@@ -361,7 +361,7 @@ namespace OpenDental{
 		#endregion
 
 		private void FormChartProcedureEntryEdit_Load(object sender, System.EventArgs e) {
-			AutoCodes.RefreshCache();
+            CacheManager.Invalidate<AutoCode>();
       ProcButtonItems.RefreshCache();     
       if(IsNew){
         this.Text=Lan.g(this,"Add Procedure Button");
@@ -389,7 +389,7 @@ namespace OpenDental{
 				listADA.Items.Add(ProcedureCodes.GetStringProcCode(codeNumList[i]));
 			}
 			listAutoCodes.Items.Clear();
-			_listShortDeep=AutoCodes.GetListDeep(true);
+			_listShortDeep=AutoCode.All();
 			for(int i=0;i<_listShortDeep.Count;i++) {
 				listAutoCodes.Items.Add(_listShortDeep[i].Description);
 				for(int j=0;j<auto.Length;j++){
@@ -463,7 +463,7 @@ namespace OpenDental{
       }
 		foreach(int index in listAutoCodes.SelectedIndices){
 				AutoCode autoCode=_listShortDeep[index];
-				if(AutoCodeItems.GetListForCode(autoCode.Id).Count==0) {
+				if(AutoCodeItem.GetByAutoCode(autoCode.Id).Count==0) {
 					//This AutoCode was saved with no AutoCodeItems attached, which is invalid.
 					MessageBox.Show(this,Lan.g(this,"The following AutoCode has no associated Procedure Codes: ")+"\r\n"+autoCode.Description+"\r\n"
 						+Lan.g(this,"AutoCode must be setup correctly before it can be used with a Quick Proc Button."));

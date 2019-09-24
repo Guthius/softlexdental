@@ -16,6 +16,7 @@
 * along with this program; If not, see <http://www.gnu.org/licenses/>
 */
 using MySql.Data.MySqlClient;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace OpenDentBusiness
@@ -65,6 +66,13 @@ namespace OpenDentBusiness
                 Options = (string)dataReader["options"]
             };
         }
+
+        /// <summary>
+        /// Gets a list of all auto note controls.
+        /// </summary>
+        /// <returns>A list of auto note controls.</returns>
+        public static List<AutoNoteControl> All() =>
+            cache.All().ToList();
 
         /// <summary>
         /// Gets the auto note control with the specified description.

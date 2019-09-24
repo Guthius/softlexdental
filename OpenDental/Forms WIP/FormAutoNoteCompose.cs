@@ -55,7 +55,7 @@ namespace OpenDental
             _listAutoNoteCatDefs.FindAll(x => string.IsNullOrWhiteSpace(x.Value) || !listCatDefNums.Contains(PIn.Long(x.Value)))
                 .ForEach(x => treeListMain.Nodes.Add(CreateNodeAndChildren(x)));//child cats and categorized auto notes added in recursive function
                                                                                 //add any uncategorized auto notes after the categorized ones and only for the root nodes
-            AutoNotes.GetWhere(x => x.CategoryId == 0 || !listCatDefNums.Contains(x.CategoryId))
+            AutoNote.All().Where(x => !x.CategoryId.HasValue || !listCatDefNums.Contains(x.CategoryId.Value)).ToList()
                 .ForEach(x => treeListMain.Nodes.Add(new TreeNode(x.Name, 1, 1) { Tag = x }));
             if (listExpandedDefNums.Count > 0)
             {
@@ -74,7 +74,7 @@ namespace OpenDental
             List<TreeNode> listChildNodes = _listAutoNoteCatDefs
                 .Where(x => !string.IsNullOrWhiteSpace(x.Value) && x.Value == defCur.Id.ToString())
                 .Select(CreateNodeAndChildren).ToList();
-            listChildNodes.AddRange(AutoNotes.GetWhere(x => x.CategoryId == defCur.Id)
+            listChildNodes.AddRange(AutoNote.All().Where(x => x.CategoryId == defCur.Id)
                 .Select(x => new TreeNode(x.Name, 1, 1) { Tag = x }));
             return new TreeNode(defCur.Description, 0, 0, listChildNodes.OrderBy(x => x.Tag is AutoNote).ThenBy(x => x.Name).ToArray()) { Tag = defCur };
         }
@@ -151,7 +151,7 @@ namespace OpenDental
             //Prompts are stored in the form [Prompt: "PromptName"]
             List<Match> listPrompts = Regex.Matches(note, @"\[Prompt:""[a-zA-Z_0-9 ]+""\]").OfType<Match>().ToList();
             //Remove all matched prompts that do not exist in the database.
-            listPrompts.RemoveAll(x => AutoNoteControls.GetByDescript(x.Value.Substring(9, x.Value.Length - 11)) == null);
+            listPrompts.RemoveAll(x => AutoNoteControl.GetByDescription(x.Value.Substring(9, x.Value.Length - 11)) == null);
             //Holds the PromptName from [Prompt: "PromptName"]
             string autoNoteDescript;
             AutoNoteControl control;
@@ -179,7 +179,7 @@ namespace OpenDental
                 Application.DoEvents();//refresh the textbox so the yellow will show
                                        //Holds the PromptName from [Prompt: "PromptName"]
                 autoNoteDescript = listPrompts[i].Value.Substring(9, listPrompts[i].Value.Length - 11);
-                control = AutoNoteControls.GetByDescript(autoNoteDescript);//should never be null since we removed nulls above
+                control = AutoNoteControl.GetByDescription(autoNoteDescript);//should never be null since we removed nulls above
                 promptResponse = "";
                 if (control.Type == "Text")
                 {//Response just inserts text. No choosing options here.
@@ -265,7 +265,7 @@ namespace OpenDental
                         {
                             isAutoNote = true;
                             //For some reason the Auto Note string always contains a new line and a return character at the end of the note. Must be trimmed
-                            autoNoteString = AutoNotes.GetByTitle(autoNoteName).TrimEnd('\n').TrimEnd('\r');//Returns empty string If no AutoNote is found. 
+                            autoNoteString = AutoNote.GetByName(autoNoteName).TrimEnd('\n').TrimEnd('\r');//Returns empty string If no AutoNote is found. 
                         }
                         if (listAutoNoteItem.Count > i && !isAutoNote)
                         {//The response already exist for this control type and it is note an AutoNote. Update it
@@ -462,7 +462,7 @@ namespace OpenDental
                 }
                 //Get string of possible AutoNoteName. Remove the bracket from the beginning and end. 
                 string autoNoteName = promptResponse.Substring(posOpenBracket + 1, length - 1);
-                if (!string.IsNullOrEmpty(autoNoteName) && AutoNotes.IsValidAutoNote(autoNoteName))
+                if (!string.IsNullOrEmpty(autoNoteName) && AutoNote.IsValidAutoNote(autoNoteName))
                 {
                     retVal = autoNoteName;
                     break;

@@ -150,15 +150,15 @@ namespace OpenDental{
 					DialogResult=DialogResult.Cancel;
 					return;
 				}
-				ApptFields.Delete(Field.Id);
+				AppointmentField.Delete(Field.Id);
 				DialogResult=DialogResult.OK;
 				return;
 			}
 			if(IsNew){
-				ApptFields.Insert(Field);
+                AppointmentField.Insert(Field);
 			}
 			else{
-				ApptFields.Update(Field);
+                AppointmentField.Update(Field);
 			}
 			DialogResult=DialogResult.OK;
 		}

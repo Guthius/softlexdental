@@ -336,17 +336,17 @@ namespace OpenDental{
 		#endregion
 
 		private void FormAutomationEdit_Load(object sender, System.EventArgs e) {
-			_listCommLogTypeDefs=Definition.GetByCategory(DefinitionCategory.CommLogTypes);
-			textDescription.Text=AutoCur.Description;
-			_listAptTypes=new List<AppointmentType>() { new AppointmentType() { Name="none" } };
-			AppointmentTypes.GetWhere(x => !x.Hidden || x.Id==AutoCur.AppointmentTypeNum)
-				.ForEach(x => _listAptTypes.Add(x));
-			_listAptTypes=_listAptTypes.OrderBy(x => x.Id>0).ThenBy(x => x.SortOrder).ToList();
-			Enum.GetNames(typeof(AutomationTrigger)).ToList().ForEach(x => comboTrigger.Items.Add(x));
-			comboTrigger.SelectedIndex=(int)AutoCur.Autotrigger;
-			textProcCodes.Text=AutoCur.ProcCodes;//although might not be visible.
-			textMessage.Text=AutoCur.MessageContent;
-			FillGrid();
+			//_listCommLogTypeDefs=Definition.GetByCategory(DefinitionCategory.CommLogTypes);
+			//textDescription.Text=AutoCur.Description;
+			//_listAptTypes=new List<AppointmentType>() { new AppointmentType() { Name="none" } };
+			//AppointmentTypes.GetWhere(x => !x.Hidden || x.Id==AutoCur.AppointmentTypeNum)
+			//	.ForEach(x => _listAptTypes.Add(x));
+			//_listAptTypes=_listAptTypes.OrderBy(x => x.Id>0).ThenBy(x => x.SortOrder).ToList();
+			//Enum.GetNames(typeof(AutomationTrigger)).ToList().ForEach(x => comboTrigger.Items.Add(x));
+			//comboTrigger.SelectedIndex=(int)AutoCur.Autotrigger;
+			//textProcCodes.Text=AutoCur.ProcCodes;//although might not be visible.
+			//textMessage.Text=AutoCur.MessageContent;
+			//FillGrid();
 		}
 
 		private void FillGrid() {

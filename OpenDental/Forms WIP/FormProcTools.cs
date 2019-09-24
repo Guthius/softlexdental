@@ -365,7 +365,7 @@ namespace OpenDental{
 			#region Auto Codes
 			if(checkAutocodes.Checked) {
 				//checking for any AutoCodes and prompting the user if they exist
-				if(AutoCode.GetCount() > 0) {
+				if(AutoCode.All().Count > 0) {
 					string msgText=Lan.g(this,"This tool will delete all current autocodes and then add in the default autocodes.")+"\r\n";
 					//If the proc tool isn't going to put the procedure buttons back to default, warn them that they will need to reassociate them.
 					if(!checkProcButtons.Checked) {

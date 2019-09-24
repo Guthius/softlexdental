@@ -350,7 +350,7 @@ namespace OpenDental
                 }
                 else if (selectedDefCatOpt.DefCat == DefinitionCategory.WebSchedNewPatApptTypes)
                 {
-                    AppointmentType appointmentType = AppointmentTypes.GetWebSchedNewPatApptTypeByDef(defCur.Id);
+                    AppointmentType appointmentType = AppointmentType.GetWebSchedNewPatApptTypeByDef(defCur.Id);
                     row.Cells.Add(appointmentType == null ? "" : appointmentType.Name);
                 }
                 else if (selectedDefCatOpt.DoShowItemOrderInValue)
