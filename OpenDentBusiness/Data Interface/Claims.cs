@@ -9,6 +9,7 @@ using System.Text;
 using OpenDentBusiness.Crud;
 using CodeBase;
 using System.Xml.Serialization;
+using OpenDentBusiness.X12;
 
 namespace OpenDentBusiness
 {

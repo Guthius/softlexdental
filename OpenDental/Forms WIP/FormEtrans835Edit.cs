@@ -10,6 +10,7 @@ using OpenDentBusiness;
 using OpenDental.UI;
 using CodeBase;
 using System.Linq;
+using OpenDentBusiness.X12;
 
 namespace OpenDental {
 	public partial class FormEtrans835Edit:ODForm {

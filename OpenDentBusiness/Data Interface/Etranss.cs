@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using OpenDentBusiness;
+using OpenDentBusiness.X12;
 
 namespace OpenDentBusiness
 {
@@ -501,7 +502,7 @@ namespace OpenDentBusiness
         {
             Etrans etrans = CreateEtrans(dateTimeTrans, hqClearinghouseNum, messageText, userNum);
             string command;
-            X12object Xobj = X12object.ToX12object(messageText);
+            X12Object Xobj = X12Object.Parse(messageText);
             if (Xobj != null)
             {//Is a correctly formatted X12 message.
                 if (Xobj.IsAckInterchange())

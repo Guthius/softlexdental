@@ -1,29 +1,51 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿/**
+ * Copyright (C) 2019 Dental Stars SRL
+ * Copyright (C) 2003-2019 Jordan S. Sparks, D.M.D.
+ * 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; If not, see <http://www.gnu.org/licenses/>
+ */
+using System;
 
 namespace OpenDentBusiness
 {
-
     /// <summary>
     /// Represents a X12 segment.
     /// </summary>
     public class X12Segment
     {
-        ///<summary>Usually 2 or 3 letters. Can also be found at Elements[0].</summary>
-        public string SegmentID;
+        private readonly X12Separators separators;
 
-        ///<summary></summary>
-        public string[] Elements;
+        /// <summary>
+        /// The ID of the segment. Usually 2 or 3 letters. 
+        /// This can also be found as the first item in the <see cref="Elements"/> property.
+        /// </summary>
+        public string ID { get; }
 
-        ///<summary>The zero-based segment index within the X12 document.</summary>
-        public int SegmentIndex;
+        /// <summary>
+        /// Gets the segment elements.
+        /// </summary>
+        public string[] Elements { get; }
 
-        ///<summary></summary>
-        private X12Separators Separators;
-        public string RawText;
+        /// <summary>
+        /// The zero-based segment index within the X12 document.
+        /// </summary>
+        public int SegmentIndex { get; set; }
+
+        /// <summary>
+        /// The raw unmodified segment data.
+        /// </summary>
+        public string Raw { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="X12Segment"/> class.
@@ -32,125 +54,127 @@ namespace OpenDentBusiness
         /// <param name="separators"></param>
         public X12Segment(string segmentData, X12Separators separators)
         {
-            RawText = segmentData ?? throw new ArgumentNullException(nameof(segmentData));
+            Raw = segmentData ?? throw new ArgumentNullException(nameof(segmentData));
 
-            Separators = separators;
-            //first, remove the segment terminator
+            this.separators = separators;
+
             segmentData = segmentData.Replace(separators.Segment, "");
-            //then, split the row into elements, eliminating the DataElementSeparator
-            Elements = RawText.Split(Char.Parse(separators.Element));
-            SegmentID = Elements[0];
-        }
 
-        public X12Segment(X12Segment segment)
-        {
-            SegmentID = segment.SegmentID;
-            Elements = (string[])segment.Elements.Clone();
-            SegmentIndex = segment.SegmentIndex;
-            Separators = segment.Separators;
-            RawText = segment.RawText;
+            Elements = segmentData.Split(char.Parse(separators.Element));
+
+            ID = Elements[0];
         }
 
         /// <summary>
-        /// The segment will represent an invalid segment or end of file segment.
-        /// Useful to escape X12 loops which require a segment to be present.
-        /// The SegmentID will be set to "INVALID", because this string will never match a real segment ID (real segment IDs are 3 characters)
+        /// Initializes a new instance of the <see cref="X12Segment"/> class.
+        /// </summary>
+        /// <param name="segment">The segment to copy.</param>
+        public X12Segment(X12Segment segment)
+        {
+            ID = segment.ID;
+            Elements = (string[])segment.Elements.Clone();
+            SegmentIndex = segment.SegmentIndex;
+            separators = segment.separators;
+            Raw = segment.Raw;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="X12Segment"/> class that will represent an
+        /// invalid segment or end of file segment. Useful to escape X12 loops which require a 
+        /// segment to be present. The <see cref="ID"/> will be set to "INVALID", because this 
+        /// string will never match a real segment ID (real segment IDs are 3 characters)
         /// </summary>
         public X12Segment() : this("INVALID", new X12Separators())
         {
         }
 
-        public override string ToString() => RawText;
+        /// <summary>
+        /// Returns a string representation of the <see cref="X12Segment"/>.
+        /// </summary>
+        public override string ToString() => Raw ?? "";
 
-        public X12Segment Copy()
-        {
-            return new X12Segment(this);
-        }
+        /// <summary>
+        /// Creates a copy of this <see cref="X12Segment"/>.
+        /// </summary>
+        public X12Segment Copy() => new X12Segment(this);
 
         /// <summary>
         /// Returns the string representation of the given element within this segment.
-        /// If the element does not exist, as can happen with optional elements, then "" is returned.
+        /// If the element does not exist, as can happen with optional elements, then a empty 
+        /// string is returned.
         /// </summary>
-        public string Get(int elementPosition)
+        public string Get(int elementIndex) => 
+            elementIndex >= 0 && elementIndex < Elements.Length ? 
+                Elements[elementIndex] : "";
+
+        /// <summary>
+        /// <para>Returns the string representation of the given element, subelement within this
+        /// segment. If the element or subelement does not exist, as can happen with optional 
+        /// elements, then a empty string is returned.</para>
+        /// <para><paramref name="subElementIndex"/> is 1-based, just like the X12 specs.</para>
+        /// </summary>
+        public string Get(int elementIndex, int subElementIndex)
         {
-            if (Elements.Length <= elementPosition)
+            if (elementIndex >= 0 && elementIndex < Elements.Length)
             {
-                return "";
+                var values = Elements[elementIndex].Split(char.Parse(separators.Subelement));
+
+                // Subtract 1 from sub element index because the value passed in will be 1-indexed...
+                subElementIndex--; 
+
+                if (subElementIndex >= 0 && subElementIndex < values.Length)
+                {
+                    return values[subElementIndex];
+                }
             }
-            return Elements[elementPosition];
+
+            return "";
         }
 
         /// <summary>
-        /// Returns the string representation of the given element, subelement within this segment.
-        /// If the element or subelement does not exist, as can happen with optional elements, then "" is returned.
-        /// Subelement is 1-based, just like the x12 specs.
+        /// True if the segment matches the specified segmentId, and the first element of the 
+        /// segment is one of the specified values.
         /// </summary>
-        public string Get(int elementPosition, int subelementPosition)
+        public bool IsType(string segmentId, params string[] validElement01Values)
         {
-            if (Elements.Length <= elementPosition)
-            {
-                return "";
-            }
-            string[] subelements = Elements[elementPosition].Split(Char.Parse(Separators.Subelement));
-            //example, subelement passed in is 2.  Convert to 0-indexed means [1].  If Length < 2, then we have a problem.
-            if (subelements.Length < subelementPosition)
-            {
-                return "";
-            }
-            return subelements[subelementPosition - 1];
-        }
-
-        /// <summary>
-        /// True if the segment matches the specified segmentId, and the first element of the segment is one of the specified values.
-        /// </summary>
-        public bool IsType(string segmentId, params string[] arrayElement01Values)
-        {
-            if (SegmentID != segmentId) return false;
+            if (ID != segmentId) return false;
             
-
-            bool isElement01Valid = false;
-            string element01 = Get(1);
-            for (int i = 0; i < arrayElement01Values.Length; i++)
+            var value = Get(1);
+            for (int i = 0; i < validElement01Values.Length; i++)
             {
-                if (element01 == arrayElement01Values[i])
+                if (value == validElement01Values[i])
                 {
-                    isElement01Valid = true;
-                    break;
+                    return true;
                 }
             }
-            if (arrayElement01Values.Length > 0 && !isElement01Valid)
-            {
-                return false;
-            }
-            return true;
+
+            return validElement01Values.Length == 0;
         }
 
         /// <summary>
-        /// Verifies the segment matches the specified segmentId, and the first element of the segment is one of the specified values.
+        /// Verifies the segment matches the specified segmentId, and the first element of the 
+        /// segment is one of the specified values.
         /// </summary>
-        public void AssertType(string segmentId, params string[] arrayElement01Values)
+        public void AssertType(string segmentId, params string[] validElement01Values)
         {
-            if (SegmentID != segmentId)
-            {
-                throw new ApplicationException(segmentId + " segment expected.");
-            }
-            bool isElement01Valid = false;
+            if (ID != segmentId)
+                throw new Exception(segmentId + " segment expected.");
 
-            string element01 = Get(1);
-            for (int i = 0; i < arrayElement01Values.Length; i++)
+            bool elementValid = false;
+
+            var value = Get(1);
+            for (int i = 0; i < validElement01Values.Length; i++)
             {
-                if (element01 == arrayElement01Values[i])
+                if (value == validElement01Values[i])
                 {
-                    isElement01Valid = true;
+                    elementValid = true;
                     break;
                 }
             }
 
-            if (arrayElement01Values.Length > 0 && !isElement01Valid)
-            {
-                throw new ApplicationException(
-                    segmentId + " segment expected with element 01 set to one of the following values: " + string.Join(",", arrayElement01Values));
-            }
+            if (validElement01Values.Length > 0 && !elementValid)
+                throw new Exception(
+                    segmentId + " segment expected with element 01 set to one of the following values: " + string.Join(",", validElement01Values));
         }
     }
 }

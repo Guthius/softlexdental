@@ -7,10 +7,11 @@ using System.Text;
 using System.Xml.Serialization;
 using CodeBase;
 using Newtonsoft.Json;
+using OpenDentBusiness.X12;
 
 namespace OpenDentBusiness {
 	///<summary>X12 835 Health Care Claim Payment/Advice. This transaction type is a response to an 837 claim submission. The 835 will always come after a 277 is received and a 277 will always come after a 999. Neither the 277 nor the 999 are required, so it is possible that an 835 will be received directly after the 837. The 835 is not required either, so it is possible that none of the 997, 999, 277 or 835 reports will be returned from the carrier.</summary>
-	public class X835:X12object {
+	public class X835:X12Object {
 		
 		///<summary>This is the Etrans entry which the X12 for this X835 came from.</summary>
 		public Etrans EtransSource;
@@ -124,11 +125,11 @@ namespace OpenDentBusiness {
 
 		#region Static Globals
 
-		public static bool Is835(X12object xobj) {
-			if(xobj.FunctGroups.Count!=1) {//Exactly 1 GS segment in each 835.
+		public static bool Is835(X12Object xobj) {
+			if(xobj.FunctionalGroups.Count!=1) {//Exactly 1 GS segment in each 835.
 				return false;
 			}
-			if(xobj.FunctGroups[0].Header.Get(1)=="HP") {//GS01 (pg. 279)
+			if(xobj.FunctionalGroups[0].Header.Get(1)=="HP") {//GS01 (pg. 279)
 				return true;
 			}
 			return false;
@@ -136,12 +137,12 @@ namespace OpenDentBusiness {
 
 		///<summary>Returns true if the required Application Sender's Code within the GS - Functional Group Header is "DENTICAL".
 		///Returns false if there is no FunctGroups or the sender's code is not "DENTICAL".</summary>
-		public static bool IsDentical(X12object xobj) {
-			if(xobj.FunctGroups==null || xobj.FunctGroups.Count!=1) {//Exactly 1 GS segment in each 835.
+		public static bool IsDentical(X12Object xobj) {
+			if(xobj.FunctionalGroups==null || xobj.FunctionalGroups.Count!=1) {//Exactly 1 GS segment in each 835.
 				return false;
 			}
 			//Check the Application Sender's Code.  Code identifying party sending transmission; codes agreed to by trading partners.
-			if(xobj.FunctGroups[0].Header.Get(2).Trim().ToUpper()=="DENTICAL") {//GS02 (standard guide pg. 279)
+			if(xobj.FunctionalGroups[0].Header.Get(2).Trim().ToUpper()=="DENTICAL") {//GS02 (standard guide pg. 279)
 				return true;
 			}
 			return false;
@@ -295,17 +296,17 @@ namespace OpenDentBusiness {
 		///Called when constructing a isSimple X835, used to save memory.</summary>
 		public void ClearSegments() {
 			_listSegments=new List<X12Segment>();
-			Segments=new List<X12Segment>();
-			FunctGroups=new List<X12FunctionalGroup>();
+            Segments.Clear();
+            FunctionalGroups.Clear();
 		}
 
 		private void ProcessMessage() {
 			//Table 1 - Header
 			//ST: Transaction Set Header.  Required.  Repeat 1.  Guide page 68.  The GS segment contains exactly one ST segment below it.
-			_listSegments=FunctGroups[0].Transactions[0].Segments;
-			for(int i=1;i<FunctGroups[0].Transactions.Count;i++) {
-				if(_tranSetId==FunctGroups[0].Transactions[i].Header.Get(2)) {
-					_listSegments=FunctGroups[0].Transactions[i].Segments;
+			_listSegments=FunctionalGroups[0].Transactions[0].Segments;
+			for(int i=1;i<FunctionalGroups[0].Transactions.Count;i++) {
+				if(_tranSetId==FunctionalGroups[0].Transactions[i].Header.Get(2)) {
+					_listSegments=FunctionalGroups[0].Transactions[i].Segments;
 					break;
 				}
 			}
@@ -313,19 +314,19 @@ namespace OpenDentBusiness {
 			ProcessTRN(1);
 			int segNum=2;
 			//CUR: Foreign Currency Information.  Situational.  Repeat 1.  Guide page 79.  We do not use.
-			if(segNum<_listSegments.Count && _listSegments[segNum].SegmentID=="CUR") {
+			if(segNum<_listSegments.Count && _listSegments[segNum].ID=="CUR") {
 				segNum++;
 			}
 			//REF*EV: Receiver Identification.  Situational.  Repeat 1.  Guide page 82.  We do not use.
-			if(segNum<_listSegments.Count && _listSegments[segNum].SegmentID=="REF" && _listSegments[segNum].Get(1)=="EV") {
+			if(segNum<_listSegments.Count && _listSegments[segNum].ID=="REF" && _listSegments[segNum].Get(1)=="EV") {
 				segNum++;
 			}
 			//REF*F2: Version Identification.  Situational.  Repeat 1.  Guide page 84.  We do not use.
-			if(segNum<_listSegments.Count && _listSegments[segNum].SegmentID=="REF" && _listSegments[segNum].Get(1)=="F2") {
+			if(segNum<_listSegments.Count && _listSegments[segNum].ID=="REF" && _listSegments[segNum].Get(1)=="F2") {
 				segNum++;
 			}
 			//DTM: Production Date.  Situational.  Repeat 1.  Guide page 85.  We do not use.
-			if(segNum<_listSegments.Count && _listSegments[segNum].SegmentID=="DTM") {
+			if(segNum<_listSegments.Count && _listSegments[segNum].ID=="DTM") {
 				segNum++;
 			}
 			ProcessN1_PR(segNum);
@@ -335,11 +336,11 @@ namespace OpenDentBusiness {
 			ProcessN4_PR(segNum);
 			segNum++;
 			//1000A REF: Additional Payer Identification.  Situational.  Repeat 4.  Guide page 92.  We do not use.
-			while(segNum<_listSegments.Count && _listSegments[segNum].SegmentID=="REF") {
+			while(segNum<_listSegments.Count && _listSegments[segNum].ID=="REF") {
 				segNum++;
 			}
 			_payerContactInfo="";
-			while(segNum<_listSegments.Count && _listSegments[segNum].SegmentID=="PER") {
+			while(segNum<_listSegments.Count && _listSegments[segNum].ID=="PER") {
 				//The order of each of these PER segments are as defined in the guide page 62.
 				//Some clearinghouses have sent them back in the wrong order.
 				//1000A PER*CX: Payer Business Contact Information.  Situational.  Repeat 1.  Guide page 94.  We do not use.
@@ -357,24 +358,24 @@ namespace OpenDentBusiness {
 				segNum++;
 			}
 			//1000B N1*PE: Payee Identification.  Required.  Repeat 1.  Guide page 102.
-			if(segNum<_listSegments.Count && _listSegments[segNum].SegmentID=="N1" && _listSegments[segNum].Get(1)=="PE") {
+			if(segNum<_listSegments.Count && _listSegments[segNum].ID=="N1" && _listSegments[segNum].Get(1)=="PE") {
 				ProcessN1_PE(segNum);
 				segNum++;
 			}
 			//1000B N3: Payee Address.  Situational.  Repeat 1.  Guide page 104.  We do not use because the payee already knows their own address, and because it is not required.
-			if(segNum<_listSegments.Count && _listSegments[segNum].SegmentID=="N3") {
+			if(segNum<_listSegments.Count && _listSegments[segNum].ID=="N3") {
 				segNum++;
 			}
 			//1000B N4: Payee City, State, ZIP Code.  Situational.  Repeat 1.  Guide page 105.  We do not use because the payee already knows their own address, and because it is not required.
-			if(segNum<_listSegments.Count && _listSegments[segNum].SegmentID=="N4") {
+			if(segNum<_listSegments.Count && _listSegments[segNum].ID=="N4") {
 				segNum++;
 			}
 			//1000B REF: Payee Additional Identification.  Situational.  Repeat >1.  Guide page 107.  We do not use.
-			while(segNum<_listSegments.Count && _listSegments[segNum].SegmentID=="REF") {
+			while(segNum<_listSegments.Count && _listSegments[segNum].ID=="REF") {
 				segNum++;
 			}
 			//1000B RDM: Remittance Delivery Method.  Situational.  Repeat 1.  Guide page 109.  We do not use.
-			if(segNum<_listSegments.Count && _listSegments[segNum].SegmentID=="RDM") {
+			if(segNum<_listSegments.Count && _listSegments[segNum].ID=="RDM") {
 				segNum++;
 			}
 			//Table 2 - Detail
@@ -384,24 +385,24 @@ namespace OpenDentBusiness {
 			while(isLoop2000) {
 				isLoop2000=false;
 				//2000 LX: Header Number.  Situational.  Repeat 1.  Guide page 111.  We do not use.
-				if(segNum<_listSegments.Count && _listSegments[segNum].SegmentID=="LX") {
+				if(segNum<_listSegments.Count && _listSegments[segNum].ID=="LX") {
 					isLoop2000=true;
 					segNum++;
 				}
 				//2000 TS3: Provider Summary Information.  Repeat 1.  Guide page 112.
 				string npi="";
-				if(segNum<_listSegments.Count && _listSegments[segNum].SegmentID=="TS3") {
+				if(segNum<_listSegments.Count && _listSegments[segNum].ID=="TS3") {
 					isLoop2000=true;
 					npi=_listSegments[segNum].Get(1);
 					segNum++;
 				}
 				//2000 TS2: Provider Supplemental Summary Infromation.  Repeat 1.  Guide page 117.  We do not use.
-				if(segNum<_listSegments.Count && _listSegments[segNum].SegmentID=="TS2") {
+				if(segNum<_listSegments.Count && _listSegments[segNum].ID=="TS2") {
 					isLoop2000=true;
 					segNum++;
 				}
 				//Loop 2100 Claim Payment Information.  Repeat 1.  Guide page 123.
-				if(segNum<_listSegments.Count && _listSegments[segNum].SegmentID=="CLP") {
+				if(segNum<_listSegments.Count && _listSegments[segNum].ID=="CLP") {
 					isLoop2000=true;
 					Hx835_Claim claimPaid=ProcessCLP(segNum,npi);
 					claimPaid.Era=this;
@@ -412,7 +413,7 @@ namespace OpenDentBusiness {
 			//Table 3 - Summary
 			//PLB: Provider Admustment.  Situational.  Repeat >1.  Guide page 217.
 			_listProvAdjustments=new List<Hx835_ProvAdj>();
-			while(segNum<_listSegments.Count && _listSegments[segNum].SegmentID=="PLB") {
+			while(segNum<_listSegments.Count && _listSegments[segNum].ID=="PLB") {
 				_listProvAdjustments.AddRange(ProcessPLB(segNum));
 				segNum++;
 			}
@@ -661,7 +662,7 @@ namespace OpenDentBusiness {
 			segNum++;
 			retVal.ListClaimAdjustments=new List<Hx835_Adj>();
 			//2100 CAS: Claim Adjustment.  Situational.  Repeat 99.  Guide page 129.
-			while(segNum<_listSegments.Count && _listSegments[segNum].SegmentID=="CAS") {
+			while(segNum<_listSegments.Count && _listSegments[segNum].ID=="CAS") {
 				retVal.ListClaimAdjustments.AddRange(ProcessCAS(segNum));
 				segNum++;
 			}
@@ -674,44 +675,44 @@ namespace OpenDentBusiness {
 			retVal.PatientName.Suffix="";
 			retVal.PatientName.SubscriberId="";
 			retVal.PatientName.SubscriberIdTypeDesc="";
-			if(segNum<_listSegments.Count && _listSegments[segNum].SegmentID=="NM1" && _listSegments[segNum].Get(1)=="QC") {
+			if(segNum<_listSegments.Count && _listSegments[segNum].ID=="NM1" && _listSegments[segNum].Get(1)=="QC") {
 				retVal.PatientName=ProcessNM1_Person(segNum);
 				segNum++;
 			}
 			//2100 NM1: Insured Name.  Situational.  Required when different from the patient.  Repeat 1.  Guide page 140.
 			retVal.SubscriberName=retVal.PatientName;
-			if(segNum<_listSegments.Count && _listSegments[segNum].SegmentID=="NM1" && _listSegments[segNum].Get(1)=="IL") {
+			if(segNum<_listSegments.Count && _listSegments[segNum].ID=="NM1" && _listSegments[segNum].Get(1)=="IL") {
 				retVal.SubscriberName=ProcessNM1_Person(segNum);
 				segNum++;
 			}
 			//2100 NM1: Corrected Patient/Insured Name.  Situational.  Repeat 1.  Guide page 143.  We do not use.
-			if(segNum<_listSegments.Count && _listSegments[segNum].SegmentID=="NM1" && _listSegments[segNum].Get(1)=="74") {
+			if(segNum<_listSegments.Count && _listSegments[segNum].ID=="NM1" && _listSegments[segNum].Get(1)=="74") {
 				segNum++;
 			}
 			//2100 NM1: Service Provider Name.  Situational.  Repeat 1.  Guide page 146.  We do not use.
-			if(segNum<_listSegments.Count && _listSegments[segNum].SegmentID=="NM1" && _listSegments[segNum].Get(1)=="82") {
+			if(segNum<_listSegments.Count && _listSegments[segNum].ID=="NM1" && _listSegments[segNum].Get(1)=="82") {
 				segNum++;
 			}
 			//2100 NM1: Crossover Carrier Name.  Situational.  Repeat 1.  Guide page 150.  We do not use.
-			if(segNum<_listSegments.Count && _listSegments[segNum].SegmentID=="NM1" && _listSegments[segNum].Get(1)=="TT") {
+			if(segNum<_listSegments.Count && _listSegments[segNum].ID=="NM1" && _listSegments[segNum].Get(1)=="TT") {
 				segNum++;
 			}
 			//2100 NM1: Corrected Priority Payer Name.  Situational.  Repeat 1.  Guide page 153.  We do not use.
-			if(segNum<_listSegments.Count && _listSegments[segNum].SegmentID=="NM1" && _listSegments[segNum].Get(1)=="PR") {
+			if(segNum<_listSegments.Count && _listSegments[segNum].ID=="NM1" && _listSegments[segNum].Get(1)=="PR") {
 				segNum++;
 			}
 			//2100 NM1: Other Subscriber Name.  Situational.  Repeat 1.  Guide page 156.  We do not use.
-			if(segNum<_listSegments.Count && _listSegments[segNum].SegmentID=="NM1" && _listSegments[segNum].Get(1)=="GB") {
+			if(segNum<_listSegments.Count && _listSegments[segNum].ID=="NM1" && _listSegments[segNum].Get(1)=="GB") {
 				segNum++;
 			}
 			//2100 MIA: Inpatient Adjudication Information.  Situational.  Repeat 1.  Guide page 159. 
 			retVal.ListAdjudicationInfo=new List<Hx835_Info>();
-			if(segNum<_listSegments.Count && _listSegments[segNum].SegmentID=="MIA") {
+			if(segNum<_listSegments.Count && _listSegments[segNum].ID=="MIA") {
 				retVal.ListAdjudicationInfo.AddRange(ProcessMIA(segNum));
 				segNum++;
 			}
 			//2100 MOA: Outpatient Adjudication Information.  Situational.  Repeat 1.  Guide page 166.
-			if(segNum<_listSegments.Count && _listSegments[segNum].SegmentID=="MOA") {
+			if(segNum<_listSegments.Count && _listSegments[segNum].ID=="MOA") {
 				retVal.ListAdjudicationInfo.AddRange(ProcessMOA(segNum));
 				segNum++;
 			}
@@ -725,13 +726,13 @@ namespace OpenDentBusiness {
 			}
 			//2100 REF: Other Claim Releated Identification.  Situational.  Repeat 5.  Guide page 169.  We do not use.
 			//2100 REF: Rendering Provider Identification.  Situational.  Repeat 10.  Guide page 171.  We do not use.
-			while(segNum<_listSegments.Count && _listSegments[segNum].SegmentID=="REF") {//We clump 2 segments into a single loop, because neither segment is used, and there are multiple REF01 choices for each.
+			while(segNum<_listSegments.Count && _listSegments[segNum].ID=="REF") {//We clump 2 segments into a single loop, because neither segment is used, and there are multiple REF01 choices for each.
 				segNum++;
 			}
 			//2100 DTM: Statement From or To Date.  Situational.  Required if at least one service line is missing a service date.  Service line dates override this date.  Repeat 2.  Guide page 173.
 			retVal.DateServiceStart=DateTime.MinValue;
 			retVal.DateServiceEnd=DateTime.MinValue;
-			while(segNum<_listSegments.Count && _listSegments[segNum].SegmentID=="DTM" &&
+			while(segNum<_listSegments.Count && _listSegments[segNum].ID=="DTM" &&
 				(_listSegments[segNum].Get(1)=="050" || _listSegments[segNum].Get(1)=="232" || _listSegments[segNum].Get(1)=="233"))
 			{
 				if(_listSegments[segNum].Get(2)=="00000000") {
@@ -756,33 +757,33 @@ namespace OpenDentBusiness {
 				retVal.DateServiceStart=retVal.DateServiceEnd;
 			}
 			//2100 DTM: Coverage Expiration Date.  Situational.  Repeat 1.  Guide page 175.  We do not use.
-			while(segNum<_listSegments.Count && _listSegments[segNum].SegmentID=="DTM" && _listSegments[segNum].Get(1)=="036") {
+			while(segNum<_listSegments.Count && _listSegments[segNum].ID=="DTM" && _listSegments[segNum].Get(1)=="036") {
 				segNum++;
 			}
 			//2100 DTM: Claim Received Date.  Situational.  Repeat 1.  Guide page 177.
 			retVal.DatePayerReceived=DateTime.MinValue;
-			while(segNum<_listSegments.Count && _listSegments[segNum].SegmentID=="DTM" && _listSegments[segNum].Get(1)=="050") {
+			while(segNum<_listSegments.Count && _listSegments[segNum].ID=="DTM" && _listSegments[segNum].Get(1)=="050") {
 				retVal.DatePayerReceived=X12Parse.ToDate(_listSegments[segNum].Get(2));
 				segNum++;
 			}
 			//2100 PER: Claim Contact Information.  Situational.  Repeat 2.  Guide page 179.  We do not use.
-			while(segNum<_listSegments.Count && _listSegments[segNum].SegmentID=="PER") {
+			while(segNum<_listSegments.Count && _listSegments[segNum].ID=="PER") {
 				segNum++;
 			}
 			//2100 AMT: Claim Supplemental Information.  Situational.  Repeat 13.  Guide page 182.
 			retVal.ListSupplementalInfo=new List<Hx835_Info>();
-			while(segNum<_listSegments.Count && _listSegments[segNum].SegmentID=="AMT") {
+			while(segNum<_listSegments.Count && _listSegments[segNum].ID=="AMT") {
 				retVal.ListSupplementalInfo.Add(ProcessAMT(segNum));
 				segNum++;
 			}
 			//2100 QTY: Claim Supplemental Information Quantity.  Situational.  Repeat 14.  Guide page 184.  We do not use.
-			while(segNum<_listSegments.Count && _listSegments[segNum].SegmentID=="QTY") {
+			while(segNum<_listSegments.Count && _listSegments[segNum].ID=="QTY") {
 				segNum++;
 			}
 			//===============================  PROCEDURES  =============================
 			//2110 SVC Service Payment Information.  Situational.  Repeat 999.  Guide page 186.
 			retVal.ListProcs=new List<Hx835_Proc>();
-			while(segNum<_listSegments.Count && _listSegments[segNum].SegmentID=="SVC") {
+			while(segNum<_listSegments.Count && _listSegments[segNum].ID=="SVC") {
 				Hx835_Proc proc=ProcessSVC(segNum,retVal.DateServiceStart,retVal.DateServiceEnd);
 				proc.ClaimPaid=retVal;
 				retVal.ListProcs.Add(proc);
@@ -1191,7 +1192,7 @@ namespace OpenDentBusiness {
 			//2110 DTM: Service Date.  Situational.  Repeat 2.  Guide page 194.
 			proc.DateServiceStart=dateClaimServiceStart;
 			proc.DateServiceEnd=dateClaimServiceEnd;
-			while(segNum<_listSegments.Count && _listSegments[segNum].SegmentID=="DTM") {
+			while(segNum<_listSegments.Count && _listSegments[segNum].ID=="DTM") {
 				string dateStr=_listSegments[segNum].Get(2);
 				//Denti-cal and EDS have sent us invalid dates in the past.  Translate invalid dates 0/0/0 to 1/1/1.
 				if(dateStr=="00000000") {
@@ -1213,7 +1214,7 @@ namespace OpenDentBusiness {
 			}
 			proc.ListProcAdjustments=new List<Hx835_Adj>();
 			//2110 CAS: Service Adjustment.  Situational.  Repeat 99.  Guide page 196.
-			while(segNum<_listSegments.Count && _listSegments[segNum].SegmentID=="CAS") {
+			while(segNum<_listSegments.Count && _listSegments[segNum].ID=="CAS") {
 				proc.ListProcAdjustments.AddRange(ProcessCAS(segNum));
 				segNum++;
 			}
@@ -1248,7 +1249,7 @@ namespace OpenDentBusiness {
 			//2110 REF: Line Item Control Number.  Situational.  Repeat 1.  Guide page 206.
 			//2110 REF: Rendering Provider Information.  Situational.  Repeat 10.  Guide page 207.  We do not use.
 			//2110 REF: HealthCare Policy Identification.  Situational.  Repeat 5.  Guide page 209.  We do not use.
-			while(segNum<_listSegments.Count && _listSegments[segNum].SegmentID=="REF") {//4 segment types clumped together, but we only care about REF*6R.
+			while(segNum<_listSegments.Count && _listSegments[segNum].ID=="REF") {//4 segment types clumped together, but we only care about REF*6R.
 				if(_listSegments[segNum].Get(1)=="6R") {
 					string strRef02=_listSegments[segNum].Get(2).ToLower();//Our outgoing values are always lowercase, but some clearinghouses change to uppercase.
 					if(strRef02.StartsWith("y")) {
@@ -1283,17 +1284,17 @@ namespace OpenDentBusiness {
 			}
 			proc.ListSupplementalInfo=new List<Hx835_Info>();
 			//2110 AMT: Service Supplemental Amount.  Situational.  Repeat 9.  Guide page 211.
-			while(segNum<_listSegments.Count && _listSegments[segNum].SegmentID=="AMT") {
+			while(segNum<_listSegments.Count && _listSegments[segNum].ID=="AMT") {
 				proc.ListSupplementalInfo.Add(ProcessAMT(segNum));
 				segNum++;
 			}
 			//2110 QTY: Service Supplemental Quantity.  Situational.  Repeat 6.  Guide page 213.  We do not use.
-			while(segNum<_listSegments.Count && _listSegments[segNum].SegmentID=="QTY") {
+			while(segNum<_listSegments.Count && _listSegments[segNum].ID=="QTY") {
 				segNum++;
 			}
 			//2110 LQ: Health Care Remark Codes.  Repeat 99.  Guide page 215.
 			proc.ListRemarks=new List<Hx835_Remark>();
-			while(segNum<_listSegments.Count && _listSegments[segNum].SegmentID=="LQ") {
+			while(segNum<_listSegments.Count && _listSegments[segNum].ID=="LQ") {
 				X12Segment segLQ=_listSegments[segNum];
 				string code=segLQ.Get(2);
 				string remark=ProcessLQ(segNum);

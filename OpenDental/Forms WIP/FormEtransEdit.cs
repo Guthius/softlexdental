@@ -431,8 +431,8 @@ namespace OpenDental{
 			textAckCode.Text=EtransCur.AckCode;
 			textNote.Text=EtransCur.Note;
 			if(EtransCur.Etype==EtransType.ClaimSent){
-				if(X12object.IsX12(MessageText)) {
-					X12object x12obj=new X12object(MessageText);
+				if(X12Object.IsX12(MessageText)) {
+					X12Object x12obj=new X12Object(MessageText);
 					if(x12obj.IsFormat4010()) {
 						X837_4010 x837=new X837_4010(MessageText);
 						checkAttachments.Checked=x837.AttachmentsWereSent(EtransCur.ClaimNum);//This function does not currently work, so the corresponding checkbox is hidden on the form as well.

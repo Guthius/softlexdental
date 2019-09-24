@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace OpenDentBusiness{
 	///<summary></summary>
-	public class X997:X12object{
+	public class X997:X12Object{
 
 		public X997(string messageText):base(messageText){
 		
@@ -11,10 +11,10 @@ namespace OpenDentBusiness{
 		
 		///<summary>In X12 lingo, the batchNumber is known as the functional group.</summary>
 		public int GetBatchNumber(){
-			if(this.FunctGroups[0].Transactions.Count!=1) {
+			if(this.FunctionalGroups[0].Transactions.Count!=1) {
 				return 0;
 			}
-			X12Segment seg=FunctGroups[0].Transactions[0].GetSegmentByID("AK1");
+			X12Segment seg=FunctionalGroups[0].Transactions[0].GetSegmentByID("AK1");
 			if(seg==null) {
 				return 0;
 			}
@@ -32,9 +32,9 @@ namespace OpenDentBusiness{
 			List<int> retVal=new List<int>();
 			X12Segment seg;
 			int transNum=0;
-			for(int i=0;i<FunctGroups[0].Transactions[0].Segments.Count;i++){
-				seg=FunctGroups[0].Transactions[0].Segments[i];
-				if(seg.SegmentID=="AK2"){
+			for(int i=0;i<FunctionalGroups[0].Transactions[0].Segments.Count;i++){
+				seg=FunctionalGroups[0].Transactions[0].Segments[i];
+				if(seg.ID=="AK2"){
 					transNum=0;
 					try{
 						transNum=PIn.Int(seg.Get(2));
@@ -55,10 +55,10 @@ namespace OpenDentBusiness{
 			X12Segment seg;
 			bool foundTransNum=false;
 			int thisTransNum=0;
-			for(int i=0;i<FunctGroups[0].Transactions[0].Segments.Count;i++){
-				seg=FunctGroups[0].Transactions[0].Segments[i];
+			for(int i=0;i<FunctionalGroups[0].Transactions[0].Segments.Count;i++){
+				seg=FunctionalGroups[0].Transactions[0].Segments[i];
 				if(foundTransNum){
-					if(seg.SegmentID!="AK5"){
+					if(seg.ID!="AK5"){
 						continue;
 					}
 					string code=seg.Get(1);
@@ -67,7 +67,7 @@ namespace OpenDentBusiness{
 					}
 					return "R";//rejected
 				}
-				if(seg.SegmentID=="AK2"){
+				if(seg.ID=="AK2"){
 					thisTransNum=0;
 					try {
 						thisTransNum=PIn.Int(seg.Get(2));
@@ -85,10 +85,10 @@ namespace OpenDentBusiness{
 
 		///<summary>Will return "" if unable to determine.  But would normally return A=Accepted or R=Rejected or P=Partially accepted if only some of the transactions were accepted.</summary>
 		public string GetBatchAckCode(){
-			if(this.FunctGroups[0].Transactions.Count!=1){
+			if(this.FunctionalGroups[0].Transactions.Count!=1){
 				return "";
 			}
-			X12Segment seg=FunctGroups[0].Transactions[0].GetSegmentByID("AK9");
+			X12Segment seg=FunctionalGroups[0].Transactions[0].GetSegmentByID("AK9");
 			if(seg==null){
 				return "";
 			}
@@ -120,17 +120,17 @@ namespace OpenDentBusiness{
 		public string GetHumanReadable() {
 			string retVal="";
 			for(int i=0;i<Segments.Count;i++) {
-				if(Segments[i].SegmentID!="AK3"
-					&& Segments[i].SegmentID!="AK4") {
+				if(Segments[i].ID!="AK3"
+					&& Segments[i].ID!="AK4") {
 					continue;
 				}
 				if(retVal != "") {//if multiple errors
 					retVal+="\r\n";
 				}
-				if(Segments[i].SegmentID=="AK3") {
+				if(Segments[i].ID=="AK3") {
 					retVal+="Segment "+Segments[i].Get(1)+": "+GetSegmentSyntaxError(Segments[i].Get(4));
 				}
-				if(Segments[i].SegmentID=="AK4") {
+				if(Segments[i].ID=="AK4") {
 					retVal+="Element "+Segments[i].Get(1)+": "+GetElementSyntaxError(Segments[i].Get(3));
 				}
 				//retVal+=GetRejectReason(Segments[i].Get(3))+", "

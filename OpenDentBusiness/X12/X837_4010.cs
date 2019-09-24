@@ -8,7 +8,7 @@ using System.Text.RegularExpressions;
 
 namespace OpenDentBusiness {
 	///<summary></summary>
-	public class X837_4010:X12object {
+	public class X837_4010:X12Object {
 
 		public X837_4010(string messageText)
 			: base(messageText) {
@@ -2082,7 +2082,7 @@ namespace OpenDentBusiness {
 		public bool AttachmentsWereSent(long claimNum) {
 			bool isCurrentClaim=false;
 			for(int i=0;i<Segments.Count;i++) {
-				if(Segments[i].SegmentID=="CLM") {
+				if(Segments[i].ID=="CLM") {
 					//The following check is currently broken, because we need to compare the claimNum to the portion of the CLM01 which is after the separator (/ or -). CLM01 is typically formatted like PatNum/ClaimNum
 					if(Segments[i].Get(1).TrimStart(new char[] { '0' })==claimNum.ToString()) {//if for specified claim
 						isCurrentClaim=true;
@@ -2091,7 +2091,7 @@ namespace OpenDentBusiness {
 						isCurrentClaim=false;
 					}
 				}
-				if(Segments[i].SegmentID=="PWK" && isCurrentClaim) {
+				if(Segments[i].ID=="PWK" && isCurrentClaim) {
 					return true;
 				}
 			}

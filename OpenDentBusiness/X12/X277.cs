@@ -7,7 +7,7 @@ using System.Text;
 namespace OpenDentBusiness
 {
 	///<summary>X12 277 Unsolicited Claim Status Notification. There is only one type of 277, but a 277 can be sent out unsolicited (without sending a request) or as a response to a 276 request.</summary>
-	public class X277:X12object {
+	public class X277:X12Object {
 
 		private List<X12Segment> segments;
 		///<summary>NM1 of loop 2100A.</summary>
@@ -21,11 +21,11 @@ namespace OpenDentBusiness
 		///<summary>TRN of loop 2200D.</summary>
 		private List<int> segNumsClaimTrackingNumberTRN;
 
-		public static bool Is277(X12object xobj) {
-			if(xobj.FunctGroups.Count!=1) {//Exactly 1 GS segment in each 277.
+		public static bool Is277(X12Object xobj) {
+			if(xobj.FunctionalGroups.Count!=1) {//Exactly 1 GS segment in each 277.
 				return false;
 			}
-			if(xobj.FunctGroups[0].Header.Get(1)=="HN") {//GS01 (pgs. 139 & 7)
+			if(xobj.FunctionalGroups[0].Header.Get(1)=="HN") {//GS01 (pgs. 139 & 7)
 				return true;
 			}
 			return false;
@@ -33,7 +33,7 @@ namespace OpenDentBusiness
 
 		public X277(string messageText)
 			: base(messageText) {
-			segments=FunctGroups[0].Transactions[0].Segments;//The GS segment contains exactly one ST segment below it.
+			segments=FunctionalGroups[0].Transactions[0].Segments;//The GS segment contains exactly one ST segment below it.
 			segNumInfoSourceNM101=-1;
 			segNumInfoReceiverNM101=-1;
 			segNumsBillingProviderNM1=new List<int>();
@@ -41,7 +41,7 @@ namespace OpenDentBusiness
 			segNumsClaimTrackingNumberTRN=new List<int>();
 			for(int i=0;i<segments.Count;i++) {
 				X12Segment seg=segments[i];
-				if(seg.SegmentID=="NM1") {
+				if(seg.ID=="NM1") {
 					string entityIdentifierCode=seg.Get(1);
 					if(entityIdentifierCode=="AY" || entityIdentifierCode=="PR") {
 						segNumInfoSourceNM101=i;
@@ -51,7 +51,7 @@ namespace OpenDentBusiness
 						segNumInfoReceiverNM101=i;
 						i+=3;
 						seg=segments[i];
-						while(seg.SegmentID=="STC") {
+						while(seg.ID=="STC") {
 							i++;
 							seg=segments[i];
 						}
@@ -68,7 +68,7 @@ namespace OpenDentBusiness
 							segNumsClaimTrackingNumberTRN.Add(i);//a TRN segment is required at this location.
 							i++;
 							seg=segments[i];//at least one STC segment is required at this location.
-							while(seg.SegmentID=="STC") {//there may be multiple STC segments.
+							while(seg.ID=="STC") {//there may be multiple STC segments.
 								i++;
 								if(i>=segments.Count) {
 									return;//End of file
@@ -76,7 +76,7 @@ namespace OpenDentBusiness
 								seg=segments[i];
 							}
 							//Followed by 0 to 3 situational REF segments.
-							for(int j=0;j<3 && (seg.SegmentID=="REF");j++) {
+							for(int j=0;j<3 && (seg.ID=="REF");j++) {
 								i++;
 								if(i>=segments.Count) {
 									return;//End of file
@@ -84,7 +84,7 @@ namespace OpenDentBusiness
 								seg=segments[i];
 							}
 							//Followed by 0 or 1 DTP segments. 
-							if(seg.SegmentID=="DTP") {
+							if(seg.ID=="DTP") {
 								i++;
 								if(i>=segments.Count) {
 									return;//End of file
@@ -92,7 +92,7 @@ namespace OpenDentBusiness
 								seg=segments[i];
 							}
 							//An entire iteration of loop 2200D is now finished. If another iteration is present, it will begin with a TRN segment.
-						} while(seg.SegmentID=="TRN");
+						} while(seg.ID=="TRN");
 					}
 				}
 			}
@@ -154,7 +154,7 @@ namespace OpenDentBusiness
 			if(segNumInfoReceiverNM101!=-1) {
 				int segNum=segNumInfoReceiverNM101+2;
 				X12Segment seg=segments[segNum];
-				while(seg.SegmentID=="STC") {
+				while(seg.ID=="STC") {
 					segNum++;
 					//End of message can happen because the QTY and AMT segments are situational, and so are the two HL segments after this.
 					if(segNum>=segments.Count) {
@@ -174,7 +174,7 @@ namespace OpenDentBusiness
 				segNum++;
 				if(segNum<segments.Count) {
 					X12Segment seg=segments[segNum];
-					if(seg.SegmentID=="QTY" && seg.Get(1)=="90") {
+					if(seg.ID=="QTY" && seg.Get(1)=="90") {
 						return long.Parse(seg.Get(2));
 					}
 				}
@@ -189,7 +189,7 @@ namespace OpenDentBusiness
 				segNum++;
 				if(segNum<segments.Count) {
 					X12Segment seg=segments[segNum];
-					if(seg.SegmentID=="QTY") {
+					if(seg.ID=="QTY") {
 						try {
 							if(seg.Get(1)=="AA") {
 								return long.Parse(seg.Get(2));
@@ -198,7 +198,7 @@ namespace OpenDentBusiness
 								segNum++;
 								if(segNum<segments.Count) {
 									seg=segments[segNum];
-									if(seg.SegmentID=="QTY" && seg.Get(1)=="AA") {
+									if(seg.ID=="QTY" && seg.Get(1)=="AA") {
 										return long.Parse(seg.Get(2));
 									}
 								}
@@ -219,14 +219,14 @@ namespace OpenDentBusiness
 				segNum++;
 				if(segNum<segments.Count) {
 					X12Segment seg=segments[segNum];
-					while(seg.SegmentID=="QTY") {
+					while(seg.ID=="QTY") {
 						segNum++;
 						if(segNum>=segments.Count) {
 							return 0;
 						}
 						seg=segments[segNum];
 					}
-					if(seg.SegmentID=="AMT" && seg.Get(1)=="YU") {
+					if(seg.ID=="AMT" && seg.Get(1)=="YU") {
 						return double.Parse(seg.Get(2));
 					}
 				}
@@ -241,14 +241,14 @@ namespace OpenDentBusiness
 				segNum++;
 				if(segNum<segments.Count) {
 					X12Segment seg=segments[segNum];
-					while(seg.SegmentID=="QTY") {
+					while(seg.ID=="QTY") {
 						segNum++;
 						if(segNum>=segments.Count) {
 							return 0;
 						}
 						seg=segments[segNum];
 					}
-					if(seg.SegmentID=="AMT") {
+					if(seg.ID=="AMT") {
 						if(seg.Get(1)=="YY") {
 							return double.Parse(seg.Get(2));
 						}
@@ -256,7 +256,7 @@ namespace OpenDentBusiness
 							segNum++;
 							if(segNum<segments.Count) {
 								seg=segments[segNum];
-								if(seg.SegmentID=="AMT" && seg.Get(1)=="YY") {
+								if(seg.ID=="AMT" && seg.Get(1)=="YY") {
 									return double.Parse(seg.Get(2));
 								}
 							}
@@ -317,11 +317,11 @@ namespace OpenDentBusiness
 						return result;//End of file
 					}
 					seg=segments[segNum];
-					while(seg.SegmentID=="STC") {
+					while(seg.ID=="STC") {
 						segNum++;
 						seg=segments[segNum];
 					}
-					while(seg.SegmentID=="REF") {
+					while(seg.ID=="REF") {
 						string refIdQualifier=seg.Get(1);
 						if(refIdQualifier=="1K") {
 							result[4]=seg.Get(2);//REF02 Payor's Claim Control Number.
@@ -341,7 +341,7 @@ namespace OpenDentBusiness
 						seg=segments[segNum];
 					}
 					//The DTP segment for the date of service will not be present when an invalid date was originally sent to the carrier (even though the specifications have it marked as a required segment).
-					if(seg.SegmentID=="DTP") {
+					if(seg.ID=="DTP") {
 						string dateServiceStr=seg.Get(3);
 						int dateServiceStartYear=PIn.Int(dateServiceStr.Substring(0,4));
 						int dateServiceStartMonth=PIn.Int(dateServiceStr.Substring(4,2));

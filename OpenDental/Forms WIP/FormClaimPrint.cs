@@ -1520,7 +1520,7 @@ namespace OpenDental{
 						}
 						break;
 					case "PlaceNumericCode":
-						displayStrings[i]=X12object.GetPlaceService(ClaimCur.PlaceService);
+						displayStrings[i]=X12Object.GetPlaceService(ClaimCur.PlaceService);
 						break;
 					case "IsRadiographsAttached":
 						if(ClaimCur.Radiographs>0) {
@@ -4272,7 +4272,7 @@ namespace OpenDental{
 				}
 			}
 			if(field=="PlaceNumericCode"){
-				return X12object.GetPlaceService(ClaimCur.PlaceService);
+				return X12Object.GetPlaceService(ClaimCur.PlaceService);
 			}
 			//(Procedure)Procedures.HList[ClaimProcsForClaim[procIndex].ProcNum];
 			//Procedure ProcOld=ProcCur.Clone();

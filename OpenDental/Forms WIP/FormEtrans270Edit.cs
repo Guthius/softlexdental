@@ -154,7 +154,7 @@ namespace OpenDental {
 			for(int i=0;i<listDTP.Count;i++) {
 				row=new ODGridRow();
 				row.Cells.Add(DTP271.GetDateStr(listDTP[i].Segment.Get(2),listDTP[i].Segment.Get(3)));
-				row.Cells.Add(DTP271.GetQualifierDescript(listDTP[i].Segment.Get(1)));
+				row.Cells.Add(DTP271.GetQualifierDescription(listDTP[i].Segment.Get(1)));
 				gridDates.Rows.Add(row);
 			}
 			gridDates.EndUpdate();

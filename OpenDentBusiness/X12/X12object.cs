@@ -1,6 +1,25 @@
+/**
+ * Copyright (C) 2019 Dental Stars SRL
+ * Copyright (C) 2003-2019 Jordan S. Sparks, D.M.D.
+ * 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; If not, see <http://www.gnu.org/licenses/>
+ */
+using OpenDentBusiness.X12;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Text;
 
 namespace OpenDentBusiness
@@ -10,35 +29,34 @@ namespace OpenDentBusiness
     /// transaction sets. It does not care what type of transactions are contained. It just 
     /// stores them. It does not inherit either. It is up to other classes to use this as needed.
     /// </summary>
-    public class X12object
+    public class X12Object
     {
         /// <summary>
         /// External reference to the file corresponding to this X12 object.
         /// </summary>
-        public string FilePath;
+        public string FilePath { get; set; }
 
         /// <summary>
-        /// The date and time this X12 object was created by the sender. Relative to sender's time zone.
+        /// The date and time this X12 object was created by the sender. 
+        /// Relative to sender's time zone.
         /// </summary>
-        public DateTime DateInterchange;
+        public DateTime DateInterchange { get; }
 
-        /// <summary>usually *,:,and ~
-        /// </summary>
-        public X12Separators Separators;
+        public X12Separators Separators { get; }
 
         /// <summary>
         /// A collection of X12FunctionalGroups. GS segments.
         /// </summary>
-        public List<X12FunctionalGroup> FunctGroups;
+        public List<X12FunctionalGroup> FunctionalGroups { get; } = new List<X12FunctionalGroup>();
 
         /// <summary>
         /// All segments for the entiremessage.
         /// </summary>
-        public List<X12Segment> Segments;
+        public List<X12Segment> Segments { get; } = new List<X12Segment>();
 
         public static bool IsX12(string messageText)
         {
-            if (ToX12object(messageText) != null)
+            if (Parse(messageText) != null)
             {
                 return true;
             }
@@ -46,130 +64,137 @@ namespace OpenDentBusiness
         }
 
         /// <summary>
-        /// Returns null if the messageText is not X12 or if messageText could not be parsed.
+        /// Parses the specified message and returns the resulting <see cref="X12Object"/>.
+        /// If the message is not valid X12 message, null will be returned instead.
         /// </summary>
-        public static X12object ToX12object(string messageText)
+        public static X12Object Parse(string messageText)
         {
-            if (messageText == null || messageText.Length < 106)
-            {//Minimum length of 106, because the segment separator is at index 105.
+            if (messageText == null || messageText.Length < 106) // Minimum length of 106, because the segment separator is at index 105.
                 return null;
-            }
+
             if (messageText.Substring(0, 3) != "ISA")
-            {
                 return null;
-            }
+
             try
             {
-                //Denti-cal sends us 835s, but they also send us "EOB" reports which start with "ISA" and look similar to X12 but are NOT X12.
-                return new X12object(messageText);//Only an X12 object if we can parse it.  Denti-cal "EOB" reports fail this test, as they should.
+                // Denti-cal sends us 835s, but they also send us "EOB" reports which start with "ISA" and look similar to X12 but are NOT X12.
+
+                return new X12Object(messageText); // Only an X12 object if we can parse it.  Denti-cal "EOB" reports fail this test, as they should.
             }
             catch
             {
             }
+
             return null;
         }
 
-        ///<summary>This override is never explicitly used.</summary>
-        protected X12object()
+        /// <summary>
+        /// Initializes a new instance of the <see cref="X12Object"/> class.
+        /// </summary>
+        protected X12Object()
         {
-
         }
 
-        ///<summary>The new X12object will point to the same data as the x12other.  This is for efficiency and to save memory.  Be careful.</summary>
-        public X12object(X12object x12other)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="X12Object"/> class, copying data from the 
+        /// specified <see cref="X12Object"/> instance.
+        /// </summary>
+        public X12Object(X12Object other)
         {
-            FilePath = x12other.FilePath;
-            DateInterchange = x12other.DateInterchange;
-            Separators = x12other.Separators;
-            FunctGroups = x12other.FunctGroups;
-            Segments = x12other.Segments;
+            FilePath = other.FilePath;
+            DateInterchange = other.DateInterchange;
+            Separators = other.Separators;
+            FunctionalGroups = other.FunctionalGroups;
+            Segments = other.Segments;
         }
 
-        ///<summary>Takes raw text and converts it into an X12Object.</summary>
-        public X12object(string messageText)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="X12Object"/> class from the specified raw 
+        /// message text.
+        /// </summary>
+        public X12Object(string messageText)
         {
-            messageText = messageText.Replace("\r", "");
-            messageText = messageText.Replace("\n", "");
+            messageText = messageText.Replace("\r", "").Replace("\n", "");
             if (messageText.Substring(0, 3) != "ISA")
+                throw new Exception("ISA not found");
+            
+            Separators = new X12Separators
             {
-                throw new ApplicationException("ISA not found");
-            }
-            Separators = new X12Separators();
-            Separators.Element = messageText.Substring(3, 1);
-            Separators.Subelement = messageText.Substring(104, 1);
-            Separators.Segment = messageText.Substring(105, 1);
-            string[] arrayRawSegments = messageText.Split(new string[] { Separators.Segment }, StringSplitOptions.None);
-            FunctGroups = new List<X12FunctionalGroup>();
-            Segments = new List<X12Segment>();
-            X12Segment segment;
-            for (int i = 0; i < arrayRawSegments.Length; i++)
+                Element = messageText.Substring(3, 1),
+                Subelement = messageText.Substring(104, 1),
+                Segment = messageText.Substring(105, 1)
+            };
+
+            var rawSegments = messageText.Split(new string[] { Separators.Segment }, StringSplitOptions.None);
+
+            for (int i = 0; i < rawSegments.Length; i++)
             {
-                segment = new X12Segment(arrayRawSegments[i], Separators);
-                segment.SegmentIndex = i;
-                Segments.Add(segment);
-                if (arrayRawSegments[i] == "")
+                var segment = new X12Segment(rawSegments[i], Separators)
                 {
-                    //do nothing
+                    SegmentIndex = i
+                };
+
+                Segments.Add(segment);
+
+                switch (segment.ID)
+                {
+                    case "ISA": // Interchange control header begin
+                        {
+                            try
+                            {
+                                DateInterchange = DateTime.ParseExact(segment.Get(9) + segment.Get(10), "yyMMddHHmm", CultureInfo.CurrentCulture.DateTimeFormat);
+                            }
+                            catch
+                            {
+                                DateInterchange = DateTime.MinValue;
+                            }
+                        }
+                        break;
+
+                    case "GS": // Functional Group Start
+                        FunctionalGroups.Add(new X12FunctionalGroup(segment));
+                        break;
+
+                    case "ST": // Transaction Start
+                        LastFunctionalGroup.Transactions.Add(new X12Transaction(segment));
+                        break;
+
+                    case "TA1":
+                        // This segment can either replace or supplement any GS segments for any 
+                        // ack type (997,999,277).  The TA1 will always be before the first GS 
+                        // segment.
+                        //
+                        // Ignore for now.  We should eventually match TA101 with the ISA13 of the
+                        // claim that we sent, so we can report the status to the user using fields
+                        // TA104 and TA105. This segment is neither mandated or prohibited 
+                        // (see 277.pdf pg. 207).
+                        break;
+
+                    case "":
+                    case "IEA": // Interchange Control Header End
+                    case "GE":  // Functional Group End
+                    case "SE":  // Transaction End
+                        break;
+
+                    default: // Detail Segment
+                        LastTransaction.Segments.Add(segment);
+                        break;
                 }
-                else if (segment.SegmentID == "ISA")
-                {//interchange control header begin
-                 //do not add to list of segments
-                    try
-                    {
-                        DateInterchange = DateTime.ParseExact(segment.Get(9) + segment.Get(10), "yyMMddHHmm", CultureInfo.CurrentCulture.DateTimeFormat);
-                    }
-                    catch 
-                    {
-                        DateInterchange = DateTime.MinValue;
-                    }
-                }
-                else if (segment.SegmentID == "IEA")
-                {//interchange control header end
-                 //do nothing
-                }
-                else if (segment.SegmentID == "GS")
-                {//if new functional group
-                    FunctGroups.Add(new X12FunctionalGroup(segment));
-                }
-                else if (segment.SegmentID == "GE")
-                {//if end of functional group
-                 //do nothing
-                }
-                else if (segment.SegmentID == "ST")
-                {//if new transaction set
-                    if (LastGroup().Transactions == null)
-                    {
-                        LastGroup().Transactions = new List<X12Transaction>();
-                    }
-                    LastGroup().Transactions.Add(new X12Transaction(segment));
-                }
-                else if (segment.SegmentID == "SE")
-                {//if end of transaction
-                 //do nothing
-                }
-                else if (segment.SegmentID == "TA1")
-                {//This segment can either replace or supplement any GS segments for any ack type (997,999,277).  The TA1 will always be before the first GS segment.
-                 //Ignore for now.  We should eventually match TA101 with the ISA13 of the claim that we sent, so we can report the status to the user using fields TA104 and TA105.
-                 //This segment is neither mandated or prohibited (see 277.pdf pg. 207).
-                }
-                else
-                {//it must be a detail segment within a transaction.
-                    if (LastTransaction().Segments == null)
-                    {
-                        LastTransaction().Segments = new List<X12Segment>();
-                    }
-                    LastTransaction().Segments.Add(segment);
-                }
-                //row=sr.ReadLine();
             }
         }
 
-        ///<summary>Example of values returned: 004010X097A1 (4010 dental), 005010X222A1 (5010 medical), 005010X223A2 (5010 institutional), 005010X224A2 (5010 dental)</summary>
-        public string GetFormat()
+        /// <summary>
+        /// Example of values returned: 
+        /// 004010X097A1 (4010 dental), 
+        /// 005010X222A1 (5010 medical), 
+        /// 005010X223A2 (5010 institutional), 
+        /// 005010X224A2 (5010 dental)
+        /// </summary>
+        private string GetFormat()
         {
             for (int i = 0; i < Segments.Count; i++)
             {
-                if (Segments[i].SegmentID == "GS")
+                if (Segments[i].ID == "GS")
                 {
                     return Segments[i].Get(8);
                 }
@@ -177,193 +202,176 @@ namespace OpenDentBusiness
             return "";
         }
 
-        ///<summary>Returns true if the X12 object is in 4010 format.</summary>
+        /// <summary>
+        /// Returns true if the X12 object is in 4010 format.
+        /// </summary>
         public bool IsFormat4010()
         {
             string format = GetFormat();
             if (format.Length >= 6)
             {
-                return (format.Substring(2, 4) == "4010");
+                return format.Substring(2, 4) == "4010";
             }
             return false;
         }
 
-        ///<summary>Returns true if the X12 object is in 5010 format.</summary>
+        /// <summary>
+        /// Returns true if the X12 object is in 5010 format.
+        /// </summary>
         public bool IsFormat5010()
         {
             string format = GetFormat();
             if (format.Length >= 6)
             {
-                return (format.Substring(2, 4) == "5010");
+                return format.Substring(2, 4) == "5010";
             }
             return false;
         }
 
-        ///<summary>Returns true if there is a TA1 segment. The TA1 segment is neither mandated or prohibited (see 277.pdf pg. 207).
-        ///The Inmidiata clearinghouse likes to use TA1 segments to replace the usual acknowledgements (format ISA-TA1-IEA).</summary>
+        /// <summary>
+        /// Returns true if there is a TA1 segment. The TA1 segment is neither mandated or 
+        /// prohibited (see 277.pdf pg. 207). The Inmidiata clearinghouse likes to use TA1 segments
+        /// to replace the usual acknowledgements (format ISA-TA1-IEA).
+        /// </summary>
         public bool IsAckInterchange()
         {
-            for (int i = 0; i < Segments.Count; i++)
-            {
-                if (Segments[i].SegmentID == "GS")
-                {
-                    return false;//If a GS is present, it will get handled elsewhere.
-                }
-            }
-            for (int i = 0; i < Segments.Count; i++)
-            {
-                if (Segments[i].SegmentID == "TA1")
-                {
-                    return true;//A TA1 can be used when there are no GS segments.  That implies that it is an interchange ack.
-                }
-            }
-            return false;
+            // If a GS is present, it will get handled elsewhere.
+            // A TA1 can be used when there are no GS segments. That implies that it is an interchange ack.
+            return
+                !Segments.Exists(segment => segment.ID == "GS") && 
+                 Segments.Exists(segment => segment.ID == "TA1");
         }
 
         public bool Is997()
         {
-            //There is only one transaction set (ST/SE) per functional group (GS/GE), but I think there can be multiple functional groups
-            //if acking multiple 
-            if (this.FunctGroups.Count != 1)
-            {
-                return false;
-            }
-            if (this.FunctGroups[0].Transactions[0].Header.Get(1) == "997")
-            {
-                return true;
-            }
-            return false;
+            return 
+                FunctionalGroups.Count == 1 && 
+                FunctionalGroups[0].Transactions[0].Header.Get(1) == "997";
         }
 
         public bool Is999()
         {
-            //There is only one transaction set (ST/SE) per functional group (GS/GE).
-            if (this.FunctGroups.Count != 1)
-            {
-                return false;
-            }
-            if (this.FunctGroups[0].Transactions[0].Header.Get(1) == "999")
-            {
-                return true;
-            }
-            return false;
+            return 
+                FunctionalGroups.Count == 1 && 
+                FunctionalGroups[0].Transactions[0].Header.Get(1) == "999";
         }
 
         public bool Is271()
         {
-            if (this.FunctGroups.Count != 1)
-            {
-                return false;
-            }
-            if (this.FunctGroups[0].Transactions[0].Header.Get(1) == "271")
-            {
-                return true;
-            }
-            return false;
+            return
+                FunctionalGroups.Count == 1 &&
+                FunctionalGroups[0].Transactions[0].Header.Get(1) == "271";
         }
 
-        private X12FunctionalGroup LastGroup()
-        {
-            return (X12FunctionalGroup)FunctGroups[FunctGroups.Count - 1];
-        }
+        /// <summary>
+        /// Gets the last functional group.
+        /// </summary>
+        private X12FunctionalGroup LastFunctionalGroup => 
+            FunctionalGroups[FunctionalGroups.Count - 1];
 
-        private X12Transaction LastTransaction()
-        {
-            return (X12Transaction)LastGroup().Transactions[LastGroup().Transactions.Count - 1];
-        }
+        /// <summary>
+        /// Gets the last transaction.
+        /// </summary>
+        private X12Transaction LastTransaction => 
+            LastFunctionalGroup.Transactions[LastFunctionalGroup.Transactions.Count - 1];
 
-        ///<summary>Returns the list of unique transaction set identifiers within the X12.</summary>
-        public List<string> GetTranSetIds()
-        {
-            List<string> retVal = new List<string>();
-            for (int i = 0; i < FunctGroups[0].Transactions.Count; i++)
-            {
-                string tranSetId = FunctGroups[0].Transactions[i].Header.Get(2);
-                retVal.Add(tranSetId);
-            }
-            return retVal;
-        }
+        /// <summary>
+        /// Gets the list of unique transaction set identifiers within the X12 object.
+        /// </summary>
+        public List<string> GetTranSetIds() =>
+            FunctionalGroups[0].Transactions.Select(trx => trx.Header.Get(2)).ToList();
 
-        ///<summary>The startIndex is zero-based.  The segmentId is case sensitive.
-        ///If arrayElement01Values is specified, then will only return segments where the segment.Get(1) returns one of the specified values.
-        ///Returns null if no segment is found.</summary>
-        public X12Segment GetNextSegmentById(int startIndex, string segmentId, params string[] arrayElement01Values)
+        /// <summary>
+        /// The startIndex is zero-based. The segmentId is case sensitive.
+        /// If arrayElement01Values is specified, then will only return segments where the 
+        /// segment.Get(1) returns one of the specified values.
+        /// Returns null if no segment is found.
+        /// </summary>
+        public X12Segment GetNextSegmentById(int startIndex, string segmentId, params string[] validElement01Values)
         {
             for (int i = startIndex; i < Segments.Count; i++)
             {
-                X12Segment seg = Segments[i];
-                if (seg.SegmentID != segmentId)
+                var segment = Segments[i];
+                if (segment.ID != segmentId)
                 {
                     continue;
                 }
-                if (arrayElement01Values.Length > 0)
+
+                if (validElement01Values.Length > 0)
                 {
-                    bool isMatchingElement01 = false;
-                    for (int j = 0; j < arrayElement01Values.Length; j++)
+                    var matchingElement01 = false;
+
+                    foreach (var value in validElement01Values)
                     {
-                        if (arrayElement01Values[j] == seg.Get(1))
+                        if (value == segment.Get(1))
                         {
-                            isMatchingElement01 = true;
+                            matchingElement01 = true;
                             break;
                         }
                     }
-                    if (!isMatchingElement01)
-                    {
-                        continue;
-                    }
+
+                    if (!matchingElement01) continue;
                 }
-                return seg;
+
+                return segment;
             }
+
             return null;
         }
 
-        public int GetSegmentCountById(string segmentId)
+        /// <summary>
+        /// Returns the number of segments with the specified ID in this <see cref="X12Object"/>.
+        /// </summary>
+        /// <param name="segmentId">The segment ID.</param>
+        /// <returns>The number of segments with the specified ID.</returns>
+        public int GetSegmentCountById(string segmentId) => Segments.Count(segment => segment.ID == segmentId);
+
+        /// <summary>
+        /// Removes the specified segments and recreates the raw X12 from the remaining segments.
+        /// Useful for modifying X12 reports which have been partially processed in order to keep 
+        /// track of which parts have not been processed. Certain X12 documents also require the 
+        /// segment count as part of the message (ex 5010 SE segment). This function does not 
+        /// modify total segment count within the message.
+        /// </summary>
+        public string ReconstructRaw(List<int> indicesToRemove)
         {
-            int count = 0;
-            for (int i = 0; i < Segments.Count; i++)
+            var indicesToKeep = new bool[Segments.Count];
+            for (int i = 0; i < indicesToKeep.Length; i++)
             {
-                if (Segments[i].SegmentID == segmentId)
+                indicesToKeep[i] = true;
+            }
+
+            foreach (var index in indicesToRemove)
+            {
+                if (index >= 0 && index < indicesToKeep.Length)
                 {
-                    count++;
+                    indicesToKeep[index] = false;
                 }
             }
-            return count;
-        }
 
-        ///<summary>Removes the specified segments and recreates the raw X12 from the remaining segments.
-        ///Useful for modifying X12 reports which have been partially processed in order to keep track of which parts have not been processed.
-        ///Certain X12 documents also require the segment count as part of the message (ex 5010 SE segment).
-        ///This function does not modify total segment count within the message.</summary>
-        public string ReconstructRaw(List<int> listSegmentIndiciesToRemove)
-        {
-            bool[] arrayIndiciesToKeep = new bool[Segments.Count];
-            for (int i = 0; i < arrayIndiciesToKeep.Length; i++)
+            var stringBuilder = new StringBuilder();
+
+            for (int i = 0; i < indicesToKeep.Length; i++)
             {
-                arrayIndiciesToKeep[i] = true;
-            }
-            for (int i = 0; i < listSegmentIndiciesToRemove.Count; i++)
-            {
-                int index = listSegmentIndiciesToRemove[i];
-                arrayIndiciesToKeep[index] = false;
-            }
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < arrayIndiciesToKeep.Length; i++)
-            {
-                if (!arrayIndiciesToKeep[i])
+                if (indicesToKeep[i])
                 {
-                    continue;
+                    stringBuilder.Append(Segments[i].Raw);
+                    stringBuilder.Append(Separators.Segment);
+                    stringBuilder.Append("\r\n");
                 }
-                sb.Append(Segments[i].ToString());//This gets the raw text of the segment.
-                sb.Append(Separators.Segment);
-                sb.Append("\r\n");
             }
-            return sb.ToString();
+
+            return stringBuilder.ToString();
         }
 
-        ///<summary>"CODE SOURCE 237: Place of Service Codes for Professional Claims" is published by CMS (Centers for Medicare and Medicaid Services),
-        ///according to https://www.cms.gov/Medicare/Coding/place-of-service-codes/.
-        ///See code list here: https://www.cms.gov/Medicare/Medicare-Fee-for-Service-Payment/PhysicianFeeSched/Downloads/Website-POS-database.pdf
-        ///Copy of PDF saved to "Place-of-Service-Codes.pdf" in internal documents.</summary>
+        /// <summary>
+        /// "CODE SOURCE 237: Place of Service Codes for Professional Claims" is published by CMS
+        /// (Centers for Medicare and Medicaid Services), according to 
+        /// https://www.cms.gov/Medicare/Coding/place-of-service-codes/.
+        /// 
+        /// See code list here:
+        /// https://www.cms.gov/Medicare/Medicare-Fee-for-Service-Payment/PhysicianFeeSched/Downloads/Website-POS-database.pdf
+        /// </summary>
         public static string GetPlaceService(PlaceOfService place)
         {
             switch (place)
@@ -402,87 +410,7 @@ namespace OpenDentBusiness
             }
             return "11";
         }
-
     }
-
-    /// <summary>
-    /// GS/GE combination.
-    /// Contained within an interchange control combination (ISA/IEA).
-    /// Contains at least one transaction (ST/SE).
-    /// </summary>
-    public class X12FunctionalGroup
-    {
-        /// <summary>
-        /// A collection of X12Transactions. ST segments.
-        /// </summary>
-        public List<X12Transaction> Transactions;
-
-        /// <summary>
-        /// The segment that identifies this functional group
-        /// </summary>
-        public X12Segment Header;
-
-        /// <summary>
-        /// This override is never explicitly used. For serialization.
-        /// </summary>
-        public X12FunctionalGroup()
-        {
-        }
-
-        /// <summary>
-        /// Supply the functional group header(GS) when creating this object.
-        /// </summary>
-        public X12FunctionalGroup(X12Segment header)
-        {
-            Header = header.Copy();
-        }
-    }
-
-    /// <summary>
-    /// ST/SE combination.
-    /// Containted within functional group (GS/GE).
-    /// In claims, there will be one transaction per carrier.
-    /// </summary>
-    public class X12Transaction
-    {
-        /// <summary>
-        /// A collection of all the X12Segments for this transaction, in the order they originally appeared.
-        /// </summary>
-        public List<X12Segment> Segments;
-
-        /// <summary>
-        /// The segment that identifies this functional group
-        /// </summary>
-        public X12Segment Header;
-
-        ///<summary>This override is never explicitly used.  For serialization.</summary>
-        public X12Transaction()
-        {
-
-        }
-
-        ///<summary>Supply the transaction header(ST) when creating this object.</summary>
-        public X12Transaction(X12Segment header)
-        {
-            Header = header.Copy();
-        }
-
-        public X12Segment GetSegmentByID(string segID)
-        {
-            for (int i = 0; i < Segments.Count; i++)
-            {
-                if (Segments[i].SegmentID == segID)
-                {
-                    return Segments[i];
-                }
-            }
-            return null;
-        }
-    }
-
-
-
-
 
 
     #region Segments
@@ -1048,24 +976,7 @@ namespace OpenDentBusiness
 
     #endregion Segments
 
-    public class X12ClaimMatch
-    {
-        public string ClaimIdentifier;
-        public double ClaimFee;
-        public string PatFname;
-        public string PatLname;
-        public string SubscriberId;
-        public DateTime DateServiceStart;
-        public DateTime DateServiceEnd;
-        public long EtransNum;
-        ///<summary>A reversal is a special type of supplemental payment.</summary>
-        public bool Is835Reversal;
-        ///<summary>All non-zero procedures found on the ERA.  Excludes procedures which could not be identified from the ERA.
-        ///This list of procedures might be shorter than the list of procedures on the ERA claim.</summary>
-        public List<Hx835_Proc> List835Procs = new List<Hx835_Proc>();
-        ///<summary>Indicates Primary, Secondary, or Preauth.  Claim type from CLP segment element 02.</summary>
-        public string CodeClp02 = "";
-    }
+
 
     ///<summary></summary>
     public enum PlaceOfService

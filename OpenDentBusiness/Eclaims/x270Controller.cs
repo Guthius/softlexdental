@@ -67,9 +67,9 @@ namespace OpenDentBusiness.Eclaims
             }
             //start to process the 271----------------------------------------------------------
             X271 x271 = null;
-            if (X12object.IsX12(x12response))
+            if (X12Object.IsX12(x12response))
             {
-                X12object x12obj = new X12object(x12response);
+                X12Object x12obj = new X12Object(x12response);
                 if (x12obj.Is271())
                 {
                     x271 = new X271(x12response);
@@ -105,11 +105,11 @@ namespace OpenDentBusiness.Eclaims
             etrans271.DateTimeTrans = DateTime.Now;
             etrans271.ClearingHouseNum = clearinghouseClin.HqClearinghouseNum;
             etrans271.Etype = EtransType.TextReport;
-            if (X12object.IsX12(x12response))
+            if (X12Object.IsX12(x12response))
             {//this shouldn't need to be tested because it was tested above.
                 if (x271 == null)
                 {
-                    X12object Xobj = new X12object(x12response);
+                    X12Object Xobj = new X12Object(x12response);
                     if (Xobj.Is997())
                     {
                         etrans271.Etype = EtransType.Acknowledge_997;
@@ -213,7 +213,7 @@ namespace OpenDentBusiness.Eclaims
             }
             else if (etrans271.Etype == EtransType.Ack_Interchange)
             {//See document "X092 Elig 270-271.pdf" pages 388 and 401.
-                X12object xobj = new X12object(x12response);
+                X12Object xobj = new X12Object(x12response);
                 X12Segment segTa1 = xobj.GetNextSegmentById(0, "TA1");
                 if (segTa1.Get(4) == "A")
                 {

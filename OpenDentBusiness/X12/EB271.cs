@@ -161,10 +161,10 @@ namespace OpenDentBusiness
 			bool containsAddress=false;
 			bool containsDate=false;
 			for(int i=0;i<SupplementalSegments.Count;i++) {
-				if(SupplementalSegments[i].SegmentID=="LS") {
+				if(SupplementalSegments[i].ID=="LS") {
 					containsAddress=true;
 				}
-				if(SupplementalSegments[i].SegmentID=="DTP") {
+				if(SupplementalSegments[i].ID=="DTP") {
 					containsDate=true;
 				}
 			}
@@ -248,7 +248,7 @@ namespace OpenDentBusiness
 				if(!isMessageMode) {
 					continue;
 				}
-				if(SupplementalSegments[i].SegmentID=="MSG") {
+				if(SupplementalSegments[i].ID=="MSG") {
 					retVal+=", "+SupplementalSegments[i].Get(1);
 				}
 			}
@@ -258,13 +258,13 @@ namespace OpenDentBusiness
 		private string GetDescriptionForAddress() {
 			string retVal=GetDescript(1)+"\r\n";//tells us what kind of address
 			for(int i=0;i<SupplementalSegments.Count;i++) {
-				if(SupplementalSegments[i].SegmentID=="NM1") {
+				if(SupplementalSegments[i].ID=="NM1") {
 					retVal+=SupplementalSegments[i].Get(3)+" "+SupplementalSegments[i].Get(4)+"\r\n";//LName and optional FName
 				}
-				if(SupplementalSegments[i].SegmentID=="N3") {
+				if(SupplementalSegments[i].ID=="N3") {
 					retVal+=SupplementalSegments[i].Get(1)+" "+SupplementalSegments[i].Get(2)+"\r\n";//Address 1 and 2
 				}
-				if(SupplementalSegments[i].SegmentID=="N4") {
+				if(SupplementalSegments[i].ID=="N4") {
 					retVal+=SupplementalSegments[i].Get(1)+", "+SupplementalSegments[i].Get(2)+SupplementalSegments[i].Get(3);//City, State Zip
 				}
 			}
@@ -274,8 +274,8 @@ namespace OpenDentBusiness
 		private string GetDescriptionForDate() {
 			string retVal="";
 			for(int i=0;i<SupplementalSegments.Count;i++) {
-				if(SupplementalSegments[i].SegmentID=="DTP") {
-					retVal+=DTP271.GetQualifierDescript(SupplementalSegments[i].Get(1))+": "
+				if(SupplementalSegments[i].ID=="DTP") {
+					retVal+=DTP271.GetQualifierDescription(SupplementalSegments[i].Get(1))+": "
 						+DTP271.GetDateStr(SupplementalSegments[i].Get(2),SupplementalSegments[i].Get(3));
 				}
 			}

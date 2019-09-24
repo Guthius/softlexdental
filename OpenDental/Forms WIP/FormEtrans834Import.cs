@@ -16,7 +16,7 @@ namespace OpenDental {
 		private int _colPatCountIndex;
 		private int _colPlanCountIndex;
 		private int _colErrorIndex;
-		private X12object _x834selected=null;
+		private X12Object _x834selected=null;
 		public FormEtrans834Preview FormE834P=null;
 
 		public FormEtrans834Import() {
@@ -116,7 +116,7 @@ namespace OpenDental {
 				string filePath=(string)row.Tag;
 				ShowStatus(Lan.g(this,"Parsing file")+" "+Path.GetFileName(filePath));
 				string messageText=File.ReadAllText(filePath);
-				X12object xobj=X12object.ToX12object(messageText);
+				X12Object xobj=X12Object.Parse(messageText);
 				if(xobj==null) {
 					row.Cells[_colErrorIndex].Text="Is not in X12 format.";
 					continue;

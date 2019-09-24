@@ -6,7 +6,7 @@ namespace OpenDentBusiness
     /// <summary>
     /// A 271 is the eligibility response to a 270.
     /// </summary>
-    public class X271 : X12object
+    public class X271 : X12Object
     {
         public X271(string messageText) : base(messageText)
         {
@@ -24,11 +24,11 @@ namespace OpenDentBusiness
             for (int i = 0; i < Segments.Count; i++)
             {
                 //loop until we encounter the first EB
-                if (Segments[i].SegmentID != "EB" && eb == null)
+                if (Segments[i].ID != "EB" && eb == null)
                 {
                     continue;
                 }
-                if (Segments[i].SegmentID == "EB")
+                if (Segments[i].ID == "EB")
                 {
                     //add the previous eb
                     if (eb != null)
@@ -36,7 +36,7 @@ namespace OpenDentBusiness
                         retVal.Add(eb);
                     }
                     X12Segment hsdSeg = null;
-                    if (Segments[i + 1].SegmentID == "HSD")
+                    if (Segments[i + 1].ID == "HSD")
                     {
                         hsdSeg = Segments[i + 1];
                     }
@@ -44,7 +44,7 @@ namespace OpenDentBusiness
                     eb = new EB271(Segments[i], isInNetwork, isCoinsuranceInverted, hsdSeg);
                     continue;
                 }
-                else if (Segments[i].SegmentID == "SE")
+                else if (Segments[i].ID == "SE")
                 {//end of benefits
                     retVal.Add(eb);
                     break;
@@ -62,7 +62,7 @@ namespace OpenDentBusiness
         {
             foreach (X12Segment segment in Segments)
             {
-                if (segment.SegmentID == "REF" && segment.Elements[1] == "6P")
+                if (segment.ID == "REF" && segment.Elements[1] == "6P")
                 { //Line beginning "REF*6P* indicates group num
                     return segment.Elements[2]; //The group num is the third element in the line
                 }
@@ -77,11 +77,11 @@ namespace OpenDentBusiness
             DTP271 dtp;
             for (int i = 0; i < Segments.Count; i++)
             {
-                if (Segments[i].SegmentID == "EB")
+                if (Segments[i].ID == "EB")
                 {
                     break;
                 }
-                if (Segments[i].SegmentID != "DTP")
+                if (Segments[i].ID != "DTP")
                 {
                     continue;
                 }
@@ -97,7 +97,7 @@ namespace OpenDentBusiness
             string retVal = "";
             for (int i = 0; i < Segments.Count; i++)
             {
-                if (Segments[i].SegmentID != "AAA")
+                if (Segments[i].ID != "AAA")
                 {
                     continue;
                 }

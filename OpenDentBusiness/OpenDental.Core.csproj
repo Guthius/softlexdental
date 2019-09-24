@@ -345,6 +345,9 @@
     <Compile Include="Eclaims\x270Controller.cs" />
     <Compile Include="Eclaims\x837Controller.cs" />
     <Compile Include="Crud\AdjustmentCrud.cs" />
+    <Compile Include="X12\X12ClaimMatch.cs" />
+    <Compile Include="X12\X12FunctionalGroup.cs" />
+    <Compile Include="X12\X12Transaction.cs" />
     <Compile Include="__WIP\AlertActionType.cs" />
     <Compile Include="__WIP\AlertSeverityType.cs" />
     <Compile Include="Crud\AppointmentCrud.cs" />
@@ -1326,7 +1329,7 @@
     <Compile Include="Data\UserGroup.cs" />
     <Compile Include="TableTypes\UserQuery.cs" />
     <Compile Include="TableTypes\ZipCode.cs" />
-    <Compile Include="X12\X12object.cs" />
+    <Compile Include="X12\X12Object.cs" />
     <Compile Include="__WIP\UserPreferenceName.cs" />
   </ItemGroup>
   <ItemGroup>

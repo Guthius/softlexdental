@@ -51,7 +51,7 @@ namespace OpenDentBusiness{
 		///<summary>This function is used to enhance readabilty of the X12 message when displayed.
 		///This function is specifically for X12 messages and not for other formats (ex not for Canadian).</summary>
 		private static string TidyMessageTextX12(string msgText) {
-			if(!X12object.IsX12(msgText)) {
+			if(!X12Object.IsX12(msgText)) {
 				return msgText;
 			}
 			Match match=Regex.Match(msgText,"~[^(\n)(\r)]");

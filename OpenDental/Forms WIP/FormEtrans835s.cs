@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using OpenDental.UI;
 using OpenDentBusiness;
 using CodeBase;
+using OpenDentBusiness.X12;
 
 namespace OpenDental {
 	public partial class FormEtrans835s:ODForm {

@@ -7,7 +7,7 @@ using System.Linq;
 namespace OpenDentBusiness
 {
     ///<summary></summary>
-    public class X270 : X12object
+    public class X270 : X12Object
     {
 
         public X270(string messageText) : base(messageText)
