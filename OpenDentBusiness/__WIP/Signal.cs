@@ -88,7 +88,7 @@ namespace OpenDentBusiness
                 Date = (DateTime)dataReader["date"],
                 Name = (string)dataReader["name"],
                 ExternalId = dataReader["external_id"] as long?,
-                ExternalDate = dataReader[""] as DateTime?,
+                ExternalDate = dataReader["external_date"] as DateTime?,
                 Param1 = (string)dataReader["param1"],
                 Param2 = (string)dataReader["param2"],
                 Message = (string)dataReader["message"]
