@@ -13,7 +13,8 @@
     <AssemblyName>OpenDental</AssemblyName>
     <TargetZone>LocalIntranet</TargetZone>
     <GenerateManifests>false</GenerateManifests>
-    <ApplicationIcon>Misc\App.ico</ApplicationIcon>
+    <ApplicationIcon>
+    </ApplicationIcon>
     <StartupObject>
     </StartupObject>
     <FileUpgradeFlags>
@@ -7932,8 +7933,6 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="EraseCircle.cur" />
-    <Content Include="Misc\App.ico" />
-    <Content Include="Misc\TerminalMgr.ico" />
     <EmbeddedResource Include="Forms Reports\FormRpInsOverpaid.resx">
       <DependentUpon>FormRpInsOverpaid.cs</DependentUpon>
       <SubType>Designer</SubType>
