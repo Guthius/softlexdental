@@ -1609,7 +1609,7 @@ namespace OpenDental {
 				else {
 					//If the user has task filters on this TaskList or one of its children, prompt the user they may be moving tasks that are filtered.
 					if((GlobalTaskFilterType)Preference.GetInt(PreferenceName.TasksGlobalFilterType)!=GlobalTaskFilterType.Disabled &&
-						(_globalFilterType!=GlobalTaskFilterType.None || TaskLists.HasGlobalFilterTypeInTree(newTL)) && !ODInitialize.IsRunningInUnitTest)
+						(_globalFilterType!=GlobalTaskFilterType.None || TaskLists.HasGlobalFilterTypeInTree(newTL)))
 					{
 						if(!MsgBox.Show(this,MsgBoxButtons.OKCancel
 							,"Task filters are turned on in this task list or one of its sub lists.  Pasting will cause filtered tasks to move as "

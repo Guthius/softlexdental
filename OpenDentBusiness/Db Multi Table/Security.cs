@@ -46,7 +46,7 @@ namespace OpenDentBusiness
         public static User CurrentUser { get; set; }
 
         [Obsolete("Use Environment.MachineName instead.")]
-        public static string CurrentComputerName { get; set; }
+        public static string CurrentComputerName => Environment.MachineName;
 
         [Obsolete("Don't use the plaintext password of the user.")]
         public static string PasswordTyped { get; set; }
