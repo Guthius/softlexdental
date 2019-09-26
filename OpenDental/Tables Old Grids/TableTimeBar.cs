@@ -1,9 +1,10 @@
+using System;
 using System.Drawing;
 using System.Windows.Forms;
 
 namespace OpenDental
 {
-    public class TableTimeBar : OpenDental.ContrTable
+    public class TableTimeBar : ContrTable
     {
         public TableTimeBar()
         {
@@ -20,21 +21,9 @@ namespace OpenDental
             LayoutTables();
         }
 
-        private void TableTimeBar_Load(object sender, System.EventArgs e)
+        protected override void OnLoad(EventArgs e)
         {
             LayoutTables();
-        }
-
-        private void butSlider_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
-        {
-        }
-
-        private void butSlider_MouseMove(object sender, System.Windows.Forms.MouseEventArgs e)
-        {
-        }
-
-        private void butSlider_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e)
-        {
         }
     }
 }

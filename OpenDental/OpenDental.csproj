@@ -7372,10 +7372,6 @@
       <DependentUpon>ContrTable.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Tables Old Grids\TableAutoItem.resx" />
-    <EmbeddedResource Include="Tables Old Grids\TableCarriers.resx" />
-    <EmbeddedResource Include="Tables Old Grids\TableProvIdent.resx" />
-    <EmbeddedResource Include="Tables Old Grids\TableTimeBar.resx" />
     <EmbeddedResource Include="UI\Appt J\ContrApptSingleJ.resx">
       <DependentUpon>ContrApptSingleJ.cs</DependentUpon>
       <SubType>Designer</SubType>
