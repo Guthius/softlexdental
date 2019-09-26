@@ -108,17 +108,6 @@ namespace OpenDental
         {
             FormOpenDental.S_DataValid_BecomeInvalid(new ValidEventArgs(DateTime.MinValue, arrayITypes, false, 0));
         }
-
-        /// <summary>
-        /// Triggers an event that causes a signal to be sent to all other computers telling them what kind of locally stored data needs to be updated. 
-        /// Either supply a set of flags for the types, or supply a date if the appointment screen needs to be refreshed. 
-        /// Yes, this does immediately refresh the local data, too. The AllLocal override does all types except appointment date for the local computer 
-        /// only, such as when starting up.
-        /// </summary>
-        public static void SetInvalid(bool onlyLocal)
-        {
-            FormOpenDental.S_DataValid_BecomeInvalid(new ValidEventArgs(DateTime.MinValue, new[] { InvalidType.AllLocal }, onlyLocal, 0));
-        }
     }
 
     public delegate void ValidEventHandler(ValidEventArgs e);

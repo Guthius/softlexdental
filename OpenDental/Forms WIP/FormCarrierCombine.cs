@@ -102,7 +102,6 @@ namespace OpenDental{
 			this.tbCarriers.Location = new System.Drawing.Point(9,42);
 			this.tbCarriers.Name = "tbCarriers";
 			this.tbCarriers.ScrollValue = 363;
-			this.tbCarriers.SelectedIndices = new int[0];
 			this.tbCarriers.SelectionMode = System.Windows.Forms.SelectionMode.One;
 			this.tbCarriers.Size = new System.Drawing.Size(839,356);
 			this.tbCarriers.TabIndex = 2;

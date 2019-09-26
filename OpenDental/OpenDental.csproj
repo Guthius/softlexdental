@@ -631,7 +631,6 @@
       <DependentUpon>FormOpenDental.cs</DependentUpon>
     </Compile>
     <Compile Include="Misc\Aggregate.cs" />
-    <Compile Include="Misc\WebServiceRequest.cs" />
     <Compile Include="Module.cs">
       <SubType>UserControl</SubType>
     </Compile>
