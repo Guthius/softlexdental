@@ -1,30 +1,36 @@
-﻿using System;
+﻿/**
+ * Copyright (C) 2019 Dental Stars SRL
+ * Copyright (C) 2003-2019 Jordan S. Sparks, D.M.D.
+ * 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; If not, see <http://www.gnu.org/licenses/>
+ */
+using System;
 
 namespace CodeBase
 {
     public class ODException : ApplicationException
     {
         /// <summary>
-        /// Contains query text when an ErrorCode in the 700s was thrown. This is the query that was attempted prior to an exception.
-        /// </summary>
-        private string _query = "";
-
-        /// <summary>
         /// Gets the error code associated to this exception.
-        /// Defaults to 0 if no error code was explicitly set.
         /// </summary>		
         public int ErrorCode { get; } = 0;
 
         /// <summary>
-        /// Contains query text when an ErrorCode in the 700s was thrown. This is the query that was attempted prior to an exception.
+        /// Contains query text when an ErrorCode in the 700s was thrown. This is the query that 
+        /// was attempted prior to an exception.
         /// </summary>
-        public string Query
-        {
-            get
-            {
-                return _query ?? "";
-            }
-        }
+        public string Query { get; } = "";
 
         public ODException(string message) : this(message, 0)
         {
@@ -45,7 +51,8 @@ namespace CodeBase
 
         /// <summary>
         /// Wrap the given action in a try/catch and swallow any exceptions that are thrown.
-        /// This should be used sparingly as we typically want to handle the exception or let it bubble up to the UI but sometimes you just want to ignore it.
+        /// This should be used sparingly as we typically want to handle the exception or let it 
+        /// bubble up to the UI but sometimes you just want to ignore it.
         /// </summary>
         public static void SwallowAnyException(Action a)
         {
@@ -56,22 +63,6 @@ namespace CodeBase
             catch
             {
             }
-        }
-
-        /// <summary>
-        /// Does nothing if the exception passed in is null. Preserves the callstack of the exception passed in.
-        /// Typically used when a work thread throws an exception and we want to wait until we are back on the main thread in order to throw the exception.
-        /// Calling this when there is no worker thread involved is harmless and unnecessary but will still preserve the call stack.
-        /// </summary>
-        public static void TryThrowPreservedCallstack(Exception ex)
-        {
-            if (ex == null)
-            {
-                return;
-            }
-            //We are back in the main thread context so throw a new exception which contains our actual exception (from the worker) as the innner exception.
-            //Simply throwing ex here would cause the stack trace to be lost. https://stackoverflow.com/q/3403501
-            throw new Exception(ex.Message, ex);
         }
 
         ///<summary>Predefined ODException.ErrorCode field values. ErrorCode field is not limited to these values but this is a convenient way defined known error types.
@@ -125,13 +116,6 @@ namespace CodeBase
             //700-799 range. Values used by failed query exceptions.
             ///<summary>Generic database command failed to execute.</summary>
             DbQueryError = 700,
-            //800-899 range. Values used by BugSubmissions.
-            ///<summary>Specific error code that represents an unhandled exception that has a uniquely formatted Message property.
-            ///The goal of this special error code is to preserve StackTrace information from inner exceptions.
-            ///The first line of this UE's Message property will become the bug submission's ExceptionMessageText field.
-            ///All subsequent lines of this UE's Message property will become the bug submission's ExceptionStackTrace field.
-            ///This specific ErrorCode will be looked for within the heart of the BugSubmission constructor.</summary>
-            BugSubmissionMessage = 800,
         }
     }
 }

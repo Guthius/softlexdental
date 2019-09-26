@@ -137,10 +137,10 @@ namespace OpenDental {
 				labelShowInTerminal.Visible=false;
 				textShowInTerminal.Visible=false;
 				butToKiosk.Visible=false;
-				if(!ODBuild.IsDebug()) {
+
 					butPrint.Visible=false;
 					butPDF.Visible=false;
-				}
+				
 				butDelete.Visible=false;
 				butOK.Visible=false;
 				butChangePat.Visible=false;

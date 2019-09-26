@@ -331,8 +331,8 @@ namespace OpenDental
                     ex = e;
                 }
             });
-            //Throw any errors that happened within the worker delegate while we were in a threaded context.
-            ODException.TryThrowPreservedCallstack(ex);
+
+            if (ex != null) throw ex;
         }
 
         private void ODForm_FormClosed(object sender, FormClosedEventArgs e)
