@@ -158,7 +158,7 @@ namespace OpenDentBusiness
             {
                 commandText += " AND `name` IN(" + string.Join(", ", signalNames.Select(signalName => "'" + MySqlHelper.EscapeString(signalName) + "'")) + ") ";
             }
-            commandText += " GROUPY BY `name`, `external_id`, `external_date`, `param1`, `param2` ORDER BY `date`";
+            commandText += " GROUP BY `name`, `external_id`, `external_date`, `param1`, `param2` ORDER BY `date`";
 
             return SelectMany(commandText, FromReader,
                 new MySqlParameter("date", dateTimeSince));
