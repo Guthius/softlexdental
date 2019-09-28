@@ -25,7 +25,7 @@ namespace OpenDentBusiness
     /// When a reminder is sent for an appointment a record of that send is stored here. 
     /// This is used to prevent re-sends of the same reminder.
     /// </summary>
-    public class ApptReminderSent : DataRecord
+    public class AppointmentReminderSent : DataRecord
     {
         public long AppointmentId;
 
@@ -56,13 +56,13 @@ namespace OpenDentBusiness
         public bool SentEmail;
 
         /// <summary>
-        /// Constructs a new instance of the <see cref="ApptReminderSent"/> class.
+        /// Constructs a new instance of the <see cref="AppointmentReminderSent"/> class.
         /// </summary>
         /// <param name="dataReader">The data reader containing record data.</param>
-        /// <returns>A <see cref="ApptReminderSent"/> instance.</returns>
-        private static ApptReminderSent FromReader(MySqlDataReader dataReader)
+        /// <returns>A <see cref="AppointmentReminderSent"/> instance.</returns>
+        private static AppointmentReminderSent FromReader(MySqlDataReader dataReader)
         {
-            return new ApptReminderSent
+            return new AppointmentReminderSent
             {
                 Id = (long)dataReader["id"],
                 AppointmentId = (long)dataReader["appointment_id"],
@@ -79,7 +79,7 @@ namespace OpenDentBusiness
         /// </summary>
         /// <param name="appointmentId">The ID of the appointment.</param>
         /// <returns>A list of sent reminders.</returns>
-        public static List<ApptReminderSent> GetByAppointment(long appointmentId) =>
+        public static List<AppointmentReminderSent> GetByAppointment(long appointmentId) =>
             SelectMany("SELECT * FROM `appointment_reminders_sent` WHERE `appointment_id` = " + appointmentId, FromReader);
 
         /// <summary>
@@ -87,7 +87,7 @@ namespace OpenDentBusiness
         /// </summary>
         /// <param name="apptReminderSent">The sent appointment reminder.</param>
         /// <returns>The ID assigned to the sent appointment reminder.</returns>
-        public static long Insert(ApptReminderSent apptReminderSent) =>
+        public static long Insert(AppointmentReminderSent apptReminderSent) =>
             apptReminderSent.Id = DataConnection.ExecuteInsert(
                 "INSERT INTO `appointment_sent_reminders` (`appointment_id`, `appointment_date`, `date`, `appointment_reminder_rule_id`, " +
                 "`sent_sms`, `sent_email`) VALUES (?appointment_id, ?appointment_date, ?date, ?appointment_reminder_rule_id, " +
@@ -103,14 +103,14 @@ namespace OpenDentBusiness
         /// Inserts the specified sent appointment reminders into the database.
         /// </summary>
         /// <param name="apptRemindersSent">The sent appointment reminders.</param>
-        public static void InsertMany(List<ApptReminderSent> apptRemindersSent) =>
+        public static void InsertMany(List<AppointmentReminderSent> apptRemindersSent) =>
             apptRemindersSent.ForEach(apptReminderSent => Insert(apptReminderSent));
 
         /// <summary>
         /// Updates the specified appointment reminder in the database.
         /// </summary>
         /// <param name="apptReminderSent">The sent appointment reminder.</param>
-        public static void Update(ApptReminderSent apptReminderSent) =>
+        public static void Update(AppointmentReminderSent apptReminderSent) =>
             DataConnection.ExecuteInsert(
                 "UPDATE `appointment_sent_reminders` SET `appointment_id` = ?appointment_id, `appointment_date` = ?appointment_date, " +
                 "`date` = ?date, `appointment_reminder_rule_id` = ?appointment_reminder_rule_id, `sent_sms` = ?sent_sms, " +

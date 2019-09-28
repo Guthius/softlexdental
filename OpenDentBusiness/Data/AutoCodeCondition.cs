@@ -101,6 +101,11 @@ namespace OpenDentBusiness
         public static List<AutoCodeCondition> GetByAutoCodeItem(long autoCodeItemId) =>
             cache.Where(autoCodeCond => autoCodeCond.AutoCodeItemId == autoCodeItemId).ToList();
         
+        /// <summary>
+        /// Determines whether the specified condition is a surface condition.
+        /// </summary>
+        /// <param name="condition">The condition.</param>
+        /// <returns></returns>
         public static bool IsSurface(AutoCodeConditionType condition)
         {
             switch (condition)

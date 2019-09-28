@@ -348,7 +348,7 @@
     <Compile Include="X12\X12ClaimMatch.cs" />
     <Compile Include="X12\X12FunctionalGroup.cs" />
     <Compile Include="X12\X12Transaction.cs" />
-    <Compile Include="__WIP\AlertActionType.cs" />
+    <Compile Include="Data\AlertActionType.cs" />
     <Compile Include="__WIP\AlertSeverityType.cs" />
     <Compile Include="Crud\AppointmentCrud.cs" />
     <Compile Include="Crud\AppointmentRuleCrud.cs" />
@@ -527,10 +527,10 @@
     <Compile Include="Crud\QuestionDefCrud.cs" />
     <Compile Include="Crud\QuickPasteCatCrud.cs" />
     <Compile Include="Crud\QuickPasteNoteCrud.cs" />
-    <Compile Include="__WIP\AppointmentField.cs" />
-    <Compile Include="__WIP\AppointmentFieldDefinition.cs" />
-    <Compile Include="__WIP\AppointmentFieldType.cs" />
-    <Compile Include="__WIP\AutoCodeConditionType.cs" />
+    <Compile Include="Data\AppointmentField.cs" />
+    <Compile Include="Data\AppointmentFieldDefinition.cs" />
+    <Compile Include="Data\AppointmentFieldType.cs" />
+    <Compile Include="Data\AutoCodeConditionType.cs" />
     <Compile Include="__WIP\RecallCrud.cs" />
     <Compile Include="Crud\RecallTriggerCrud.cs" />
     <Compile Include="Crud\RecallTypeCrud.cs" />
@@ -966,10 +966,10 @@
     <Compile Include="TableTypes\FamAging.cs" />
     <Compile Include="TableTypes\FieldDefLink.cs" />
     <Compile Include="TableTypes\ClinicPref.cs" />
-    <Compile Include="__WIP\Alert.cs" />
+    <Compile Include="Data\Alert.cs" />
     <Compile Include="__WIP\AlertRead.cs" />
-    <Compile Include="__WIP\AlertSubscription.cs" />
-    <Compile Include="__WIP\ApptReminderSent.cs" />
+    <Compile Include="Data\AlertSubscription.cs" />
+    <Compile Include="Data\AppointmentReminderSent.cs" />
     <Compile Include="TableTypes\ApptReminderRule.cs" />
     <Compile Include="TableTypes\ConfirmationRequest.cs" />
     <Compile Include="TableTypes\FHIRContactPoint.cs" />
@@ -1015,7 +1015,7 @@
     <Compile Include="Data\ClinicUser.cs" />
     <Compile Include="__WIP\SecurityLogEvents.cs" />
     <Compile Include="Data\SecurityLogSource.cs" />
-    <Compile Include="__WIP\UserGroupUser.cs" />
+    <Compile Include="Data\UserGroupUser.cs" />
     <Compile Include="TableTypes\UserodApptView.cs" />
     <Compile Include="__WIP\UserPreference.cs" />
     <Compile Include="TableTypes\UserWeb.cs" />
@@ -1198,7 +1198,7 @@
     <Compile Include="TableTypes\ApptView.cs" />
     <Compile Include="TableTypes\ApptViewItem.cs" />
     <Compile Include="__WIP\AutoCode.cs" />
-    <Compile Include="__WIP\AutoCodeCondition.cs" />
+    <Compile Include="Data\AutoCodeCondition.cs" />
     <Compile Include="__WIP\AutoCodeItem.cs" />
     <Compile Include="__WIP\AutoNote.cs" />
     <Compile Include="__WIP\AutoNoteControl.cs" />
@@ -1325,7 +1325,7 @@
     <Compile Include="TableTypes\ToothInitial.cs" />
     <Compile Include="TableTypes\Transaction.cs" />
     <Compile Include="TableTypes\TreatPlan.cs" />
-    <Compile Include="__WIP\User.cs" />
+    <Compile Include="Data\User.cs" />
     <Compile Include="Data\UserGroup.cs" />
     <Compile Include="TableTypes\UserQuery.cs" />
     <Compile Include="TableTypes\ZipCode.cs" />

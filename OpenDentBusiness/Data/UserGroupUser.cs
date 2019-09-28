@@ -29,6 +29,11 @@ namespace OpenDentBusiness
         public long UserGroupId;
         public long UserId;
 
+        /// <summary>
+        /// Constructs a new instance of the <see cref="UserGroupUser"/> class.
+        /// </summary>
+        /// <param name="dataReader">The data reader containing record data.</param>
+        /// <returns>A <see cref="UserGroupUser"/> instance.</returns>
         static UserGroupUser FromReader(MySqlDataReader dataReader) =>
             new UserGroupUser(
                 dataReader.GetInt64(0), 
@@ -45,27 +50,55 @@ namespace OpenDentBusiness
             UserId = userId;
         }
 
+        /// <summary>
+        /// Gets a list of all user group users for the specified user.
+        /// </summary>
+        /// <param name="userId">The ID of the user.</param>
+        /// <returns>A list of user group users.</returns>
         public static IEnumerable<UserGroupUser> GetByUser(long userId) => 
             cache.Where(userGroupUser => userGroupUser.UserId == userId);
 
+        /// <summary>
+        /// Gets a list of all user group users for the specified user group.
+        /// </summary>
+        /// <param name="userGroupId">The ID of the user group.</param>
+        /// <returns>A list of user group users.</returns>
         public static IEnumerable<UserGroupUser> GetByUserGroup(long userGroupId) =>
             cache.Where(userGroupUser => userGroupUser.UserGroupId == userGroupId);
 
+        /// <summary>
+        /// Inserts the specified user group user into the database.
+        /// </summary>
+        /// <param name="userGroupUser"></param>
         public static void Insert(UserGroupUser userGroupUser) =>
             DataConnection.ExecuteNonQuery(
                 "INSERT IGNORE INTO `user_group_users` (?user_group_id, ?user_id)",
                     new MySqlParameter("user_group_id", userGroupUser.UserGroupId),
                     new MySqlParameter("user_id", userGroupUser.UserId));
 
+        /// <summary>
+        /// Creates a new user group user with the specified details and inserts it into the database.
+        /// </summary>
+        /// <param name="userGroupId">The ID of the user group.</param>
+        /// <param name="userId">The ID of the user.</param>
         public static void Insert(long userGroupId, long userId) =>
             Insert(new UserGroupUser(userGroupId, userId));
 
+        /// <summary>
+        /// Delete the specified user group user from the database.
+        /// </summary>
+        /// <param name="userGroupUser">The user group user.</param>
         public static void Delete(UserGroupUser userGroupUser) =>
            DataConnection.ExecuteNonQuery(
                "DELETE FROM `user_group_users` WHERE `user_group_id` = ?user_group_id AND `user_id` = ?user_id",
                    new MySqlParameter("user_group_id", userGroupUser.UserGroupId),
                    new MySqlParameter("user_id", userGroupUser.UserId));
 
+        /// <summary>
+        /// Synchronizes the list of user groups for the specified user in the database.
+        /// </summary>
+        /// <param name="user">The user.</param>
+        /// <param name="userGroupIds">The ID's of the user groups the user is a member of.</param>
         public static void Synchronize(User user, List<long> userGroupIds)
         {
             var userGroupUsers = GetByUser(user.Id);

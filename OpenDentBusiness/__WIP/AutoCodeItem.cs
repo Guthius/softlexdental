@@ -55,6 +55,11 @@ namespace OpenDentBusiness
             };
         }
 
+        /// <summary>
+        /// Gets the auto code item for the specified procedure code.
+        /// </summary>
+        /// <param name="procedureCodeId">The ID of the procedure code.</param>
+        /// <returns>The auto code item.</returns>
         public static AutoCodeItem GetByProcedureCode(long procedureCodeId) =>
             cache.SelectOne(autoCodeItem => autoCodeItem.ProcedureCodeId == procedureCodeId);
 

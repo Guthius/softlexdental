@@ -140,6 +140,11 @@ namespace OpenDentBusiness
         /// </summary>
         public override string ToString() => UserName;
 
+        /// <summary>
+        /// Constructs a new instance of the <see cref="User"/> class.
+        /// </summary>
+        /// <param name="dataReader">The data reader containing record data.</param>
+        /// <returns>A <see cref="User"/> instance.</returns>
         private static User FromReader(MySqlDataReader dataReader)
         {
             return new User
@@ -217,10 +222,6 @@ namespace OpenDentBusiness
         public static User GetByUserName(string userName) =>
             SelectOne("SELECT * FROM `users` WHERE `hidden` = 0 AND `username` = ?username", FromReader,
                 new MySqlParameter("username", userName));
-
-        public static User GetByDomainUser(string domainUser) =>
-            SelectOne("SELECT * FROM `users` WHERE `hidden` = 0 AND `domain_user` = ?domain_user", FromReader,
-                new MySqlParameter("domain_user", domainUser));
 
         /// <summary>
         /// Gets a list of all users that are members of the specified user group.
@@ -509,7 +510,7 @@ namespace OpenDentBusiness
             int countLower = 0;
             for (int i = 0; i < password.Length; i++)
             {
-                if (Char.IsLower(password[i]))
+                if (char.IsLower(password[i]))
                 {
                     countLower++;
                 }
@@ -536,7 +537,7 @@ namespace OpenDentBusiness
             int countNumber = 0;
             for (int i = 0; i < password.Length; i++)
             {
-                if (Char.IsNumber(password[i]))
+                if (char.IsNumber(password[i]))
                 {
                     countNumber++;
                 }
@@ -548,62 +549,21 @@ namespace OpenDentBusiness
             return "";
         }
 
-
-
+        /// <summary>
+        /// Gts the name of the specified user.
+        /// </summary>
+        /// <param name="userId">The ID of the user.</param>
+        /// <returns>The name of the user.</returns>
         public static string GetName(long userId) => GetById(userId)?.UserName ?? "";
 
-
-
-        public static bool IsInUserGroup(long userId, long userGroup) =>
-            UserGroupUser.GetByUser(userId).Select(x => x.UserGroupId).Contains(userGroup);
-
-
-
-
-
-        ///<summary>Returns the UserNum of the first non-hidden admin user if they have no password set.
-        ///It is very important to order by UserName in order to preserve old behavior of only considering the first Admin user we come across.
-        ///This method does not simply return the first admin user with no password.  It is explicit in only considering the FIRST admin user.
-        ///Returns 0 if there are no admin users or the first admin user found has a password set.</summary>
-        public static long GetFirstSecurityAdminUserNumNoPasswordNoCache()
-        {
-            //The query will order by UserName in order to preserve old behavior (mimics the cache).
-            //string command = @"SELECT userod.UserNum,CASE WHEN COALESCE(userod.Password,'')='' THEN 0 ELSE 1 END HasPassword 
-            //	FROM userod
-            //	INNER JOIN usergroupattach ON userod.UserNum=usergroupattach.UserNum
-            //	INNER JOIN grouppermission ON usergroupattach.UserGroupNum=grouppermission.UserGroupNum 
-            //	WHERE userod.IsHidden=0
-            //	AND grouppermission.PermType=" + POut.Int((int)Permissions.SecurityAdmin) + @"
-            //	GROUP BY userod.UserNum
-            //	ORDER BY userod.UserName
-            //	LIMIT 1";
-            //DataTable table = Db.GetTable(command);
-            //long userNumAdminNoPass = 0;
-            //if (table != null && table.Rows.Count > 0 && table.Rows[0]["HasPassword"].ToString() == "0")
-            //{
-            //    //The first admin user in the database does NOT have a password set.  Return their UserNum.
-            //    userNumAdminNoPass = PIn.Long(table.Rows[0]["UserNum"].ToString());
-            //}
-            //return userNumAdminNoPass;
-
-            return 0;
-        }
-
-
-
-        ///<summary>Returns all non-hidden UserNums (key) and UserNames (value) associated with the domain user name passed in.
-        ///Returns an empty dictionary if no matches were found.</summary>
-        //public static Dictionary<long, string> GetUsersByDomainUserName(string domainUser)
-        //{
-        //    string command = @"SELECT userod.UserNum, userod.UserName, userod.DomainUser 
-		// 		FROM userod 
-		// 		WHERE IsHidden=0";
-        //    //Not sure how to do an InvariantCultureIgnoreCase via a query so doing it over in C# in order to preserve old behavior.
-        //    return Db.GetTable(command).Select()
-        //        .Where(x => PIn.String(x["DomainUser"].ToString()).Equals(domainUser, StringComparison.InvariantCultureIgnoreCase))
-        //        .ToDictionary(x => PIn.Long(x["UserNum"].ToString()), x => PIn.String(x["UserName"].ToString()));
-        //}
-
+        /// <summary>
+        /// Checks wether the user is a member of the specified group.
+        /// </summary>
+        /// <param name="userId">The ID of the user.</param>
+        /// <param name="userGroupId">The ID of the user group.</param>
+        /// <returns>True if the user is a member of the specified group; otherwise, false.</returns>
+        public static bool IsInUserGroup(long userId, long userGroupId) =>
+            UserGroupUser.GetByUser(userId).Select(x => x.UserGroupId).Contains(userGroupId);
 
         /// <summary>
         /// Returns all users that are associated to the permission passed in. Returns empty list if no matches found.
@@ -623,48 +583,54 @@ namespace OpenDentBusiness
             return users;
         }
 
-
-
-
-
-        ///<summary>Returns all users selectable for the insurance verification list.  
-        ///Pass in an empty list to not filter by clinic.  
-        ///Set isAssigning to false to return only users who have an insurance already assigned.</summary>
+        /// <summary>
+        /// Returns all users selectable for the insurance verification list.  
+        /// Pass in an empty list to not filter by clinic.  
+        /// Set isAssigning to false to return only users who have an insurance already assigned.
+        /// </summary>
         public static List<User> GetUsersForVerifyList(List<long> clinicIds, bool isAssigning)
         {
-            //No need to check RemotingRole; no explicit call to db.
-            List<long> listUserNumsInInsVerify = InsVerifies.GetAllInsVerifyUserNums();
-            List<long> listUserNumsInClinic = new List<long>();
+            var listUserNumsInInsVerify = InsVerifies.GetAllInsVerifyUserNums();
+            var listUserNumsInClinic = new List<long>();
             if (clinicIds.Count > 0)
             {
-                List<ClinicUser> listUserClinics = new List<ClinicUser>();
+                var listUserClinics = new List<ClinicUser>();
                 for (int i = 0; i < clinicIds.Count; i++)
                 {
                     listUserNumsInClinic.AddRange(ClinicUser.GetForClinic(clinicIds[i]).Select(y => y.UserId).Distinct().ToList());
                 }
-                listUserNumsInClinic.AddRange(AllActive().FindAll(x => !x.ClinicRestricted).Select(x => x.Id).Distinct().ToList());//Always add unrestricted users into the list.
-                listUserNumsInClinic = listUserNumsInClinic.Distinct().ToList();//Remove duplicates that could possibly be in the list.
+
+                listUserNumsInClinic.AddRange(AllActive().FindAll(x => !x.ClinicRestricted).Select(x => x.Id).Distinct().ToList()); // Always add unrestricted users into the list.
+                listUserNumsInClinic = listUserNumsInClinic.Distinct().ToList(); // Remove duplicates that could possibly be in the list.
                 if (listUserNumsInClinic.Count > 0)
                 {
                     listUserNumsInInsVerify = listUserNumsInInsVerify.FindAll(x => listUserNumsInClinic.Contains(x));
                 }
-                listUserNumsInInsVerify.AddRange(GetById(listUserNumsInInsVerify).FindAll(x => !x.ClinicRestricted).Select(x => x.Id).Distinct().ToList());//Always add unrestricted users into the list.
+
+                listUserNumsInInsVerify.AddRange(GetById(listUserNumsInInsVerify).FindAll(x => !x.ClinicRestricted).Select(x => x.Id).Distinct().ToList()); // Always add unrestricted users into the list.
                 listUserNumsInInsVerify = listUserNumsInInsVerify.Distinct().ToList();
             }
 
-            List<User> listUsersWithPerm = GetByPermission(Permissions.InsPlanVerifyList, false);
+            var listUsersWithPerm = GetByPermission(Permissions.InsPlanVerifyList, false);
             if (isAssigning)
             {
                 if (clinicIds.Count == 0)
                 {
-                    return listUsersWithPerm;//Return unfiltered list of users with permission
+                    return listUsersWithPerm; // Return unfiltered list of users with permission
                 }
-                //Don't limit user list to already assigned insurance verifications.
-                return listUsersWithPerm.FindAll(x => listUserNumsInClinic.Contains(x.Id));//Return users with permission, limited by their clinics
+
+                // Don't limit user list to already assigned insurance verifications.
+                return listUsersWithPerm.FindAll(x => listUserNumsInClinic.Contains(x.Id)); // Return users with permission, limited by their clinics
             }
-            return listUsersWithPerm.FindAll(x => listUserNumsInInsVerify.Contains(x.Id));//Return users limited by permission, clinic, and having an insurance already assigned.
+
+            return listUsersWithPerm.FindAll(x => listUserNumsInInsVerify.Contains(x.Id)); // Return users limited by permission, clinic, and having an insurance already assigned.
         }
 
+        /// <summary>
+        /// Gets a list of users that only have access to the specified clinic.
+        /// </summary>
+        /// <param name="clinicId">The ID of the clinic.</param>
+        /// <returns>A list of users.</returns>
         public static List<User> GetUsersOnlyThisClinic(long clinicId) =>
             SelectMany(
                 "SELECT `users`.* FROM (" +
@@ -676,6 +642,11 @@ namespace OpenDentBusiness
                 "INNER JOIN `user_clinics` ON (`user_clinics`.`user_id` = `users`.`id` AND `user_clinics`.`clinic_id` = " + clinicId + ") " +
                 "INNER JOIN `users` ON `users`.`id` = `user_clinics`.`user_id`", FromReader);
 
+        /// <summary>
+        /// Checks whether a user with the specified name exists in the database.
+        /// </summary>
+        /// <param name="username">The username to check.</param>
+        /// <returns>True if the username exists; otherwise, false.</returns>
         public static bool UserNameExists(string username) =>
             DataConnection.ExecuteLong(
                 "SELECT COUNT(*) FROM `users` WHERE `hidden` = 0 AND `username` = ?username", 

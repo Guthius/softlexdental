@@ -176,6 +176,4 @@ namespace OpenDentBusiness
         public static string GetPickListByFieldName(string fieldName) =>
             GetByFieldName(fieldName)?.PickList ?? "";
     }
-
-
 }
