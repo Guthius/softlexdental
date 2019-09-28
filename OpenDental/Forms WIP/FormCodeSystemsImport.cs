@@ -754,92 +754,92 @@ If the master term dictionary or software program containing the UCUM table, UCU
             ///<summary>Will request, download, and import codeSystem from webservice. Returns false if unsuccessful.</summary>
             private bool RequestCodeSystemDownloadHelper(ref string failText, ref int numCodesImported, ref int numCodesUpdated)
             {
-                try
-                {
-                    //If local file was not provided then try to download it from Customer Update web service. 
-                    //Local file will only be provided for CPT code system.
-                    if (string.IsNullOrEmpty(_localFilePath))
-                    {
-                        string result = SendAndReceiveDownloadXml(_codeSystem.Name);
-                        XmlDocument doc = new XmlDocument();
-                        doc.LoadXml(result);
-                        string strError = WebServiceRequest.CheckForErrors(doc);
-                        if (!string.IsNullOrEmpty(strError))
-                        {
-                            throw new Exception(strError);
-                        }
-                        XmlNode node = doc.SelectSingleNode("//CodeSystemURL");
-                        if (node == null)
-                        {
-                            throw new Exception(Lan.g("CodeSystemImporter", "Code System URL is empty for ") + ": " + _codeSystem.Name);
-                        }
-                        //Node's inner text contains the URL
-                        _localFilePath = DownloadFileHelper(node.InnerText);
-                    }
-                    if (!File.Exists(_localFilePath))
-                    {
-                        throw new Exception(Lan.g("CodeSystemImporter", "Local file not found ") + ": " + _localFilePath);
-                    }
-                    switch (_codeSystem.Name)
-                    {
-                        case "CDCREC":
-                            CodeSystem.ImportCdcrec(_localFilePath, new CodeSystem.ProgressArgs(ImportProgress), ref _quit, ref numCodesImported, ref numCodesUpdated,
-                                _updateExisting);
-                            break;
-                        case "CVX":
-                            CodeSystem.ImportCvx(_localFilePath, new CodeSystem.ProgressArgs(ImportProgress), ref _quit, ref numCodesImported, ref numCodesUpdated,
-                                _updateExisting);
-                            break;
-                        case "HCPCS":
-                            CodeSystem.ImportHcpcs(_localFilePath, new CodeSystem.ProgressArgs(ImportProgress), ref _quit, ref numCodesImported, ref numCodesUpdated,
-                                _updateExisting);
-                            break;
-                        case "ICD10CM":
-                            CodeSystem.ImportIcd10(_localFilePath, new CodeSystem.ProgressArgs(ImportProgress), ref _quit, ref numCodesImported, ref numCodesUpdated,
-                                _updateExisting);
-                            break;
-                        case "ICD9CM":
-                            CodeSystem.ImportIcd9(_localFilePath, new CodeSystem.ProgressArgs(ImportProgress), ref _quit, ref numCodesImported, ref numCodesUpdated,
-                                _updateExisting);
-                            break;
-                        case "LOINC":
-                            CodeSystem.ImportLoinc(_localFilePath, new CodeSystem.ProgressArgs(ImportProgress), ref _quit, ref numCodesImported, ref numCodesUpdated,
-                                _updateExisting);
-                            break;
-                        case "RXNORM":
-                            CodeSystem.ImportRxNorm(_localFilePath, new CodeSystem.ProgressArgs(ImportProgress), ref _quit, ref numCodesImported, ref numCodesUpdated,
-                                _updateExisting);
-                            break;
-                        case "SNOMEDCT":
-                            CodeSystem.ImportSnomed(_localFilePath, new CodeSystem.ProgressArgs(ImportProgress), ref _quit, ref numCodesImported, ref numCodesUpdated,
-                                _updateExisting);
-                            break;
-                        case "SOP":
-                            CodeSystem.ImportSop(_localFilePath, new CodeSystem.ProgressArgs(ImportProgress), ref _quit, ref numCodesImported, ref numCodesUpdated,
-                                _updateExisting);
-                            break;
-                        case "UCUM":
-                            CodeSystem.ImportUcum(_localFilePath, new CodeSystem.ProgressArgs(ImportProgress), ref _quit, ref numCodesImported, ref numCodesUpdated,
-                                _updateExisting);
-                            break;
-                        case "CPT":
-                            CodeSystem.ImportCpt(_localFilePath, new CodeSystem.ProgressArgs(ImportProgress), ref _quit, ref numCodesImported, ref numCodesUpdated,
-                                _versionID);
-                            break;
-                        case "CDT":  //import not supported
-                        case "AdministrativeSex":  //import not supported
-                        default:  //new code system perhaps?
-                            throw new Exception(Lan.g("CodeSystemImporter", "Unsupported Code System") + ": " + _codeSystem.Name);
-                    }
-                    //Import succeded so delete the import file where necessary.
-                    DeleteImportFileIfNecessary();
-                    //We got here so everything succeeded.
-                    return true;
-                }
-                catch (Exception ex)
-                {
-                    failText = ex.Message;
-                }
+                //try
+                //{
+                //    //If local file was not provided then try to download it from Customer Update web service. 
+                //    //Local file will only be provided for CPT code system.
+                //    if (string.IsNullOrEmpty(_localFilePath))
+                //    {
+                //        string result = SendAndReceiveDownloadXml(_codeSystem.Name);
+                //        XmlDocument doc = new XmlDocument();
+                //        doc.LoadXml(result);
+                //        string strError = WebServiceRequest.CheckForErrors(doc);
+                //        if (!string.IsNullOrEmpty(strError))
+                //        {
+                //            throw new Exception(strError);
+                //        }
+                //        XmlNode node = doc.SelectSingleNode("//CodeSystemURL");
+                //        if (node == null)
+                //        {
+                //            throw new Exception(Lan.g("CodeSystemImporter", "Code System URL is empty for ") + ": " + _codeSystem.Name);
+                //        }
+                //        //Node's inner text contains the URL
+                //        _localFilePath = DownloadFileHelper(node.InnerText);
+                //    }
+                //    if (!File.Exists(_localFilePath))
+                //    {
+                //        throw new Exception(Lan.g("CodeSystemImporter", "Local file not found ") + ": " + _localFilePath);
+                //    }
+                //    switch (_codeSystem.Name)
+                //    {
+                //        case "CDCREC":
+                //            CodeSystem.ImportCdcrec(_localFilePath, new CodeSystem.ProgressArgs(ImportProgress), ref _quit, ref numCodesImported, ref numCodesUpdated,
+                //                _updateExisting);
+                //            break;
+                //        case "CVX":
+                //            CodeSystem.ImportCvx(_localFilePath, new CodeSystem.ProgressArgs(ImportProgress), ref _quit, ref numCodesImported, ref numCodesUpdated,
+                //                _updateExisting);
+                //            break;
+                //        case "HCPCS":
+                //            CodeSystem.ImportHcpcs(_localFilePath, new CodeSystem.ProgressArgs(ImportProgress), ref _quit, ref numCodesImported, ref numCodesUpdated,
+                //                _updateExisting);
+                //            break;
+                //        case "ICD10CM":
+                //            CodeSystem.ImportIcd10(_localFilePath, new CodeSystem.ProgressArgs(ImportProgress), ref _quit, ref numCodesImported, ref numCodesUpdated,
+                //                _updateExisting);
+                //            break;
+                //        case "ICD9CM":
+                //            CodeSystem.ImportIcd9(_localFilePath, new CodeSystem.ProgressArgs(ImportProgress), ref _quit, ref numCodesImported, ref numCodesUpdated,
+                //                _updateExisting);
+                //            break;
+                //        case "LOINC":
+                //            CodeSystem.ImportLoinc(_localFilePath, new CodeSystem.ProgressArgs(ImportProgress), ref _quit, ref numCodesImported, ref numCodesUpdated,
+                //                _updateExisting);
+                //            break;
+                //        case "RXNORM":
+                //            CodeSystem.ImportRxNorm(_localFilePath, new CodeSystem.ProgressArgs(ImportProgress), ref _quit, ref numCodesImported, ref numCodesUpdated,
+                //                _updateExisting);
+                //            break;
+                //        case "SNOMEDCT":
+                //            CodeSystem.ImportSnomed(_localFilePath, new CodeSystem.ProgressArgs(ImportProgress), ref _quit, ref numCodesImported, ref numCodesUpdated,
+                //                _updateExisting);
+                //            break;
+                //        case "SOP":
+                //            CodeSystem.ImportSop(_localFilePath, new CodeSystem.ProgressArgs(ImportProgress), ref _quit, ref numCodesImported, ref numCodesUpdated,
+                //                _updateExisting);
+                //            break;
+                //        case "UCUM":
+                //            CodeSystem.ImportUcum(_localFilePath, new CodeSystem.ProgressArgs(ImportProgress), ref _quit, ref numCodesImported, ref numCodesUpdated,
+                //                _updateExisting);
+                //            break;
+                //        case "CPT":
+                //            CodeSystem.ImportCpt(_localFilePath, new CodeSystem.ProgressArgs(ImportProgress), ref _quit, ref numCodesImported, ref numCodesUpdated,
+                //                _versionID);
+                //            break;
+                //        case "CDT":  //import not supported
+                //        case "AdministrativeSex":  //import not supported
+                //        default:  //new code system perhaps?
+                //            throw new Exception(Lan.g("CodeSystemImporter", "Unsupported Code System") + ": " + _codeSystem.Name);
+                //    }
+                //    //Import succeded so delete the import file where necessary.
+                //    DeleteImportFileIfNecessary();
+                //    //We got here so everything succeeded.
+                //    return true;
+                //}
+                //catch (Exception ex)
+                //{
+                //    failText = ex.Message;
+                //}
                 //We got here so something failed.
                 return false;
             }

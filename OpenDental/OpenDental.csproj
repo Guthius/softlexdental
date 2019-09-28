@@ -13,7 +13,8 @@
     <AssemblyName>OpenDental</AssemblyName>
     <TargetZone>LocalIntranet</TargetZone>
     <GenerateManifests>false</GenerateManifests>
-    <ApplicationIcon>Misc\App.ico</ApplicationIcon>
+    <ApplicationIcon>
+    </ApplicationIcon>
     <StartupObject>
     </StartupObject>
     <FileUpgradeFlags>
@@ -631,7 +632,6 @@
       <DependentUpon>FormOpenDental.cs</DependentUpon>
     </Compile>
     <Compile Include="Misc\Aggregate.cs" />
-    <Compile Include="Misc\WebServiceRequest.cs" />
     <Compile Include="Module.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -7372,10 +7372,6 @@
       <DependentUpon>ContrTable.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Tables Old Grids\TableAutoItem.resx" />
-    <EmbeddedResource Include="Tables Old Grids\TableCarriers.resx" />
-    <EmbeddedResource Include="Tables Old Grids\TableProvIdent.resx" />
-    <EmbeddedResource Include="Tables Old Grids\TableTimeBar.resx" />
     <EmbeddedResource Include="UI\Appt J\ContrApptSingleJ.resx">
       <DependentUpon>ContrApptSingleJ.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -7937,8 +7933,6 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="EraseCircle.cur" />
-    <Content Include="Misc\App.ico" />
-    <Content Include="Misc\TerminalMgr.ico" />
     <EmbeddedResource Include="Forms Reports\FormRpInsOverpaid.resx">
       <DependentUpon>FormRpInsOverpaid.cs</DependentUpon>
       <SubType>Designer</SubType>

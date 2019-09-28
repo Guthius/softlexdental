@@ -769,34 +769,39 @@ namespace OpenDental {
 				+"from Import Ins Plans 834.",SecurityLogSource.InsPlanImport834,insPlan.PlanNum,insPlan.SecDateTEdit);
 		}
 
-		///<summary>For the given x834, tries to move the file to the archive folder. Will return if this succeeded or not.</summary>
-		private static bool MoveFileToArchiveFolder(X834 x834) {
-			try {
-				string dir=Path.GetDirectoryName(x834.FilePath);
-				string dirArchive= Storage.Default.CombinePath(dir,"Archive");
-				if(!Directory.Exists(dirArchive)) {
-					Directory.CreateDirectory(dirArchive);
-				}
-				string destPathBasic= Storage.Default.CombinePath(dirArchive,Path.GetFileName(x834.FilePath));
-				string destPathExt=Path.GetExtension(destPathBasic);
-				string destPathBasicRoot=destPathBasic.Substring(0,destPathBasic.Length-destPathExt.Length);
-				string destPath=destPathBasic;
-				int attemptCount=1;
-				while(File.Exists(destPath)) {
-					attemptCount++;
-					destPath=destPathBasicRoot+"_"+attemptCount+destPathExt;
-				}
-				File.Move(x834.FilePath,destPath);
-			}
-			catch(Exception ex) {
-				if(!ODInitialize.IsRunningInUnitTest) {
-					MessageBox.Show(Lan.g("FormEtrans834Preview","Failed to move file")+" '"+x834.FilePath+"' "
-						+Lan.g("FormEtrans834Preview","to archive, probably due to a permission issue.")+"  "+ex.Message);
-				}
-				return false;
-			}
-			return true;
-		}
+        ///<summary>For the given x834, tries to move the file to the archive folder. Will return if this succeeded or not.</summary>
+        private static bool MoveFileToArchiveFolder(X834 x834)
+        {
+            try
+            {
+                string dir = Path.GetDirectoryName(x834.FilePath);
+                string dirArchive = Storage.Default.CombinePath(dir, "Archive");
+                if (!Directory.Exists(dirArchive))
+                {
+                    Directory.CreateDirectory(dirArchive);
+                }
+                string destPathBasic = Storage.Default.CombinePath(dirArchive, Path.GetFileName(x834.FilePath));
+                string destPathExt = Path.GetExtension(destPathBasic);
+                string destPathBasicRoot = destPathBasic.Substring(0, destPathBasic.Length - destPathExt.Length);
+                string destPath = destPathBasic;
+                int attemptCount = 1;
+                while (File.Exists(destPath))
+                {
+                    attemptCount++;
+                    destPath = destPathBasicRoot + "_" + attemptCount + destPathExt;
+                }
+                File.Move(x834.FilePath, destPath);
+            }
+            catch (Exception ex)
+            {
+
+                MessageBox.Show(Lan.g("FormEtrans834Preview", "Failed to move file") + " '" + x834.FilePath + "' "
+                    + Lan.g("FormEtrans834Preview", "to archive, probably due to a permission issue.") + "  " + ex.Message);
+
+                return false;
+            }
+            return true;
+        }
 
 		///<summary>For the given information creates an insurance plan if insPlan is null. If one is passed in, it updates the plan. Returns the
 		///inserted/updated InsPlan object.</summary>

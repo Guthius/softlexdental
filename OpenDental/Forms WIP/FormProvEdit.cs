@@ -332,7 +332,6 @@ namespace OpenDental{
 			this.tbProvIdent.Location = new System.Drawing.Point(11, 58);
 			this.tbProvIdent.Name = "tbProvIdent";
 			this.tbProvIdent.ScrollValue = 211;
-			this.tbProvIdent.SelectedIndices = new int[0];
 			this.tbProvIdent.SelectionMode = System.Windows.Forms.SelectionMode.One;
 			this.tbProvIdent.Size = new System.Drawing.Size(319, 88);
 			this.tbProvIdent.TabIndex = 43;

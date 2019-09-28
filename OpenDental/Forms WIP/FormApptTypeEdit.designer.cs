@@ -169,7 +169,6 @@ namespace OpenDental{
 			this.tbTime.Location = new System.Drawing.Point(7, 12);
 			this.tbTime.Name = "tbTime";
 			this.tbTime.ScrollValue = 150;
-			this.tbTime.SelectedIndices = new int[0];
 			this.tbTime.SelectionMode = System.Windows.Forms.SelectionMode.None;
 			this.tbTime.Size = new System.Drawing.Size(15, 561);
 			this.tbTime.TabIndex = 187;

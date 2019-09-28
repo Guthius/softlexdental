@@ -125,7 +125,6 @@ namespace OpenDental{
 			this.tbAutoItem.Location = new System.Drawing.Point(36, 94);
 			this.tbAutoItem.Name = "tbAutoItem";
 			this.tbAutoItem.ScrollValue = 1;
-			this.tbAutoItem.SelectedIndices = new int[0];
 			this.tbAutoItem.SelectionMode = System.Windows.Forms.SelectionMode.One;
 			this.tbAutoItem.Size = new System.Drawing.Size(719, 356);
 			this.tbAutoItem.TabIndex = 24;

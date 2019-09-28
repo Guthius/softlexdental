@@ -230,7 +230,6 @@
     </Compile>
     <Compile Include="Utilities\ODBuild.cs" />
     <Compile Include="Utilities\ODClassExtensions.cs" />
-    <Compile Include="Utilities\ODInitialize.cs" />
     <Compile Include="Utilities\ODInvokeExtensions.cs" />
     <Compile Include="Utilities\DateSpan.cs" />
     <Compile Include="Utilities\LimitedSizeQueue.cs" />
