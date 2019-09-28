@@ -72,10 +72,12 @@ namespace OpenDentBusiness
                 Hidden = Convert.ToBoolean(dataReader["hidden"])
             };
 
+            // TODO: Convert color column to string...
+
             var color = dataReader["color"];
             if (color != DBNull.Value)
             {
-                definition.Color = ColorTranslator.FromHtml(Convert.ToString(color));
+                definition.Color = Color.FromArgb(Convert.ToInt32(color));
             }
 
             return definition;
@@ -139,7 +141,7 @@ namespace OpenDentBusiness
                     new MySqlParameter("category", (int)definition.Category),
                     new MySqlParameter("description", definition.Description),
                     new MySqlParameter("value", definition.Value),
-                    new MySqlParameter("color", ColorTranslator.ToHtml(definition.Color)),
+                    new MySqlParameter("color", definition.Color.ToArgb()),
                     new MySqlParameter("sort_order", definition.SortOrder),
                     new MySqlParameter("hidden", definition.Hidden));
 
@@ -153,7 +155,7 @@ namespace OpenDentBusiness
                      new MySqlParameter("category", (int)definition.Category),
                      new MySqlParameter("description", definition.Description),
                      new MySqlParameter("value", definition.Value),
-                     new MySqlParameter("color", ColorTranslator.ToHtml(definition.Color)),
+                     new MySqlParameter("color", definition.Color.ToArgb()),
                      new MySqlParameter("sort_order", definition.SortOrder),
                      new MySqlParameter("hidden", definition.Hidden),
                      new MySqlParameter("id", definition.Id));
