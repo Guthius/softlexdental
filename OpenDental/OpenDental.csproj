@@ -428,7 +428,7 @@
     <Compile Include="Forms WIP\FormApptEdit.designer.cs">
       <DependentUpon>FormApptEdit.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms WIP\FormApptLists.Designer.cs">
+    <Compile Include="Forms\FormApptLists.Designer.cs">
       <DependentUpon>FormApptLists.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms WIP\FormApptRules.Designer.cs">
@@ -526,6 +526,18 @@
     </Compile>
     <Compile Include="Forms WIP\FormPayConnectSetup.Designer.cs">
       <DependentUpon>FormPayConnectSetup.cs</DependentUpon>
+    </Compile>
+    <Compile Include="__WIP\FormAutoCode.Designer.cs">
+      <DependentUpon>FormAutoCode.cs</DependentUpon>
+    </Compile>
+    <Compile Include="__WIP\FormAutoCodeEdit.Designer.cs">
+      <DependentUpon>FormAutoCodeEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="__WIP\FormAutoCodeLessIntrusive.Designer.cs">
+      <DependentUpon>FormAutoCodeLessIntrusive.cs</DependentUpon>
+    </Compile>
+    <Compile Include="__WIP\FormAutoItemEdit.Designer.cs">
+      <DependentUpon>FormAutoItemEdit.cs</DependentUpon>
     </Compile>
     <Compile Include="__WIP\FormClockEventEdit.Designer.cs">
       <DependentUpon>FormClockEventEdit.cs</DependentUpon>
@@ -3821,7 +3833,7 @@
     <Compile Include="Forms WIP\FormAging.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms WIP\FormApptLists.cs">
+    <Compile Include="Forms\FormApptLists.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms WIP\FormApptRuleEdit.cs">
@@ -3845,16 +3857,16 @@
     <Compile Include="Forms WIP\FormAuditOneType.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms WIP\FormAutoCode.cs">
+    <Compile Include="__WIP\FormAutoCode.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms WIP\FormAutoCodeEdit.cs">
+    <Compile Include="__WIP\FormAutoCodeEdit.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms WIP\FormAutoCodeLessIntrusive.cs">
+    <Compile Include="__WIP\FormAutoCodeLessIntrusive.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms WIP\FormAutoItemEdit.cs">
+    <Compile Include="__WIP\FormAutoItemEdit.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms WIP\FormBackup.cs">
@@ -6547,7 +6559,7 @@
       <DependentUpon>FormAging.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms WIP\FormApptLists.resx">
+    <EmbeddedResource Include="Forms\FormApptLists.resx">
       <DependentUpon>FormApptLists.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -6579,19 +6591,19 @@
       <DependentUpon>FormAuditOneType.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms WIP\FormAutoCode.resx">
+    <EmbeddedResource Include="__WIP\FormAutoCode.resx">
       <DependentUpon>FormAutoCode.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms WIP\FormAutoCodeEdit.resx">
+    <EmbeddedResource Include="__WIP\FormAutoCodeEdit.resx">
       <DependentUpon>FormAutoCodeEdit.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms WIP\FormAutoCodeLessIntrusive.resx">
+    <EmbeddedResource Include="__WIP\FormAutoCodeLessIntrusive.resx">
       <DependentUpon>FormAutoCodeLessIntrusive.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms WIP\FormAutoItemEdit.resx">
+    <EmbeddedResource Include="__WIP\FormAutoItemEdit.resx">
       <DependentUpon>FormAutoItemEdit.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>

@@ -53,6 +53,19 @@ namespace OpenDentBusiness
         public bool LessIntrusive;
 
         /// <summary>
+        /// Returns a string representation of the auto code.
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            if (Hidden)
+            {
+                return Description + " (hidden)";
+            }
+            return Description;
+        }
+
+        /// <summary>
         /// Constructs a new instance of the <see cref="AutoCode"/> class.
         /// </summary>
         /// <param name="dataReader">The data reader containing record data.</param>

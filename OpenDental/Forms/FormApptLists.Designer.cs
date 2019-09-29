@@ -124,7 +124,7 @@
             this.asapButton.Size = new System.Drawing.Size(120, 40);
             this.asapButton.TabIndex = 9;
             this.asapButton.Text = "ASAP";
-            this.asapButton.Click += new System.EventHandler(this.asapButton_Click);
+            this.asapButton.Click += new System.EventHandler(this.AsapButton_Click);
             // 
             // unscheduledButton
             // 
@@ -133,7 +133,7 @@
             this.unscheduledButton.Size = new System.Drawing.Size(120, 40);
             this.unscheduledButton.TabIndex = 7;
             this.unscheduledButton.Text = "Unscheduled";
-            this.unscheduledButton.Click += new System.EventHandler(this.unscheduledButton_Click);
+            this.unscheduledButton.Click += new System.EventHandler(this.UnscheduledButton_Click);
             // 
             // plannedTrackerButton
             // 
@@ -142,7 +142,7 @@
             this.plannedTrackerButton.Size = new System.Drawing.Size(120, 40);
             this.plannedTrackerButton.TabIndex = 5;
             this.plannedTrackerButton.Text = "Planned Tracker";
-            this.plannedTrackerButton.Click += new System.EventHandler(this.plannedTrackerButton_Click);
+            this.plannedTrackerButton.Click += new System.EventHandler(this.PlannedTrackerButton_Click);
             // 
             // confirmationsButton
             // 
@@ -151,7 +151,7 @@
             this.confirmationsButton.Size = new System.Drawing.Size(120, 40);
             this.confirmationsButton.TabIndex = 3;
             this.confirmationsButton.Text = "Confirmations";
-            this.confirmationsButton.Click += new System.EventHandler(this.confirmationsButton_Click);
+            this.confirmationsButton.Click += new System.EventHandler(this.ConfirmationsButton_Click);
             // 
             // recallsButton
             // 
@@ -160,7 +160,7 @@
             this.recallsButton.Size = new System.Drawing.Size(120, 40);
             this.recallsButton.TabIndex = 1;
             this.recallsButton.Text = "Recall";
-            this.recallsButton.Click += new System.EventHandler(this.recallsButton_Click);
+            this.recallsButton.Click += new System.EventHandler(this.RecallsButton_Click);
             // 
             // cancelButton
             // 
@@ -179,7 +179,7 @@
             this.radiologyButton.Size = new System.Drawing.Size(120, 40);
             this.radiologyButton.TabIndex = 11;
             this.radiologyButton.Text = "Radiology";
-            this.radiologyButton.Click += new System.EventHandler(this.radiologyButton_Click);
+            this.radiologyButton.Click += new System.EventHandler(this.RadiologyButton_Click);
             // 
             // label7
             // 
@@ -200,7 +200,7 @@
             this.insuranceVerifyButton.Size = new System.Drawing.Size(120, 40);
             this.insuranceVerifyButton.TabIndex = 13;
             this.insuranceVerifyButton.Text = "Ins Verify";
-            this.insuranceVerifyButton.Click += new System.EventHandler(this.insuranceVerifyButton_Click);
+            this.insuranceVerifyButton.Click += new System.EventHandler(this.InsuranceVerifyButton_Click);
             // 
             // label8
             // 

@@ -19,9 +19,9 @@
 namespace OpenDentBusiness
 {
     /// <summary>
-    /// Identifies the condition type of a <see cref="AutoCodeCondition"/>.
+    /// Identifies the condition type of a <see cref="AutoCodeItemCondition"/>.
     /// </summary>
-    public enum AutoCodeConditionType
+    public enum AutoCodeItemConditionType
     {
         Anterior,
         Posterior,

@@ -35,10 +35,9 @@ namespace OpenDentBusiness
         public long ProcedureCodeId;
 
         /// <summary>
-        /// Only used in the validation section when closing FormAutoCodeEdit.
-        /// Will normally be empty.
+        /// Gets or sets the conditions of the auto code item.
         /// </summary>
-        public List<AutoCodeCondition> Conditions;
+        public List<AutoCodeItemConditionType> Conditions { get; set; }
 
         /// <summary>
         /// Constructs a new instance of the <see cref="AutoCodeItem"/> class.
@@ -110,12 +109,12 @@ namespace OpenDentBusiness
 
             foreach (var autoCodeItem in autoCodeItems)
             {
-                var autoCodeConditions = AutoCodeCondition.GetByAutoCodeItem(autoCodeItem.Id);
+                var autoCodeConditions = AutoCodeItemCondition.GetByAutoCodeItem(autoCodeItem.Id);
 
                 var conditionsMet = true;
                 foreach (var autoCodeCondition in autoCodeConditions)
                 {
-                    if (!AutoCodeCondition.CheckCondition(autoCodeCondition.Condition, toothNumber, surface, isAdditional, willBeMissing, age))
+                    if (!AutoCodeItemCondition.CheckCondition(autoCodeCondition.Condition, toothNumber, surface, isAdditional, willBeMissing, age))
                     {
                         conditionsMet = false;
 
@@ -148,12 +147,12 @@ namespace OpenDentBusiness
             var autoCodeItems = GetByAutoCode(tempAutoCodeItem.AutoCodeId);
             foreach (var autoCodeItem in autoCodeItems)
             {
-                var autoCodeConditions = AutoCodeCondition.GetByAutoCodeItem(autoCodeItem.Id);
+                var autoCodeConditions = AutoCodeItemCondition.GetByAutoCodeItem(autoCodeItem.Id);
 
                 var conditionsMet = true;
                 foreach (var autoCodeCondition in autoCodeConditions)
                 {
-                    if (!AutoCodeCondition.CheckCondition(autoCodeCondition.Condition, toothNumber, surface, isAdditional, willBeMissing, age))
+                    if (!AutoCodeItemCondition.CheckCondition(autoCodeCondition.Condition, toothNumber, surface, isAdditional, willBeMissing, age))
                     {
                         conditionsMet = false;
 
