@@ -1030,19 +1030,13 @@ namespace OpenDental
                 // TODO: myOutlookBar.RefreshButtons();
                 if (Preference.GetBool(PreferenceName.EasyHideDentalSchools))
                 {
-                    menuItemSchoolClass.Visible = false;
-                    menuItemSchoolCourses.Visible = false;
                     menuItemDentalSchools.Visible = false;
                     menuItemRequirementsNeeded.Visible = false;
-                    menuItemReqStudents.Visible = false;
                     menuItemEvaluations.Visible = false;
                 }
                 else
                 {
-                    menuItemSchoolClass.Visible = true;
-                    menuItemSchoolCourses.Visible = true;
                     menuItemRequirementsNeeded.Visible = true;
-                    menuItemReqStudents.Visible = true;
                 }
                 if (Preference.GetBool(PreferenceName.EasyHideRepeatCharges))
                 {

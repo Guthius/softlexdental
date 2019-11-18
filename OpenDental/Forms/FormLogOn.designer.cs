@@ -31,12 +31,12 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormLogOn));
             this.acceptButton = new System.Windows.Forms.Button();
-            this.logoPictureBox = new System.Windows.Forms.PictureBox();
             this.usernameTextBox = new System.Windows.Forms.TextBox();
             this.passwordTextBox = new System.Windows.Forms.TextBox();
             this.cancelButton = new System.Windows.Forms.Button();
             this.passwordLabel = new System.Windows.Forms.Label();
             this.usernameLabel = new System.Windows.Forms.Label();
+            this.logoPictureBox = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.logoPictureBox)).BeginInit();
             this.SuspendLayout();
             // 
@@ -49,17 +49,6 @@
             this.acceptButton.TabIndex = 4;
             this.acceptButton.Text = "&OK";
             this.acceptButton.Click += new System.EventHandler(this.AcceptButton_Click);
-            // 
-            // logoPictureBox
-            // 
-            this.logoPictureBox.BackColor = System.Drawing.Color.White;
-            this.logoPictureBox.Image = ((System.Drawing.Image)(resources.GetObject("logoPictureBox.Image")));
-            this.logoPictureBox.Location = new System.Drawing.Point(13, 10);
-            this.logoPictureBox.Margin = new System.Windows.Forms.Padding(3, 3, 3, 10);
-            this.logoPictureBox.Name = "logoPictureBox";
-            this.logoPictureBox.Size = new System.Drawing.Size(200, 50);
-            this.logoPictureBox.TabIndex = 59;
-            this.logoPictureBox.TabStop = false;
             // 
             // usernameTextBox
             // 
@@ -107,6 +96,18 @@
             this.usernameLabel.Text = "Username";
             this.usernameLabel.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
             // 
+            // logoPictureBox
+            // 
+            this.logoPictureBox.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.logoPictureBox.BackColor = System.Drawing.Color.White;
+            this.logoPictureBox.Image = ((System.Drawing.Image)(resources.GetObject("logoPictureBox.Image")));
+            this.logoPictureBox.Location = new System.Drawing.Point(112, 10);
+            this.logoPictureBox.Margin = new System.Windows.Forms.Padding(3, 3, 3, 10);
+            this.logoPictureBox.Name = "logoPictureBox";
+            this.logoPictureBox.Size = new System.Drawing.Size(200, 50);
+            this.logoPictureBox.TabIndex = 60;
+            this.logoPictureBox.TabStop = false;
+            // 
             // FormLogOn
             // 
             this.AcceptButton = this.acceptButton;
@@ -124,7 +125,7 @@
             this.MinimizeBox = false;
             this.Name = "FormLogOn";
             this.ShowInTaskbar = false;
-            this.Text = "Log On";
+            this.Text = "Log on";
             this.Load += new System.EventHandler(this.FormLogOn_Load);
             ((System.ComponentModel.ISupportInitialize)(this.logoPictureBox)).EndInit();
             this.ResumeLayout(false);

@@ -1605,7 +1605,7 @@
             this.Menu = this.mainMenu;
             this.Name = "FormOpenDental";
             this.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.Text = "Softlex";
+            this.Text = "Imedisoft";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Deactivate += new System.EventHandler(this.FormOpenDental_Deactivate);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormOpenDental_FormClosing);

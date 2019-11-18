@@ -594,6 +594,8 @@ namespace OpenDentBusiness
         EasyHideCapitation,
         [PrefName(ValueType = PrefValueType.BOOL)]
         EasyHideClinical,
+
+        [Obsolete]
         [PrefName(ValueType = PrefValueType.BOOL)]
         EasyHideDentalSchools,
         [PrefName(ValueType = PrefValueType.BOOL)]
