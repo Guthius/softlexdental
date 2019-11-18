@@ -628,13 +628,12 @@ namespace OpenDental{
 			for(int i=0;i<gridMain.SelectedIndices.Length;i++) {
 				pickedCarrierNums.Add(PIn.Long(table.Rows[gridMain.SelectedIndices[i]]["CarrierNum"].ToString()));
 			}
-			FormCarrierCombine FormCB=new FormCarrierCombine();
-			FormCB.CarrierNums=pickedCarrierNums;
+			FormCarrierCombine FormCB=new FormCarrierCombine(pickedCarrierNums);
 			FormCB.ShowDialog();
 			if(FormCB.DialogResult!=DialogResult.OK){
 				return;
 			}
-			if(!VerifyCarrierCombineData(FormCB.PickedCarrierNum,pickedCarrierNums)) {
+			if(!VerifyCarrierCombineData(FormCB.SelectedCarrierId,pickedCarrierNums)) {
 				return;
 			}
 			//int[] combCarrierNums=new int[tbCarriers.SelectedIndices.Length];
@@ -645,12 +644,12 @@ namespace OpenDental{
 				//Prepare audit trail entry data, then combine, then make audit trail entries if successful
 				List<string> carrierNames=new List<string>();
 				List<List<InsPlan>> listInsPlans=new List<List<InsPlan>>();
-				string carrierTo=Carriers.GetName(FormCB.PickedCarrierNum);
+				string carrierTo=Carriers.GetName(FormCB.SelectedCarrierId);
 				for(int i=0;i<pickedCarrierNums.Count;i++) {
 					carrierNames.Add(Carriers.GetName(pickedCarrierNums[i]));
 					listInsPlans.Add(InsPlans.GetAllByCarrierNum(pickedCarrierNums[i]));					
 				}
-				Carriers.Combine(pickedCarrierNums,FormCB.PickedCarrierNum);
+				Carriers.Combine(pickedCarrierNums,FormCB.SelectedCarrierId);
 				//Carriers were combined successfully. Loop through all the associated insplans and make a securitylog entry that their carrier changed.
 				for(int i=0;i<listInsPlans.Count;i++) {
 					for(int j=0;j<listInsPlans[i].Count;j++) {

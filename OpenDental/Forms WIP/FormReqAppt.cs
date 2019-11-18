@@ -385,18 +385,6 @@ namespace OpenDental{
 		}
 
 		private void gridAttached_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			if(hasChanged){
-				MsgBox.Show(this,"Not allowed to edit individual requirements immediately after adding or removing.");
-				return;
-			}
-			FormReqStudentEdit FormRSE=new FormReqStudentEdit();
-			FormRSE.ReqCur=reqsAttached[e.Row];
-			FormRSE.ShowDialog();
-			if(FormRSE.DialogResult!=DialogResult.OK) {
-				return;
-			}
-			reqsAttached=ReqStudents.GetForAppt(AptNum);
-			FillAttached();
 		}
 
 		private void gridStudents_CellClick(object sender,ODGridClickEventArgs e) {

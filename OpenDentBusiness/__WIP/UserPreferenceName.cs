@@ -117,5 +117,9 @@ namespace OpenDentBusiness
         /// Stores the Dynamic Chart Layout SheetDef.SheetDefNum selected by a user.
         /// </summary>
         public const string DynamicChartLayout = "sys.dynamic_chart_layout";
+
+
+
+        public const string DoseSpotUserId = "sys.dose_spot_user_id";
     }
 }

@@ -530,7 +530,7 @@
     <Compile Include="Data\AppointmentField.cs" />
     <Compile Include="Data\AppointmentFieldDefinition.cs" />
     <Compile Include="Data\AppointmentFieldType.cs" />
-    <Compile Include="Data\AutoCodeConditionType.cs" />
+    <Compile Include="Data\AutoCodeItemConditionType.cs" />
     <Compile Include="__WIP\RecallCrud.cs" />
     <Compile Include="Crud\RecallTriggerCrud.cs" />
     <Compile Include="Crud\RecallTypeCrud.cs" />
@@ -1198,7 +1198,7 @@
     <Compile Include="TableTypes\ApptView.cs" />
     <Compile Include="TableTypes\ApptViewItem.cs" />
     <Compile Include="__WIP\AutoCode.cs" />
-    <Compile Include="Data\AutoCodeCondition.cs" />
+    <Compile Include="Data\AutoCodeItemCondition.cs" />
     <Compile Include="__WIP\AutoCodeItem.cs" />
     <Compile Include="__WIP\AutoNote.cs" />
     <Compile Include="__WIP\AutoNoteControl.cs" />

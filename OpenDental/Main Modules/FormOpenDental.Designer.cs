@@ -131,8 +131,6 @@
             this.menuItemClinics = new System.Windows.Forms.MenuItem();
             this.menuItemContacts = new System.Windows.Forms.MenuItem();
             this.menuItemCounties = new System.Windows.Forms.MenuItem();
-            this.menuItemSchoolClass = new System.Windows.Forms.MenuItem();
-            this.menuItemSchoolCourses = new System.Windows.Forms.MenuItem();
             this.menuItemDiscountPlans = new System.Windows.Forms.MenuItem();
             this.menuItemEmployees = new System.Windows.Forms.MenuItem();
             this.menuItemEmployers = new System.Windows.Forms.MenuItem();
@@ -191,7 +189,6 @@
             this.menuItemScreening = new System.Windows.Forms.MenuItem();
             this.menuItemRepeatingCharges = new System.Windows.Forms.MenuItem();
             this.menuItemSetupWizard = new System.Windows.Forms.MenuItem();
-            this.menuItemReqStudents = new System.Windows.Forms.MenuItem();
             this.menuItemWiki = new System.Windows.Forms.MenuItem();
             this.menuItemXWebTrans = new System.Windows.Forms.MenuItem();
             this.menuClinics = new System.Windows.Forms.MenuItem();
@@ -922,8 +919,6 @@
             this.menuItemClinics,
             this.menuItemContacts,
             this.menuItemCounties,
-            this.menuItemSchoolClass,
-            this.menuItemSchoolCourses,
             this.menuItemDiscountPlans,
             this.menuItemEmployees,
             this.menuItemEmployers,
@@ -979,105 +974,93 @@
             this.menuItemCounties.Text = "Counties";
             this.menuItemCounties.Click += new System.EventHandler(this.menuItemCounties_Click);
             // 
-            // menuItemSchoolClass
-            // 
-            this.menuItemSchoolClass.Index = 6;
-            this.menuItemSchoolClass.Text = "Dental School Classes";
-            this.menuItemSchoolClass.Click += new System.EventHandler(this.menuItemSchoolClass_Click);
-            // 
-            // menuItemSchoolCourses
-            // 
-            this.menuItemSchoolCourses.Index = 7;
-            this.menuItemSchoolCourses.Text = "Dental School Courses";
-            this.menuItemSchoolCourses.Click += new System.EventHandler(this.menuItemSchoolCourses_Click);
-            // 
             // menuItemDiscountPlans
             // 
-            this.menuItemDiscountPlans.Index = 8;
+            this.menuItemDiscountPlans.Index = 6;
             this.menuItemDiscountPlans.Text = "Discount Plans";
             this.menuItemDiscountPlans.Click += new System.EventHandler(this.menuItemDiscountPlans_Click);
             // 
             // menuItemEmployees
             // 
-            this.menuItemEmployees.Index = 9;
+            this.menuItemEmployees.Index = 7;
             this.menuItemEmployees.Text = "&Employees";
             this.menuItemEmployees.Click += new System.EventHandler(this.menuItemEmployees_Click);
             // 
             // menuItemEmployers
             // 
-            this.menuItemEmployers.Index = 10;
+            this.menuItemEmployers.Index = 8;
             this.menuItemEmployers.Text = "Employers";
             this.menuItemEmployers.Click += new System.EventHandler(this.menuItemEmployers_Click);
             // 
             // menuItemCarriers
             // 
-            this.menuItemCarriers.Index = 11;
+            this.menuItemCarriers.Index = 9;
             this.menuItemCarriers.Text = "Insurance Carriers";
             this.menuItemCarriers.Click += new System.EventHandler(this.menuItemCarriers_Click);
             // 
             // menuItemInsPlans
             // 
-            this.menuItemInsPlans.Index = 12;
+            this.menuItemInsPlans.Index = 10;
             this.menuItemInsPlans.Text = "&Insurance Plans";
             this.menuItemInsPlans.Click += new System.EventHandler(this.menuItemInsPlans_Click);
             // 
             // menuItemLabCases
             // 
-            this.menuItemLabCases.Index = 13;
+            this.menuItemLabCases.Index = 11;
             this.menuItemLabCases.Text = "Lab Cases";
             this.menuItemLabCases.Click += new System.EventHandler(this.menuItemLabCases_Click);
             // 
             // menuItemMedications
             // 
-            this.menuItemMedications.Index = 14;
+            this.menuItemMedications.Index = 12;
             this.menuItemMedications.Text = "&Medications";
             this.menuItemMedications.Click += new System.EventHandler(this.menuItemMedications_Click);
             // 
             // menuItemPharmacies
             // 
-            this.menuItemPharmacies.Index = 15;
+            this.menuItemPharmacies.Index = 13;
             this.menuItemPharmacies.Text = "Pharmacies";
             this.menuItemPharmacies.Click += new System.EventHandler(this.menuItemPharmacies_Click);
             // 
             // menuItemProblems
             // 
-            this.menuItemProblems.Index = 16;
+            this.menuItemProblems.Index = 14;
             this.menuItemProblems.Text = "Problems";
             this.menuItemProblems.Click += new System.EventHandler(this.menuItemProblems_Click);
             // 
             // menuItemProviders
             // 
-            this.menuItemProviders.Index = 17;
+            this.menuItemProviders.Index = 15;
             this.menuItemProviders.Text = "Providers";
             this.menuItemProviders.Click += new System.EventHandler(this.menuItemProviders_Click);
             // 
             // menuItemPrescriptions
             // 
-            this.menuItemPrescriptions.Index = 18;
+            this.menuItemPrescriptions.Index = 16;
             this.menuItemPrescriptions.Text = "Pre&scriptions";
             this.menuItemPrescriptions.Click += new System.EventHandler(this.menuItemPrescriptions_Click);
             // 
             // menuItemReferrals
             // 
-            this.menuItemReferrals.Index = 19;
+            this.menuItemReferrals.Index = 17;
             this.menuItemReferrals.Text = "&Referrals";
             this.menuItemReferrals.Click += new System.EventHandler(this.menuItemReferrals_Click);
             // 
             // menuItemSchools
             // 
-            this.menuItemSchools.Index = 20;
+            this.menuItemSchools.Index = 18;
             this.menuItemSchools.Text = "Sites";
             this.menuItemSchools.Click += new System.EventHandler(this.menuItemSites_Click);
             // 
             // menuItemStateAbbrs
             // 
-            this.menuItemStateAbbrs.Index = 21;
+            this.menuItemStateAbbrs.Index = 19;
             this.menuItemStateAbbrs.Text = "State Abbreviations";
             this.menuItemStateAbbrs.Click += new System.EventHandler(this.menuItemStateAbbrs_Click);
             // 
             // menuItemZipCodes
             // 
-            this.menuItemZipCodes.Index = 22;
+            this.menuItemZipCodes.Index = 20;
             this.menuItemZipCodes.Text = "&Zip Codes";
             this.menuItemZipCodes.Click += new System.EventHandler(this.menuItemZipCodes_Click);
             // 
@@ -1145,7 +1128,6 @@
             this.menuItemScreening,
             this.menuItemRepeatingCharges,
             this.menuItemSetupWizard,
-            this.menuItemReqStudents,
             this.menuItemWiki,
             this.menuItemXWebTrans});
             this.menuItemTools.Shortcut = System.Windows.Forms.Shortcut.CtrlU;
@@ -1383,21 +1365,15 @@
             this.menuItemSetupWizard.Text = "Setup Wizard";
             this.menuItemSetupWizard.Click += new System.EventHandler(this.menuItemSetupWizard_Click);
             // 
-            // menuItemReqStudents
-            // 
-            this.menuItemReqStudents.Index = 19;
-            this.menuItemReqStudents.Text = "Student Requirements";
-            this.menuItemReqStudents.Click += new System.EventHandler(this.menuItemReqStudents_Click);
-            // 
             // menuItemWiki
             // 
-            this.menuItemWiki.Index = 20;
+            this.menuItemWiki.Index = 19;
             this.menuItemWiki.Text = "Wiki";
             this.menuItemWiki.Click += new System.EventHandler(this.menuItemWiki_Click);
             // 
             // menuItemXWebTrans
             // 
-            this.menuItemXWebTrans.Index = 21;
+            this.menuItemXWebTrans.Index = 20;
             this.menuItemXWebTrans.Text = "&XWeb Transactions";
             this.menuItemXWebTrans.Click += new System.EventHandler(this.menuItemXWebTrans_Click);
             // 
@@ -1701,8 +1677,6 @@
         private System.Windows.Forms.MenuItem menuItemHelpWindows;
         private System.Windows.Forms.MenuItem menuItemMisc;
         private System.Windows.Forms.MenuItem menuItemRemote;
-        private System.Windows.Forms.MenuItem menuItemSchoolClass;
-        private System.Windows.Forms.MenuItem menuItemSchoolCourses;
         private System.Windows.Forms.MenuItem menuItemSecurity;
         private System.Windows.Forms.MenuItem menuItemLogOff;
         private System.Windows.Forms.MenuItem menuItemInsPlans;
@@ -1760,7 +1734,6 @@
         private System.Windows.Forms.MenuItem menuItemGraphics;
         private System.Windows.Forms.MenuItem menuItemLabCases;
         private System.Windows.Forms.MenuItem menuItemRequirementsNeeded;
-        private System.Windows.Forms.MenuItem menuItemReqStudents;
         private System.Windows.Forms.MenuItem menuItemAutoNotes;
         private System.Windows.Forms.MenuItem menuItemDisplayFields;
         private System.Windows.Forms.ImageList imageListMain;

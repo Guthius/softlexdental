@@ -527,17 +527,20 @@
     <Compile Include="Forms WIP\FormPayConnectSetup.Designer.cs">
       <DependentUpon>FormPayConnectSetup.cs</DependentUpon>
     </Compile>
-    <Compile Include="__WIP\FormAutoCode.Designer.cs">
+    <Compile Include="Forms\FormAutoCode.Designer.cs">
       <DependentUpon>FormAutoCode.cs</DependentUpon>
     </Compile>
-    <Compile Include="__WIP\FormAutoCodeEdit.Designer.cs">
+    <Compile Include="Forms\FormAutoCodeEdit.Designer.cs">
       <DependentUpon>FormAutoCodeEdit.cs</DependentUpon>
     </Compile>
     <Compile Include="__WIP\FormAutoCodeLessIntrusive.Designer.cs">
       <DependentUpon>FormAutoCodeLessIntrusive.cs</DependentUpon>
     </Compile>
-    <Compile Include="__WIP\FormAutoItemEdit.Designer.cs">
+    <Compile Include="Forms\FormAutoItemEdit.Designer.cs">
       <DependentUpon>FormAutoItemEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="__WIP\FormCarrierCombine.Designer.cs">
+      <DependentUpon>FormCarrierCombine.cs</DependentUpon>
     </Compile>
     <Compile Include="__WIP\FormClockEventEdit.Designer.cs">
       <DependentUpon>FormClockEventEdit.cs</DependentUpon>
@@ -835,10 +838,10 @@
     <Compile Include="Forms WIP\FormPaySimpleSetup.designer.cs">
       <DependentUpon>FormPaySimpleSetup.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms WIP\FormUserPrefAdditional.cs">
+    <Compile Include="__WIP\FormUserPrefAdditional.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms WIP\FormUserPrefAdditional.designer.cs">
+    <Compile Include="__WIP\FormUserPrefAdditional.designer.cs">
       <DependentUpon>FormUserPrefAdditional.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms WIP\FormProvAdditional.cs">
@@ -886,10 +889,10 @@
     <Compile Include="Forms WIP\FormFamilyBalancer.designer.cs">
       <DependentUpon>FormFamilyBalancer.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms WIP\FormUserSetting.cs">
+    <Compile Include="__WIP\FormUserSetting.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms WIP\FormUserSetting.designer.cs">
+    <Compile Include="__WIP\FormUserSetting.designer.cs">
       <DependentUpon>FormUserSetting.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms WIP\FormApptReminderRuleAggEdit.cs">
@@ -3746,15 +3749,6 @@
     <Compile Include="Forms WIP\FormMountEdit.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms WIP\FormReqStudentEdit.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms WIP\FormReqStudentOne.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms WIP\FormReqStudentsMany.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Forms WIP\FormReportsMore.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -3857,16 +3851,16 @@
     <Compile Include="Forms WIP\FormAuditOneType.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="__WIP\FormAutoCode.cs">
+    <Compile Include="Forms\FormAutoCode.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="__WIP\FormAutoCodeEdit.cs">
+    <Compile Include="Forms\FormAutoCodeEdit.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="__WIP\FormAutoCodeLessIntrusive.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="__WIP\FormAutoItemEdit.cs">
+    <Compile Include="Forms\FormAutoItemEdit.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms WIP\FormBackup.cs">
@@ -3884,7 +3878,7 @@
     <Compile Include="Forms WIP\FormBillingUndo.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms WIP\FormCarrierCombine.cs">
+    <Compile Include="__WIP\FormCarrierCombine.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms WIP\FormCarrierEdit.cs">
@@ -4065,12 +4059,6 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms WIP\FormInsSpanEdit.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms WIP\FormInstructorEdit.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms WIP\FormInstructors.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms WIP\FormJournal.cs">
@@ -4304,18 +4292,6 @@
     <Compile Include="Forms WIP\FormScheduleBlockEdit.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms WIP\FormSchoolClassEdit.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms WIP\FormSchoolClasses.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms WIP\FormSchoolCourseEdit.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms WIP\FormSchoolCourses.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Forms WIP\FormScreenEdit.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -4388,7 +4364,7 @@
     <Compile Include="Forms WIP\FormUpdate.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms WIP\FormUserEdit.cs">
+    <Compile Include="__WIP\FormUserEdit.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\FormUserGroupEdit.cs">
@@ -4959,7 +4935,7 @@
     <EmbeddedResource Include="Forms WIP\FormPaySimpleSetup.resx">
       <DependentUpon>FormPaySimpleSetup.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms WIP\FormUserPrefAdditional.resx">
+    <EmbeddedResource Include="__WIP\FormUserPrefAdditional.resx">
       <DependentUpon>FormUserPrefAdditional.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms WIP\FormProvAdditional.resx">
@@ -4983,7 +4959,7 @@
     <EmbeddedResource Include="Forms WIP\FormFamilyBalancer.resx">
       <DependentUpon>FormFamilyBalancer.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms WIP\FormUserSetting.resx">
+    <EmbeddedResource Include="__WIP\FormUserSetting.resx">
       <DependentUpon>FormUserSetting.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms WIP\FormApptReminderRuleAggEdit.resx">
@@ -6443,18 +6419,6 @@
       <DependentUpon>FormMountEdit.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms WIP\FormReqStudentEdit.resx">
-      <DependentUpon>FormReqStudentEdit.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms WIP\FormReqStudentOne.resx">
-      <DependentUpon>FormReqStudentOne.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms WIP\FormReqStudentsMany.resx">
-      <DependentUpon>FormReqStudentsMany.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forms WIP\FormReportsMore.resx">
       <DependentUpon>FormReportsMore.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -6591,11 +6555,11 @@
       <DependentUpon>FormAuditOneType.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="__WIP\FormAutoCode.resx">
+    <EmbeddedResource Include="Forms\FormAutoCode.resx">
       <DependentUpon>FormAutoCode.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="__WIP\FormAutoCodeEdit.resx">
+    <EmbeddedResource Include="Forms\FormAutoCodeEdit.resx">
       <DependentUpon>FormAutoCodeEdit.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -6603,7 +6567,7 @@
       <DependentUpon>FormAutoCodeLessIntrusive.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="__WIP\FormAutoItemEdit.resx">
+    <EmbeddedResource Include="Forms\FormAutoItemEdit.resx">
       <DependentUpon>FormAutoItemEdit.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -6627,7 +6591,7 @@
       <DependentUpon>FormBillingUndo.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms WIP\FormCarrierCombine.resx">
+    <EmbeddedResource Include="__WIP\FormCarrierCombine.resx">
       <DependentUpon>FormCarrierCombine.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -6869,14 +6833,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms WIP\FormInsSpanEdit.resx">
       <DependentUpon>FormInsSpanEdit.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms WIP\FormInstructorEdit.resx">
-      <DependentUpon>FormInstructorEdit.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms WIP\FormInstructors.resx">
-      <DependentUpon>FormInstructors.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms WIP\FormJournal.resx">
@@ -7187,22 +7143,6 @@
       <DependentUpon>FormScheduleBlockEdit.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms WIP\FormSchoolClassEdit.resx">
-      <DependentUpon>FormSchoolClassEdit.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms WIP\FormSchoolClasses.resx">
-      <DependentUpon>FormSchoolClasses.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms WIP\FormSchoolCourseEdit.resx">
-      <DependentUpon>FormSchoolCourseEdit.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms WIP\FormSchoolCourses.resx">
-      <DependentUpon>FormSchoolCourses.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forms WIP\FormScreenEdit.resx">
       <DependentUpon>FormScreenEdit.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -7295,7 +7235,7 @@
       <DependentUpon>FormUpdate.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms WIP\FormUserEdit.resx">
+    <EmbeddedResource Include="__WIP\FormUserEdit.resx">
       <DependentUpon>FormUserEdit.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>

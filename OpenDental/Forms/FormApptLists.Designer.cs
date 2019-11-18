@@ -238,7 +238,6 @@
             this.Name = "FormApptLists";
             this.ShowInTaskbar = false;
             this.Text = "Appointment Lists";
-            this.Load += new System.EventHandler(this.FormApptLists_Load);
             this.ResumeLayout(false);
 
         }

@@ -4859,28 +4859,6 @@ namespace OpenDental
             SecurityLog.Write(SecurityLogEvents.Setup, "Counties");
         }
 
-        private void menuItemSchoolClass_Click(object sender, System.EventArgs e)
-        {
-            if (!Security.IsAuthorized(Permissions.Setup))
-            {
-                return;
-            }
-            FormSchoolClasses FormS = new FormSchoolClasses();
-            FormS.ShowDialog();
-            SecurityLog.Write(SecurityLogEvents.Setup, "Dental School Classes");
-        }
-
-        private void menuItemSchoolCourses_Click(object sender, System.EventArgs e)
-        {
-            if (!Security.IsAuthorized(Permissions.Setup))
-            {
-                return;
-            }
-            FormSchoolCourses FormS = new FormSchoolCourses();
-            FormS.ShowDialog();
-            SecurityLog.Write(SecurityLogEvents.Setup, "Dental School Courses");
-        }
-
         private void menuItemEmployees_Click(object sender, System.EventArgs e)
         {
             if (!Security.IsAuthorized(Permissions.Setup))
@@ -5487,31 +5465,6 @@ namespace OpenDental
         {
             FormScreenGroups FormS = new FormScreenGroups();
             FormS.ShowDialog();
-        }
-
-        private void menuItemReqStudents_Click(object sender, EventArgs e)
-        {
-            if (!Security.CurrentUser.ProviderId.HasValue) return;
-
-            Provider prov = Providers.GetProv(Security.CurrentUser.ProviderId.Value);
-            if (prov == null)
-            {
-                MsgBox.Show(this, "The current user is not attached to a provider. Attach the user to a provider to gain access to this feature.");
-                return;
-            }
-            if (!prov.IsInstructor)
-            {//if a student is logged in
-             //the student always has permission to view their own requirements
-                FormReqStudentOne FormO = new FormReqStudentOne();
-                FormO.ProvNum = prov.ProvNum;
-                FormO.ShowDialog();
-                return;
-            }
-            if (prov.IsInstructor)
-            {
-                FormReqStudentsMany FormM = new FormReqStudentsMany();
-                FormM.ShowDialog();
-            }
         }
 
         private void menuItemWiki_Click(object sender, EventArgs e)

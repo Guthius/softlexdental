@@ -108,7 +108,6 @@ namespace OpenDental{
 			this.butCoursePicker.Size = new System.Drawing.Size(24, 24);
 			this.butCoursePicker.TabIndex = 5;
 			this.butCoursePicker.Text = "...";
-			this.butCoursePicker.Click += new System.EventHandler(this.butCoursePicker_Click);
 			// 
 			// butDelete
 			// 

@@ -159,16 +159,6 @@ namespace OpenDental {
 			}
 		}
 
-		private void butCoursePicker_Click(object sender,EventArgs e) {
-			FormSchoolCourses FormSC=new FormSchoolCourses();
-			FormSC.IsSelectionMode=true;
-			FormSC.ShowDialog();
-			if(FormSC.DialogResult==DialogResult.OK) {
-				_evalDefCur.SchoolCourseNum=FormSC.CourseSelected.SchoolCourseNum;
-				textCourse.Text=FormSC.CourseSelected.CourseID;
-			}
-		}
-
 		private void butUp_Click(object sender,EventArgs e) {
 			if(gridMain.SelectedIndices.Length==0) {
 				MsgBox.Show(this,"Please select an item in the grid first.");
