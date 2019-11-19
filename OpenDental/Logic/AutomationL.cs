@@ -439,8 +439,7 @@ namespace OpenDental
         {
             Patient pat = Patients.GetPat(patNum);
             int age = pat.Age;
-            int ageTrigger = 0;
-            if (!int.TryParse(autoCond.CompareString, out ageTrigger))
+            if (!int.TryParse(autoCond.CompareString, out var ageTrigger))
             {
                 return false;//This is only possible due to an old bug that was fixed.
             }

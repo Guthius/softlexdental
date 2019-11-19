@@ -8,9 +8,9 @@ namespace OpenDental
         /// <summary>
         /// Checks for an existing patrestriction for the specified patient and PatRestrictType. 
         /// </summary>
-        public static bool IsRestricted(long patNum, PatRestrict patRestrictType, bool suppressMessage = false)
+        public static bool IsRestricted(long patientId, PatRestrict patRestrictType, bool suppressMessage = false)
         {
-            if (PatRestrictions.IsRestricted(patNum, patRestrictType))
+            if (PatRestrictions.IsRestricted(patientId, patRestrictType))
             {
                 if (!suppressMessage)
                 {

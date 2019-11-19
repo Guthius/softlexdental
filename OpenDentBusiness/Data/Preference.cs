@@ -138,6 +138,22 @@ namespace OpenDentBusiness
         }
 
         /// <summary>
+        /// Gets the enumeration value of the preference with the specified name.
+        /// </summary>
+        /// <typeparam name="T">The enumeration type.</typeparam>
+        /// <param name="preferenceName">The preference name.</param>
+        /// <param name="defaultValue">The default value of the preference.</param>
+        /// <returns></returns>
+        public static T GetEnum<T>(PreferenceName preferenceName, T defaultValue = default) where T : Enum
+        {
+            if (int.TryParse(GetString(preferenceName), out var result) && Enum.IsDefined(typeof(T), result))
+            {
+                return (T)Enum.ToObject(typeof(T), result);
+            }
+            return defaultValue;
+        }
+
+        /// <summary>
         /// Gets the long value of the preference with the specified name.
         /// </summary>
         /// <param name="preferenceName">The preference name.</param>

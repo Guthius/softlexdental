@@ -140,7 +140,7 @@ namespace OpenDental
             {
                 if (retVal != "")
                 {
-                    retVal += " - " + Lan.g("FormOpenDental", "Clinic") + ": ";
+                    retVal += " - Clinic: ";
                 }
                 if (Preference.GetBool(PreferenceName.TitleBarClinicUseAbbr))
                 {
@@ -159,7 +159,7 @@ namespace OpenDental
             {
                 if (FormOpenDental.RegKeyIsForTesting)
                 {
-                    retVal += " - " + Lan.g("FormOpenDental", "Developer Only License") + " - " + Lan.g("FormOpenDental", "Not for use with live patient data") + " - ";
+                    retVal += " - Developer Only License - Not for use with live patient data - ";
                 }
                 return retVal;
             }
@@ -191,7 +191,7 @@ namespace OpenDental
             }
             if (FormOpenDental.RegKeyIsForTesting)
             {
-                retVal += " - " + Lan.g("FormOpenDental", "Developer Only License") + " - " + Lan.g("FormOpenDental", "Not for use with live patient data") + " - ";
+                retVal += " - Developer Only License - Not for use with live patient data - ";
             }
             return retVal;
         }

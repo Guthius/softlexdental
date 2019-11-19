@@ -21,7 +21,9 @@ using System.Collections.Generic;
 namespace OpenDentBusiness
 {
     /// <summary>
-    /// Uses to keep track of alerts that have been read per user.
+    ///     <para>
+    ///         Uses to keep track of alerts that have been read per user.
+    ///     </para>
     /// </summary>
     public class AlertRead : DataRecordBase
     {

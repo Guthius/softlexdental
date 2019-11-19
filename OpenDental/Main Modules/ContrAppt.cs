@@ -177,16 +177,20 @@ namespace OpenDental
 
             menuWeeklyApt = new ContextMenu();
 
-            PicturePat = new ODPictureBox();
-            PicturePat.Location = new Point(6, 17);
-            PicturePat.Size = new Size(100, 100);
-            PicturePat.BackColor = Color.FromArgb(232, 220, 190);
-            PicturePat.TextNullImage = Lan.g(this, "Patient Picture Unavailable");
+            PicturePat = new ODPictureBox
+            {
+                Location = new Point(6, 17),
+                Size = new Size(100, 100),
+                BackColor = Color.FromArgb(232, 220, 190),
+                TextNullImage = "Patient Picture Unavailable"
+            };
             PicturePat.MouseMove += new MouseEventHandler(PicturePat_MouseMove);
 
-            infoBubble = new Panel();
-            infoBubble.Visible = false;
-            infoBubble.Size = new Size(200, 300);
+            infoBubble = new Panel
+            {
+                Visible = false,
+                Size = new Size(200, 300)
+            };
             infoBubble.MouseMove += new MouseEventHandler(InfoBubble_MouseMove);
             infoBubble.BackColor = Color.FromArgb(255, 250, 190);
             infoBubble.Controls.Clear();
@@ -225,7 +229,7 @@ namespace OpenDental
                             if (Security.CurrentUser != null)
                             {
                                 //Make a security log if we still have a valid user logged in.  E.g. clicking Log Off invalidates the user.
-                                string logText = Lan.g(this, "Deleted from pinboard while closing Open Dental") + ": ";
+                                string logText = "Deleted from pinboard while closing Open Dental: ";
                                 if (aptCur.AptDateTime.Year > 1880)
                                 {
                                     logText += aptCur.AptDateTime.ToString() + ", ";
@@ -4776,7 +4780,7 @@ namespace OpenDental
             }
             try
             {
-                Bitmap imageTemp = ContrApptSheet2.GetShadowClone(startTime, stopTime);
+                Bitmap imageTemp = ContrApptSheet2.CloneBackBuffer(startTime, stopTime);
                 if (imageTemp != null)
                 {
                     Clipboard.SetDataObject(imageTemp);

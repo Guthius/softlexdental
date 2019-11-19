@@ -20,8 +20,10 @@ using System;
 namespace OpenDentBusiness
 {
     /// <summary>
-    /// Identifies the possible actions that can be taken on a alert. 
-    /// Multiple actions can be available for one alert.
+    ///     <para>
+    ///         Identifies the possible actions that can be taken on a alert. Multiple actions can 
+    ///         be available for one alert.
+    ///     </para>
     /// </summary>
     [Flags]
     public enum AlertActionType
