@@ -175,7 +175,7 @@ namespace OpenDental
             }
             else if (program.TypeName == ProgramName.Dimaxis.ToString())
             {
-                Planmeca.SendData(program, patient);
+                PlanmecaBridge.SendData(program, patient);
                 return;
             }
             else if (program.TypeName == ProgramName.Office.ToString())
@@ -232,12 +232,12 @@ namespace OpenDental
             }
             else if (program.TypeName == ProgramName.iCat.ToString())
             {
-                ICat.SendData(program, patient);
+                ICatBridge.SendData(program, patient);
                 return;
             }
             else if (program.TypeName == ProgramName.HdxWill.ToString())
             {
-                HdxWill.SendData(program, patient);
+                HdxWillBridge.SendData(program, patient);
                 return;
             }
             else if (program.TypeName == ProgramName.iDixel.ToString())
@@ -247,12 +247,12 @@ namespace OpenDental
             }
             else if (program.TypeName == ProgramName.ImageFX.ToString())
             {
-                ImageFX.SendData(program, patient);
+                ImageFXBridge.SendData(program, patient);
                 return;
             }
             else if (program.TypeName == ProgramName.iRYS.ToString())
             {
-                Irys.SendData(program, patient);
+                IrysBridge.SendData(program, patient);
                 return;
             }
             else if (program.TypeName == ProgramName.Lightyear.ToString())
@@ -272,7 +272,7 @@ namespace OpenDental
             }
             else if (program.TypeName == ProgramName.Midway.ToString())
             {
-                Midway.SendData(program, patient);
+                MidwayBridge.SendData(program, patient);
                 return;
             }
             else if (program.TypeName == ProgramName.MiPACS.ToString())
@@ -317,7 +317,7 @@ namespace OpenDental
             }
             else if (program.TypeName == ProgramName.PerioPal.ToString())
             {
-                PerioPal.SendData(program, patient);
+                PerioPalBridge.SendData(program, patient);
                 return;
             }
             else if (program.TypeName == ProgramName.Progeny.ToString())
@@ -359,17 +359,17 @@ namespace OpenDental
 #endif
             else if (program.TypeName == ProgramName.Sirona.ToString())
             {
-                Sirona.SendData(program, patient);
+                SironaBridge.SendData(program, patient);
                 return;
             }
             else if (program.TypeName == ProgramName.SMARTDent.ToString())
             {
-                SmartDent.SendData(program, patient);
+                SmartDentBridge.SendData(program, patient);
                 return;
             }
             else if (program.TypeName == ProgramName.Sopro.ToString())
             {
-                Sopro.SendData(program, patient);
+                SoproBridge.SendData(program, patient);
                 return;
             }
             else if (program.TypeName == ProgramName.TigerView.ToString())
@@ -379,7 +379,7 @@ namespace OpenDental
             }
             else if (program.TypeName == ProgramName.Triana.ToString())
             {
-                Triana.SendData(program, patient);
+                TrianaBridge.SendData(program, patient);
                 return;
             }
             else if (program.TypeName == ProgramName.Trophy.ToString())
@@ -416,27 +416,27 @@ namespace OpenDental
             }
             else if (program.TypeName == ProgramName.VixWin.ToString())
             {
-                VixWin.SendData(program, patient);
+                VixWinBridge.SendData(program, patient);
                 return;
             }
             else if (program.TypeName == ProgramName.VixWinBase36.ToString())
             {
-                VixWinBase36.SendData(program, patient);
+                VixWinBase36Bridge.SendData(program, patient);
                 return;
             }
             else if (program.TypeName == ProgramName.VixWinBase41.ToString())
             {
-                VixWinBase41.SendData(program, patient);
+                VixWinBase41Bridge.SendData(program, patient);
                 return;
             }
             else if (program.TypeName == ProgramName.VixWinNumbered.ToString())
             {
-                VixWinNumbered.SendData(program, patient);
+                VixWinNumberedBridge.SendData(program, patient);
                 return;
             }
             else if (program.TypeName == ProgramName.VixWinOld.ToString())
             {
-                VixWinOld.SendData(program, patient);
+                VixWinOldBridge.SendData(program, patient);
                 return;
             }
             else if (program.TypeName == ProgramName.XDR.ToString())
@@ -451,7 +451,7 @@ namespace OpenDental
             }
             else if (program.TypeName == ProgramName.ZImage.ToString())
             {
-                ZImage.SendData(program, patient);
+                ZImageBridge.SendData(program, patient);
                 return;
             }
 

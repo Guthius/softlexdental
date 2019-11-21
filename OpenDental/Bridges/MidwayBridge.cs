@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (C) 2019 Dental Stars SRL
  * Copyright (C) 2003-2019 Jordan S. Sparks, D.M.D.
  * 
@@ -17,31 +17,44 @@
  */
 using OpenDentBusiness;
 using OpenDentBusiness.Bridges;
+using System;
+using System.Diagnostics;
+using System.Windows.Forms;
 
 namespace OpenDental.Bridges
 {
-    public class XChargeBridge : Bridge
+    public class MidwayBridge : Bridge
     {
-        private static readonly BridgePreference[] preferences =
-        {
-            BridgePreference.Custom("force_recurring_charge", "XChargeForceRecurringCharge", BridgePreferenceType.String),
-            BridgePreference.Custom("prevent_saving_new_cc", "XChargePreventSavingNewCC", BridgePreferenceType.String)
-        };
-
         /// <summary>
-        /// Initializes a new instance of the <see cref="XChargeBridge"/> class.
+        /// Initializes a new instance of the <see cref="MidwayBridge"/> class.
         /// </summary>
-        public XChargeBridge() : base("XCharge", "XCharge offers the ability to process credit card payments.", preferences)
+        public MidwayBridge() : base(
+            "Midway Dental", 
+            "Midway Dental Supply is an independent dental supply company that services Indiana, Michigan and Northeastern Illinois.")
         {
         }
 
         /// <summary>
-        /// Can't send anything directly, this does nothign.
+        ///     <para>
+        ///         Opens the Midway Dental site.
+        ///     </para>
         /// </summary>
-        /// <param name="programId">T</param>
-        /// <param name="patient"></param>
+        /// <param name="programId">The ID of the program.</param>
+        /// <param name="patient">The patient details.</param>
         public override void Send(long programId, Patient patient)
         {
+            try
+            {
+                Process.Start("https://midwaydental.com/");
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show(
+                    exception.Message,
+                    Name,
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
         }
     }
 }
