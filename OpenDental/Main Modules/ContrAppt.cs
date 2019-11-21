@@ -4285,7 +4285,7 @@ namespace OpenDental
                 {
                     pat = Patients.GetPat(PatCur.PatNum);
                 }
-                ProgramL.Execute(((Program)e.Button.Tag).ProgramNum, pat);
+                ProgramL.Execute(((Program)e.Button.Tag).Id, pat);
             }
         }
 
@@ -4952,7 +4952,7 @@ namespace OpenDental
                 case MenuItemNames.HomePhone: //Call Home Phone
                     if (Programs.GetCur(ProgramName.DentalTekSmartOfficePhone).Enabled)
                     {
-                        DentalTek.PlaceCall(PatCur.HmPhone);
+                        DentalTekBridge.PlaceCall(PatCur.HmPhone);
                     }
                     else
                     {
@@ -4962,7 +4962,7 @@ namespace OpenDental
                 case MenuItemNames.WorkPhone: //Call Work Phone
                     if (Programs.GetCur(ProgramName.DentalTekSmartOfficePhone).Enabled)
                     {
-                        DentalTek.PlaceCall(PatCur.WkPhone);
+                        DentalTekBridge.PlaceCall(PatCur.WkPhone);
                     }
                     else
                     {
@@ -4972,7 +4972,7 @@ namespace OpenDental
                 case MenuItemNames.WirelessPhone: //Call Wireless Phone
                     if (Programs.GetCur(ProgramName.DentalTekSmartOfficePhone).Enabled)
                     {
-                        DentalTek.PlaceCall(PatCur.WirelessPhone);
+                        DentalTekBridge.PlaceCall(PatCur.WirelessPhone);
                     }
                     else
                     {

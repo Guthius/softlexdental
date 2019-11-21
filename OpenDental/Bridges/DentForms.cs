@@ -1,68 +1,57 @@
-using System;
-using System.Collections;
-using System.Diagnostics;
-using System.IO;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Windows.Forms;
+/**
+ * Copyright (C) 2019 Dental Stars SRL
+ * Copyright (C) 2003-2019 Jordan S. Sparks, D.M.D.
+ * 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; If not, see <http://www.gnu.org/licenses/>
+ */
 using OpenDentBusiness;
-using System.Collections.Generic;
+using OpenDentBusiness.Bridges;
 
-namespace OpenDental.Bridges{
-	/// <summary></summary>
-	public class DentForms{
+namespace OpenDental.Bridges
+{
+    public class DentForms : CommandLineBridge
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DentForms"/> class.
+        /// </summary>
+        public DentForms() : base("DentForms", "")
+        {
+            RequirePatient = true;
+        }
 
-		/// <summary></summary>
-		public DentForms(){
-			
-		}
+        /// <summary>
+        ///     <para>
+        ///         Generates the appropriate command line arguments for the specified patient.
+        ///     </para>
+        /// </summary>
+        /// <param name="programId">The ID of the program.</param>
+        /// <param name="patient">The patient.</param>
+        /// <param name="arguments">The command line arguments to pass to the program.</param>
+        /// <returns>
+        ///     True if the preparation was successful and the program can be started; otherwise, false.
+        /// </returns>
+        protected override bool PrepareToRun(long programId, Patient patient, out string arguments)
+        {
+            arguments = 
+                " -patid " + GetPatientId(programId, patient) + 
+                " -fname " + patient.FName + 
+                " -lname " + patient.LName + 
+                " -ssn " + patient.SSN + 
+                " -dob " + patient.Birthdate.ToShortDateString() + 
+                " -gender " + (patient.Gender == PatientGender.Male ? "M" : "F");
 
-		///<summary>Launches the program using the patient.Cur data.</summary>
-		public static void SendData(Program ProgramCur, Patient pat){
-			string path=Programs.GetProgramPath(ProgramCur);
-			//mtconnector.exe -patid 123  -fname John  -lname Doe  -ssn 123456789  -dob 01/25/1962  -gender M
-			List<ProgramProperty> ForProgram =ProgramProperties.GetForProgram(ProgramCur.ProgramNum);;
-			if(pat==null){
-				MessageBox.Show("Please select a patient first");
-				return;
-			}
-			string info="-patid ";
-			ProgramProperty PPCur=ProgramProperties.GetCur(ForProgram, "Enter 0 to use PatientNum, or 1 to use ChartNum");;
-			if(PPCur.Value=="0"){
-				info+=pat.PatNum.ToString()+"  ";
-			}
-			else{
-				info+=pat.ChartNumber+"  ";
-			}
-			info+="-fname "+pat.FName+"  "
-				+"-lname "+pat.LName+"  "
-				+"-ssn "+pat.SSN+"  "
-				+"-dob "+pat.Birthdate.ToShortDateString()+"  "
-				+"-gender ";
-			if(pat.Gender==PatientGender.Male){
-				info+="M";
-			}
-			else{
-				info+="F";
-			}
-			try{
-				Process.Start(path,info);
-			}
-			catch{
-				MessageBox.Show(path+" is not available.");
-			}
-			
-		}
-
-	}
+            return true;
+        }
+    }
 }
-
-
-
-
-
-
-
-
-
-

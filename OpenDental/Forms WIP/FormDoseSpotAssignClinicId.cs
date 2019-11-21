@@ -12,8 +12,8 @@ namespace OpenDental
     {
         private List<Clinic> _listClinicsInComboBox;
         private ClinicErx _clinicErxCur;
-        List<ProgramProperty> _listClinicIDs;
-        List<ProgramProperty> _listClinicKeys;
+        List<ProgramPreference> _listClinicIDs;
+        List<ProgramPreference> _listClinicKeys;
 
         public FormDoseSpotAssignClinicId(long clinicErxNum)
         {
@@ -25,7 +25,7 @@ namespace OpenDental
         private void FormDoseSpotAssignUserId_Load(object sender, EventArgs e)
         {
             _listClinicsInComboBox = Clinics.GetForUserod(Security.CurrentUser, true, "Headquarters");
-            List<ProgramProperty> listProgramProperties = ProgramProperties.GetForProgram(Programs.GetCur(ProgramName.eRx).ProgramNum);
+            List<ProgramPreference> listProgramProperties = ProgramProperties.GetForProgram(Programs.GetCur(ProgramName.eRx).Id);
             _listClinicIDs = listProgramProperties.FindAll(x => x.Key == Erx.PropertyDescs.ClinicID);
             _listClinicKeys = listProgramProperties.FindAll(x => x.Key == Erx.PropertyDescs.ClinicKey);
             _listClinicsInComboBox.RemoveAll(x =>//Remove all clinics that already have a DoseSpot Clinic ID OR Clinic Key entered

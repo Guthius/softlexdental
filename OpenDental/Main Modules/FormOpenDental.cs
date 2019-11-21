@@ -1448,7 +1448,7 @@ namespace OpenDental
             }
             else if (e.Button.Tag.GetType() == typeof(Program))
             {
-                ProgramL.Execute(((Program)e.Button.Tag).ProgramNum, Patients.GetPat(CurPatNum));
+                ProgramL.Execute(((Program)e.Button.Tag).Id, Patients.GetPat(CurPatNum));
             }
         }
 

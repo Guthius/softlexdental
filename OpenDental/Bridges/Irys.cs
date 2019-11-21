@@ -28,14 +28,14 @@ namespace OpenDental.Bridges {
 			}
 			else {
 				string info="/PATID \"";
-				if(ProgramProperties.GetPropVal(ProgramCur.ProgramNum,"Enter 0 to use PatientNum, or 1 to use ChartNum")=="0") {
+				if(ProgramProperties.GetPropVal(ProgramCur.Id,"Enter 0 to use PatientNum, or 1 to use ChartNum")=="0") {
 					info+=pat.PatNum.ToString();
 				}
 				else {
 					info+=pat.ChartNumber;
 				}
 				info+="\" /NAME \""+Tidy(pat.FName)+"\" /SURNAME \""+Tidy(pat.LName)+"\"";
-				info+=" /DATEB \""+pat.Birthdate.ToString(ProgramProperties.GetPropVal(ProgramCur.ProgramNum,"Birthdate format (default dd,MM,yyyy)"))+"\"";
+				info+=" /DATEB \""+pat.Birthdate.ToString(ProgramProperties.GetPropVal(ProgramCur.Id,"Birthdate format (default dd,MM,yyyy)"))+"\"";
 				if(pat.Gender.ToString()=="Female"){
 					info+=" /SEX \"F\"";
 				}

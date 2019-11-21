@@ -61,8 +61,8 @@ namespace OpenDental {
 				labelUpdated.Visible=true;
 				checkForceDuplicates.Visible=true;
 				string xPath=Programs.GetProgramPath(progCur);
-				checkForceDuplicates.Checked=PIn.Bool(ProgramProperties.GetPropValForClinicOrDefault(progCur.ProgramNum,
-					XCharge.ProgramProperties.XChargeForceRecurringCharge,Clinics.ClinicNum));
+				checkForceDuplicates.Checked=PIn.Bool(ProgramProperties.GetPropValForClinicOrDefault(progCur.Id,
+					XChargeBridge.ProgramProperties.XChargeForceRecurringCharge,Clinics.ClinicNum));
 				if(!File.Exists(xPath)) {//program path is invalid
 					//if user has setup permission and they want to edit the program path, show the X-Charge setup window
 					if(Security.IsAuthorized(Permissions.Setup)

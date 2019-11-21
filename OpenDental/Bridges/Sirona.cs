@@ -25,7 +25,7 @@ namespace OpenDental.Bridges {
 		///<summary>Sends data for Patient to a mailbox file and launches the program.</summary>
 		public static void SendData(Program ProgramCur, Patient pat) {
 			string path=Programs.GetProgramPath(ProgramCur);
-			List<ProgramProperty> listProgramProperties=ProgramProperties.GetForProgram(ProgramCur.ProgramNum);
+			List<ProgramPreference> listProgramProperties=ProgramProperties.GetForProgram(ProgramCur.Id);
 			if(pat!=null) {
 				try {
 					#region Read / Write .ini
@@ -71,7 +71,7 @@ namespace OpenDental.Bridges {
 						line.Append(pat.Birthdate.ToString("dd.MM.yyyy"));
 						line.Append(nTerm);
 						//Patient id:
-						ProgramProperty PPCur=ProgramProperties.GetCur(listProgramProperties, "Enter 0 to use PatientNum, or 1 to use ChartNum");;
+						ProgramPreference PPCur=ProgramProperties.GetCur(listProgramProperties, "Enter 0 to use PatientNum, or 1 to use ChartNum");;
 						if(PPCur.Value=="0"){
 							line.Append(pat.PatNum.ToString());
 						}

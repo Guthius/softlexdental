@@ -21,7 +21,7 @@ namespace OpenDental
         /// </summary>
         public static void Execute(long programId, Patient patient)
         {
-            var program = Programs.GetFirstOrDefault(x => x.ProgramNum == programId);
+            var program = Programs.GetFirstOrDefault(x => x.Id == programId);
 
             if (program == null)
             {
@@ -51,405 +51,405 @@ namespace OpenDental
                 }
                 return;
             }
-            if (program.ProgName == ProgramName.ActeonImagingSuite.ToString())
+            if (program.TypeName == ProgramName.ActeonImagingSuite.ToString())
             {
                 ActeonImagingSuite.SendData(program, patient);
                 return;
             }
-            if (program.ProgName == ProgramName.Adstra.ToString())
+            if (program.TypeName == ProgramName.Adstra.ToString())
             {
-                Adstra.SendData(program, patient);
+                AdstraBridge.SendData(program, patient);
                 return;
             }
-            else if (program.ProgName == ProgramName.Apixia.ToString())
+            else if (program.TypeName == ProgramName.Apixia.ToString())
             {
-                Apixia.SendData(program, patient);
+                ApixiaBridge.SendData(program, patient);
                 return;
             }
-            else if (program.ProgName == ProgramName.Apteryx.ToString())
+            else if (program.TypeName == ProgramName.Apteryx.ToString())
             {
-                Apteryx.SendData(program, patient);
+                ApteryxBridge.SendData(program, patient);
                 return;
             }
-            else if (program.ProgName == ProgramName.AudaxCeph.ToString())
+            else if (program.TypeName == ProgramName.AudaxCeph.ToString())
             {
-                AudaxCeph.SendData(program, patient);
+                AudaxCephBridge.SendData(program, patient);
                 return;
             }
-            else if (program.ProgName == ProgramName.BioPAK.ToString())
+            else if (program.TypeName == ProgramName.BioPAK.ToString())
             {
                 BioPAK.SendData(program, patient);
                 return;
             }
-            else if (program.ProgName == ProgramName.CADI.ToString())
+            else if (program.TypeName == ProgramName.CADI.ToString())
             {
-                CADI.SendData(program, patient);
+                CadiBridge.SendData(program, patient);
                 return;
             }
-            else if (program.ProgName == ProgramName.Camsight.ToString())
+            else if (program.TypeName == ProgramName.Camsight.ToString())
             {
-                Camsight.SendData(program, patient);
+                CamsightBridge.SendData(program, patient);
                 return;
             }
-            else if (program.ProgName == ProgramName.CaptureLink.ToString())
+            else if (program.TypeName == ProgramName.CaptureLink.ToString())
             {
-                CaptureLink.SendData(program, patient);
+                CaptureLinkBridge.SendData(program, patient);
                 return;
             }
-            else if (program.ProgName == ProgramName.Carestream.ToString())
+            else if (program.TypeName == ProgramName.Carestream.ToString())
             {
-                Carestream.SendData(program, patient);
+                CarestreamBridge.SendData(program, patient);
                 return;
             }
-            else if (program.ProgName == ProgramName.Cerec.ToString())
+            else if (program.TypeName == ProgramName.Cerec.ToString())
             {
-                Cerec.SendData(program, patient);
+                CerecBridge.SendData(program, patient);
                 return;
             }
-            else if (program.ProgName == ProgramName.CleaRay.ToString())
+            else if (program.TypeName == ProgramName.CleaRay.ToString())
             {
                 CleaRay.SendData(program, patient);
                 return;
             }
-            else if (program.ProgName == ProgramName.CliniView.ToString())
+            else if (program.TypeName == ProgramName.CliniView.ToString())
             {
-                Cliniview.SendData(program, patient);
+                CliniviewBridge.SendData(program, patient);
                 return;
             }
-            else if (program.ProgName == ProgramName.ClioSoft.ToString())
+            else if (program.TypeName == ProgramName.ClioSoft.ToString())
             {
-                ClioSoft.SendData(program, patient);
+                ClioSoftBridge.SendData(program, patient);
                 return;
             }
-            else if (program.ProgName == ProgramName.DBSWin.ToString())
+            else if (program.TypeName == ProgramName.DBSWin.ToString())
             {
-                DBSWin.SendData(program, patient);
+                DbsWinBridge.SendData(program, patient);
                 return;
             }
-            else if (program.ProgName == ProgramName.DemandForce.ToString())
+            else if (program.TypeName == ProgramName.DemandForce.ToString())
             {
                 DemandForce.SendData(program, patient);
                 return;
             }
 #if !DISABLE_WINDOWS_BRIDGES
-            else if (program.ProgName == ProgramName.DentalEye.ToString())
+            else if (program.TypeName == ProgramName.DentalEye.ToString())
             {
                 DentalEye.SendData(program, patient);
                 return;
             }
-            else if (program.ProgName == ProgramName.DentalStudio.ToString())
+            else if (program.TypeName == ProgramName.DentalStudio.ToString())
             {
-                DentalStudio.SendData(program, patient);
+                DentalStudioBridge.SendData(program, patient);
                 return;
             }
-            else if (program.ProgName == ProgramName.DentX.ToString())
+            else if (program.TypeName == ProgramName.DentX.ToString())
             {
                 DentX.SendData(program, patient);
                 return;
             }
-            else if (program.ProgName == ProgramName.DrCeph.ToString())
+            else if (program.TypeName == ProgramName.DrCeph.ToString())
             {
                 DrCeph.SendData(program, patient);
                 return;
             }
 #endif
-            else if (program.ProgName == ProgramName.DentalTekSmartOfficePhone.ToString())
+            else if (program.TypeName == ProgramName.DentalTekSmartOfficePhone.ToString())
             {
-                DentalTek.SendData(program, patient);
+                DentalTekBridge.SendData(program, patient);
                 return;
             }
-            else if (program.ProgName == ProgramName.DentForms.ToString())
+            else if (program.TypeName == ProgramName.DentForms.ToString())
             {
                 DentForms.SendData(program, patient);
                 return;
             }
-            else if (program.ProgName == ProgramName.Dexis.ToString())
+            else if (program.TypeName == ProgramName.Dexis.ToString())
             {
                 Dexis.SendData(program, patient);
                 return;
             }
-            else if (program.ProgName == ProgramName.Digora.ToString())
+            else if (program.TypeName == ProgramName.Digora.ToString())
             {
                 Digora.SendData(program, patient);
                 return;
             }
-            else if (program.ProgName == ProgramName.Dimaxis.ToString())
+            else if (program.TypeName == ProgramName.Dimaxis.ToString())
             {
                 Planmeca.SendData(program, patient);
                 return;
             }
-            else if (program.ProgName == ProgramName.Office.ToString())
+            else if (program.TypeName == ProgramName.Office.ToString())
             {
                 Office.SendData(program, patient);
                 return;
             }
-            else if (program.ProgName == ProgramName.Dolphin.ToString())
+            else if (program.TypeName == ProgramName.Dolphin.ToString())
             {
                 Dolphin.SendData(program, patient);
                 return;
             }
-            else if (program.ProgName == ProgramName.DXCPatientCreditScore.ToString())
+            else if (program.TypeName == ProgramName.DXCPatientCreditScore.ToString())
             {
-                DentalXChange.SendData(program, patient);
+                DentalXChangeBridge.SendData(program, patient);
                 return;
             }
-            else if (program.ProgName == ProgramName.Dxis.ToString())
+            else if (program.TypeName == ProgramName.Dxis.ToString())
             {
-                Dxis.SendData(program, patient);
+                DxisBridge.SendData(program, patient);
                 return;
             }
-            else if (program.ProgName == ProgramName.EvaSoft.ToString())
+            else if (program.TypeName == ProgramName.EvaSoft.ToString())
             {
                 EvaSoft.SendData(program, patient);
                 return;
             }
-            else if (program.ProgName == ProgramName.EwooEZDent.ToString())
+            else if (program.TypeName == ProgramName.EwooEZDent.ToString())
             {
                 Ewoo.SendData(program, patient);
                 return;
             }
-            else if (program.ProgName == ProgramName.FloridaProbe.ToString())
+            else if (program.TypeName == ProgramName.FloridaProbe.ToString())
             {
-                FloridaProbe.SendData(program, patient);
+                FloridaProbeBridge.SendData(program, patient);
                 return;
             }
-            else if (program.ProgName == ProgramName.Guru.ToString())
+            else if (program.TypeName == ProgramName.Guru.ToString())
             {
                 Guru.SendData(program, patient);
                 return;
             }
-            else if (program.ProgName == ProgramName.HandyDentist.ToString())
+            else if (program.TypeName == ProgramName.HandyDentist.ToString())
             {
-                HandyDentist.SendData(program, patient);
+                HandyDentistBridge.SendData(program, patient);
                 return;
             }
-            else if (program.ProgName == ProgramName.HouseCalls.ToString())
+            else if (program.TypeName == ProgramName.HouseCalls.ToString())
             {
                 FormHouseCalls FormHC = new FormHouseCalls();
                 FormHC.ProgramCur = program;
                 FormHC.ShowDialog();
                 return;
             }
-            else if (program.ProgName == ProgramName.iCat.ToString())
+            else if (program.TypeName == ProgramName.iCat.ToString())
             {
                 ICat.SendData(program, patient);
                 return;
             }
-            else if (program.ProgName == ProgramName.HdxWill.ToString())
+            else if (program.TypeName == ProgramName.HdxWill.ToString())
             {
                 HdxWill.SendData(program, patient);
                 return;
             }
-            else if (program.ProgName == ProgramName.iDixel.ToString())
+            else if (program.TypeName == ProgramName.iDixel.ToString())
             {
-                iDixel.SendData(program, patient);
+                IDixelBridge.SendData(program, patient);
                 return;
             }
-            else if (program.ProgName == ProgramName.ImageFX.ToString())
+            else if (program.TypeName == ProgramName.ImageFX.ToString())
             {
                 ImageFX.SendData(program, patient);
                 return;
             }
-            else if (program.ProgName == ProgramName.iRYS.ToString())
+            else if (program.TypeName == ProgramName.iRYS.ToString())
             {
                 Irys.SendData(program, patient);
                 return;
             }
-            else if (program.ProgName == ProgramName.Lightyear.ToString())
+            else if (program.TypeName == ProgramName.Lightyear.ToString())
             {
                 Lightyear.SendData(program, patient);
                 return;
             }
-            else if (program.ProgName == ProgramName.NewTomNNT.ToString())
+            else if (program.TypeName == ProgramName.NewTomNNT.ToString())
             {
                 NewTomNNT.SendData(program, patient);
                 return;
             }
-            else if (program.ProgName == ProgramName.MediaDent.ToString())
+            else if (program.TypeName == ProgramName.MediaDent.ToString())
             {
                 MediaDent.SendData(program, patient);
                 return;
             }
-            else if (program.ProgName == ProgramName.Midway.ToString())
+            else if (program.TypeName == ProgramName.Midway.ToString())
             {
                 Midway.SendData(program, patient);
                 return;
             }
-            else if (program.ProgName == ProgramName.MiPACS.ToString())
+            else if (program.TypeName == ProgramName.MiPACS.ToString())
             {
                 MiPACS.SendData(program, patient);
                 return;
             }
-            else if (program.ProgName == ProgramName.OrthoCAD.ToString())
+            else if (program.TypeName == ProgramName.OrthoCAD.ToString())
             {
                 OrthoCad.SendData(program, patient);
                 return;
             }
-            else if (program.ProgName == ProgramName.Oryx.ToString())
+            else if (program.TypeName == ProgramName.Oryx.ToString())
             {
                 Oryx.SendData(program, patient);
                 return;
             }
-            else if (program.ProgName == ProgramName.OrthoInsight3d.ToString())
+            else if (program.TypeName == ProgramName.OrthoInsight3d.ToString())
             {
                 OrthoInsight3d.SendData(program, patient);
                 return;
             }
-            else if (program.ProgName == ProgramName.Owandy.ToString())
+            else if (program.TypeName == ProgramName.Owandy.ToString())
             {
                 Owandy.SendData(program, patient);
                 return;
             }
-            else if (program.ProgName == ProgramName.PandaPerio.ToString())
+            else if (program.TypeName == ProgramName.PandaPerio.ToString())
             {
                 PandaPerio.SendData(program, patient);
                 return;
             }
-            else if (program.ProgName == ProgramName.PandaPeriodAdvanced.ToString())
+            else if (program.TypeName == ProgramName.PandaPeriodAdvanced.ToString())
             {
                 PandaPeriodAdvanced.SendData(program, patient);
                 return;
             }
-            else if (program.ProgName == ProgramName.Patterson.ToString())
+            else if (program.TypeName == ProgramName.Patterson.ToString())
             {
                 Patterson.SendData(program, patient);
                 return;
             }
-            else if (program.ProgName == ProgramName.PerioPal.ToString())
+            else if (program.TypeName == ProgramName.PerioPal.ToString())
             {
                 PerioPal.SendData(program, patient);
                 return;
             }
-            else if (program.ProgName == ProgramName.Progeny.ToString())
+            else if (program.TypeName == ProgramName.Progeny.ToString())
             {
                 Progeny.SendData(program, patient);
                 return;
             }
-            else if (program.ProgName == ProgramName.PT.ToString())
+            else if (program.TypeName == ProgramName.PT.ToString())
             {
                 PaperlessTechnology.SendData(program, patient, false);
                 return;
             }
-            else if (program.ProgName == ProgramName.PTupdate.ToString())
+            else if (program.TypeName == ProgramName.PTupdate.ToString())
             {
                 PaperlessTechnology.SendData(program, patient, true);
                 return;
             }
-            else if (program.ProgName == ProgramName.RayMage.ToString())
+            else if (program.TypeName == ProgramName.RayMage.ToString())
             {
                 RayMage.SendData(program, patient);
                 return;
             }
-            else if (program.ProgName == ProgramName.Romexis.ToString())
+            else if (program.TypeName == ProgramName.Romexis.ToString())
             {
                 Romexis.SendData(program, patient);
                 return;
             }
-            else if (program.ProgName == ProgramName.Scanora.ToString())
+            else if (program.TypeName == ProgramName.Scanora.ToString())
             {
                 Scanora.SendData(program, patient);
                 return;
             }
 #if !DISABLE_WINDOWS_BRIDGES
-            else if (program.ProgName == ProgramName.Schick.ToString())
+            else if (program.TypeName == ProgramName.Schick.ToString())
             {
                 Schick.SendData(program, patient);
                 return;
             }
 #endif
-            else if (program.ProgName == ProgramName.Sirona.ToString())
+            else if (program.TypeName == ProgramName.Sirona.ToString())
             {
                 Sirona.SendData(program, patient);
                 return;
             }
-            else if (program.ProgName == ProgramName.SMARTDent.ToString())
+            else if (program.TypeName == ProgramName.SMARTDent.ToString())
             {
                 SmartDent.SendData(program, patient);
                 return;
             }
-            else if (program.ProgName == ProgramName.Sopro.ToString())
+            else if (program.TypeName == ProgramName.Sopro.ToString())
             {
                 Sopro.SendData(program, patient);
                 return;
             }
-            else if (program.ProgName == ProgramName.TigerView.ToString())
+            else if (program.TypeName == ProgramName.TigerView.ToString())
             {
                 TigerView.SendData(program, patient);
                 return;
             }
-            else if (program.ProgName == ProgramName.Triana.ToString())
+            else if (program.TypeName == ProgramName.Triana.ToString())
             {
                 Triana.SendData(program, patient);
                 return;
             }
-            else if (program.ProgName == ProgramName.Trophy.ToString())
+            else if (program.TypeName == ProgramName.Trophy.ToString())
             {
                 Trophy.SendData(program, patient);
                 return;
             }
-            else if (program.ProgName == ProgramName.TrophyEnhanced.ToString())
+            else if (program.TypeName == ProgramName.TrophyEnhanced.ToString())
             {
                 TrophyEnhanced.SendData(program, patient);
                 return;
             }
-            else if (program.ProgName == ProgramName.Tscan.ToString())
+            else if (program.TypeName == ProgramName.Tscan.ToString())
             {
                 Tscan.SendData(program, patient);
                 return;
             }
 #if !DISABLE_WINDOWS_BRIDGES
-            else if (program.ProgName == ProgramName.Vipersoft.ToString())
+            else if (program.TypeName == ProgramName.Vipersoft.ToString())
             {
                 Vipersoft.SendData(program, patient);
                 return;
             }
 #endif
-            else if (program.ProgName == ProgramName.visOra.ToString())
+            else if (program.TypeName == ProgramName.visOra.ToString())
             {
                 Visora.SendData(program, patient);
                 return;
             }
-            else if (program.ProgName == ProgramName.VistaDent.ToString())
+            else if (program.TypeName == ProgramName.VistaDent.ToString())
             {
                 VistaDent.SendData(program, patient);
                 return;
             }
-            else if (program.ProgName == ProgramName.VixWin.ToString())
+            else if (program.TypeName == ProgramName.VixWin.ToString())
             {
                 VixWin.SendData(program, patient);
                 return;
             }
-            else if (program.ProgName == ProgramName.VixWinBase36.ToString())
+            else if (program.TypeName == ProgramName.VixWinBase36.ToString())
             {
                 VixWinBase36.SendData(program, patient);
                 return;
             }
-            else if (program.ProgName == ProgramName.VixWinBase41.ToString())
+            else if (program.TypeName == ProgramName.VixWinBase41.ToString())
             {
                 VixWinBase41.SendData(program, patient);
                 return;
             }
-            else if (program.ProgName == ProgramName.VixWinNumbered.ToString())
+            else if (program.TypeName == ProgramName.VixWinNumbered.ToString())
             {
                 VixWinNumbered.SendData(program, patient);
                 return;
             }
-            else if (program.ProgName == ProgramName.VixWinOld.ToString())
+            else if (program.TypeName == ProgramName.VixWinOld.ToString())
             {
                 VixWinOld.SendData(program, patient);
                 return;
             }
-            else if (program.ProgName == ProgramName.XDR.ToString())
+            else if (program.TypeName == ProgramName.XDR.ToString())
             {
                 Dexis.SendData(program, patient);//XDR uses the Dexis protocol
                 return;
             }
-            else if (program.ProgName == ProgramName.XVWeb.ToString())
+            else if (program.TypeName == ProgramName.XVWeb.ToString())
             {
                 XVWeb.SendData(program, patient);
                 return;
             }
-            else if (program.ProgName == ProgramName.ZImage.ToString())
+            else if (program.TypeName == ProgramName.ZImage.ToString())
             {
                 ZImage.SendData(program, patient);
                 return;
@@ -481,7 +481,7 @@ namespace OpenDental
             catch
             {
                 MessageBox.Show(
-                    string.Format("{0} is not available.", program.ProgDesc), 
+                    string.Format("{0} is not available.", program.Description), 
                     "Program", 
                     MessageBoxButtons.OK, 
                     MessageBoxIcon.Error);
@@ -516,7 +516,7 @@ namespace OpenDental
                 {
                     image = PIn.Bitmap(program.ButtonImage);
                 }
-                else if (program.ProgName == ProgramName.Midway.ToString())
+                else if (program.TypeName == ProgramName.Midway.ToString())
                 {
                     image = Resources.Midway_Icon_22x22;
                 }
@@ -541,7 +541,7 @@ namespace OpenDental
         /// </summary>
         private static void AddDropDown(ODToolBarButton button, Program program)
         {
-            if (program.ProgName == ProgramName.Oryx.ToString())
+            if (program.TypeName == ProgramName.Oryx.ToString())
             {
                 var menuItem = new MenuItem
                 {

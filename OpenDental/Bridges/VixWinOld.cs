@@ -18,8 +18,8 @@ namespace OpenDental.Bridges{
 
 		///<summary>Sends data for Patient.Cur to the QuikLink directory. No further action is required.</summary>
 		public static void SendData(Program ProgramCur, Patient pat){
-			List<ProgramProperty> ForProgram =ProgramProperties.GetForProgram(ProgramCur.ProgramNum);
-			ProgramProperty PPCur=ProgramProperties.GetCur(ForProgram, "QuikLink directory.");
+			List<ProgramPreference> ForProgram =ProgramProperties.GetForProgram(ProgramCur.Id);
+			ProgramPreference PPCur=ProgramProperties.GetCur(ForProgram, "QuikLink directory.");
 			string quikLinkDir=PPCur.Value;
 			if(pat==null){
 				return;

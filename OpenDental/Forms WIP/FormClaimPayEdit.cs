@@ -805,16 +805,16 @@ namespace OpenDental{
 			//}
 			//show if enabled.  User could have both enabled.
 			if(progXcharge.Enabled
-				&& !PIn.Bool(ProgramProperties.GetPropVal(progXcharge.ProgramNum,XCharge.ProgramProperties.XChargePreventSavingNewCC,clinicNum)))
+				&& !PIn.Bool(ProgramProperties.GetPropVal(progXcharge.Id,XChargeBridge.ProgramProperties.XChargePreventSavingNewCC,clinicNum)))
 			{
 				//if clinics are disabled, X-Charge is enabled if marked enabled
 				if(!Preferences.HasClinicsEnabled) {
 					panelXcharge.Visible=true;
 				}
 				else {//if clinics are enabled, X-Charge is enabled if the PaymentType is valid and the Username and Password are not blank
-					string paymentType=ProgramProperties.GetPropVal(progXcharge.ProgramNum,"PaymentType",clinicNum);
-					if(!string.IsNullOrEmpty(ProgramProperties.GetPropVal(progXcharge.ProgramNum,"Username",clinicNum))
-						&& !string.IsNullOrEmpty(ProgramProperties.GetPropVal(progXcharge.ProgramNum,"Password",clinicNum))
+					string paymentType=ProgramProperties.GetPropVal(progXcharge.Id,"PaymentType",clinicNum);
+					if(!string.IsNullOrEmpty(ProgramProperties.GetPropVal(progXcharge.Id,"Username",clinicNum))
+						&& !string.IsNullOrEmpty(ProgramProperties.GetPropVal(progXcharge.Id,"Password",clinicNum))
 						&& listDefs.Any(x => x.Id.ToString()==paymentType))
 					{
 						panelXcharge.Visible=true;

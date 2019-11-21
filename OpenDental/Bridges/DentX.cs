@@ -34,7 +34,7 @@ namespace OpenDental.Bridges{
 
 		///<summary>Launches the program using the patient.Cur data.</summary>
 		public static void SendData(Program ProgramCur, Patient pat){
-			List<ProgramProperty> ForProgram =ProgramProperties.GetForProgram(ProgramCur.ProgramNum);;
+			List<ProgramPreference> ForProgram =ProgramProperties.GetForProgram(ProgramCur.Id);;
 			if(pat==null){
 				MessageBox.Show("Please select a patient first");
 				return;
@@ -56,7 +56,7 @@ namespace OpenDental.Bridges{
 			//command="Xray,PatientNo,FirstName,LastName,Birth Date,Sex,Address,City,State,Code"(zip)
 			string command="Xray,";
 			//PatientNo can be any string format up to 9 char
-			ProgramProperty PPCur=ProgramProperties.GetCur(ForProgram, "Enter 0 to use PatientNum, or 1 to use ChartNum");;
+			ProgramPreference PPCur=ProgramProperties.GetCur(ForProgram, "Enter 0 to use PatientNum, or 1 to use ChartNum");;
 			if(PPCur.Value=="0"){
 				command+=pat.PatNum.ToString()+",";
 			}

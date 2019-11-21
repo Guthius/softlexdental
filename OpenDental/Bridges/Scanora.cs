@@ -20,7 +20,7 @@ namespace OpenDental.Bridges{
 		///<summary></summary>
 		public static void SendData(Program ProgramCur,Patient pat) {
 			string path=Programs.GetProgramPath(ProgramCur);
-			string iniFile=ProgramProperties.GetPropVal(ProgramCur.ProgramNum,"Import.ini path");
+			string iniFile=ProgramProperties.GetPropVal(ProgramCur.Id,"Import.ini path");
 			if(pat==null) {
 				MsgBox.Show("Scanora","Please select a patient first.");
 				return;
@@ -30,7 +30,7 @@ namespace OpenDental.Bridges{
 				+"CLEAR_PRACTICE_MANAGEMENT_AUTOMATICALLY = 1\r\n"
 				+"USE_PRACTICE_MANAGEMENT = 1\r\n"
 				+"PATID = ";
-			if(ProgramProperties.GetPropVal(ProgramCur.ProgramNum,"Enter 0 to use PatientNum, or 1 to use ChartNum")=="0"){
+			if(ProgramProperties.GetPropVal(ProgramCur.Id,"Enter 0 to use PatientNum, or 1 to use ChartNum")=="0"){
 				iniText+=pat.PatNum.ToString();
 			}
 			else{

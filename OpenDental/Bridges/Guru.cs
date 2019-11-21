@@ -144,7 +144,7 @@ namespace OpenDental.Bridges {
 				mvPatient.Sex = Tidy("0",1);
 			}
 			mvPatient.BirthDate = Tidy(pat.Birthdate.ToString("MMddyyyy"),8);
-			if(ProgramProperties.GetPropVal(ProgramCur.ProgramNum,"Enter 0 to use PatientNum, or 1 to use ChartNum")=="0") {
+			if(ProgramProperties.GetPropVal(ProgramCur.Id,"Enter 0 to use PatientNum, or 1 to use ChartNum")=="0") {
 				mvPatient.ID=Tidy(pat.PatNum.ToString(),64);
 			}
 			else {
@@ -155,7 +155,7 @@ namespace OpenDental.Bridges {
 				pat.ImageFolder=pat.LName+pat.FName+pat.PatNum;
 				Patients.Update(pat,patOld);
 			}
-			string imagePath=Path.Combine(ProgramProperties.GetPropVal(ProgramCur.ProgramNum,"Guru image path"),pat.ImageFolder);
+			string imagePath=Path.Combine(ProgramProperties.GetPropVal(ProgramCur.Id,"Guru image path"),pat.ImageFolder);
 			mvPatient.Directory = Tidy(imagePath,259);
 			if(MVSendPatient(mvPatient) != 0) {
 				MsgBox.Show("Guru","An error has occured.");

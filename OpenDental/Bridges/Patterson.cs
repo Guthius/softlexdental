@@ -21,7 +21,7 @@ namespace OpenDental.Bridges {
 			if(pat==null) {
 				return;
 			}
-			string strPathToIni=ProgramProperties.GetPropVal(ProgramCur.ProgramNum,"System path to Patterson Imaging ini");
+			string strPathToIni=ProgramProperties.GetPropVal(ProgramCur.Id,"System path to Patterson Imaging ini");
 			if(!strPathToIni.ToLower().EndsWith(".ini")) {//A customer specified an exe path here once, and then the exe file was overwritten.
 				MsgBox.Show("Patterson","System path to Patterson Imaging ini is invalid in program link setup.");
 				return;

@@ -41,8 +41,8 @@ namespace OpenDental.Bridges {
 			string path=Programs.GetProgramPath(ProgramCur);
 			try {
 				if(pat!=null) {
-					List<ProgramProperty> listProgramProperties=ProgramProperties.GetForProgram(ProgramCur.ProgramNum);
-					ProgramProperty propIniFileLocation=ProgramProperties.GetCur(listProgramProperties,"System path to HDX WILL Argument ini file");
+					List<ProgramPreference> listProgramProperties=ProgramProperties.GetForProgram(ProgramCur.Id);
+					ProgramPreference propIniFileLocation=ProgramProperties.GetCur(listProgramProperties,"System path to HDX WILL Argument ini file");
 					string patientId=pat.PatNum.ToString();
 					string patientId2=pat.ChartNumber.ToString();
 					if(ProgramProperties.GetPropValFromList(listProgramProperties, "Enter 0 to use PatientNum, or 1 to use ChartNum")=="1") {

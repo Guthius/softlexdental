@@ -18,7 +18,7 @@ namespace OpenDental {
 		private List<long> _listUserClinicNums;
 		///<summary>List of PaySimple program properties for all clinics.
 		///Includes properties with ClinicNum=0, the headquarters props or props not assigned to a clinic.</summary>
-		private List<ProgramProperty> _listProgProps;
+		private List<ProgramPreference> _listProgProps;
 
 		///<summary>Used to revert the slected index in the clinic drop down box if the user tries to change clinics
 		///and the payment type has not been set.</summary>
@@ -74,7 +74,7 @@ namespace OpenDental {
 				}
 				_indexClinicRevert=comboClinic.SelectedIndex;
 			}
-			_listProgProps=ProgramProperties.GetForProgram(_progCur.ProgramNum);
+			_listProgProps=ProgramProperties.GetForProgram(_progCur.Id);
 			if(Preferences.HasClinicsEnabled) {
 				foreach(Clinic clinicCur in Clinics.GetForUserod(Security.CurrentUser)) {
 					AddNeededProgramProperties(clinicCur.ClinicNum);

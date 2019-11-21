@@ -120,15 +120,13 @@ namespace OpenDentBusiness
         ///<summary>Fills ForProgram with toolbutitems attached to the Programs.Cur</summary>
         public static List<ToolButItem> GetForProgram(long programNum)
         {
-            //No need to check RemotingRole; no call to db.
             return GetWhere(x => x.ProgramNum == programNum);
         }
 
         ///<summary>Returns a list of toolbutitems for the specified toolbar. Used when laying out toolbars.</summary>
         public static List<ToolButItem> GetForToolBar(ToolBarsAvail toolbar)
         {
-            //No need to check RemotingRole; no call to db.
-            return GetWhere(x => x.ToolBar == toolbar && Programs.IsEnabled(x.ProgramNum));
+            return GetWhere(x => x.ToolBar == toolbar && Program.IsEnabled(x.ProgramNum));
         }
     }
 }

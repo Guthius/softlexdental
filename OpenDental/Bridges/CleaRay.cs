@@ -1,63 +1,51 @@
-using System;
-using System.Collections;
-using System.Diagnostics;
-using System.IO;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Windows.Forms;
 using OpenDentBusiness;
+using System;
+using System.Diagnostics;
+using System.Windows.Forms;
 
-namespace OpenDental.Bridges{
-	///<summary></summary>
-	public class CleaRay {
+namespace OpenDental.Bridges
+{
+    public class CleaRay
+    {
+        public CleaRay()
+        {
+        }
 
-		///<summary></summary>
-		public CleaRay() {
-			
-		}
+        public static void SendData(Program ProgramCur, Patient pat)
+        {
+            string path = Programs.GetProgramPath(ProgramCur);
+            if (pat == null)
+            {
+                try
+                {
+                    Process.Start(path);
+                }
+                catch
+                {
+                    MessageBox.Show(path + " is not available.");
+                }
+                return;
+            }
 
-		///<summary></summary>
-		public static void SendData(Program ProgramCur,Patient pat) {
-			string path=Programs.GetProgramPath(ProgramCur);
-			if(pat==null) {
-				try {
-					Process.Start(path);
-				}
-				catch {
-					MessageBox.Show(path+" is not available.");
-				}
-				return;
-			}
-			string str="";
-			if(ProgramProperties.GetPropVal(ProgramCur.ProgramNum,"Enter 0 to use PatientNum, or 1 to use ChartNum")=="0"){
-				str+="/ID:"+TidyAndEncapsulate(pat.PatNum.ToString())+" ";
-			}
-			else{
-				str+="/ID:"+TidyAndEncapsulate(pat.ChartNumber)+" ";
-			}
-			str+="/LN:"+TidyAndEncapsulate(pat.LName)+" ";
-			str+="/N:"+TidyAndEncapsulate(pat.FName)+" ";
-			try {
-				Process.Start(path,str);
-			}
-			catch(Exception ex) {
-				MessageBox.Show(ex.Message);
-			}
-		}
+            string str = "";
 
-		///<summary>Removes semicolons, forward slashes, and spaces.</summary>
-		private static string TidyAndEncapsulate(string input) {
-			string retVal=input.Replace(";","");//get rid of any semicolons.
-			retVal=retVal.Replace("/","");//get rid of any forward slashes.
-			return "\""+retVal+"\"";
-		}
+            var id =
+                ProgramPreference.GetLong(ProgramCur.Id, ProgramPreferenceName.UsePatientIdOrChartNumber) == 0 ?
+                    pat.PatNum.ToString() : pat.ChartNumber;
 
-	}
+            str += "/ID:" + Tidy(id) + " ";
+            str += "/LN:" + Tidy(pat.LName) + " ";
+            str += "/N:" + Tidy(pat.FName) + " ";
+            try
+            {
+                Process.Start(path, str);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private static string Tidy(string input) => "\"" + input.Replace(";", "").Replace("/", "") + "\"";
+    }
 }
-
-
-
-
-
-
-

@@ -21,7 +21,7 @@ namespace OpenDental.Bridges {
 		public static void SendData(Program ProgramCur,Patient pat) {
 			string path=Programs.GetProgramPath(ProgramCur);
 			//ArrayList ForProgram=ProgramProperties.GetForProgram(ProgramCur.ProgramNum); ;
-			string version4or5=ProgramProperties.GetPropVal(ProgramCur.ProgramNum,"MediaDent Version 4 or 5");
+			string version4or5=ProgramProperties.GetPropVal(ProgramCur.Id,"MediaDent Version 4 or 5");
 			if(version4or5=="4") {
 				SendData4(ProgramCur,pat);
 				return;
@@ -34,11 +34,11 @@ namespace OpenDental.Bridges {
 					MessageBox.Show(path+" is not available.");
 				}
 			}
-			string infoFile=ProgramProperties.GetPropVal(ProgramCur.ProgramNum,"Text file path");
+			string infoFile=ProgramProperties.GetPropVal(ProgramCur.Id,"Text file path");
 			try {
 				using(StreamWriter sw=new StreamWriter(infoFile,false)) {
 					string id="";
-					if(ProgramProperties.GetPropVal(ProgramCur.ProgramNum,"Enter 0 to use PatientNum, or 1 to use ChartNum")=="0") {
+					if(ProgramProperties.GetPropVal(ProgramCur.Id,"Enter 0 to use PatientNum, or 1 to use ChartNum")=="0") {
 						id=pat.PatNum.ToString();
 					}
 					else {
@@ -77,7 +77,7 @@ namespace OpenDental.Bridges {
 			string path=Programs.GetProgramPath(ProgramCur);
 			//Usage: mediadent.exe /P<Patient Name> /D<Practitioner> /L<Language> /F<Image folder> /B<Birthdate>
 			//Example: mediadent.exe /PJan Met De Pet /DOtté Gunter /L1 /Fc:\Mediadent\patients\1011 /B27071973
-			List<ProgramProperty> ForProgram =ProgramProperties.GetForProgram(ProgramCur.ProgramNum); ;
+			List<ProgramPreference> ForProgram =ProgramProperties.GetForProgram(ProgramCur.Id); ;
 			if(pat==null) {
 				return;
 			}
@@ -85,7 +85,7 @@ namespace OpenDental.Bridges {
 			Provider prov=Providers.GetProv(Patients.GetProvNum(pat));
 			info+=" /D"+prov.FName+" "+prov.LName
 				+" /L1 /F";
-			ProgramProperty PPCur=ProgramProperties.GetCur(ForProgram,ProgramProperties.PropertyDescs.ImageFolder);
+			ProgramPreference PPCur=ProgramProperties.GetCur(ForProgram,ProgramProperties.PropertyDescs.ImageFolder);
 			info+=PPCur.Value;
 			PPCur=ProgramProperties.GetCur(ForProgram,ProgramProperties.PropertyDescs.PatOrChartNum); ;
 			if(PPCur.Value=="0") {

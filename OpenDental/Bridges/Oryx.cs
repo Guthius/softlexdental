@@ -21,7 +21,7 @@ namespace OpenDental.Bridges
         {
             try
             {
-                string clientUrl = OpenDentBusiness.ProgramProperties.GetPropVal(progOryx.ProgramNum, ProgramProperties.ClientUrl);
+                string clientUrl = OpenDentBusiness.ProgramProperties.GetPropVal(progOryx.Id, ProgramProperties.ClientUrl);
                 if (clientUrl == "")
                 {//Office has not signed up with Oryx yet, launch a promotional page.
                     string promoUrl = "http://www.opendental.com/resources/redirects/redirectoryx.html";

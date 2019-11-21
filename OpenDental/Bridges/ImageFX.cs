@@ -20,10 +20,10 @@ namespace OpenDental.Bridges{
 		///<summary>Launches the program using a combination of command line characters and the patient.Cur data.  They also have an available file based method which passes more information, but we don't use it yet.</summary>
 		public static void SendData(Program ProgramCur, Patient pat){
 			string path=Programs.GetProgramPath(ProgramCur);
-			List<ProgramProperty> ForProgram =ProgramProperties.GetForProgram(ProgramCur.ProgramNum);;
+			List<ProgramPreference> ForProgram =ProgramProperties.GetForProgram(ProgramCur.Id);;
 			if(pat!=null){
 				string info="-";
-				ProgramProperty PPCur=ProgramProperties.GetCur(ForProgram, "Enter 0 to use PatientNum, or 1 to use ChartNum");;
+				ProgramPreference PPCur=ProgramProperties.GetCur(ForProgram, "Enter 0 to use PatientNum, or 1 to use ChartNum");;
 				if(PPCur.Value=="0"){
 					info+=ClipTo(pat.PatNum.ToString(),10)+";";
 				}

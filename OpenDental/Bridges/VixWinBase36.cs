@@ -24,7 +24,7 @@ namespace OpenDental.Bridges {
 			}
 			//Example: c:\vixwin\vixwin -I 12ABYZ -N Bill^Smith -P X:\VXImages\12AB#$\
 			string info="-I "+ConvertToBase36(pat.PatNum);
-			string ppImagePath=ProgramProperties.GetPropVal(ProgramCur.ProgramNum,"Image Path");
+			string ppImagePath=ProgramProperties.GetPropVal(ProgramCur.Id,"Image Path");
 			if(pat.FName.ToString()!="") {
 				info+=" -N "+Tidy(pat.FName)+"^"+Tidy(pat.LName);
 			}

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -8,191 +7,8 @@ using System.Text;
 
 namespace OpenDentBusiness
 {
-
-    ///<summary></summary>
     public class Programs
     {
-        #region Get Methods
-        #endregion
-
-        #region Modification Methods
-
-        #region Insert
-        #endregion
-
-        #region Update
-        #endregion
-
-        #region Delete
-        #endregion
-
-        #endregion
-
-        #region Misc Methods
-        #endregion
-
-        #region Cache Pattern
-
-        private class ProgramCache : CacheListAbs<Program>
-        {
-            protected override List<Program> GetCacheFromDb()
-            {
-                string command = "SELECT * FROM program ORDER BY ProgDesc";
-                return Crud.ProgramCrud.SelectMany(command);
-            }
-            protected override List<Program> TableToList(DataTable table)
-            {
-                return Crud.ProgramCrud.TableToList(table);
-            }
-            protected override Program Copy(Program program)
-            {
-                return program.Copy();
-            }
-            protected override DataTable ListToTable(List<Program> listPrograms)
-            {
-                return Crud.ProgramCrud.ListToTable(listPrograms, "Program");
-            }
-            protected override void FillCacheIfNeeded()
-            {
-                Programs.GetTableFromCache(false);
-            }
-        }
-
-        ///<summary>The object that accesses the cache in a thread-safe manner.</summary>
-        private static ProgramCache _programCache = new ProgramCache();
-
-        public static List<Program> GetListDeep(bool isShort = false)
-        {
-            return _programCache.GetDeepCopy(isShort);
-        }
-
-        public static Program GetFirstOrDefault(Func<Program, bool> match, bool isShort = false)
-        {
-            return _programCache.GetFirstOrDefault(match, isShort);
-        }
-
-        public static List<Program> GetWhere(Predicate<Program> match, bool isShort = false)
-        {
-            return _programCache.GetWhere(match, isShort);
-        }
-
-        public static bool HListIsNull()
-        {
-            return _programCache.ListIsNull();
-        }
-
-        ///<summary>Refreshes the cache and returns it as a DataTable. This will refresh the ClientWeb's cache and the ServerWeb's cache.</summary>
-        public static DataTable RefreshCache()
-        {
-            return GetTableFromCache(true);
-        }
-
-        ///<summary>Fills the local cache with the passed in DataTable.</summary>
-        public static void FillCacheFromTable(DataTable table)
-        {
-            _programCache.FillCacheFromTable(table);
-        }
-
-        ///<summary>Always refreshes the ClientWeb's cache.</summary>
-        public static DataTable GetTableFromCache(bool doRefreshCache)
-        {
-            return _programCache.GetTableFromCache(doRefreshCache);
-        }
-
-        #endregion Cache Pattern
-
-        ///<summary></summary>
-        public static void Update(Program Cur)
-        {
-            Crud.ProgramCrud.Update(Cur);
-        }
-
-        ///<summary></summary>
-        public static long Insert(Program Cur)
-        {
-            return Crud.ProgramCrud.Insert(Cur);
-        }
-
-        ///<summary>This can only be called by the user if it is a program link that they created. Included program links cannot be deleted.  If calling this from ClassConversion, must delete any dependent ProgramProperties first.  It will delete ToolButItems for you.</summary>
-        public static void Delete(Program prog)
-        {
-            string command = "DELETE from toolbutitem WHERE ProgramNum = " + POut.Long(prog.ProgramNum);
-            Db.NonQ(command);
-            command = "DELETE from program WHERE ProgramNum = '" + prog.ProgramNum.ToString() + "'";
-            Db.NonQ(command);
-        }
-
-        ///<summary>Returns true if a Program link with the given name or number exists and is enabled.</summary>
-        public static bool IsEnabled(ProgramName progName)
-        {
-            //No need to check RemotingRole; no call to db.
-            Program program = GetFirstOrDefault(x => x.ProgName == progName.ToString());
-            return (program == null ? false : program.Enabled);
-        }
-
-        ///<summary></summary>
-        public static bool IsEnabled(long programNum)
-        {
-            //No need to check RemotingRole; no call to db.
-            Program program = GetFirstOrDefault(x => x.ProgramNum == programNum);
-            return (program == null ? false : program.Enabled);
-        }
-
-        ///<summary>Returns the Program of the passed in ProgramNum.  Will be null if a Program is not found.</summary>
-        public static Program GetProgram(long programNum)
-        {
-            //No need to check RemotingRole; no call to db.
-            return GetFirstOrDefault(x => x.ProgramNum == programNum);
-        }
-
-        ///<summary>Supply a valid program Name, and this will set Cur to be the corresponding Program object.</summary>
-        public static Program GetCur(ProgramName progName)
-        {
-            //No need to check RemotingRole; no call to db.
-            return GetFirstOrDefault(x => x.ProgName == progName.ToString());
-        }
-
-        ///<summary>Supply a valid program Name.  Will return 0 if not found.</summary>
-        public static long GetProgramNum(ProgramName progName)
-        {
-            //No need to check RemotingRole; no call to db.
-            Program program = GetCur(progName);
-            return (program == null ? 0 : program.ProgramNum);
-        }
-
-        /// <summary>Using eClinicalWorks tight integration.</summary>
-        public static bool UsingEcwTightMode()
-        {
-            //No need to check RemotingRole; no call to db.
-            if (Programs.IsEnabled(ProgramName.eClinicalWorks) && ProgramProperties.GetPropVal(ProgramName.eClinicalWorks, "eClinicalWorksMode") == "0")
-            {
-                return true;
-            }
-            return false;
-        }
-
-        /// <summary>Using eClinicalWorks full mode.</summary>
-        public static bool UsingEcwFullMode()
-        {
-            //No need to check RemotingRole; no call to db.
-            if (Programs.IsEnabled(ProgramName.eClinicalWorks) && ProgramProperties.GetPropVal(ProgramName.eClinicalWorks, "eClinicalWorksMode") == "2")
-            {
-                return true;
-            }
-            return false;
-        }
-
-        /// <summary>Returns true if using eCW in tight or full mode.  In these modes, appointments ARE allowed to overlap because we block users from seeing them.</summary>
-        public static bool UsingEcwTightOrFullMode()
-        {
-            //No need to check RemotingRole; no call to db.
-            if (UsingEcwTightMode() || UsingEcwFullMode())
-            {
-                return true;
-            }
-            return false;
-        }
-
         /// <summary></summary>
         public static bool UsingOrion
         {
@@ -219,7 +35,7 @@ namespace OpenDentBusiness
         public bool IsStatic(Program prog)
         {
             //Currently there is just one static program. As more are created they will need to be added to this check.
-            if (prog.ProgName == ProgramName.RapidCall.ToString())
+            if (prog.TypeName == ProgramName.RapidCall.ToString())
             {
                 return true;
             }
@@ -369,7 +185,7 @@ namespace OpenDentBusiness
             {
                 return;
             }
-            string strFileToScrub = Path.Combine(ProgramProperties.GetPropVal(program.ProgramNum, strFileProperty), strFilePropertySuffix);
+            string strFileToScrub = Path.Combine(ProgramProperties.GetPropVal(program.Id, strFileProperty), strFilePropertySuffix);
             if (!File.Exists(strFileToScrub))
             {
                 return;
@@ -382,6 +198,7 @@ namespace OpenDentBusiness
             {
                 //Another instance of OD might be closing at the same time, in which case the delete will fail. Could also be a permission issue or a concurrency issue. Ignore.
             }
+
             if (!isRemovable)
             {
                 return;

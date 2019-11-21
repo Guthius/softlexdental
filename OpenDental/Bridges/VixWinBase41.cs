@@ -23,7 +23,7 @@ namespace OpenDental.Bridges {
 			}
 			//Example: c:\vixwin\vixwin -I 12AB@# -N Bill^Smith -P X:\VXImages\12AB#$\
 			string info="-I "+ConvertToBase41(pat.PatNum);
-			string ppImagePath=ProgramProperties.GetPropVal(ProgramCur.ProgramNum,"Image Path");
+			string ppImagePath=ProgramProperties.GetPropVal(ProgramCur.Id,"Image Path");
 			info+=" -N "+pat.FName.Replace(" ","")+"^"+pat.LName.Replace(" ","");//no spaces allowed
 			if(ppImagePath=="") {
 				MessageBox.Show("Image Path cannot be left blank.");

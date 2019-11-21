@@ -36,7 +36,7 @@ namespace OpenDental.Bridges{
 				info+="-m"+Tidy(pat.MiddleI)+" ";//Middle name can only be alpha-numeric, so we remove non-alpha-numeric characters.
 			}
 			info+="-l"+Tidy(pat.LName)+" ";//Last name can only be alpha-numeric, so we remove non-alpha-numeric characters.
-			if(ProgramProperties.GetPropVal(ProgramCur.ProgramNum,"Enter 0 to use PatientNum, or 1 to use ChartNum")=="0"){
+			if(ProgramProperties.GetPropVal(ProgramCur.Id,"Enter 0 to use PatientNum, or 1 to use ChartNum")=="0"){
 				info+="-i"+pat.PatNum.ToString()+" ";
 			}
 			else{

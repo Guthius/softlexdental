@@ -21,7 +21,7 @@ namespace OpenDental.Bridges {
 				MsgBox.Show("VixWinNumbered","Please select a patient first.");
 				return;
 			}
-			string ppImagePath=ProgramProperties.GetPropVal(ProgramCur.ProgramNum,"Image Path");
+			string ppImagePath=ProgramProperties.GetPropVal(ProgramCur.Id,"Image Path");
 			if(ppImagePath.Trim()=="") {
 				MsgBox.Show("VixWinNumbered","Missing Image Path.");
 				return;
@@ -40,7 +40,7 @@ namespace OpenDental.Bridges {
 			}
 			//Example: c:\vixwin\vixwin -I 123ABC -N Bill^Smith -P X:\VXImages\02\196402\
 			string info="-I ";
-			if(ProgramProperties.GetPropVal(ProgramCur.ProgramNum,"Enter 0 to use PatientNum, or 1 to use ChartNum")=="0") {
+			if(ProgramProperties.GetPropVal(ProgramCur.Id,"Enter 0 to use PatientNum, or 1 to use ChartNum")=="0") {
 				info+=pat.PatNum.ToString();
 			}
 			else {

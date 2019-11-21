@@ -21,10 +21,10 @@ namespace OpenDental.Bridges {
 				MsgBox.Show("Office","Please select a patient first.");
 				return;
 			}
-			string fileName=ProgramProperties.GetPropVal(ProgramCur.ProgramNum,"Document folder");
+			string fileName=ProgramProperties.GetPropVal(ProgramCur.Id,"Document folder");
 			string oldFileName= Path.Combine(fileName,Tidy(pat.LName+pat.FName));
 			//ProgramProperties.GetPropVal() is the way to get program properties.
-			if(ProgramProperties.GetPropVal(ProgramCur.ProgramNum,"Enter 0 to use PatientNum, or 1 to use ChartNum")=="0") {
+			if(ProgramProperties.GetPropVal(ProgramCur.Id,"Enter 0 to use PatientNum, or 1 to use ChartNum")=="0") {
 				fileName= Path.Combine(fileName,pat.PatNum.ToString());
 				oldFileName+=pat.PatNum.ToString();
 			}
@@ -32,8 +32,8 @@ namespace OpenDental.Bridges {
 				fileName= Path.Combine(fileName,Tidy(pat.ChartNumber));
 				oldFileName+=Tidy(pat.ChartNumber);
 			}
-			fileName+=ProgramProperties.GetPropVal(ProgramCur.ProgramNum,"File extension");
-			oldFileName+=ProgramProperties.GetPropVal(ProgramCur.ProgramNum,"File extension");
+			fileName+=ProgramProperties.GetPropVal(ProgramCur.Id,"File extension");
+			oldFileName+=ProgramProperties.GetPropVal(ProgramCur.Id,"File extension");
 			Process process=new Process();
 			ProcessStartInfo startInfo=new ProcessStartInfo();
 			if(!File.Exists(fileName)) {

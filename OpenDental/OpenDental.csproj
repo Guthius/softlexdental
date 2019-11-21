@@ -10,7 +10,7 @@
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>OpenDental</RootNamespace>
-    <AssemblyName>OpenDental</AssemblyName>
+    <AssemblyName>Imedisoft</AssemblyName>
     <TargetZone>LocalIntranet</TargetZone>
     <GenerateManifests>false</GenerateManifests>
     <ApplicationIcon>
@@ -91,7 +91,7 @@
     </DefineConstants>
     <Prefer32Bit>false</Prefer32Bit>
     <CodeAnalysisRuleSet>OpenDental.ruleset</CodeAnalysisRuleSet>
-    <DocumentationFile>bin\Release\OpenDental.XML</DocumentationFile>
+    <DocumentationFile>bin\Release\Imedisoft.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="AxInterop.AcroPDFLib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -269,24 +269,23 @@
       <DependentUpon>FormOryxUserSettings.cs</DependentUpon>
     </Compile>
     <Compile Include="Bridges\Oryx.cs" />
-    <Compile Include="Bridges\DentalXChange.cs" />
+    <Compile Include="Bridges\DentalXChangeBridge.cs" />
     <Compile Include="Bridges\Midway.cs" />
     <Compile Include="Bridges\ApteryxImage.cs" />
-    <Compile Include="Bridges\CADI.cs" />
-    <Compile Include="Bridges\Carestream.cs" />
+    <Compile Include="Bridges\CadiBridge.cs" />
+    <Compile Include="Bridges\CarestreamBridge.cs" />
     <Compile Include="Bridges\HdxWill.cs" />
     <Compile Include="Bridges\NewTomNNT.cs" />
-    <Compile Include="Bridges\iDixel.cs" />
-    <Compile Include="Bridges\Adstra.cs" />
-    <Compile Include="Bridges\Apteryx.cs" />
-    <Compile Include="Bridges\AudaxCeph.cs" />
-    <Compile Include="Bridges\Cerec.cs" />
-    <Compile Include="Bridges\Apixia.cs" />
-    <Compile Include="Bridges\BioPAK.cs" />
-    <Compile Include="Bridges\CaptureLink.cs" />
-    <Compile Include="Bridges\ClioSoft.cs" />
+    <Compile Include="Bridges\IDixelBridge.cs" />
+    <Compile Include="Bridges\AdstraBridge.cs" />
+    <Compile Include="Bridges\ApteryxBridge.cs" />
+    <Compile Include="Bridges\AudaxCephBridge.cs" />
+    <Compile Include="Bridges\CerecBridge.cs" />
+    <Compile Include="Bridges\ApixiaBridge.cs" />
+    <Compile Include="Bridges\BioPAKBridge.cs" />
+    <Compile Include="Bridges\CaptureLinkBridge.cs" />
+    <Compile Include="Bridges\ClioSoftBridge.cs" />
     <Compile Include="Bridges\ClaimX_Statements.cs" />
-    <Compile Include="Bridges\CDS.cs" />
     <Compile Include="Bridges\CleaRay.cs" />
     <Compile Include="Bridges\OrthoInsight3d.cs" />
     <Compile Include="Bridges\PandaPeriodAdvanced.cs" />
@@ -296,22 +295,21 @@
     <Compile Include="Bridges\OrthoCad.cs" />
     <Compile Include="Bridges\RapidCall.cs" />
     <Compile Include="Bridges\Romexis.cs" />
-    <Compile Include="Bridges\DentalTek.cs" />
+    <Compile Include="Bridges\DentalTekBridge.cs" />
     <Compile Include="Bridges\DemandForce.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Bridges\Office.cs" />
-    <Compile Include="Bridges\HandyDentist.cs" />
+    <Compile Include="Bridges\HandyDentistBridge.cs" />
     <Compile Include="Bridges\Irys.cs" />
     <Compile Include="Bridges\PandaPerio.cs" />
     <Compile Include="Bridges\Scanora.cs" />
     <Compile Include="Bridges\SmartDent.cs" />
-    <Compile Include="Bridges\ActeonImagingSuite.cs" />
+    <Compile Include="Bridges\ActeonImagingSuiteBridge.cs" />
     <Compile Include="Bridges\Triana.cs" />
     <Compile Include="Bridges\Visora.cs" />
     <Compile Include="Bridges\VistaDent.cs" />
-    <Compile Include="Bridges\DentalStudio.cs" />
-    <Compile Include="Bridges\DivvyPostcardService.cs" />
+    <Compile Include="Bridges\DentalStudioBridge.cs" />
     <Compile Include="Bridges\Guru.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -334,8 +332,8 @@
     <Compile Include="Bridges\FormTrophyNamePick.Designer.cs">
       <DependentUpon>FormTrophyNamePick.cs</DependentUpon>
     </Compile>
-    <Compile Include="Bridges\Camsight.cs" />
-    <Compile Include="Bridges\Cliniview.cs" />
+    <Compile Include="Bridges\CamsightBridge.cs" />
+    <Compile Include="Bridges\CliniviewBridge.cs" />
     <Compile Include="Bridges\ICat.cs" />
     <Compile Include="Bridges\ECW.cs" />
     <Compile Include="Bridges\Progeny.cs" />
@@ -362,15 +360,15 @@
     <Compile Include="Bridges\FormPrintReport.designer.cs">
       <DependentUpon>FormPrintReport.cs</DependentUpon>
     </Compile>
-    <Compile Include="Bridges\Dxis.cs" />
+    <Compile Include="Bridges\DxisBridge.cs" />
     <Compile Include="Bridges\Vipersoft.cs" />
-    <Compile Include="Bridges\DBSWin.cs" />
+    <Compile Include="Bridges\DbsWinBridge.cs" />
     <Compile Include="Bridges\DentalEye.cs" />
     <Compile Include="Bridges\DentForms.cs" />
     <Compile Include="Bridges\DentX.cs" />
     <Compile Include="Bridges\Dexis.cs" />
     <Compile Include="Bridges\DrCeph.cs" />
-    <Compile Include="Bridges\FloridaProbe.cs" />
+    <Compile Include="Bridges\FloridaProbeBridge.cs" />
     <Compile Include="Bridges\Iap.cs" />
     <Compile Include="Bridges\ImageFX.cs" />
     <Compile Include="Bridges\Lightyear.cs" />

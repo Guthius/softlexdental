@@ -380,8 +380,8 @@ namespace OpenDentBusiness
                 MarkFailed(chargeData, Lans.g(_lanThis, "The X-Charge Username or Password for the clinic has not been set."), LogLevel.Info);
                 return false;
             }
-            string username = ProgramProperties.GetPropVal(_progCur.ProgramNum, "Username", clinicNumCur);
-            string password = ProgramProperties.GetPropVal(_progCur.ProgramNum, "Password", clinicNumCur);
+            string username = ProgramProperties.GetPropVal(_progCur.Id, "Username", clinicNumCur);
+            string password = ProgramProperties.GetPropVal(_progCur.Id, "Password", clinicNumCur);
             if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
             {//clinicNumCur is not in listClinicNumsBadCredentials yet
                 string clinicAbbr = "Headquarters";
@@ -708,7 +708,7 @@ namespace OpenDentBusiness
             }
             if (paymentCur.PayType == 0)
             {//Pref default not set or this is ACH
-                paymentCur.PayType = PIn.Int(ProgramProperties.GetPropVal(_progCur.ProgramNum, ppPayTypeDesc, paymentCur.ClinicNum));
+                paymentCur.PayType = PIn.Int(ProgramProperties.GetPropVal(_progCur.Id, ppPayTypeDesc, paymentCur.ClinicNum));
             }
             paymentCur.PayAmt = amount;
             double payPlanDue = recCharge.RecurringCharge.PayPlanDue;

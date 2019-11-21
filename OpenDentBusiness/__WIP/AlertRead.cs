@@ -64,6 +64,14 @@ namespace OpenDentBusiness
         public static List<AlertRead> GetByUser(long userId) =>
             SelectMany("SELECT * FROM `alerts_read` WHERE `user_id` = " + userId, FromReader);
 
+        /// <summary>
+        ///     <para>
+        ///         Gets a list of all alerts read by the specified user.
+        ///     </para>
+        /// </summary>
+        /// <param name="userId">The ID of the user.</param>
+        /// <param name="alertItemIds">The ID's of the alert items to check.</param>
+        /// <returns>A list of alerts read.</returns>
         public static List<AlertRead> GetByUser(long userId, List<long> alertItemIds)
         {
             if (alertItemIds == null || alertItemIds.Count == 0)

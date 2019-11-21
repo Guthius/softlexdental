@@ -515,7 +515,7 @@ namespace OpenDentBusiness
             }
             #region commlog
             List<Definition> listCommLogTypeDefs = Definition.GetByCategory(DefinitionCategory.CommLogTypes);
-            long podiumProgramNum = Programs.GetCur(ProgramName.Podium).ProgramNum;
+            long podiumProgramNum = Programs.GetCur(ProgramName.Podium).Id;
             bool showPodiumCommlogs = PIn.Bool(ProgramProperties.GetPropVal(podiumProgramNum, Podium.PropertyDescs.ShowCommlogsInChartAndAccount));
             string andNotPodiumCommlog = " AND (commlog.CommSource!=" + POut.Int((int)CommItemSource.ProgramLink) + " "
                 + "OR commlog.ProgramNum!=" + POut.Long(podiumProgramNum) + ")";

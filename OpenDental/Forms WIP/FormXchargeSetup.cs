@@ -53,10 +53,10 @@ namespace OpenDental
         ///as comboClinic and is used to set programproperty.ClinicNum when saving.</summary>
         private List<long> _listUserClinicNums;
         ///<summary>List of X-Charge prog props for all clinics.  Includes props with ClinicNum=0 for headquarters/props unassigned to a clinic.</summary>
-        private List<ProgramProperty> _listProgProps;
+        private List<ProgramPreference> _listProgProps;
         private CheckBox checkWebPayEnabled;
         private CheckBox checkForceDuplicate;
-        private List<ProgramProperty> _listPayConnectWebPayProgProps = new List<ProgramProperty>();
+        private List<ProgramPreference> _listPayConnectWebPayProgProps = new List<ProgramPreference>();
 
         ///<summary>Used to revert the clinic drop down selected index if the user tries to change clinics and the payment type hasn't been set.</summary>
         private int _indexClinicRevert;
@@ -534,17 +534,17 @@ namespace OpenDental
             }
             else
             {//clinics not enabled
-                checkEnabled.Text = Lan.g(this, "Enabled");
+                checkEnabled.Text = "Enabled";
                 labelClinicEnable.Visible = false;
                 labelClinic.Visible = false;
                 comboClinic.Visible = false;
-                groupPaySettings.Text = Lan.g(this, "Payment Settings");
+                groupPaySettings.Text = "Payment Settings";
                 _listUserClinicNums = new List<long>() { 0 };//if clinics are disabled, programproperty.ClinicNum will be set to 0
             }
             checkEnabled.Checked = _progCur.Enabled;
-            textPath.Text = _progCur.Path;
+            textPath.Text = ProgramPreference.GetString(_progCur.Id, ProgramPreferenceName.ProgramPath);
             //textOverride.Text = ProgramProperties.GetLocalPathOverrideForProgram(_progCur.ProgramNum);
-            _listProgProps = ProgramProperties.GetForProgram(_progCur.ProgramNum);
+            _listProgProps = ProgramProperties.GetForProgram(_progCur.Id);
             FillFields();
         }
 
@@ -582,9 +582,9 @@ namespace OpenDental
             checkPromptSig.Checked = PIn.Bool(ProgramProperties.GetPropValFromList(_listProgProps, "PromptSignature", clinicNum));
             checkPrintReceipt.Checked = PIn.Bool(ProgramProperties.GetPropValFromList(_listProgProps, "PrintReceipt", clinicNum));
             checkForceDuplicate.Checked = PIn.Bool(ProgramProperties.GetPropValFromList(_listProgProps,
-                XCharge.ProgramProperties.XChargeForceRecurringCharge, clinicNum));
+                XChargeBridge.ProgramProperties.XChargeForceRecurringCharge, clinicNum));
             checkPreventSavingNewCC.Checked = PIn.Bool(ProgramProperties.GetPropValFromList(_listProgProps,
-                XCharge.ProgramProperties.XChargePreventSavingNewCC, clinicNum));
+                XChargeBridge.ProgramProperties.XChargePreventSavingNewCC, clinicNum));
         }
 
         private void comboClinic_SelectionChangeCommitted(object sender, EventArgs e)
@@ -637,10 +637,10 @@ namespace OpenDental
             _listProgProps.FindAll(x => x.ClinicId == _listUserClinicNums[_indexClinicRevert] && x.Key == "PaymentType")//payment type already validated
                 .ForEach(x => x.Value = payTypeCur);//always 1 item, null safe
             _listProgProps.FindAll(x => x.ClinicId == _listUserClinicNums[_indexClinicRevert] &&
-                x.Key == XCharge.ProgramProperties.XChargeForceRecurringCharge)
+                x.Key == XChargeBridge.ProgramProperties.XChargeForceRecurringCharge)
                 .ForEach(x => x.Value = POut.Bool(checkForceDuplicate.Checked));
             _listProgProps.FindAll(x => x.ClinicId == _listUserClinicNums[_indexClinicRevert] &&
-                    x.Key == XCharge.ProgramProperties.XChargePreventSavingNewCC)
+                    x.Key == XChargeBridge.ProgramProperties.XChargePreventSavingNewCC)
                 .ForEach(x => x.Value = POut.Bool(checkPreventSavingNewCC.Checked));
             _indexClinicRevert = comboClinic.SelectedIndex;//now that we've updated the values for the clinic we're switching from, update _indexClinicRevert
             textPassword.UseSystemPasswordChar = false;//FillFields will set this to true if the clinic being selected has a password set
@@ -891,7 +891,7 @@ namespace OpenDental
             }
         }
 
-        private void butOK_Click(object sender, System.EventArgs e)
+        private void butOK_Click(object sender, EventArgs e)
         {
             #region Validation and Update Local List
             if (_progCur == null)
@@ -980,9 +980,9 @@ namespace OpenDental
                 .ForEach(x => x.Value = POut.Bool(checkWebPayEnabled.Checked));//always 1 item, null safe
             _listProgProps.FindAll(x => x.ClinicId == clinicNum && x.Key == "PaymentType")
                 .ForEach(x => x.Value = payTypeCur);//always 1 item; null safe
-            _listProgProps.FindAll(x => x.ClinicId == clinicNum && x.Key == XCharge.ProgramProperties.XChargeForceRecurringCharge)
+            _listProgProps.FindAll(x => x.ClinicId == clinicNum && x.Key == XChargeBridge.ProgramProperties.XChargeForceRecurringCharge)
                 .ForEach(x => x.Value = POut.Bool(checkForceDuplicate.Checked));
-            _listProgProps.FindAll(x => x.ClinicId == clinicNum && x.Key == XCharge.ProgramProperties.XChargePreventSavingNewCC)
+            _listProgProps.FindAll(x => x.ClinicId == clinicNum && x.Key == XChargeBridge.ProgramProperties.XChargePreventSavingNewCC)
                 .ForEach(x => x.Value = POut.Bool(checkPreventSavingNewCC.Checked));
             #endregion Update Local List of Program Properties
             #region Validate PaymentTypes For All Clinics
@@ -994,12 +994,11 @@ namespace OpenDental
             #endregion Validate PaymentTypes For All Clinics
             #endregion Validation and Update Local List
             #region Save
-            if (_progCur.Enabled != checkEnabled.Checked || _progCur.Path != textPath.Text.Trim())
-            {//update the program if the IsEnabled flag or Path has changed
+
                 _progCur.Enabled = checkEnabled.Checked;
-                _progCur.Path = textPath.Text.Trim();
-                Programs.Update(_progCur);
-            }
+                ProgramPreference.Set(_progCur.Id, ProgramPreferenceName.ProgramPath, textPath.Text.Trim());
+                Program.Update(_progCur);
+            
             //if (ProgramProperties.GetLocalPathOverrideForProgram(_progCur.ProgramNum) != textOverride.Text.Trim())
             //{
             //    ProgramProperties.InsertOrUpdateLocalOverridePath(_progCur.ProgramNum, textOverride.Text.Trim());
@@ -1018,11 +1017,13 @@ namespace OpenDental
             //    }
             //});
             #endregion Save
-            DataValid.SetInvalid(InvalidType.Programs);
+
+            CacheManager.Invalidate<Program>();
+
             DialogResult = DialogResult.OK;
         }
 
-        private void butCancel_Click(object sender, System.EventArgs e)
+        private void butCancel_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.Cancel;
         }

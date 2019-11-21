@@ -247,8 +247,8 @@ namespace OpenDental{
 			else
 				ToDate=PIn.Date(textDateTo.Text);
 			//Create the file and first row--------------------------------------------------------
-			List<ProgramProperty> ForProgram =ProgramProperties.GetForProgram(ProgramCur.ProgramNum);
-			ProgramProperty PPCur=ProgramProperties.GetCur(ForProgram, "Export Path");
+			List<ProgramPreference> ForProgram =ProgramProperties.GetForProgram(ProgramCur.Id);
+			ProgramPreference PPCur=ProgramProperties.GetCur(ForProgram, "Export Path");
 			string fileName=PPCur.Value+"Appt.txt";
 			if(!Directory.Exists(PPCur.Value)){
 				Directory.CreateDirectory(PPCur.Value);

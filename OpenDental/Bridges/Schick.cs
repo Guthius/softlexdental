@@ -20,8 +20,8 @@ namespace OpenDental.Bridges{
 			if(pat==null){
 				return;
 			}
-			List<ProgramProperty> ForProgram=ProgramProperties.GetForProgram(ProgramCur.ProgramNum);
-			ProgramProperty PPCur=ProgramProperties.GetCur(ForProgram,"Enter 0 to use PatientNum, or 1 to use ChartNum");
+			List<ProgramPreference> ForProgram=ProgramProperties.GetForProgram(ProgramCur.Id);
+			ProgramPreference PPCur=ProgramProperties.GetCur(ForProgram,"Enter 0 to use PatientNum, or 1 to use ChartNum");
 			string patID="";
 			if(PPCur.Value=="0") {
 				patID=pat.PatNum.ToString();
@@ -30,7 +30,7 @@ namespace OpenDental.Bridges{
 				patID=pat.ChartNumber;
 			}
 			try {
-				string version4or5=ProgramProperties.GetPropVal(ProgramCur.ProgramNum,"Schick Version 4 or 5");
+				string version4or5=ProgramProperties.GetPropVal(ProgramCur.Id,"Schick Version 4 or 5");
 				if(version4or5=="5") {
 					ShowExam(pat,patID);
 				}

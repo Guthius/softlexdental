@@ -20,9 +20,9 @@ namespace OpenDental
         private List<long> _listUserClinicNums;
         ///<summary>List of PayConnect program properties for all clinics.
         ///Includes properties with ClinicNum=0, the headquarters props or props not assigned to a clinic.</summary>
-        private List<ProgramProperty> _listProgProps;
+        private List<ProgramPreference> _listProgProps;
 
-        private List<ProgramProperty> _listXWebWebPayProgProps = new List<ProgramProperty>();
+        private List<ProgramPreference> _listXWebWebPayProgProps = new List<ProgramPreference>();
 
         ///<summary>Used to revert the slected index in the clinic drop down box if the user tries to change clinics
         ///and the payment type has not been set.</summary>
@@ -89,7 +89,7 @@ namespace OpenDental
                 }
                 _indexClinicRevert = comboClinic.SelectedIndex;
             }
-            _listProgProps = ProgramProperties.GetForProgram(_progCur.ProgramNum);
+            _listProgProps = ProgramProperties.GetForProgram(_progCur.Id);
             FillFields();
         }
 

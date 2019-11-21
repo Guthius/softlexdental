@@ -17,7 +17,7 @@ namespace OpenDental.Bridges
             }
 
             string payload = "-patid ";
-            if (ProgramProperties.GetPropVal(ProgramCur.ProgramNum, "Enter 0 to use PatientNum, or 1 to use ChartNum") == "0")
+            if (ProgramProperties.GetPropVal(ProgramCur.Id, "Enter 0 to use PatientNum, or 1 to use ChartNum") == "0")
             {
                 payload += pat.PatNum.ToString() + " ";
             }

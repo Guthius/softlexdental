@@ -25,7 +25,7 @@ namespace OpenDental
 		///<summary>Used to reselect rows after sorting the grid by column.  Filled on grid MouseDown event and used in grid OnSortByColumn event to reselect.</summary>
 		private List<long> _listSelectedPatNums;
 		private Program _tsiProg;
-		private Dictionary<long,List<ProgramProperty>> _dictClinicProgProps;
+		private Dictionary<long,List<ProgramPreference>> _dictClinicProgProps;
 		private ToolTip _toolTipUnsentErrors;
 		private Point _lastCursorPos;
 
@@ -1215,7 +1215,7 @@ namespace OpenDental
 					continue;
 				}
 				string clientID="";
-				List<ProgramProperty> listProgProps;
+				List<ProgramPreference> listProgProps;
 				if(!_dictClinicProgProps.TryGetValue(clinicNum,out listProgProps) && !_dictClinicProgProps.TryGetValue(0,out listProgProps)) {
 					listClinicsSkipped.Add(clinicNum);
 					listFailedPatNums.Add(pAgingCur.PatNum);
@@ -1323,7 +1323,7 @@ namespace OpenDental
 				if(kvp.Value.Count<1) {
 					continue;
 				}
-				List<ProgramProperty> listProps=new List<ProgramProperty>();
+				List<ProgramPreference> listProps=new List<ProgramPreference>();
 				if(!_dictClinicProgProps.TryGetValue(kvp.Key,out listProps) && !_dictClinicProgProps.TryGetValue(0,out listProps)) {
 					//should never happen, dictClinicProps should contain all clinicNums the user has access to, including clinicnum 0
 					listFailedPatNums.AddRange(kvp.Value.Keys);
@@ -1366,7 +1366,7 @@ namespace OpenDental
 				if(kvp.Value.Count<1) {
 					continue;
 				}
-				List<ProgramProperty> listProps=new List<ProgramProperty>();
+				List<ProgramPreference> listProps=new List<ProgramPreference>();
 				if(!_dictClinicProgProps.TryGetValue(kvp.Key,out listProps) && !_dictClinicProgProps.TryGetValue(0,out listProps)) {
 					//should never happen, dictClinicProps should contain all clinicNums the user has access to, including clinicnum 0
 					listFailedPatNums.AddRange(kvp.Value.Keys);
@@ -1790,7 +1790,7 @@ namespace OpenDental
 					listFailedPatNums.Add(pAgingCur.PatNum);
 					continue;
 				}
-				List<ProgramProperty> listProgProps;
+				List<ProgramPreference> listProgProps;
 				if(!_dictClinicProgProps.TryGetValue(clinicNum,out listProgProps) && !_dictClinicProgProps.TryGetValue(0,out listProgProps)) {
 					listFailedPatNums.Add(pAgingCur.PatNum);
 					listClinicsSkipped.Add(clinicNum);
@@ -1861,7 +1861,7 @@ namespace OpenDental
 				if(kvp.Value.Count<1) {
 					continue;
 				}
-				List<ProgramProperty> listProps=new List<ProgramProperty>();
+				List<ProgramPreference> listProps=new List<ProgramPreference>();
 				if(!_dictClinicProgProps.TryGetValue(kvp.Key,out listProps) && !_dictClinicProgProps.TryGetValue(0,out listProps)) {
 					//should never happen, dictClinicProps should contain all clinicNums the user has access to, including clinicnum 0
 					listFailedPatNums.AddRange(kvp.Value.Keys);

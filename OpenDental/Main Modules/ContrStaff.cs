@@ -441,10 +441,10 @@ namespace OpenDental
                 listClinicNums.Add(0);
             }
 
-            List<ProgramProperty> listProperties = ProgramProperties.GetForProgram(progCur.ProgramNum);
+            List<ProgramPreference> listProperties = ProgramProperties.GetForProgram(progCur.Id);
             foreach (long clinicNum in listClinicNums)
             {
-                List<ProgramProperty> listPropsForClinic = new List<ProgramProperty>();
+                List<ProgramPreference> listPropsForClinic = new List<ProgramPreference>();
                 if (listProperties.All(x => x.ClinicId != clinicNum))
                 {//if no prog props exist for the clinic, continue, clinicNum 0 will be tested once as well
                     continue;

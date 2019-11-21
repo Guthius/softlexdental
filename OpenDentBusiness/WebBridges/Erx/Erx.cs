@@ -24,8 +24,8 @@ namespace OpenDentBusiness
             {
                 throw new ODException(Lans.g("eRx", "The eRx bridge is missing from the database."));
             }
-            List<ProgramProperty> listProgramProperties = ProgramProperties.GetForProgram(progCur.ProgramNum);
-            ProgramProperty propCur = listProgramProperties.FirstOrDefault(x => x.Key == PropertyDescs.ErxOption);
+            List<ProgramPreference> listProgramProperties = ProgramProperties.GetForProgram(progCur.Id);
+            ProgramPreference propCur = listProgramProperties.FirstOrDefault(x => x.Key == PropertyDescs.ErxOption);
             if (propCur == null)
             {
                 throw new ODException(Lans.g("eRx", "The eRx Option program property is missing from the database."));

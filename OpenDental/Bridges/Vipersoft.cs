@@ -22,7 +22,7 @@ namespace OpenDental.Bridges
 		///<summary>Launches the program if necessary.  Then passes patient.Cur data using DDE.</summary>
 		public static void SendData(Program ProgramCur, Patient pat){
 			string path=Programs.GetProgramPath(ProgramCur);
-			List<ProgramProperty> ForProgram =ProgramProperties.GetForProgram(ProgramCur.ProgramNum);;
+			List<ProgramPreference> ForProgram =ProgramProperties.GetForProgram(ProgramCur.Id);;
 			if(pat==null){
 				MessageBox.Show("Please select a patient first");
 				return;
@@ -58,7 +58,7 @@ namespace OpenDental.Bridges
 			IntPtr hwnd=Application.OpenForms[0].Handle;
 			command+=hwnd.ToString()+"|"//hwnd
 				+"OpenDental|";//name
-			ProgramProperty PPCur=ProgramProperties.GetCur(ForProgram, "Enter 0 to use PatientNum, or 1 to use ChartNum");;
+			ProgramPreference PPCur=ProgramProperties.GetCur(ForProgram, "Enter 0 to use PatientNum, or 1 to use ChartNum");;
 			string patID;
 			if(PPCur.Value=="0"){
 				patID=pat.PatNum.ToString();

@@ -23,8 +23,8 @@ namespace OpenDental.Bridges {
 			}
 			//Example: c:\vixwin\vixwin -I 123ABC -N Bill^Smith -P X:\VXImages\
 			string info="-I ";
-			bool isChartNum=PIn.Bool(ProgramProperties.GetPropVal(ProgramCur.ProgramNum,"Enter 0 to use PatientNum, or 1 to use ChartNum"));
-			string ppImagePath=ProgramProperties.GetPropVal(ProgramCur.ProgramNum,"Optional Image Path");
+			bool isChartNum=PIn.Bool(ProgramProperties.GetPropVal(ProgramCur.Id,"Enter 0 to use PatientNum, or 1 to use ChartNum"));
+			string ppImagePath=ProgramProperties.GetPropVal(ProgramCur.Id,"Optional Image Path");
 			if(isChartNum) {
 				info+=pat.ChartNumber;//max 64 char
 			}

@@ -167,7 +167,7 @@ namespace OpenDental
                 row.BackColor = prog.Enabled ? color : row.BackColor;
                 ODGridCell cell = new ODGridCell(prog.Enabled ? "X" : "");
                 row.Cells.Add(cell);
-                row.Cells.Add(prog.ProgDesc);
+                row.Cells.Add(prog.Description);
                 gridProgram.Rows.Add(row);
             }
             gridProgram.EndUpdate();
@@ -187,7 +187,7 @@ namespace OpenDental
         {
             DialogResult dResult = DialogResult.None;
             Program program = _listPrograms[gridProgram.GetSelectedIndex()].Copy();
-            switch (program.ProgName)
+            switch (program.TypeName)
             {
                 case "UAppoint":
                     FormUAppoint FormU = new FormUAppoint();

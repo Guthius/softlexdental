@@ -69,8 +69,8 @@ namespace OpenDental
 
         #region Dropbox Private Variables
         private Program _progCur;
-        private ProgramProperty _ppDropboxPathAtoZ;
-        private ProgramProperty _ppDropboxAccessToken;
+        private ProgramPreference _ppDropboxPathAtoZ;
+        private ProgramPreference _ppDropboxAccessToken;
         ///<summary>Set to true if the Dropbox API has been loaded already.</summary>
         private bool _hasDropboxLoaded;
         #endregion
@@ -78,10 +78,10 @@ namespace OpenDental
         #region Sftp Private Variables
         ///<summary>Set to true if the Sftp stuff has been loaded already.</summary>
         private bool _hasSftpLoaded;
-        private ProgramProperty _ppSftpPathAtoZ;
-        private ProgramProperty _ppSftpHostname;
-        private ProgramProperty _ppSftpUsername;
-        private ProgramProperty _ppSftpPassword;
+        private ProgramPreference _ppSftpPathAtoZ;
+        private ProgramPreference _ppSftpHostname;
+        private ProgramPreference _ppSftpUsername;
+        private ProgramPreference _ppSftpPassword;
         #endregion
 
         ///<summary>This is the database storage type that the user has chosen (or was pulled from the database.
@@ -1056,7 +1056,7 @@ namespace OpenDental
             }
             try
             {
-                List<ProgramProperty> listProperties = ProgramProperties.GetForProgram(_progCur.ProgramNum);
+                List<ProgramPreference> listProperties = ProgramProperties.GetForProgram(_progCur.Id);
                 _ppSftpPathAtoZ = listProperties.FirstOrDefault(x => x.Key == ODSftp.PropertyDescs.AtoZPath);
                 _ppSftpHostname = listProperties.FirstOrDefault(x => x.Key == ODSftp.PropertyDescs.SftpHostname);
                 _ppSftpUsername = listProperties.FirstOrDefault(x => x.Key == ODSftp.PropertyDescs.UserName);

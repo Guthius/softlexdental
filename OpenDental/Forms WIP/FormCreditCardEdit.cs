@@ -394,8 +394,8 @@ namespace OpenDental {
 					+"sufficient permissions.");
 				return;
 			}
-			string xUsername=ProgramProperties.GetPropVal(prog.ProgramNum,"Username",Clinics.ClinicNum);
-			string xPassword=CodeBase.MiscUtils.Decrypt(ProgramProperties.GetPropVal(prog.ProgramNum,"Password",Clinics.ClinicNum));
+			string xUsername=ProgramProperties.GetPropVal(prog.Id,"Username",Clinics.ClinicNum);
+			string xPassword=CodeBase.MiscUtils.Decrypt(ProgramProperties.GetPropVal(prog.Id,"Password",Clinics.ClinicNum));
 			info.Arguments+="/TRANSACTIONTYPE:ARCHIVEVAULTDELETE ";
 			info.Arguments+="/XCACCOUNTID:"+CreditCardCur.XChargeToken+" ";
 			info.Arguments+="/RESULTFILE:\""+resultfile+"\" ";
@@ -529,8 +529,8 @@ namespace OpenDental {
 						MsgBox.Show(this,"Could not delete XResult.txt file.  It may be in use by another program, flagged as read-only, or you might not have sufficient permissions.");
 						return;
 					}
-					string xUsername=ProgramProperties.GetPropVal(prog.ProgramNum,"Username",Clinics.ClinicNum);
-					string xPassword=CodeBase.MiscUtils.Decrypt(ProgramProperties.GetPropVal(prog.ProgramNum,"Password",Clinics.ClinicNum));
+					string xUsername=ProgramProperties.GetPropVal(prog.Id,"Username",Clinics.ClinicNum);
+					string xPassword=CodeBase.MiscUtils.Decrypt(ProgramProperties.GetPropVal(prog.Id,"Password",Clinics.ClinicNum));
 					if(_creditCardOld.CCNumberMasked!=CreditCardCur.CCNumberMasked) {//User changed card number, which invlidates the X-Charge token
 						//delete archived token, a new one will be created the next time the card is charged.
 						info.Arguments+="/TRANSACTIONTYPE:ARCHIVEVAULTDELETE ";

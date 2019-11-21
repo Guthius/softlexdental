@@ -128,8 +128,8 @@ namespace OpenDental.Bridges {
 		///</summary>
 		public static void SendData(Program ProgramCur,Patient pat) {
 			string path=Programs.GetProgramPath(ProgramCur);
-			List<ProgramProperty> ForProgram =ProgramProperties.GetForProgram(ProgramCur.ProgramNum);
-			ProgramProperty PPCur=ProgramProperties.GetCur(ForProgram,"Tiger1.ini path");
+			List<ProgramPreference> ForProgram =ProgramProperties.GetForProgram(ProgramCur.Id);
+			ProgramPreference PPCur=ProgramProperties.GetCur(ForProgram,"Tiger1.ini path");
 			string bDayFormat=ProgramProperties.GetCur(ForProgram,"Birthdate format (default MM/dd/yy)").Value;
 			iniFile=PPCur.Value;
 			System.Collections.Hashtable htKeyVals=new Hashtable();
@@ -201,8 +201,8 @@ namespace OpenDental.Bridges {
 			if(!prog.Enabled) {
 				return;
 			}
-			List<ProgramProperty> propertiesForProgram =ProgramProperties.GetForProgram(prog.ProgramNum);
-			ProgramProperty programProperty=ProgramProperties.GetCur(propertiesForProgram,"TigerView EMR folder path");
+			List<ProgramPreference> propertiesForProgram =ProgramProperties.GetForProgram(prog.Id);
+			ProgramPreference programProperty=ProgramProperties.GetCur(propertiesForProgram,"TigerView EMR folder path");
 			string returnFolder=programProperty.Value;
 			if(!Directory.Exists(returnFolder)) {
 				//Do not show a message that the directory was not found because not every workstation in the office will be running this service.
@@ -243,8 +243,8 @@ namespace OpenDental.Bridges {
 				}
 			}
 			if(!useChartNum) { //If it could be a valid patnum, check program pref
-				List<ProgramProperty> propertiesForProgram =ProgramProperties.GetForProgram(Programs.GetProgramNum(ProgramName.TigerView));
-				ProgramProperty programProperty=ProgramProperties.GetCur(propertiesForProgram,"Enter 0 to use PatientNum, or 1 to use ChartNum");
+				List<ProgramPreference> propertiesForProgram =ProgramProperties.GetForProgram(Programs.GetProgramNum(ProgramName.TigerView));
+				ProgramPreference programProperty=ProgramProperties.GetCur(propertiesForProgram,"Enter 0 to use PatientNum, or 1 to use ChartNum");
 				if(programProperty.Value=="1") {//ChartNum
 					useChartNum=true;
 				}

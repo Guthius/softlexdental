@@ -10,25 +10,25 @@ using System.Linq;
 namespace OpenDental {
 	public partial class FormPodiumSetup:ODForm {
 		private Program _progCur;
-		private ProgramProperty _apiToken;
-		private ProgramProperty _compName;
+		private ProgramPreference _apiToken;
+		private ProgramPreference _compName;
 		///<summary>Dictionary used to store changes for each clinic to be updated or inserted when saving to DB.</summary>
-		private Dictionary<long,ProgramProperty> _dictLocationIDs=new Dictionary<long, ProgramProperty>();
-		private ProgramProperty _useService;
-		private ProgramProperty _disableAdvertising;
-		private ProgramProperty _apptSetCompleteMins;
-		private ProgramProperty _apptTimeArrivedMins;
-		private ProgramProperty _apptTimeDismissedMins;
-		private ProgramProperty _newPatTriggerType;
-		private ProgramProperty _existingPatTriggerType;
-		private ProgramProperty _showCommlogsInChartAndAccount;
+		private Dictionary<long,ProgramPreference> _dictLocationIDs=new Dictionary<long, ProgramPreference>();
+		private ProgramPreference _useService;
+		private ProgramPreference _disableAdvertising;
+		private ProgramPreference _apptSetCompleteMins;
+		private ProgramPreference _apptTimeArrivedMins;
+		private ProgramPreference _apptTimeDismissedMins;
+		private ProgramPreference _newPatTriggerType;
+		private ProgramPreference _existingPatTriggerType;
+		private ProgramPreference _showCommlogsInChartAndAccount;
 		private ReviewInvitationTrigger _existingPatTriggerEnum;
 		private ReviewInvitationTrigger _newPatTriggerEnum;
 		private bool _hasProgramPropertyChanged;
 		///<summary>Local cache of all of the clinic nums the current user has permission to access at the time the form loads.  Filled at the same time
 		///as comboClinic and is used to set programproperty.ClinicNum when saving.</summary>
 		private List<long> _listUserClinicNums;
-		private List<ProgramProperty> _listProgramProperties;
+		private List<ProgramPreference> _listProgramProperties;
 		///<summary>Can be 0 for "Headquarters" or non clinic users.</summary>
 		private long _clinicNumCur;
 
@@ -116,7 +116,7 @@ namespace OpenDental {
 		///<summary>Handles both visibility and checking of checkHideButtons.</summary>
 		private void SetAdvertising() {
 			checkHideButtons.Visible=true;
-			ProgramProperty prop=ProgramProperties.GetForProgram(_progCur.ProgramNum).FirstOrDefault(x => x.Key=="Disable Advertising");
+			ProgramPreference prop=ProgramProperties.GetForProgram(_progCur.Id).FirstOrDefault(x => x.Key=="Disable Advertising");
 			if(checkEnabled.Checked || prop==null) {
 				checkHideButtons.Visible=false;
 			}
@@ -145,8 +145,8 @@ namespace OpenDental {
 				if(_dictLocationIDs.ContainsKey(_clinicNumCur)) {
 					//Get the location ID so that we correctly update all program properties with a matching location ID.
 					string locationIdOld=_dictLocationIDs[_clinicNumCur].Value;
-					foreach(KeyValuePair<long,ProgramProperty> item in _dictLocationIDs) {
-						ProgramProperty ppCur=item.Value;
+					foreach(KeyValuePair<long,ProgramPreference> item in _dictLocationIDs) {
+						ProgramPreference ppCur=item.Value;
 						if(ppCur.Value==locationIdOld) {
 							ppCur.Value=textLocationID.Text;
 						}
@@ -155,12 +155,12 @@ namespace OpenDental {
 				return;//No other clinic specific changes could have been made, we need to return.
 			}
 			//Update or Insert clinic specific properties into memory
-			ProgramProperty ppLocationID=new ProgramProperty();
+			ProgramPreference ppLocationID=new ProgramPreference();
 			if(_dictLocationIDs.ContainsKey(_clinicNumCur)) {
 				ppLocationID=_dictLocationIDs[_clinicNumCur];//Override the database's property with what is in memory.
 			}
 			else {//Get default programproperty from db.
-				ppLocationID=ProgramProperties.GetListForProgramAndClinicWithDefault(_progCur.ProgramNum,_clinicNumCur)
+				ppLocationID=ProgramProperties.GetListForProgramAndClinicWithDefault(_progCur.Id,_clinicNumCur)
 					.FirstOrDefault(x => x.Key==Podium.PropertyDescs.LocationID);
 			}
 			if(ppLocationID.ClinicId==0) {//No program property for current clinic, since _clinicNumCur!=0
@@ -277,10 +277,10 @@ namespace OpenDental {
 			UpdateProgramProperty(_newPatTriggerType,POut.Int((int)_newPatTriggerEnum));
 			UpdateProgramProperty(_existingPatTriggerType,POut.Int((int)_existingPatTriggerEnum));
 			UpsertProgramPropertiesForClinics();
-			Programs.Update(_progCur);
+			Program.Update(_progCur);
 		}
 
-		private void UpdateProgramProperty(ProgramProperty ppFromDb,string newpropertyValue) {
+		private void UpdateProgramProperty(ProgramPreference ppFromDb,string newpropertyValue) {
 			//if(ppFromDb.Value==newpropertyValue) {
 			//	return;
 			//}

@@ -21,12 +21,12 @@ namespace OpenDental.Bridges{
 		public static void SendData(Program ProgramCur, Patient pat){
 			string path=Programs.GetProgramPath(ProgramCur);
 			//Usage: [Application Path]PerioPal "PtChart; PtName ; PtBday; PtMedAlert;"
-			List<ProgramProperty> ForProgram =ProgramProperties.GetForProgram(ProgramCur.ProgramNum);;
+			List<ProgramPreference> ForProgram =ProgramProperties.GetForProgram(ProgramCur.Id);;
 			if(pat==null){
 				return;
 			}
 			string info="\"";
-			ProgramProperty PPCur=ProgramProperties.GetCur(ForProgram, "Enter 0 to use PatientNum, or 1 to use ChartNum");;
+			ProgramPreference PPCur=ProgramProperties.GetCur(ForProgram, "Enter 0 to use PatientNum, or 1 to use ChartNum");;
 			if(PPCur.Value=="0") {
 				info+=pat.PatNum.ToString();
 			}

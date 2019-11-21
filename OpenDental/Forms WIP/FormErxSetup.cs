@@ -13,11 +13,11 @@ namespace OpenDental {
 
 		private Program _progCur;
 		private ErxOption _eRxOption;
-		private List<ProgramProperty> _listProgramProperties=new List<ProgramProperty>();
+		private List<ProgramPreference> _listProgramProperties=new List<ProgramPreference>();
 
-		private ProgramProperty ErxOptionPP {
+		private ProgramPreference ErxOptionPP {
 			get {
-				ProgramProperty retVal=_listProgramProperties.FirstOrDefault(x => x.Key==Erx.PropertyDescs.ErxOption);
+				ProgramPreference retVal=_listProgramProperties.FirstOrDefault(x => x.Key==Erx.PropertyDescs.ErxOption);
 				if(retVal==null) {
 					throw new Exception("The database is missing an eRx option program property.");
 				}
@@ -44,7 +44,7 @@ namespace OpenDental {
 				if(_progCur==null) {
 					throw new Exception("The eRx bridge is missing from the database.");
 				}
-				_listProgramProperties=ProgramProperties.GetForProgram(_progCur.ProgramNum);
+				_listProgramProperties=ProgramProperties.GetForProgram(_progCur.Id);
 				checkEnabled.Checked=_progCur.Enabled;
 				_eRxOption=PIn.Enum<ErxOption>(ErxOptionPP.Value);
 				if(_eRxOption==ErxOption.Legacy) {
@@ -59,20 +59,20 @@ namespace OpenDental {
 					//HideLegacy();
 				}
 				textNewCropAccountID.Text=Preference.GetString(PreferenceName.NewCropAccountId);
-				List<ProgramProperty> listClinicIDs=_listProgramProperties.FindAll(x => x.Key==Erx.PropertyDescs.ClinicID);
-				List<ProgramProperty> listClinicKeys=_listProgramProperties.FindAll(x => x.Key==Erx.PropertyDescs.ClinicKey);
+				List<ProgramPreference> listClinicIDs=_listProgramProperties.FindAll(x => x.Key==Erx.PropertyDescs.ClinicID);
+				List<ProgramPreference> listClinicKeys=_listProgramProperties.FindAll(x => x.Key==Erx.PropertyDescs.ClinicKey);
 				//Always make sure clinicnum 0 (HQ) exists, regardless of if clinics are enabled
 				if(!listClinicIDs.Exists(x => x.ClinicId==0)) {
-					ProgramProperty ppClinicID=new ProgramProperty();
-					ppClinicID.ProgramId=_progCur.ProgramNum;
+					ProgramPreference ppClinicID=new ProgramPreference();
+					ppClinicID.ProgramId=_progCur.Id;
 					ppClinicID.ClinicId=0;
 					ppClinicID.Key=Erx.PropertyDescs.ClinicID;
 					ppClinicID.Value="";
 					_listProgramProperties.Add(ppClinicID);
 				}
 				if(!listClinicKeys.Exists(x => x.ClinicId==0)) {
-					ProgramProperty ppClinicKey=new ProgramProperty();
-					ppClinicKey.ProgramId=_progCur.ProgramNum;
+					ProgramPreference ppClinicKey=new ProgramPreference();
+					ppClinicKey.ProgramId=_progCur.Id;
 					ppClinicKey.ClinicId=0;
 					ppClinicKey.Key=Erx.PropertyDescs.ClinicKey;
 					ppClinicKey.Value="";
@@ -81,16 +81,16 @@ namespace OpenDental {
 				if(Preferences.HasClinicsEnabled) {
 					foreach(Clinic clinicCur in Clinics.GetAllForUserod(Security.CurrentUser)) {
 						if(!listClinicIDs.Exists(x => x.ClinicId==clinicCur.ClinicNum)) {//Only add a program property if it doesn't already exist.
-							ProgramProperty ppClinicID=new ProgramProperty();
-							ppClinicID.ProgramId=_progCur.ProgramNum;
+							ProgramPreference ppClinicID=new ProgramPreference();
+							ppClinicID.ProgramId=_progCur.Id;
 							ppClinicID.ClinicId=clinicCur.ClinicNum;
 							ppClinicID.Key=Erx.PropertyDescs.ClinicID;
 							ppClinicID.Value="";
 							_listProgramProperties.Add(ppClinicID);
 						}
 						if(!listClinicKeys.Exists(x => x.ClinicId==clinicCur.ClinicNum)) {//Only add a program property if it doesn't already exist.
-							ProgramProperty ppClinicKey=new ProgramProperty();
-							ppClinicKey.ProgramId=_progCur.ProgramNum;
+							ProgramPreference ppClinicKey=new ProgramPreference();
+							ppClinicKey.ProgramId=_progCur.Id;
 							ppClinicKey.ClinicId=clinicCur.ClinicNum;
 							ppClinicKey.Key=Erx.PropertyDescs.ClinicKey;
 							ppClinicKey.Value="";
@@ -152,7 +152,7 @@ namespace OpenDental {
 			return row;
 		}
 
-		private ProgramProperty GetPropertyForClinic(long clinicNum,string propDesc) {
+		private ProgramPreference GetPropertyForClinic(long clinicNum,string propDesc) {
 			return _listProgramProperties.FindAll(x => x.ClinicId==clinicNum)
 					.FirstOrDefault(x => x.Key==propDesc);
 		}
@@ -212,7 +212,7 @@ namespace OpenDental {
 		private void butOK_Click(object sender,EventArgs e) {
 			ErxOptionPP.Value=POut.Int((int)_eRxOption);
 			_progCur.Enabled=checkEnabled.Checked;
-			Programs.Update(_progCur);
+			Program.Update(_progCur);
 			//ProgramProperties.Sync(_listProgramProperties,_progCur.ProgramNum);
 			DataValid.SetInvalid(InvalidType.Programs);
 			DialogResult=DialogResult.OK;
@@ -224,8 +224,8 @@ namespace OpenDental {
 
 		private class DoseSpotGridRowModel {
 			public Clinic Clinic;
-			public ProgramProperty ClinicIDProperty;
-			public ProgramProperty ClinicKeyProperty;
+			public ProgramPreference ClinicIDProperty;
+			public ProgramPreference ClinicKeyProperty;
 
 			public DoseSpotGridRowModel() {
 			}

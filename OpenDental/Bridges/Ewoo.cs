@@ -41,7 +41,7 @@ namespace OpenDental.Bridges{
 				writer.WriteStartElement("Patient");
 				writer.WriteAttributeString("LastName",pat.LName);
 				writer.WriteAttributeString("FirstName",pat.FName);
-				if(ProgramProperties.GetPropVal(ProgramCur.ProgramNum,"Enter 0 to use PatientNum, or 1 to use ChartNum")=="0"){
+				if(ProgramProperties.GetPropVal(ProgramCur.Id,"Enter 0 to use PatientNum, or 1 to use ChartNum")=="0"){
 					writer.WriteAttributeString("ChartNumber",pat.PatNum.ToString());
 				}
 				else{
@@ -79,16 +79,5 @@ namespace OpenDental.Bridges{
 				MessageBox.Show("Error launching "+path);
 			}
 		}
-
 	}
 }
-
-
-
-
-
-
-
-
-
-

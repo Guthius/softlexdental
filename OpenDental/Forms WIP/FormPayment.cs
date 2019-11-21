@@ -1848,9 +1848,9 @@ namespace OpenDental {
 					butPayConnect.Visible=true;
 				}
 				else {//if clinics are enabled, PayConnect is enabled if the PaymentType is valid and the Username and Password are not blank
-					string paymentType=ProgramProperties.GetPropVal(progPayConnect.ProgramNum,"PaymentType",_paymentCur.ClinicNum);
-					if(!string.IsNullOrEmpty(ProgramProperties.GetPropVal(progPayConnect.ProgramNum,"Username",_paymentCur.ClinicNum))
-						&& !string.IsNullOrEmpty(ProgramProperties.GetPropVal(progPayConnect.ProgramNum,"Password",_paymentCur.ClinicNum))
+					string paymentType=ProgramProperties.GetPropVal(progPayConnect.Id,"PaymentType",_paymentCur.ClinicNum);
+					if(!string.IsNullOrEmpty(ProgramProperties.GetPropVal(progPayConnect.Id,"Username",_paymentCur.ClinicNum))
+						&& !string.IsNullOrEmpty(ProgramProperties.GetPropVal(progPayConnect.Id,"Password",_paymentCur.ClinicNum))
 						&& _listPaymentTypeDefs.Any(x => x.Id.ToString()==paymentType))
 					{
 						butPayConnect.Visible=true;
@@ -1864,9 +1864,9 @@ namespace OpenDental {
 					panelXcharge.Visible=true;
 				}
 				else {//if clinics are enabled, X-Charge is enabled if the PaymentType is valid and the Username and Password are not blank
-					string paymentType=ProgramProperties.GetPropVal(_xProg.ProgramNum,"PaymentType",_paymentCur.ClinicNum);
-					if(!string.IsNullOrEmpty(ProgramProperties.GetPropVal(_xProg.ProgramNum,"Username",_paymentCur.ClinicNum))
-						&& !string.IsNullOrEmpty(ProgramProperties.GetPropVal(_xProg.ProgramNum,"Password",_paymentCur.ClinicNum))
+					string paymentType=ProgramProperties.GetPropVal(_xProg.Id,"PaymentType",_paymentCur.ClinicNum);
+					if(!string.IsNullOrEmpty(ProgramProperties.GetPropVal(_xProg.Id,"Username",_paymentCur.ClinicNum))
+						&& !string.IsNullOrEmpty(ProgramProperties.GetPropVal(_xProg.Id,"Password",_paymentCur.ClinicNum))
 						&& _listPaymentTypeDefs.Any(x => x.Id.ToString()==paymentType))
 					{
 						panelXcharge.Visible=true;
@@ -2476,7 +2476,7 @@ namespace OpenDental {
 			if(e.Button != MouseButtons.Left) {
 				return;
 			}
-			if(!CanAddNewCreditCard(Programs.GetCur(ProgramName.Xcharge),XCharge.ProgramProperties.XChargePreventSavingNewCC)) {
+			if(!CanAddNewCreditCard(Programs.GetCur(ProgramName.Xcharge),XChargeBridge.ProgramProperties.XChargePreventSavingNewCC)) {
 				return;
 			}
 			_xChargeMilestone="";
@@ -2550,7 +2550,7 @@ namespace OpenDental {
 			bool notRecurring=false;
 			if(prepaidAmt==0) {
 				//These UI changes only need to happen for regular credit cards when the payment window is displayed.
-				string xPayTypeNum=ProgramProperties.GetPropVal(_xProg.ProgramNum,"PaymentType",_paymentCur.ClinicNum);
+				string xPayTypeNum=ProgramProperties.GetPropVal(_xProg.Id,"PaymentType",_paymentCur.ClinicNum);
 				//still need to add functionality for accountingAutoPay
 				listPayType.SelectedIndex=Defs.GetOrder(DefinitionCategory.PaymentTypes,PIn.Long(xPayTypeNum));
 				SetComboDepositAccounts();
@@ -2585,8 +2585,8 @@ namespace OpenDental {
 				_xChargeMilestone="Transaction Window Launch";
 				//Show window to lock in the transaction type.
 				FormXT=new FormXchargeTrans();
-				FormXT.PrintReceipt=PIn.Bool(ProgramProperties.GetPropVal(_xProg.ProgramNum,"PrintReceipt",_paymentCur.ClinicNum));
-				FormXT.PromptSignature=PIn.Bool(ProgramProperties.GetPropVal(_xProg.ProgramNum,"PromptSignature",_paymentCur.ClinicNum));
+				FormXT.PrintReceipt=PIn.Bool(ProgramProperties.GetPropVal(_xProg.Id,"PrintReceipt",_paymentCur.ClinicNum));
+				FormXT.PromptSignature=PIn.Bool(ProgramProperties.GetPropVal(_xProg.Id,"PromptSignature",_paymentCur.ClinicNum));
 				FormXT.ClinicNum=_paymentCur.ClinicNum;
 				FormXT.ShowDialog();
 				if(FormXT.DialogResult!=DialogResult.OK) {
@@ -2663,8 +2663,8 @@ namespace OpenDental {
 			}
 			info.Arguments+="\"/CLERK:"+Security.CurrentUser.UserName+"\" /LOCKCLERK ";
 			info.Arguments+="/RESULTFILE:\""+resultfile+"\" ";
-			info.Arguments+="/USERID:"+ProgramProperties.GetPropVal(_xProg.ProgramNum,"Username",_paymentCur.ClinicNum)+" ";
-			info.Arguments+="/PASSWORD:"+CodeBase.MiscUtils.Decrypt(ProgramProperties.GetPropVal(_xProg.ProgramNum,"Password",_paymentCur.ClinicNum))+" ";
+			info.Arguments+="/USERID:"+ProgramProperties.GetPropVal(_xProg.Id,"Username",_paymentCur.ClinicNum)+" ";
+			info.Arguments+="/PASSWORD:"+CodeBase.MiscUtils.Decrypt(ProgramProperties.GetPropVal(_xProg.Id,"Password",_paymentCur.ClinicNum))+" ";
 			info.Arguments+="/PARTIALAPPROVALSUPPORT:T ";
 			info.Arguments+="/AUTOCLOSE ";
 			info.Arguments+="/HIDEMAINWINDOW ";
@@ -2981,8 +2981,8 @@ namespace OpenDental {
 			info.Arguments+="/RECEIPT:Pat"+_paymentCur.PatNum.ToString()+" ";//aka invoice#
 			info.Arguments+="\"/CLERK:"+Security.CurrentUser.UserName+"\" /LOCKCLERK ";
 			info.Arguments+="/RESULTFILE:\""+resultfile+"\" ";
-			info.Arguments+="/USERID:"+ProgramProperties.GetPropVal(_xProg.ProgramNum,"Username",_paymentCur.ClinicNum)+" ";
-			info.Arguments+="/PASSWORD:"+CodeBase.MiscUtils.Decrypt(ProgramProperties.GetPropVal(_xProg.ProgramNum,"Password",_paymentCur.ClinicNum))+" ";
+			info.Arguments+="/USERID:"+ProgramProperties.GetPropVal(_xProg.Id,"Username",_paymentCur.ClinicNum)+" ";
+			info.Arguments+="/PASSWORD:"+CodeBase.MiscUtils.Decrypt(ProgramProperties.GetPropVal(_xProg.Id,"Password",_paymentCur.ClinicNum))+" ";
 			info.Arguments+="/AUTOCLOSE ";
 			info.Arguments+="/HIDEMAINWINDOW /SMALLWINDOW ";
 			if(!isDebit) {
@@ -3097,9 +3097,9 @@ namespace OpenDental {
 			if(_xProg.Enabled) {
 				//X-Charge is enabled if the username and password are set and the PaymentType is a valid DefNum
 				//If clinics are disabled, _paymentCur.ClinicNum will be 0 and the Username and Password will be the 'Headquarters' or practice credentials
-				string paymentType=ProgramProperties.GetPropVal(_xProg.ProgramNum,"PaymentType",_paymentCur.ClinicNum);
-				if(string.IsNullOrEmpty(ProgramProperties.GetPropVal(_xProg.ProgramNum,"Username",_paymentCur.ClinicNum))
-					|| string.IsNullOrEmpty(ProgramProperties.GetPropVal(_xProg.ProgramNum,"Password",_paymentCur.ClinicNum))
+				string paymentType=ProgramProperties.GetPropVal(_xProg.Id,"PaymentType",_paymentCur.ClinicNum);
+				if(string.IsNullOrEmpty(ProgramProperties.GetPropVal(_xProg.Id,"Username",_paymentCur.ClinicNum))
+					|| string.IsNullOrEmpty(ProgramProperties.GetPropVal(_xProg.Id,"Password",_paymentCur.ClinicNum))
 					|| !_listPaymentTypeDefs.Any(x => x.Id.ToString()==paymentType))
 				{
 					isSetupRequired=true;
@@ -3438,9 +3438,9 @@ namespace OpenDental {
 			bool isSetupRequired=false;
 			if(prog.Enabled) {
 				//If clinics are disabled, _paymentCur.ClinicNum will be 0 and the Username and Password will be the 'Headquarters' or practice credentials
-				string paymentType=ProgramProperties.GetPropVal(prog.ProgramNum,"PaymentType",_paymentCur.ClinicNum);
-				if(string.IsNullOrEmpty(ProgramProperties.GetPropVal(prog.ProgramNum,"Username",_paymentCur.ClinicNum))
-					|| string.IsNullOrEmpty(ProgramProperties.GetPropVal(prog.ProgramNum,"Password",_paymentCur.ClinicNum))
+				string paymentType=ProgramProperties.GetPropVal(prog.Id,"PaymentType",_paymentCur.ClinicNum);
+				if(string.IsNullOrEmpty(ProgramProperties.GetPropVal(prog.Id,"Username",_paymentCur.ClinicNum))
+					|| string.IsNullOrEmpty(ProgramProperties.GetPropVal(prog.Id,"Password",_paymentCur.ClinicNum))
 					|| !_listPaymentTypeDefs.Any(x => x.Id.ToString()==paymentType)) 
 				{
 					isSetupRequired=true;
@@ -3666,19 +3666,19 @@ namespace OpenDental {
 				MsgBox.Show(this,"Invalid credit card selected.");
 				return false;
 			}
-			bool hasPreventCcAdd=PIn.Bool(ProgramProperties.GetPropVal(prog.ProgramNum,progPropertyDescription,_paymentCur.ClinicNum));
+			bool hasPreventCcAdd=PIn.Bool(ProgramProperties.GetPropVal(prog.Id,progPropertyDescription,_paymentCur.ClinicNum));
 			CreditCard ccSelected=comboCreditCards.SelectedTag<CreditCard>();
 			if(ccSelected==null) {
 				return !hasPreventCcAdd;
 			}
 			bool hasToken=false;
-			if(prog.ProgName==ProgramName.Xcharge.ToString() && !string.IsNullOrEmpty(ccSelected.XChargeToken)) {
+			if(prog.TypeName==ProgramName.Xcharge.ToString() && !string.IsNullOrEmpty(ccSelected.XChargeToken)) {
 				hasToken=true;
 			}
-			else if(prog.ProgName==ProgramName.PayConnect.ToString() && !string.IsNullOrEmpty(ccSelected.PayConnectToken)) {
+			else if(prog.TypeName==ProgramName.PayConnect.ToString() && !string.IsNullOrEmpty(ccSelected.PayConnectToken)) {
 				hasToken=true;
 			}
-			else if(prog.ProgName==ProgramName.PaySimple.ToString() && !string.IsNullOrEmpty(ccSelected.PaySimpleToken)) {
+			else if(prog.TypeName==ProgramName.PaySimple.ToString() && !string.IsNullOrEmpty(ccSelected.PaySimpleToken)) {
 				hasToken=true;
 			}
 			if(hasPreventCcAdd && (ccSelected.CreditCardNum==0 || !hasToken)) {

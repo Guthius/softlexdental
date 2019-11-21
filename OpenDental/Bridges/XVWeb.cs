@@ -34,7 +34,7 @@ namespace OpenDental.Bridges {
 
 		///<summary></summary>
 		public static void SendData(Program ProgramCur,Patient pat) {
-			string urlPath=ProgramProperties.GetPropVal(ProgramCur.ProgramNum,ProgramProps.UrlPath);
+			string urlPath=ProgramProperties.GetPropVal(ProgramCur.Id,ProgramProps.UrlPath);
 			string progPath=Programs.GetProgramPath(ProgramCur);
 			if(pat==null) {
 				//Launch program without any patient.
@@ -55,7 +55,7 @@ namespace OpenDental.Bridges {
 				return;
 			}
 			string urlcomm="?patientid=";
-			if(ProgramProperties.GetPropVal(ProgramCur.ProgramNum,"Enter 0 to use PatientNum, or 1 to use ChartNum")=="0") {
+			if(ProgramProperties.GetPropVal(ProgramCur.Id,"Enter 0 to use PatientNum, or 1 to use ChartNum")=="0") {
 				urlcomm+=pat.PatNum.ToString();
 			}
 			else {
@@ -75,7 +75,7 @@ namespace OpenDental.Bridges {
 				urlcomm+="&gender=O";//fixed to match XVWeb Documentation 16.3.28+
 			}
 			if(pat.Birthdate.Year>1880) {
-				List<ProgramProperty> listProgramProperties=ProgramProperties.GetForProgram(ProgramCur.ProgramNum);
+				List<ProgramPreference> listProgramProperties=ProgramProperties.GetForProgram(ProgramCur.Id);
 				string bDayFormat=ProgramProperties.GetCur(listProgramProperties,"Birthdate format (default MM/dd/yyyy)").Value;
 				urlcomm+="&birthdate="+pat.Birthdate.ToString(bDayFormat);
 			}

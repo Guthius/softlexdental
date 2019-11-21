@@ -119,14 +119,14 @@ namespace OpenDentBusiness
         /// </summary>
         public static bool HasOnlinePaymentEnabled()
         {
-            var program = Programs.GetCur(ProgramName.Xcharge);
+            var program = Program.GetByType("OpenDental.Bridges.XChargeBridge");
 
             if (program == null || !program.Enabled)
             {
                 return false;
             }
 
-            var programPropertyList = ProgramProperties.GetForProgram(program.ProgramNum);
+            var programPropertyList = ProgramProperties.GetForProgram(program.Id);
 
             return programPropertyList.Any(x => x.Key == "IsOnlinePaymentsEnabled" && x.Value == "1");
         }

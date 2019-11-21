@@ -388,7 +388,7 @@ namespace OpenDental
             }
             else if (e.Button.Tag.GetType() == typeof(Program))
             {
-                ProgramL.Execute(((Program)e.Button.Tag).ProgramNum, PatCur);
+                ProgramL.Execute(((Program)e.Button.Tag).Id, PatCur);
             }
         }
 
@@ -493,7 +493,7 @@ namespace OpenDental
             //If we support color and underline in the future, this might be changed to a regex of the cell text.
             if (gridCellCur.ColorText == System.Drawing.Color.Blue && gridCellCur.Underline == true && Programs.GetCur(ProgramName.DentalTekSmartOfficePhone).Enabled)
             {
-                DentalTek.PlaceCall(gridCellCur.Text);
+                DentalTekBridge.PlaceCall(gridCellCur.Text);
             }
         }
 

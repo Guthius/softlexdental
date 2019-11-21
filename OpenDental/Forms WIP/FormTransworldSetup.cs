@@ -15,7 +15,7 @@ namespace OpenDental {
 		///the db for Transworld on load.  If a clinic is synced with HQ, i.e. all props for the clinic match those for HQ, the props for that clinic will
 		///be deleted from the dict and on form close the sync will delete them from the db and the form will display the HQ 'clinic' details.  Any edit
 		///to a clinic synced with HQ will break the sync.</summary>
-		private Dictionary<long,List<ProgramProperty>> _dictClinicListProgProps;
+		private Dictionary<long,List<ProgramPreference>> _dictClinicListProgProps;
 		///<summary>If the user changes clinics, this will hold the previous ClinicNum used to save the form details to the local list of props before
 		///loading the new clinic props.</summary>
 		private long _selectedClinicNum;
@@ -121,11 +121,11 @@ namespace OpenDental {
 			if(Preferences.HasClinicsEnabled) {
 				clinicNum=_listUserClinicNums[comboClinic.SelectedIndex];
 			}
-			List<ProgramProperty> listPropsCurClinic;
+			List<ProgramPreference> listPropsCurClinic;
 			if(!_dictClinicListProgProps.TryGetValue(clinicNum,out listPropsCurClinic)) {
 				listPropsCurClinic=_dictClinicListProgProps[0];//dictionary guaranteed to have ClinicNum 0 in it
 			}
-			foreach(ProgramProperty propCur in listPropsCurClinic) {
+			foreach(ProgramPreference propCur in listPropsCurClinic) {
 				switch(propCur.Key) {
 					case "SftpServerAddress":
 						textSftpAddress.Text=propCur.Value;
@@ -166,7 +166,7 @@ namespace OpenDental {
 		
 		///<summary>Handles both visibility and checking of checkHideButtons.</summary>
 		private void SetAdvertising() {
-			ProgramProperty prop=_dictClinicListProgProps[0].FirstOrDefault(x => x.Key=="Disable Advertising");//dict guaranteed to contain key 0
+			ProgramPreference prop=_dictClinicListProgProps[0].FirstOrDefault(x => x.Key=="Disable Advertising");//dict guaranteed to contain key 0
 			checkHideButtons.Visible=(prop!=null && !checkEnabled.Checked);//show check box if disable prop exists and program is not enabled
 			checkHideButtons.Checked=(prop?.Value=="1");//check box checked if disable prop exists and is set to "1" for HQ
 		}
@@ -178,11 +178,11 @@ namespace OpenDental {
 		///<summary>Saves form data to the dict and then removes any clinics from the dict that exactly match the HQ clinic details.  If editing a clinic
 		///other than HQ and there are no props for that clinic and the form values are different than HQ, a new list is added to the dict.</summary>
 		private void SyncWithHQ() {
-			List<ProgramProperty> listHqProps=_dictClinicListProgProps[0];//dict guaranteed to contain ClinicNum 0
-			List<ProgramProperty> listPropsCur;
+			List<ProgramPreference> listHqProps=_dictClinicListProgProps[0];//dict guaranteed to contain ClinicNum 0
+			List<ProgramPreference> listPropsCur;
 			if(!_dictClinicListProgProps.TryGetValue(_selectedClinicNum,out listPropsCur)) {
 				//if there isn't a list of props for the clinic, create a new list for comparison and possibly for inserting for the clinic
-				listPropsCur=listHqProps.Select(x => new ProgramProperty() {
+				listPropsCur=listHqProps.Select(x => new ProgramPreference() {
 					ProgramId=x.ProgramId,
 					ClinicId=_selectedClinicNum,
 					Key=x.Key
@@ -192,7 +192,7 @@ namespace OpenDental {
 			//the disable advert and disable advert HQ props are only for the HQ clinic and will be ignored for syncing a clinic
 			string[] listSyncedProps=new[] { "SftpServerAddress","SftpServerPort","SftpUsername","SftpPassword","ClientIdAccelerator","ClientIdCollection",
 				"IsThankYouLetterEnabled","SelectedServices","SyncExcludePosAdjType","SyncExcludeNegAdjType" };
-			foreach(ProgramProperty propCur in listPropsCur) {//update the currently selected props with the current form values
+			foreach(ProgramPreference propCur in listPropsCur) {//update the currently selected props with the current form values
 				switch(propCur.Key) {
 					case "SftpServerAddress":
 						propCur.Value=textSftpAddress.Text;

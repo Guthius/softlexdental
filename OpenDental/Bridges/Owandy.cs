@@ -38,7 +38,7 @@ namespace OpenDental.Bridges {
 		///<summary>Launches the program using command line, then passes some data using Windows API.</summary>
 		public static void SendData(Program ProgramCur,Patient pat) {
 			string path=Programs.GetProgramPath(ProgramCur);
-			List<ProgramProperty> listProgProperties =ProgramProperties.GetForProgram(ProgramCur.ProgramNum);
+			List<ProgramPreference> listProgProperties =ProgramProperties.GetForProgram(ProgramCur.Id);
 			//ProgramProperties.GetForProgram();
 			string info;
 			if(pat != null) {
@@ -51,7 +51,7 @@ namespace OpenDental.Bridges {
 					// info = "/P:1,DEMO,Patient1";
 					//Patient id:
 					string patId="";
-					ProgramProperty propertyCur=ProgramProperties.GetCur(listProgProperties, "Enter 0 to use PatientNum, or 1 to use ChartNum");;
+					ProgramPreference propertyCur=ProgramProperties.GetCur(listProgProperties, "Enter 0 to use PatientNum, or 1 to use ChartNum");;
 					if(propertyCur.Value=="0"){
 						patId=POut.Long(pat.PatNum);
 					}

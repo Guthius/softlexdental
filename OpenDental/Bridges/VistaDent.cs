@@ -31,7 +31,7 @@ namespace OpenDental.Bridges{
 			listArgs.Add(ProgramCur.CommandLine);
 			listArgs.Add("-first=\""+Tidy(pat.FName)+"\"");
 			listArgs.Add("-last=\""+Tidy(pat.LName)+"\"");
-			if(ProgramProperties.GetPropVal(ProgramCur.ProgramNum,"Enter 0 to use PatientNum, or 1 to use ChartNum")=="0"){
+			if(ProgramProperties.GetPropVal(ProgramCur.Id,"Enter 0 to use PatientNum, or 1 to use ChartNum")=="0"){
 				listArgs.Add("-id=\""+pat.PatNum.ToString()+"\"");
 			}
 			else{

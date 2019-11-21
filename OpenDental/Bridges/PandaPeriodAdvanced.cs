@@ -89,7 +89,7 @@ namespace OpenDental.Bridges {
 		private static string GetIniString(Patient pat,Program programCur) {
 			const string  nl="\r\n";
 			string iniString="[PATIENT]"+nl;
-			if(ProgramProperties.GetPropVal(programCur.ProgramNum,"Enter 0 to use PatientNum, or 1 to use ChartNum")=="0") {
+			if(ProgramProperties.GetPropVal(programCur.Id,"Enter 0 to use PatientNum, or 1 to use ChartNum")=="0") {
 				iniString+="PatID="+pat.PatNum.ToString()+nl;
 			}
 			else {
