@@ -1356,6 +1356,8 @@ namespace OpenDentBusiness
         /// <summary>Only called from above method, but must be public for remoting.</summary>
         public static DataTable GetApptFieldsByApptNums(List<long> aptNums)
         {
+            if (aptNums == null || aptNums.Count == 0) return null;
+
             string command = "SELECT AptNum,FieldName,FieldValue "
                 + "FROM apptfield "
                 + "WHERE AptNum IN (";
