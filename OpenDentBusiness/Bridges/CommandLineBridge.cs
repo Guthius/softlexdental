@@ -88,7 +88,7 @@ namespace OpenDentBusiness.Bridges
         /// <param name="patient">The patient details.</param>
         public sealed override void Send(long programId, Patient patient)
         {
-            var programPath = ProgramPreference.GetString(programId, ProgramPreferenceName.ProgramPath);
+            var programPath = GetProgramPath(programId);
             if (string.IsNullOrEmpty(programPath))
             {
                 return;
@@ -105,7 +105,7 @@ namespace OpenDentBusiness.Bridges
                 return;
             }
 
-            var programArguments = ProgramPreference.GetString(programId, ProgramPreferenceName.CommandLineArguments);
+            var programArguments = GetCommandLineArguments(programId);
 
             if (patient == null)
             {
@@ -193,5 +193,21 @@ namespace OpenDentBusiness.Bridges
         ///     True if the preparation was successful and the program can be started; otherwise, false.
         /// </returns>
         protected abstract bool PrepareToRun(long programId, Patient patient, out string arguments);
+
+        /// <summary>
+        /// Gets the path of the program with the specified ID.
+        /// </summary>
+        /// <param name="programId">The ID of the program.</param>
+        /// <returns>The path of the program.</returns>
+        protected static string GetProgramPath(long programId) =>
+            ProgramPreference.GetString(programId, ProgramPreferenceName.ProgramPath);
+
+        /// <summary>
+        /// Gets the command line arguments for the program with the specified ID.
+        /// </summary>
+        /// <param name="programId">The ID of the program.</param>
+        /// <returns>The command line arguments for the program.</returns>
+        protected static string GetCommandLineArguments(long programId) =>
+            ProgramPreference.GetString(programId, ProgramPreferenceName.CommandLineArguments);
     }
 }
