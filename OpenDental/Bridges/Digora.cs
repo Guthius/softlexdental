@@ -10,14 +10,10 @@ using System.Collections.Generic;
 
 namespace OpenDental.Bridges
 {
-    /// <summary></summary>
     public class Digora
     {
-
-        /// <summary></summary>
         public Digora()
         {
-
         }
 
         /*string InvalidCommandLine="999";

@@ -262,6 +262,7 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Bridges\DdeBridge.cs" />
     <Compile Include="Bridges\FormOryxUserSettings.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -285,14 +286,14 @@
     <Compile Include="Bridges\BioPAKBridge.cs" />
     <Compile Include="Bridges\CaptureLinkBridge.cs" />
     <Compile Include="Bridges\ClioSoftBridge.cs" />
-    <Compile Include="Bridges\ClaimX_Statements.cs" />
-    <Compile Include="Bridges\CleaRay.cs" />
-    <Compile Include="Bridges\OrthoInsight3d.cs" />
+    <Compile Include="Bridges\_WIP\ClaimX_Statements.cs" />
+    <Compile Include="Bridges\CleaRayBridge.cs" />
+    <Compile Include="Bridges\OrthoInsight3dBridge.cs" />
     <Compile Include="Bridges\PandaPeriodAdvanced.cs" />
-    <Compile Include="Bridges\PayConnectTerminal.cs" />
+    <Compile Include="Bridges\_WIP\PayConnectTerminal.cs" />
     <Compile Include="Bridges\XChargeBridge.cs" />
-    <Compile Include="Bridges\EDS_Statements.cs" />
-    <Compile Include="Bridges\OrthoCad.cs" />
+    <Compile Include="Bridges\_WIP\EDS_Statements.cs" />
+    <Compile Include="Bridges\OrthoCadBridge.cs" />
     <Compile Include="Bridges\RapidCall.cs" />
     <Compile Include="Bridges\Romexis.cs" />
     <Compile Include="Bridges\DentalTekBridge.cs" />
@@ -307,24 +308,24 @@
     <Compile Include="Bridges\SmartDentBridge.cs" />
     <Compile Include="Bridges\ActeonImagingSuiteBridge.cs" />
     <Compile Include="Bridges\TrianaBridge.cs" />
-    <Compile Include="Bridges\Visora.cs" />
-    <Compile Include="Bridges\VistaDent.cs" />
+    <Compile Include="Bridges\VisoraBridge.cs" />
+    <Compile Include="Bridges\VistaDentBridge.cs" />
     <Compile Include="Bridges\DentalStudioBridge.cs" />
     <Compile Include="Bridges\Guru.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Bridges\Tscan.cs" />
-    <Compile Include="Bridges\POS_statements.cs" />
+    <Compile Include="Bridges\_WIP\POS_statements.cs" />
     <Compile Include="Bridges\RayMage.cs" />
-    <Compile Include="Bridges\MiPACS.cs" />
-    <Compile Include="Bridges\QuickBooks.cs" />
+    <Compile Include="Bridges\MiPACSBridge.cs" />
+    <Compile Include="Bridges\_WIP\QuickBooks.cs" />
     <Compile Include="Bridges\VixWinBase36Bridge.cs" />
     <Compile Include="Bridges\VixWinBase41Bridge.cs" />
-    <Compile Include="Bridges\EvaSoft.cs" />
+    <Compile Include="Bridges\EvaSoftBridge.cs" />
     <Compile Include="Bridges\Orion.cs" />
     <Compile Include="Bridges\PaperlessTechnology.cs" />
     <Compile Include="Bridges\Patterson.cs" />
-    <Compile Include="Bridges\Ewoo.cs" />
+    <Compile Include="Bridges\EwooBridge.cs" />
     <Compile Include="Bridges\FormTrophyNamePick.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -334,13 +335,13 @@
     <Compile Include="Bridges\CamsightBridge.cs" />
     <Compile Include="Bridges\CliniviewBridge.cs" />
     <Compile Include="Bridges\ICatBridge.cs" />
-    <Compile Include="Bridges\ECW.cs" />
+    <Compile Include="Bridges\_WIP\ECW.cs" />
     <Compile Include="Bridges\Progeny.cs" />
     <Compile Include="Bridges\SoproBridge.cs" />
-    <Compile Include="Bridges\Tesia_statements.cs" />
+    <Compile Include="Bridges\_WIP\Tesia_statements.cs" />
     <Compile Include="Bridges\Dolphin.cs" />
     <Compile Include="Bridges\Digora.cs" />
-    <Compile Include="Bridges\EHG_statements.cs" />
+    <Compile Include="Bridges\_WIP\EHG_statements.cs" />
     <Compile Include="Bridges\FormHouseCalls.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -362,13 +363,13 @@
     <Compile Include="Bridges\DxisBridge.cs" />
     <Compile Include="Bridges\Vipersoft.cs" />
     <Compile Include="Bridges\DbsWinBridge.cs" />
-    <Compile Include="Bridges\DentalEye.cs" />
-    <Compile Include="Bridges\DentForms.cs" />
-    <Compile Include="Bridges\DentX.cs" />
-    <Compile Include="Bridges\Dexis.cs" />
-    <Compile Include="Bridges\DrCeph.cs" />
+    <Compile Include="Bridges\DentalEyeBridge.cs" />
+    <Compile Include="Bridges\DentFormsBridge.cs" />
+    <Compile Include="Bridges\DentXBridge.cs" />
+    <Compile Include="Bridges\DexisBridge.cs" />
+    <Compile Include="Bridges\DrCephBridge.cs" />
     <Compile Include="Bridges\FloridaProbeBridge.cs" />
-    <Compile Include="Bridges\Iap.cs" />
+    <Compile Include="Bridges\_WIP\Iap.cs" />
     <Compile Include="Bridges\ImageFXBridge.cs" />
     <Compile Include="Bridges\Lightyear.cs" />
     <Compile Include="Bridges\MediaDent.cs" />
@@ -378,9 +379,9 @@
     <Compile Include="Bridges\Schick.cs" />
     <Compile Include="Bridges\SironaBridge.cs" />
     <Compile Include="Bridges\TigerView.cs" />
-    <Compile Include="Bridges\Trojan.cs" />
-    <Compile Include="Bridges\Trophy.cs" />
-    <Compile Include="Bridges\TrophyEnhanced.cs" />
+    <Compile Include="Bridges\_WIP\Trojan.cs" />
+    <Compile Include="Bridges\TrophyBridge.cs" />
+    <Compile Include="Bridges\TrophyEnhancedBridge.cs" />
     <Compile Include="Bridges\VixWinBridge.cs" />
     <Compile Include="Bridges\VixWinNumberedBridge.cs" />
     <Compile Include="Bridges\VixWinOldBridge.cs" />

@@ -25,7 +25,7 @@ namespace OpenDental.Bridges
         /// <summary>
         /// Initializes a new instance of the <see cref="ZImageBridge"/> class.
         /// </summary>
-        public ZImageBridge() : base("ZImage", "")
+        public ZImageBridge() : base("Z-Image", "")
         {
             RequirePatient = true;
         }

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Copyright (C) 2019 Dental Stars SRL
  * Copyright (C) 2003-2019 Jordan S. Sparks, D.M.D.
  * 
@@ -20,21 +20,18 @@ using OpenDentBusiness.Bridges;
 
 namespace OpenDental.Bridges
 {
-    public class FloridaProbeBridge : CommandLineBridge
+    public class MiPACSBridge : CommandLineBridge
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="FloridaProbeBridge"/> class.
+        /// Initializes a new instance of the <see cref="MiPACSBridge"/> class.
         /// </summary>
-        public FloridaProbeBridge() : base("FloridaProbe", "")
+        public MiPACSBridge() : base("MiPACS", "")
         {
         }
 
         /// <summary>
         ///     <para>
-        ///         Prepares the local system enviroment for running the program. Most bridges
-        ///         will only fill the <paramref name="arguments"/> parameter with the appropriate 
-        ///         data. Some bridges will perform more complex actions such as generating files,
-        ///         contacting remote services, etc...
+        ///         Generates the appropriate command line arguments for the specified patient.
         ///     </para>
         /// </summary>
         /// <param name="programId">The ID of the program.</param>
@@ -45,13 +42,12 @@ namespace OpenDental.Bridges
         /// </returns>
         protected override bool PrepareToRun(long programId, Patient patient, out string arguments)
         {
-            string Tidy(string input) => input.Replace("\"", "");
-
-            arguments =
-                "/search " +
-                "/chart \"" + Tidy(GetPatientId(programId, patient)) + "\" " +
-                "/first \"" + Tidy(patient.FName) + "\" " + 
-                "/last \"" + Tidy(patient.LName) + "\"";
+            arguments = 
+                " /ID=" + GetPatientId(programId, patient) +
+                " /FN=" + patient.FName  + 
+                " /LN=" + patient.LName + 
+                " /BD=" + patient.Birthdate.ToShortDateString() + 
+                " /Sex=" + (patient.Gender == PatientGender.Female ? "F" : "M");
 
             return true;
         }

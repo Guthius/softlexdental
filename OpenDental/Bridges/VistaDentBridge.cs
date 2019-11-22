@@ -20,14 +20,31 @@ using OpenDentBusiness.Bridges;
 
 namespace OpenDental.Bridges
 {
-    public class DentForms : CommandLineBridge
+    public class VistaDentBridge : CommandLineBridge
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="DentForms"/> class.
+        /// Initializes a new instance of the <see cref="VistaDentBridge"/> class.
         /// </summary>
-        public DentForms() : base("DentForms", "")
+        public VistaDentBridge() : base("VistaDent", "")
         {
-            RequirePatient = true;
+        }
+
+        /// <summary>
+        /// Gets a string representation of the specified <paramref name="gender"/>.
+        /// </summary>
+        /// <param name="gender">The gender.</param>
+        /// <returns>A string representation of the gender.</returns>
+        private static string GetPatientGender(PatientGender gender)
+        {
+            switch (gender)
+            {
+                case PatientGender.Male:
+                    return "m";
+
+                case PatientGender.Female:
+                    return "f";
+            }
+            return "u";
         }
 
         /// <summary>
@@ -43,13 +60,14 @@ namespace OpenDental.Bridges
         /// </returns>
         protected override bool PrepareToRun(long programId, Patient patient, out string arguments)
         {
-            arguments = 
-                " -patid " + GetPatientId(programId, patient) + 
-                " -fname " + patient.FName + 
-                " -lname " + patient.LName + 
-                " -ssn " + patient.SSN + 
-                " -dob " + patient.Birthdate.ToShortDateString() + 
-                " -gender " + (patient.Gender == PatientGender.Male ? "M" : "F");
+            string Tidy(string input) => '"' + input.Replace(";", "").Replace("\"", "").Replace(" ", "") + '"';
+
+            arguments =
+                " -first=" + Tidy(patient.FName) +
+                " -last=" + Tidy(patient.LName) +
+                " -id=" + Tidy(GetPatientId(programId, patient)) +
+                " -DOB=" + Tidy(patient.Birthdate.ToString("yyyy-MM-dd")) +
+                " -sex=" + Tidy(GetPatientGender(patient.Gender));
 
             return true;
         }

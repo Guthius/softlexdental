@@ -20,21 +20,18 @@ using OpenDentBusiness.Bridges;
 
 namespace OpenDental.Bridges
 {
-    public class FloridaProbeBridge : CommandLineBridge
+    public class CleaRayBridge : CommandLineBridge
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="FloridaProbeBridge"/> class.
+        /// Initializes a new instance of the <see cref="CleaRayBridge"/> class.
         /// </summary>
-        public FloridaProbeBridge() : base("FloridaProbe", "")
+        public CleaRayBridge() : base("CleaRay", "")
         {
         }
 
         /// <summary>
         ///     <para>
-        ///         Prepares the local system enviroment for running the program. Most bridges
-        ///         will only fill the <paramref name="arguments"/> parameter with the appropriate 
-        ///         data. Some bridges will perform more complex actions such as generating files,
-        ///         contacting remote services, etc...
+        ///         Generates the appropriate command line arguments for the specified patient.
         ///     </para>
         /// </summary>
         /// <param name="programId">The ID of the program.</param>
@@ -45,13 +42,12 @@ namespace OpenDental.Bridges
         /// </returns>
         protected override bool PrepareToRun(long programId, Patient patient, out string arguments)
         {
-            string Tidy(string input) => input.Replace("\"", "");
+            string Tidy(string input) => "\"" + input.Replace(";", "").Replace("/", "") + "\"";
 
             arguments =
-                "/search " +
-                "/chart \"" + Tidy(GetPatientId(programId, patient)) + "\" " +
-                "/first \"" + Tidy(patient.FName) + "\" " + 
-                "/last \"" + Tidy(patient.LName) + "\"";
+                " /ID:" + Tidy(GetPatientId(programId, patient)) +
+                " /LN:" + Tidy(patient.LName) +
+                " /N:" + Tidy(patient.FName);
 
             return true;
         }

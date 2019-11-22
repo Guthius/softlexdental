@@ -17,24 +17,27 @@
  */
 using OpenDentBusiness;
 using OpenDentBusiness.Bridges;
+using System.IO;
 
 namespace OpenDental.Bridges
 {
-    public class FloridaProbeBridge : CommandLineBridge
+    public class TrophyBridge : CommandLineBridge
     {
+        private static readonly BridgePreference[] preferences =
+        {
+            BridgePreference.Custom("storage_path", "Storage Path", BridgePreferenceType.FolderPath)
+        };
+
         /// <summary>
-        /// Initializes a new instance of the <see cref="FloridaProbeBridge"/> class.
+        /// Initializes a new instance of the <see cref="TrophyBridge"/> class.
         /// </summary>
-        public FloridaProbeBridge() : base("FloridaProbe", "")
+        public TrophyBridge() : base("Trophy", "", preferences)
         {
         }
 
         /// <summary>
         ///     <para>
-        ///         Prepares the local system enviroment for running the program. Most bridges
-        ///         will only fill the <paramref name="arguments"/> parameter with the appropriate 
-        ///         data. Some bridges will perform more complex actions such as generating files,
-        ///         contacting remote services, etc...
+        ///         Generates the appropriate command line arguments for the specified patient.
         ///     </para>
         /// </summary>
         /// <param name="programId">The ID of the program.</param>
@@ -45,13 +48,13 @@ namespace OpenDental.Bridges
         /// </returns>
         protected override bool PrepareToRun(long programId, Patient patient, out string arguments)
         {
-            string Tidy(string input) => input.Replace("\"", "");
+            string Tidy(string input) => input.Replace("\"", "").Replace("'", "");
 
-            arguments =
-                "/search " +
-                "/chart \"" + Tidy(GetPatientId(programId, patient)) + "\" " +
-                "/first \"" + Tidy(patient.FName) + "\" " + 
-                "/last \"" + Tidy(patient.LName) + "\"";
+            var storagePath = ProgramPreference.GetString(programId, "storage_path");
+
+            arguments = 
+                " -P" + Path.Combine(storagePath, GetPatientId(programId, patient)) +
+                " -N" + Tidy(patient.LName) + ", " + Tidy(patient.FName);
 
             return true;
         }

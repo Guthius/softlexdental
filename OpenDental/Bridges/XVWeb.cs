@@ -101,32 +101,7 @@ namespace OpenDental.Bridges
             var programPath = ProgramPreference.GetString(programId, ProgramPreferenceName.ProgramPath);
             var programUrl = ProgramPreference.GetString(programId, "url", "https://demo2.apteryxweb.com/");
 
-            if (patient == null)
-            {
-                try
-                {
-                    if (string.IsNullOrWhiteSpace(programPath))
-                    {
-                        Process.Start(programUrl);
-                    }
-                    else
-                    {
-                        Process.Start(programPath, programUrl);
-                    }
-                }
-                catch (Exception exception)
-                {
-                    MessageBox.Show(
-                        exception.Message,
-                        Name,
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Error);
-                }
-
-                return;
-            }
-
-            var queryString = GetQueryString(programId, patient);
+            var queryString = patient != null ? GetQueryString(programId, patient) : "";
 
             try
             {
@@ -195,11 +170,11 @@ namespace OpenDental.Bridges
             HttpWebResponse response = (HttpWebResponse)request.GetResponse();
             if (response.StatusCode == HttpStatusCode.NoContent)
             {
-                throw new ApplicationException(Lan.g("XVWeb", "Invalid XVWeb credentials. Please check your username and password in the XVWeb bridge setup."));
+                throw new ApplicationException("Invalid XVWeb credentials. Please check your username and password in the XVWeb bridge setup.");
             }
             if (response.StatusCode != HttpStatusCode.OK)
             {
-                throw new ApplicationException(Lan.g("XVWeb", "Unable to connect to XVWeb. Response from XVWeb:") + " " + response.StatusDescription);
+                throw new ApplicationException("Unable to connect to XVWeb. Response from XVWeb: " + response.StatusDescription);
             }
             dataStream = response.GetResponseStream();
             StreamReader reader = new StreamReader(dataStream);
