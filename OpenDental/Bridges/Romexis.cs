@@ -1,57 +1,49 @@
-using System.Collections;
-using System.Diagnostics;
-using System.Windows.Forms;
 using OpenDentBusiness;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Windows.Forms;
 
-namespace OpenDental.Bridges{
-	/// <summary></summary>
-	public class Romexis{
+namespace OpenDental.Bridges
+{
+    public class Romexis
+    {
+        public Romexis()
+        {
+        }
 
-		/// <summary></summary>
-		public Romexis(){
-			
-		}
+        public static void SendData(Program ProgramCur, Patient pat)
+        {
+            string path = Programs.GetProgramPath(ProgramCur);
+            //DxStart.exe ”PatientID” ”FamilyName” ”FirstName” ”BirthDate”
+            List<ProgramPreference> ForProgram = ProgramProperties.GetForProgram(ProgramCur.Id);
+            if (pat == null)
+            {
+                MessageBox.Show("Please select a patient first");
+                return;
+            }
+            string info = "";
+            //Patient id can be any string format
+            ProgramPreference PPCur = ProgramProperties.GetCur(ForProgram, "Enter 0 to use PatientNum, or 1 to use ChartNum");
+            if (PPCur.Value == "0")
+            {
+                info += "\"" + pat.PatNum.ToString() + "\" ";
+            }
+            else
+            {
+                info += "\"" + pat.ChartNumber.Replace("\"", "") + "\" ";
+            }
+            info += "\"" + pat.LName.Replace("\"", "") + "\" "
+                + "\"" + pat.FName.Replace("\"", "") + "\" "
+                + "\"" + pat.Birthdate.ToString("yyyyMMdd") + "\"";
+            try
+            {
+                Process.Start(path, info);
+            }
+            catch
+            {
+                MessageBox.Show(path + " is not available.");
+            }
 
-		///<summary>Launches the program using the patient.Cur data.</summary>
-		public static void SendData(Program ProgramCur, Patient pat){
-			string path=Programs.GetProgramPath(ProgramCur);
-			//DxStart.exe ”PatientID” ”FamilyName” ”FirstName” ”BirthDate”
-			List<ProgramPreference> ForProgram=ProgramProperties.GetForProgram(ProgramCur.Id);
-			if(pat==null){
-				MessageBox.Show("Please select a patient first");
-				return;
-			}
-			string info="";
-			//Patient id can be any string format
-			ProgramPreference PPCur=ProgramProperties.GetCur(ForProgram, "Enter 0 to use PatientNum, or 1 to use ChartNum");
-			if(PPCur.Value=="0"){
-				info+="\""+pat.PatNum.ToString()+"\" ";
-			}
-			else{
-				info+="\""+pat.ChartNumber.Replace("\"","")+"\" ";
-			}
-			info+="\""+pat.LName.Replace("\"","")+"\" "
-				+"\""+pat.FName.Replace("\"","")+"\" "
-				+"\""+pat.Birthdate.ToString("yyyyMMdd")+"\"";
-			try{
-				Process.Start(path,info);
-			}
-			catch{
-				MessageBox.Show(path+" is not available.");
-			}
-			
-		}
-
-	}
+        }
+    }
 }
-
-
-
-
-
-
-
-
-
-

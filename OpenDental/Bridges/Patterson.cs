@@ -73,6 +73,8 @@ namespace OpenDental.Bridges
                 ssn = "";//We do not send if the ssn is all zeros, because Patterson treats ssn like a primary key if present. If more than one patient have the same ssn, then they are treated as the same patient.
             }
 
+            // TODO: Extract the logic from the VBBridges assembly and move it to this class.....
+
             VBbridges.Patterson.Launch(
                 Tidy(patient.FName, 40),
                 "",//Tidy(pat.MiddleI,1),//When there is no SSN and the name changes, Patterson creates a whole new patient record, which is troublesome for our customers.
