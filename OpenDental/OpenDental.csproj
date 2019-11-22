@@ -269,14 +269,14 @@
     <Compile Include="Bridges\FormOryxUserSettings.designer.cs">
       <DependentUpon>FormOryxUserSettings.cs</DependentUpon>
     </Compile>
-    <Compile Include="Bridges\Oryx.cs" />
+    <Compile Include="Bridges\OryxBridge.cs" />
     <Compile Include="Bridges\DentalXChangeBridge.cs" />
     <Compile Include="Bridges\MidwayBridge.cs" />
     <Compile Include="Bridges\ApteryxImage.cs" />
     <Compile Include="Bridges\CadiBridge.cs" />
     <Compile Include="Bridges\CarestreamBridge.cs" />
     <Compile Include="Bridges\HdxWillBridge.cs" />
-    <Compile Include="Bridges\NewTomNNT.cs" />
+    <Compile Include="Bridges\NewTomNNTBridge.cs" />
     <Compile Include="Bridges\IDixelBridge.cs" />
     <Compile Include="Bridges\AdstraBridge.cs" />
     <Compile Include="Bridges\ApteryxBridge.cs" />
@@ -300,7 +300,7 @@
     <Compile Include="Bridges\DemandForce.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Bridges\Office.cs" />
+    <Compile Include="Bridges\OfficeBridge.cs" />
     <Compile Include="Bridges\HandyDentistBridge.cs" />
     <Compile Include="Bridges\IrysBridge.cs" />
     <Compile Include="Bridges\PandaPerio.cs" />
@@ -322,7 +322,7 @@
     <Compile Include="Bridges\VixWinBase36Bridge.cs" />
     <Compile Include="Bridges\VixWinBase41Bridge.cs" />
     <Compile Include="Bridges\EvaSoftBridge.cs" />
-    <Compile Include="Bridges\Orion.cs" />
+    <Compile Include="Bridges\_WIP\Orion.cs" />
     <Compile Include="Bridges\PaperlessTechnology.cs" />
     <Compile Include="Bridges\Patterson.cs" />
     <Compile Include="Bridges\EwooBridge.cs" />

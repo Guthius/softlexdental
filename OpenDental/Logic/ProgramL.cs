@@ -180,7 +180,7 @@ namespace OpenDental
             }
             else if (program.TypeName == ProgramName.Office.ToString())
             {
-                Office.SendData(program, patient);
+                OfficeBridge.SendData(program, patient);
                 return;
             }
             else if (program.TypeName == ProgramName.Dolphin.ToString())
@@ -262,7 +262,7 @@ namespace OpenDental
             }
             else if (program.TypeName == ProgramName.NewTomNNT.ToString())
             {
-                NewTomNNT.SendData(program, patient);
+                NewTomNNTBridge.SendData(program, patient);
                 return;
             }
             else if (program.TypeName == ProgramName.MediaDent.ToString())
@@ -287,7 +287,7 @@ namespace OpenDental
             }
             else if (program.TypeName == ProgramName.Oryx.ToString())
             {
-                Oryx.SendData(program, patient);
+                OryxBridge.SendData(program, patient);
                 return;
             }
             else if (program.TypeName == ProgramName.OrthoInsight3d.ToString())
@@ -549,7 +549,7 @@ namespace OpenDental
                     Text = "User Settings"
                 };
 
-                menuItem.Click += Oryx.menuItemUserSettingsClick;
+                menuItem.Click += OryxBridge.MenuItemUserSettingsClick;
 
                 var contextMenu = new ContextMenu();
 

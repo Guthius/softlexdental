@@ -18,9 +18,9 @@ namespace OpenDental
 
         private void FormUserSetting_Load(object sender, EventArgs e)
         {
-            textUsername.Text = UserPreference.GetString(Security.CurrentUser.Id, Oryx.Preferences.Username);
+            textUsername.Text = UserPreference.GetString(Security.CurrentUser.Id, OryxBridge.Preferences.Username);
 
-            var password = UserPreference.GetString(Security.CurrentUser.Id, Oryx.Preferences.Password);
+            var password = UserPreference.GetString(Security.CurrentUser.Id, OryxBridge.Preferences.Password);
             if (!string.IsNullOrEmpty(password))
             {
                 string passwordPlain;
@@ -31,11 +31,11 @@ namespace OpenDental
 
         private void butOK_Click(object sender, EventArgs e)
         {
-            UserPreference.Update(Security.CurrentUser.Id, Oryx.Preferences.Username, textUsername.Text);
+            UserPreference.Update(Security.CurrentUser.Id, OryxBridge.Preferences.Username, textUsername.Text);
 
             Encryption.TryEncrypt(textPassword.Text, out var password);
 
-            UserPreference.Update(Security.CurrentUser.Id, Oryx.Preferences.Password, password);
+            UserPreference.Update(Security.CurrentUser.Id, OryxBridge.Preferences.Password, password);
 
             DialogResult = DialogResult.OK;
 
