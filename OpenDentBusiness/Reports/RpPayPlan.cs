@@ -27,20 +27,19 @@ namespace OpenDentBusiness
                 whereProv += ") ";
             }
             string whereClin = "";
-            bool hasClinicsEnabled = Preference.HasClinicsEnabledNoCache;
-            if (hasClinicsEnabled)
-            {//Using clinics
-                whereClin += " AND payplancharge.ClinicNum IN(";
-                for (int i = 0; i < listClinicNums.Count; i++)
+
+
+            whereClin += " AND payplancharge.ClinicNum IN(";
+            for (int i = 0; i < listClinicNums.Count; i++)
+            {
+                if (i > 0)
                 {
-                    if (i > 0)
-                    {
-                        whereClin += ",";
-                    }
-                    whereClin += POut.Long(listClinicNums[i]);
+                    whereClin += ",";
                 }
-                whereClin += ") ";
+                whereClin += POut.Long(listClinicNums[i]);
             }
+            whereClin += ") ";
+
             DataSet ds = new DataSet();
             DataTable table = new DataTable("Clinic");
             table.Columns.Add("provider");
@@ -95,10 +94,9 @@ namespace OpenDentBusiness
                 + "AND payplancharge.ChargeType=" + POut.Int((int)PayPlanChargeType.Credit) + " AND ChargeDate > " + datesql + "),0) '_notDue', "
                 + "patient.PatNum PatNum, "
                 + "payplancharge.ProvNum ProvNum ";
-            if (hasClinicsEnabled)
-            {
-                command += ", payplancharge.ClinicNum ClinicNum ";
-            }
+
+            command += ", payplancharge.ClinicNum ClinicNum ";
+
             //In order to determine if the patient has completely paid off their payment plan we need to get the total amount of interest as of today.
             //Then, after the query has run, we'll add the interest up until today with the total principal for the entire payment plan.
             //For this reason, we cannot use _accumDue which only gets the principle up until today and not the entire payment plan principle.
@@ -133,14 +131,8 @@ namespace OpenDentBusiness
                 command += "AND payplan.IsClosed=0 ";
             }
             command += "GROUP BY FName,LName,MiddleI,Preferred,payplan.PayPlanNum ";
-            if (hasClinicsEnabled)
-            {
-                command += "ORDER BY ClinicNum,LName,FName";
-            }
-            else
-            {
-                command += "ORDER BY LName,FName";
-            }
+            command += "ORDER BY ClinicNum,LName,FName";
+
             DataTable raw = DataConnection.ExecuteDataTable(command);
             List<Provider> listProvs = Providers.GetAll();
             //DateTime payplanDate;
@@ -206,67 +198,64 @@ namespace OpenDentBusiness
                     famBal = (decimal)famCur.Members[0].BalTotal;
                     row["famBal"] = (famBal - (decimal)famCur.Members[0].InsEst).ToString("F");
                 }
-                if (hasClinicsEnabled)
-                {//Using clinics
-                    List<Clinic> listClinics = Clinics.GetClinicsNoCache();
-                    string clinicAbbr = Clinics.GetAbbr(PIn.Long(raw.Rows[i]["ClinicNum"].ToString()), listClinics);
-                    clinicAbbr = (clinicAbbr == "") ? Lans.g("FormRpPayPlans", "Unassigned") : clinicAbbr;
-                    if (!String.IsNullOrEmpty(clinicAbbrOld) && clinicAbbr != clinicAbbrOld)
-                    {//Reset all the total values
-                        DataRow rowTot = tableTotals.NewRow();
-                        rowTot["clinicName"] = clinicAbbrOld;
-                        rowTot["princ"] = princTot.ToString();
-                        rowTot["accumInt"] = interestTot.ToString();
-                        rowTot["paid"] = paidTot.ToString();
-                        rowTot["balance"] = balanceTot.ToString();
-                        rowTot["due"] = accumDueTot.ToString();
-                        if (isPayPlanV2)
-                        {
-                            rowTot["notDue"] = notDueTot.ToString();
-                        }
-                        rowTot["famBal"] = famBalTot.ToString();
-                        tableTotals.Rows.Add(rowTot);
-                        princTot = 0;
-                        paidTot = 0;
-                        interestTot = 0;
-                        accumDueTot = 0;
-                        balanceTot = 0;
-                        notDueTot = 0;
-                        famBalTot = 0;
-                    }
-                    row["clinicName"] = clinicAbbr;
-                    clinicAbbrOld = clinicAbbr;
-                    princTot += princ;
-                    paidTot += paid;
-                    interestTot += interest;
-                    accumDueTot += (accumDue - paid);
-                    balanceTot += (princ + interest - paid);
-                    notDueTot += ((princ + interest - paid) - (accumDue - paid));
-                    famBalTot += famBal;
-                    if (i == raw.Rows.Count - 1)
+
+                string clinicAbbr = Clinic.GetById(PIn.Long(raw.Rows[i]["ClinicNum"].ToString())).Abbr;
+                clinicAbbr = (clinicAbbr == "") ? "Unassigned" : clinicAbbr;
+                if (!String.IsNullOrEmpty(clinicAbbrOld) && clinicAbbr != clinicAbbrOld)
+                {//Reset all the total values
+                    DataRow rowTot = tableTotals.NewRow();
+                    rowTot["clinicName"] = clinicAbbrOld;
+                    rowTot["princ"] = princTot.ToString();
+                    rowTot["accumInt"] = interestTot.ToString();
+                    rowTot["paid"] = paidTot.ToString();
+                    rowTot["balance"] = balanceTot.ToString();
+                    rowTot["due"] = accumDueTot.ToString();
+                    if (isPayPlanV2)
                     {
-                        DataRow rowTot = tableTotals.NewRow();
-                        rowTot["clinicName"] = clinicAbbrOld;
-                        rowTot["princ"] = princTot.ToString();
-                        rowTot["accumInt"] = interestTot.ToString();
-                        rowTot["paid"] = paidTot.ToString();
-                        rowTot["balance"] = balanceTot.ToString();
-                        rowTot["due"] = accumDueTot.ToString();
-                        if (isPayPlanV2)
-                        {
-                            rowTot["notDue"] = notDueTot.ToString();
-                        }
-                        rowTot["famBal"] = famBalTot.ToString();
-                        tableTotals.Rows.Add(rowTot);
+                        rowTot["notDue"] = notDueTot.ToString();
                     }
+                    rowTot["famBal"] = famBalTot.ToString();
+                    tableTotals.Rows.Add(rowTot);
+                    princTot = 0;
+                    paidTot = 0;
+                    interestTot = 0;
+                    accumDueTot = 0;
+                    balanceTot = 0;
+                    notDueTot = 0;
+                    famBalTot = 0;
                 }
+                row["clinicName"] = clinicAbbr;
+                clinicAbbrOld = clinicAbbr;
+                princTot += princ;
+                paidTot += paid;
+                interestTot += interest;
+                accumDueTot += (accumDue - paid);
+                balanceTot += (princ + interest - paid);
+                notDueTot += ((princ + interest - paid) - (accumDue - paid));
+                famBalTot += famBal;
+                if (i == raw.Rows.Count - 1)
+                {
+                    DataRow rowTot = tableTotals.NewRow();
+                    rowTot["clinicName"] = clinicAbbrOld;
+                    rowTot["princ"] = princTot.ToString();
+                    rowTot["accumInt"] = interestTot.ToString();
+                    rowTot["paid"] = paidTot.ToString();
+                    rowTot["balance"] = balanceTot.ToString();
+                    rowTot["due"] = accumDueTot.ToString();
+                    if (isPayPlanV2)
+                    {
+                        rowTot["notDue"] = notDueTot.ToString();
+                    }
+                    rowTot["famBal"] = famBalTot.ToString();
+                    tableTotals.Rows.Add(rowTot);
+                }
+
                 table.Rows.Add(row);
             }
             ds.Tables.Add(table);
             ds.Tables.Add(tableTotals);
             return ds;
         }
-
     }
 
     ///<summary>Used to dictate which payment plan types are shown in the payment plan report.</summary>

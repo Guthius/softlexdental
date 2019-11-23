@@ -4675,9 +4675,9 @@ namespace OpenDental{
 			butApptLineColor.BackColor= Preference.GetColor(PreferenceName.AppointmentTimeLineColor);
 			checkApptModuleDefaultToWeek.Checked= Preference.GetBool(PreferenceName.ApptModuleDefaultToWeek);
 			checkApptTimeReset.Checked=Preference.GetBool(PreferenceName.AppointmentClinicTimeReset);
-			if(!Preferences.HasClinicsEnabled) {
+			
 				checkApptTimeReset.Visible=false;
-			}
+			
 			checkApptModuleAdjInProd.Checked= Preference.GetBool(PreferenceName.ApptModuleAdjustmentsInProd);
 			checkUseOpHygProv.Checked= Preference.GetBool(PreferenceName.ApptSecondaryProviderConsiderOpOnly);
 			checkApptModuleProductionUsesOps.Checked= Preference.GetBool(PreferenceName.ApptModuleProductionUsesOps);
@@ -4687,10 +4687,10 @@ namespace OpenDental{
 			comboApptSchedEnforceSpecialty.Items.AddRange(Enum.GetValues(typeof(ApptSchedEnforceSpecialty)).OfType<ApptSchedEnforceSpecialty>()
 				.Select(x => x.GetDescription()).ToArray());
 			comboApptSchedEnforceSpecialty.SelectedIndex= Preference.GetInt(PreferenceName.ApptSchedEnforceSpecialty);
-			if(!Preferences.HasClinicsEnabled) {
+			
 				comboApptSchedEnforceSpecialty.Visible=false;
 				labelApptSchedEnforceSpecialty.Visible=false;
-			}
+			
 			textApptWithoutProcsDefaultLength.Text= Preference.GetString(PreferenceName.AppointmentWithoutProcsDefaultLength);
 			checkReplaceBlockouts.Checked= Preference.GetBool(PreferenceName.ReplaceExistingBlockout);
 			checkUnscheduledListNoRecalls.Checked= Preference.GetBool(PreferenceName.UnscheduledListNoRecalls);
@@ -4742,9 +4742,9 @@ namespace OpenDental{
 			checkPatInitBillingTypeFromPriInsPlan.Checked= Preference.GetBool(PreferenceName.PatInitBillingTypeFromPriInsPlan);
 			checkPreferredReferrals.Checked= Preference.GetBool(PreferenceName.ShowPreferedReferrals);
 			checkAutoFillPatEmail.Checked= Preference.GetBool(PreferenceName.AddFamilyInheritsEmail);
-			if(!Preferences.HasClinicsEnabled) {
+		
 				checkAllowPatsAtHQ.Visible=false;
-			}
+			
 			checkAllowPatsAtHQ.Checked= Preference.GetBool(PreferenceName.ClinicAllowPatientsAtHeadquarters);
 			checkInsPlanExclusionsUseUCR.Checked=Preference.GetBool(PreferenceName.InsPlanUseUcrFeeForExclusions);
 			checkInsPlanExclusionsMarkDoNotBill.Checked= Preference.GetBool(PreferenceName.InsPlanExclusionsMarkDoNotBillIns);
@@ -4878,7 +4878,7 @@ namespace OpenDental{
 			//TP module-----------------------------------------------------------------------
 			textTreatNote.Text= Preference.GetString(PreferenceName.TreatmentPlanNote);
 			checkTreatPlanShowCompleted.Checked= Preference.GetBool(PreferenceName.TreatPlanShowCompleted);
-			if(Clinics.IsMedicalPracticeOrClinic(Clinics.ClinicNum)) {
+			if(Clinic.GetById(Clinics.ClinicId).IsMedicalOnly) {
 				checkTreatPlanShowCompleted.Visible=false;
 			}
 			else {
@@ -4937,7 +4937,7 @@ namespace OpenDental{
 			comboToothNomenclature.Items.Add(Lan.g(this,"Haderup (Danish)"));
 			comboToothNomenclature.Items.Add(Lan.g(this,"Palmer (Ortho)"));
 			comboToothNomenclature.SelectedIndex = Preference.GetInt(PreferenceName.UseInternationalToothNumbers);
-			if(Clinics.IsMedicalPracticeOrClinic(Clinics.ClinicNum)) {
+			if(Clinic.GetById(Clinics.ClinicId).IsMedicalOnly) {
 				labelToothNomenclature.Visible=false;
 				comboToothNomenclature.Visible=false;
 			}
@@ -4982,9 +4982,9 @@ namespace OpenDental{
 			comboProcFeeUpdatePrompt.SelectedIndex= Preference.GetInt(PreferenceName.ProcFeeUpdatePrompt);
 			checkProcProvChangesCp.Checked= Preference.GetBool(PreferenceName.ProcProvChangesClaimProcWithClaim);
 			checkBoxRxClinicUseSelected.Checked= Preference.GetBool(PreferenceName.ElectronicRxClinicUseSelected);
-			if(!Preferences.HasClinicsEnabled) {
+
 				checkBoxRxClinicUseSelected.Visible=false;
-			}
+			
 			checkProcNoteConcurrencyMerge.Checked= Preference.GetBool(PreferenceName.ProcNoteConcurrencyMerge);
 			checkIsAlertRadiologyProcsEnabled.Checked= Preference.GetBool(PreferenceName.IsAlertRadiologyProcsEnabled);
 			checkShowPlannedApptPrompt.Checked= Preference.GetBool(PreferenceName.ShowPlannedAppointmentPrompt);
@@ -5042,7 +5042,7 @@ namespace OpenDental{
 				comboUseChartNum.SelectedIndex=0;
 			}
 			checkStatementsAlphabetically.Checked= Preference.GetBool(PreferenceName.PrintStatementsAlphabetically);
-			checkStatementsAlphabetically.Visible= Preferences.HasClinicsEnabled;
+            checkStatementsAlphabetically.Visible = true;
 			if(Preference.GetLong(PreferenceName.StatementsCalcDueDate)!=-1) {
 				textStatementsCalcDueDate.Text= Preference.GetLong(PreferenceName.StatementsCalcDueDate).ToString();
 			}

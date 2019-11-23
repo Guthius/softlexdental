@@ -27,7 +27,7 @@ namespace OpenDental.Bridges {
 		///<summary>Returns empty list if no errors.  Otherwise returns a list with error messages.</summary>
 		public static List <string> Validate(long clinicNum) {
 			List <string> listErrors=new List<string>();
-			Clinic clinic=Clinics.GetClinic(clinicNum);
+			Clinic clinic=Clinic.GetById(clinicNum);
 			Ebill eBillClinic=Ebills.GetForClinic(clinicNum);
 			Ebill eBillDefault=Ebills.GetForClinic(0);
 			EHG_Address addressRemit=null;
@@ -47,7 +47,7 @@ namespace OpenDental.Bridges {
 
 		///<summary>Generates all the xml up to the point where the first statement would go.</summary>
 		public static void GeneratePracticeInfo(XmlWriter writer,long clinicNum) {
-			Clinic clinic=Clinics.GetClinic(clinicNum);
+			Clinic clinic=Clinic.GetById(clinicNum);
 			Ebill eBillClinic=Ebills.GetForClinic(clinicNum);
 			Ebill eBillDefault=Ebills.GetForClinic(0);
 			writer.WriteProcessingInstruction("xml","version = \"1.0\" standalone=\"yes\"");
@@ -98,7 +98,7 @@ namespace OpenDental.Bridges {
 			Provider prov=Providers.GetProv(Preference.GetLong(PreferenceName.PracticeDefaultProv));
 			writer.WriteStartElement("RenderingProvider");
 			writer.WriteElementString("Name",prov.GetFormalName());
-			ProviderClinic provClinic=ProviderClinics.GetOneOrDefault(prov.ProvNum,clinicNum);
+			ProviderClinic provClinic=ProviderClinic.GetByProviderAndClinic(prov.ProvNum,clinicNum);
 			writer.WriteElementString("LicenseNumber",(provClinic==null ? "" : provClinic.StateLicense));
 			writer.WriteElementString("State",Preference.GetString(PreferenceName.PracticeST));
 			writer.WriteEndElement();//Rendering provider
@@ -146,8 +146,8 @@ namespace OpenDental.Bridges {
 				address.Source="Practice Billing Address";
 			}
 			else if(eBillAddress==EbillAddress.ClinicPhysical) {
-				address.Address1=clinic.Address;
-				address.Address2=clinic.Address2;
+				address.Address1=clinic.AddressLine1;
+				address.Address2=clinic.AddressLine2;
 				address.City=clinic.City;
 				address.State=clinic.State;
 				address.Zip=clinic.Zip;
@@ -155,8 +155,8 @@ namespace OpenDental.Bridges {
 				address.Source="Clinic Physical Treating Address";
 			}
 			else if(eBillAddress==EbillAddress.ClinicPayTo) {
-				address.Address1=clinic.PayToAddress;
-				address.Address2=clinic.PayToAddress2;
+				address.Address1=clinic.PayToAddressLine1;
+				address.Address2=clinic.PayToAddressLine2;
 				address.City=clinic.PayToCity;
 				address.State=clinic.PayToState;
 				address.Zip=clinic.PayToZip;
@@ -164,8 +164,8 @@ namespace OpenDental.Bridges {
 				address.Source="Clinic Pay To Address";
 			}
 			else if(eBillAddress==EbillAddress.ClinicBilling) {
-				address.Address1=clinic.BillingAddress;
-				address.Address2=clinic.BillingAddress2;
+				address.Address1=clinic.BillingAddressLine1;
+				address.Address2=clinic.BillingAddressLine2;
 				address.City=clinic.BillingCity;
 				address.State=clinic.BillingState;
 				address.Zip=clinic.BillingZip;
@@ -441,7 +441,7 @@ namespace OpenDental.Bridges {
 			Ebill ebillDefault=Ebills.GetForClinic(0);
 			string billingUserName=ebillDefault.ElectUserName;
 			string billingPassword=ebillDefault.ElectPassword;
-			if(Preferences.HasClinicsEnabled && clinicNum!=0) {
+			if(clinicNum!=0) {
 				Ebill eBill=Ebills.GetForClinic(clinicNum);
 				if(eBill!=null) {//eBill entry exists, check the fields for overrides.
 					if(eBill.ElectUserName!="") {

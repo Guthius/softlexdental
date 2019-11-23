@@ -325,60 +325,54 @@ namespace OpenDentBusiness
         public static double GetClinicBalance(long clinicNum)
         {
             double limit = 0;
-            if (!Preferences.HasClinicsEnabled)
-            {
-                if (Preference.GetDate(PreferenceName.SmsContractDate).Year > 1880)
-                {
-                    limit = Preference.GetDouble(PreferenceName.SmsMonthlyLimit);
-                }
-            }
-            else
-            {
-                if (clinicNum == 0 && Clinics.GetCount(true) > 0)
-                {//Sending text for "Unassigned" patient.  Use the first non-hidden clinic. (for now)
-                    clinicNum = Clinics.GetFirst(true).ClinicNum;
-                }
-                Clinic clinicCur = Clinics.GetClinic(clinicNum);
-                if (clinicCur != null && clinicCur.SmsContractDate.Year > 1880)
-                {
-                    limit = clinicCur.SmsMonthlyLimit;
-                }
-            }
-            DateTime dtStart = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
-            DateTime dtEnd = dtStart.AddMonths(1);
-            string command = "SELECT SUM(MsgChargeUSD) FROM smstomobile WHERE ClinicNum=" + POut.Long(clinicNum) + " "
-                + "AND DateTimeSent>=" + POut.Date(dtStart) + " AND DateTimeSent<" + POut.Date(dtEnd);
-            limit -= PIn.Double(Db.GetScalar(command));
+            //if (!Preferences.HasClinicsEnabled)
+            //{
+            //    if (Preference.GetDate(PreferenceName.SmsContractDate).Year > 1880)
+            //    {
+            //        limit = Preference.GetDouble(PreferenceName.SmsMonthlyLimit);
+            //    }
+            //}
+            //else
+            //{
+            //    if (clinicNum == 0 && Clinics.GetCount(true) > 0)
+            //    {//Sending text for "Unassigned" patient.  Use the first non-hidden clinic. (for now)
+            //        clinicNum = Clinics.GetFirst(true).Id;
+            //    }
+            //    Clinic clinicCur = Clinics.GetClinic(clinicNum);
+            //    if (clinicCur != null && clinicCur.SmsContractDate.Year > 1880)
+            //    {
+            //        limit = clinicCur.SmsMonthlyLimit;
+            //    }
+            //}
+            //DateTime dtStart = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
+            //DateTime dtEnd = dtStart.AddMonths(1);
+            //string command = "SELECT SUM(MsgChargeUSD) FROM smstomobile WHERE ClinicNum=" + POut.Long(clinicNum) + " "
+            //    + "AND DateTimeSent>=" + POut.Date(dtStart) + " AND DateTimeSent<" + POut.Date(dtEnd);
+            //limit -= PIn.Double(Db.GetScalar(command));
             return limit;
         }
 
         ///<summary>Returns true if texting is enabled for any clinics (including hidden), or if not using clinics, if it is enabled for the practice.</summary>
         public static bool IsIntegratedTextingEnabled()
         {
-            if (Plugin.Filter(null, "Data_SmsPhones_IsIntegratedTextingEnabled", false))
-            {
-                return true;
-            }
-            if (!Preferences.HasClinicsEnabled)
-            {
-                return Preference.GetDateTime(PreferenceName.SmsContractDate).Year > 1880;
-            }
-            return (Clinics.GetFirstOrDefault(x => x.SmsContractDate.Year > 1880) != null);
+            //if (Plugin.Filter(null, "Data_SmsPhones_IsIntegratedTextingEnabled", false))
+            //{
+            //    return true;
+            //}
+
+            //return (Clinics.GetFirstOrDefault(x => x.SmsContractDate.Year > 1880) != null);
+            return false;
         }
 
         ///<summary>Returns 0 if clinics not in use, or patient.ClinicNum if assigned to a clinic, or ClinicNum of the default texting clinic.</summary>
         public static long GetClinicNumForTexting(long patNum)
         {
-            //No need to check RemotingRole; no call to db.
-            if (!Preferences.HasClinicsEnabled || Clinics.GetCount() == 0)
-            {
-                return 0;//0 used for no clinics
-            }
-            Clinic clinic = Clinics.GetClinic(Patients.GetPat(patNum).ClinicNum);//if patnum invalid will throw unhandled exception.
+            Clinic clinic = Clinic.GetById(Patients.GetPat(patNum).ClinicNum);//if patnum invalid will throw unhandled exception.
             if (clinic != null)
             {//if pat assigned to invalid clinic or clinic num 0
-                return clinic.ClinicNum;
+                return clinic.Id;
             }
+
             return Preference.GetLong(PreferenceName.TextingDefaultClinicNum);
         }
 

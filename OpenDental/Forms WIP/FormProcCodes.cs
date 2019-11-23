@@ -1085,7 +1085,7 @@ namespace OpenDental{
 			for(int i=0;i<listCategories.Items.Count;i++) {
 				listCategories.SetSelected(i,true);
 			}
-			_listClinics=Clinics.GetForUserod(Security.CurrentUser);
+			_listClinics=Clinic.GetByUser(Security.CurrentUser).ToList();
 			_listProviders=Providers.GetDeepCopy(true);
 			_feeCache=Fees.GetCache();
 			_feeCache.BeginTransaction();
@@ -1186,20 +1186,7 @@ namespace OpenDental{
 			comboFeeSched2.SelectedIndex=0;
 			comboFeeSched3.SelectedIndex=0;
 			//Fill clinic combo boxes
-			if(!Preferences.HasClinicsEnabled) {//No clinics
-				//Add none even though clinics is turned off so that 0 is a valid index to select.
-				comboClinic1.Items.Add(Lan.g(this,"None"));
-				comboClinic2.Items.Add(Lan.g(this,"None"));
-				comboClinic3.Items.Add(Lan.g(this,"None"));
-				//For UI reasons, leave the clinic combo boxes visible for users not using clinics and they will just say "none".
-				comboClinic1.Enabled=false;
-				comboClinic2.Enabled=false;
-				comboClinic3.Enabled=false;
-				butPickClinic1.Enabled=false;
-				butPickClinic2.Enabled=false;
-				butPickClinic3.Enabled=false;
-			}
-			else {
+
 				comboClinic1.Items.Add(Lan.g(this,"Default"));
 				comboClinic2.Items.Add(Lan.g(this,"Default"));
 				comboClinic3.Items.Add(Lan.g(this,"Default"));
@@ -1208,7 +1195,7 @@ namespace OpenDental{
 					comboClinic2.Items.Add(_listClinics[i].Abbr);
 					comboClinic3.Items.Add(_listClinics[i].Abbr);
 				}
-			}
+			
 			//Fill provider combo boxes
 			comboProvider1.Items.Add(Lan.g(this,"None"));
 			comboProvider2.Items.Add(Lan.g(this,"None"));
@@ -1246,14 +1233,14 @@ namespace OpenDental{
 				comboProvider1.SelectedIndex=0;
 			}
 			else {//Newly selected FeeSched is NOT global
-				if(Preferences.HasClinicsEnabled) {
+
 					if(feeSchedNum1Selected==0 || comboClinic1.Enabled==false) {
 						//Previously selected FeeSched WAS global or there was none selected previously, select OD's selected Clinic
-						comboClinic1.SelectedIndex=Clinics.ClinicNum==0 ? 0 : _listClinics.ToList().FindIndex(x => x.ClinicNum==Clinics.ClinicNum)+1;
+						comboClinic1.SelectedIndex=Clinics.ClinicId==0 ? 0 : _listClinics.ToList().FindIndex(x => x.Id==Clinics.ClinicId)+1;
 					}
 					comboClinic1.Enabled=true;
 					butPickClinic1.Enabled=true;
-				}
+				
 				comboProvider1.Enabled=true;
 				butPickProv1.Enabled=true;
 			}
@@ -1266,14 +1253,14 @@ namespace OpenDental{
 				comboProvider2.SelectedIndex=0;
 			}
 			else {//Newly selected FeeSched is NOT global
-				if(Preferences.HasClinicsEnabled) {
+
 					if(comboClinic2.Enabled==false) {
 						//Previously selected FeeSched WAS global, select OD's selected Clinic
-						comboClinic2.SelectedIndex=Clinics.ClinicNum==0 ? 0 : _listClinics.ToList().FindIndex(x => x.ClinicNum==Clinics.ClinicNum)+1;
+						comboClinic2.SelectedIndex=Clinics.ClinicId==0 ? 0 : _listClinics.ToList().FindIndex(x => x.Id==Clinics.ClinicId)+1;
 					}
 					comboClinic2.Enabled=true;
 					butPickClinic2.Enabled=true;
-				}
+				
 				comboProvider2.Enabled=true;
 				butPickProv2.Enabled=true;
 			}
@@ -1286,14 +1273,14 @@ namespace OpenDental{
 				comboProvider3.SelectedIndex=0;
 			}
 			else {//Newly selected FeeSched is NOT global
-				if(Preferences.HasClinicsEnabled) {
+
 					if(comboClinic3.Enabled==false) {//Previously selected FeeSched WAS global
 						//Select OD's selected Clinic
-						comboClinic3.SelectedIndex=Clinics.ClinicNum==0 ? 0 : _listClinics.ToList().FindIndex(x => x.ClinicNum==Clinics.ClinicNum)+1;
+						comboClinic3.SelectedIndex=Clinics.ClinicId==0 ? 0 : _listClinics.ToList().FindIndex(x => x.Id==Clinics.ClinicId)+1;
 					}
 					comboClinic3.Enabled=true;
 					butPickClinic3.Enabled=true;
-				}
+				
 				comboProvider3.Enabled=true;
 				butPickProv3.Enabled=true;
 			}
@@ -1358,17 +1345,17 @@ namespace OpenDental{
 			long clinic1Num=0;
 			long clinic2Num=0;
 			long clinic3Num=0;
-			if(Preferences.HasClinicsEnabled) { //Clinics is on
+
 				if(comboClinic1.SelectedIndex>0) {
-					clinic1Num=_listClinics[comboClinic1.SelectedIndex-1].ClinicNum;
+					clinic1Num=_listClinics[comboClinic1.SelectedIndex-1].Id;
 				}
 				if(comboClinic2.SelectedIndex>0) {
-					clinic2Num=_listClinics[comboClinic2.SelectedIndex-1].ClinicNum;
+					clinic2Num=_listClinics[comboClinic2.SelectedIndex-1].Id;
 				}
 				if(comboClinic3.SelectedIndex>0) {
-					clinic3Num=_listClinics[comboClinic3.SelectedIndex-1].ClinicNum;
+					clinic3Num=_listClinics[comboClinic3.SelectedIndex-1].Id;
 				}
-			}
+			
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			//The order of these columns are important for gridMain_CellDoubleClick() and gridMain_CellLeave()
@@ -1525,8 +1512,8 @@ namespace OpenDental{
 				if(comboProvider1.SelectedIndex>0) {
 					provNum=_listProviders[comboProvider1.SelectedIndex-1].ProvNum;
 				}
-				if(Preferences.HasClinicsEnabled && comboClinic1.SelectedIndex>0) {
-					clinicNum=_listClinics[comboClinic1.SelectedIndex-1].ClinicNum;
+				if(comboClinic1.SelectedIndex>0) {
+					clinicNum=_listClinics[comboClinic1.SelectedIndex-1].Id;
 				}
 			}
 			else if(e.Column==5) {
@@ -1538,8 +1525,8 @@ namespace OpenDental{
 				if(comboProvider2.SelectedIndex>0) {
 					provNum=_listProviders[comboProvider2.SelectedIndex-1].ProvNum;
 				}
-				if(Preferences.HasClinicsEnabled && comboClinic2.SelectedIndex>0) {
-					clinicNum=_listClinics[comboClinic2.SelectedIndex-1].ClinicNum;
+				if(comboClinic2.SelectedIndex>0) {
+					clinicNum=_listClinics[comboClinic2.SelectedIndex-1].Id;
 				}
 			}
 			else if(e.Column==6) {
@@ -1551,8 +1538,8 @@ namespace OpenDental{
 				if(comboProvider3.SelectedIndex>0) {
 					provNum=_listProviders[comboProvider3.SelectedIndex-1].ProvNum;
 				}
-				if(Preferences.HasClinicsEnabled && comboClinic3.SelectedIndex>0) {
-					clinicNum=_listClinics[comboClinic3.SelectedIndex-1].ClinicNum;
+				if(comboClinic3.SelectedIndex>0) {
+					clinicNum=_listClinics[comboClinic3.SelectedIndex-1].Id;
 				}
 			}
 			Fee fee=_feeCache.GetFee(codeNum,feeSched.FeeSchedNum,clinicNum,provNum);
@@ -1998,7 +1985,7 @@ namespace OpenDental{
 			FormC.IsSelectionMode=true;
 			FormC.ListClinics=_listClinics.ToList();
 			FormC.ShowDialog();
-			return _listClinics.FindIndex(x => x.ClinicNum==FormC.SelectedClinicNum);
+			return _listClinics.FindIndex(x => x.Id==FormC.SelectedClinicNum);
 		}
 
 		///<summary>Launches the Fee Schedules window and lets the user pick a specific schedule.

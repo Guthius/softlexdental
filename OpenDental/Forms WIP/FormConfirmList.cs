@@ -15,6 +15,7 @@ using System.Windows.Forms;
 using OpenDental.UI;
 using OpenDentBusiness;
 using CodeBase;
+using System.Linq;
 
 namespace OpenDental{
 ///<summary></summary>
@@ -535,7 +536,7 @@ namespace OpenDental{
 			if(!Security.IsAuthorized(Permissions.ApptConfirmStatusEdit,true)) {//Suppress message because it would be very annoying to users.
 				comboStatus.Enabled=false;
 			}
-			labelClinic.Visible=Preferences.HasClinicsEnabled;
+            labelClinic.Visible = true;
 			if(!Programs.IsEnabled(ProgramName.CallFire) && !SmsPhones.IsIntegratedTextingEnabled()) {
 				butText.Enabled=false;
 			}
@@ -547,9 +548,9 @@ namespace OpenDental{
 
 		private void FillComboEmail() {
 			_listEmailAddresses=EmailAddress.All();//Does not include user specific email addresses.
-			List<Clinic> listClinicsAll=Clinics.GetDeepCopy();
+            List<Clinic> listClinicsAll = Clinic.All().ToList();
 			for(int i=0;i<listClinicsAll.Count;i++) {//Exclude any email addresses that are associated to a clinic.
-				_listEmailAddresses.RemoveAll(x => x.Id==listClinicsAll[i].EmailAddressNum);
+				_listEmailAddresses.RemoveAll(x => x.Id==listClinicsAll[i].EmailAddressId);
 			}
 			//Exclude default practice email address.
 			_listEmailAddresses.RemoveAll(x => x.Id==Preference.GetLong(PreferenceName.EmailDefaultAddressNum));
@@ -1000,7 +1001,7 @@ namespace OpenDental{
 			while(yPos<ev.PageBounds.Height-bottomPageMargin && patientsPrinted<AddrTable.Rows.Count){
 				//Return Address--------------------------------------------------------------------------
 				if(Preference.GetBool(PreferenceName.RecallCardsShowReturnAdd)){
-					if(!Preferences.HasClinicsEnabled || PIn.Long(AddrTable.Rows[patientsPrinted]["ClinicNum"].ToString())==0) {//No clinics or no clinic selected for this appt
+					if(PIn.Long(AddrTable.Rows[patientsPrinted]["ClinicNum"].ToString())==0) {//No clinics or no clinic selected for this appt
 						str=Preference.GetString(PreferenceName.PracticeTitle)+"\r\n";
 						g.DrawString(str,new Font(FontFamily.GenericSansSerif,9,FontStyle.Bold),Brushes.Black,xPos+45,yPos+60);
 						str=Preference.GetString(PreferenceName.PracticeAddress)+"\r\n";
@@ -1017,12 +1018,12 @@ namespace OpenDental{
 						}
 					}
 					else {//Clinics enabled and clinic selected
-						Clinic clinic=Clinics.GetClinic(PIn.Long(AddrTable.Rows[patientsPrinted]["ClinicNum"].ToString()));
+						Clinic clinic=Clinic.GetById(PIn.Long(AddrTable.Rows[patientsPrinted]["ClinicNum"].ToString()));
 						str=clinic.Description+"\r\n";
 						g.DrawString(str,new Font(FontFamily.GenericSansSerif,9,FontStyle.Bold),Brushes.Black,xPos+45,yPos+60);
-						str=clinic.Address+"\r\n";
-						if(clinic.Address2!="") {
-							str+=clinic.Address2+"\r\n";
+						str=clinic.AddressLine1+"\r\n";
+						if(clinic.AddressLine2!="") {
+							str+=clinic.AddressLine2+"\r\n";
 						}
 						str+=clinic.City+",  "+clinic.State+"  "+clinic.Zip+"\r\n";
 						string phone=clinic.Phone;
@@ -1177,7 +1178,7 @@ namespace OpenDental{
 				message=new EmailMessage();
 				message.PatientId=PIn.Long(Table.Rows[gridMain.SelectedIndices[i]]["PatNum"].ToString());
 				message.ToAddress=Table.Rows[gridMain.SelectedIndices[i]]["email"].ToString();//Could be guarantor email.
-				long clinicNum=Clinics.ClinicNum;
+				long clinicNum=Clinics.ClinicId;
 				if(comboEmailFrom.SelectedIndex==0) { //clinic/practice default
 					clinicNum=PIn.Long(Table.Rows[gridMain.SelectedIndices[i]]["ClinicNum"].ToString());
 					emailAddress=EmailAddress.GetByClinic(clinicNum);
@@ -1301,10 +1302,10 @@ namespace OpenDental{
 					gridMain.SetSelected(gridMain.SelectedIndices[i],false);
 					continue;
 				}
-				if(Preferences.HasClinicsEnabled && SmsPhones.IsIntegratedTextingEnabled()){//using clinics with Integrated texting must have a non-zero clinic num.
+				if(SmsPhones.IsIntegratedTextingEnabled()){//using clinics with Integrated texting must have a non-zero clinic num.
 					patNum=PIn.Long(Table.Rows[gridMain.SelectedIndices[i]]["PatNum"].ToString());
 					long clinicNum=SmsPhones.GetClinicNumForTexting(patNum);
-					if(clinicNum==0 || Clinics.GetClinic(clinicNum).SmsContractDate.Year<1880) {//no clinic or assigned clinic is not enabled.
+					if(clinicNum==0) {//no clinic or assigned clinic is not enabled.
 						skipped++;
 						gridMain.SetSelected(gridMain.SelectedIndices[i],false);
 						continue;

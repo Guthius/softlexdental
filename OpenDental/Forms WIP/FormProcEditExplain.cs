@@ -127,7 +127,7 @@ namespace OpenDental {
 		  }
 		  if(procOld.ClinicNum != procCur.ClinicNum) {
 		    if(Changes!=""){ Changes+="\r\n";}
-		    Changes+="Clinic changed from "+Clinics.GetAbbr(procOld.ClinicNum)+" to "+Clinics.GetAbbr(procCur.ClinicNum)+".";
+		    Changes+="Clinic changed from "+Clinic.GetById(procOld.ClinicNum).Abbr+" to "+Clinic.GetById(procCur.ClinicNum).Abbr+".";
 		  }
 		  if(procOld.SiteNum != procCur.SiteNum) {
 		    if(Changes!=""){ Changes+="\r\n";}

@@ -546,7 +546,7 @@ namespace OpenDental{
 			upDownExposure.Value=exposureLevelVal;
 			//checkScanDocShowOptions.Checked=PrefC.GetBool(PrefName.ScannerSuppressDialog);
 			//textScanDocResolution.Text=PrefC.GetString(PrefName.ScannerResolution);
-			if(Clinics.IsMedicalPracticeOrClinic(Clinics.ClinicNum)) {
+			if(Clinic.GetById(Clinics.ClinicId).IsMedicalOnly) {
 				labelPanoBW.Visible=false;
 			}
 		}

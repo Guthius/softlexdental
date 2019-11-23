@@ -129,21 +129,12 @@ namespace OpenDental
             {//Discount Plan (neg)
                 textAmount.Text = (-adjustment.AdjAmt).ToString("F");//shows without the neg sign
             }
-            if (!Preferences.HasClinicsEnabled)
-            {
-                labelClinic.Visible = false;
-                comboClinic.Visible = false;
-                _listClinics = new List<Clinic>();
-                _selectedClinicNum = IsNew ? 0 : adjustment.ClinicNum;//Only set clinicNum=0 when IsNew. Otherwise, set it equal to the _adjustmentCur.ClinicNum
-            }
-            else
-            {
                 _listClinics = new List<Clinic>() { new Clinic() { Abbr = Lan.g(this, "None") } }; //Seed with "None"
-                Clinics.GetForUserod(Security.CurrentUser).ForEach(x => _listClinics.Add(x));//do not re-organize from cache. They could either be alphabetizeded or sorted by item order.
+                Clinic.GetByUser(Security.CurrentUser).ForEach(x => _listClinics.Add(x));//do not re-organize from cache. They could either be alphabetizeded or sorted by item order.
                 _listClinics.ForEach(x => comboClinic.Items.Add(x.Abbr));
                 _selectedClinicNum = adjustment.ClinicNum;
-                comboClinic.IndexSelectOrSetText(_listClinics.FindIndex(x => x.ClinicNum == _selectedClinicNum), () => { return Clinics.GetAbbr(_selectedClinicNum); });
-            }
+                comboClinic.IndexSelectOrSetText(_listClinics.FindIndex(x => x.Id == _selectedClinicNum), () => { return Clinic.GetById(_selectedClinicNum).Abbr; });
+            
             _selectedProvNum = adjustment.ProvNum;
             comboProv.SelectedIndex = -1;
             FillComboProvHyg();
@@ -216,7 +207,7 @@ namespace OpenDental
         {
             if (comboClinic.SelectedIndex > -1)
             {
-                _selectedClinicNum = _listClinics[comboClinic.SelectedIndex].ClinicNum;
+                _selectedClinicNum = _listClinics[comboClinic.SelectedIndex].Id;
             }
             FillComboProvHyg();
         }
@@ -315,7 +306,7 @@ namespace OpenDental
                 _selectedProvNum = FormPS.ListSelectedProcs[0].ProvNum;
                 _selectedClinicNum = FormPS.ListSelectedProcs[0].ClinicNum;
                 comboProv.IndexSelectOrSetText(_listProviders.FindIndex(x => x.ProvNum == _selectedProvNum), () => { return Providers.GetAbbr(_selectedProvNum); });
-                comboClinic.IndexSelectOrSetText(_listClinics.FindIndex(x => x.ClinicNum == _selectedClinicNum), () => { return Clinics.GetAbbr(_selectedClinicNum); });
+                comboClinic.IndexSelectOrSetText(_listClinics.FindIndex(x => x.Id == _selectedClinicNum), () => { return Clinic.GetById(_selectedClinicNum).Abbr; });
                 if (Preference.GetInt(PreferenceName.RigorousAdjustments) == (int)RigorousAdjustments.EnforceFully && !_isEditAnyway)
                 {
                     if (Security.IsAuthorized(Permissions.Setup, true))

@@ -35,7 +35,7 @@ namespace OpenDentBusiness
         /// A value indicating whether the access of the user is restricted to a single clinic.
         /// This only applies when <see cref="ClinicId"/> is not null.
         /// </summary>
-        public bool ClinicRestricted { get => ClinicId.HasValue; }
+        public bool ClinicRestricted => ClinicId.HasValue;
 
         /// <summary>
         /// FK to employee.EmployeeNum. Cannot be used if provnum is used. Used for timecards to block access by other users.

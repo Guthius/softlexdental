@@ -104,7 +104,7 @@ namespace OpenDental {
 			get {
 				List<long> listClinicNums = new List<long>();
 				if(!comboBoxMultiClinics.ListSelectedItems.Select(x => ((ODBoxItem<Clinic>)x).Tag).Contains(null)) { //"All" is selected.
-					listClinicNums = comboBoxMultiClinics.ListSelectedItems.Select(x => ((ODBoxItem<Clinic>)x).Tag.ClinicNum).ToList();
+					listClinicNums = comboBoxMultiClinics.ListSelectedItems.Select(x => ((ODBoxItem<Clinic>)x).Tag.Id).ToList();
 				}
 				return listClinicNums;
 			}
@@ -909,11 +909,11 @@ namespace OpenDental {
 			FillUsers();
 			_listOldClaimTrackings=ClaimTrackings.RefreshForUsers(ClaimTrackingType.ClaimUser,_listClaimSentEditUsers.Select(x => x.Id).ToList());
 			_listNewClaimTrackings=_listOldClaimTrackings.Select(x => x.Copy()).ToList();
-			if(Preferences.HasClinicsEnabled) {
+
 				comboBoxMultiClinics.Visible=true;
 				labelClinic.Visible=true;
 				FillClinics();
-			}
+			
 			if(!Security.IsAuthorized(Permissions.UpdateCustomTracking,true)) {
 				buttonUpdateCustomTrack.Enabled=false;
 			}
@@ -966,16 +966,16 @@ namespace OpenDental {
 		}
 
 		private void FillClinics() {
-			List<Clinic> listUserClinics=Clinics.GetForUserod(Security.CurrentUser,true,"Unassigned");
+			List<Clinic> listUserClinics=Clinic.GetByUser(Security.CurrentUser).ToList();
 			comboBoxMultiClinics.Items.Clear();
 			comboBoxMultiClinics.Items.Add(new ODBoxItem<Clinic>("All"));//tag=null
 			foreach(Clinic clinic in listUserClinics) {
 				int idx=comboBoxMultiClinics.Items.Add(new ODBoxItem<Clinic>(clinic.Abbr,clinic));
-				if(Clinics.ClinicNum==clinic.ClinicNum) {
+				if(Clinics.ClinicId==clinic.Id) {
 					comboBoxMultiClinics.SetSelected(idx,true);
 				}
 			}
-			if(Clinics.ClinicNum==0) {
+			if(Clinics.ClinicId==0) {
 				comboBoxMultiClinics.SetSelected(false);//unselect 'Unassigned' if it was selected
 				comboBoxMultiClinics.SetSelected(0,true);//default to all
 			}
@@ -1153,7 +1153,7 @@ namespace OpenDental {
 							}
 							break;
 						case "Clinic":
-							row.Cells.Add(Clinics.GetAbbr(claimCur.ClinicNum));
+							row.Cells.Add(Clinic.GetById(claimCur.ClinicNum).Abbr);
 							break;
 						case "DateService":
 							row.Cells.Add(claimCur.DateService.ToShortDateString());

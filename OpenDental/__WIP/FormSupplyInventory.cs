@@ -28,10 +28,10 @@ namespace OpenDental
 {
     public partial class FormSupplyInventory : FormBase
     {
-        List<SupplyNeeded> suppliesList;
-        int pagesPrinted;
-        bool headingPrinted;
-        int headingPrintHeight;
+        private List<SupplyNeeded> suppliesList;
+        private int pagesPrinted;
+        private bool headingPrinted;
+        private int headingPrintHeight;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FormSupplyInventory"/> class.
@@ -41,7 +41,7 @@ namespace OpenDental
         /// <summary>
         /// Loads the form.
         /// </summary>
-        void FormInventory_Load(object sender, EventArgs e)
+        private void FormInventory_Load(object sender, EventArgs e)
         {
             categoriesButton.Enabled = Security.IsAuthorized(Permissions.Setup);
             equipmentButton.Enabled = Security.IsAuthorized(Permissions.EquipmentSetup);
@@ -52,7 +52,7 @@ namespace OpenDental
         /// <summary>
         /// Loads the supplies needed and populates the grid.
         /// </summary>
-        void LoadSuppliesNeeded()
+        private void LoadSuppliesNeeded()
         {
             suppliesList = SupplyNeeded.All();
 
@@ -75,7 +75,7 @@ namespace OpenDental
         /// <summary>
         /// Opens the form the edit the needed supply.
         /// </summary>
-        void SuppliesGrid_CellDoubleClick(object sender, ODGridClickEventArgs e)
+        private void SuppliesGrid_CellDoubleClick(object sender, ODGridClickEventArgs e)
         {
             using (var formSupplyNeededEdit = new FormSupplyNeededEdit(suppliesList[e.Row]))
             {
@@ -89,7 +89,7 @@ namespace OpenDental
         /// <summary>
         /// Opens the form to edit the supply categories.
         /// </summary>
-        void CategoriesButton_Click(object sender, EventArgs e)
+        private void CategoriesButton_Click(object sender, EventArgs e)
         {
             if (!Security.IsAuthorized(Permissions.Setup)) return;
 
@@ -104,7 +104,7 @@ namespace OpenDental
         /// <summary>
         /// Opens the form to edit the suppliers.
         /// </summary>
-        void SuppliersButton_Click(object sender, EventArgs e)
+        private void SuppliersButton_Click(object sender, EventArgs e)
         {
             using (var formSuppliers = new FormSuppliers())
             {
@@ -115,7 +115,7 @@ namespace OpenDental
         /// <summary>
         /// Opens the form to edit the supplies.
         /// </summary>
-        void SuppliesButton_Click(object sender, EventArgs e)
+        private void SuppliesButton_Click(object sender, EventArgs e)
         {
             using (var formSupplies = new FormSupplies())
             {
@@ -126,7 +126,7 @@ namespace OpenDental
         /// <summary>
         /// Opens the equipment list form.
         /// </summary>
-        void EquipmentButton_Click(object sender, EventArgs e)
+        private void EquipmentButton_Click(object sender, EventArgs e)
         {
             if (!Security.IsAuthorized(Permissions.EquipmentSetup)) return;
 
@@ -139,7 +139,7 @@ namespace OpenDental
         /// <summary>
         /// Opens the order list form.
         /// </summary>
-        void OrdersButton_Click(object sender, EventArgs e)
+        private void OrdersButton_Click(object sender, EventArgs e)
         {
             using (var formSupplyOrders = new FormSupplyOrders())
             {
@@ -150,7 +150,7 @@ namespace OpenDental
         /// <summary>
         /// Opens the form to add a needed supply.
         /// </summary>
-        void AddNeededButton_Click(object sender, EventArgs e)
+        private void AddNeededButton_Click(object sender, EventArgs e)
         {
             using (var formSupplyNeededEdit = new FormSupplyNeededEdit(new SupplyNeeded()))
             {
@@ -164,7 +164,7 @@ namespace OpenDental
         /// <summary>
         /// Prints the list of supplies needed.
         /// </summary>
-        void PrintButton_Click(object sender, EventArgs e)
+        private void PrintButton_Click(object sender, EventArgs e)
         {
             pagesPrinted = 0;
             headingPrinted = false;
@@ -175,7 +175,7 @@ namespace OpenDental
                 PrintoutOrientation.Portrait);
         }
 
-        void PrintPage(object sender, PrintPageEventArgs e)
+        private void PrintPage(object sender, PrintPageEventArgs e)
         {
             Rectangle bounds = e.MarginBounds;
   
@@ -216,6 +216,6 @@ namespace OpenDental
         /// <summary>
         /// Closes the form.
         /// </summary>
-        void CloseButton_Click(object sender, EventArgs e) => Close();
+        private void CloseButton_Click(object sender, EventArgs e) => Close();
     }
 }

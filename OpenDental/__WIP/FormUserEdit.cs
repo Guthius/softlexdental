@@ -9,104 +9,106 @@ using System.Collections.Generic;
 using System.DirectoryServices;
 using CodeBase;
 
-namespace OpenDental{
-	/// <summary>
-	/// Summary description for FormBasicTemplate.
-	/// </summary>
-	public class FormUserEdit : ODForm {
-		/// <summary>
-		/// Required designer variable.
-		/// </summary>
-		private System.ComponentModel.Container components = null;
-		///<summary></summary>
-		public bool IsNew;
-		///<summary></summary>
-		public User UserCur;
-		private TabControl tabControl1;
-		private TabPage tabUser;
-		private TabPage tabClinics;
-		private UI.Button butCancel;
-		private UI.Button butOK;
-		private UI.Button butPassword;
-		private Label labelClinic;
-		private ListBox listClinic;
-		private Label label1;
-		private Label label3;
-		private ListBox listUserGroup;
-		private TextBox textUserName;
-		private Label label2;
-		private ListBox listEmployee;
-		private Label label4;
-		private Label label5;
-		private ListBox listProv;
-		private CheckBox checkIsHidden;
-		private Label label27;
-		private TextBox textUserNum;
-		private ListBox listClinicMulti;
-		private Label label6;
-		private CheckBox checkClinicIsRestricted;
-		private List<UserGroup> _listUserGroups;
-		private TabPage tabAlertSubs;
-		private ListBox listAlertSubMulti;
-		private Label label7;
-		private List<AlertSubscription> _listUserAlertTypesOld;
-		private Label labelAlertClinic;
-		private ListBox listAlertSubsClinicsMulti;
-		private List<Clinic> _listClinics;
-		private UI.Button butUnlock;
-		private TextBox textDomainUser;
-		private Label labelDomainUser;
-		private UI.Button butPickDomainUser;
-		///<summary>The password that was entered in FormUserPassword.</summary>
-		private string _passwordTyped;
-		private CheckBox checkRequireReset;
-		private TextBox textDoseSpotUserID;
-		private Label label8;
-		private UI.Button butDoseSpotAdditional;
+namespace OpenDental
+{
+    /// <summary>
+    /// Summary description for FormBasicTemplate.
+    /// </summary>
+    public class FormUserEdit : ODForm
+    {
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.Container components = null;
+        ///<summary></summary>
+        public bool IsNew;
+        ///<summary></summary>
+        public User UserCur;
+        private TabControl tabControl1;
+        private TabPage tabUser;
+        private TabPage tabClinics;
+        private UI.Button butCancel;
+        private UI.Button butOK;
+        private UI.Button butPassword;
+        private Label labelClinic;
+        private ListBox listClinic;
+        private Label label1;
+        private Label label3;
+        private ListBox listUserGroup;
+        private TextBox textUserName;
+        private Label label2;
+        private ListBox listEmployee;
+        private Label label4;
+        private Label label5;
+        private ListBox listProv;
+        private CheckBox checkIsHidden;
+        private Label label27;
+        private TextBox textUserNum;
+        private ListBox listClinicMulti;
+        private Label label6;
+        private CheckBox checkClinicIsRestricted;
+        private List<UserGroup> _listUserGroups;
+        private TabPage tabAlertSubs;
+        private ListBox listAlertSubMulti;
+        private Label label7;
+        private List<AlertSubscription> _listUserAlertTypesOld;
+        private Label labelAlertClinic;
+        private ListBox listAlertSubsClinicsMulti;
+        private List<Clinic> _listClinics;
+        private UI.Button butUnlock;
+        private TextBox textDomainUser;
+        private Label labelDomainUser;
+        private UI.Button butPickDomainUser;
+        ///<summary>The password that was entered in FormUserPassword.</summary>
+        private string _passwordTyped;
+        private CheckBox checkRequireReset;
+        private TextBox textDoseSpotUserID;
+        private Label label8;
+        private UI.Button butDoseSpotAdditional;
 
-		///<summary>The alert categories that are available to be selected. Some alert types will not be displayed if this is not OD HQ.</summary>
-		private List<AlertCategory> _listAlertCategories;
-		///<summary>The UserOdPref for DoseSpot User ID.</summary>
-		private UserPreference _doseSpotUserPrefDefault;
-		private List<Employee> _listEmployees;
-		private List<Provider> _listProviders;
-		private bool _isFromAddUser;
-		private List<UserPreference> _listDoseSpotUserPrefOld;
-		private List<UserPreference> _listDoseSpotUserPrefNew;
+        ///<summary>The alert categories that are available to be selected. Some alert types will not be displayed if this is not OD HQ.</summary>
+        private List<AlertCategory> _listAlertCategories;
+        ///<summary>The UserOdPref for DoseSpot User ID.</summary>
+        private UserPreference _doseSpotUserPrefDefault;
+        private List<Employee> _listEmployees;
+        private List<Provider> _listProviders;
+        private bool _isFromAddUser;
+        private List<UserPreference> _listDoseSpotUserPrefOld;
+        private List<UserPreference> _listDoseSpotUserPrefNew;
 
-		///<summary></summary>
-		public FormUserEdit(User userCur,bool isFromAddUser=false)
-		{
-			//
-			// Required for Windows Form Designer support
-			//
-			InitializeComponent();
-			UserCur=userCur.Copy();
-			_isFromAddUser=isFromAddUser;
-		}
+        ///<summary></summary>
+        public FormUserEdit(User userCur, bool isFromAddUser = false)
+        {
+            //
+            // Required for Windows Form Designer support
+            //
+            InitializeComponent();
+            UserCur = userCur.Copy();
+            _isFromAddUser = isFromAddUser;
+        }
 
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
-		protected override void Dispose( bool disposing )
-		{
-			if( disposing )
-			{
-				if(components != null)
-				{
-					components.Dispose();
-				}
-			}
-			base.Dispose( disposing );
-		}
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (components != null)
+                {
+                    components.Dispose();
+                }
+            }
+            base.Dispose(disposing);
+        }
 
-		#region Windows Form Designer generated code
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent()
-		{
+        #region Windows Form Designer generated code
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormUserEdit));
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabUser = new System.Windows.Forms.TabPage();
@@ -554,281 +556,329 @@ namespace OpenDental{
             this.tabAlertSubs.ResumeLayout(false);
             this.ResumeLayout(false);
 
-		}
-		#endregion
+        }
+        #endregion
 
-		private void FormUserEdit_Load(object sender, System.EventArgs e) {
-			checkIsHidden.Checked=UserCur.Hidden;
-			if(UserCur.Id!=0) {
-				textUserNum.Text=UserCur.Id.ToString();
-			}
-			textUserName.Text=UserCur.UserName;
-			textDomainUser.Text=UserCur.DomainUser;
-			if(!Preference.GetBool(PreferenceName.DomainLoginEnabled)) {
-				labelDomainUser.Visible=false;
-				textDomainUser.Visible=false;
-				butPickDomainUser.Visible=false;
-			}
-			checkRequireReset.Checked=UserCur.PasswordResetRequired;
-			_listUserGroups=UserGroup.All();
-			for(int i=0;i<_listUserGroups.Count;i++){
-				listUserGroup.Items.Add(new ODBoxItem<UserGroup>(_listUserGroups[i].Description,_listUserGroups[i]));
-				if(!_isFromAddUser && UserCur.IsInUserGroup(_listUserGroups[i].Id)) {
-					listUserGroup.SetSelected(i,true);
-				}
-				if(_isFromAddUser && _listUserGroups[i].Id==Preference.GetLong(PreferenceName.DefaultUserGroup)) {
-					listUserGroup.SetSelected(i,true);
-				}
-			}
-			if(listUserGroup.SelectedIndex==-1){//never allowed to delete last group, so this won't fail
-				listUserGroup.SelectedIndex=0;
-			}
-			listEmployee.Items.Clear();
-			listEmployee.Items.Add(Lan.g(this,"none"));
-			listEmployee.SelectedIndex=0;
+        private void FormUserEdit_Load(object sender, System.EventArgs e)
+        {
+            checkIsHidden.Checked = UserCur.Hidden;
+            if (UserCur.Id != 0)
+            {
+                textUserNum.Text = UserCur.Id.ToString();
+            }
+            textUserName.Text = UserCur.UserName;
+            textDomainUser.Text = UserCur.DomainUser;
+            if (!Preference.GetBool(PreferenceName.DomainLoginEnabled))
+            {
+                labelDomainUser.Visible = false;
+                textDomainUser.Visible = false;
+                butPickDomainUser.Visible = false;
+            }
+            checkRequireReset.Checked = UserCur.PasswordResetRequired;
+            _listUserGroups = UserGroup.All();
+            for (int i = 0; i < _listUserGroups.Count; i++)
+            {
+                listUserGroup.Items.Add(new ODBoxItem<UserGroup>(_listUserGroups[i].Description, _listUserGroups[i]));
+                if (!_isFromAddUser && UserCur.IsInUserGroup(_listUserGroups[i].Id))
+                {
+                    listUserGroup.SetSelected(i, true);
+                }
+                if (_isFromAddUser && _listUserGroups[i].Id == Preference.GetLong(PreferenceName.DefaultUserGroup))
+                {
+                    listUserGroup.SetSelected(i, true);
+                }
+            }
+            if (listUserGroup.SelectedIndex == -1)
+            {//never allowed to delete last group, so this won't fail
+                listUserGroup.SelectedIndex = 0;
+            }
+            listEmployee.Items.Clear();
+            listEmployee.Items.Add(Lan.g(this, "none"));
+            listEmployee.SelectedIndex = 0;
             _listEmployees = Employee.All();
-			for(int i=0;i<_listEmployees.Count;i++){
-				listEmployee.Items.Add(Employee.GetNameFL(_listEmployees[i]));
-				if(UserCur.EmployeeId==_listEmployees[i].Id) {
-					listEmployee.SelectedIndex=i+1;
-				}
-			}
-			listProv.Items.Clear();
-			listProv.Items.Add(Lan.g(this,"none"));
-			listProv.SelectedIndex=0;
-			_listProviders=Providers.GetDeepCopy(true);
-			for(int i=0;i<_listProviders.Count;i++) {
-				listProv.Items.Add(_listProviders[i].GetLongDesc());
-				if(UserCur.ProviderId==_listProviders[i].ProvNum) {
-					listProv.SelectedIndex=i+1;
-				}
-			}
-			_listClinics=Clinics.GetDeepCopy(true);
-			_listUserAlertTypesOld=AlertSubscription.GetByUser(UserCur.Id);
-			List<long> listSubscribedClinics=_listUserAlertTypesOld.Where(x => x.ClinicId.HasValue).Select(x => x.ClinicId.Value).Distinct().ToList();
-			List<long> listAlertCatNums=_listUserAlertTypesOld.Select(x => x.AlertCategoryId).Distinct().ToList();
-			bool isAllClinicsSubscribed=listSubscribedClinics.Count==_listClinics.Count+1;//Plus 1 for HQ
-			listAlertSubMulti.Items.Clear();
-			_listAlertCategories=AlertCategory.All();
-			List<long> listUserAlertCatNums=_listUserAlertTypesOld.Select(x => x.AlertCategoryId).ToList();
-			foreach(AlertCategory cat in _listAlertCategories) {
-				int index=listAlertSubMulti.Items.Add(Lan.g(this,cat.Description));
-				listAlertSubMulti.SetSelected(index,listUserAlertCatNums.Contains(cat.Id));
-			}
-			if(!Preferences.HasClinicsEnabled) {
-				tabClinics.Enabled=false;//Disables all controls in the clinics tab.  Tab is still selectable.
-				listAlertSubsClinicsMulti.Visible=false;
-				labelAlertClinic.Visible=false;
-			}
-			else {
-				listClinic.Items.Clear();
-				listClinic.Items.Add(Lan.g(this,"All"));
-				listAlertSubsClinicsMulti.Items.Add(Lan.g(this,"All"));
-				listAlertSubsClinicsMulti.Items.Add(Lan.g(this,"Headquarters"));
-				if(UserCur.ClinicId==0) {//Unrestricted
-					listClinic.SetSelected(0,true);
-					checkClinicIsRestricted.Enabled=false;//We don't really need this checkbox any more but it's probably better for users to keep it....
-				}
-				if(isAllClinicsSubscribed) {//They are subscribed to all clinics
-					listAlertSubsClinicsMulti.SetSelected(0,true);
-				}
-				else if(listSubscribedClinics.Contains(0)) {//They are subscribed to Headquarters
-					listAlertSubsClinicsMulti.SetSelected(1,true);
-				}
-				List<ClinicUser> listUserClinics=ClinicUser.GetForUser(UserCur.Id).ToList();
-				for(int i=0;i<_listClinics.Count;i++) {
-					listClinic.Items.Add(_listClinics[i].Abbr);
-					listClinicMulti.Items.Add(_listClinics[i].Abbr);
-					listAlertSubsClinicsMulti.Items.Add(_listClinics[i].Abbr);
-					if(UserCur.ClinicId==_listClinics[i].ClinicNum) {
-						listClinic.SetSelected(i+1,true);
-					}
-					if(UserCur.ClinicId!=0 && listUserClinics.Exists(x => x.ClinicId==_listClinics[i].ClinicNum)) {
-						listClinicMulti.SetSelected(i,true);//No "All" option, don't select i+1
-					}
-					if(!isAllClinicsSubscribed && _listUserAlertTypesOld.Exists(x => x.ClinicId==_listClinics[i].ClinicNum)) {
-						listAlertSubsClinicsMulti.SetSelected(i+2,true);//All+HQ
-					}
-				}
-				checkClinicIsRestricted.Checked=UserCur.ClinicRestricted;
-			}
-			if(string.IsNullOrEmpty(UserCur.PasswordHash)){
-				butPassword.Text=Lan.g(this,"Create Password");
-			}
-			if(IsNew) {
-				butUnlock.Visible=false;
-			}
-			//_listDoseSpotUserPrefOld=UserOdPrefs.GetByUserAndFkeyAndFkeyType(UserCur.UserNum,
-			//	Programs.GetCur(ProgramName.eRx).ProgramNum,UserOdFkeyType.Program,
-			//	Clinics.GetForUserod(Security.CurUser,true).Select(x => x.ClinicNum)
-			//	.Union(new List<long>() { 0 })//Always include 0 clinic, this is the default, NOT a headquarters only value.
-			//	.Distinct()
-			//	.ToList());
-			//_listDoseSpotUserPrefNew=_listDoseSpotUserPrefOld.Select(x => x.Clone()).ToList();
-			//_doseSpotUserPrefDefault=_listDoseSpotUserPrefNew.Find(x => x.ClinicNum==0);
-			//if(_doseSpotUserPrefDefault==null) {
-			//	_doseSpotUserPrefDefault=DoseSpot.GetDoseSpotUserIdFromPref(UserCur.UserNum,0);
-			//	_listDoseSpotUserPrefNew.Add(_doseSpotUserPrefDefault);
-			//}
-			//textDoseSpotUserID.Text=_doseSpotUserPrefDefault.ValueString;
-			if(_isFromAddUser && !Security.IsAuthorized(Permissions.SecurityAdmin,true)) {
-				butPassword.Visible=false;
-				checkRequireReset.Checked=true;
-				checkRequireReset.Enabled=false;
-				butUnlock.Visible=false;
-			}
-			if(!Preferences.HasClinicsEnabled) {
-				butDoseSpotAdditional.Visible=false;
-			}
-		}
+            for (int i = 0; i < _listEmployees.Count; i++)
+            {
+                listEmployee.Items.Add(Employee.GetNameFL(_listEmployees[i]));
+                if (UserCur.EmployeeId == _listEmployees[i].Id)
+                {
+                    listEmployee.SelectedIndex = i + 1;
+                }
+            }
+            listProv.Items.Clear();
+            listProv.Items.Add(Lan.g(this, "none"));
+            listProv.SelectedIndex = 0;
+            _listProviders = Providers.GetDeepCopy(true);
+            for (int i = 0; i < _listProviders.Count; i++)
+            {
+                listProv.Items.Add(_listProviders[i].GetLongDesc());
+                if (UserCur.ProviderId == _listProviders[i].ProvNum)
+                {
+                    listProv.SelectedIndex = i + 1;
+                }
+            }
+            _listClinics = Clinic.All().ToList();
+            _listUserAlertTypesOld = AlertSubscription.GetByUser(UserCur.Id);
+            List<long> listSubscribedClinics = _listUserAlertTypesOld.Where(x => x.ClinicId.HasValue).Select(x => x.ClinicId.Value).Distinct().ToList();
+            List<long> listAlertCatNums = _listUserAlertTypesOld.Select(x => x.AlertCategoryId).Distinct().ToList();
+            bool isAllClinicsSubscribed = listSubscribedClinics.Count == _listClinics.Count + 1;//Plus 1 for HQ
+            listAlertSubMulti.Items.Clear();
+            _listAlertCategories = AlertCategory.All();
+            List<long> listUserAlertCatNums = _listUserAlertTypesOld.Select(x => x.AlertCategoryId).ToList();
+            foreach (AlertCategory cat in _listAlertCategories)
+            {
+                int index = listAlertSubMulti.Items.Add(Lan.g(this, cat.Description));
+                listAlertSubMulti.SetSelected(index, listUserAlertCatNums.Contains(cat.Id));
+            }
 
-		private void butPickDomainUser_Click(object sender,EventArgs e) {
-			//DirectoryEntry does recognize an empty string as a valid LDAP entry and will just return all logins from all available domains
-			//But all logins should be on the same domain, so this field is required
-			if(string.IsNullOrWhiteSpace(Preference.GetString(PreferenceName.DomainLoginPath))) {
-				MsgBox.Show(this,"DomainLoginPath is missing in security settings. DomainLoginPath is required before assigning domain logins to user accounts.");
-				return;
-			}
-			//Try to access the specified DomainLoginPath
-			try {
-				DirectoryEntry.Exists(Preference.GetString(PreferenceName.DomainLoginPath));
-			}
-			catch(Exception ex) {
-				MessageBox.Show(Lan.g(this,"An error occurred while attempting to access the provided DomainLoginPath:")+" "+ex.Message);
-				return;
-			}
-			FormDomainUserPick FormDU=new FormDomainUserPick();
-			FormDU.ShowDialog();
-			if(FormDU.DialogResult==DialogResult.OK && FormDU.SelectedDomainName!=null) { //only check for null, as empty string should clear the field
-				UserCur.DomainUser=FormDU.SelectedDomainName;
-				textDomainUser.Text=UserCur.DomainUser;
-			}
-		}
+            listClinic.Items.Clear();
+            listClinic.Items.Add(Lan.g(this, "All"));
+            listAlertSubsClinicsMulti.Items.Add(Lan.g(this, "All"));
+            listAlertSubsClinicsMulti.Items.Add(Lan.g(this, "Headquarters"));
+            if (UserCur.ClinicId == 0)
+            {//Unrestricted
+                listClinic.SetSelected(0, true);
+                checkClinicIsRestricted.Enabled = false;//We don't really need this checkbox any more but it's probably better for users to keep it....
+            }
+            if (isAllClinicsSubscribed)
+            {//They are subscribed to all clinics
+                listAlertSubsClinicsMulti.SetSelected(0, true);
+            }
+            else if (listSubscribedClinics.Contains(0))
+            {//They are subscribed to Headquarters
+                listAlertSubsClinicsMulti.SetSelected(1, true);
+            }
+            List<ClinicUser> listUserClinics = ClinicUser.GetForUser(UserCur.Id).ToList();
+            for (int i = 0; i < _listClinics.Count; i++)
+            {
+                listClinic.Items.Add(_listClinics[i].Abbr);
+                listClinicMulti.Items.Add(_listClinics[i].Abbr);
+                listAlertSubsClinicsMulti.Items.Add(_listClinics[i].Abbr);
+                if (UserCur.ClinicId == _listClinics[i].Id)
+                {
+                    listClinic.SetSelected(i + 1, true);
+                }
+                if (UserCur.ClinicId != 0 && listUserClinics.Exists(x => x.ClinicId == _listClinics[i].Id))
+                {
+                    listClinicMulti.SetSelected(i, true);//No "All" option, don't select i+1
+                }
+                if (!isAllClinicsSubscribed && _listUserAlertTypesOld.Exists(x => x.ClinicId == _listClinics[i].Id))
+                {
+                    listAlertSubsClinicsMulti.SetSelected(i + 2, true);//All+HQ
+                }
+            }
+            checkClinicIsRestricted.Checked = UserCur.ClinicRestricted;
 
-		private void listClinic_MouseClick(object sender,MouseEventArgs e) {
-			int idx=listClinic.IndexFromPoint(e.Location);
-			if(idx==-1){
-				return;
-			}
-			if(idx==0){//all
-				checkClinicIsRestricted.Checked=false;
-				checkClinicIsRestricted.Enabled=false;
-			}
-			else{
-				checkClinicIsRestricted.Enabled=true;
-			}
-		}
+            if (string.IsNullOrEmpty(UserCur.PasswordHash))
+            {
+                butPassword.Text = Lan.g(this, "Create Password");
+            }
+            if (IsNew)
+            {
+                butUnlock.Visible = false;
+            }
+            //_listDoseSpotUserPrefOld=UserOdPrefs.GetByUserAndFkeyAndFkeyType(UserCur.UserNum,
+            //	Programs.GetCur(ProgramName.eRx).ProgramNum,UserOdFkeyType.Program,
+            //	Clinics.GetForUserod(Security.CurUser,true).Select(x => x.ClinicNum)
+            //	.Union(new List<long>() { 0 })//Always include 0 clinic, this is the default, NOT a headquarters only value.
+            //	.Distinct()
+            //	.ToList());
+            //_listDoseSpotUserPrefNew=_listDoseSpotUserPrefOld.Select(x => x.Clone()).ToList();
+            //_doseSpotUserPrefDefault=_listDoseSpotUserPrefNew.Find(x => x.ClinicNum==0);
+            //if(_doseSpotUserPrefDefault==null) {
+            //	_doseSpotUserPrefDefault=DoseSpot.GetDoseSpotUserIdFromPref(UserCur.UserNum,0);
+            //	_listDoseSpotUserPrefNew.Add(_doseSpotUserPrefDefault);
+            //}
+            //textDoseSpotUserID.Text=_doseSpotUserPrefDefault.ValueString;
+            if (_isFromAddUser && !Security.IsAuthorized(Permissions.SecurityAdmin, true))
+            {
+                butPassword.Visible = false;
+                checkRequireReset.Checked = true;
+                checkRequireReset.Enabled = false;
+                butUnlock.Visible = false;
+            }
+        }
 
-		private void butPassword_Click(object sender, System.EventArgs e) {
-			bool isCreate=string.IsNullOrEmpty(UserCur.PasswordHash);
-			FormUserPassword FormU=new FormUserPassword(isCreate,UserCur.UserName);
-			FormU.IsInSecurityWindow=true;
-			FormU.ShowDialog();
-			if(FormU.DialogResult==DialogResult.Cancel){
-				return;
-			}
-			UserCur.Password=FormU.LoginDetails;
-			UserCur.PasswordIsStrong=FormU.PasswordIsStrong;
-			_passwordTyped=FormU.Password;
-			if(string.IsNullOrEmpty(UserCur.PasswordHash)) {
-				butPassword.Text=Lan.g(this,"Create Password");
-			}
-			else{
-				butPassword.Text=Lan.g(this,"Change Password");
-			}
-		}
+        private void butPickDomainUser_Click(object sender, EventArgs e)
+        {
+            //DirectoryEntry does recognize an empty string as a valid LDAP entry and will just return all logins from all available domains
+            //But all logins should be on the same domain, so this field is required
+            if (string.IsNullOrWhiteSpace(Preference.GetString(PreferenceName.DomainLoginPath)))
+            {
+                MsgBox.Show(this, "DomainLoginPath is missing in security settings. DomainLoginPath is required before assigning domain logins to user accounts.");
+                return;
+            }
+            //Try to access the specified DomainLoginPath
+            try
+            {
+                DirectoryEntry.Exists(Preference.GetString(PreferenceName.DomainLoginPath));
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(Lan.g(this, "An error occurred while attempting to access the provided DomainLoginPath:") + " " + ex.Message);
+                return;
+            }
+            FormDomainUserPick FormDU = new FormDomainUserPick();
+            FormDU.ShowDialog();
+            if (FormDU.DialogResult == DialogResult.OK && FormDU.SelectedDomainName != null)
+            { //only check for null, as empty string should clear the field
+                UserCur.DomainUser = FormDU.SelectedDomainName;
+                textDomainUser.Text = UserCur.DomainUser;
+            }
+        }
 
-		private void butUnlock_Click(object sender,EventArgs e) {
-			if(!MsgBox.Show(this,true,"Users can become locked when invalid credentials have been entered several times in a row.\r\n"
-				+"Unlock this user so that more log in attempts can be made?"))
-			{
-				return;
-			}
-			UserCur.FailedDateTime=DateTime.MinValue;
-			UserCur.FailedAttempts=0;
-			try {
-				User.Update(UserCur);
-				MsgBox.Show(this,"User has been unlocked.");
-			}
-			catch(Exception) {
-				MsgBox.Show(this,"There was a problem unlocking this user.  Please call support or wait the allotted lock time.");
-			}
-		}
+        private void listClinic_MouseClick(object sender, MouseEventArgs e)
+        {
+            int idx = listClinic.IndexFromPoint(e.Location);
+            if (idx == -1)
+            {
+                return;
+            }
+            if (idx == 0)
+            {//all
+                checkClinicIsRestricted.Checked = false;
+                checkClinicIsRestricted.Enabled = false;
+            }
+            else
+            {
+                checkClinicIsRestricted.Enabled = true;
+            }
+        }
 
-		private void butDoseSpotAdditional_Click(object sender,EventArgs e) {
-			_doseSpotUserPrefDefault.Value=textDoseSpotUserID.Text;
-			FormUserPrefAdditional FormUP=new FormUserPrefAdditional(_listDoseSpotUserPrefNew,UserCur);
-			FormUP.ShowDialog();
-			if(FormUP.DialogResult==DialogResult.OK) {
-				_listDoseSpotUserPrefNew=FormUP.ListUserPrefOut;
-				_doseSpotUserPrefDefault=_listDoseSpotUserPrefNew.Find(x => x.ClinicId==0);
-				textDoseSpotUserID.Text=_doseSpotUserPrefDefault.Value;
-			}
-		}
+        private void butPassword_Click(object sender, System.EventArgs e)
+        {
+            bool isCreate = string.IsNullOrEmpty(UserCur.PasswordHash);
+            FormUserPassword FormU = new FormUserPassword(isCreate, UserCur.UserName);
+            FormU.IsInSecurityWindow = true;
+            FormU.ShowDialog();
+            if (FormU.DialogResult == DialogResult.Cancel)
+            {
+                return;
+            }
+            UserCur.Password = FormU.LoginDetails;
+            UserCur.PasswordIsStrong = FormU.PasswordIsStrong;
+            _passwordTyped = FormU.Password;
+            if (string.IsNullOrEmpty(UserCur.PasswordHash))
+            {
+                butPassword.Text = Lan.g(this, "Create Password");
+            }
+            else
+            {
+                butPassword.Text = Lan.g(this, "Change Password");
+            }
+        }
 
-		private void butOK_Click(object sender, System.EventArgs e) {
-			if(textUserName.Text==""){
-				MsgBox.Show(this,"Please enter a username.");
-				return;
-			}
-			if(IsNew && Preference.GetBool(PreferenceName.PasswordsMustBeStrong) && string.IsNullOrWhiteSpace(_passwordTyped)) {
-				MsgBox.Show(this,"Password may not be blank when the strong password feature is turned on.");
-				return;
-			}
-			if(Preferences.HasClinicsEnabled && listClinic.SelectedIndex==-1) {
-				MsgBox.Show(this,"This user does not have a User Default Clinic set.  Please choose one to continue.");
-				return;
-			}
-			if(listUserGroup.SelectedIndices.Count == 0) {
-				MsgBox.Show(this,"Users must have at least one user group associated. Please select a user group to continue.");
-				return;
-			}
-			if(_isFromAddUser && !Security.IsAuthorized(Permissions.SecurityAdmin,true)
-				&& (listUserGroup.SelectedItems.Count!=1 || listUserGroup.SelectedTag<UserGroup>().Id!=Preference.GetLong(PreferenceName.DefaultUserGroup)))
-			{
-				MsgBox.Show(this,"This user must be assigned to the default user group.");
-				for(int i=0;i<listUserGroup.Items.Count;i++) {
-					if(((ODBoxItem<UserGroup>)listUserGroup.Items[i]).Tag.Id==Preference.GetLong(PreferenceName.DefaultUserGroup)) {
-						listUserGroup.SetSelected(i,true);
-					}
-					else {
-						listUserGroup.SetSelected(i,false);
-					}
-				}
-				return;
-			}
-			List<ClinicUser> listUserClinics=new List<ClinicUser>();
-			if(Preferences.HasClinicsEnabled && checkClinicIsRestricted.Checked) {//They want to restrict the user to certain clinics or clinics are enabled.  
-				for(int i=0;i<listClinicMulti.SelectedIndices.Count;i++) {
-					listUserClinics.Add(new ClinicUser(_listClinics[listClinicMulti.SelectedIndices[i]].ClinicNum,UserCur.Id));
-				}
-				//If they set the user up with a default clinic and it's not in the restricted list, return.
-				if(!listUserClinics.Exists(x => x.ClinicId==_listClinics[listClinic.SelectedIndex-1].ClinicNum)) {
-					MsgBox.Show(this,"User cannot have a default clinic that they are not restricted to.");
-					return;
-				}
-			}
+        private void butUnlock_Click(object sender, EventArgs e)
+        {
+            if (!MsgBox.Show(this, true, "Users can become locked when invalid credentials have been entered several times in a row.\r\n"
+                + "Unlock this user so that more log in attempts can be made?"))
+            {
+                return;
+            }
+            UserCur.FailedDateTime = DateTime.MinValue;
+            UserCur.FailedAttempts = 0;
+            try
+            {
+                User.Update(UserCur);
+                MsgBox.Show(this, "User has been unlocked.");
+            }
+            catch (Exception)
+            {
+                MsgBox.Show(this, "There was a problem unlocking this user.  Please call support or wait the allotted lock time.");
+            }
+        }
+
+        private void butDoseSpotAdditional_Click(object sender, EventArgs e)
+        {
+            _doseSpotUserPrefDefault.Value = textDoseSpotUserID.Text;
+            FormUserPrefAdditional FormUP = new FormUserPrefAdditional(_listDoseSpotUserPrefNew, UserCur);
+            FormUP.ShowDialog();
+            if (FormUP.DialogResult == DialogResult.OK)
+            {
+                _listDoseSpotUserPrefNew = FormUP.ListUserPrefOut;
+                _doseSpotUserPrefDefault = _listDoseSpotUserPrefNew.Find(x => x.ClinicId == 0);
+                textDoseSpotUserID.Text = _doseSpotUserPrefDefault.Value;
+            }
+        }
+
+        private void butOK_Click(object sender, System.EventArgs e)
+        {
+            if (textUserName.Text == "")
+            {
+                MsgBox.Show(this, "Please enter a username.");
+                return;
+            }
+            if (IsNew && Preference.GetBool(PreferenceName.PasswordsMustBeStrong) && string.IsNullOrWhiteSpace(_passwordTyped))
+            {
+                MsgBox.Show(this, "Password may not be blank when the strong password feature is turned on.");
+                return;
+            }
+            if (listClinic.SelectedIndex == -1)
+            {
+                MsgBox.Show(this, "This user does not have a User Default Clinic set.  Please choose one to continue.");
+                return;
+            }
+            if (listUserGroup.SelectedIndices.Count == 0)
+            {
+                MsgBox.Show(this, "Users must have at least one user group associated. Please select a user group to continue.");
+                return;
+            }
+            if (_isFromAddUser && !Security.IsAuthorized(Permissions.SecurityAdmin, true)
+                && (listUserGroup.SelectedItems.Count != 1 || listUserGroup.SelectedTag<UserGroup>().Id != Preference.GetLong(PreferenceName.DefaultUserGroup)))
+            {
+                MsgBox.Show(this, "This user must be assigned to the default user group.");
+                for (int i = 0; i < listUserGroup.Items.Count; i++)
+                {
+                    if (((ODBoxItem<UserGroup>)listUserGroup.Items[i]).Tag.Id == Preference.GetLong(PreferenceName.DefaultUserGroup))
+                    {
+                        listUserGroup.SetSelected(i, true);
+                    }
+                    else
+                    {
+                        listUserGroup.SetSelected(i, false);
+                    }
+                }
+                return;
+            }
+            List<ClinicUser> listUserClinics = new List<ClinicUser>();
+            if (checkClinicIsRestricted.Checked)
+            {//They want to restrict the user to certain clinics or clinics are enabled.  
+                for (int i = 0; i < listClinicMulti.SelectedIndices.Count; i++)
+                {
+                    listUserClinics.Add(new ClinicUser(_listClinics[listClinicMulti.SelectedIndices[i]].Id, UserCur.Id));
+                }
+                //If they set the user up with a default clinic and it's not in the restricted list, return.
+                if (!listUserClinics.Exists(x => x.ClinicId == _listClinics[listClinic.SelectedIndex - 1].Id))
+                {
+                    MsgBox.Show(this, "User cannot have a default clinic that they are not restricted to.");
+                    return;
+                }
+            }
             // TODO: Fix me...
-			//if(UserClinic.Sync(listUserClinics,UserCur.Id)) {//Either syncs new list, or clears old list if no longer restricted.
-			//	DataValid.SetInvalid(InvalidType.UserClinics);
-			//}
-			if(!Preferences.HasClinicsEnabled || listClinic.SelectedIndex==0) {
-				UserCur.ClinicId=0;
-			}
-			else {
-				UserCur.ClinicId=_listClinics[listClinic.SelectedIndex-1].ClinicNum;
-			}
-			//UserCur.ClinicRestricted=checkClinicIsRestricted.Checked;//This is kept in sync with their choice of "All".
-			UserCur.Hidden=checkIsHidden.Checked;
-			UserCur.PasswordResetRequired=checkRequireReset.Checked;
-			UserCur.UserName=textUserName.Text;
-			if(listEmployee.SelectedIndex==0){
-				UserCur.EmployeeId=0;
-			}
-			else{
-				UserCur.EmployeeId=_listEmployees[listEmployee.SelectedIndex-1].Id;
-			}
-			if(listProv.SelectedIndex==0) {
+            //if(UserClinic.Sync(listUserClinics,UserCur.Id)) {//Either syncs new list, or clears old list if no longer restricted.
+            //	DataValid.SetInvalid(InvalidType.UserClinics);
+            //}
+            if (listClinic.SelectedIndex == 0)
+            {
+                UserCur.ClinicId = 0;
+            }
+            else
+            {
+                UserCur.ClinicId = _listClinics[listClinic.SelectedIndex - 1].Id;
+            }
+            //UserCur.ClinicRestricted=checkClinicIsRestricted.Checked;//This is kept in sync with their choice of "All".
+            UserCur.Hidden = checkIsHidden.Checked;
+            UserCur.PasswordResetRequired = checkRequireReset.Checked;
+            UserCur.UserName = textUserName.Text;
+            if (listEmployee.SelectedIndex == 0)
+            {
+                UserCur.EmployeeId = 0;
+            }
+            else
+            {
+                UserCur.EmployeeId = _listEmployees[listEmployee.SelectedIndex - 1].Id;
+            }
+            if (listProv.SelectedIndex == 0)
+            {
                 if (UserCur.ProviderId.HasValue)
                 {
                     Provider prov = Providers.GetProv(UserCur.ProviderId.Value);
@@ -839,8 +889,9 @@ namespace OpenDental{
                     }
                 }
                 UserCur.ProviderId = null;
-			}
-			else {
+            }
+            else
+            {
                 if (UserCur.ProviderId.HasValue)
                 {
                     Provider prov = Providers.GetProv(UserCur.ProviderId.Value);
@@ -853,113 +904,128 @@ namespace OpenDental{
                         Providers.Update(prov);
                     }
                 }
-				UserCur.ProviderId=_listProviders[listProv.SelectedIndex-1].ProvNum;
-			}
-			try{
-				if(IsNew){
-					User.Insert(UserCur,listUserGroup.SelectedItems.OfType<ODBoxItem<UserGroup>>().Select(x => x.Tag.Id).ToList());
-					//Set the userodprefs to the new user's UserNum that was just retreived from the database.
-					_listDoseSpotUserPrefNew.ForEach(x => x.UserId=UserCur.Id);
+                UserCur.ProviderId = _listProviders[listProv.SelectedIndex - 1].ProvNum;
+            }
+            try
+            {
+                if (IsNew)
+                {
+                    User.Insert(UserCur, listUserGroup.SelectedItems.OfType<ODBoxItem<UserGroup>>().Select(x => x.Tag.Id).ToList());
+                    //Set the userodprefs to the new user's UserNum that was just retreived from the database.
+                    _listDoseSpotUserPrefNew.ForEach(x => x.UserId = UserCur.Id);
                     SecurityLog.Write(null, SecurityLogEvents.AddNewUser, "New user '" + UserCur.UserName + "' added");
-				}
-				else{
-					List<UserGroup> listNewUserGroups=listUserGroup.SelectedItems.OfType<ODBoxItem<UserGroup>>().Select(x => x.Tag).ToList();
-					List<UserGroup> listOldUserGroups=UserCur.GetGroups();
-					User.Update(UserCur,listNewUserGroups.Select(x => x.Id).ToList());
-					//if this is the current user, update the user, credentials, etc.
-					if(UserCur.Id==Security.CurrentUser.Id) {
-						Security.CurrentUser=UserCur.Copy();
-						if(_passwordTyped!=null) {
-							Security.PasswordTyped=_passwordTyped; //update the password typed for middle tier refresh
-						}
-					}
-					//Log changes to the User's UserGroups.
-					Func<List<UserGroup>,List<UserGroup>,List<UserGroup>> funcGetMissing=(listCur,listCompare) => {
-						List<UserGroup> retVal=new List<UserGroup>();
-						foreach(UserGroup group in listCur) {
-							if(listCompare.Exists(x => x.Id==group.Id)) {
-								continue;
-							}
-							retVal.Add(group);
-						}
-						return retVal;
-					};
-					List<UserGroup> listRemovedGroups=funcGetMissing(listOldUserGroups,listNewUserGroups);
-					List<UserGroup> listAddedGroups=funcGetMissing(listNewUserGroups,listOldUserGroups);
-					if(listRemovedGroups.Count>0) {//Only log if there are items in the list
-						SecurityLog.Write(null, SecurityLogEvents.SecurityAdmin, "User " +UserCur.UserName+
-							" removed from User group(s): "+string.Join(", ",listRemovedGroups.Select(x => x.Description).ToArray())+" by: "+Security.CurrentUser.UserName);
-					}
-					if(listAddedGroups.Count>0) {//Only log if there are items in the list.
-						SecurityLog.Write(null, SecurityLogEvents.SecurityAdmin, "User " +UserCur.UserName+
-							" added to User group(s): "+string.Join(", ",listAddedGroups.Select(x => x.Description).ToArray())+" by: "+Security.CurrentUser.UserName);
-					}
-				}
-			}
-			catch(Exception ex){
-				MessageBox.Show(ex.Message);
-				return;
-			}
-			//DoseSpot User ID Insert/Update/Delete
-			//if(_doseSpotUserPrefDefault.Value!=textDoseSpotUserID.Text) {
-			//	if(string.IsNullOrWhiteSpace(textDoseSpotUserID.Text)) {
-			//		UserOdPrefs.DeleteMany(_doseSpotUserPrefDefault.UserId,_doseSpotUserPrefDefault.Fkey,UserPreferenceName.Program);
-			//	}
-			//	else {
-			//		_doseSpotUserPrefDefault.Value=textDoseSpotUserID.Text;
-			//		UserOdPrefs.Upsert(_doseSpotUserPrefDefault);
-			//	}
-			//}
-			DataValid.SetInvalid(InvalidType.Security);
-			//List of AlertTypes that are selected.
-			List<long> listUserAlertCats=new List<long>();
-			foreach(int index in listAlertSubMulti.SelectedIndices) {
-				listUserAlertCats.Add(_listAlertCategories[index].Id);
-			}
-			List<long> listClinics=new List<long>();
-			foreach(int index in listAlertSubsClinicsMulti.SelectedIndices) {
-				if(index==0) {//All
-					listClinics.Add(0);//Add HQ
-					foreach(Clinic clinicCur in _listClinics) {
-						listClinics.Add(clinicCur.ClinicNum);
-					}
-					break;
-				}
-				if(index==1) {//HQ
-					listClinics.Add(0);
-					continue;
-				}
-				Clinic clinic=_listClinics[index-2];//Subtract 2 for 'All' and 'HQ'
-				listClinics.Add(clinic.ClinicNum);
-			}
+                }
+                else
+                {
+                    List<UserGroup> listNewUserGroups = listUserGroup.SelectedItems.OfType<ODBoxItem<UserGroup>>().Select(x => x.Tag).ToList();
+                    List<UserGroup> listOldUserGroups = UserCur.GetGroups();
+                    User.Update(UserCur, listNewUserGroups.Select(x => x.Id).ToList());
+                    //if this is the current user, update the user, credentials, etc.
+                    if (UserCur.Id == Security.CurrentUser.Id)
+                    {
+                        Security.CurrentUser = UserCur.Copy();
+                        if (_passwordTyped != null)
+                        {
+                            Security.PasswordTyped = _passwordTyped; //update the password typed for middle tier refresh
+                        }
+                    }
+                    //Log changes to the User's UserGroups.
+                    Func<List<UserGroup>, List<UserGroup>, List<UserGroup>> funcGetMissing = (listCur, listCompare) =>
+                    {
+                        List<UserGroup> retVal = new List<UserGroup>();
+                        foreach (UserGroup group in listCur)
+                        {
+                            if (listCompare.Exists(x => x.Id == group.Id))
+                            {
+                                continue;
+                            }
+                            retVal.Add(group);
+                        }
+                        return retVal;
+                    };
+                    List<UserGroup> listRemovedGroups = funcGetMissing(listOldUserGroups, listNewUserGroups);
+                    List<UserGroup> listAddedGroups = funcGetMissing(listNewUserGroups, listOldUserGroups);
+                    if (listRemovedGroups.Count > 0)
+                    {//Only log if there are items in the list
+                        SecurityLog.Write(null, SecurityLogEvents.SecurityAdmin, "User " + UserCur.UserName +
+                            " removed from User group(s): " + string.Join(", ", listRemovedGroups.Select(x => x.Description).ToArray()) + " by: " + Security.CurrentUser.UserName);
+                    }
+                    if (listAddedGroups.Count > 0)
+                    {//Only log if there are items in the list.
+                        SecurityLog.Write(null, SecurityLogEvents.SecurityAdmin, "User " + UserCur.UserName +
+                            " added to User group(s): " + string.Join(", ", listAddedGroups.Select(x => x.Description).ToArray()) + " by: " + Security.CurrentUser.UserName);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                return;
+            }
+            //DoseSpot User ID Insert/Update/Delete
+            //if(_doseSpotUserPrefDefault.Value!=textDoseSpotUserID.Text) {
+            //	if(string.IsNullOrWhiteSpace(textDoseSpotUserID.Text)) {
+            //		UserOdPrefs.DeleteMany(_doseSpotUserPrefDefault.UserId,_doseSpotUserPrefDefault.Fkey,UserPreferenceName.Program);
+            //	}
+            //	else {
+            //		_doseSpotUserPrefDefault.Value=textDoseSpotUserID.Text;
+            //		UserOdPrefs.Upsert(_doseSpotUserPrefDefault);
+            //	}
+            //}
+            DataValid.SetInvalid(InvalidType.Security);
+            //List of AlertTypes that are selected.
+            List<long> listUserAlertCats = new List<long>();
+            foreach (int index in listAlertSubMulti.SelectedIndices)
+            {
+                listUserAlertCats.Add(_listAlertCategories[index].Id);
+            }
+            List<long> listClinics = new List<long>();
+            foreach (int index in listAlertSubsClinicsMulti.SelectedIndices)
+            {
+                if (index == 0)
+                {//All
+                    listClinics.Add(0);//Add HQ
+                    foreach (Clinic clinicCur in _listClinics)
+                    {
+                        listClinics.Add(clinicCur.Id);
+                    }
+                    break;
+                }
+                if (index == 1)
+                {//HQ
+                    listClinics.Add(0);
+                    continue;
+                }
+                Clinic clinic = _listClinics[index - 2];//Subtract 2 for 'All' and 'HQ'
+                listClinics.Add(clinic.Id);
+            }
             List<AlertSubscription> _listUserAlertTypesNew = new List<AlertSubscription>(_listUserAlertTypesOld);
-			//Remove AlertTypes that have been deselected through either deslecting the type or clinic.
-			_listUserAlertTypesNew.RemoveAll(x => !listUserAlertCats.Contains(x.AlertCategoryId));
-			if(Preferences.HasClinicsEnabled) {
-				_listUserAlertTypesNew.RemoveAll(x => !listClinics.Contains(x.ClinicId.GetValueOrDefault()));
-			}
-			foreach(long alertCatNum in listUserAlertCats) {
-				if(!Preferences.HasClinicsEnabled) {
-					if(!_listUserAlertTypesOld.Exists(x => x.AlertCategoryId==alertCatNum)) {//Was not subscribed to type.
-						_listUserAlertTypesNew.Add(new AlertSubscription(UserCur.Id,0,alertCatNum));
-					}
-				}
-				else {//Clinics enabled.
-					foreach(long clinicNumCur in listClinics) {
-						if(!_listUserAlertTypesOld.Exists(x => x.ClinicId==clinicNumCur && x.AlertCategoryId==alertCatNum)) {//Was not subscribed to type.
-							_listUserAlertTypesNew.Add(new AlertSubscription(UserCur.Id,clinicNumCur,alertCatNum));
-							continue;
-						}
-					}
-				}
-			}
-			// TODO: AlertSubs.Sync(_listUserAlertTypesNew,_listUserAlertTypesOld);
-			//UserOdPrefs.Sync(_listDoseSpotUserPrefNew,_listDoseSpotUserPrefOld);
-			DialogResult=DialogResult.OK;
-		}
+            //Remove AlertTypes that have been deselected through either deslecting the type or clinic.
+            _listUserAlertTypesNew.RemoveAll(x => !listUserAlertCats.Contains(x.AlertCategoryId));
 
-		private void butCancel_Click(object sender, System.EventArgs e) {
-			DialogResult=DialogResult.Cancel;
-		}
-	}
+            _listUserAlertTypesNew.RemoveAll(x => !listClinics.Contains(x.ClinicId.GetValueOrDefault()));
+
+            foreach (long alertCatNum in listUserAlertCats)
+            {
+                foreach (long clinicNumCur in listClinics)
+                {
+                    if (!_listUserAlertTypesOld.Exists(x => x.ClinicId == clinicNumCur && x.AlertCategoryId == alertCatNum))
+                    {//Was not subscribed to type.
+                        _listUserAlertTypesNew.Add(new AlertSubscription(UserCur.Id, clinicNumCur, alertCatNum));
+                        continue;
+                    }
+                }
+
+            }
+
+            // TODO: AlertSubs.Sync(_listUserAlertTypesNew,_listUserAlertTypesOld);
+            //UserOdPrefs.Sync(_listDoseSpotUserPrefNew,_listDoseSpotUserPrefOld);
+            DialogResult = DialogResult.OK;
+        }
+
+        private void butCancel_Click(object sender, EventArgs e)
+        {
+            DialogResult = DialogResult.Cancel;
+        }
+    }
 }

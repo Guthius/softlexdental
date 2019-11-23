@@ -315,7 +315,7 @@ namespace OpenDental
         ///Also disables pretty much every control available in the appointment module if it is going to return true, otherwise re-enables them.</summary>
         private bool IsHqNoneView()
         {
-            if (Preferences.HasClinicsEnabled && Clinics.ClinicNum == 0 && comboView.SelectedIndex == 0)
+            if (Clinics.ClinicId == 0 && comboView.SelectedIndex == 0)
             {
                 ContrApptSheet2.Visible = false;
                 panelOps.Visible = false;
@@ -393,8 +393,8 @@ namespace OpenDental
             {
                 return;//If all data is already in memory and we are not forcing the refresh.
             }
-            _dtEmpSched = Schedules.GetPeriodEmployeeSchedTable(dateStart, dateEnd, Clinics.ClinicNum);
-            _dtProvSched = Schedules.GetPeriodProviderSchedTable(dateStart, dateEnd, Clinics.ClinicNum);
+            _dtEmpSched = Schedules.GetPeriodEmployeeSchedTable(dateStart, dateEnd, Clinics.ClinicId);
+            _dtProvSched = Schedules.GetPeriodProviderSchedTable(dateStart, dateEnd, Clinics.ClinicId);
             _dtSchedule = Schedules.GetPeriodSchedule(dateStart, dateEnd, listOpNums, false);
         }
 
@@ -826,11 +826,8 @@ namespace OpenDental
             }//end for
             pinBoard.Invalidate();
             ApptDrawing.SchedListPeriod = SchedListPeriod;
-            List<long> opNums = null;
-            if (Preferences.HasClinicsEnabled && Clinics.ClinicNum > 0)
-            {
-                opNums = Operatories.GetOpsForClinic(Clinics.ClinicNum).Select(x => x.OperatoryNum).ToList();
-            }
+            List<long> opNums = Operatories.GetOpsForClinic(Clinics.ClinicId).Select(x => x.OperatoryNum).ToList();
+            
             List<LabCase> labCaseList = LabCases.GetForPeriod(startDate, endDate, opNums);
             FillLab(labCaseList);
             FillProduction(startDate, endDate);
@@ -1204,17 +1201,17 @@ namespace OpenDental
                 ToolStripMenuItem scheduledStrip = new ToolStripMenuItem(stripText);
                 _menuOp.Items.Add(scheduledStrip);
             }
-            if (Preferences.HasClinicsEnabled && Clinics.ClinicNum != 0)
-            {//HQ can not have clinic specialties.
-                Clinic clinicCur = Clinics.GetClinic(Clinics.ClinicNum);
-                string clinSchedText = clinicCur.SchedNote;
+            if (Clinics.ClinicId != 0)
+            {
+                Clinic clinicCur = Clinic.GetById(Clinics.ClinicId);
+                string clinSchedText = clinicCur.SchedulingNote;
                 if (!string.IsNullOrEmpty(clinSchedText))
                 {
                     if (_menuOp.Items.Count > 0)
                     {
                         _menuOp.Items.Add("-");
                     }
-                    List<DefLink> listSpecialties = DefLinks.GetListByFKey(clinicCur.ClinicNum, DefLinkType.Clinic);
+                    List<DefLink> listSpecialties = DefLinks.GetListByFKey(clinicCur.Id, DefLinkType.Clinic);
                     _menuOp.Items.Add(new ToolStripMenuItem(string.Join(", ", listSpecialties.Select(x => Defs.GetName(DefinitionCategory.ClinicSpecialty, x.DefNum)))
                         + "\r\n" + clinSchedText));
                 }
@@ -1385,18 +1382,10 @@ namespace OpenDental
             menuItem.Name = MenuItemNames.RoutingSlip;
             menuItem = menuBlockout.MenuItems.Add(Lan.g(this, "Blockout Cut-Copy-Paste"), OnBlockCutCopyPaste_Click);
             menuItem.Name = MenuItemNames.RoutingSlip;
-            if (!Preferences.HasClinicsEnabled)
-            {//Clear All Blockouts for Day is too aggressive when Clinics are enabled.
-                menuItem = menuBlockout.MenuItems.Add(Lan.g(this, "Clear All Blockouts for Day"), OnClearBlockouts_Click);
-                menuItem.Name = MenuItemNames.ClearAllBlockoutsForDay;
-            }
             menuItem = menuBlockout.MenuItems.Add(Lan.g(this, "Clear All Blockouts for Day, Op only"), OnClearBlockoutsOp_Click);
             menuItem.Name = MenuItemNames.ClearAllBlockoutsForDayOpOnly;
-            if (Preferences.HasClinicsEnabled)
-            {
-                menuItem = menuBlockout.MenuItems.Add(Lan.g(this, "Clear All Blockouts for Day, Clinic only"), OnClearBlockoutsClinic_Click);
-                menuItem.Name = MenuItemNames.ClearAllBlockoutsForDayClinicOnly;
-            }
+            menuItem = menuBlockout.MenuItems.Add(Lan.g(this, "Clear All Blockouts for Day, Clinic only"), OnClearBlockoutsClinic_Click);
+            menuItem.Name = MenuItemNames.ClearAllBlockoutsForDayClinicOnly;
             menuItem = menuBlockout.MenuItems.Add(Lan.g(this, "Edit Blockout Types"), OnBlockTypes_Click);
             menuItem.Name = MenuItemNames.EditBlockoutTypes;
             menuItem = menuBlockout.MenuItems.Add("-");//Designer code to insert a horizontal separator
@@ -1484,9 +1473,9 @@ namespace OpenDental
             if (saveToDb)
             {
                 ComputerPrefs.LocalComputer.ApptViewNum = apptViewNum;
-                ComputerPrefs.LocalComputer.ClinicNum = Clinics.ClinicNum;
+                ComputerPrefs.LocalComputer.ClinicNum = Clinics.ClinicId;
                 ComputerPrefs.Update(ComputerPrefs.LocalComputer);
-                UserodApptViews.InsertOrUpdate(Security.CurrentUser.Id, Clinics.ClinicNum, apptViewNum);
+                UserodApptViews.InsertOrUpdate(Security.CurrentUser.Id, Clinics.ClinicId, apptViewNum);
             }
             if (PatCur == null)
             {
@@ -1507,7 +1496,7 @@ namespace OpenDental
             string f = "";
             foreach (ApptView apptView in ApptViews.GetDeepCopy())
             {
-                if (Preferences.HasClinicsEnabled && Clinics.ClinicNum != apptView.ClinicNum)
+                if (Clinics.ClinicId != apptView.ClinicNum)
                 {
                     //This is intentional, we do NOT want 'Headquarters' to have access to clinic specific apptviews.  
                     //Likewise, we do not want clinic specific views to be accessible from specific clinic filters.
@@ -1537,18 +1526,18 @@ namespace OpenDental
         {
             //load the recently used apptview from the db, either the userodapptview table if an entry exists or the computerpref table if an entry for this computer exists
             ApptView apptViewCur = null;
-            UserodApptView userodApptViewCur = UserodApptViews.GetOneForUserAndClinic(Security.CurrentUser.Id, Clinics.ClinicNum);
+            UserodApptView userodApptViewCur = UserodApptViews.GetOneForUserAndClinic(Security.CurrentUser.Id, Clinics.ClinicId);
             if (userodApptViewCur != null)
             { //if there is an entry in the userodapptview table for this user
                 if (InitializedOnStartup //if either ContrAppt has already been initialized
                     || (Security.CurrentUser.ClinicRestricted //or the current user is restricted
-                    && Clinics.ClinicNum != ComputerPrefs.LocalComputer.ClinicNum)) //and FormOpenDental.ClinicNum (set to the current user's clinic) is not the computerpref clinic
+                    && Clinics.ClinicId != ComputerPrefs.LocalComputer.ClinicNum)) //and FormOpenDental.ClinicNum (set to the current user's clinic) is not the computerpref clinic
                 {
                     apptViewCur = ApptViews.GetApptView(userodApptViewCur.ApptViewNum); //then load the view for the user in the userodapptview table
                 }
             }
             if (apptViewCur == null //if no entry in the userodapptview table
-                && Clinics.ClinicNum == ComputerPrefs.LocalComputer.ClinicNum) //and if the program level ClinicNum is the stored recent ClinicNum for this computer 
+                && Clinics.ClinicId == ComputerPrefs.LocalComputer.ClinicNum) //and if the program level ClinicNum is the stored recent ClinicNum for this computer 
             {
                 apptViewCur = ApptViews.GetApptView(ComputerPrefs.LocalComputer.ApptViewNum);//use the computerpref for this computer and user
             }
@@ -1794,9 +1783,7 @@ namespace OpenDental
                     && ctrl.AptStatus != ApptStatus.PtNoteCompleted)
                 {
                     //When the program is restricted to a specific clinic, only count up production for the corresponding clinic.
-                    if (Preferences.HasClinicsEnabled
-                        && Clinics.ClinicNum != 0
-                        && Clinics.ClinicNum != ctrl.ClinicNum)
+                    if (Clinics.ClinicId != 0 && Clinics.ClinicId != ctrl.ClinicNum)
                     {
                         continue;//This appointment is for a different clinic.  Do not include this production in the daily prod.
                     }
@@ -1821,7 +1808,7 @@ namespace OpenDental
                 {
                     listProvNumsForApptView = ApptViewItems.GetProvsForView(apptViewNum);
                 }
-                netproduction += Adjustments.GetAdjustAmtForAptView(start, end, Clinics.ClinicNum, listOpsForApptView, listProvNumsForApptView);
+                netproduction += Adjustments.GetAdjustAmtForAptView(start, end, Clinics.ClinicId, listOpsForApptView, listProvNumsForApptView);
             }
             textProduction.Text = grossproduction.ToString("c0");
             if (grossproduction != netproduction)
@@ -1947,10 +1934,9 @@ namespace OpenDental
                 List<Schedule> listSchedulesForToday = SchedListPeriod.FindAll(x => x.SchedDate == DateTime.Today);
                 listOpsForApptView = ApptViewItemL.GetOpsForApptView(viewCur, ApptDrawing.IsWeeklyView, listSchedulesForToday);
             }
-            if (Preferences.HasClinicsEnabled)
-            {//Using clinics
-                listOpsForClinic = Operatories.GetOpsForClinic(Clinics.ClinicNum);
-            }
+
+            listOpsForClinic = Operatories.GetOpsForClinic(Clinics.ClinicId);
+            
             gridWaiting.BeginUpdate();
             gridWaiting.Columns.Clear();
             ODGridColumn col = new ODGridColumn(Lan.g("TableApptWaiting", "Patient"), 130);
@@ -1982,7 +1968,7 @@ namespace OpenDental
                     }
                 }
                 //We only want to filter the waiting room by the clinic's operatories when clinics are enabled and they are not using 'Headquarters' mode.
-                if (Preferences.HasClinicsEnabled && Clinics.ClinicNum != 0)
+                if (Clinics.ClinicId != 0)
                 {
                     bool isInView = false;
                     for (int j = 0; j < listOpsForClinic.Count; j++)
@@ -2035,7 +2021,7 @@ namespace OpenDental
             {
                 return;
             }
-            FormScheduleDayEdit FormSDE = new FormScheduleDayEdit(AppointmentL.DateSelected, Clinics.ClinicNum);
+            FormScheduleDayEdit FormSDE = new FormScheduleDayEdit(AppointmentL.DateSelected, Clinics.ClinicId);
             FormSDE.ShowOkSchedule = true;
             FormSDE.ShowDialog();
             SecurityLog.Write(Permissions.Schedules, "");
@@ -2228,7 +2214,7 @@ namespace OpenDental
             Procedures.SetProvidersInAppointment(apt, procsForSingleApt, isUpdatingFees);
             List<long> listOpNums = null;
             List<long> listProvNums = null;
-            if (Clinics.ClinicNum != 0 || comboView.SelectedIndex != 0)
+            if (Clinics.ClinicId != 0 || comboView.SelectedIndex != 0)
             {
                 listOpNums = ApptDrawing.VisOps.Select(x => x.OperatoryNum).ToList();
                 listProvNums = ApptDrawing.VisProvs.Select(x => x.ProvNum).ToList();
@@ -3001,16 +2987,10 @@ namespace OpenDental
                 MenuItem menuClearForDay = new MenuItem();
                 MenuItem menuClearForDayOp = new MenuItem();
                 MenuItem menuClearForDayClinics = new MenuItem();
-                if (Preferences.HasClinicsEnabled)
-                {//No clear for day if clinics enabled
+
                     menuClearForDayOp = menuBlockout.MenuItems[7];
                     menuClearForDayClinics = menuBlockout.MenuItems[8];
-                }
-                else
-                {//Clinics disabled, no clear for day clinics
-                    menuClearForDay = menuBlockout.MenuItems[7];
-                    menuClearForDayOp = menuBlockout.MenuItems[8];
-                }
+
                 if (!Security.IsAuthorized(Permissions.Blockouts, true))
                 {
                     menuCutCopyPaste.Enabled = false;
@@ -3129,7 +3109,7 @@ namespace OpenDental
                 SetMenuItemProperty(menuBlockout, MenuItemNames.TextApptsForDay, x =>
                 {
                     x.Visible = isTextingEnabled;
-                    x.Text = MenuItemNames.TextApptsForDay + (Preferences.HasClinicsEnabled ? ", Clinic only" : "");
+                    x.Text = MenuItemNames.TextApptsForDay + ", Clinic only";
                 });
                 //Fun, but not needed----
                 menuBlockout.MenuItems[menuBlockout.MenuItems.Count - 1].Text = "Update Provs on Future Appts (" + Operatories.GetOperatory(SheetClickedonOp).Abbrev + ")";
@@ -5803,7 +5783,7 @@ namespace OpenDental
                 MessageBox.Show("Blockout not found.");
                 return;//should never happen
             }
-            FormScheduleBlockEdit FormSB = new FormScheduleBlockEdit(SchedCur, Clinics.ClinicNum, listUserBlockoutDefs);
+            FormScheduleBlockEdit FormSB = new FormScheduleBlockEdit(SchedCur, Clinics.ClinicId, listUserBlockoutDefs);
             FormSB.ShowDialog();
             RefreshPeriodSchedules();
         }
@@ -5885,7 +5865,7 @@ namespace OpenDental
                 SchedCur.StopTime = new TimeSpan(23, 59, 00);
             }
             SchedCur.SchedType = ScheduleType.Blockout;
-            FormScheduleBlockEdit FormSB = new FormScheduleBlockEdit(SchedCur, Clinics.ClinicNum, listUserBlockoutDefs);
+            FormScheduleBlockEdit FormSB = new FormScheduleBlockEdit(SchedCur, Clinics.ClinicId, listUserBlockoutDefs);
             FormSB.IsNew = true;
             FormSB.ShowDialog();
             RefreshPeriodSchedules();
@@ -6069,9 +6049,9 @@ namespace OpenDental
 
         private void OnTextApptsForDay_Click(object sender, EventArgs e)
         {
-            List<Appointment> listAppts = Appointments.GetForPeriodList(GetDateTimeClicked(), GetDateTimeClicked(), Clinics.ClinicNum)
+            List<Appointment> listAppts = Appointments.GetForPeriodList(GetDateTimeClicked(), GetDateTimeClicked(), Clinics.ClinicId)
                 .Where(x => !x.AptStatus.In(ApptStatus.PtNote, ApptStatus.PtNoteCompleted)).ToList();
-            if (Preferences.HasClinicsEnabled && Clinics.ClinicNum == 0)
+            if (Clinics.ClinicId == 0)
             {
                 //The above query would have gotten appointments for all clinics. We need to filter to just ClinicNums of 0.
                 listAppts = listAppts.Where(x => x.ClinicNum == 0).ToList();
@@ -6087,7 +6067,8 @@ namespace OpenDental
                 MsgBox.Show("No appointments this day to send text messages to.");
                 return;
             }
-            Clinic curClinic = Clinics.GetClinic(Clinics.ClinicNum) ?? Clinics.GetDefaultForTexting() ?? Clinics.GetPracticeAsClinicZero();
+
+            Clinic curClinic = Clinic.GetById(Clinics.ClinicId) ?? Clinic.GetDefaultForTexting();
             List<PatComm> listPatComms = Patients.GetPatComms(listPatNums, curClinic, false);
             List<string> listPatsSkipped = new List<string>();
             for (int i = listPatComms.Count - 1; i >= 0; i--)
@@ -6118,7 +6099,7 @@ namespace OpenDental
             {
                 return;
             }
-            FormTxtMsgMany formTMM = new FormTxtMsgMany(listPatComms, "", Clinics.ClinicNum, SmsMessageSource.DirectSms);
+            FormTxtMsgMany formTMM = new FormTxtMsgMany(listPatComms, "", Clinics.ClinicId, SmsMessageSource.DirectSms);
             formTMM.DoCombineNumbers = true;
             formTMM.Show();
         }
@@ -6136,7 +6117,7 @@ namespace OpenDental
                 return;
             }
             Operatory operatory = Operatories.GetOperatory(SheetClickedonOp);
-            if (Security.CurrentUser.ClinicRestricted && !Clinics.GetForUserod(Security.CurrentUser).Exists(x => x.ClinicNum == operatory.ClinicNum))
+            if (Security.CurrentUser.ClinicRestricted && !Clinic.GetByUser(Security.CurrentUser).Any(x => x.Id == operatory.ClinicNum))
             {
                 MsgBox.Show(this, "You are restricted from accessing the clinic belonging to the selected operatory.  No changes will be made.");
                 return;
@@ -6633,32 +6614,27 @@ namespace OpenDental
             }
             List<long> listOpNums = new List<long>();
             List<long> listClinicNums = new List<long>();
-            if (Preferences.HasClinicsEnabled)
-            {
-                if (Clinics.ClinicNum != 0)
-                {//not HQ
-                    listClinicNums.Add(Clinics.ClinicNum);
-                    listOpNums = Operatories.GetOpsForClinic(Clinics.ClinicNum).Select(x => x.OperatoryNum).ToList();//get ops for the currently selected clinic only
-                }
-                else
-                {//HQ
-                    if (comboView.SelectedIndex == 0)
-                    {//none view
-                        MsgBox.Show(this, "Must have a view selected to search for appointment.");//this should never get hit. Just in case.
-                        return;
-                    }
-                    long apptViewNum = _listApptViews[comboView.SelectedIndex - 1].ApptViewNum;//get the currently selected HQ view for appt search.
-                                                                                               //get the disctinct clinic nums for the operatories in the current appointment view
-                    List<long> listOpsForView = ApptViewItems.GetOpsForView(apptViewNum);
-                    List<Operatory> listOperatories = Operatories.GetOperatories(listOpsForView, true);
-                    listClinicNums = listOperatories.Select(x => x.ClinicNum).Distinct().ToList();
-                    listOpNums = listOperatories.Select(x => x.OperatoryNum).ToList();
-                }
+
+            if (Clinics.ClinicId != 0)
+            {//not HQ
+                listClinicNums.Add(Clinics.ClinicId);
+                listOpNums = Operatories.GetOpsForClinic(Clinics.ClinicId).Select(x => x.OperatoryNum).ToList();//get ops for the currently selected clinic only
             }
             else
-            {//all non hidden ops
-                listOpNums = Operatories.GetDeepCopy(true).Select(x => x.OperatoryNum).ToList();
+            {//HQ
+                if (comboView.SelectedIndex == 0)
+                {//none view
+                    MsgBox.Show(this, "Must have a view selected to search for appointment.");//this should never get hit. Just in case.
+                    return;
+                }
+                long apptViewNum = _listApptViews[comboView.SelectedIndex - 1].ApptViewNum;//get the currently selected HQ view for appt search.
+                                                                                           //get the disctinct clinic nums for the operatories in the current appointment view
+                List<long> listOpsForView = ApptViewItems.GetOpsForView(apptViewNum);
+                List<Operatory> listOperatories = Operatories.GetOperatories(listOpsForView, true);
+                listClinicNums = listOperatories.Select(x => x.ClinicNum).Distinct().ToList();
+                listOpNums = listOperatories.Select(x => x.OperatoryNum).ToList();
             }
+
             //the result might be empty
             _searchResults = ApptSearch.GetSearchResults(pinBoard.SelectedAppt.AptNum, afterDate, afterDate.AddDays(731)
                 , providerNums, listOpNums, listClinicNums, beforeTime, afterTime);
@@ -6826,18 +6802,18 @@ namespace OpenDental
             {
                 apptClinicNum = ctrl.ClinicNum;
             }
-            Clinic clinic = Clinics.GetClinic(apptClinicNum);
+            Clinic clinic = Clinic.GetById(apptClinicNum);
             //Return Address--------------------------------------------------------------------------
             string str = "";
             string phone = "";
-            if (Preferences.HasClinicsEnabled && clinic != null)
+            if (clinic != null)
             {//Use clinic on appointment if clinic exists and has clinics enabled
                 str = clinic.Description + "\r\n";
                 g.DrawString(str, new Font(FontFamily.GenericSansSerif, 9, FontStyle.Bold), Brushes.Black, 60, 60);
-                str = clinic.Address + "\r\n";
-                if (clinic.Address2 != "")
+                str = clinic.AddressLine1 + "\r\n";
+                if (clinic.AddressLine2 != "")
                 {
-                    str += clinic.Address2 + "\r\n";
+                    str += clinic.AddressLine2 + "\r\n";
                 }
                 str += clinic.City + "  " + clinic.State + "  " + clinic.Zip + "\r\n";
                 phone = clinic.Phone;

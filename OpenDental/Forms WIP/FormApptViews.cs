@@ -1,6 +1,7 @@
 using OpenDentBusiness;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace OpenDental
@@ -16,32 +17,25 @@ namespace OpenDental
 
         void FormApptViews_Load(object sender, EventArgs e)
         {
-            if (!Preferences.HasClinicsEnabled)
+            clinicNum = Clinics.ClinicId;
+            clinicsList = Clinic.GetByUser(Security.CurrentUser).ToList();
+            clinicComboBox.Items.Clear();
+
+            if (!Security.CurrentUser.ClinicRestricted)
             {
-                clinicComboBox.Visible = false;
-                clinicLabel.Visible = false;
+                clinicComboBox.Items.Add("Headquarters"); // In this form, the Headquarters list is the list of views that are not assigned to a clinic
+                clinicComboBox.SelectedIndex = 0;
             }
-            else
+
+            for (int i = 0; i < clinicsList.Count; i++)
             {
-                clinicNum = Clinics.ClinicNum;
-                clinicsList = Clinics.GetForUserod(Security.CurrentUser);
-                clinicComboBox.Items.Clear();
-
-                if (!Security.CurrentUser.ClinicRestricted)
+                clinicComboBox.Items.Add(clinicsList[i].Abbr);
+                if (clinicNum == clinicsList[i].Id)
                 {
-                    clinicComboBox.Items.Add("Headquarters"); // In this form, the Headquarters list is the list of views that are not assigned to a clinic
-                    clinicComboBox.SelectedIndex = 0;
-                }
-
-                for (int i = 0; i < clinicsList.Count; i++)
-                {
-                    clinicComboBox.Items.Add(clinicsList[i].Abbr);
-                    if (clinicNum == clinicsList[i].ClinicNum)
-                    {
-                        clinicComboBox.SelectedIndex = Security.CurrentUser.ClinicRestricted ? i : i + 1;
-                    }
+                    clinicComboBox.SelectedIndex = Security.CurrentUser.ClinicRestricted ? i : i + 1;
                 }
             }
+
 
             FillViewList();
             if (Preference.GetInt(PreferenceName.AppointmentTimeIncrement) == 5)
@@ -71,7 +65,7 @@ namespace OpenDental
             for (int i = 0; i < listApptViewsTemp.Count; i++)
             {
                 // Only add views assigned to the clinic selected
-                if (Preferences.HasClinicsEnabled && clinicNum != listApptViewsTemp[i].ClinicNum) continue; 
+                if (clinicNum != listApptViewsTemp[i].ClinicNum) continue; 
 
                 if (viewsListBox.Items.Count < 12)
                     F = "F" + (viewsListBox.Items.Count + 1).ToString() + "-";
@@ -87,7 +81,7 @@ namespace OpenDental
         {
             if (Security.CurrentUser.ClinicRestricted)
             {
-                clinicNum = clinicsList[clinicComboBox.SelectedIndex].ClinicNum;
+                clinicNum = clinicsList[clinicComboBox.SelectedIndex].Id;
             }
             else
             {
@@ -97,7 +91,7 @@ namespace OpenDental
                 }
                 else
                 {
-                    clinicNum = clinicsList[clinicComboBox.SelectedIndex - 1].ClinicNum;
+                    clinicNum = clinicsList[clinicComboBox.SelectedIndex - 1].Id;
                 }
             }
             FillViewList();

@@ -24,7 +24,7 @@ namespace OpenDental {
 		///<summary>Returns the index in the main grid of the "Enabled" column.</summary>
 		private int _indexOfEnabledColumn {
 			get {
-				return (Preferences.HasClinicsEnabled ? 4 : 3);
+				return 4 ;
 			}
 		}
 
@@ -43,12 +43,11 @@ namespace OpenDental {
 
 		private void FormMobileAppDevices_Load(object sender,EventArgs e) {
 			SetFilterControlsAndAction(() => FillGrid(),comboClinic);
-			comboClinic.SelectedClinicNum=Clinics.ClinicNum;
+			comboClinic.SelectedClinicNum=Clinics.ClinicId;
 			_listAllMobileDevicesDb=MobileAppDevices.GetAll();
 			//Make a deep copy of the database list.
 			_listAllMobileDevicesNew=_listAllMobileDevicesDb.Select(x => x.Copy()).ToList();
 			FillGrid();
-			labelClinic.Visible=Preferences.HasClinicsEnabled;
 		}
 
 		private void butDelete_Click(object sender,EventArgs e) {
@@ -89,55 +88,54 @@ namespace OpenDental {
 			DialogResult=DialogResult.Cancel;
 		}
 
+        #endregion
+
+        #region Helper Methods
+
+        ///<summary>Fills the main grid. Uses the classwide list to fill the specific clinics devices (or all).</summary>
+        private void FillGrid()
+        {
+            gridMain.BeginUpdate();
+            if (gridMain.Columns.Count == 0)
+            {
+                ODGridColumn col;
+                col = new ODGridColumn(Lan.g(this, "Device Name"), 125);
+                gridMain.Columns.Add(col);
+                col = new ODGridColumn(Lan.g(this, "Last Attempt"), 135);
+                gridMain.Columns.Add(col);
+                col = new ODGridColumn(Lan.g(this, "Last Login"), 135);
+                gridMain.Columns.Add(col);
+                col = new ODGridColumn(Lan.g(this, "Clinic"), 150);
+                gridMain.Columns.Add(col);
+                col = new ODGridColumn(Lan.g(this, "Enabled"), 50, HorizontalAlignment.Center);
+                gridMain.Columns.Add(col);
+            }
+            gridMain.Rows.Clear();
+            List<MobileAppDevice> listDevicesToShow;
+            if (comboClinic.IsAllSelected)
+            {
+                //No clinics are enabled or all is selected. Show all.
+                listDevicesToShow = _listAllMobileDevicesNew;
+            }
+            else
+            {
+                //Otherwise, find the devices that match the clinic num.
+                listDevicesToShow = _listAllMobileDevicesNew.Where(x => x.ClinicNum == comboClinic.SelectedClinicNum).ToList();
+            }
+            foreach (MobileAppDevice device in listDevicesToShow)
+            {
+                ODGridRow row = new ODGridRow();
+                row.Cells.Add(device.DeviceName);
+                row.Cells.Add((device.LastAttempt.Year > 1880 ? device.LastAttempt.ToString() : ""));
+                row.Cells.Add((device.LastLogin.Year > 1880 ? device.LastLogin.ToString() : ""));
+                row.Cells.Add(Clinic.GetById(device.ClinicNum)?.Abbr ?? "");
+                row.Cells.Add((device.IsAllowed ? "X" : ""));
+                row.Tag = device;
+                gridMain.Rows.Add(row);
+            }
+            gridMain.EndUpdate();
+        }
+
 		#endregion
-
-		#region Helper Methods
-
-		///<summary>Fills the main grid. Uses the classwide list to fill the specific clinics devices (or all).</summary>
-		private void FillGrid() {
-			gridMain.BeginUpdate();
-			if(gridMain.Columns.Count==0) {
-				ODGridColumn col;
-				col=new ODGridColumn(Lan.g(this,"Device Name"),125);
-				gridMain.Columns.Add(col);
-				col=new ODGridColumn(Lan.g(this,"Last Attempt"),135);
-				gridMain.Columns.Add(col);
-				col=new ODGridColumn(Lan.g(this,"Last Login"),135);
-				gridMain.Columns.Add(col);
-				if(Preferences.HasClinicsEnabled) {
-					col=new ODGridColumn(Lan.g(this,"Clinic"),150);
-					gridMain.Columns.Add(col);
-				}
-				col=new ODGridColumn(Lan.g(this,"Enabled"),50,HorizontalAlignment.Center);
-				gridMain.Columns.Add(col);
-			}
-			gridMain.Rows.Clear();
-			List<MobileAppDevice> listDevicesToShow;
-			if(!Preferences.HasClinicsEnabled || (Preferences.HasClinicsEnabled && comboClinic.IsAllSelected)) {
-				//No clinics are enabled or all is selected. Show all.
-				listDevicesToShow=_listAllMobileDevicesNew;
-			}
-			else {
-				//Otherwise, find the devices that match the clinic num.
-				listDevicesToShow=_listAllMobileDevicesNew.Where(x => x.ClinicNum==comboClinic.SelectedClinicNum).ToList();
-			}
-			foreach(MobileAppDevice device in listDevicesToShow) {
-				ODGridRow row=new ODGridRow();
-				row.Cells.Add(device.DeviceName);
-				row.Cells.Add((device.LastAttempt.Year > 1880 ? device.LastAttempt.ToString() : ""));
-				row.Cells.Add((device.LastLogin.Year > 1880 ? device.LastLogin.ToString() : ""));
-				if(Preferences.HasClinicsEnabled) {
-					row.Cells.Add((device.ClinicNum==0 ? Clinics.GetPracticeAsClinicZero() : Clinics.GetClinic(device.ClinicNum)).Abbr);
-				}
-				row.Cells.Add((device.IsAllowed ? "X" : ""));
-				row.Tag=device;
-				gridMain.Rows.Add(row);
-			}
-			gridMain.EndUpdate();
-		}
-
-		#endregion
-
 	}
-
 }

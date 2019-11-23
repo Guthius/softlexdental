@@ -495,8 +495,40 @@ namespace OpenDentBusiness
         ClinicAllowPatientsAtHeadquarters,
         ///<summary>Boolean.  0 by default.  If enabled, lists clinics in alphabetical order.</summary>
         ClinicListIsAlphabetical,
-        ///<summary>String, "Workstation"(default), "User", "None". See FormMisc. Determines how recently viewed clinics should be tracked.</summary>
-        ClinicTrackLast,
+
+        /// <summary>
+        ///     <para>
+        ///         Determines how the last viewed should be tracked. The last selected clinic is
+        ///         gets auto selected when a user logs in.
+        ///     </para>
+        ///     <para>
+        ///         Possible values are "workstation", "user" and "none".
+        ///     </para>
+        ///     <list type="bullet">
+        ///         <item>
+        ///             <term>workstation</term>
+        ///             <description>
+        ///                 The last selected clinic is tracked per workstation.
+        ///             </description>
+        ///         </item>
+        ///         <item>
+        ///             <term>user</term>
+        ///             <description>
+        ///                 The last selected clinic is tracked per user.
+        ///             </description>
+        ///         </item>
+        ///         <item>
+        ///             <term>none</term>
+        ///             <description>
+        ///                 The last selected clinic is not tracked. Upon log in the first clinic in the list
+        ///                 of accessible clinics will be selected.
+        ///             </description>
+        ///         </item>
+        ///     </list>
+        /// </summary>
+        /// <see cref="FormMisc"/>
+        LastClinicTrackingMethod,
+
         ///<summary>Boolean.  1 by default.  If enabled, displays 'Break' and 'Lunch' buttons in Manage Module, if disabled, changes 'Lunch' button text to
         ///'Break' and disables/hides true 'Break' button.  Effectively, enabling this preference means on-the-clock-breaks are allowed, and 
         ///disabling the preference means on-the-clock-breaks are not allowed.</summary>
@@ -1050,31 +1082,35 @@ namespace OpenDentBusiness
         ///<summary>Can be any int.  Defaults to 365.</summary>
         PlannedApptDaysPast,
         PlannedApptTreatedAsRegularAppt,
-        PracticeAddress,
-        PracticeAddress2,
-        PracticeBankNumber,
-        PracticeBillingAddress,
-        PracticeBillingAddress2,
-        PracticeBillingCity,
-        PracticeBillingST,
-        PracticeBillingZip,
-        PracticeCity,
-        PracticeDefaultBillType,
-        PracticeDefaultProv,
+
+
+        [Obsolete]PracticeAddress,
+        [Obsolete]PracticeAddress2,
+        [Obsolete]PracticeBankNumber,
+        [Obsolete]PracticeBillingAddress,
+        [Obsolete]PracticeBillingAddress2,
+        [Obsolete]PracticeBillingCity,
+        [Obsolete]PracticeBillingST,
+        [Obsolete]PracticeBillingZip,
+        [Obsolete]PracticeCity,
+        [Obsolete]PracticeDefaultBillType,
+        [Obsolete]PracticeDefaultProv,
+
         ///<summary>In USA and Canada, enforced to be exactly 10 digits or blank.</summary>
-        PracticeFax,
+        [Obsolete] PracticeFax,
         ///<summary>This preference is used to hide/change certain OD features, like hiding the tooth chart and changing 'dentist' to 'provider'.</summary>
-        PracticeIsMedicalOnly,
-        PracticePayToAddress,
-        PracticePayToAddress2,
-        PracticePayToCity,
-        PracticePayToST,
-        PracticePayToZip,
+        [Obsolete]PracticeIsMedicalOnly,
+        [Obsolete]PracticePayToAddress,
+        [Obsolete]PracticePayToAddress2,
+        [Obsolete]PracticePayToCity,
+        [Obsolete]PracticePayToST,
+        [Obsolete]PracticePayToZip,
         ///<summary>In USA and Canada, enforced to be exactly 10 digits or blank.</summary>
-        PracticePhone,
-        PracticeST,
-        PracticeTitle,
-        PracticeZip,
+        [Obsolete]PracticePhone,
+        [Obsolete]PracticeST,
+        [Obsolete]PracticeTitle,
+        [Obsolete]PracticeZip,
+
         ///<summary>Boolean.  False by default.  If true, checks "Preferred only" in FormReferralSelect.</summary>
         ShowPreferedReferrals,
         ///<summary>This is the default pregnancy code used for diagnosing pregnancy from FormVitalSignEdit2014 and is displayed/set in FormEhrSettings.  When the check box for BMI and BP not taken due to pregnancy Dx is selected, this code value will be inserted into the diseasedef table in the column identified by the PregnancyDefaultCodeSystem (i.e. diseasedef.SnomedCode, diseasedef.ICD9Code).  It will then be a FK in the diseasedef table to the associated code system table.</summary>

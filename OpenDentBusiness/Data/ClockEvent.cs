@@ -273,7 +273,7 @@ namespace OpenDentBusiness
                 {
                     EmployeeId = employeeId,
                     Status = ClockEventStatus.Home,
-                    ClinicId = Clinics.ClinicNum
+                    ClinicId = Clinics.ClinicId
                 });
             }
             else if (clockEvent.Status == ClockEventStatus.Break)
@@ -298,7 +298,7 @@ namespace OpenDentBusiness
                     {
                         EmployeeId = employeeId,
                         Status = clockEventStatus,
-                        ClinicId = Clinics.ClinicNum
+                        ClinicId = Clinics.ClinicId
                     });
                 }
             }

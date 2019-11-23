@@ -9,7 +9,7 @@ namespace OpenDentBusiness
     public abstract class CacheListAbs<T> : CacheAbs<T>
     {
         private readonly ReaderWriterLockSlim slimLock = new ReaderWriterLockSlim();
-        private List<T> cacheData = new List<T>();
+        private List<T> cacheData;
         private bool isCacheAllowed = true;
 
         protected abstract DataTable ListToTable(List<T> listAllItems);

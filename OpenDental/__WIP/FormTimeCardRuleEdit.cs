@@ -40,10 +40,7 @@ namespace OpenDental
 
         private void FormTimeCardRuleEdit_Load(object sender, EventArgs e)
         {
-            var employees = 
-                Preferences.HasClinicsEnabled ? 
-                    Employee.GetEmpsForClinic(Clinics.ClinicNum) : 
-                    Employee.GetForTimeCard();
+            var employees = Employee.GetEmpsForClinic(Clinics.ClinicId);
 
             employeesListBox.Items.Add("All Employees");
             if (timeCardRule.EmployeeId == null)

@@ -739,15 +739,11 @@ namespace OpenDental {
 			textNumDecimals.Text=CultureInfo.CurrentCulture.NumberFormat.CurrencyDecimalDigits.ToString();
 			_trackLastClinicBy=new List<string> { "None","Workstation","User" };//must be in english because these values are stored in DB.
 			_trackLastClinicBy.ForEach(x => comboTrackClinic.Items.Add(Lan.g(this,x)));//translation is for display only.
-			comboTrackClinic.SelectedIndex=_trackLastClinicBy.FindIndex(x => x==Preference.GetString(PreferenceName.ClinicTrackLast));
+			comboTrackClinic.SelectedIndex=_trackLastClinicBy.FindIndex(x => x==Preference.GetString(PreferenceName.LastClinicTrackingMethod));
 			if(comboTrackClinic.SelectedIndex==-1) {
 				comboTrackClinic.SelectedIndex=0;
 			}
-			if(!Preferences.HasClinicsEnabled) {
-				labelTrackClinic.Visible=false;
-				comboTrackClinic.Visible=false;
-				checkUseClinicAbbr.Visible=false;
-			}
+
 			textSyncCode.Text=Preference.GetString(PreferenceName.CentralManagerSyncCode);
 			textAuditEntries.Text=Preference.GetString(PreferenceName.AuditTrailEntriesDisplayed);
 			if(Preference.GetBool(PreferenceName.AgingIsEnterprise)) {
@@ -890,7 +886,7 @@ namespace OpenDental {
 				| Preference.Update(PreferenceName.PatientSelectUseFNameForPreferred,checkPrefFName.Checked)
 				| Preference.Update(PreferenceName.PatientSelectUsesSearchButton,!checkRefresh.Checked)
 				| Preference.Update(PreferenceName.ImeCompositionCompatibility,checkImeCompositionCompatibility.Checked)
-				| Preference.Update(PreferenceName.ClinicTrackLast,_trackLastClinicBy[comboTrackClinic.SelectedIndex])
+				| Preference.Update(PreferenceName.LastClinicTrackingMethod,_trackLastClinicBy[comboTrackClinic.SelectedIndex])
 				| Preference.Update(PreferenceName.CentralManagerSyncCode,textSyncCode.Text)
 				| Preference.Update(PreferenceName.AuditTrailEntriesDisplayed,textAuditEntries.Text)
 				| Preference.Update(PreferenceName.AgingIsEnterprise,checkAgingIsEnterprise.Checked)

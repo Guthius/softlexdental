@@ -59,7 +59,7 @@ namespace OpenDental
             this.suppliersGrid.Location = new System.Drawing.Point(13, 19);
             this.suppliersGrid.Name = "suppliersGrid";
             this.suppliersGrid.ScrollValue = 0;
-            this.suppliersGrid.Size = new System.Drawing.Size(918, 566);
+            this.suppliersGrid.Size = new System.Drawing.Size(918, 573);
             this.suppliersGrid.TabIndex = 0;
             this.suppliersGrid.Title = "Suppliers";
             this.suppliersGrid.TitleVisible = true;

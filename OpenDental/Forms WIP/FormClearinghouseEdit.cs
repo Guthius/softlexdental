@@ -1073,9 +1073,9 @@ namespace OpenDental{
 				string translatedCommBridgeName=Lan.g("enumEclaimsCommBridge",Enum.GetNames(typeof(EclaimsCommBridge))[i]);
 				comboCommBridge.Items.Add(new ODBoxItem<EclaimsCommBridge>(translatedCommBridgeName,(EclaimsCommBridge)i));
 			}
-			if(Preferences.HasClinicsEnabled) {
+
 				FillClinics();
-			}
+			
 			FillFields();
 		}
 
@@ -1122,7 +1122,7 @@ namespace OpenDental{
 			textClientProgram.Text=ClearinghouseCur.ClientProgram;
 			//checkIsDefault.Checked=ClearinghouseCur.IsDefault;
 			textPayors.Text=ClearinghouseCur.Payors;
-			if(Preferences.HasClinicsEnabled) {
+
 				labelInfo.Visible=true;
 				labelTIN.Font=new System.Drawing.Font(labelTIN.Font,FontStyle.Bold);
 				labelSenderName.Font=new System.Drawing.Font(labelSenderName.Font,FontStyle.Bold);
@@ -1134,7 +1134,7 @@ namespace OpenDental{
 				labelClientProgram.Font=new System.Drawing.Font(labelClientProgram.Font,FontStyle.Bold);
 				labelClinic.Visible=true;
 				comboClinic.Visible=true;
-			}
+			
 			if(ClinicNum!=0) {
 				textDescription.ReadOnly=true;
 				textISA02.ReadOnly=true;
@@ -1199,7 +1199,7 @@ namespace OpenDental{
 		private void FillClinics() {
 			for(int i=0;i<ListClinics.Count;i++) {
 				comboClinic.Items.Add(ListClinics[i].Abbr);
-				if(ListClinics[i].ClinicNum==ClinicNum) {
+				if(ListClinics[i].Id==ClinicNum) {
 					comboClinic.SelectedIndex=i;
 				}
 			}
@@ -1517,7 +1517,7 @@ namespace OpenDental{
 				return;
 			}
 			clinicSelectionLastIndex=comboClinic.SelectedIndex;
-			ClinicNum=ListClinics[clinicSelectionLastIndex].ClinicNum;
+			ClinicNum=ListClinics[clinicSelectionLastIndex].Id;
 			FillFields();
 		}
 		

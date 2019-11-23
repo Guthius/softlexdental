@@ -109,7 +109,7 @@ namespace OpenDental
             }
             billingTypeComboBox.Items.Add(Lan.g(this, "All"));
             billingTypeComboBox.SelectedIndex = 0;
-            _listBillingTypeDefs = Definition.GetByCategory(DefinitionCategory.BillingTypes);;
+            _listBillingTypeDefs = Definition.GetByCategory(DefinitionCategory.BillingTypes); ;
             for (int i = 0; i < _listBillingTypeDefs.Count; i++)
             {
                 billingTypeComboBox.Items.Add(_listBillingTypeDefs[i].Description);
@@ -129,37 +129,31 @@ namespace OpenDental
                     siteComboBox.Items.Add(_listSites[i].Description);
                 }
             }
-            if (!Preferences.HasClinicsEnabled)
-            {
-                clinicLabel.Visible = false;
-                clinicComboBox.Visible = false;
+
+            //if the current user is restricted to a clinic (or in the future many clinics), All will refer to only those clinics the user has access to. May only be one clinic.
+            clinicComboBox.Items.Add(new ODBoxItem<Clinic>(Lan.g(this, "All"), new Clinic()));
+            clinicComboBox.SelectedIndex = 0;
+            if (Security.IsAuthorized(Permissions.UnrestrictedSearch, true))
+            {//user has permission to search all clinics though restricted. 
+                _listClinics = Clinic.All().ToList();
             }
             else
+            {//only authorized to search restricted clinics.
+                _listClinics = Clinic.GetByUser(Security.CurrentUser, true).ToList();//could be only one if the user is restricted
+            }
+            for (int i = 0; i < _listClinics.Count; i++)
             {
-                //if the current user is restricted to a clinic (or in the future many clinics), All will refer to only those clinics the user has access to. May only be one clinic.
-                clinicComboBox.Items.Add(new ODBoxItem<Clinic>(Lan.g(this, "All"), new Clinic()));
-                clinicComboBox.SelectedIndex = 0;
-                if (Security.IsAuthorized(Permissions.UnrestrictedSearch, true))
-                {//user has permission to search all clinics though restricted. 
-                    _listClinics = Clinics.GetDeepCopy();
-                }
-                else
-                {//only authorized to search restricted clinics.
-                    _listClinics = Clinics.GetAllForUserod(Security.CurrentUser);//could be only one if the user is restricted
-                }
-                for (int i = 0; i < _listClinics.Count; i++)
+                if (_listClinics[i].IsHidden)
                 {
-                    if (_listClinics[i].IsHidden)
-                    {
-                        continue;//Don't add hidden clinics to the combo
-                    }
-                    clinicComboBox.Items.Add(new ODBoxItem<Clinic>(_listClinics[i].Abbr, _listClinics[i]));
-                    if (Clinics.ClinicNum == _listClinics[i].ClinicNum)
-                    {
-                        clinicComboBox.SelectedIndex = clinicComboBox.Items.Count - 1;
-                    }
+                    continue;//Don't add hidden clinics to the combo
+                }
+                clinicComboBox.Items.Add(new ODBoxItem<Clinic>(_listClinics[i].Abbr, _listClinics[i]));
+                if (Clinics.ClinicId == _listClinics[i].Id)
+                {
+                    clinicComboBox.SelectedIndex = clinicComboBox.Items.Count - 1;
                 }
             }
+
             FillSearchOption();
             SetGridCols();
             if (ExplicitPatNums != null && ExplicitPatNums.Count > 0)
@@ -422,29 +416,28 @@ namespace OpenDental
             }
             DateTime birthdate = PIn.Date(birthdateTextBox.Text); //this will frequently be minval.
             string clinicNums = "";
-            if (Preferences.HasClinicsEnabled)
+
+            if (clinicComboBox.SelectedIndex == 0)
+            {//'All' is selected
+                clinicNums = string.Join(",", _listClinics
+                    .Where(x => !x.IsHidden || checkShowArchived.Checked)//Only show hidden clinics if "Show Archived" is checked
+                    .Select(x => x.Id));
+            }
+            else
             {
-                if (clinicComboBox.SelectedIndex == 0)
-                {//'All' is selected
-                    clinicNums = string.Join(",", _listClinics
-                        .Where(x => !x.IsHidden || checkShowArchived.Checked)//Only show hidden clinics if "Show Archived" is checked
-                        .Select(x => x.ClinicNum));
-                }
-                else
+                clinicNums = ((ODBoxItem<Clinic>)clinicComboBox.SelectedItem).Tag.Id.ToString();
+                if (checkShowArchived.Checked)
                 {
-                    clinicNums = ((ODBoxItem<Clinic>)clinicComboBox.SelectedItem).Tag.ClinicNum.ToString();
-                    if (checkShowArchived.Checked)
+                    foreach (Clinic clinic in _listClinics)
                     {
-                        foreach (Clinic clinic in _listClinics)
+                        if (clinic.IsHidden)
                         {
-                            if (clinic.IsHidden)
-                            {
-                                clinicNums += "," + clinic.ClinicNum.ToString();
-                            }
+                            clinicNums += "," + clinic.Id.ToString();
                         }
                     }
                 }
             }
+
             bool hasSpecialty = _ListDisplayFields.Any(x => x.InternalName == "Specialty");
             DataTable dataTablePats = new DataTable();
             _fillGridThread = new ODThread(new ODThread.WorkerDelegate((ODThread o) =>
@@ -683,9 +676,9 @@ namespace OpenDental
             long primaryProviderNum = 0;
             if (!Preference.GetBool(PreferenceName.PriProvDefaultToSelectProv))
             {
-                if (Preferences.HasClinicsEnabled && clinicComboBox.SelectedIndex != 0)
+                if (clinicComboBox.SelectedIndex != 0)
                 {
-                    var prov = Providers.GetDefaultProvider(((ODBoxItem<Clinic>)clinicComboBox.SelectedItem).Tag.ClinicNum);
+                    var prov = Providers.GetDefaultProvider(((ODBoxItem<Clinic>)clinicComboBox.SelectedItem).Tag.Id);
                     if (prov != null)
                     {
                         primaryProviderNum = prov.ProvNum;
@@ -707,7 +700,7 @@ namespace OpenDental
                     firstNameTextBox.Text, 
                     PIn.Date(birthdateTextBox.Text), 
                     primaryProviderNum, 
-                    Clinics.ClinicNum, 
+                    Clinics.ClinicId, 
                     "Created from Select Patient window.");
 
             var family = Patients.GetFamily(patient.PatNum);

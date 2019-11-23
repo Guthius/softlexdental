@@ -53,19 +53,18 @@ namespace OpenDentBusiness
                 patNumClause = "medlab.PatNum=0";
             }
             List<string> listWhereClauseStrs = new List<string>();
-            if (Preferences.HasClinicsEnabled)
-            {
-                List<string> listAllClinicAcctNums = Clinics.GetWhere(x => !string.IsNullOrWhiteSpace(x.MedLabAccountNum)).Select(x => x.MedLabAccountNum).ToList();
-                if (listSelectedClinics.Any(x => x.ClinicNum == 0) && listAllClinicAcctNums.Count > 0)
+
+                List<string> listAllClinicAcctNums = Clinic.All().Where(x => !string.IsNullOrWhiteSpace(x.MedLabAccountId)).Select(x => x.MedLabAccountId).ToList();
+                if (listSelectedClinics.Any(x => x.Id == 0) && listAllClinicAcctNums.Count > 0)
                 {//include "Unassigned" medlabs
                     listWhereClauseStrs.Add("medlab.PatAccountNum NOT IN (" + string.Join(",", listAllClinicAcctNums) + ")");
                 }
-                listSelectedClinics.RemoveAll(x => x.ClinicNum <= 0 || string.IsNullOrWhiteSpace(x.MedLabAccountNum));
+                listSelectedClinics.RemoveAll(x => x.Id <= 0 || string.IsNullOrWhiteSpace(x.MedLabAccountId));
                 if (listSelectedClinics.Count > 0)
                 {
-                    listWhereClauseStrs.Add("medlab.PatAccountNum IN (" + string.Join(",", listSelectedClinics.Select(x => x.MedLabAccountNum)) + ")");
+                    listWhereClauseStrs.Add("medlab.PatAccountNum IN (" + string.Join(",", listSelectedClinics.Select(x => x.MedLabAccountId)) + ")");
                 }
-            }
+            
             string command = "SELECT MAX(CASE WHEN medlab.DateTimeReported=maxDate.DateTimeReported THEN MedLabNum ELSE 0 END) AS MedLabNum,"
                 + "SendingApp,SendingFacility,medlab.PatNum,medlab.ProvNum,PatIDLab,PatIDAlt,PatAge,PatAccountNum,PatFasting,medlab.SpecimenID,"
                 + "SpecimenIDFiller,ObsTestID,ObsTestLoinc,ObsTestLoincText,DateTimeCollected,TotalVolume,ActionCode,ClinicalInfo,"
@@ -82,7 +81,7 @@ namespace OpenDentBusiness
                     + "GROUP BY PatNum,ProvNum,SpecimenID "
                     + "HAVING " + DbHelper.DtimeToDate("MAX(DateTimeReported)") + " BETWEEN " + POut.Date(dateReportedStart) + " AND " + POut.Date(dateReportedEnd)
                 + ") maxDate ON maxDate.PatNum=medlab.PatNum AND maxDate.ProvNum=medlab.ProvNum AND maxDate.SpecimenID=medlab.SpecimenID ";
-            if (Preferences.HasClinicsEnabled && listWhereClauseStrs.Count > 0)
+            if (listWhereClauseStrs.Count > 0)
             {
                 command += "WHERE (" + string.Join(" OR ", listWhereClauseStrs) + ") ";
             }

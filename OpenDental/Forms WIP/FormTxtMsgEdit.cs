@@ -57,14 +57,14 @@ namespace OpenDental {
 				return false;
 			}
 			if(SmsPhones.IsIntegratedTextingEnabled()) {
-				if(!Preferences.HasClinicsEnabled && Preference.GetDateTime(PreferenceName.SmsContractDate).Year<1880) { //Checking for practice (clinics turned off).
+				if( Preference.GetDateTime(PreferenceName.SmsContractDate).Year<1880) { //Checking for practice (clinics turned off).
 					MsgBox.Show(this,"Integrated Texting has not been enabled.");
 					return false;
 				}
-				else if(Preferences.HasClinicsEnabled && !Clinics.IsTextingEnabled(clinicNum)) { //Checking for specific clinic.
+				else if(!Clinic.GetById(clinicNum).IsTextingEnabled) { //Checking for specific clinic.
 					//This is likely to happen a few times per office until they setup texting properly.
 					if(clinicNum!=0) {
-						MessageBox.Show(Lans.g(this,"Integrated Texting has not been enabled for the following clinic")+":\r\n"+Clinics.GetClinic(clinicNum).Description+".");
+						MessageBox.Show(Lans.g(this,"Integrated Texting has not been enabled for the following clinic")+":\r\n"+Clinic.GetById(clinicNum).Description+".");
 					}
 					else {
 						//Should never happen. This message is precautionary.
@@ -154,7 +154,7 @@ namespace OpenDental {
 						+"will be created and any replies to this message will not be automatically associated with any patient.  Continue?")) {
 					return;
 				}
-				long clinicNum= Clinics.ClinicNum;
+				long clinicNum= Clinics.ClinicId;
 				if(clinicNum==0) {
 						clinicNum=Preference.GetLong(PreferenceName.TextingDefaultClinicNum);
 				}

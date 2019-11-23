@@ -247,7 +247,7 @@ namespace OpenDental
 					if(Programs.UsingEcwTightOrFullMode()) {
 						_sheetLayoutModeCur=SheetFieldLayoutMode.Ecw;
 					}
-					else if(Clinics.IsMedicalPracticeOrClinic(Clinics.ClinicNum)) {
+					else if(Clinic.GetById(Clinics.ClinicId).IsMedicalOnly) {
 						_sheetLayoutModeCur=SheetFieldLayoutMode.MedicalPractice;
 					}
 					else if(Programs.UsingOrion) {

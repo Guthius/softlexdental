@@ -10,10 +10,9 @@ namespace OpenDentBusiness
         ///<summary>If not using clinics then supply an empty list of clinicNums. dateStart and dateEnd can be MinVal/MaxVal to indicate "forever".</summary>
         public static DataTable GetActivePatientTable(DateTime dateStart, DateTime dateEnd, List<long> listProvNums, List<long> listClinicNums, List<long> listBillingTypes, bool hasAllProvs, bool hasAllClinics, bool hasAllBilling)
         {
-            bool hasClinicsEnabled = Preference.HasClinicsEnabledNoCache;
             List<Provider> listProvs = Providers.GetAll();
             List<Definition> listDefs = Definition.GetByCategory(DefinitionCategory.BillingTypes);
-            List<Clinic> listClinics = Clinics.GetClinicsNoCache();
+            List<Clinic> listClinics = Clinic.All().ToList();
             DataTable table = new DataTable();
             table.Columns.Add("name");
             table.Columns.Add("priProv");
@@ -52,15 +51,8 @@ namespace OpenDentBusiness
             }
             command += "AND patient.BillingType IN(" + String.Join(",", listBillingTypes) + ") ";
             command += "GROUP BY patient.PatNum";
+            command += " ORDER BY patient.ClinicNum,provider.Abbr,patient.LName,patient.FName";
 
-            if (!hasClinicsEnabled)
-            {
-                command += " ORDER BY provider.Abbr,patient.LName,patient.FName";
-            }
-            else
-            {//Using clinics
-                command += " ORDER BY patient.ClinicNum,provider.Abbr,patient.LName,patient.FName";
-            }
             DataTable raw = DataConnection.ExecuteDataTable(command);
             Patient pat;
             for (int i = 0; i < raw.Rows.Count; i++)
@@ -85,15 +77,13 @@ namespace OpenDentBusiness
                 row["WirelessPhone"] = raw.Rows[i]["WirelessPhone"].ToString();
                 row["billingType"] = (billingType == null) ? "" : billingType.Value;
                 row["secProv"] = Providers.GetLName(PIn.Long(raw.Rows[i]["SecProv"].ToString()), listProvs);
-                if (hasClinicsEnabled)
-                {//Using clinics
-                    string clinicDesc = Clinics.GetDesc(PIn.Long(raw.Rows[i]["ClinicNum"].ToString()), listClinics);
-                    row["clinic"] = (clinicDesc == "") ? Lans.g("FormRpPayPlans", "Unassigned") : clinicDesc;
-                }
+
+                string clinicDesc = Clinic.GetById(PIn.Long(raw.Rows[i]["ClinicNum"].ToString())).Description;
+                row["clinic"] = (clinicDesc == "") ? "Unassigned" : clinicDesc;
+
                 table.Rows.Add(row);
             }
             return table;
         }
-
     }
 }

@@ -1259,13 +1259,9 @@ namespace OpenDental{
 			else {
 				_listPayPlanCharges=PayPlanCharges.GetForPayPlan(_payPlanCur.PayPlanNum);
 			}
-			if(!Preferences.HasClinicsEnabled) {
-				labelClinic.Visible=false;
-				comboClinic.Visible=false;
-			}
-			else {
+
 				_listClinics=new List<Clinic>() { new Clinic() { Abbr=Lan.g(this,"None") } }; //Seed with "None"
-				Clinics.GetForUserod(Security.CurrentUser).ForEach(x => _listClinics.Add(x));//do not re-organize from cache. They could either be alphabetizeded or sorted by item order.
+				Clinic.GetByUser(Security.CurrentUser).ForEach(x => _listClinics.Add(x));//do not re-organize from cache. They could either be alphabetizeded or sorted by item order.
 				_listClinics.ForEach(x => comboClinic.Items.Add(x.Abbr));
 				if(IsNew) {
 					_selectedClinicNum=PatCur.ClinicNum;
@@ -1276,8 +1272,8 @@ namespace OpenDental{
 				else {
 					_selectedClinicNum=_listPayPlanCharges[0].ClinicNum;
 				}
-				comboClinic.IndexSelectOrSetText(_listClinics.FindIndex(x => x.ClinicNum==_selectedClinicNum),() => { return Clinics.GetAbbr(_selectedClinicNum); });
-			}
+				comboClinic.IndexSelectOrSetText(_listClinics.FindIndex(x => x.Id==_selectedClinicNum),() => { return Clinic.GetById(_selectedClinicNum).Abbr; });
+			
 			if(_listPayPlanCharges.Count>0) {
 				_selectedProvNum=_listPayPlanCharges[0].ProvNum;
 			}
@@ -1387,7 +1383,7 @@ namespace OpenDental{
 
 		private void comboClinic_SelectedIndexChanged(object sender,EventArgs e) {
 			if(comboClinic.SelectedIndex>-1) {
-				_selectedClinicNum=_listClinics[comboClinic.SelectedIndex].ClinicNum;
+				_selectedClinicNum=_listClinics[comboClinic.SelectedIndex].Id;
 			}
 			FillComboProv();
 		}

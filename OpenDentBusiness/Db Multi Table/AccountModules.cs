@@ -981,7 +981,7 @@ namespace OpenDentBusiness
                 row["ClaimPaymentNum"] = "1";//this is now just a boolean flag indicating that it is a payment.
                                              //this is because it will frequently not be attached to an actual claim payment.
                 long clinicNumCur = PIn.Long(rawClaimPayRow["ClinicNum"].ToString());
-                row["clinic"] = Clinics.GetDesc(clinicNumCur);
+                row["clinic"] = Clinic.GetById(clinicNumCur).Description;
                 row["ClinicNum"] = clinicNumCur;
                 row["colorText"] = listDefs[7].Color.ToArgb().ToString();
                 amt = PIn.Decimal(rawClaimPayRow["InsPayAmt_"].ToString());//payments tracked in payment plans will show in the payment plan grid
@@ -1129,7 +1129,7 @@ namespace OpenDentBusiness
                 row["ClaimNum"] = 0;
                 row["ClaimPaymentNum"] = "0";
                 long clinicNumCur = PIn.Long(rawProcRow["ClinicNum"].ToString());
-                row["clinic"] = Clinics.GetDesc(clinicNumCur);
+                row["clinic"] = Clinic.GetById(clinicNumCur).Description;
                 row["ClinicNum"] = clinicNumCur;
                 string procCode = rawProcRow["ProcCode"].ToString();
                 if (procCode == "D9986")
@@ -1337,7 +1337,7 @@ namespace OpenDentBusiness
                 row["ClaimNum"] = 0;
                 row["ClaimPaymentNum"] = "0";
                 long clinicNumCur = PIn.Long(rawAdj.Rows[i]["ClinicNum"].ToString());
-                row["clinic"] = Clinics.GetDesc(clinicNumCur);
+                row["clinic"] = Clinic.GetById(clinicNumCur).Description;
                 row["ClinicNum"] = clinicNumCur;
                 row["colorText"] = listDefs[1].Color.ToArgb().ToString();
                 dateT = PIn.DateT(rawAdj.Rows[i]["AdjDate"].ToString());
@@ -1509,7 +1509,7 @@ namespace OpenDentBusiness
                 row["ClaimNum"] = 0;
                 row["ClaimPaymentNum"] = "0";
                 long clinicNumCur = PIn.Long(rawPay.Rows[i]["ClinicNum"].ToString());
-                row["clinic"] = Clinics.GetDesc(clinicNumCur);
+                row["clinic"] = Clinic.GetById(clinicNumCur).Description;
                 row["ClinicNum"] = clinicNumCur;
                 row["colorText"] = listDefs[3].Color.ToArgb().ToString();
                 amt = PIn.Decimal(rawPay.Rows[i]["splitAmt_"].ToString());
@@ -1670,7 +1670,7 @@ namespace OpenDentBusiness
                 row["ClaimNum"] = PIn.Long(rawClaim.Rows[i]["ClaimNum"].ToString());
                 row["ClaimPaymentNum"] = "0";
                 long clinicNumCur = PIn.Long(rawClaim.Rows[i]["ClinicNum"].ToString());
-                row["clinic"] = Clinics.GetDesc(clinicNumCur);
+                row["clinic"] = Clinic.GetById(clinicNumCur).Description;
                 row["ClinicNum"] = clinicNumCur;
                 row["colorText"] = listDefs[4].Color.ToArgb().ToString();
                 //might be changed lower down based on claim status
@@ -1964,7 +1964,7 @@ namespace OpenDentBusiness
                     row["ClaimNum"] = 0;
                     row["ClaimPaymentNum"] = "0";
                     long clinicNumCur = PIn.Long(rawPayPlan.Rows[i]["ClinicNum"].ToString());
-                    row["clinic"] = Clinics.GetDesc(clinicNumCur);
+                    row["clinic"] = Clinic.GetById(clinicNumCur).Description;
                     row["ClinicNum"] = clinicNumCur;
                     row["colorText"] = listDefs[6].Color.ToArgb().ToString();
                     //amt=PIn.PDouble(rawPayPlan.Rows[i]["principal_"].ToString());
@@ -2086,7 +2086,7 @@ namespace OpenDentBusiness
                     row["ClaimNum"] = 0;
                     row["ClaimPaymentNum"] = "0";
                     long clinicNumCur = PIn.Long(rawPayPlan2.Rows[i]["ClinicNum"].ToString());
-                    row["clinic"] = Clinics.GetDesc(clinicNumCur);
+                    row["clinic"] = Clinic.GetById(clinicNumCur).Description;
                     row["ClinicNum"] = clinicNumCur;
                     row["colorText"] = listDefs[6].Color.ToArgb().ToString();
                     dateT = PIn.DateT(rawPayPlan2.Rows[i]["ChargeDate"].ToString());
@@ -2168,7 +2168,7 @@ namespace OpenDentBusiness
                     row["ClaimNum"] = 0;
                     row["ClaimPaymentNum"] = "0";
                     long clinicNumCur = PIn.Long(rawPayPlan3.Rows[i]["ClinicNum"].ToString());
-                    row["clinic"] = Clinics.GetDesc(clinicNumCur);
+                    row["clinic"] = Clinic.GetById(clinicNumCur).Description;
                     row["ClinicNum"] = clinicNumCur;
                     row["colorText"] = listDefs[6].Color.ToArgb().ToString();
                     dateT = PIn.DateT(rawPayPlan3.Rows[i]["ChargeDate"].ToString());
@@ -3248,7 +3248,7 @@ namespace OpenDentBusiness
             for (int i = 1; i < listProcs.Count; i++)
             {//skips 0
                 proc = listProcs[i];
-                if (Preferences.HasClinicsEnabled && clinicNum != proc.ClinicNum)
+                if (clinicNum != proc.ClinicNum)
                 {
                     claimError = claimError.AppendLine(Lans.g("ContrAccount", "All procedures do not have the same clinic."));
                     return new Tuple<bool, Claim, string>(false, new Claim(), claimError);

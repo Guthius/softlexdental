@@ -66,7 +66,7 @@ namespace OpenDentBusiness
         {
             clinicQueue = new FeeCacheQueue(maxClinics)
             {
-                CurClinicNum = Clinics.ClinicNum
+                CurClinicNum = Clinics.ClinicId
             };
 
             feeDictionary = new FeeCacheDictionary();
@@ -352,11 +352,11 @@ namespace OpenDentBusiness
                 throw new Exception("No fee cache.");
             }
             long removedClinic;
-            if (clinicQueue.CurClinicNum != Clinics.ClinicNum)
+            if (clinicQueue.CurClinicNum != Clinics.ClinicId)
             {
-                if (clinicQueue.Contains(Clinics.ClinicNum))
+                if (clinicQueue.Contains(Clinics.ClinicId))
                 {
-                    clinicQueue.CurClinicNum = Clinics.ClinicNum;
+                    clinicQueue.CurClinicNum = Clinics.ClinicId;
                 }
                 else
                 {
@@ -365,8 +365,8 @@ namespace OpenDentBusiness
                     {
                         RemoveClinicFees(removedClinic);
                     }
-                    AddClinicFees(Clinics.ClinicNum);
-                    clinicQueue.CurClinicNum = Clinics.ClinicNum;
+                    AddClinicFees(Clinics.ClinicId);
+                    clinicQueue.CurClinicNum = Clinics.ClinicId;
                 }
             }
             if (clinicQueue.Contains(clinicNum))

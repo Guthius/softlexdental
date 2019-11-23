@@ -197,7 +197,7 @@ namespace OpenDentBusiness{
 						ProcedureCode procCode=ProcedureCodes.GetProcCode(fee.CodeNum);
 						string securityLogText="Fee Schedule \""+fromFeeSched.Description+"\" copied to Fee Schedule \""+toFeeSched.Description+"\", ";
 						if(clinicNumTo!=0){
-							securityLogText+="To Clinic \""+Clinics.GetDesc(clinicNumTo)+"\", ";
+							securityLogText+="To Clinic \""+Clinic.GetById(clinicNumTo).Description+"\", ";
 						}
 						securityLogText+="Proc Code \""+procCode.ProcCode+"\", Fee \""+fee.Amount+"\"";
 						SecurityLog.Write(null, SecurityLogEvents.FeeSchedEdit, securityLogText);
@@ -383,10 +383,10 @@ namespace OpenDentBusiness{
 				object lockObj=new object();//used to lock rowCurIndex so the threads will correctly increment the count
 				progress.Fire(ODEventType.FeeSched,new ProgressBarHelper(Lans.g("FeeSchedEvent","Getting list to update writeoffs..."),
 						progressBarEventType: ProgBarEventType.TextMsg));
-				listFeesHQandClinic=Fees.GetByClinicNum(clinicCur.ClinicNum);//could be empty for some clinics that don't use overrides
+				listFeesHQandClinic=Fees.GetByClinicNum(clinicCur.Id);//could be empty for some clinics that don't use overrides
 				listFeesHQandClinic.AddRange(listFeesHQ);
 				lookupFeesByCodeAndSched=(Lookup<FeeKey2,Fee>)listFeesHQandClinic.ToLookup(x => new FeeKey2(x.CodeNum,x.FeeSched));
-				dictPatProcs=Procedures.GetAllTp(clinicCur.ClinicNum)
+				dictPatProcs=Procedures.GetAllTp(clinicCur.Id)
 					.GroupBy(x => x.PatNum)
 					.ToDictionary(x => x.Key,x => Procedures.SortListByTreatPlanPriority(x.ToList()).ToList());
 				#region Has Paused or Cancelled
@@ -495,12 +495,12 @@ namespace OpenDentBusiness{
 				totalWriteoffsUpdated+=rowCurIndex;
 				if(doUpdatePrevClinicPref && rowCurIndex==procCount) {
 					//if storing previously completed clinic and we actually completed this clinic's procs, update the pref
-					if(listWriteoffClinics.Last().ClinicNum==clinicCur.ClinicNum) {
+					if(listWriteoffClinics.Last().Id==clinicCur.Id) {
 						//if this is the last clinic in the list, clear the last clinic pref so the next time it will run for all clinics
 						Preference.Update(PreferenceName.GlobalUpdateWriteOffLastClinicCompleted,"");
 					}
 					else {
-						Preference.Update(PreferenceName.GlobalUpdateWriteOffLastClinicCompleted,clinicCur.ClinicNum);
+						Preference.Update(PreferenceName.GlobalUpdateWriteOffLastClinicCompleted,clinicCur.Id);
 					}
 
                     CacheManager.InvalidateEverywhere<Preference>();

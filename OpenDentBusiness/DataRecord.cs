@@ -44,6 +44,25 @@ namespace OpenDentBusiness
     public class DataRecordBase
     {
         /// <summary>
+        /// Returns the value of a nullable if it has a value; if the value is null, 
+        /// <see cref="DBNull.Value"/> is returned instead.
+        /// </summary>
+        /// <typeparam name="T">The type of the value.</typeparam>
+        /// <param name="value">The value.</param>
+        /// <returns></returns>
+        protected static object ValueOrDbNull<T>(T? value) where T : struct =>
+            value.HasValue ? (object)value.Value : DBNull.Value;
+
+        /// <summary>
+        /// Returns the specified string value if its not null and non empty; otherwise,
+        /// it returns <see cref="DBNull.Value"/> instead.
+        /// </summary>
+        /// <param name="value">The string value.</param>
+        /// <returns>The string value or <see cref="DBNull.Value"/>.</returns>
+        protected static object ValueOrDbNull(string value) =>
+            string.IsNullOrEmpty(value) ? DBNull.Value : (object)value;
+
+        /// <summary>
         /// Selects a list of records from the database.
         /// </summary>
         /// <typeparam name="T">The data record type.</typeparam>

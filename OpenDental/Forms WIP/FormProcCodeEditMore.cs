@@ -29,7 +29,7 @@ namespace OpenDental {
 
 		///<summary></summary>
 		private void FillAndSortListFees() {
-			List<long> listClinicNums=Clinics.GetForUserod(Security.CurrentUser,true).Select(x => x.ClinicNum).ToList();
+			List<long> listClinicNums=Clinic.GetByUser(Security.CurrentUser,true).Select(x => x.Id).ToList();
 			_listFees=Fees.GetFeesForCode(_procCode.CodeNum,listClinicNums);//already sorted
 			if(Preference.GetBool(PreferenceName.FeesUseCache)){
 				//Create a temporary list that will be used to keep track of the Fees after they've been sorted within each fee schedule.
@@ -43,64 +43,61 @@ namespace OpenDental {
 			}
 		}
 
-		private void FillGrid() {
-			gridMain.BeginUpdate();
-			gridMain.Columns.Clear();
-			ODGridColumn col;
-			if(!Preferences.HasClinicsEnabled) {
-				col=new ODGridColumn(Lan.g("TableProcCodeEditMore","Schedule"),200);
-				gridMain.Columns.Add(col);
-				col=new ODGridColumn(Lan.g("TableProcCodeEditMore","Provider"),135);
-				gridMain.Columns.Add(col);
-			}
-			else {//Using clinics.
-				col=new ODGridColumn(Lan.g("TableProcCodeEditMore","Schedule"),130);
-				gridMain.Columns.Add(col);
-				col=new ODGridColumn(Lan.g("TableProcCodeEditMore","Clinic"),130);
-				gridMain.Columns.Add(col);
-				col=new ODGridColumn(Lan.g("TableProcCodeEditMore","Provider"),75);
-				gridMain.Columns.Add(col);
-			}
-			col=new ODGridColumn(Lan.g("TableProcCodeEditMore","Amount"),100,HorizontalAlignment.Right);
-			gridMain.Columns.Add(col);
-			gridMain.Rows.Clear();
-			ODGridRow row;
-			long lastFeeSched=0;
-			for(int i=0;i<_listFees.Count;i++) {
-				row=new ODGridRow();
-				if(_listFees[i].FeeSched!=lastFeeSched) {
-					row.Cells.Add(FeeScheds.GetDescription(_listFees[i].FeeSched));
-					row.Bold=true;
-					lastFeeSched=_listFees[i].FeeSched;
-					row.BackColor=Color.LightBlue;
-					if(_listFees[i].ClinicNum!=0 || _listFees[i].ProvNum!=0) { //FeeSched change, but not with a default fee. Insert placeholder row.
-						if(Preferences.HasClinicsEnabled) {
-							row.Cells.Add("");
-						}
-						row.Cells.Add("");
-						row.Cells.Add("");
-						Fee fee=new Fee();
-						fee.FeeSched=_listFees[i].FeeSched;
-						row.Tag=fee;
-						gridMain.Rows.Add(row);
-						//Now that we have a placeholder for the default fee (none was found), go about adding the next row (non-default fee).
-						row=new ODGridRow();
-						row.Cells.Add("");
-					}
-				}
-				else {
-					row.Cells.Add("");
-				}
-				row.Tag=_listFees[i];
-				if(Preferences.HasClinicsEnabled) { //Using clinics
-					row.Cells.Add(Clinics.GetAbbr(_listFees[i].ClinicNum)); //Returns "" if invalid clinicnum (ie. 0)
-				}
-				row.Cells.Add(Providers.GetAbbr(_listFees[i].ProvNum)); //Returns "" if invalid provnum (ie. 0)
-				row.Cells.Add(_listFees[i].Amount.ToString("n"));
-				gridMain.Rows.Add(row);
-			}
-			gridMain.EndUpdate();
-		}
+        private void FillGrid()
+        {
+            gridMain.BeginUpdate();
+            gridMain.Columns.Clear();
+            ODGridColumn col;
+
+            col = new ODGridColumn(Lan.g("TableProcCodeEditMore", "Schedule"), 130);
+            gridMain.Columns.Add(col);
+            col = new ODGridColumn(Lan.g("TableProcCodeEditMore", "Clinic"), 130);
+            gridMain.Columns.Add(col);
+            col = new ODGridColumn(Lan.g("TableProcCodeEditMore", "Provider"), 75);
+            gridMain.Columns.Add(col);
+
+            col = new ODGridColumn(Lan.g("TableProcCodeEditMore", "Amount"), 100, HorizontalAlignment.Right);
+            gridMain.Columns.Add(col);
+            gridMain.Rows.Clear();
+            ODGridRow row;
+            long lastFeeSched = 0;
+            for (int i = 0; i < _listFees.Count; i++)
+            {
+                row = new ODGridRow();
+                if (_listFees[i].FeeSched != lastFeeSched)
+                {
+                    row.Cells.Add(FeeScheds.GetDescription(_listFees[i].FeeSched));
+                    row.Bold = true;
+                    lastFeeSched = _listFees[i].FeeSched;
+                    row.BackColor = Color.LightBlue;
+                    if (_listFees[i].ClinicNum != 0 || _listFees[i].ProvNum != 0)
+                    { //FeeSched change, but not with a default fee. Insert placeholder row.
+
+                        row.Cells.Add("");
+                        row.Cells.Add("");
+                        row.Cells.Add("");
+                        Fee fee = new Fee();
+                        fee.FeeSched = _listFees[i].FeeSched;
+                        row.Tag = fee;
+                        gridMain.Rows.Add(row);
+                        //Now that we have a placeholder for the default fee (none was found), go about adding the next row (non-default fee).
+                        row = new ODGridRow();
+                        row.Cells.Add("");
+                    }
+                }
+                else
+                {
+                    row.Cells.Add("");
+                }
+                row.Tag = _listFees[i];
+
+                row.Cells.Add(Clinic.GetById(_listFees[i].ClinicNum).Abbr); //Returns "" if invalid clinicnum (ie. 0)
+                row.Cells.Add(Providers.GetAbbr(_listFees[i].ProvNum)); //Returns "" if invalid provnum (ie. 0)
+                row.Cells.Add(_listFees[i].Amount.ToString("n"));
+                gridMain.Rows.Add(row);
+            }
+            gridMain.EndUpdate();
+        }
 
 		private void gridMain_CellDoubleClick(object sender,UI.ODGridClickEventArgs e) {
 			Fee fee=(Fee)gridMain.Rows[e.Row].Tag;

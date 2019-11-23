@@ -6,26 +6,16 @@ namespace OpenDentBusiness
 {
     public class RpClaimNotSent
     {
-
-        public static DataTable GetClaimsNotSent(DateTime fromDate, DateTime toDate, List<long> listClinicNums
-            , bool hasClaimTypeExpanded, ClaimNotSentStatuses claimStatusFilter)
+        public static DataTable GetClaimsNotSent(DateTime fromDate, DateTime toDate, List<long> listClinicNums, bool hasClaimTypeExpanded, ClaimNotSentStatuses claimStatusFilter)
         {
-            bool hasClinicsEnabled = Preference.HasClinicsEnabledNoCache;
-            string command = "";
+            string command;
             string whereClin = "";
             string claimFilter = "";
-            if (hasClinicsEnabled && listClinicNums.Count > 0)
-            {//construct the IN statement for all of the selected clinics
-                whereClin += " AND claim.ClinicNum IN(" + string.Join(",", listClinicNums) + ")";
-            }
-            if (hasClinicsEnabled)
-            {
-                command = "SELECT clinic.Abbr AS 'Clinic',";
-            }
-            else
-            {
-                command = "SELECT ";
-            }
+
+            whereClin += " AND claim.ClinicNum IN(" + string.Join(",", listClinicNums) + ")";
+
+            command = "SELECT clinic.Abbr AS 'Clinic',";
+
             if (hasClaimTypeExpanded)
             {
                 command += "claim.DateService,(CASE WHEN claim.ClaimType='P' THEN 'Primary' WHEN claim.ClaimType='S' THEN 'Secondary' "
@@ -52,11 +42,9 @@ namespace OpenDentBusiness
                     claimFilter += claimStatusAll;
                     break;
             }
-            string clinJoin = "";
-            if (hasClinicsEnabled)
-            {
-                clinJoin = " LEFT JOIN clinic ON clinic.ClinicNum=claim.ClinicNum";
-            }
+
+            string clinJoin = " LEFT JOIN clinic ON clinic.ClinicNum=claim.ClinicNum";
+
             command += "(CASE WHEN claim.ClaimStatus='U' THEN 'Unsent' WHEN "
                 + "claim.ClaimStatus='H' THEN 'Hold' WHEN claim.ClaimStatus='W' THEN 'WaitQ' ELSE claim.ClaimStatus END) AS ClaimStatus, "
                 + "CONCAT(CONCAT(CONCAT(CONCAT(patient.LName,', '),patient.FName),' '),patient.MiddleI) as 'Patient Name',carrier.CarrierName"

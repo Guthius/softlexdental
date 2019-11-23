@@ -72,10 +72,7 @@ namespace OpenDental
             adjustmentGrid.Columns.Clear();
             adjustmentGrid.Columns.Add(new ODGridColumn("Date", 70));
             adjustmentGrid.Columns.Add(new ODGridColumn("Prov", 55));
-            if (Preferences.HasClinicsEnabled)
-            {
-                adjustmentGrid.Columns.Add(new ODGridColumn("Clinic", 55));
-            }
+            adjustmentGrid.Columns.Add(new ODGridColumn("Clinic", 55));
             adjustmentGrid.Columns.Add(new ODGridColumn("Amt Orig", 60, HorizontalAlignment.Right));
             adjustmentGrid.Columns.Add(new ODGridColumn("Amt End", 60, HorizontalAlignment.Right));
             adjustmentGrid.Rows.Clear();
@@ -85,10 +82,7 @@ namespace OpenDental
                 var row = new ODGridRow();
                 row.Cells.Add(((Adjustment)accountEntry.Tag).AdjDate.ToShortDateString());
                 row.Cells.Add(Providers.GetAbbr(((Adjustment)accountEntry.Tag).ProvNum));
-                if (Preferences.HasClinicsEnabled)
-                {
-                    row.Cells.Add(Clinics.GetAbbr(((Adjustment)accountEntry.Tag).ClinicNum));
-                }
+                row.Cells.Add(Clinic.GetById(((Adjustment)accountEntry.Tag).ClinicNum).Abbr);
                 row.Cells.Add(accountEntry.AmountOriginal.ToString("F"));//Amt Orig
                 row.Cells.Add(accountEntry.AmountStart.ToString("F"));//Amt Available
                 row.Tag = accountEntry;

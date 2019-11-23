@@ -69,10 +69,9 @@ namespace OpenDentBusiness
             {
                 query += "AND procedurelog.ProvNum IN (" + String.Join(",", listProvNums) + ") ";
             }
-            if (Preference.HasClinicsEnabledNoCache)
-            {
-                query += "AND procedurelog.ClinicNum IN (" + String.Join(",", listClinicNums) + ") ";
-            }
+
+            query += "AND procedurelog.ClinicNum IN (" + String.Join(",", listClinicNums) + ") ";
+
             query += "AND procedurecode.ProcCode LIKE '%" + POut.String(procCode) + "%' "
             + "AND procedurelog.ProcDate >= " + POut.Date(dateFrom) + " "
             + "AND procedurelog.ProcDate <= " + POut.Date(dateTo) + " "

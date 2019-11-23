@@ -118,11 +118,11 @@ namespace OpenDental {
 				string sendingFacilityCity=Preference.GetString(PreferenceName.PracticeCity);
 				string sendingFacilityState=Preference.GetString(PreferenceName.PracticeST);
 				string sendingFacilityZip=Preference.GetString(PreferenceName.PracticeZip);
-				if(Preferences.HasClinicsEnabled && _appt.ClinicNum!=0) {//Using clinics and a clinic is assigned.
-					Clinic clinic=Clinics.GetClinic(_appt.ClinicNum);
+				if( _appt.ClinicNum!=0) {//Using clinics and a clinic is assigned.
+					Clinic clinic=Clinic.GetById(_appt.ClinicNum);
 					sendingFacilityName=clinic.Description;
-					sendingFacilityAddress1=clinic.Address;
-					sendingFacilityAddress2=clinic.Address2;
+					sendingFacilityAddress1=clinic.AddressLine1;
+					sendingFacilityAddress2=clinic.AddressLine2;
 					sendingFacilityCity=clinic.City;
 					sendingFacilityState=clinic.State;
 					sendingFacilityZip=clinic.Zip;

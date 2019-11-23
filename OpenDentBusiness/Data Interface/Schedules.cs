@@ -324,30 +324,30 @@ namespace OpenDentBusiness
                 logText += dateTime.Date.ToShortDateString() + " ";
                 if (opNum != 0)
                 {
-                    logText += Lans.g("Schedule", "for operatory") + " " + Operatories.GetOpName(opNum);
+                    logText += "for operatory " + Operatories.GetOpName(opNum);
                 }
                 if (clinicNum != -1)
                 {
                     if (opNum != 0)
                     {//Not currently an option to clear via op and clinic, but may be in the future.
-                        logText += Lans.g("Schedule", "and clinic") + " ";
+                        logText += "and clinic ";
                     }
                     else
                     {
-                        logText += Lans.g("Schedule", "for clinic") + " ";
+                        logText += "for clinic ";
                     }
-                    logText += (clinicNum == 0 ? Lans.g("Schedule", "Headquarters") : Clinics.GetDesc(clinicNum));
+                    logText += (clinicNum == 0 ? "Headquarters" : Clinic.GetById(clinicNum).Description);
                 }
             }
             else
             {
                 if (blockout.Ops.Count > 1)
                 {
-                    logText += Lans.g("Schedule", "operatories") + " ";
+                    logText += "operatories" + " ";
                 }
                 else
                 {
-                    logText += Lans.g("Schedule", "operatory") + " ";
+                    logText += "operatory" + " ";
                 }
                 for (int i = 0; i < blockout.Ops.Count; i++)
                 {
@@ -357,8 +357,7 @@ namespace OpenDentBusiness
                     }
                     logText += Operatories.GetOpName(blockout.Ops[i]);
                 }
-                logText += " " + Lans.g("Schedule", "on") + " " + blockout.SchedDate.ToShortDateString() + " "
-                    + Lans.g("Schedule", "for") + " " + blockout.StartTime.ToShortTimeString() + " - " + blockout.StopTime.ToShortTimeString();
+                logText += " on " + blockout.SchedDate.ToShortDateString() + " for " + blockout.StartTime.ToShortTimeString() + " - " + blockout.StopTime.ToShortTimeString();
             }
             SecurityLog.Write(null, SecurityLogEvents.Blockouts, logText);
         }
@@ -1122,9 +1121,9 @@ namespace OpenDentBusiness
         {
             string command = "SELECT COUNT(*) FROM schedule "
                 //only count holiday schedules for the entire practice or for the currently selected clinic
-                + "WHERE (ClinicNum=0 OR ClinicNum=" + POut.Long(Clinics.ClinicNum) + ") "
-                + "AND Status=" + POut.Int((int)SchedStatus.Holiday) + " "
-                + "AND SchedType=" + POut.Int((int)ScheduleType.Practice) + " "
+                + "WHERE (ClinicNum=0 OR ClinicNum=" + Clinics.ClinicId + ") "
+                + "AND Status=" + (int)SchedStatus.Holiday + " "
+                + "AND SchedType=" + (int)ScheduleType.Practice + " "
                 + "AND SchedDate=" + POut.Date(date);
             string result = Db.GetCount(command);
             return result != "0";
@@ -1134,7 +1133,6 @@ namespace OpenDentBusiness
         ///op nums are passed in, only schedules in these operatories will be gotten.</summary>
         public static List<Schedule> GetAllForDateAndType(DateTime date, ScheduleType schedType, bool skipSchedOps = false, List<long> listOpNums = null)
         {
-            //No need to check RemotingRole; no call to db.
             return GetAllForDateRangeAndType(date, date, schedType, skipSchedOps, listOpNums);
         }
 
@@ -1273,7 +1271,7 @@ namespace OpenDentBusiness
                     if (startTime.TimeOfDay == PIn.DateT("12 AM").TimeOfDay && stopTime.TimeOfDay == PIn.DateT("12 AM").TimeOfDay)
                     {
                         #region Note or Holiday
-                        if ((Preferences.HasClinicsEnabled && raw.Rows[i - 1]["ClinicNum"].ToString() != raw.Rows[i]["ClinicNum"].ToString())//different clinic than previous line
+                        if ((raw.Rows[i - 1]["ClinicNum"].ToString() != raw.Rows[i]["ClinicNum"].ToString())//different clinic than previous line
                             || raw.Rows[i - 1]["Status"].ToString() != raw.Rows[i]["Status"].ToString())//start notes and holidays on different lines
                         {
                             table.Rows[rowI][(int)dateSched.DayOfWeek] += "\r\n";
@@ -1285,9 +1283,9 @@ namespace OpenDentBusiness
                             {
                                 table.Rows[rowI][(int)dateSched.DayOfWeek] += Lans.g("Schedules", "Note");
                             }
-                            if (Preferences.HasClinicsEnabled && raw.Rows[i]["SchedType"].ToString() == "0")
+                            if (raw.Rows[i]["SchedType"].ToString() == "0")
                             {//a practice sched type, prov/emp notes do not have a clinic associated
-                                string clinicAbbr = Clinics.GetAbbr(PIn.Long(raw.Rows[i]["ClinicNum"].ToString()));
+                                string clinicAbbr = Clinic.GetById(PIn.Long(raw.Rows[i]["ClinicNum"].ToString())).Abbr;
                                 if (string.IsNullOrEmpty(clinicAbbr))
                                 {
                                     clinicAbbr = "Headquarters";
@@ -1332,9 +1330,9 @@ namespace OpenDentBusiness
                             }
                             table.Rows[rowI][(int)dateSched.DayOfWeek] += Lans.g("Schedules", "Note");
                         }
-                        if (Preferences.HasClinicsEnabled && raw.Rows[i]["SchedType"].ToString() == "0")
+                        if (raw.Rows[i]["SchedType"].ToString() == "0")
                         {//a practice sched type, prov/emp notes do not have a clinic associated
-                            string clinicAbbr = Clinics.GetAbbr(PIn.Long(raw.Rows[i]["ClinicNum"].ToString()));
+                            string clinicAbbr = Clinic.GetById(PIn.Long(raw.Rows[i]["ClinicNum"].ToString())).Abbr;
                             table.Rows[rowI][(int)dateSched.DayOfWeek] += " (" + (string.IsNullOrEmpty(clinicAbbr) ? "Headquarters" : clinicAbbr) + ")";
                         }
                         table.Rows[rowI][(int)dateSched.DayOfWeek] += ":";
@@ -1409,10 +1407,9 @@ namespace OpenDentBusiness
             }
             listOperatoryNums.AddRange(listOperatories.Select(x => x.OperatoryNum));
             List<long> listClinicNums = new List<long>();
-            if (Preferences.HasClinicsEnabled)
-            {
+
                 listClinicNums.Add(clinicNum);
-            }
+            
             List<int> listSchedTypes = new List<int>() { (int)ScheduleType.Provider, (int)ScheduleType.Blockout };
             return GetSchedulesHelper(dateStart, dateEnd, listClinicNums, listOperatoryNums, listProvNumsWithZero, listBlockoutTypeDefNums, listSchedTypes);
         }
@@ -1742,15 +1739,14 @@ namespace OpenDentBusiness
                 + "AND SchedDate=" + POut.Date(dateStart) + " "
                 + "AND StopTime>'00:00:00' "//We want to ignore invalid schedules, such as Provider/Employee notes.
                 + "AND employees.hidden=0 ";
-            if (Preferences.HasClinicsEnabled)
-            {//Using clinics.
+
                 List<Employee> listEmps = Employee.GetEmpsForClinic(clinicNum);
                 if (listEmps.Count == 0)
                 {
                     return table;
                 }
                 command += "AND employees.id IN (" + string.Join(",", listEmps.Select(x => x.Id)) + ") ";
-            }
+            
             command += "GROUP BY schedule.ScheduleNum ";
 
             //Sort by Emp num so that sort is deterministic
@@ -1791,18 +1787,13 @@ namespace OpenDentBusiness
                 return table;
             }
             List<long> listProvNums;
-            if (Preferences.HasClinicsEnabled)
-            {//Using clinics.
+
                 listProvNums = Providers.GetProvsForClinic(clinicNum).Select(x => x.ProvNum).ToList();
                 if (listProvNums.Count == 0)
                 {
                     return table;
                 }
-            }
-            else
-            {
-                listProvNums = Providers.GetDeepCopy(true).OrderBy(x => x.ItemOrder).Select(y => y.ProvNum).ToList();
-            }
+
             List<Schedule> ListSchedulesForDate = Schedules.GetAllForDateAndType(dateStart, ScheduleType.Provider);
             List<Schedule> listScheds = ListSchedulesForDate.FindAll(x => listProvNums.Contains(x.ProvNum));
             listScheds = listScheds.OrderBy(x => listProvNums.IndexOf(x.ProvNum)).ToList();//Make list alphabetical.

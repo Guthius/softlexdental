@@ -1,4 +1,3 @@
-using CodeBase;
 using OpenDentBusiness;
 using System;
 using System.Collections.Generic;
@@ -44,17 +43,7 @@ namespace OpenDental
                 return;
             }
             enabledCheckBox.Checked = _progCur.Enabled;
-            if (!Preferences.HasClinicsEnabled)
-            {//clinics are not enabled, use ClinicNum 0 to indicate 'Headquarters' or practice level program properties
-                enabledCheckBox.Text = Lan.g(this, "Enabled");
-                paySettingsGroupBox.Text = Lan.g(this, "Payment Settings");
-                comboClinic.Visible = false;
-                labelClinic.Visible = false;
-                labelClinicEnable.Visible = false;
-                _listUserClinicNums = new List<long>() { 0 };//if clinics are disabled, programproperty.ClinicNum will be set to 0
-            }
-            else
-            {//Using clinics
+
                 paySettingsGroupBox.Text = Lan.g(this, "Clinic Payment Settings");
                 _listUserClinicNums = new List<long>();
                 comboClinic.Items.Clear();
@@ -73,12 +62,12 @@ namespace OpenDental
                     _listUserClinicNums.Add(0);
                     comboClinic.SelectedIndex = 0;
                 }
-                List<Clinic> listClinics = Clinics.GetForUserod(Security.CurrentUser);
+                List<Clinic> listClinics = Clinic.GetByUser(Security.CurrentUser).ToList();
                 for (int i = 0; i < listClinics.Count; i++)
                 {
                     comboClinic.Items.Add(listClinics[i].Abbr);
-                    _listUserClinicNums.Add(listClinics[i].ClinicNum);
-                    if (Clinics.ClinicNum == listClinics[i].ClinicNum)
+                    _listUserClinicNums.Add(listClinics[i].Id);
+                    if (Clinics.ClinicId == listClinics[i].Id)
                     {
                         comboClinic.SelectedIndex = i;
                         if (!Security.CurrentUser.ClinicRestricted)
@@ -88,7 +77,7 @@ namespace OpenDental
                     }
                 }
                 _indexClinicRevert = comboClinic.SelectedIndex;
-            }
+            
             _listProgProps = ProgramProperties.GetForProgram(_progCur.ProgramNum);
             FillFields();
         }
@@ -154,7 +143,7 @@ namespace OpenDental
         ///values in the text boxes.  Only modifies other clinics if _indexClinicRevert=0, meaning user just modified the HQ clinic credentials.</summary>
         private void SynchWithHQ()
         {
-            if (!Preferences.HasClinicsEnabled || _listUserClinicNums[_indexClinicRevert] > 0)
+            if (_listUserClinicNums[_indexClinicRevert] > 0)
             {//using clinics, and modifying the HQ clinic. otherwise return.
                 return;
             }
@@ -225,11 +214,8 @@ namespace OpenDental
         {
             if (portalPayEnabledCheckBox.Checked)
             {
-                long clinicNum = 0;
-                if (Preferences.HasClinicsEnabled)
-                {
-                    clinicNum = _listUserClinicNums[comboClinic.SelectedIndex];
-                }
+                long clinicNum = _listUserClinicNums[comboClinic.SelectedIndex];
+                
                 OpenDentBusiness.WebTypes.Shared.XWeb.WebPaymentProperties xwebProperties = new OpenDentBusiness.WebTypes.Shared.XWeb.WebPaymentProperties();
                 try
                 {

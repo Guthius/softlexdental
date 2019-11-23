@@ -791,157 +791,159 @@ namespace OpenDental {
 			}
 		}
 
-		private void FillComboBoxes() {
-			long feeSchedNum1Selected=0;//Default to the first 
-			if(comboFeeSched.SelectedIndex > -1) {
-				feeSchedNum1Selected=_listFeeScheds[comboFeeSched.SelectedIndex].FeeSchedNum;
-			}
-			long feeSchedNum2Selected=0;//Default to the first
-			if(comboFeeSchedTo.SelectedIndex > -1) {
-				feeSchedNum2Selected=_listFeeScheds[comboFeeSchedTo.SelectedIndex].FeeSchedNum;
-			}
-			//The number of clinics and providers cannot change while inside this window.  Always reselect exactly what the user had before.
-			int comboClinicIdx=comboClinic.SelectedIndex;
-			int comboProvIdx=comboProvider.SelectedIndex;
-			int comboProvToIdx=comboProviderTo.SelectedIndex;
-			comboFeeSched.Items.Clear();
-			comboFeeSchedTo.Items.Clear();
-			comboClinic.Items.Clear();
-			comboClinicTo.Items.Clear();
-			comboGlobalUpdateClinics.Items.Clear();
-			comboProvider.Items.Clear();
-			comboProviderTo.Items.Clear();
-			string str;
-			for(int i=0;i<_listFeeScheds.Count;i++) {
-				str=_listFeeScheds[i].Description;
-				if(_listFeeScheds[i].FeeSchedType!=FeeScheduleType.Normal) {
-					str+=" ("+_listFeeScheds[i].FeeSchedType.ToString()+")";
-				}
-				comboFeeSched.Items.Add(str);
-				comboFeeSchedTo.Items.Add(str);
-				if(_listFeeScheds[i].FeeSchedNum==feeSchedNum1Selected) {
-					comboFeeSched.SelectedIndex=i;
-				}
-				if(_listFeeScheds[i].FeeSchedNum==feeSchedNum2Selected) {
-					comboFeeSchedTo.SelectedIndex=i;
-				}
-			}
-			if(_listFeeScheds.Count==0) {//No fee schedules in the database so set the first item to none.
-				comboFeeSched.Items.Add(Lan.g(this,"None"));
-				comboFeeSchedTo.Items.Add(Lan.g(this,"None"));
-			}
-			if(comboFeeSched.SelectedIndex==-1) {
-				comboFeeSched.SelectedIndex=0;
-			}
-			if(comboFeeSchedTo.SelectedIndex==-1) {
-				comboFeeSchedTo.SelectedIndex=0;
-			}
-			if(!Preferences.HasClinicsEnabled) {//No clinics
-				//Add none even though clinics is turned off so that 0 is a valid index to select.
-				comboClinic.Items.Add(Lan.g(this,"None"));
-				comboClinicTo.Items.Add(new ODBoxItem<Clinic>(Lan.g(this,"None"),new Clinic() { ClinicNum=0 }));
-				comboGlobalUpdateClinics.Items.Add(new ODBoxItem<Clinic>("Updating Write-offs...",new Clinic() { ClinicNum=0 }));
-				//For UI reasons, leave the clinic combo boxes visible for users not using clinics and they will just say "none".
-				comboClinic.Enabled=false;
-				comboClinicTo.Enabled=false;
-				comboGlobalUpdateClinics.Enabled=false;
-				butPickClinic.Enabled=false;
-				butPickClinicTo.Enabled=false;
-				butGlobalUpdatePickClinic.Enabled=false;
-			}
-			else {
-				comboClinic.Items.Add(Lan.g(this,"Default"));
-				comboClinicTo.Items.Add(new ODBoxItem<Clinic>(Lan.g(this,"Default"),new Clinic { Abbr="Default" }));
-				if(!Security.CurrentUser.ClinicRestricted) {
-					comboGlobalUpdateClinics.Items.Add(new ODBoxItem<Clinic>(Lan.g(this,"All"),new Clinic { ClinicNum=-1,Abbr="All" }));
-					comboGlobalUpdateClinics.Items.Add(new ODBoxItem<Clinic>(Lan.g(this,"Unassigned"),new Clinic { ClinicNum=0,Abbr="Unassigned" }));
-				}
-				for(int i=0;i<_listClinics.Count;i++) {
-					comboClinic.Items.Add(_listClinics[i].Abbr);
-					comboClinicTo.Items.Add(new ODBoxItem<Clinic>(_listClinics[i].Abbr,_listClinics[i]));
-					comboGlobalUpdateClinics.Items.Add(new ODBoxItem<Clinic>(_listClinics[i].Abbr,_listClinics[i]));
-				}
-			}
-			comboProvider.Items.Add(Lan.g(this,"None"));
-			comboProviderTo.Items.Add(Lan.g(this,"None"));
-			for(int i=0;i<_listProvs.Count;i++) {
-				comboProvider.Items.Add(_listProvs[i].Abbr);
-				comboProviderTo.Items.Add(_listProvs[i].Abbr);
-			}
-			comboClinic.SelectedIndex=comboClinicIdx > -1 ? comboClinicIdx:0;
-			if(_listSelectedClinicNumsTo.Count > 1) {
-				comboClinicTo.SelectedIndex=-1;
-				comboClinicTo.DropDownStyle=ComboBoxStyle.DropDown;
-				comboClinicTo.Text=Lans.g(this,"Multiple");
-			}
-			else if(_listSelectedClinicNumsTo.Count==0) {
-				comboClinicTo.SelectedIndex=0;//'Default'
-				_listSelectedClinicNumsTo.Add(comboClinicTo.SelectedTag<Clinic>().ClinicNum);
-			}
-			else {//One Clinic selected
-				comboClinicTo.SetSelectedItem<Clinic>(x => x.ClinicNum==_listSelectedClinicNumsTo.First(),"");
-			}
-			if(_listSelectedClinicsGlobalUpdates.Count > 1) {
-				comboGlobalUpdateClinics.SelectedIndex=-1;
-				comboGlobalUpdateClinics.DropDownStyle=ComboBoxStyle.DropDown;
-				comboGlobalUpdateClinics.Text=Lans.g(this,"Multiple");
-			}
-			else if(_listSelectedClinicsGlobalUpdates.Count==0) {
-				comboGlobalUpdateClinics.SelectedIndex=0;//'All'
-				_listSelectedClinicsGlobalUpdates.Add(comboGlobalUpdateClinics.SelectedTag<Clinic>());
-			}
-			else {//One Clinic selected
-				comboGlobalUpdateClinics.SetSelectedItem<Clinic>(x => x.ClinicNum==_listSelectedClinicsGlobalUpdates.First().ClinicNum,"");
-			}
-			comboProvider.SelectedIndex=comboProvIdx > -1 ? comboProvIdx:0;
-			comboProviderTo.SelectedIndex=comboProvToIdx > -1 ? comboProvToIdx:0;
-			if(_listFeeScheds[comboFeeSched.SelectedIndex].IsGlobal) {
-				comboClinic.Enabled=false;
-				butPickClinic.Enabled=false;
-				comboClinic.SelectedIndex=0;				
-				comboProvider.Enabled=false;
-				butPickProv.Enabled=false;
-				comboProvider.SelectedIndex=0;
-			}
-			else {
-				if(Preferences.HasClinicsEnabled) {
-					comboClinic.Enabled=true;
-					butPickClinic.Enabled=true;
-				}
-				comboProvider.Enabled=true;
-				butPickProv.Enabled=true;
-			}
-			if(_listFeeScheds[comboFeeSchedTo.SelectedIndex].IsGlobal) {
-				comboClinicTo.Enabled=false;
-				butPickClinicTo.Enabled=false;
-				comboClinicTo.SelectedIndex=0;
-				_listSelectedClinicNumsTo=new List<long> { comboClinicTo.SelectedTag<Clinic>().ClinicNum };
-				comboProviderTo.Enabled=false;
-				butPickProvTo.Enabled=false;
-				comboProviderTo.SelectedIndex=0;
-			}
-			else {
-				if(Preferences.HasClinicsEnabled) {
-					comboClinicTo.Enabled=true;
-					butPickClinicTo.Enabled=true;
-				}
-				comboProviderTo.Enabled=true;
-				butPickProvTo.Enabled=true;
-			}
-		}
+        private void FillComboBoxes()
+        {
+            long feeSchedNum1Selected = 0;//Default to the first 
+            if (comboFeeSched.SelectedIndex > -1)
+            {
+                feeSchedNum1Selected = _listFeeScheds[comboFeeSched.SelectedIndex].FeeSchedNum;
+            }
+            long feeSchedNum2Selected = 0;//Default to the first
+            if (comboFeeSchedTo.SelectedIndex > -1)
+            {
+                feeSchedNum2Selected = _listFeeScheds[comboFeeSchedTo.SelectedIndex].FeeSchedNum;
+            }
+            //The number of clinics and providers cannot change while inside this window.  Always reselect exactly what the user had before.
+            int comboClinicIdx = comboClinic.SelectedIndex;
+            int comboProvIdx = comboProvider.SelectedIndex;
+            int comboProvToIdx = comboProviderTo.SelectedIndex;
+            comboFeeSched.Items.Clear();
+            comboFeeSchedTo.Items.Clear();
+            comboClinic.Items.Clear();
+            comboClinicTo.Items.Clear();
+            comboGlobalUpdateClinics.Items.Clear();
+            comboProvider.Items.Clear();
+            comboProviderTo.Items.Clear();
+            string str;
+            for (int i = 0; i < _listFeeScheds.Count; i++)
+            {
+                str = _listFeeScheds[i].Description;
+                if (_listFeeScheds[i].FeeSchedType != FeeScheduleType.Normal)
+                {
+                    str += " (" + _listFeeScheds[i].FeeSchedType.ToString() + ")";
+                }
+                comboFeeSched.Items.Add(str);
+                comboFeeSchedTo.Items.Add(str);
+                if (_listFeeScheds[i].FeeSchedNum == feeSchedNum1Selected)
+                {
+                    comboFeeSched.SelectedIndex = i;
+                }
+                if (_listFeeScheds[i].FeeSchedNum == feeSchedNum2Selected)
+                {
+                    comboFeeSchedTo.SelectedIndex = i;
+                }
+            }
+            if (_listFeeScheds.Count == 0)
+            {//No fee schedules in the database so set the first item to none.
+                comboFeeSched.Items.Add(Lan.g(this, "None"));
+                comboFeeSchedTo.Items.Add(Lan.g(this, "None"));
+            }
+            if (comboFeeSched.SelectedIndex == -1)
+            {
+                comboFeeSched.SelectedIndex = 0;
+            }
+            if (comboFeeSchedTo.SelectedIndex == -1)
+            {
+                comboFeeSchedTo.SelectedIndex = 0;
+            }
+
+            comboClinic.Items.Add(Lan.g(this, "Default"));
+            comboClinicTo.Items.Add(new ODBoxItem<Clinic>(Lan.g(this, "Default"), new Clinic { Abbr = "Default" }));
+            if (!Security.CurrentUser.ClinicRestricted)
+            {
+                comboGlobalUpdateClinics.Items.Add(new ODBoxItem<Clinic>(Lan.g(this, "All"), new Clinic { Abbr = "All" }));
+                comboGlobalUpdateClinics.Items.Add(new ODBoxItem<Clinic>(Lan.g(this, "Unassigned"), new Clinic { Abbr = "Unassigned" }));
+            }
+            for (int i = 0; i < _listClinics.Count; i++)
+            {
+                comboClinic.Items.Add(_listClinics[i].Abbr);
+                comboClinicTo.Items.Add(new ODBoxItem<Clinic>(_listClinics[i].Abbr, _listClinics[i]));
+                comboGlobalUpdateClinics.Items.Add(new ODBoxItem<Clinic>(_listClinics[i].Abbr, _listClinics[i]));
+            }
+
+            comboProvider.Items.Add(Lan.g(this, "None"));
+            comboProviderTo.Items.Add(Lan.g(this, "None"));
+            for (int i = 0; i < _listProvs.Count; i++)
+            {
+                comboProvider.Items.Add(_listProvs[i].Abbr);
+                comboProviderTo.Items.Add(_listProvs[i].Abbr);
+            }
+            comboClinic.SelectedIndex = comboClinicIdx > -1 ? comboClinicIdx : 0;
+            if (_listSelectedClinicNumsTo.Count > 1)
+            {
+                comboClinicTo.SelectedIndex = -1;
+                comboClinicTo.DropDownStyle = ComboBoxStyle.DropDown;
+                comboClinicTo.Text = Lans.g(this, "Multiple");
+            }
+            else if (_listSelectedClinicNumsTo.Count == 0)
+            {
+                comboClinicTo.SelectedIndex = 0;//'Default'
+                _listSelectedClinicNumsTo.Add(comboClinicTo.SelectedTag<Clinic>().Id);
+            }
+            else
+            {//One Clinic selected
+                comboClinicTo.SetSelectedItem<Clinic>(x => x.Id == _listSelectedClinicNumsTo.First(), "");
+            }
+            if (_listSelectedClinicsGlobalUpdates.Count > 1)
+            {
+                comboGlobalUpdateClinics.SelectedIndex = -1;
+                comboGlobalUpdateClinics.DropDownStyle = ComboBoxStyle.DropDown;
+                comboGlobalUpdateClinics.Text = Lans.g(this, "Multiple");
+            }
+            else if (_listSelectedClinicsGlobalUpdates.Count == 0)
+            {
+                comboGlobalUpdateClinics.SelectedIndex = 0;//'All'
+                _listSelectedClinicsGlobalUpdates.Add(comboGlobalUpdateClinics.SelectedTag<Clinic>());
+            }
+            else
+            {//One Clinic selected
+                comboGlobalUpdateClinics.SetSelectedItem<Clinic>(x => x.Id == _listSelectedClinicsGlobalUpdates.First().Id, "");
+            }
+            comboProvider.SelectedIndex = comboProvIdx > -1 ? comboProvIdx : 0;
+            comboProviderTo.SelectedIndex = comboProvToIdx > -1 ? comboProvToIdx : 0;
+            if (_listFeeScheds[comboFeeSched.SelectedIndex].IsGlobal)
+            {
+                comboClinic.Enabled = false;
+                butPickClinic.Enabled = false;
+                comboClinic.SelectedIndex = 0;
+                comboProvider.Enabled = false;
+                butPickProv.Enabled = false;
+                comboProvider.SelectedIndex = 0;
+            }
+            else
+            {
+                comboClinic.Enabled = true;
+                butPickClinic.Enabled = true;
+                comboProvider.Enabled = true;
+                butPickProv.Enabled = true;
+            }
+            if (_listFeeScheds[comboFeeSchedTo.SelectedIndex].IsGlobal)
+            {
+                comboClinicTo.Enabled = false;
+                butPickClinicTo.Enabled = false;
+                comboClinicTo.SelectedIndex = 0;
+                _listSelectedClinicNumsTo = new List<long> { comboClinicTo.SelectedTag<Clinic>().Id };
+                comboProviderTo.Enabled = false;
+                butPickProvTo.Enabled = false;
+                comboProviderTo.SelectedIndex = 0;
+            }
+            else
+            {
+                comboClinicTo.Enabled = true;
+                butPickClinicTo.Enabled = true;
+                comboProviderTo.Enabled = true;
+                butPickProvTo.Enabled = true;
+            }
+        }
 
 		private void butClear_Click(object sender, System.EventArgs e) {
-			if(Preferences.HasClinicsEnabled) {
 				if(!MsgBox.Show(this,true,"This will clear all values from the selected fee schedule for the currently selected clinic and provider.  Are you sure you want to continue?")) {
 					return;
 				}
-			}
-			else if(!MsgBox.Show(this,true,"This will clear all values from the selected fee schedule for the currently selected provider.  Are you sure you want to continue?")) {
-				return;
-			}
+
 			long clinicNum=0;
-			if(Preferences.HasClinicsEnabled && comboClinic.SelectedIndex!=0){
-				clinicNum=_listClinics[comboClinic.SelectedIndex-1].ClinicNum;
+			if(comboClinic.SelectedIndex!=0){
+				clinicNum=_listClinics[comboClinic.SelectedIndex-1].Id;
 			}
 			long provNum=0;
 			if(comboProvider.SelectedIndex!=0) {
@@ -952,14 +954,14 @@ namespace OpenDental {
 					_feeCache.BeginTransaction();
 					_feeCache.RemoveFees(feeSchedNum,clinicNum,provNum);
 					string logText=Lan.g(this,"Procedures for Fee Schedule")+" "+FeeScheds.GetDescription(feeSchedNum)+" ";
-					if(Preferences.HasClinicsEnabled) {
-						if(Clinics.GetAbbr(Clinics.ClinicNum)=="") {
+
+						if(Clinic.GetById(Clinics.ClinicId).Abbr=="") {
 							logText+=Lan.g(this,"at Headquarters");
 						}
 						else {
-							logText+=Lan.g(this,"at clinic")+" "+Clinics.GetAbbr(Clinics.ClinicNum);
+							logText+=Lan.g(this,"at clinic")+" "+Clinic.GetById(Clinics.ClinicId).Abbr;
 						}
-					}
+					
 					logText+=" "+Lan.g(this,"were all cleared.");
 					SecurityLog.Write(SecurityLogEvents.ProcFeeEdit,0,logText);
 					_changed=true;
@@ -968,7 +970,7 @@ namespace OpenDental {
 		}
 
 		private void butCopy_Click(object sender, System.EventArgs e) {
-			if(Preferences.HasClinicsEnabled && _listSelectedClinicNumsTo.Count==0) {
+			if(_listSelectedClinicNumsTo.Count==0) {
 				MsgBox.Show(this,"At least one \"Clinic To\" clinic must be selected.");
 				return;
 			}
@@ -978,8 +980,8 @@ namespace OpenDental {
 			}
 			FeeSched toFeeSched=_listFeeScheds[comboFeeSchedTo.SelectedIndex];
 			long fromClinicNum=0;
-			if(Preferences.HasClinicsEnabled && comboClinic.SelectedIndex!=0){
-				fromClinicNum=_listClinics[comboClinic.SelectedIndex-1].ClinicNum;
+			if(comboClinic.SelectedIndex!=0){
+				fromClinicNum=_listClinics[comboClinic.SelectedIndex-1].Id;
 			}
 			long fromProvNum=0;
 			if(comboProvider.SelectedIndex!=0) {
@@ -1007,99 +1009,117 @@ namespace OpenDental {
 			comboFeeSchedTo.SelectedIndex=0;
 			comboClinicTo.SelectedIndex=0;
 			_listSelectedClinicNumsTo.Clear();
-			_listSelectedClinicNumsTo.Add(comboClinicTo.SelectedTag<Clinic>().ClinicNum);
+			_listSelectedClinicNumsTo.Add(comboClinicTo.SelectedTag<Clinic>().Id);
 			comboProviderTo.SelectedIndex=0;
 			MsgBox.Show(this,"Done.");
 		}
 
-		private void butIncrease_Click(object sender, System.EventArgs e) {
-			int percent=0;
-			if(textPercent.Text==""){
-				MsgBox.Show(this,"Please enter a percent first.");
-				return;
-			}
-			try{
-				percent=System.Convert.ToInt32(textPercent.Text);
-			}
-			catch{
-				MsgBox.Show(this,"Percent is not a valid number.");
-				return;
-			}
-			if(percent<-99 || percent>99){
-				MsgBox.Show(this,"Percent must be between -99 and 99.");
-				return;
-			}
-			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"This will overwrite all values of the selected fee schedule, causing all previously entered fee "
-				+"amounts to be lost.  It is recommended to first create a backup copy of the original fee schedule, then update the original fee schedule "
-				+"with the new fees.  Are you sure you want to continue?"))
-			{
-				return;
-			}
-			long clinicNum=0;
-			if(Preferences.HasClinicsEnabled && comboClinic.SelectedIndex>0){
-				clinicNum=_listClinics[comboClinic.SelectedIndex-1].ClinicNum;
-			}
-			long provNum=0;
-			if(comboProvider.SelectedIndex>0){
-				provNum=_listProvs[comboProvider.SelectedIndex-1].ProvNum;
-			}
-			long feeSchedNum=_listFeeScheds[comboFeeSched.SelectedIndex].FeeSchedNum;
-			//Modifies in-memory list, all entries increased (if they exist) will be a 100% match to the combo box settings.
-			List<Fee> listFees=_feeCache.GetListFees(feeSchedNum,clinicNum,provNum);
-			bool doIncreaseFees=EvaluateOverrides(clinicNum,provNum,feeSchedNum,listFees);
-			if(!doIncreaseFees) {
-				return;//either no fees would be updated or the user chose to cancel and review so don't increase fees.
-			}
-			_feeCache.BeginTransaction();
-			int round=0;//Default to dollar
-			if(radioDime.Checked){
-				round=1;
-			}
-			if(radioPenny.Checked){
-				round=2;
-			}
-			ODProgress.ShowAction(() => {
-					listFees=Fees.Increase(feeSchedNum,percent,round,listFees,clinicNum,provNum);
-					_feeCache.RemoveFees(feeSchedNum,clinicNum,provNum);
-					string procCode;
-					for(int i=0;i<listFees.Count;i++) {
-						if(listFees[i].Amount==0) {
-							continue;
-						}
-						try {
-							procCode=ProcedureCodes.GetStringProcCode(listFees[i].CodeNum);
-						}
-						catch(Exception) {//if CodeNum is not in the procedurecode table, don't make securitylog entry
-							continue;
-						}
-						_feeCache.Add(listFees[i]);
-						string logText=Lan.g(this,"Procedure")+": "+procCode+", "
-							+Lan.g(this,"Fee")+": "+listFees[i].Amount.ToString("c")+", "
-							+Lan.g(this,"Fee Schedule")+": "+FeeScheds.GetDescription(listFees[i].FeeSched);
-						if(Preferences.HasClinicsEnabled) {
-							if(Clinics.GetAbbr(clinicNum)=="") {
-								logText+=Lan.g(this,"at Headquarters");
-							}
-							else {
-								logText+=", "+Lan.g(this,"at clinic")+": "+Clinics.GetAbbr(clinicNum);
-							}
-						}
-						if(provNum!=0) {
-							logText+=", "+Lan.g(this,"for provider")+": "+Providers.GetAbbr(provNum);
-						}
-						logText+=". "+Lan.g(this,"Fee increased by")+" "+((float)percent/100.0f).ToString("p")+" "+Lan.g(this," using the increase "
-							+"button in the Fee Tools window.");
-						SecurityLog.Write(SecurityLogEvents.ProcFeeEdit,0,logText,listFees[i].CodeNum,DateTime.MinValue);
-						SecurityLog.Write(SecurityLogEvents.LogFeeEdit,0,Lan.g(this,"Fee Updated"),listFees[i].FeeNum,listFees[i].SecDateTEdit);
-						FeeSchedEvent.Fire(ODEventType.FeeSched,Lan.g(this,"Modifying fees, please wait")+"...");
-					}
-					_changed=true;
-				},
-				startingMessage:Lan.g(this,"Preparing to modify fees")+"...",
-				eventType:typeof(FeeSchedEvent),
-				odEventType:ODEventType.FeeSched);
-			DialogResult=DialogResult.OK;
-		}
+        private void butIncrease_Click(object sender, System.EventArgs e)
+        {
+            int percent = 0;
+            if (textPercent.Text == "")
+            {
+                MsgBox.Show(this, "Please enter a percent first.");
+                return;
+            }
+            try
+            {
+                percent = System.Convert.ToInt32(textPercent.Text);
+            }
+            catch
+            {
+                MsgBox.Show(this, "Percent is not a valid number.");
+                return;
+            }
+            if (percent < -99 || percent > 99)
+            {
+                MsgBox.Show(this, "Percent must be between -99 and 99.");
+                return;
+            }
+            if (!MsgBox.Show(this, MsgBoxButtons.OKCancel, "This will overwrite all values of the selected fee schedule, causing all previously entered fee "
+                + "amounts to be lost.  It is recommended to first create a backup copy of the original fee schedule, then update the original fee schedule "
+                + "with the new fees.  Are you sure you want to continue?"))
+            {
+                return;
+            }
+            long clinicNum = 0;
+            if (comboClinic.SelectedIndex > 0)
+            {
+                clinicNum = _listClinics[comboClinic.SelectedIndex - 1].Id;
+            }
+            long provNum = 0;
+            if (comboProvider.SelectedIndex > 0)
+            {
+                provNum = _listProvs[comboProvider.SelectedIndex - 1].ProvNum;
+            }
+            long feeSchedNum = _listFeeScheds[comboFeeSched.SelectedIndex].FeeSchedNum;
+            //Modifies in-memory list, all entries increased (if they exist) will be a 100% match to the combo box settings.
+            List<Fee> listFees = _feeCache.GetListFees(feeSchedNum, clinicNum, provNum);
+            bool doIncreaseFees = EvaluateOverrides(clinicNum, provNum, feeSchedNum, listFees);
+            if (!doIncreaseFees)
+            {
+                return;//either no fees would be updated or the user chose to cancel and review so don't increase fees.
+            }
+            _feeCache.BeginTransaction();
+            int round = 0;//Default to dollar
+            if (radioDime.Checked)
+            {
+                round = 1;
+            }
+            if (radioPenny.Checked)
+            {
+                round = 2;
+            }
+            ODProgress.ShowAction(() =>
+            {
+                listFees = Fees.Increase(feeSchedNum, percent, round, listFees, clinicNum, provNum);
+                _feeCache.RemoveFees(feeSchedNum, clinicNum, provNum);
+                string procCode;
+                for (int i = 0; i < listFees.Count; i++)
+                {
+                    if (listFees[i].Amount == 0)
+                    {
+                        continue;
+                    }
+                    try
+                    {
+                        procCode = ProcedureCodes.GetStringProcCode(listFees[i].CodeNum);
+                    }
+                    catch (Exception)
+                    {//if CodeNum is not in the procedurecode table, don't make securitylog entry
+                        continue;
+                    }
+                    _feeCache.Add(listFees[i]);
+                    string logText = Lan.g(this, "Procedure") + ": " + procCode + ", "
+                        + Lan.g(this, "Fee") + ": " + listFees[i].Amount.ToString("c") + ", "
+                        + Lan.g(this, "Fee Schedule") + ": " + FeeScheds.GetDescription(listFees[i].FeeSched);
+
+                    if (Clinic.GetById(clinicNum).Abbr == "")
+                    {
+                        logText += Lan.g(this, "at Headquarters");
+                    }
+                    else
+                    {
+                        logText += ", " + Lan.g(this, "at clinic") + ": " + Clinic.GetById(clinicNum).Abbr;
+                    }
+
+                    if (provNum != 0)
+                    {
+                        logText += ", " + Lan.g(this, "for provider") + ": " + Providers.GetAbbr(provNum);
+                    }
+                    logText += ". " + Lan.g(this, "Fee increased by") + " " + ((float)percent / 100.0f).ToString("p") + " " + Lan.g(this, " using the increase "
+                        + "button in the Fee Tools window.");
+                    SecurityLog.Write(SecurityLogEvents.ProcFeeEdit, 0, logText, listFees[i].CodeNum, DateTime.MinValue);
+                    SecurityLog.Write(SecurityLogEvents.LogFeeEdit, 0, Lan.g(this, "Fee Updated"), listFees[i].FeeNum, listFees[i].SecDateTEdit);
+                    FeeSchedEvent.Fire(ODEventType.FeeSched, Lan.g(this, "Modifying fees, please wait") + "...");
+                }
+                _changed = true;
+            },
+                startingMessage: Lan.g(this, "Preparing to modify fees") + "...",
+                eventType: typeof(FeeSchedEvent),
+                odEventType: ODEventType.FeeSched);
+            DialogResult = DialogResult.OK;
+        }
 
 		///<summary>Determines if there are overrides being updated, or just a regular feeSchedule. Returns true if there are overrides and user wants to 
 		///continue, or if it is a regular fee schedule. Returns false is it is an override schedule and there are no overrides to update or if user 
@@ -1107,7 +1127,7 @@ namespace OpenDental {
 		private bool EvaluateOverrides(long clinicNum,long provNum,long feeSchedNum,List<Fee> listFees) {
 			int countGeneralFees=_feeCache.GetListFees(feeSchedNum,0,0).Count; 
 			string msgText="";
-			string clinicName=Clinics.GetAbbr(clinicNum);
+			string clinicName=Clinic.GetById(clinicNum).Abbr;
 			string provName=Providers.GetAbbr(provNum);
 			string feeSchedDesc=_listFeeScheds.FirstOrDefault(x => x.FeeSchedNum==feeSchedNum).Description;
 			if(clinicNum!=0 && provNum!=0) {
@@ -1185,7 +1205,7 @@ namespace OpenDental {
 			FeeSched feeSched=_listFeeScheds[comboFeeSched.SelectedIndex];
 			long clinicNum=0;
 			if(comboClinic.SelectedIndex!=0) {
-				clinicNum=_listClinics[comboClinic.SelectedIndex-1].ClinicNum;
+				clinicNum=_listClinics[comboClinic.SelectedIndex-1].Id;
 			}
 			long provNum=0;
 			if(comboProvider.SelectedIndex!=0) {
@@ -1229,7 +1249,7 @@ namespace OpenDental {
 			//Import deletes fee of the given sched for the active clinic if it exists and inserts new fees based on fee settings.
 			long clinicNum=0;
 			if(comboClinic.SelectedIndex!=0) {
-				clinicNum=_listClinics[comboClinic.SelectedIndex-1].ClinicNum;
+				clinicNum=_listClinics[comboClinic.SelectedIndex-1].Id;
 			}
 			long provNum=0;
 			if(comboProvider.SelectedIndex!=0) {
@@ -1396,17 +1416,17 @@ namespace OpenDental {
 				cancelButtonText:Lan.g(this,"Close"));
 			Cursor=Cursors.WaitCursor;
 			try {
-				if(Preferences.HasClinicsEnabled) {
+
 					List<Clinic> listFeeClinics=new List<Clinic>();
-					if(_listSelectedClinicsGlobalUpdates.Any(x => x.ClinicNum==-1)) {//user selected 'All'
-						listFeeClinics=_listClinics.Select(x => x.Copy()).ToList();
-						listFeeClinics.Insert(0,new Clinic { Abbr="Unassigned",ClinicNum=0 });
+					if(_listSelectedClinicsGlobalUpdates.Any(x => x.Id==-1)) {//user selected 'All'
+                    listFeeClinics = new List<Clinic>(_listClinics);
+						listFeeClinics.Insert(0,new Clinic { Abbr="Unassigned" });
 					}
 					else {
 						listFeeClinics=_listSelectedClinicsGlobalUpdates;
 					}
 					if(listFeeClinics.Count==0) {				
-						listFeeClinics.Insert(0,new Clinic { Abbr="Unassigned",ClinicNum=0 });
+						listFeeClinics.Insert(0,new Clinic { Abbr="Unassigned" });
 					}
 					for(int i=0;i<listFeeClinics.Count;i++) {
 						Clinic clinicCur=listFeeClinics[i];
@@ -1431,7 +1451,7 @@ namespace OpenDental {
 								tagString:"Clinic"));
 							progExtended.HideButtons();//can't pause or cancel with 1 clinic. This event needs to be called after the bar is instantiated. 
 						}
-						rowsChanged+=Procedures.GlobalUpdateFees(_feeCache.GetFeesForClinics(new List<long> { clinicCur.ClinicNum }),clinicCur.ClinicNum,clinicCur.Abbr);
+						rowsChanged+=Procedures.GlobalUpdateFees(_feeCache.GetFeesForClinics(new List<long> { clinicCur.Id }),clinicCur.Id,clinicCur.Abbr);
 						if(progExtended.IsPaused) {
 							progExtended.AllowResume();
 						}
@@ -1439,12 +1459,7 @@ namespace OpenDental {
 					if(listFeeClinics.Count>1) {
 						progExtended.Fire(ODEventType.FeeSched,new ProgressBarHelper(Lan.g(this,"Overall"),"100%",100,100,tagString:"OverallStatus"));
 					}
-				}
-				else {//no clinic - "Clinic" here is just a reference to the progress bar that updates Clinic progress instead of overall progress
-					progExtended.Fire(ODEventType.FeeSched,new ProgressBarHelper("Updating...","0%",1,100,tagString:"Clinic"));
-					progExtended.HideButtons();
-					rowsChanged=Procedures.GlobalUpdateFees(_feeCache.ToList(),-1,"Updating...");
-				}
+
 				progExtended.OnProgressDone();
 				progExtended.Fire(ODEventType.FeeSched
 					,new ProgressBarHelper(Lan.g(this,"Treatment planned procedure fees changed:")+" "+rowsChanged.ToString()+"\r\n"+Lan.g(this,"Done.")
@@ -1474,28 +1489,27 @@ namespace OpenDental {
 			}
 			List<Clinic> listWriteoffClinics=new List<Clinic>();
 			bool doUpdatePrevClinicPref=false;
-			if(_listSelectedClinicsGlobalUpdates.Any(x => x.ClinicNum==-1)) {//user selected 'All'
-				listWriteoffClinics=_listClinics.Select(x => x.Copy()).ToList();
-				listWriteoffClinics.Insert(0,new Clinic { Abbr=(Preferences.HasClinicsEnabled?"Unassigned":"Updating Write-offs..."),ClinicNum=0 });
+			if(_listSelectedClinicsGlobalUpdates.Any(x => x.Id==-1)) {//user selected 'All'
+                listWriteoffClinics = new List<Clinic>(_listClinics);
+				listWriteoffClinics.Insert(0,new Clinic { Abbr="Unassigned" });
 				doUpdatePrevClinicPref=true;
 			}
 			else {
 				listWriteoffClinics=_listSelectedClinicsGlobalUpdates;
 			}
 			if(listWriteoffClinics.Count==0) {				
-				listWriteoffClinics.Insert(0,new Clinic { Abbr=(Preferences.HasClinicsEnabled?"Unassigned":"Updating Write-offs..."),ClinicNum=0 });
+				listWriteoffClinics.Insert(0,new Clinic { Abbr="Unassigned" });
 			}
 			//MUST be in primary key order so that we will resume on the correct clinic and update the remaining clinics in the list
-			listWriteoffClinics=listWriteoffClinics.OrderBy(x => x.ClinicNum).ToList();
+			listWriteoffClinics=listWriteoffClinics.OrderBy(x => x.Id).ToList();
 			int indexPrevClinic=-1;
-			if(Preferences.HasClinicsEnabled
-				&& !Security.CurrentUser.ClinicRestricted
-				&& _listSelectedClinicsGlobalUpdates.Any(x => x.ClinicNum==-1) //user selected 'All'
+			if(!Security.CurrentUser.ClinicRestricted
+				&& _listSelectedClinicsGlobalUpdates.Any(x => x.Id==-1) //user selected 'All'
 				&& !string.IsNullOrEmpty(Preference.GetString(PreferenceName.GlobalUpdateWriteOffLastClinicCompleted)))//previous 'All' run was interrupted, resume
 			{
 				try {
 					long prevClinic=Preference.GetLong(PreferenceName.GlobalUpdateWriteOffLastClinicCompleted);
-					indexPrevClinic=listWriteoffClinics.FindIndex(x => x.ClinicNum==prevClinic);
+					indexPrevClinic=listWriteoffClinics.FindIndex(x => x.Id==prevClinic);
 				}
 				catch {
 					//if pref is not a long, leave prevClinic as -1 so it will run as if it was not previously interrupted
@@ -1589,26 +1603,26 @@ namespace OpenDental {
 			}
 			//One clinic selected
 			comboClinicTo.DropDownStyle=ComboBoxStyle.DropDownList;
-			comboClinicTo.SetSelectedItem<Clinic>(x => x.ClinicNum==_listSelectedClinicNumsTo.First(),"");
+			comboClinicTo.SetSelectedItem<Clinic>(x => x.Id==_listSelectedClinicNumsTo.First(),"");
 		}
 
 		private void butGlobalUpdatePickClinic_Click(object sender,EventArgs e) {
 			FormClinics FormC=new FormClinics();
 			FormC.IsSelectionMode=true;
 			FormC.IsMultiSelect=true;
-			FormC.ListClinics=_listClinics.Select(x => x.Copy()).ToList();
+            FormC.ListClinics = new List<Clinic>(_listClinics);
 			if(!Security.CurrentUser.ClinicRestricted) {
-				FormC.ListClinics.Insert(0,new Clinic { ClinicNum=0,Description=Lan.g(this,"Headquarters"),Abbr=Lan.g(this,"HQ") });
+				FormC.ListClinics.Insert(0,new Clinic { Description=Lan.g(this,"Headquarters"),Abbr=Lan.g(this,"HQ") });
 				FormC.IncludeHQInList=true;
 			}
-			FormC.ListSelectedClinicNums=_listSelectedClinicsGlobalUpdates.Select(x => x.ClinicNum).ToList();
+			FormC.ListSelectedClinicNums=_listSelectedClinicsGlobalUpdates.Select(x => x.Id).ToList();
 			DialogResult diagRes=FormC.ShowDialog();
 			if(diagRes==DialogResult.Cancel) {
 				return;
 			}
-			_listSelectedClinicsGlobalUpdates=_listClinics.FindAll(x => FormC.ListSelectedClinicNums.Contains(x.ClinicNum)).Select(x => x.Copy()).ToList();
+			_listSelectedClinicsGlobalUpdates=_listClinics.FindAll(x => FormC.ListSelectedClinicNums.Contains(x.Id)).ToList();
 			if(!Security.CurrentUser.ClinicRestricted && FormC.ListSelectedClinicNums.Contains(0)) {
-				_listSelectedClinicsGlobalUpdates.Insert(0,new Clinic { ClinicNum=0,Description=Lan.g(this,"Headquarters"),Abbr=Lan.g(this,"HQ") });
+				_listSelectedClinicsGlobalUpdates.Insert(0,new Clinic { Description=Lan.g(this,"Headquarters"),Abbr=Lan.g(this,"HQ") });
 			}
 			if(_listSelectedClinicsGlobalUpdates.Count>1) {
 				comboGlobalUpdateClinics.SelectedIndex=-1;
@@ -1617,7 +1631,7 @@ namespace OpenDental {
 			}
 			else if(_listSelectedClinicsGlobalUpdates.Count==1) {
 				comboGlobalUpdateClinics.DropDownStyle=ComboBoxStyle.DropDownList;
-				comboGlobalUpdateClinics.SetSelectedItem<Clinic>(x => x.ClinicNum==_listSelectedClinicsGlobalUpdates.First().ClinicNum,"");
+				comboGlobalUpdateClinics.SetSelectedItem<Clinic>(x => x.Id==_listSelectedClinicsGlobalUpdates.First().Id,"");
 			}
 			else {//if count==0
 				comboGlobalUpdateClinics.DropDownStyle=ComboBoxStyle.DropDownList;
@@ -1659,7 +1673,7 @@ namespace OpenDental {
 			FormC.IsSelectionMode=true;
 			FormC.ListClinics=_listClinics;
 			FormC.ShowDialog();
-			return _listClinics.FindIndex(x => x.ClinicNum==FormC.SelectedClinicNum);
+			return _listClinics.FindIndex(x => x.Id==FormC.SelectedClinicNum);
 		}
 
 		///<summary>Launches the Fee Schedules window and lets the user pick a specific schedule.
@@ -1679,7 +1693,7 @@ namespace OpenDental {
 		private void comboClinicTo_SelectionChangeCommitted(object sender,EventArgs e) {
 			comboClinicTo.DropDownStyle=ComboBoxStyle.DropDownList;
 			_listSelectedClinicNumsTo.Clear();
-			_listSelectedClinicNumsTo.Add(comboClinicTo.SelectedTag<Clinic>().ClinicNum);
+			_listSelectedClinicNumsTo.Add(comboClinicTo.SelectedTag<Clinic>().Id);
 		}
 
 		private void comboClinicGlobalUpdate_SelectionChangeCommitted(object sender,EventArgs e) {

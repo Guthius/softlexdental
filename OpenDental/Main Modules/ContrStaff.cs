@@ -161,28 +161,15 @@ namespace OpenDental
         {
             if (!Security.IsAuthorized(Permissions.Billing)) return;
 
-            if (Preferences.HasClinicsEnabled)
+            if (Statements.UnsentClinicStatementsExist(Clinics.ClinicId))
             {
-                if (Statements.UnsentClinicStatementsExist(Clinics.ClinicNum))
-                {
-                    ShowBilling(Clinics.ClinicNum);
-                }
-                else 
-                {
-                    ShowBillingOptions(Clinics.ClinicNum);
-                }
+                ShowBilling(Clinics.ClinicId);
             }
             else
             {
-                if (Statements.UnsentStatementsExist())
-                {
-                    ShowBilling(0);
-                }
-                else
-                {
-                    ShowBillingOptions(0);
-                }
+                ShowBillingOptions(Clinics.ClinicId);
             }
+
             SecurityLog.Write(SecurityLogEvents.Billing, "");
         }
 
@@ -237,14 +224,9 @@ namespace OpenDental
             {
                 while (!ValidateConnectionDetails()) // Only validate connection details if the ArManager form does not exist yet
                 {
-                    var message =
-                        Preferences.HasClinicsEnabled ?
-                            "An SFTP connection could not be made using the connection details in the enabled Transworld (TSI) program link. Would you like to edit the Transworld program link now?" :
-                            "An SFTP connection could not be made using the connection details for any clinic in the enabled Transworld (TSI) program link. Would you like to edit the Transworld program link now?";
-
                     var result =
                         MessageBox.Show(
-                            message, 
+                            "An SFTP connection could not be made using the connection details in the enabled Transworld (TSI) program link. Would you like to edit the Transworld program link now?", 
                             "Collections",
                             MessageBoxButtons.YesNo,
                             MessageBoxIcon.Warning);
@@ -379,7 +361,7 @@ namespace OpenDental
                 // reason to close the window is when using clinics. It was possible to show a different clinic billing list than the one chosen.
                 for (int i = 0; i < formBilling.ListClinics.Count; i++)
                 {
-                    if (formBilling.ListClinics[i].ClinicNum != clinicNum)
+                    if (formBilling.ListClinics[i].Id != clinicNum)
                     {
                         // For most users clinic nums will always be 0.
                         // The old billing list was showing a different clinic. 
@@ -428,15 +410,8 @@ namespace OpenDental
             Program progCur = Programs.GetCur(ProgramName.Transworld);
             List<long> listClinicNums = new List<long>();
 
-            if (Preferences.HasClinicsEnabled)
-            {
-                listClinicNums = Clinics.GetAllForUserod(Security.CurrentUser).Select(x => x.ClinicNum).ToList();
-                if (!Security.CurrentUser.ClinicRestricted)
-                {
-                    listClinicNums.Add(0);
-                }
-            }
-            else
+            listClinicNums = Clinic.GetByUser(Security.CurrentUser).Select(x => x.Id).ToList();
+            if (!Security.CurrentUser.ClinicRestricted)
             {
                 listClinicNums.Add(0);
             }
@@ -525,14 +500,7 @@ namespace OpenDental
             employeeGrid.Columns.Add(new ODGridColumn("Status", 100));
             employeeGrid.Rows.Clear();
 
-            if (Preferences.HasClinicsEnabled)
-            {
-                _listEmployees = Employee.GetEmpsForClinic(Clinics.ClinicNum, false, true);
-            }
-            else
-            {
-                _listEmployees = Employee.All();
-            }
+            _listEmployees = Employee.GetEmpsForClinic(Clinics.ClinicId, false, true);
 
             foreach (Employee emp in _listEmployees)
             {

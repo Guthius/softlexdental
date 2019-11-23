@@ -474,11 +474,11 @@ namespace OpenDentBusiness
             string command = GetQueryAdjustmentsForAppointments(dateStart, dateEnd, listOpNums, doGetSum: true);
             if (!listProvNums.IsNullOrEmpty())
             {
-                command += "AND adjustment.ProvNum IN(" + string.Join(",", listProvNums.Select(x => POut.Long(x))) + ") ";
+                command += "AND adjustment.ProvNum IN(" + string.Join(",", listProvNums) + ") ";
             }
-            if (clinicNum > 0 && Preferences.HasClinicsEnabled)
+            if (clinicNum > 0)
             {
-                command += "AND adjustment.ClinicNum=" + POut.Long(clinicNum);
+                command += "AND adjustment.ClinicNum=" + clinicNum;
             }
             return PIn.Decimal(Db.GetScalar(command));
         }

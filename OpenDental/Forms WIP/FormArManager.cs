@@ -59,21 +59,21 @@ namespace OpenDental
 			#endregion Get Variables for Both Tabs
 			#region Fill Unsent Tab Filter ComboBoxes, CheckBoxes, and Fields
 			#region Unsent Tab Clinic Combo
-			if(Preferences.HasClinicsEnabled) {
+
 				comboBoxMultiUnsentClinics.Visible=true;
 				labelUnsentClinics.Visible=true;
 				comboBoxMultiSentClinics.Visible=true;
 				labelSentClinics.Visible=true;
 				comboBoxMultiUnsentClinics.Items.Add(Lan.g(this,"All"));
 				comboBoxMultiSentClinics.Items.Add(Lan.g(this,"All"));
-				if(Clinics.ClinicNum==0) {
+				if(Clinics.ClinicId==0) {
 					comboBoxMultiUnsentClinics.SetSelected(0,true);
 					comboBoxMultiSentClinics.SetSelected(0,true);
 				}
 				foreach(Clinic clinCur in _listClinics) {
 					comboBoxMultiUnsentClinics.Items.Add(clinCur.Abbr);
 					comboBoxMultiSentClinics.Items.Add(clinCur.Abbr);
-					if(Clinics.ClinicNum>0 && clinCur.ClinicNum==Clinics.ClinicNum) {
+					if(Clinics.ClinicId>0 && clinCur.Id==Clinics.ClinicId) {
 						comboBoxMultiUnsentClinics.SetSelected(comboBoxMultiUnsentClinics.Items.Count-1,true);
 						comboBoxMultiSentClinics.SetSelected(comboBoxMultiSentClinics.Items.Count-1,true);
 					}
@@ -82,7 +82,7 @@ namespace OpenDental
 					comboBoxMultiUnsentClinics.SetSelected(0,true);
 					comboBoxMultiSentClinics.SetSelected(0,true);//if unsent clinic combo has 0 selected, so will sent clinic combo
 				}
-			}
+			
 			#endregion Unsent Tab Clinic Combo
 			#region Unsent Tab Prov Combo
 			comboBoxMultiUnsentProvs.Items.Add("All");
@@ -646,9 +646,6 @@ namespace OpenDental
 			gridUnsent.Columns.Clear();
 			List<DisplayField> listDisplayFields=DisplayFields.GetForCategory(DisplayFieldCategory.ArManagerUnsentGrid);
 			foreach(DisplayField fieldCur in listDisplayFields) {
-				if(fieldCur.InternalName=="Clinic" && !Preferences.HasClinicsEnabled) {
-					continue;//skip the clinic column if clinics are not enabled
-				}
 				ODGridSortingStrategy sortingStrat=ODGridSortingStrategy.StringCompare;
 				HorizontalAlignment hAlign=HorizontalAlignment.Left;
 				if(fieldCur.InternalName.In("0-30 Days","31-60 Days","61-90 Days","> 90 Days","Total","-Ins Est","=Patient","PayPlan Due",
@@ -680,7 +677,7 @@ namespace OpenDental
 			#endregion Set Grid Title and Columns
 			#region Fill Grid Rows
 			gridUnsent.Rows.Clear();
-			Dictionary<long,string> dictClinicAbbrs=_listClinics.ToDictionary(x => x.ClinicNum,x => x.Abbr);
+			Dictionary<long,string> dictClinicAbbrs=_listClinics.ToDictionary(x => x.Id,x => x.Abbr);
 			Dictionary<long,string> dictProvAbbrs=_listProviders.ToDictionary(x => x.ProvNum,x => x.Abbr);
 			Dictionary<long,string> dictBillTypeNames=Definition.GetByCategory(DefinitionCategory.BillingTypes).ToDictionary(x => x.Id,x => x.Description);
 			Dictionary<long,DateTime> dictSuspendDateTimes=new Dictionary<long,DateTime>();
@@ -718,9 +715,6 @@ namespace OpenDental
 							row.Cells.Add((checkUnsentShowPatNums.Checked?(patAgeCur.PatNum.ToString()+" - "):"")+patAgeCur.PatName);
 							continue;
 						case "Clinic":
-							if(!Preferences.HasClinicsEnabled) {
-								continue;//skip the clinic column if clinics are not enabled
-							}
 							string clinicAbbr;
 							row.Cells.Add(dictClinicAbbrs.TryGetValue(patAgeCur.ClinicNum,out clinicAbbr)?clinicAbbr:"");
 							continue;
@@ -829,15 +823,15 @@ namespace OpenDental
 				listProvNums=comboBoxMultiUnsentProvs.ListSelectedIndices.Select(x => _listProviders[x-1].ProvNum).ToList();
 			}
 			List<long> listClinicNums=new List<long>();
-			if(Preferences.HasClinicsEnabled) {
+
 				if(comboBoxMultiUnsentClinics.ListSelectedIndices.Contains(0)) {
-					listClinicNums=_listClinics.Select(x => x.ClinicNum).ToList();
+					listClinicNums=_listClinics.Select(x => x.Id).ToList();
 				}
 				else {
 					//x-1 works because we know index 0 isn't selected(from above contains(0)) and we -1 for All clinics
-					listClinicNums=comboBoxMultiUnsentClinics.ListSelectedIndices.Select(x => _listClinics[x-1].ClinicNum).ToList();
+					listClinicNums=comboBoxMultiUnsentClinics.ListSelectedIndices.Select(x => _listClinics[x-1].Id).ToList();
 				}
-			}
+			
 			#endregion Get Filter Data
 			#region Apply Filter Data to PatAging List
 			for(int i=0;i<_listPatAgingUnsentAll.Count;i++) {
@@ -958,12 +952,12 @@ namespace OpenDental
 		private void FillDemandTypes() {
 			TsiDemandType selectedType=comboDemandType.SelectedTag<TsiDemandType>();//If they have nothing selected, this will default to 'Accelerator'.
 			List<long> listClinicNums=new List<long>();
-			if(!Preferences.HasClinicsEnabled || comboBoxMultiUnsentClinics.ListSelectedIndices.Contains(0)) {
-				listClinicNums=_listClinics.Select(x => x.ClinicNum).ToList();//if clinics are disabled, this will only contain the HQ "clinic"
+			if(comboBoxMultiUnsentClinics.ListSelectedIndices.Contains(0)) {
+				listClinicNums=_listClinics.Select(x => x.Id).ToList();//if clinics are disabled, this will only contain the HQ "clinic"
 			}
 			else {
 				//x-1 works because we know index 0 isn't selected(from above contains(0)) and we -1 due to the "All"" clinic
-				listClinicNums=comboBoxMultiUnsentClinics.ListSelectedIndices.Select(x => _listClinics[x-1].ClinicNum).ToList();
+				listClinicNums=comboBoxMultiUnsentClinics.ListSelectedIndices.Select(x => _listClinics[x-1].Id).ToList();
 			}
 			comboDemandType.Items.Clear();
 			Dictionary<long,string[]> dictClinicSelectedServices=_dictClinicProgProps
@@ -1087,7 +1081,7 @@ namespace OpenDental
 				return;
 			}
 			if(_dictClinicProgProps.All(x => listClinicsSkipped.Contains(x.Key))) {
-				MsgBox.Show(this,"An SFTP connection could not be made using the connection details "+(Preferences.HasClinicsEnabled ? "for any clinic " : "")
+				MsgBox.Show(this,"An SFTP connection could not be made using the connection details for any clinic "
 					+"in the enabled Transworld (TSI) program link.  Accounts cannot be sent to collection until the program link is setup.");
 				return;
 			}
@@ -1104,8 +1098,8 @@ namespace OpenDental
 				.Where(x => x.Value.Any(y => y.Key=="SelectedServices" && !string.IsNullOrEmpty(y.Value)))
 				.ToDictionary(x => x.Key,x => x.Value.Find(y => y.Key=="SelectedServices").Value.Split(','));
 			TsiDemandType demandType=comboDemandType.SelectedTag<TsiDemandType>();
-			List<long> listPatNumsToReselect=listPatAging.FindAll(x => !dictClinicSelectedServices.ContainsKey(Preferences.HasClinicsEnabled?x.ClinicNum:0)
-						|| !dictClinicSelectedServices[Preferences.HasClinicsEnabled?x.ClinicNum:0].Contains(((int)demandType).ToString())).Select(x => x.PatNum).ToList();
+			List<long> listPatNumsToReselect=listPatAging.FindAll(x => !dictClinicSelectedServices.ContainsKey(x.ClinicNum)
+						|| !dictClinicSelectedServices[x.ClinicNum].Contains(((int)demandType).ToString())).Select(x => x.PatNum).ToList();
 			string msgTxt="";
 			if(listPatNumsToReselect.Count > 0)	{
 				Cursor=Cursors.Default;
@@ -1209,7 +1203,7 @@ namespace OpenDental
 			Dictionary<long,List<TsiTransLog>> dictClinicNumListTransLogs=new Dictionary<long,List<TsiTransLog>>();
 			List<long> listFailedPatNums=new List<long>();
 			foreach(PatAging pAgingCur in listPatAging) {
-				long clinicNum=Preferences.HasClinicsEnabled?pAgingCur.ClinicNum:0;
+				long clinicNum=pAgingCur.ClinicNum;
 				if(listClinicsSkipped.Contains(clinicNum)) {
 					listFailedPatNums.Add(pAgingCur.PatNum);
 					continue;
@@ -1432,9 +1426,6 @@ namespace OpenDental
 			gridSent.Columns.Clear();
 			List<DisplayField> listDisplayFields=DisplayFields.GetForCategory(DisplayFieldCategory.ArManagerSentGrid);
 			foreach(DisplayField fieldCur in listDisplayFields) {
-				if(fieldCur.InternalName=="Clinic" && !Preferences.HasClinicsEnabled) {
-					continue;//skip the clinic column if clinics are not enabled
-				}
 				ODGridSortingStrategy sortingStrat=ODGridSortingStrategy.StringCompare;
 				HorizontalAlignment hAlign=HorizontalAlignment.Left;
 				if(fieldCur.InternalName.In("0-30 Days","31-60 Days","61-90 Days","> 90 Days","Total","-Ins Est","=Patient","PayPlan Due",
@@ -1465,7 +1456,7 @@ namespace OpenDental
 			#endregion Set Grid Title and Columns
 			#region Fill Grid Rows
 			gridSent.Rows.Clear();
-			Dictionary<long,string> dictClinicAbbrs=_listClinics.ToDictionary(x => x.ClinicNum,x => x.Abbr);
+			Dictionary<long,string> dictClinicAbbrs=_listClinics.ToDictionary(x => x.Id,x => x.Abbr);
 			Dictionary<long,string> dictProvAbbrs=_listProviders.ToDictionary(x => x.ProvNum,x => x.Abbr);
 			double bal0_30=0;
 			double bal31_60=0;
@@ -1494,9 +1485,6 @@ namespace OpenDental
 							row.Cells.Add((checkSentShowPatNums.Checked?(patAgeCur.PatNum.ToString()+" - "):"")+patAgeCur.PatName);
 							continue;
 						case "Clinic":
-							if(!Preferences.HasClinicsEnabled) {
-								continue;//skip the clinic column if clinics are not enabled
-							}
 							string clinicAbbr;
 							row.Cells.Add(dictClinicAbbrs.TryGetValue(patAgeCur.ClinicNum,out clinicAbbr)?clinicAbbr:"");
 							continue;
@@ -1601,15 +1589,15 @@ namespace OpenDental
 				listProvNums=comboBoxMultiSentProvs.ListSelectedIndices.Select(x => _listProviders[x-1].ProvNum).ToList();
 			}
 			List<long> listClinicNums=new List<long>();
-			if(Preferences.HasClinicsEnabled) {
+
 				if(comboBoxMultiSentClinics.ListSelectedIndices.Contains(0)) {
-					listClinicNums=_listClinics.Select(x => x.ClinicNum).ToList();
+					listClinicNums=_listClinics.Select(x => x.Id).ToList();
 				}
 				else {
 					//x-1 works because we know index 0 isn't selected(from above contains(0)) and we -1 for All clinics
-					listClinicNums=comboBoxMultiSentClinics.ListSelectedIndices.Select(x => _listClinics[x-1].ClinicNum).ToList();
+					listClinicNums=comboBoxMultiSentClinics.ListSelectedIndices.Select(x => _listClinics[x-1].Id).ToList();
 				}
-			}
+			
 			#endregion Get Filter Data
 			#region Apply Filter Data to PatAging List
 			for(int i=0;i<_listPatAgingSentAll.Count;i++) {
@@ -1758,7 +1746,7 @@ namespace OpenDental
 				return;
 			}
 			if(_dictClinicProgProps.All(x => listClinicsSkipped.Contains(x.Key))) {
-				MsgBox.Show(this,"An SFTP connection could not be made using the connection details "+(Preferences.HasClinicsEnabled ? "for any clinic " : "")
+				MsgBox.Show(this,"An SFTP connection could not be made using the connection details for any clinic "
 					+"in the enabled Transworld (TSI) program link.  Account statuses cannot be updated with TSI until the program link is setup.");
 				return;
 			}
@@ -1785,7 +1773,7 @@ namespace OpenDental
 			Dictionary<long,List<TsiTransLog>> dictClinicNumListTransLogs=new Dictionary<long,List<TsiTransLog>>();
 			List<long> listFailedPatNums=new List<long>();
 			foreach(PatAging pAgingCur in listPatAging) {
-				long clinicNum=Preferences.HasClinicsEnabled?pAgingCur.ClinicNum:0;
+				long clinicNum=pAgingCur.ClinicNum;
 				if(listClinicsSkipped.Contains(clinicNum)) {
 					listFailedPatNums.Add(pAgingCur.PatNum);
 					continue;

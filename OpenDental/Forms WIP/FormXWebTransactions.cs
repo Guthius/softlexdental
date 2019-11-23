@@ -19,15 +19,7 @@ namespace OpenDental
 
         void FormXWebTransactions_Load(object sender, EventArgs e)
         {
-            if (Preferences.HasClinicsEnabled)
-            {
-                LoadClinics();
-            }
-            else
-            {
-                clinicComboBox.Visible = false;
-                clinicLabel.Visible = false;
-            }
+            LoadClinics();
 
             dateFromTextBox.Text = DateTime.Today.ToShortDateString();
             dateToTextBox.Text = DateTime.Today.ToShortDateString();
@@ -36,7 +28,7 @@ namespace OpenDental
 
         void LoadClinics()
         {
-            clinicsList = Clinics.GetForUserod(Security.CurrentUser);
+            clinicsList = Clinic.GetByUser(Security.CurrentUser).ToList();
             clinicComboBox.Items.Add("All");
             clinicComboBox.SelectedIndex = 0;
 
@@ -48,7 +40,7 @@ namespace OpenDental
             }
 
             clinicsList.ForEach(x => clinicComboBox.Items.Add(x.Abbr));
-            clinicComboBox.SelectedIndex = clinicsList.FindIndex(x => x.ClinicNum == Clinics.ClinicNum) + offset;
+            clinicComboBox.SelectedIndex = clinicsList.FindIndex(x => x.Id == Clinics.ClinicId) + offset;
             if (clinicComboBox.SelectedIndex - offset < 0)
             {
                 clinicComboBox.SelectedIndex = 0;
@@ -58,11 +50,11 @@ namespace OpenDental
         void LoadTransactions()
         {
             var clinicNumsList = new List<long>();
-            if (Preferences.HasClinicsEnabled && clinicComboBox.SelectedIndex != 0) //Not 'All' selected
+            if (clinicComboBox.SelectedIndex != 0) //Not 'All' selected
             {
                 if (Security.CurrentUser.ClinicRestricted)
                 {
-                    clinicNumsList.Add(clinicsList[clinicComboBox.SelectedIndex - 1].ClinicNum);
+                    clinicNumsList.Add(clinicsList[clinicComboBox.SelectedIndex - 1].Id);
                 }
                 else
                 {
@@ -72,12 +64,12 @@ namespace OpenDental
                     }
                     else if (clinicComboBox.SelectedIndex > 1)
                     {
-                        clinicNumsList.Add(clinicsList[clinicComboBox.SelectedIndex - 2].ClinicNum);
+                        clinicNumsList.Add(clinicsList[clinicComboBox.SelectedIndex - 2].Id);
                     }
                 }
             }
 
-            transactionsTable = 
+            transactionsTable =
                 XWebResponses.GetApprovedTransactions(
                     clinicNumsList,
                     PIn.Date(dateFromTextBox.Text),
@@ -91,10 +83,7 @@ namespace OpenDental
             transactionsGrid.Columns.Add(new ODGridColumn("Tran Type", 80));
             transactionsGrid.Columns.Add(new ODGridColumn("Card Number", 140));
             transactionsGrid.Columns.Add(new ODGridColumn("Expiration", 70));
-            if (Preferences.HasClinicsEnabled)
-            {
-                transactionsGrid.Columns.Add(new ODGridColumn("Clinic", 100));
-            }
+            transactionsGrid.Columns.Add(new ODGridColumn("Clinic", 100));
             transactionsGrid.Columns.Add(new ODGridColumn("Transaction ID", 110));
             transactionsGrid.Rows.Clear();
 
@@ -123,6 +112,7 @@ namespace OpenDental
                         tranStatusStr = tranStatus.ToString();
                         break;
                 }
+
                 row.Cells.Add(tranStatusStr);
                 row.Cells.Add(transactionsTable.Rows[i]["MaskedAcctNum"].ToString());
                 string expiration = transactionsTable.Rows[i]["ExpDate"].ToString();
@@ -131,10 +121,7 @@ namespace OpenDental
                     expiration = expiration.Substring(0, 2) + "/" + expiration.Substring(2);
                 }
                 row.Cells.Add(expiration);
-                if (Preferences.HasClinicsEnabled)
-                {
-                    row.Cells.Add(transactionsTable.Rows[i]["Clinic"].ToString());
-                }
+                row.Cells.Add(transactionsTable.Rows[i]["Clinic"].ToString());
                 row.Cells.Add(transactionsTable.Rows[i]["TransactionID"].ToString());
                 transactionsGrid.Rows.Add(row);
             }

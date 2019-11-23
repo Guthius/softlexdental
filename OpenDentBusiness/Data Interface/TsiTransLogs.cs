@@ -104,7 +104,7 @@ namespace OpenDentBusiness
                     FKey = adjNum,
                     RawMsgText = msgText,
                     //TransJson=""//only valid for placement msgs
-                    ClinicNum = (Preferences.HasClinicsEnabled ? patAgingCur.ClinicNum : 0)
+                    ClinicNum = patAgingCur.ClinicNum
                 };
                 TsiTransLogs.InsertMany(new List<TsiTransLog>() { logCur });
             }
@@ -200,28 +200,18 @@ namespace OpenDentBusiness
 
             var disabledClinicIds = new List<long>();
 
-            if (Preferences.HasClinicsEnabled)
-            {
-                var clinics = Clinics.GetDeepCopy();
+            var clinics = Clinic.All();
 
-                disabledClinicIds.AddRange(
-                    programPropertiesPerClinic
-                        .Where(x => x.Key.HasValue && !ValidateClinicSftpDetails(new ProgramPropertyCollection(x.Value), false))
-                        .Select(x => x.Key.Value));
+            disabledClinicIds.AddRange(
+                programPropertiesPerClinic
+                    .Where(x => x.Key.HasValue && !ValidateClinicSftpDetails(new ProgramPropertyCollection(x.Value), false))
+                    .Select(x => x.Key.Value));
 
-                disabledClinicIds.AddRange(
-                    clinics
-                        .FindAll(clinic => clinic.IsHidden || (disabledClinicIds.Contains(0) && !programPropertiesPerClinic.ContainsKey(clinic.ClinicNum)))
-                        .Select(clinic => clinic.ClinicNum)
-                );
-            }
-            else
-            {
-                if (!TsiTransLogs.ValidateClinicSftpDetails(new ProgramPropertyCollection(programPropertiesPerClinic[0]), false))
-                {
-                    disabledClinicIds.Add(0);
-                }
-            }
+            disabledClinicIds.AddRange(
+                clinics
+                    .Where(clinic => clinic.IsHidden || (disabledClinicIds.Contains(0) && !programPropertiesPerClinic.ContainsKey(clinic.Id)))
+                    .Select(clinic => clinic.Id)
+            );
 
             return !disabledClinicIds.Contains(clinicId);
         }

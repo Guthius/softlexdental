@@ -53,11 +53,6 @@ namespace OpenDentBusiness
         public static DataStorageType AtoZfolderUsed => (DataStorageType)Preference.GetInt(PreferenceName.AtoZfolderUsed);
 
         /// <summary>
-        /// This property returns true if the preference for clinics is on and there is at least one non-hidden clinic.
-        /// </summary>
-        public static bool HasClinicsEnabled => !Preference.GetBoolNoCache(PreferenceName.EasyNoClinics) && Clinics.GetCount(true) > 0;
-
-        /// <summary>
         /// True if the practice has set a window to restrict the times that automatic communications will be sent out.
         /// </summary>
         public static bool DoRestrictAutoSendWindow

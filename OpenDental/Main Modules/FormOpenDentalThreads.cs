@@ -166,7 +166,7 @@ namespace OpenDental
             {
                 return;
             }
-            long clinicNumCur = Clinics.ClinicNum;
+            long clinicNumCur = Clinics.ClinicId;
             long userNumCur = Security.CurrentUser.Id;
             ODThread.WorkerDelegate getAlerts = new ODThread.WorkerDelegate((o) =>
             {
@@ -554,7 +554,7 @@ namespace OpenDental
             ODThread odThread = new ODThread((o) =>
             {
                 RefreshMenuDashboards();
-                InitDashboards(Security.CurrentUser.Id, CurPatNum);
+                InitDashboards(Security.CurrentUser.Id, CurrentPatientId);
             });
             //If the thread that attempts to start Open Dental dashboard fails for any reason, silently fail.
             odThread.GroupName = FormODThreadNames.Dashboard.GetDescription();
@@ -773,7 +773,7 @@ namespace OpenDental
                 List<UserPreference> listBlockedTaskLists = new List<UserPreference>();
                 //JM: Bug fix, but we do not know what would cause Security.CurUser to be null. Worst case task wont show till next signal tick.
                 long userNumCur = Security.CurrentUser?.Id ?? 0;
-                List<OpenDentBusiness.Task> listRefreshedTasks = Tasks.GetNewTasksThisUser(userNumCur, Clinics.ClinicNum, listEditedTaskNums);
+                List<OpenDentBusiness.Task> listRefreshedTasks = Tasks.GetNewTasksThisUser(userNumCur, Clinics.ClinicId, listEditedTaskNums);
                 if (listRefreshedTasks.Count > 0)
                 {
                     listRefreshedTaskNotes = TaskNotes.GetForTasks(listRefreshedTasks.Select(x => x.TaskNum).ToList());

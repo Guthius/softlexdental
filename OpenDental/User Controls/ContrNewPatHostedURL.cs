@@ -33,7 +33,7 @@ namespace OpenDental.User_Controls {
         {
             get
             {
-                return !Preferences.HasClinicsEnabled && SmsPhones.IsIntegratedTextingEnabled();
+                return SmsPhones.IsIntegratedTextingEnabled();
             }
         }
 
@@ -173,7 +173,7 @@ namespace OpenDental.User_Controls {
 					return;
 				case VERIFYTXT_COL:
 					if(!IsTextingEnabled) {
-						MsgBox.Show(this,"Texting not enabled"+(Preferences.HasClinicsEnabled?" for this clinic":""));
+						MsgBox.Show(this,"Texting not enabled for this clinic");
 						return;
 					}
 					break;

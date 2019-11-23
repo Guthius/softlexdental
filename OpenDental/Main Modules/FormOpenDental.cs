@@ -186,10 +186,10 @@ namespace OpenDental
         #endregion Classwide Variables
 
         ///<summary>Represents if the regkey is a developer regkey.</summary>
-        public static bool RegKeyIsForTesting;
+        public static bool RegKeyIsForTesting { get; set; }
 
         ///<summary>PatNum for currently loaded patient.</summary>
-        public static long CurPatNum
+        public static long CurrentPatientId
         {
             get
             {
@@ -299,25 +299,25 @@ namespace OpenDental
                 | System.Windows.Forms.AnchorStyles.Right | System.Windows.Forms.AnchorStyles.Bottom)));
             ContrTreat2.Size = new Size(splitContainerNoFlickerDashboard.Panel1.Width, splitContainerNoFlickerDashboard.Panel1.Height);
             splitContainerNoFlickerDashboard.Panel1.Controls.Add(ContrTreat2);
+
             //contrChart
             UpdateSplashProgress("Initializing chart module", 40);
             ContrChart2 = new ContrChart() { Visible = false };
-            ContrChart2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                | System.Windows.Forms.AnchorStyles.Right | System.Windows.Forms.AnchorStyles.Bottom)));
+            ContrChart2.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right | System.Windows.Forms.AnchorStyles.Bottom;
             ContrChart2.Size = new Size(splitContainerNoFlickerDashboard.Panel1.Width, splitContainerNoFlickerDashboard.Panel1.Height);
             splitContainerNoFlickerDashboard.Panel1.Controls.Add(ContrChart2);
+
             //contrImages
             UpdateSplashProgress("Initializing document module", 70);
             ContrImages2 = new ContrImages() { Visible = false };
-            ContrImages2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                | System.Windows.Forms.AnchorStyles.Right | System.Windows.Forms.AnchorStyles.Bottom)));
+            ContrImages2.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right | System.Windows.Forms.AnchorStyles.Bottom;
             ContrImages2.Size = new Size(splitContainerNoFlickerDashboard.Panel1.Width, splitContainerNoFlickerDashboard.Panel1.Height);
             splitContainerNoFlickerDashboard.Panel1.Controls.Add(ContrImages2);
+
             //contrManage
             UpdateSplashProgress("Initializing management module", 80);
             ContrManage2 = new ContrStaff() { Visible = false };
-            ContrManage2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                | System.Windows.Forms.AnchorStyles.Right | System.Windows.Forms.AnchorStyles.Bottom)));
+            ContrManage2.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right | System.Windows.Forms.AnchorStyles.Bottom;
             ContrManage2.Size = new Size(splitContainerNoFlickerDashboard.Panel1.Width, splitContainerNoFlickerDashboard.Panel1.Height);
 
             modules.Add(ContrManage2);
@@ -561,9 +561,9 @@ namespace OpenDental
             //If the user is restricted to a clinic(s), and the computerpref clinic is not one of the user's restricted clinics, the user's clinic will be selected
             //If the user is not restricted, or if the user is restricted but has access to the computerpref clinic, the computerpref clinic will be selected
             //The ClinicNum will determine which view is loaded, either from the computerpref table or from the userodapptview table
-            if (Preferences.HasClinicsEnabled && Security.CurrentUser != null)
+            if (Security.CurrentUser != null)
             {//If block must be run before StartCacheFillForFees() so correct clinic filtration occurs.
-                Clinics.LoadClinicNumForUser();
+                Clinics.RestoreLastSelectedClinicForUser();
                 RefreshMenuClinics();
             }
             BeginODDashboardStarterThread();
@@ -633,16 +633,18 @@ namespace OpenDental
 
             if (Preference.GetDate(PreferenceName.BackupReminderLastDateRun).AddMonths(1) < DateTime.Today)
             {
-                FormBackupReminder FormBR = new FormBackupReminder();
-                FormBR.ShowDialog();
-                if (FormBR.DialogResult == DialogResult.OK)
+                using (var formBackupReminder = new FormBackupReminder())
                 {
-                    Preference.Update(PreferenceName.BackupReminderLastDateRun, DateTimeOD.Today);
-                }
-                else
-                {
-                    Application.Exit();
-                    return;
+                    formBackupReminder.ShowDialog();
+                    if (formBackupReminder.DialogResult == DialogResult.OK)
+                    {
+                        Preference.Update(PreferenceName.BackupReminderLastDateRun, DateTime.Today);
+                    }
+                    else
+                    {
+                        Application.Exit();
+                        return;
+                    }
                 }
             }
 
@@ -652,12 +654,12 @@ namespace OpenDental
             {
                 Computer.UpdateHeartBeat(Environment.MachineName);
             });
-            Text = PatientL.GetMainTitle(Patients.GetPat(CurPatNum), Clinics.ClinicNum);
+            Text = PatientL.GetMainTitle(Patients.GetPat(CurrentPatientId), Clinics.ClinicId);
             Security.DateTimeLastActivity = DateTime.Now;
 
 
 
-            Patient pat = Patients.GetPat(CurPatNum);
+            Patient pat = Patients.GetPat(CurrentPatientId);
             if (pat != null && (_StrCmdLineShow == "popup" || _StrCmdLineShow == "popups") && myOutlookBar.SelectedIndex != -1)
             {
                 FormPopupsForFam FormP = new FormPopupsForFam(PopupEventList);
@@ -669,7 +671,7 @@ namespace OpenDental
             {
                 isApptModuleSelected = true;
             }
-            if (CurPatNum != 0 && _StrCmdLineShow == "apptsforpatient" && isApptModuleSelected)
+            if (CurrentPatientId != 0 && _StrCmdLineShow == "apptsforpatient" && isApptModuleSelected)
             {
                 ContrAppt2.DisplayOtherDlg(false);
             }
@@ -679,11 +681,11 @@ namespace OpenDental
                 formPatientSelect.ShowDialog();
                 if (formPatientSelect.DialogResult == DialogResult.OK)
                 {
-                    CurPatNum = formPatientSelect.SelectedPatNum;
-                    pat = Patients.GetPat(CurPatNum);
+                    CurrentPatientId = formPatientSelect.SelectedPatNum;
+                    pat = Patients.GetPat(CurrentPatientId);
                     if (ContrChart2.Visible)
                     {
-                        ContrChart2.ModuleSelectedErx(CurPatNum);
+                        ContrChart2.ModuleSelectedErx(CurrentPatientId);
                     }
                     else
                     {
@@ -692,27 +694,35 @@ namespace OpenDental
                     FillPatientButton(pat);
                 }
             }
-            //if (!Preferences.IsODHQ)
-            //{
-            //    //Remove the menu items that are only needed for HQ like Default CC Procedures
-            //    menuItemAccount.MenuItems.Clear();
-            //}
+
             if (Preference.GetString(PreferenceName.LanguageAndRegion) != CultureInfo.CurrentCulture.Name && !ComputerPrefs.LocalComputer.NoShowLanguage)
             {
-                if (MsgBox.Show(this, MsgBoxButtons.YesNo, "Warning, having mismatched language setting between the workstation and server may cause the program "
-                    + "to behave in unexpected ways. Would you like to view the setup window?"))
+                var result =
+                    MessageBox.Show(
+                        "Warning, having mismatched language setting between the workstation and server may cause the program to behave in unexpected ways. Would you like to view the setup window?",
+                        "Imedisoft", 
+                        MessageBoxButtons.YesNo, 
+                        MessageBoxIcon.Question);
+
+                if (result == DialogResult.Yes)
                 {
-                    FormLanguageAndRegion FormLAR = new FormLanguageAndRegion();
-                    FormLAR.ShowDialog();
+                    using (var formLanguageAndRegion = new FormLanguageAndRegion())
+                    {
+                        formLanguageAndRegion.ShowDialog();
+                    }
                 }
             }
-            if (CultureInfo.CurrentCulture.NumberFormat.CurrencyDecimalDigits != 2 //We want our users to have their currency decimal setting set to 2.
-                && !ComputerPrefs.LocalComputer.NoShowDecimal)
+
+            // We want our users to have their currency decimal setting set to 2.
+            if (CultureInfo.CurrentCulture.NumberFormat.CurrencyDecimalDigits != 2 && !ComputerPrefs.LocalComputer.NoShowDecimal)
             {
-                FormDecimalSettings FormDS = new FormDecimalSettings();
-                FormDS.ShowDialog();
+                using (var formDecimalSettings = new FormDecimalSettings())
+                {
+                    formDecimalSettings.ShowDialog();
+                }
             }
-            //Choose a default DirectX format when no DirectX format has been specified and running in DirectX tooth chart mode.
+
+            // Choose a default DirectX format when no DirectX format has been specified and running in DirectX tooth chart mode.
             if (ComputerPrefs.LocalComputer.GraphicsSimple == DrawingMode.DirectX && ComputerPrefs.LocalComputer.DirectXFormat == "")
             {
                 try
@@ -749,77 +759,6 @@ namespace OpenDental
 
 
 
-
-
-
-
-
-
-
-        MenuItem CreateMenuItem(string name, string caption, Action action)
-        {
-            var menuItem = CreateMenu(name, caption);
-
-            if (action == null)
-            {
-                menuItem.Enabled = false;
-            }
-            else
-            {
-                menuItem.Click += (s, e) =>
-                {
-                    try
-                    {
-                        action();
-                    }
-                    catch { } // TODO: Add some better error handling and logging here...
-                };
-            }
-
-            return menuItem;
-        }
-
-        MenuItem CreateMenu(string name, string caption)
-        {
-            return
-                Plugin.Filter(this, "new_menu",
-                    mainMenu.MenuItems.Add(caption),
-                    name, 
-                    mainMenu);
-        }
-
-        MenuItem CreateMenuItem(MenuItem menu, string name, string caption, Action action)
-        {
-            var menuItem = CreateMenuItem(menu, name, caption);
-
-            if (action == null)
-            {
-                menuItem.Enabled = false;
-            }
-            else
-            {
-                menuItem.Click += (s, e) =>
-                {
-                    try
-                    {
-                        action();
-                    }
-                    catch { } // TODO: Add some better error handling and logging here...
-                };
-            }
-
-            return menuItem;
-        }
-
-        MenuItem CreateMenuItem(MenuItem menu, string name, string caption)
-        {
-            return
-                Plugin.Filter(this, "new_menu_item", 
-                    menu.MenuItems.Add(caption), 
-                    name, 
-                    mainMenu, 
-                    menu);
-        }
 
 
 
@@ -1028,16 +967,8 @@ namespace OpenDental
                 }
                 //See other solution @3401 for past commented out code.
                 // TODO: myOutlookBar.RefreshButtons();
-                if (Preference.GetBool(PreferenceName.EasyHideDentalSchools))
-                {
-                    menuItemDentalSchools.Visible = false;
-                    menuItemRequirementsNeeded.Visible = false;
-                    menuItemEvaluations.Visible = false;
-                }
-                else
-                {
-                    menuItemRequirementsNeeded.Visible = true;
-                }
+
+
                 if (Preference.GetBool(PreferenceName.EasyHideRepeatCharges))
                 {
                     menuItemRepeatingCharges.Visible = false;
@@ -1393,12 +1324,12 @@ namespace OpenDental
         private void menuPatient_Popup(object sender, EventArgs e)
         {
             Family fam = null;
-            if (CurPatNum != 0)
+            if (CurrentPatientId != 0)
             {
-                fam = Patients.GetFamily(CurPatNum);
+                fam = Patients.GetFamily(CurrentPatientId);
             }
             //Always refresh the patient menu to reflect any patient status changes.
-            PatientL.AddFamilyToMenu(menuPatient, new EventHandler(menuPatient_Click), CurPatNum, fam);
+            PatientL.AddFamilyToMenu(menuPatient, new EventHandler(menuPatient_Click), CurrentPatientId, fam);
         }
 
         private void ToolBarMain_ButtonClick(object sender, ODToolBarButtonClickEventArgs e)
@@ -1421,7 +1352,7 @@ namespace OpenDental
                         OnWebMail_Click();
                         break;
                     case "Text":
-                        OnTxtMsg_Click(CurPatNum);
+                        OnTxtMsg_Click(CurrentPatientId);
                         break;
                     case "Letter":
                         OnLetter_Click();
@@ -1442,7 +1373,7 @@ namespace OpenDental
             }
             else if (e.Button.Tag.GetType() == typeof(Program))
             {
-                ProgramL.Execute(((Program)e.Button.Tag).ProgramNum, Patients.GetPat(CurPatNum));
+                ProgramL.Execute(((Program)e.Button.Tag).ProgramNum, Patients.GetPat(CurrentPatientId));
             }
         }
 
@@ -1452,12 +1383,12 @@ namespace OpenDental
             formPatientSelect.ShowDialog();
             if (formPatientSelect.DialogResult == DialogResult.OK)
             {
-                CurPatNum = formPatientSelect.SelectedPatNum;
-                Patient pat = Patients.GetPat(CurPatNum);
+                CurrentPatientId = formPatientSelect.SelectedPatNum;
+                Patient pat = Patients.GetPat(CurrentPatientId);
                 if (ContrChart2.Visible)
                 {
                     userControlTasks1.RefreshPatTicketsIfNeeded();//This is a special case.  Normally it's called in RefreshCurrentModule()
-                    ContrChart2.ModuleSelectedErx(CurPatNum);
+                    ContrChart2.ModuleSelectedErx(CurrentPatientId);
                 }
                 else
                 {
@@ -1470,10 +1401,10 @@ namespace OpenDental
 
         private void menuPatient_Click(object sender, System.EventArgs e)
         {
-            Family fam = Patients.GetFamily(CurPatNum);
-            CurPatNum = PatientL.ButtonSelect(menuPatient, sender, fam);
+            Family fam = Patients.GetFamily(CurrentPatientId);
+            CurrentPatientId = PatientL.ButtonSelect(menuPatient, sender, fam);
             //new family now
-            Patient pat = Patients.GetPat(CurPatNum);
+            Patient pat = Patients.GetPat(CurrentPatientId);
             RefreshCurrentModule();
             FillPatientButton(pat);
         }
@@ -1491,7 +1422,7 @@ namespace OpenDental
         ///call up for that module.</summary>
         private void Contr_PatientSelected(Patient pat, bool isRefreshCurModule, bool isApptRefreshDataPat, bool hasForcedRefresh)
         {
-            CurPatNum = pat.PatNum;
+            CurrentPatientId = pat.PatNum;
             if (isRefreshCurModule)
             {
                 RefreshCurrentModule(hasForcedRefresh, isApptRefreshDataPat);
@@ -1511,7 +1442,7 @@ namespace OpenDental
             {
                 pat = new Patient();
             }
-            Text = PatientL.GetMainTitle(pat, Clinics.ClinicNum);
+            Text = PatientL.GetMainTitle(pat, Clinics.ClinicId);
             bool patChanged = PatientL.AddPatsToMenu(menuPatient, new EventHandler(menuPatient_Click), pat.GetNameLF(), pat.PatNum);
             if (patChanged)
             {
@@ -1527,7 +1458,7 @@ namespace OpenDental
             {//on startup.  js Not sure why it's checking count.
                 return;
             }
-            if (CurPatNum == 0)
+            if (CurrentPatientId == 0)
             {//Only on startup, I think.
                 if (!Programs.UsingEcwTightMode())
                 {//eCW tight only gets Patient Select and Popups toolbar buttons
@@ -1632,7 +1563,7 @@ namespace OpenDental
 
         private void OnEmail_Click()
         {
-            if (CurPatNum == 0)
+            if (CurrentPatientId == 0)
             {
                 MsgBox.Show(this, "Please select a patient to send an email.");
                 return;
@@ -1642,8 +1573,8 @@ namespace OpenDental
                 return;
             }
             EmailMessage message = new EmailMessage();
-            message.PatientId = CurPatNum;
-            Patient pat = Patients.GetPat(CurPatNum);
+            message.PatientId = CurrentPatientId;
+            Patient pat = Patients.GetPat(CurrentPatientId);
             message.ToAddress = pat.Email;
             EmailAddress selectedAddress = EmailAddress.GetDefault(Security.CurrentUser.Id, pat.ClinicNum);
             message.FromAddress = selectedAddress.GetFrom();
@@ -1662,7 +1593,7 @@ namespace OpenDental
             menuItem = new MenuItem(Lan.g(this, "Referrals:"));
             menuItem.Tag = null;
             menuEmail.MenuItems.Add(menuItem);
-            List<RefAttach> refAttaches = RefAttaches.Refresh(CurPatNum);
+            List<RefAttach> refAttaches = RefAttaches.Refresh(CurrentPatientId);
             string referralDescript = DisplayFields.GetForCategory(DisplayFieldCategory.PatientInformation)
                 .FirstOrDefault(x => x.InternalName == "Referrals")?.Description;
             if (string.IsNullOrWhiteSpace(referralDescript))
@@ -1731,8 +1662,8 @@ namespace OpenDental
                     //MsgBox.Show(this,"");
                 }
                 EmailMessage message = new EmailMessage();
-                message.PatientId = CurPatNum;
-                Patient pat = Patients.GetPat(CurPatNum);
+                message.PatientId = CurrentPatientId;
+                Patient pat = Patients.GetPat(CurrentPatientId);
                 message.ToAddress = refer.EMail;//pat.Email;
                 EmailAddress address = EmailAddress.GetByClinic(pat.ClinicNum);
                 message.FromAddress = address.GetFrom();
@@ -1748,7 +1679,7 @@ namespace OpenDental
 
         private void OnCommlog_Click()
         {
-            if (Plugin.Trigger(this, "FormOpenDental_Button_Commlog", CurPatNum)) return;
+            if (Plugin.Trigger(this, "FormOpenDental_Button_Commlog", CurrentPatientId)) return;
 
             using (var formCommItem = new FormCommItem(GetNewCommlog()))
             {
@@ -1787,7 +1718,7 @@ namespace OpenDental
         {
             return new Commlog
             {
-                PatNum = CurPatNum,
+                PatNum = CurrentPatientId,
                 CommDateTime = DateTime.Now,
                 CommType = Commlogs.GetTypeAuto(CommItemTypeAuto.MISC),
                 Mode_ = CommItemMode.Phone,
@@ -1798,30 +1729,32 @@ namespace OpenDental
 
         private void OnLetter_Click()
         {
-            FormSheetPicker FormS = new FormSheetPicker();
-            FormS.SheetType = SheetTypeEnum.PatientLetter;
-            FormS.ShowDialog();
-            if (FormS.DialogResult != DialogResult.OK)
+            using (var formSheetPicker = new FormSheetPicker())
             {
-                return;
+                formSheetPicker.SheetType = SheetTypeEnum.PatientLetter;
+                if (formSheetPicker.ShowDialog() != DialogResult.OK)
+                {
+                    return;
+                }
+
+                SheetDef sheetDef = formSheetPicker.SelectedSheetDefs[0];
+                Sheet sheet = SheetUtil.CreateSheet(sheetDef, CurrentPatientId);
+                SheetParameter.SetParameter(sheet, "PatNum", CurrentPatientId);
+                //SheetParameter.SetParameter(sheet,"ReferralNum",referral.ReferralNum);
+                SheetFiller.FillFields(sheet);
+                SheetUtil.CalculateHeights(sheet);
+                FormSheetFillEdit.ShowForm(sheet, FormSheetFillEdit_FormClosing);
+                //Patient pat=Patients.GetPat(CurPatNum);
+                //FormLetters FormL=new FormLetters(pat);
+                //FormL.ShowDialog();
             }
-            SheetDef sheetDef = FormS.SelectedSheetDefs[0];
-            Sheet sheet = SheetUtil.CreateSheet(sheetDef, CurPatNum);
-            SheetParameter.SetParameter(sheet, "PatNum", CurPatNum);
-            //SheetParameter.SetParameter(sheet,"ReferralNum",referral.ReferralNum);
-            SheetFiller.FillFields(sheet);
-            SheetUtil.CalculateHeights(sheet);
-            FormSheetFillEdit.ShowForm(sheet, FormSheetFillEdit_FormClosing);
-            //Patient pat=Patients.GetPat(CurPatNum);
-            //FormLetters FormL=new FormLetters(pat);
-            //FormL.ShowDialog();
         }
 
         private void menuLetter_Popup(object sender, EventArgs e)
         {
             menuLetter.MenuItems.Clear();
             MenuItem menuItem;
-            menuItem = new MenuItem(Lan.g(this, "Merge"), menuLetter_Click);
+            menuItem = new MenuItem("Merge", menuLetter_Click);
             menuItem.Tag = "Merge";
             menuLetter.MenuItems.Add(menuItem);
             //menuItem=new MenuItem(Lan.g(this,"Stationery"),menuLetter_Click);
@@ -1829,16 +1762,16 @@ namespace OpenDental
             //menuLetter.MenuItems.Add(menuItem);
             menuLetter.MenuItems.Add("-");
             //Referrals---------------------------------------------------------------------------------------
-            menuItem = new MenuItem(Lan.g(this, "Referrals:"));
+            menuItem = new MenuItem("Referrals:");
             menuItem.Tag = null;
             menuLetter.MenuItems.Add(menuItem);
             string referralDescript = DisplayFields.GetForCategory(DisplayFieldCategory.PatientInformation)
                 .FirstOrDefault(x => x.InternalName == "Referrals")?.Description;
             if (string.IsNullOrWhiteSpace(referralDescript))
             {//either not displaying the Referral field or no description entered, default to 'Referral'
-                referralDescript = Lan.g(this, "Referral");
+                referralDescript = "Referral";
             }
-            List<RefAttach> refAttaches = RefAttaches.Refresh(CurPatNum);
+            List<RefAttach> refAttaches = RefAttaches.Refresh(CurrentPatientId);
             Referral refer;
             string str;
             for (int i = 0; i < refAttaches.Count; i++)
@@ -1849,11 +1782,11 @@ namespace OpenDental
                 }
                 if (refAttaches[i].RefType == ReferralType.RefFrom)
                 {
-                    str = Lan.g(this, "From");
+                    str = "From";
                 }
                 else if (refAttaches[i].RefType == ReferralType.RefTo)
                 {
-                    str = Lan.g(this, "To");
+                    str = "To";
                 }
                 else
                 {
@@ -1872,7 +1805,7 @@ namespace OpenDental
             {
                 return;
             }
-            Patient pat = Patients.GetPat(CurPatNum);
+            Patient pat = Patients.GetPat(CurrentPatientId);
             if (((MenuItem)sender).Tag.GetType() == typeof(string))
             {
                 if (((MenuItem)sender).Tag.ToString() == "Merge")
@@ -1895,8 +1828,8 @@ namespace OpenDental
                     return;
                 }
                 SheetDef sheetDef = FormS.SelectedSheetDefs[0];
-                Sheet sheet = SheetUtil.CreateSheet(sheetDef, CurPatNum);
-                SheetParameter.SetParameter(sheet, "PatNum", CurPatNum);
+                Sheet sheet = SheetUtil.CreateSheet(sheetDef, CurrentPatientId);
+                SheetParameter.SetParameter(sheet, "PatNum", CurrentPatientId);
                 SheetParameter.SetParameter(sheet, "ReferralNum", refer.ReferralNum);
                 //Don't fill these params if the sheet doesn't use them.
                 if (sheetDef.SheetFieldDefs.Any(x =>
@@ -1904,7 +1837,7 @@ namespace OpenDental
                      || (x.FieldType == SheetFieldType.Special && x.FieldName == "toothChart")))
                 {
                     List<Procedure> listProcs = Procedures.GetCompletedForDateRange(sheet.DateTimeSheet, sheet.DateTimeSheet
-                        , listPatNums: new List<long>() { CurPatNum }
+                        , listPatNums: new List<long>() { CurrentPatientId }
                         , includeNote: true
                         , includeGroupNote: true);
                     if (sheetDef.SheetFieldDefs.Any(x => x.FieldType == SheetFieldType.Grid && x.FieldName == "ReferralLetterProceduresCompleted"))
@@ -1913,7 +1846,7 @@ namespace OpenDental
                     }
                     if (sheetDef.SheetFieldDefs.Any(x => x.FieldType == SheetFieldType.Special && x.FieldName == "toothChart"))
                     {
-                        SheetParameter.SetParameter(sheet, "toothChartImg", SheetPrinting.GetToothChartHelper(CurPatNum, false, listProceduresFilteredOverride: listProcs));
+                        SheetParameter.SetParameter(sheet, "toothChartImg", SheetPrinting.GetToothChartHelper(CurrentPatientId, false, listProceduresFilteredOverride: listProcs));
                     }
                 }
                 SheetFiller.FillFields(sheet);
@@ -1936,42 +1869,49 @@ namespace OpenDental
 
         private void OnForm_Click()
         {
-            FormPatientForms formP = new FormPatientForms();
-            formP.PatNum = CurPatNum;
-            formP.ShowDialog();
-            //always refresh, especially to get the titlebar right after an import.
-            Patient pat = Patients.GetPat(CurPatNum);
-            RefreshCurrentModule(docNum: formP.DocNum);
-            FillPatientButton(pat);
+            using (var formPatientForms = new FormPatientForms())
+            {
+                formPatientForms.PatNum = CurrentPatientId;
+                formPatientForms.ShowDialog();
+
+                //always refresh, especially to get the titlebar right after an import.
+                Patient pat = Patients.GetPat(CurrentPatientId);
+                RefreshCurrentModule(docNum: formPatientForms.DocNum);
+                FillPatientButton(pat);
+            }
         }
 
         private void OnTasks_Click()
         {
-            FormTaskListSelect FormT = new FormTaskListSelect(TaskObjectType.Patient);
-            FormT.Location = new Point(50, 50);
-            FormT.Text = Lan.g(FormT, "Add Task") + " - " + FormT.Text;
-            FormT.ShowDialog();
-            if (FormT.DialogResult != DialogResult.OK)
+            using (var formTaskListSelect = new FormTaskListSelect(TaskObjectType.Patient))
             {
-                return;
+                formTaskListSelect.Location = new Point(50, 50);
+                formTaskListSelect.Text = "Add Task - " + formTaskListSelect.Text;
+                if (formTaskListSelect.ShowDialog() != DialogResult.OK)
+                {
+                    return;
+                }
+
+                Task task = new Task();
+                task.TaskListNum = -1;//don't show it in any list yet.
+                Tasks.Insert(task);
+
+                Task taskOld = task.Copy();
+                task.KeyNum = CurrentPatientId;
+                task.ObjectType = TaskObjectType.Patient;
+                task.TaskListNum = formTaskListSelect.ListSelectedLists[0];
+                task.UserNum = Security.CurrentUser.Id;
+
+                FormTaskEdit FormTE = new FormTaskEdit(task, taskOld);
+                FormTE.IsNew = true;
+                FormTE.Show();
             }
-            Task task = new Task();
-            task.TaskListNum = -1;//don't show it in any list yet.
-            Tasks.Insert(task);
-            Task taskOld = task.Copy();
-            task.KeyNum = CurPatNum;
-            task.ObjectType = TaskObjectType.Patient;
-            task.TaskListNum = FormT.ListSelectedLists[0];
-            task.UserNum = Security.CurrentUser.Id;
-            FormTaskEdit FormTE = new FormTaskEdit(task, taskOld);
-            FormTE.IsNew = true;
-            FormTE.Show();
         }
 
         private void menuTask_Popup(object sender, EventArgs e)
         {
-            menuItemTaskNewForUser.Text = Lan.g(this, "for") + " " + Security.CurrentUser.UserName;
-            menuItemTaskReminders.Text = Lan.g(this, "Reminders");
+            menuItemTaskNewForUser.Text = "for " + Security.CurrentUser.UserName;
+            menuItemTaskReminders.Text = "Reminders";
             int reminderTaskNewCount = GetNewReminderTaskCount();
             if (reminderTaskNewCount > 0)
             {
@@ -2062,7 +2002,7 @@ namespace OpenDental
             //when it comes from a toolbar click.
             //https://social.msdn.microsoft.com/Forums/windows/en-US/681a50b4-4ae3-407a-a747-87fb3eb427fd/first-mouse-click-after-showdialog-hits-the-parent-form?forum=winforms
             ToolBarMainClick toolClick = LabelSingle.PrintPat;
-            this.BeginInvoke(toolClick, CurPatNum);
+            this.BeginInvoke(toolClick, CurrentPatientId);
         }
 
         private void menuLabel_Popup(object sender, EventArgs e)
@@ -2072,16 +2012,16 @@ namespace OpenDental
             List<SheetDef> LabelList = SheetDefs.GetCustomForType(SheetTypeEnum.LabelPatient);
             if (LabelList.Count == 0)
             {
-                menuItem = new MenuItem(Lan.g(this, "LName, FName, Address"), menuLabel_Click);
+                menuItem = new MenuItem("LName, FName, Address", menuLabel_Click);
                 menuItem.Tag = "PatientLFAddress";
                 menuLabel.MenuItems.Add(menuItem);
-                menuItem = new MenuItem(Lan.g(this, "Name, ChartNumber"), menuLabel_Click);
+                menuItem = new MenuItem("Name, ChartNumber", menuLabel_Click);
                 menuItem.Tag = "PatientLFChartNumber";
                 menuLabel.MenuItems.Add(menuItem);
-                menuItem = new MenuItem(Lan.g(this, "Name, PatNum"), menuLabel_Click);
+                menuItem = new MenuItem("Name, PatNum", menuLabel_Click);
                 menuItem.Tag = "PatientLFPatNum";
                 menuLabel.MenuItems.Add(menuItem);
-                menuItem = new MenuItem(Lan.g(this, "Radiograph"), menuLabel_Click);
+                menuItem = new MenuItem("Radiograph", menuLabel_Click);
                 menuItem.Tag = "PatRadiograph";
                 menuLabel.MenuItems.Add(menuItem);
             }
@@ -2096,11 +2036,11 @@ namespace OpenDental
             }
             menuLabel.MenuItems.Add("-");
             //Carriers---------------------------------------------------------------------------------------
-            Family fam = Patients.GetFamily(CurPatNum);
+            Family fam = Patients.GetFamily(CurrentPatientId);
             //Received multiple bug submissions where CurPatNum==0, even though this toolbar button should not be enabled when no patient is selected.
             if (fam.Members != null && fam.Members.Length > 0)
             {
-                List<PatPlan> PatPlanList = PatPlans.Refresh(CurPatNum);
+                List<PatPlan> PatPlanList = PatPlans.Refresh(CurrentPatientId);
                 List<InsSub> subList = InsSubs.RefreshForFam(fam);
                 List<InsPlan> PlanList = InsPlans.RefreshForSubList(subList);
                 Carrier carrier;
@@ -2118,7 +2058,7 @@ namespace OpenDental
                 menuLabel.MenuItems.Add("-");
             }
             //Referrals---------------------------------------------------------------------------------------
-            menuItem = new MenuItem(Lan.g(this, "Referrals:"));
+            menuItem = new MenuItem("Referrals:");
             menuItem.Tag = null;
             menuLabel.MenuItems.Add(menuItem);
             string referralDescript = DisplayFields.GetForCategory(DisplayFieldCategory.PatientInformation)
@@ -2127,7 +2067,7 @@ namespace OpenDental
             {//either not displaying the Referral field or no description entered, default to 'Referral'
                 referralDescript = Lan.g(this, "Referral");
             }
-            List<RefAttach> refAttaches = RefAttaches.Refresh(CurPatNum);
+            List<RefAttach> refAttaches = RefAttaches.Refresh(CurrentPatientId);
             Referral refer;
             string str;
             for (int i = 0; i < refAttaches.Count; i++)
@@ -2138,11 +2078,11 @@ namespace OpenDental
                 }
                 if (refAttaches[i].RefType == ReferralType.RefFrom)
                 {
-                    str = Lan.g(this, "From");
+                    str = "From";
                 }
                 else if (refAttaches[i].RefType == ReferralType.RefTo)
                 {
-                    str = Lan.g(this, "To");
+                    str = "To";
                 }
                 else
                 {
@@ -2166,24 +2106,24 @@ namespace OpenDental
             {
                 if (((MenuItem)sender).Tag.ToString() == "PatientLFAddress")
                 {
-                    LabelSingle.PrintPatientLFAddress(CurPatNum);
+                    LabelSingle.PrintPatientLFAddress(CurrentPatientId);
                 }
                 if (((MenuItem)sender).Tag.ToString() == "PatientLFChartNumber")
                 {
-                    LabelSingle.PrintPatientLFChartNumber(CurPatNum);
+                    LabelSingle.PrintPatientLFChartNumber(CurrentPatientId);
                 }
                 if (((MenuItem)sender).Tag.ToString() == "PatientLFPatNum")
                 {
-                    LabelSingle.PrintPatientLFPatNum(CurPatNum);
+                    LabelSingle.PrintPatientLFPatNum(CurrentPatientId);
                 }
                 if (((MenuItem)sender).Tag.ToString() == "PatRadiograph")
                 {
-                    LabelSingle.PrintPatRadiograph(CurPatNum);
+                    LabelSingle.PrintPatRadiograph(CurrentPatientId);
                 }
             }
             else if (((MenuItem)sender).Tag.GetType() == typeof(SheetDef))
             {
-                LabelSingle.PrintCustomPatient(CurPatNum, (SheetDef)((MenuItem)sender).Tag);
+                LabelSingle.PrintCustomPatient(CurrentPatientId, (SheetDef)((MenuItem)sender).Tag);
             }
             else if (((MenuItem)sender).Tag.GetType() == typeof(Carrier))
             {
@@ -2200,7 +2140,7 @@ namespace OpenDental
         private void OnPopups_Click()
         {
             FormPopupsForFam FormPFF = new FormPopupsForFam(PopupEventList);
-            FormPFF.PatCur = Patients.GetPat(CurPatNum);
+            FormPFF.PatCur = Patients.GetPat(CurrentPatientId);
             FormPFF.ShowDialog();
         }
 
@@ -2324,17 +2264,8 @@ namespace OpenDental
                 { //Notification not provided or signal was malformed. Either way recalculate and post a new signal.
                     listNotifications = SmsFromMobiles.UpdateSmsNotification();
                 }
-                int smsUnreadCount = 0;
-                if (!Preferences.HasClinicsEnabled || Clinics.ClinicNum == 0)
-                {
-                    //No clinics or HQ clinic is active so sum them all.
-                    smsUnreadCount = listNotifications.Sum(x => x.Count);
-                }
-                else
-                {
-                    //Only count the active clinic.
-                    smsUnreadCount = listNotifications.Where(x => x.ClinicNum == Clinics.ClinicNum).Sum(x => x.Count);
-                }
+                int smsUnreadCount = listNotifications.Where(x => x.ClinicNum == Clinics.ClinicId).Sum(x => x.Count);
+                
                 //Default to empty so we show nothing if there aren't any notifications.
                 string smsNotificationText = "";
                 if (smsUnreadCount > 99)
@@ -2370,26 +2301,15 @@ namespace OpenDental
         private void RefreshMenuClinics()
         {
             menuClinics.MenuItems.Clear();
-            List<Clinic> listClinics = Clinics.GetForUserod(Security.CurrentUser);
+            List<Clinic> listClinics = Clinic.GetByUser(Security.CurrentUser).ToList();
             if (listClinics.Count < 30)
             { //This number of clinics will fit in a 990x735 form.
                 MenuItem menuItem;
-                if (!Security.CurrentUser.ClinicRestricted)
-                {
-                    menuItem = new MenuItem(Lan.g(this, "Headquarters"), menuClinic_Click);
-                    menuItem.Tag = new Clinic();//Having a ClinicNum of 0 will make OD act like 'Headquarters'.  This allows the user to see unassigned appt views, all operatories, etc.
-                    if (Clinics.ClinicNum == 0)
-                    {
-                        menuItem.Checked = true;
-                    }
-                    menuClinics.MenuItems.Add(menuItem);
-                    menuClinics.MenuItems.Add("-");//Separator
-                }
                 for (int i = 0; i < listClinics.Count; i++)
                 {
                     menuItem = new MenuItem(listClinics[i].Abbr, menuClinic_Click);
                     menuItem.Tag = listClinics[i];
-                    if (Clinics.ClinicNum == listClinics[i].ClinicNum)
+                    if (Clinics.ClinicId == listClinics[i].Id)
                     {
                         menuItem.Checked = true;
                     }
@@ -2428,7 +2348,7 @@ namespace OpenDental
                 RefreshCurrentClinic(new Clinic());
                 return;
             }
-            Clinic clinicCur = Clinics.GetFirstOrDefault(x => x.ClinicNum == FormC.SelectedClinicNum);
+            Clinic clinicCur = Clinic.GetById(FormC.SelectedClinicNum);
             if (clinicCur != null)
             { //Should never be null because the clinic should always be in the list
                 RefreshCurrentClinic(clinicCur);
@@ -2437,7 +2357,7 @@ namespace OpenDental
         }
 
         ///<summary>This is will set the private class wide variable _clinicNum and refresh the current module.</summary>
-        private void menuClinic_Click(object sender, System.EventArgs e)
+        private void menuClinic_Click(object sender, EventArgs e)
         {
             if (sender.GetType() != typeof(MenuItem) && ((MenuItem)sender).Tag != null)
             {
@@ -2450,13 +2370,13 @@ namespace OpenDental
         ///<summary>This is used to set the private class wide variable _clinicNum and refreshes the current module.</summary>
         private void RefreshCurrentClinic(Clinic clinicCur)
         {
-            bool isChangingClinic = (Clinics.ClinicNum != clinicCur.ClinicNum);
-            Clinics.ClinicNum = clinicCur.ClinicNum;
-            Text = PatientL.GetMainTitle(Patients.GetPat(CurPatNum), Clinics.ClinicNum);
+            bool isChangingClinic = (Clinics.ClinicId != clinicCur.Id);
+            Clinics.ClinicId = clinicCur.Id;
+            Text = PatientL.GetMainTitle(Patients.GetPat(CurrentPatientId), Clinics.ClinicId);
             SetSmsNotificationText();
             if (Preference.GetBool(PreferenceName.AppointmentClinicTimeReset))
             {
-                AppointmentL.DateSelected = DateTimeOD.Today;
+                AppointmentL.DateSelected = DateTime.Today;
                 if (AppointmentL.DateSelected.DayOfWeek == DayOfWeek.Sunday)
                 {
                     ContrAppt.WeekStartDate = AppointmentL.DateSelected.AddDays(-6).Date;//go back to previous monday
@@ -2537,7 +2457,7 @@ namespace OpenDental
             userControlPatientDashboard.UpdateDimensions(splitContainerNoFlickerDashboard.Panel2.Width, splitContainerNoFlickerDashboard.Panel2.Height);
             if (ContrAppt2.Visible)
             {
-                ContrAppt2.ModuleSelected(CurPatNum);
+                ContrAppt2.ModuleSelected(CurrentPatientId);
             }
         }
 
@@ -2566,16 +2486,16 @@ namespace OpenDental
         ///<summary>This is called when any local data becomes outdated.  It's purpose is to tell the other computers to update certain local data.</summary>
         private void DataValid_BecameInvalid(OpenDental.ValidEventArgs e)
         {
-            string suffix = Lan.g(nameof(Cache), "Refreshing Caches") + ": ";
+            string suffix = "Refreshing Caches: ";
             ODEvent.Fire(ODEventType.Cache, suffix);
             if (e.OnlyLocal)
             {//Currently used after doing a restore from FormBackup so that the local cache is forcefully updated.
-                ODEvent.Fire(ODEventType.Cache, suffix + Lan.g(nameof(Cache), "PrefsStartup"));
+                ODEvent.Fire(ODEventType.Cache, suffix + "PrefsStartup");
                 if (!LoadPreferences())
                 {//??
                     return;
                 }
-                ODEvent.Fire(ODEventType.Cache, suffix + Lan.g(nameof(Cache), "AllLocal"));
+                ODEvent.Fire(ODEventType.Cache, suffix + "AllLocal");
                 RefreshLocalData(InvalidType.AllLocal);//does local computer only
                 return;
             }
@@ -2591,7 +2511,7 @@ namespace OpenDental
                 if (ContrChart2?.Visible ?? false)
                 {
                     ODEvent.Fire(ODEventType.Cache, suffix + "Chart Module");
-                    ContrChart2.ModuleSelected(CurPatNum);
+                    ContrChart2.ModuleSelected(CurrentPatientId);
                 }
                 return;//All task signals should already be sent. Sending more Task signals here would cause unnecessary refreshes.
             }
@@ -2635,16 +2555,16 @@ namespace OpenDental
             //patient can also be set separately ahead of time instead of doing it this way:
             if (e.PatNum != 0)
             {
-                if (e.PatNum != CurPatNum)
+                if (e.PatNum != CurrentPatientId)
                 { //Currently selected patient changed.
-                    CurPatNum = e.PatNum;
+                    CurrentPatientId = e.PatNum;
                     //Going to Chart Module, to specifically handle the SendToMeCreateTask_Click in FormVoiceMails to make sure Patient tab refreshes.
                     //if (Preferences.IsODHQ && e.IModule == 4)
                     //{
                     //    UserControlTasks.RefreshTasksForAllInstances(null, UserControlTasksTab.PatientTickets);//Force a refresh on Task area or Triage.
                     //}
                 }
-                Patient pat = Patients.GetPat(CurPatNum);
+                Patient pat = Patients.GetPat(CurrentPatientId);
                 FillPatientButton(pat);
             }
             UnselectActive();
@@ -2654,21 +2574,21 @@ namespace OpenDental
                 myOutlookBar.SelectedIndex = e.IModule;
                 ContrAccount2.Visible = true;
                 this.ActiveControl = this.ContrAccount2;
-                ContrAccount2.ModuleSelected(CurPatNum, e.ClaimNum);
+                ContrAccount2.ModuleSelected(CurrentPatientId, e.ClaimNum);
             }
             else if (e.ListPinApptNums.Count != 0)
             {
                 myOutlookBar.SelectedIndex = e.IModule;
                 ContrAppt2.Visible = true;
                 this.ActiveControl = this.ContrAppt2;
-                ContrAppt2.ModuleSelectedWithPinboard(CurPatNum, e.ListPinApptNums);
+                ContrAppt2.ModuleSelectedWithPinboard(CurrentPatientId, e.ListPinApptNums);
             }
             else if (e.DocNum > 0)
             {
                 myOutlookBar.SelectedIndex = e.IModule;
                 ContrImages2.Visible = true;
                 this.ActiveControl = this.ContrImages2;
-                ContrImages2.ModuleSelected(CurPatNum, e.DocNum);
+                ContrImages2.ModuleSelected(CurrentPatientId, e.DocNum);
             }
             else if (e.IModule != -1)
             {
@@ -2764,7 +2684,7 @@ namespace OpenDental
             }
             if (hadErrorPainting)
             {
-                MessageBox.Show("Error painting on program icon.  Probably too many non-ack'd messages.");
+                MessageBox.Show("Error painting on program icon. Probably too many non-ack'd messages.");
             }
         }
 
@@ -2796,8 +2716,7 @@ namespace OpenDental
             return true;
         }
 
-        
-        private void lightSignalGrid1_ButtonClick(object sender, OpenDental.UI.ODLightSignalGridClickEventArgs e)
+        private void lightSignalGrid1_ButtonClick(object sender, ODLightSignalGridClickEventArgs e)
         {
             if (e.ActiveSignal != null)
             {//user trying to ack an existing light signal
@@ -2827,13 +2746,15 @@ namespace OpenDental
             SigMessages.Insert(sigMessage);
             FillSignalButtons(new List<SigMessage>() { sigMessage });//Does not run query.
                                                                      //Let the other computers in the office know to refresh this specific light.
-            Signal signal = new Signal();
-            signal.Name = "sig_message";
-            signal.ExternalId = sigMessage.SigMessageNum;
+            Signal signal = new Signal
+            {
+                Name = "sig_message",
+                ExternalId = sigMessage.SigMessageNum
+            };
             Signal.Insert(signal);
         }
 
-        private void timerTimeIndic_Tick(object sender, System.EventArgs e)
+        private void timerTimeIndic_Tick(object sender, EventArgs e)
         {
             //every minute:
             if (WindowState != FormWindowState.Minimized && ContrAppt2.Visible)
@@ -2843,7 +2764,7 @@ namespace OpenDental
         }
 
         ///<summary>Usually set at 4 to 6 second intervals.</summary>
-        private void timerSignals_Tick(object sender, System.EventArgs e)
+        private void timerSignals_Tick(object sender, EventArgs e)
         {
             SignalsTick();
         }
@@ -2979,11 +2900,11 @@ namespace OpenDental
             int alertCount = _listAlertItems.Count - _listAlertReads.Count;
             if (alertCount > 99)
             {
-                menuItemAlerts.Text = Lan.g(this, "Alerts") + " (99)";
+                menuItemAlerts.Text = "Alerts (99)";
             }
             else
             {
-                menuItemAlerts.Text = Lan.g(this, "Alerts") + " (" + alertCount + ")";
+                menuItemAlerts.Text = "Alerts (" + alertCount + ")";
             }
             List<MenuItem> listMenuItem = menuItemAlerts.MenuItems.Cast<MenuItem>().ToList();
             bool doRedrawMenu = false;
@@ -3206,10 +3127,12 @@ namespace OpenDental
             {
                 msg += Process.GetCurrentProcess().ProcessName + " ";
             }
-            msg += Lan.g(this, "will shut down in 15 seconds.  Quickly click OK on any open windows with unsaved data.");
-            MsgBoxCopyPaste msgbox = new MsgBoxCopyPaste(msg);
-            msgbox.Size = new Size(300, 300);
-            msgbox.TopMost = true;
+            msg += "will shut down in 15 seconds. Quickly click OK on any open windows with unsaved data.";
+            var msgbox = new MsgBoxCopyPaste(msg)
+            {
+                Size = new Size(300, 300),
+                TopMost = true
+            };
             msgbox.Show();
             BeginShutdownThread();
             return;
@@ -3223,8 +3146,9 @@ namespace OpenDental
             }
         }
 
-
-        ///<summary>This only contains UI signal processing. See Signalods.SignalsTick() for cache updates.</summary>
+        /// <summary>
+        /// This only contains UI signal processing. See Signalods.SignalsTick() for cache updates.
+        /// </summary>
         public override void OnProcessSignals(IEnumerable<Signal> signals)
         {
 
@@ -3311,7 +3235,7 @@ namespace OpenDental
             if (hasChangedReminders)
             {
                 ContrAppt2.RefreshReminders(_listReminderTasks);
-                _dateReminderRefresh = DateTimeOD.Today;
+                _dateReminderRefresh = DateTime.Today;
             }
         }
 
@@ -3532,7 +3456,7 @@ namespace OpenDental
                     ContrAppt2.InitializeOnStartup();
                     ContrAppt2.Visible = true;
                     this.ActiveControl = this.ContrAppt2;
-                    ContrAppt2.ModuleSelected(CurPatNum);
+                    ContrAppt2.ModuleSelected(CurrentPatientId);
                     break;
                 case 1:
                     if (HL7Defs.IsExistingHL7Enabled())
@@ -3542,14 +3466,14 @@ namespace OpenDental
                         {
                             ContrFamily2Ecw.Visible = true;
                             this.ActiveControl = this.ContrFamily2Ecw;
-                            ContrFamily2Ecw.ModuleSelected(CurPatNum);
+                            ContrFamily2Ecw.ModuleSelected(CurrentPatientId);
                         }
                         else
                         {
                             ContrFamily2.InitializeOnStartup();
                             ContrFamily2.Visible = true;
                             this.ActiveControl = this.ContrFamily2;
-                            ContrFamily2.ModuleSelected(CurPatNum);
+                            ContrFamily2.ModuleSelected(CurrentPatientId);
                         }
                     }
                     else
@@ -3558,14 +3482,14 @@ namespace OpenDental
                         {
                             ContrFamily2Ecw.Visible = true;
                             this.ActiveControl = this.ContrFamily2Ecw;
-                            ContrFamily2Ecw.ModuleSelected(CurPatNum);
+                            ContrFamily2Ecw.ModuleSelected(CurrentPatientId);
                         }
                         else
                         {
                             ContrFamily2.InitializeOnStartup();
                             ContrFamily2.Visible = true;
                             this.ActiveControl = this.ContrFamily2;
-                            ContrFamily2.ModuleSelected(CurPatNum);
+                            ContrFamily2.ModuleSelected(CurrentPatientId);
                         }
                     }
                     break;
@@ -3573,7 +3497,7 @@ namespace OpenDental
                     ContrAccount2.InitializeOnStartup();
                     ContrAccount2.Visible = true;
                     this.ActiveControl = this.ContrAccount2;
-                    ContrAccount2.ModuleSelected(CurPatNum);
+                    ContrAccount2.ModuleSelected(CurrentPatientId);
                     break;
                 case 3:
                     ContrTreat2.InitializeOnStartup();
@@ -3581,11 +3505,11 @@ namespace OpenDental
                     this.ActiveControl = this.ContrTreat2;
                     if (menuBarClicked)
                     {
-                        ContrTreat2.ModuleSelected(CurPatNum, true);//Set default date to true when button is clicked.
+                        ContrTreat2.ModuleSelected(CurrentPatientId, true);//Set default date to true when button is clicked.
                     }
                     else
                     {
-                        ContrTreat2.ModuleSelected(CurPatNum);
+                        ContrTreat2.ModuleSelected(CurrentPatientId);
                     }
                     break;
                 case 4:
@@ -3594,11 +3518,11 @@ namespace OpenDental
                     this.ActiveControl = this.ContrChart2;
                     if (menuBarClicked)
                     {
-                        ContrChart2.ModuleSelectedErx(CurPatNum);
+                        ContrChart2.ModuleSelectedErx(CurrentPatientId);
                     }
                     else
                     {
-                        ContrChart2.ModuleSelected(CurPatNum, true);
+                        ContrChart2.ModuleSelected(CurrentPatientId, true);
                     }
                     TryNonPatientPopup();
                     break;
@@ -3606,13 +3530,13 @@ namespace OpenDental
                     ContrImages2.InitializeOnStartup();
                     ContrImages2.Visible = true;
                     this.ActiveControl = this.ContrImages2;
-                    ContrImages2.ModuleSelected(CurPatNum);
+                    ContrImages2.ModuleSelected(CurrentPatientId);
                     break;
                 case 6:
                     //ContrManage2.InitializeOnStartup();//This gets done earlier.
                     ContrManage2.Visible = true;
                     this.ActiveControl = this.ContrManage2;
-                    ContrManage2.ModuleSelected(CurPatNum);
+                    ContrManage2.ModuleSelected(CurrentPatientId);
                     break;
             }
         }
@@ -3668,44 +3592,44 @@ namespace OpenDental
             {
                 if (hasForceRefresh)
                 {
-                    ContrAppt2.ModuleSelected(CurPatNum);
+                    ContrAppt2.ModuleSelected(CurrentPatientId);
                 }
                 else
                 {
                     if (isApptRefreshDataPat)
                     {//don't usually skip data refresh, only if CurPatNum was set just prior to calling this method
-                        ContrAppt2.RefreshModuleDataPatient(CurPatNum);
+                        ContrAppt2.RefreshModuleDataPatient(CurrentPatientId);
                     }
                     ContrAppt2.RefreshModuleScreenPatient();
                 }
             }
             if (ContrFamily2.Visible)
             {
-                ContrFamily2.ModuleSelected(CurPatNum);
+                ContrFamily2.ModuleSelected(CurrentPatientId);
             }
             if (ContrFamily2Ecw.Visible)
             {
-                ContrFamily2Ecw.ModuleSelected(CurPatNum);
+                ContrFamily2Ecw.ModuleSelected(CurrentPatientId);
             }
             if (ContrAccount2.Visible)
             {
-                ContrAccount2.ModuleSelected(CurPatNum);
+                ContrAccount2.ModuleSelected(CurrentPatientId);
             }
             if (ContrTreat2.Visible)
             {
-                ContrTreat2.ModuleSelected(CurPatNum);
+                ContrTreat2.ModuleSelected(CurrentPatientId);
             }
             if (ContrChart2.Visible)
             {
-                ContrChart2.ModuleSelected(CurPatNum, isClinicRefresh);
+                ContrChart2.ModuleSelected(CurrentPatientId, isClinicRefresh);
             }
             if (ContrImages2.Visible)
             {
-                ContrImages2.ModuleSelected(CurPatNum, docNum);
+                ContrImages2.ModuleSelected(CurrentPatientId, docNum);
             }
             if (ContrManage2.Visible)
             {
-                ContrManage2.ModuleSelected(CurPatNum);
+                ContrManage2.ModuleSelected(CurrentPatientId);
             }
             userControlTasks1.RefreshPatTicketsIfNeeded();
         }
@@ -3730,12 +3654,12 @@ namespace OpenDental
             }
             //Ctrl-Alt-R is supposed to show referral window, but it doesn't work on some computers.
             //so we're also going to use Ctrl-X to show the referral window.
-            if (CurPatNum != 0
+            if (CurrentPatientId != 0
                 && (e.Modifiers == (Keys.Alt | Keys.Control) && e.KeyCode == Keys.R)
                     || (e.Modifiers == Keys.Control && e.KeyCode == Keys.X))
             {
                 FormReferralsPatient FormRE = new FormReferralsPatient();
-                FormRE.PatNum = CurPatNum;
+                FormRE.PatNum = CurrentPatientId;
                 FormRE.ShowDialog();
             }
 
@@ -3772,8 +3696,8 @@ namespace OpenDental
             }
             if (taskOT == TaskObjectType.Patient)
             {
-                CurPatNum = keyNum;
-                Patient pat = Patients.GetPat(CurPatNum);
+                CurrentPatientId = keyNum;
+                Patient pat = Patients.GetPat(CurrentPatientId);
                 RefreshCurrentModule();
                 FillPatientButton(pat);
             }
@@ -3796,107 +3720,217 @@ namespace OpenDental
                 {
                     dateSelected = apt.AptDateTime;
                 }
-                CurPatNum = apt.PatNum;//OnPatientSelected(apt.PatNum);
-                FillPatientButton(Patients.GetPat(CurPatNum));
+                CurrentPatientId = apt.PatNum;//OnPatientSelected(apt.PatNum);
+                FillPatientButton(Patients.GetPat(CurrentPatientId));
                 GotoModule.GotoAppointment(dateSelected, apt.AptNum);
             }
         }
 
-        private void comboTriageCoordinator_MouseWheel(object sender, MouseEventArgs e)
+
+        ///<summary>Only used when theme is changed.</summary>
+        private void RecursiveInvalidate(Control control)
         {
-            ComboBox comboControl = (ComboBox)sender;
-            if (!comboControl.DroppedDown)
+            foreach (Control c in control.Controls)
             {
-                ((HandledMouseEventArgs)e).Handled = true;
+                RecursiveInvalidate(c);
+            }
+            control.Invalidate();
+        }
+
+
+
+        /// <summary>
+        ///     <para>
+        ///         Opens a dialog of the specified type if the current user has the 
+        ///         <see cref="Permissions.Setup"/> permission and afterwards creates a 
+        ///         securitylog entry.
+        ///     </para>
+        /// </summary>
+        /// <typeparam name="T">The type of the form to open.</typeparam>
+        /// <param name="logMessage">The log message to write to the security log.</param>
+        /// <param name="refreshCurrentModule"></param>
+        private void ShowSetupForm<T>(string logMessage, bool refreshCurrentModule = false) where T : Form, new()
+        {
+            if (Security.IsAuthorized(Permissions.Setup))
+            {
+                using (var form = new T())
+                {
+                    form.ShowDialog(this);
+                }
+
+                if (refreshCurrentModule)
+                {
+                    RefreshCurrentModule(true);
+                }
+
+                SecurityLog.Write(SecurityLogEvents.Setup, logMessage);
             }
         }
 
-        #region Menu
+        /// <summary>
+        ///     <para>
+        ///         Opens a dialog of the specified type if the current user has the 
+        ///         <see cref="Permissions.Setup"/> permission and afterwards creates a 
+        ///         securitylog entry.
+        ///     </para>
+        /// </summary>
+        /// <typeparam name="T">The type of the form to open.</typeparam>
+        /// <param name="formBuilder">
+        ///     A function that will construct the dialog to display. This function is only called
+        ///     if the user has the <see cref="Permissions.Setup"/> permission.
+        /// </param>
+        /// <param name="logMessage">The log message to write to the security log.</param>
+        /// <param name="refreshCurrentModule"></param>
+        private void ShowSetupForm<T>(Func<T> formBuilder, string logMessage, bool refreshCurrentModule = false) where T: Form
+        {
+            if (formBuilder == null) return;
+
+            if (Security.IsAuthorized(Permissions.Setup))
+            {
+                using (var form = formBuilder())
+                {
+                    if (form != null)
+                    {
+                        form.ShowDialog(this);
+
+                        if (refreshCurrentModule)
+                        {
+                            RefreshCurrentModule(true);
+                        }
+
+                        SecurityLog.Write(SecurityLogEvents.Setup, logMessage);
+                    }
+                }
+            }
+        }
 
         /// <summary>
-        /// Log out of the current database.
+        ///     <para>
+        ///         Checks setup permission, launches the module setup window with the specified 
+        ///         tab and then makes an audit entry.
+        ///     </para>
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        void menuItemLogOff_Click(object sender, EventArgs e)
+        private void LaunchModuleSetupWithTab(int selectedTab)
+        {
+            if (!Security.IsAuthorized(Permissions.Setup)) return;
+
+            using (var formModuleSetup = new FormModuleSetup(selectedTab))
+            {
+                if (formModuleSetup.ShowDialog() != DialogResult.OK)
+                {
+                    return;
+                }
+            }
+
+            FillPatientButton(Patients.GetPat(CurrentPatientId));
+
+            RefreshCurrentModule(true);
+
+            SecurityLog.Write(SecurityLogEvents.Setup, "Modules");
+        }
+
+
+
+
+        #region Menu
+
+        #region Menu: Log Offs
+        /// <summary>
+        ///     <para>
+        ///         Log out of the current database.
+        ///     </para>
+        /// </summary>
+        void MenuItemLogOff_Click(object sender, EventArgs e)
         {
             var suppressLogOffMessage = UserPreference.GetBool(Security.CurrentUser.Id, UserPreferenceName.SuppressLogOffMessage);
             if (!suppressLogOffMessage)
             {
-                var checkResult = 
+                using (var checkResult =
                     new InputBox(
                         OpenDental.Translation.Language.LogOffConfirmation,
                         OpenDental.Translation.Language.DoNotShowThisMessageAgain,
-                        true, new Point(0, 40));
-
-                checkResult.ShowDialog();
-                if (checkResult.DialogResult == DialogResult.Cancel)
+                        true, new Point(0, 40)))
                 {
-                    return;
-                }
-                else if (checkResult.DialogResult == DialogResult.OK)
-                {
-                    UserPreference.Update(Security.CurrentUser.Id, 
-                        UserPreferenceName.SuppressLogOffMessage, 
-                        checkResult.checkBoxResult.Checked);
-                }
 
-                checkResult.Dispose();
+                    checkResult.ShowDialog();
+                    if (checkResult.DialogResult == DialogResult.Cancel)
+                    {
+                        return;
+                    }
+                    else if (checkResult.DialogResult == DialogResult.OK)
+                    {
+                        UserPreference.Update(
+                            Security.CurrentUser.Id,
+                            UserPreferenceName.SuppressLogOffMessage,
+                            checkResult.checkBoxResult.Checked);
+                    }
+                }
             }
 
             LogOffNow(false);
         }
+        #endregion
 
         #region Menu: File
 
         /// <summary>
-        /// Open the dialog to let the user change their password.
+        ///     <para>
+        ///         Open the dialog to let the user change their password.
+        ///     </para>
         /// </summary>
-        void menuItemPassword_Click(object sender, EventArgs e) => SecurityL.ChangePassword(false);
-        
+        void MenuItemPassword_Click(object sender, EventArgs e) => SecurityL.ChangePassword(false);
+
         /// <summary>
-        /// Open the dialog to let the user configurate their e-mail address.
+        ///     <para>
+        ///         Open the dialog to let the user configurate their e-mail address.
+        ///     </para>
         /// </summary>
-        void menuItemUserEmailAddress_Click(object sender, EventArgs e)
+        void MenuItemUserEmailAddress_Click(object sender, EventArgs e)
         {
             var emailAddress = EmailAddress.GetByUser(Security.CurrentUser.Id) ?? new EmailAddress { UserId = Security.CurrentUser.Id };
 
             using (var formEmailAddressEdit = new FormEmailAddressEdit(emailAddress))
             {
-                formEmailAddressEdit.ShowDialog();
+                formEmailAddressEdit.ShowDialog(this);
             }
         }
 
         /// <summary>
-        /// Opens the user settings dialog.
+        ///     <para>
+        ///         Opens the user settings dialog.
+        ///     </para>
         /// </summary>
-        void menuItemUserSettings_Click(object sender, EventArgs e)
+        void MenuItemUserSettings_Click(object sender, EventArgs e)
         {
             using (var formUserSetting = new FormUserSetting())
             {
-                formUserSetting.ShowDialog();
+                formUserSetting.ShowDialog(this);
             }
         }
 
         /// <summary>
-        /// Opens the printer setup dialog.
+        ///     <para>
+        ///         Opens the printer setup dialog.
+        ///     </para>
         /// </summary>
-        void menuItemPrinter_Click(object sender, EventArgs e)
+        void MenuItemPrinter_Click(object sender, EventArgs e)
         {
             if (!Security.IsAuthorized(Permissions.Setup)) return;
 
             using (var formPrinterSetup = new FormPrinterSetup())
             {
-                formPrinterSetup.ShowDialog();
-
-                SecurityLog.Write(SecurityLogEvents.Setup, "Printers");
+                formPrinterSetup.ShowDialog(this);
             }
+
+            SecurityLog.Write(SecurityLogEvents.Setup, "Printers");
         }
 
         /// <summary>
-        /// Opens the graphics settings dialog.
+        ///     <para>
+        ///         Opens the graphics settings dialog.
+        ///     </para>
         /// </summary>
-        void menuItemGraphics_Click(object sender, EventArgs e)
+        void MenuItemGraphics_Click(object sender, EventArgs e)
         {
             if (!Security.IsAuthorized(Permissions.GraphicsEdit)) return;
             
@@ -3916,13 +3950,15 @@ namespace OpenDental
         }
 
         /// <summary>
-        /// Open the dialog to switch to another database.
+        ///     <para>
+        ///         Open the dialog to switch to another database.
+        ///     </para>
         /// </summary>
-        void menuItemConfig_Click(object sender, System.EventArgs e)
+        void MenuItemChooseDatabase_Click(object sender, EventArgs e)
         {
             if (!Security.IsAuthorized(Permissions.ChooseDatabase)) return;
             
-            SecurityLog.Write(SecurityLogEvents.ChooseDatabase, "");//make the entry before switching databases.
+            SecurityLog.Write(SecurityLogEvents.ChooseDatabase, "");
 
             using (var formChooseDatabase = new FormChooseDatabase())
             {
@@ -3932,8 +3968,10 @@ namespace OpenDental
                 }
             }
 
-            CurPatNum = 0;
-            RefreshCurrentModule(); // clumsy but necessary. Sets child PatNums to 0.
+            CurrentPatientId = 0;
+
+            RefreshCurrentModule();
+
             FillPatientButton(null);
 
             if (!LoadPreferences())
@@ -3945,375 +3983,471 @@ namespace OpenDental
         }
 
         /// <summary>
-        /// Exits the application.
+        ///     <para>
+        ///         Exits the application.
+        ///     </para>
         /// </summary>
-        void menuItemExit_Click(object sender, EventArgs e) => Application.Exit();
-        
+        void MenuItemExit_Click(object sender, EventArgs e) => Application.Exit();
+
         #endregion
 
+        #region Menu: Setup
 
+        #region Menu: Setup > Appointments
 
-        #region Setup
+        private void MenuItemApptsPreferences_Click(object sender, EventArgs e) =>
+            LaunchModuleSetupWithTab(0);
 
+        /// <summary>
+        ///     <para>
+        ///         Opens the dialog to manage custom appointment fields.
+        ///     </para>
+        /// </summary>
+        private void MenuItemApptFieldDefs_Click(object sender, EventArgs e) =>
+            ShowSetupForm<FormApptFieldDefs>("Appointment Field Defs");
 
-        //Setup
-        private void menuItemApptFieldDefs_Click(object sender, EventArgs e)
+        /// <summary>
+        ///     <para>
+        ///         Opens the dialog to manage appointment rules.
+        ///     </para>
+        /// </summary>
+        private void MenuItemApptRules_Click(object sender, EventArgs e) =>
+            ShowSetupForm<FormApptRules>("Appointment Rules");
+
+        /// <summary>
+        ///     <para>
+        ///         Opens the dialog to manage appointment types.
+        ///     </para>
+        /// </summary>
+        private void MenuItemApptTypes_Click(object sender, EventArgs e) =>
+            ShowSetupForm<FormApptTypes>("Appointment Types");
+
+        /// <summary>
+        ///     <para>
+        ///         Opens the dialog to manage appointment views.
+        ///     </para>
+        /// </summary>
+        private void MenuItemApptViews_Click(object sender, EventArgs e) =>
+            ShowSetupForm<FormApptViews>("Appointment Views", true);
+
+        /// <summary>
+        ///     <para>
+        ///         Opens the dialog to manage the ASAP list.
+        ///     </para>
+        /// </summary>
+        private void MenuItemAsapList_Click(object sender, EventArgs e) =>
+            ShowSetupForm<FormAsapSetup>("ASAP List Setup");
+
+        /// <summary>
+        ///     <para>
+        ///         Opens the dialog for the appointment confirmations setup.
+        ///     </para>
+        /// </summary>
+        private void MenuItemConfirmations_Click(object sender, EventArgs e) =>
+            ShowSetupForm<FormConfirmationSetup>("Confirmation Setup");
+  
+        /// <summary>
+        ///     <para>
+        ///         Opens the dialog for the insurance verification setup.
+        ///     </para>
+        /// </summary>
+        private void MenuItemInsuranceVerification_Click(object sender, EventArgs e) =>
+            ShowSetupForm<FormInsVerificationSetup>("Insurance Verification");
+
+        /// <summary>
+        ///     <para>
+        ///         Opens the dialog to manage operatories.
+        ///     </para>
+        /// </summary>
+        private void MenuItemOperatories_Click(object sender, EventArgs e)
         {
-            if (!Security.IsAuthorized(Permissions.Setup))
+            if (!Security.IsAuthorized(Permissions.Setup)) return;
+
+            using (var formOperatories = new FormOperatories())
             {
-                return;
+                formOperatories.ShowDialog();
+                if (formOperatories.ListConflictingAppts.Count > 0)
+                {
+                    var formApptConflicts = new FormApptConflicts(formOperatories.ListConflictingAppts);
+
+                    formApptConflicts.Show();
+                    formApptConflicts.BringToFront();
+                }
             }
-            FormApptFieldDefs FormA = new FormApptFieldDefs();
-            FormA.ShowDialog();
-            SecurityLog.Write(SecurityLogEvents.Setup, "Appointment Field Defs");
+
+            SecurityLog.Write(SecurityLogEvents.Setup, "Operatories");
         }
 
-        private void menuItemApptRules_Click(object sender, EventArgs e)
-        {
-            if (!Security.IsAuthorized(Permissions.Setup))
-            {
-                return;
-            }
-            FormApptRules FormA = new FormApptRules();
-            FormA.ShowDialog();
-            SecurityLog.Write(SecurityLogEvents.Setup, "Appointment Rules");
-        }
+        /// <summary>
+        ///     <para>
+        ///         Opens the dialog setup recalls.
+        ///     </para>
+        /// </summary>
+        private void menuItemRecall_Click(object sender, EventArgs e) =>
+            ShowSetupForm<FormRecallSetup>("Recall");
 
-        private void menuItemApptTypes_Click(object sender, EventArgs e)
-        {
-            if (!Security.IsAuthorized(Permissions.Setup))
-            {
-                return;
-            }
-            FormApptTypes FormA = new FormApptTypes();
-            FormA.ShowDialog();
-            SecurityLog.Write(SecurityLogEvents.Setup, "Appointment Types");
-        }
+        /// <summary>
+        ///     <para>
+        ///         Opens the dialog to manage recall types.
+        ///     </para>
+        /// </summary>
+        private void menuItemRecallTypes_Click(object sender, EventArgs e) =>
+            ShowSetupForm<FormRecallTypes>("Recall Types");
 
-        private void menuItemApptViews_Click(object sender, System.EventArgs e)
-        {
-            if (!Security.IsAuthorized(Permissions.Setup))
-            {
-                return;
-            }
-            FormApptViews FormAV = new FormApptViews();
-            FormAV.ShowDialog();
-            RefreshCurrentModule(true);
-            SecurityLog.Write(SecurityLogEvents.Setup, "Appointment Views");
-        }
+        /// <summary>
+        ///     <para>
+        ///         Opens the dialog to setup reactivation.
+        ///     </para>
+        /// </summary>
+        private void menuItemReactivation_Click(object sender, EventArgs e) =>
+            ShowSetupForm<FormReactivationSetup>("Reactivation");
 
-        private void menuItemAlertCategories_Click(object sender, EventArgs e)
-        {
-            if (!Security.IsAuthorized(Permissions.SecurityAdmin))
-            {
-                return;
-            }
-            FormAlertCategorySetup FormACS = new FormAlertCategorySetup();
-            FormACS.ShowDialog();
-            SecurityLog.Write(SecurityLogEvents.SecurityAdmin, "Alert Categories");
-        }
+        #endregion
 
-        private void menuItemAutoCodes_Click(object sender, System.EventArgs e)
-        {
-            if (!Security.IsAuthorized(Permissions.Setup))
-            {
-                return;
-            }
-            FormAutoCode FormAC = new FormAutoCode();
-            FormAC.ShowDialog();
-            SecurityLog.Write(SecurityLogEvents.Setup, "Auto Codes");
-        }
+        #region Menu: Setup > Family / Insurance
 
-        private void menuItemAutomation_Click(object sender, EventArgs e)
-        {
-            if (!Security.IsAuthorized(Permissions.Setup))
-            {
-                return;
-            }
-            FormAutomation FormA = new FormAutomation();
-            FormA.ShowDialog();
-            SecurityLog.Write(SecurityLogEvents.Setup, "Automation");
-        }
+        /// <summary>
+        ///     <para>
+        ///         Opens the family module setup.
+        ///     </para>
+        /// </summary>
+        private void MenuItemFamilyPreferences_Click(object sender, EventArgs e) =>
+            LaunchModuleSetupWithTab(1);
 
-        private void menuItemAutoNotes_Click(object sender, EventArgs e)
-        {
-            if (!Security.IsAuthorized(Permissions.AutoNoteQuickNoteEdit))
-            {
-                return;
-            }
-            FormAutoNotes FormA = new FormAutoNotes();
-            FormA.ShowDialog();
-            SecurityLog.Write(SecurityLogEvents.AutoNoteQuickNoteEdit, "Auto Notes Setup");
-        }
-
-        private void menuItemMobileAppDevices_Click(object sender, EventArgs e)
-        {
-            if (!Security.IsAuthorized(Permissions.Setup))
-            {
-                return;
-            }
-            FormMobileAppDevices formMobileAppDevices = new FormMobileAppDevices();
-            formMobileAppDevices.ShowDialog();
-        }
-
-        private void menuItemClaimForms_Click(object sender, System.EventArgs e)
+        /// <summary>
+        ///     <para>
+        ///         Opens the dialog to manage claim forms.
+        ///     </para>
+        /// </summary>
+        private void MenuItemClaimForms_Click(object sender, EventArgs e)
         {
             if (Preferences.AtoZfolderUsed == DataStorageType.InDatabase)
             {
-                MsgBox.Show(this, "Claim Forms feature is unavailable when data path A to Z folder is disabled.");
+                MessageBox.Show(
+                    "Claim Forms feature is unavailable when data path A to Z folder is disabled.",
+                    "Claim Forms",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+
                 return;
             }
-            if (!Security.IsAuthorized(Permissions.Setup))
-            {
-                return;
-            }
-            FormClaimForms FormCF = new FormClaimForms();
-            FormCF.ShowDialog();
-            SecurityLog.Write(SecurityLogEvents.Setup, "Claim Forms");
+
+            ShowSetupForm<FormClaimForms>("Claim Forms");
         }
 
-        private void menuItemClearinghouses_Click(object sender, System.EventArgs e)
+        /// <summary>
+        ///     <para>
+        ///         Opens the dialog to manage clearinghouses.
+        ///     </para>
+        /// </summary>
+        private void MenuItemClearinghouses_Click(object sender, EventArgs e) =>
+            ShowSetupForm<FormClearinghouses>("Clearinghouses");
+
+        /// <summary>
+        ///     <para>
+        ///         Opens the dialog to manage insurance categories.
+        ///     </para>
+        /// </summary>
+        private void MenuItemInsuranceCategories_Click(object sender, EventArgs e) => 
+            ShowSetupForm<FormInsCatsSetup>("Insurance Categories");
+
+        /// <summary>
+        ///     <para>
+        ///         Opens the dialog to manage insurance filling codes.
+        ///     </para>
+        /// </summary>
+        private void MenuItemInsuranceFilingCodes_Click(object sender, EventArgs e) =>
+            ShowSetupForm<FormInsFilingCodes>("Insurance Filing Codes");
+
+        /// <summary>
+        ///     <para>
+        ///         Opens the dialog to manage patient field definitions.
+        ///     </para>
+        /// </summary>
+        private void MenuItemPatFieldDefs_Click(object sender, EventArgs e) =>
+            ShowSetupForm(() => new FormPatFieldDefs(false), "Patient Field Defs");
+
+        /// <summary>
+        ///     <para>
+        ///         Opens the dialog to manage payer ID's.
+        ///     </para>
+        /// </summary>
+        private void MenuItemPayerIDs_Click(object sender, EventArgs e) =>
+            ShowSetupForm(() => new FormElectIDs { IsSelectMode = false }, "Payer IDs");
+
+        #endregion
+
+        #region Menu: Setup > Account
+
+        /// <summary>
+        ///     <para>
+        ///         Opens the dialog to setup the account module.
+        ///     </para>
+        /// </summary>
+        private void MenuItemAccountPreferences_Click(object sender, EventArgs e) =>
+            LaunchModuleSetupWithTab(2);
+
+        /// <summary>
+        ///     <para>
+        ///         Opens the dialog to manage default CC procedures.
+        ///     </para>
+        /// </summary>
+        private void MenuItemDefaultCCProcedures_Click(object sender, EventArgs e) =>
+            ShowSetupForm<FormDefaultCCProcs>("Default CC Procedures");
+
+        #endregion
+
+        #region Menu: Setup > Treatment Plan
+        private void menuItemPreferencesTreatPlan_Click(object sender, EventArgs e)
         {
-            if (!Security.IsAuthorized(Permissions.Setup))
-            {
-                return;
-            }
-            FormClearinghouses FormC = new FormClearinghouses();
-            FormC.ShowDialog();
-            SecurityLog.Write(SecurityLogEvents.Setup, "Clearinghouses");
+            LaunchModuleSetupWithTab(3);
         }
 
-        private void menuItemDiscountPlans_Click(object sender, EventArgs e)
+        #endregion
+
+        #region Menu: Setup > Chart
+
+        /// <summary>
+        ///     <para>
+        ///         Opens the dialog to setup the chart module.
+        ///     </para>
+        /// </summary>
+        private void MenuItemChartPreferences_Click(object sender, EventArgs e) =>
+            LaunchModuleSetupWithTab(4);
+
+        /// <summary>
+        ///     <para>
+        ///         Opens the dialog to manage the EHR setup.
+        ///     </para>
+        /// </summary>
+        private void MenuItemEHR_Click(object sender, EventArgs e) =>
+            ShowSetupForm<FormEhrSetup>("EHR");
+
+        /// <summary>
+        ///     <para>
+        ///         Opens the dialog to manage the procedure buttons.
+        ///     </para>
+        /// </summary>
+        private void MenuItemProcedureButtons_Click(object sender, EventArgs e)
         {
-            if (!Security.IsAuthorized(Permissions.Setup))
-            {
-                return;
-            }
-            FormDiscountPlans FormDP = new FormDiscountPlans();
-            FormDP.ShowDialog();
-            SecurityLog.Write(SecurityLogEvents.Setup, "Discount Plans");
+            ShowSetupForm<FormProcButtons>("Procedure Buttons");
+
+            SetModuleSelected();
         }
 
-        private void menuItemComputers_Click(object sender, System.EventArgs e)
-        {
-            if (!Security.IsAuthorized(Permissions.Setup))
-            {
-                return;
-            }
-            FormComputers FormC = new FormComputers();
-            FormC.ShowDialog();
-            SecurityLog.Write(SecurityLogEvents.Setup, "Computers");
-        }
+        #endregion
 
-        private void menuItemDataPath_Click(object sender, System.EventArgs e)
+        #region Menu: Setup > Images
+
+        /// <summary>
+        ///     <para>
+        ///         Opens the dialog to setup the images module.
+        ///     </para>
+        /// </summary>
+        private void MenuItemImagesPreferences_Click(object sender, EventArgs e) =>
+            LaunchModuleSetupWithTab(5);
+
+        /// <summary>
+        ///     <para>
+        ///         Opens the dialog to setup imaging quality.
+        ///     </para>
+        /// </summary>
+        private void MenuItemImagingQuality_Click(object sender, EventArgs e) =>
+            ShowSetupForm<FormImagingSetup>("Imaging");
+
+        #endregion
+
+        #region Menu: Setup > Manage
+
+        /// <summary>
+        ///     <para>
+        ///         Opens the dialog to setup the management module.
+        ///     </para>
+        /// </summary>
+        private void MenuItemManagePreferences_Click(object sender, EventArgs e) =>
+            LaunchModuleSetupWithTab(6);
+
+        /// <summary>
+        ///     <para>
+        ///         Opens the dialog to setup e-mail.
+        ///     </para>
+        /// </summary>
+        private void MenuItemEmail_Click(object sender, EventArgs e) =>
+            ShowSetupForm<FormEmailAddresses>("Email");
+
+        /// <summary>
+        ///     <para>
+        ///         Opens the dialog to setup messaging.
+        ///     </para>
+        /// </summary>
+        private void MenuItemMessaging_Click(object sender, EventArgs e) =>
+            ShowSetupForm<FormMessagingSetup>("Messaging");
+        
+        /// <summary>
+        ///     <para>
+        ///         Opens the dialog to manage messaging buttons.
+        ///     </para>
+        /// </summary>
+        private void MenuItemMessagingButtons_Click(object sender, EventArgs e) =>
+            ShowSetupForm<FormMessagingButSetup>("Messaging Buttons");
+
+        /// <summary>
+        ///     <para>
+        ///         Opens the dialog to setup time cards.
+        ///     </para>
+        /// </summary>
+        private void menuItemTimeCards_Click(object sender, EventArgs e) =>
+            ShowSetupForm<FormTimeCardSetup>("Time Card Setup");
+
+        #endregion
+
+        #region Menu: Setup > Advanced Setup
+
+        /// <summary>
+        ///     <para>
+        ///         Opens the dialog to manage computers.
+        ///     </para>
+        /// </summary>
+        private void MenuItemComputers_Click(object sender, EventArgs e) =>
+            ShowSetupForm<FormComputers>("Computers");
+
+        /// <summary>
+        ///     <para>
+        ///         Opens the dialog to manage the FHIR setup.
+        ///     </para>
+        /// </summary>
+        private void MenuItemFHIR_Click(object sender, EventArgs e) =>
+            ShowSetupForm<FormFHIRSetup>("FHIR");
+        
+        /// <summary>
+        ///     <para>
+        ///         Opens the dialog to manage the HL7 setup.
+        ///     </para>
+        /// </summary>
+        private void MenuItemHL7_Click(object sender, EventArgs e) =>
+            ShowSetupForm(() => new FormHL7Defs { CurPatNum = CurrentPatientId }, "HL7");
+
+        /// <summary>
+        ///     <para>
+        ///         Opens the dialog to manage mobile app devices.
+        ///     </para>
+        /// </summary>
+        private void MenuItemMobileAppDevices_Click(object sender, EventArgs e) =>
+            ShowSetupForm<FormMobileAppDevices>("Mobile App Devices");
+
+        #endregion
+
+        /// <summary>
+        ///     <para>
+        ///         Opens the dialog to manage alert categories.
+        ///     </para>
+        /// </summary>
+        private void MenuItemAlertCategories_Click(object sender, EventArgs e) =>
+            ShowSetupForm<FormAlertCategorySetup>("Alert Categories");
+       
+        /// <summary>
+        ///     <para>
+        ///         Opens the dialog to manage auto codes.
+        ///     </para>
+        /// </summary>
+        private void MenuItemAutoCodes_Click(object sender, EventArgs e) =>
+            ShowSetupForm<FormAutoCode>("Auto Codes");
+
+        /// <summary>
+        ///     <para>
+        ///         Opens the dialog to manage automation.
+        ///     </para>
+        /// </summary>
+        private void MenuItemAutomation_Click(object sender, EventArgs e) =>
+            ShowSetupForm<FormAutomation>("Automation");
+
+        /// <summary>
+        ///     <para>
+        ///         Opens the dialog to manage auto notes.
+        ///     </para>
+        /// </summary>
+        private void MenuItemAutoNotes_Click(object sender, EventArgs e) =>
+            ShowSetupForm<FormAutoNotes>("Auto Notes Setup");
+
+        /// <summary>
+        ///     <para>
+        ///         Opens the dialog to manage to data storage paths.
+        ///     </para>
+        /// </summary>
+        private void MenuItemDataPaths_Click(object sender, EventArgs e)
         {
-            //security is handled from within the form.
-            FormPath FormP = new FormPath();
-            FormP.ShowDialog();
+            using (var formPath = new FormPath())
+            {
+                formPath.ShowDialog();
+            }
+
             CheckCustomReports();
-            this.RefreshCurrentModule();
+
+            RefreshCurrentModule();
+
             SecurityLog.Write(SecurityLogEvents.Setup, "Data Path");
         }
 
-        private void menuItemDefaultCCProcs_Click(object sender, System.EventArgs e)
-        {
-            if (!Security.IsAuthorized(Permissions.Setup))
-            {
-                return;
-            }
-            FormDefaultCCProcs FormD = new FormDefaultCCProcs();
-            FormD.ShowDialog();
-            SecurityLog.Write(SecurityLogEvents.Setup, "Default CC Procedures");
-        }
+        /// <summary>
+        ///     <para>
+        ///         Opens the form to manage definitions.
+        ///     </para>
+        /// </summary>
+        private void MenuItemDefinitions_Click(object sender, EventArgs e) =>
+            ShowSetupForm(() => new FormDefinitions(DefinitionCategory.AccountColors), "Definitions");
 
-        private void menuItemDefinitions_Click(object sender, System.EventArgs e)
-        {
-            if (!Security.IsAuthorized(Permissions.Setup))
-            {
-                return;
-            }
-            FormDefinitions FormD = new FormDefinitions(DefinitionCategory.AccountColors);//just the first cat.
-            FormD.ShowDialog();
-            RefreshCurrentModule(true);
-            SecurityLog.Write(SecurityLogEvents.Setup, "Definitions");
-        }
+        /// <summary>
+        ///     <para>
+        ///         Opens the dialog to manage display fields.
+        ///     </para>
+        /// </summary>
+        private void MenuItemDisplayFields_Click(object sender, EventArgs e) =>
+            ShowSetupForm<FormDisplayFieldCategories>("Display Fields", true);
 
-        private void menuItemDentalSchools_Click(object sender, EventArgs e)
-        {
-            if (!Security.IsAuthorized(Permissions.Setup))
-            {
-                return;
-            }
-            FormDentalSchoolSetup FormDSS = new FormDentalSchoolSetup();
-            FormDSS.ShowDialog();
-            RefreshCurrentModule();
-            SecurityLog.Write(SecurityLogEvents.Setup, "Dental Schools");
-        }
+        /// <summary>
+        ///     <para>
+        ///         Opens the dialog for enterprise setup.
+        ///     </para>
+        /// </summary>
+        private void MenuItemEnterprise_Click(object sender, EventArgs e) =>
+            ShowSetupForm<FormEnterpriseSetup>("Enterprise");
+        
+        /// <summary>
+        ///     <para>
+        ///         Opens the dialog to manage fee schedules.
+        ///     </para>
+        /// </summary>
+        private void MenuItemFeeScheds_Click(object sender, EventArgs e) =>
+            ShowSetupForm(() => new FormFeeScheds(false), "Fee Schedules");
 
-        private void menuItemDisplayFields_Click(object sender, EventArgs e)
-        {
-            if (!Security.IsAuthorized(Permissions.Setup))
-            {
-                return;
-            }
-            FormDisplayFieldCategories FormD = new FormDisplayFieldCategories();
-            FormD.ShowDialog();
-            RefreshCurrentModule(true);
-            SecurityLog.Write(SecurityLogEvents.Setup, "Display Fields");
-        }
+        /// <summary>
+        ///     <para>
+        ///         Opens the dialog to manage laboratories.
+        ///     </para>
+        /// </summary>
+        private void MenuItemLaboratories_Click(object sender, EventArgs e) =>
+            ShowSetupForm<FormLaboratories>("Laboratories");
 
-        private void menuItemEnterprise_Click(object sender, EventArgs e)
-        {
-            if (!Security.IsAuthorized(Permissions.Setup))
-            {
-                return;
-            }
-            FormEnterpriseSetup FormES = new FormEnterpriseSetup();
-            FormES.ShowDialog();
-            SecurityLog.Write(SecurityLogEvents.Setup, "Enterprise");
-        }
-
-        private void menuItemEmail_Click(object sender, System.EventArgs e)
-        {
-            if (!Security.IsAuthorized(Permissions.Setup))
-            {
-                return;
-            }
-            FormEmailAddresses FormEA = new FormEmailAddresses();
-            FormEA.ShowDialog();
-            SecurityLog.Write(SecurityLogEvents.Setup, "Email");
-        }
-
-        private void menuItemEHR_Click(object sender, EventArgs e)
-        {
-            //if(!Security.IsAuthorized(Permissions.Setup)) {
-            //  return;
-            //}
-            FormEhrSetup FormE = new FormEhrSetup();
-            FormE.ShowDialog();
-            SecurityLog.Write(SecurityLogEvents.Setup, "EHR");
-        }
-
-        private void menuItemFeeScheds_Click(object sender, EventArgs e)
-        {
-            if (!Security.IsAuthorized(Permissions.FeeSchedEdit))
-            {
-                return;
-            }
-            FormFeeScheds FormF = new FormFeeScheds(false);
-            FormF.ShowDialog();
-            SecurityLog.Write(SecurityLogEvents.Setup, "Fee Schedules");
-        }
-
-        private void menuItemFHIR_Click(object sender, EventArgs e)
-        {
-            if (!Security.IsAuthorized(Permissions.Setup))
-            {
-                return;
-            }
-            FormFHIRSetup FormFS = new FormFHIRSetup();
-            FormFS.ShowDialog();
-            SecurityLog.Write(SecurityLogEvents.Setup, "FHIR");
-        }
-
-        private void menuItemHL7_Click(object sender, EventArgs e)
-        {
-            if (!Security.IsAuthorized(Permissions.Setup))
-            {
-                return;
-            }
-            FormHL7Defs FormH = new FormHL7Defs();
-            FormH.CurPatNum = CurPatNum;
-            FormH.ShowDialog();
-            SecurityLog.Write(SecurityLogEvents.Setup, "HL7");
-        }
-
-        private void menuItemImaging_Click(object sender, System.EventArgs e)
-        {
-            if (!Security.IsAuthorized(Permissions.Setup))
-            {
-                return;
-            }
-            FormImagingSetup FormI = new FormImagingSetup();
-            FormI.ShowDialog();
-            SecurityLog.Write(SecurityLogEvents.Setup, "Imaging");
-        }
-
-        private void menuItemInsCats_Click(object sender, System.EventArgs e)
-        {
-            if (!Security.IsAuthorized(Permissions.Setup))
-            {
-                return;
-            }
-            FormInsCatsSetup FormE = new FormInsCatsSetup();
-            FormE.ShowDialog();
-            SecurityLog.Write(SecurityLogEvents.Setup, "Insurance Categories");
-        }
-
-        private void menuItemInsFilingCodes_Click(object sender, EventArgs e)
-        {
-            if (!Security.IsAuthorized(Permissions.Setup))
-            {
-                return;
-            }
-            FormInsFilingCodes FormF = new FormInsFilingCodes();
-            FormF.ShowDialog();
-            SecurityLog.Write(SecurityLogEvents.Setup, "Insurance Filing Codes");
-        }
-
-        private void menuItemLaboratories_Click(object sender, EventArgs e)
+        /// <summary>
+        ///     <para>
+        ///         Opens the dialog with the miscellaneous settings.
+        ///     </para>
+        /// </summary>
+        private void MenuItemMiscellaneous_Click(object sender, EventArgs e)
         {
             if (!Security.IsAuthorized(Permissions.Setup))
             {
                 return;
             }
 
-            if (Plugin.Trigger(this, "FormOpenDental_MenuItem_Laboratories")) return;
-
-            FormLaboratories FormL = new FormLaboratories();
-            FormL.ShowDialog();
-            SecurityLog.Write(SecurityLogEvents.Setup, "Laboratories");
-        }
-
-        private void menuItemLetters_Click(object sender, EventArgs e)
-        {
-            FormLetters FormL = new FormLetters();
-            FormL.ShowDialog();
-        }
-
-        private void menuItemMessaging_Click(object sender, EventArgs e)
-        {
-            if (!Security.IsAuthorized(Permissions.Setup))
+            using (var formMisc = new FormMisc())
             {
-                return;
+                if (formMisc.ShowDialog(this) != DialogResult.OK)
+                {
+                    return;
+                }
             }
-            FormMessagingSetup FormM = new FormMessagingSetup();
-            FormM.ShowDialog();
-            SecurityLog.Write(SecurityLogEvents.Setup, "Messaging");
-        }
 
-        private void menuItemMessagingButs_Click(object sender, EventArgs e)
-        {
-            if (!Security.IsAuthorized(Permissions.Setup))
-            {
-                return;
-            }
-            FormMessagingButSetup FormM = new FormMessagingButSetup();
-            FormM.ShowDialog();
-            SecurityLog.Write(SecurityLogEvents.Setup, "Messaging");
-        }
-
-        private void menuItemMisc_Click(object sender, System.EventArgs e)
-        {
-            if (!Security.IsAuthorized(Permissions.Setup))
-            {
-                return;
-            }
-            FormMisc FormM = new FormMisc();
-            if (FormM.ShowDialog() != DialogResult.OK)
-            {
-                return;
-            }
             if (Preference.GetInt(PreferenceName.ProcessSigsIntervalInSecs) == 0)
             {
                 timerSignals.Enabled = false;
@@ -4327,274 +4461,275 @@ namespace OpenDental
             SecurityLog.Write(SecurityLogEvents.Setup, "Misc");
         }
 
-        ///<summary>Only used when theme is changed.</summary>
-        private void RecursiveInvalidate(Control control)
-        {
-            foreach (Control c in control.Controls)
-            {
-                RecursiveInvalidate(c);
-            }
-            control.Invalidate();
-        }
-
-        private void menuItemModules_Click(object sender, EventArgs e)
-        {
-            LaunchModuleSetupWithTab(0);//Default to Appts tab.
-        }
-
-        private void menuItemOrtho_Click(object sender, EventArgs e)
-        {
-            if (!Security.IsAuthorized(Permissions.Setup))
-            {
-                return;
-            }
-            FormOrthoSetup FormOS = new FormOrthoSetup();
-            FormOS.ShowDialog();
-        }
-
-        private void menuItemPreferencesAppts_Click(object sender, EventArgs e)
-        {
+        /// <summary>
+        ///     <para>
+        ///         Opens the module setup dialog.
+        ///     </para>
+        /// </summary>
+        private void MenuItemModulePreferences_Click(object sender, EventArgs e) =>
             LaunchModuleSetupWithTab(0);
-        }
 
-        private void menuItemPreferencesFamily_Click(object sender, EventArgs e)
-        {
-            LaunchModuleSetupWithTab(1);
-        }
+        /// <summary>
+        ///     <para>
+        ///         Opens the dialog to manage the orthodontics setup.
+        ///     </para>
+        /// </summary>
+        private void MenuItemOrtho_Click(object sender, EventArgs e) =>
+            ShowSetupForm<FormOrthoSetup>("Ortho");
 
-        private void menuItemPreferencesAccount_Click(object sender, EventArgs e)
+        /// <summary>
+        ///     <para>
+        ///         Opens the dialog to manage the practice.
+        ///     </para>
+        /// </summary>
+        private void MenuItemPractice_Click(object sender, EventArgs e)
         {
-            LaunchModuleSetupWithTab(2);
-        }
+            if (!Security.IsAuthorized(Permissions.Setup)) return;
 
-        private void menuItemPreferencesTreatPlan_Click(object sender, EventArgs e)
-        {
-            LaunchModuleSetupWithTab(3);
-        }
-
-        private void menuItemPreferencesChart_Click(object sender, EventArgs e)
-        {
-            LaunchModuleSetupWithTab(4);
-        }
-
-        private void menuItemPreferencesImages_Click(object sender, EventArgs e)
-        {
-            LaunchModuleSetupWithTab(5);
-        }
-
-        private void menuItemPreferencesManage_Click(object sender, EventArgs e)
-        {
-            LaunchModuleSetupWithTab(6);
-        }
-
-        ///<summary>Checks setup permission, launches the module setup window with the specified tab and then makes an audit entry.
-        ///This is simply a helper method because every preferences menu item will do the exact same code.</summary>
-        private void LaunchModuleSetupWithTab(int selectedTab)
-        {
-            if (!Security.IsAuthorized(Permissions.Setup))
+            using (var formPractice = new FormPractice())
             {
-                return;
-            }
-            FormModuleSetup FormM = new FormModuleSetup(selectedTab);
-            if (FormM.ShowDialog() != DialogResult.OK)
-            {
-                return;
-            }
-            FillPatientButton(Patients.GetPat(CurPatNum));
-            RefreshCurrentModule(true);
-            SecurityLog.Write(SecurityLogEvents.Setup, "Modules");
-        }
 
-        private void menuItemOperatories_Click(object sender, System.EventArgs e)
-        {
-            if (!Security.IsAuthorized(Permissions.Setup))
-            {
-                return;
-            }
-            FormOperatories FormO = new FormOperatories();
-            FormO.ShowDialog();
-            if (FormO.ListConflictingAppts.Count > 0)
-            {
-                FormApptConflicts FormAC = new FormApptConflicts(FormO.ListConflictingAppts);
-                FormAC.Show();
-                FormAC.BringToFront();
-            }
-            SecurityLog.Write(SecurityLogEvents.Setup, "Operatories");
-        }
+                formPractice.ShowDialog();
 
-        private void menuItemPatFieldDefs_Click(object sender, EventArgs e)
-        {
-            if (!Security.IsAuthorized(Permissions.Setup))
-            {
-                return;
+                SecurityLog.Write(SecurityLogEvents.Setup, "Practice Info");
+                if (formPractice.DialogResult != DialogResult.OK)
+                {
+                    return;
+                }
             }
-            FormPatFieldDefs FormP = new FormPatFieldDefs();
-            FormP.ShowDialog();
-            SecurityLog.Write(SecurityLogEvents.Setup, "Patient Field Defs");
-        }
 
-        private void menuItemPayerIDs_Click(object sender, EventArgs e)
-        {
-            if (!Security.IsAuthorized(Permissions.Setup))
-            {
-                return;
-            }
-            FormElectIDs FormE = new FormElectIDs();
-            FormE.IsSelectMode = false;
-            FormE.ShowDialog();
-            SecurityLog.Write(SecurityLogEvents.Setup, "Payer IDs");
-        }
-
-        private void menuItemPractice_Click(object sender, System.EventArgs e)
-        {
-            if (!Security.IsAuthorized(Permissions.Setup))
-            {
-                return;
-            }
-            FormPractice FormPr = new FormPractice();
-            FormPr.ShowDialog();
-            SecurityLog.Write(SecurityLogEvents.Setup, "Practice Info");
-            if (FormPr.DialogResult != DialogResult.OK)
-            {
-                return;
-            }
             // TODO: myOutlookBar.RefreshButtons();
+
             RefreshCurrentModule();
         }
 
-        private void menuItemProblems_Click(object sender, EventArgs e)
+        /// <summary>
+        ///     <para>
+        ///         Opens the dialog to manage the program links.
+        ///     </para>
+        /// </summary>
+        private void MenuItemProgramLinks_Click(object sender, EventArgs e)
         {
-            if (!Security.IsAuthorized(Permissions.Setup))
-            {
-                return;
-            }
-            FormDiseaseDefs FormD = new FormDiseaseDefs();
-            FormD.ShowDialog();
-            //RefreshCurrentModule();
-            SecurityLog.Write(SecurityLogEvents.Setup, "Disease Defs");
-        }
+            if (!Security.IsAuthorized(Permissions.Setup)) return;
 
-        private void menuItemProcedureButtons_Click(object sender, System.EventArgs e)
-        {
-            if (!Security.IsAuthorized(Permissions.Setup))
+            using (var formProgramLinks = new FormProgramLinks())
             {
-                return;
+                formProgramLinks.ShowDialog();
             }
-            FormProcButtons FormPB = new FormProcButtons();
-            FormPB.Owner = this;
-            FormPB.ShowDialog();
-            SetModuleSelected();
-            SecurityLog.Write(SecurityLogEvents.Setup, "Procedure Buttons");
-        }
 
-        private void menuItemLinks_Click(object sender, System.EventArgs e)
-        {
-            if (!Security.IsAuthorized(Permissions.Setup))
-            {
-                return;
-            }
-            FormProgramLinks FormPL = new FormProgramLinks();
-            FormPL.ShowDialog();
-            ContrChart2.InitializeLocalData();//for eCW
+            ContrChart2.InitializeLocalData();
+
             LayoutToolBar();
             RefreshMenuReports();
-            if (CurPatNum > 0)
+
+            if (CurrentPatientId > 0)
             {
-                Patient pat = Patients.GetPat(CurPatNum);
-                FillPatientButton(pat);
+                FillPatientButton(
+                    Patients.GetPat(
+                        CurrentPatientId));
             }
+
             SecurityLog.Write(SecurityLogEvents.Setup, "Program Links");
         }
 
+        /// <summary>
+        ///     <para>
+        ///         Opens the dialog to manage quick paste notes.
+        ///     </para>
+        /// </summary>
+        private void MenuItemQuickPasteNotes_Click(object sender, EventArgs e)
+        {
+            using (var formQuickPaste = new FormQuickPaste(true)
+            {
+                QuickType = QuickPasteType.None
+            })
+            {
+                formQuickPaste.ShowDialog();
+            }
+        }
+
+        /// <summary>
+        ///     <para>
+        ///         Opens the dialog to setup reports.
+        ///     </para>
+        /// </summary>
+        private void MenuItemReports_Click(object sender, EventArgs e) =>
+            ShowSetupForm(() => new FormReportSetup(0, false), "Reports");
+
+        /// <summary>
+        ///     <para>
+        ///         Opens the dialog to manage required fields.
+        ///     </para>
+        /// </summary>
+        private void MenuItemRequiredFields_Click(object sender, EventArgs e) =>
+            ShowSetupForm<FormRequiredFields>("Required Fields");
+
+        /// <summary>
+        ///     <para>
+        ///         Opens the dialog to setup schedules.
+        ///     </para>
+        /// </summary>
+        private void MenuItemSchedules_Click(object sender, EventArgs e)
+        {
+            using (var formSchedule = new FormSchedule())
+            {
+                formSchedule.ShowDialog();
+            }
+
+            // TODO: ??? SecurityLog.Write(Permissions.Schedules,0,"");
+        }
+
+        #region Menu: Setup > Security
+
+        /// <summary>
+        ///     <para>
+        ///         Opens the dialog to configure security preferences.
+        ///     </para>
+        /// </summary>
+        private void MenuItemSecuritySettings_Click(object sender, EventArgs e)
+        {
+            if (!Security.IsAuthorized(Permissions.SecurityAdmin)) return;
+
+            using (var formSecurity = new FormSecurity())
+            {
+                formSecurity.ShowDialog();
+
+                SecurityLog.Write(SecurityLogEvents.SecurityAdmin, "Security Window");
+            }
+
+            if (Security.CurrentUser.ClinicId.HasValue)
+            {
+                Clinics.ClinicId = Security.CurrentUser.ClinicId.Value;
+            }
+
+            Text = PatientL.GetMainTitle(Patients.GetPat(CurrentPatientId), Clinics.ClinicId);
+            
+            SetSmsNotificationText();
+           
+            RefreshMenuClinics();
+            RefreshMenuDashboards();
+        }
+
+        /// <summary>
+        ///     <para>
+        ///         Opens the dialog to add a new user account.
+        ///     </para>
+        /// </summary>
+        private void MenuItemAddUser_Click(object sender, EventArgs e)
+        {
+            bool isAuthorizedAddNewUser = Security.IsAuthorized(Permissions.AddNewUser, true);
+            bool isAuthorizedSecurityAdmin = Security.IsAuthorized(Permissions.SecurityAdmin, true);
+
+            if (!(isAuthorizedAddNewUser || isAuthorizedSecurityAdmin))
+            {
+                MessageBox.Show(
+                    "Not authorized to add a new user.", 
+                    "Users", 
+                    MessageBoxButtons.OK, 
+                    MessageBoxIcon.Warning);
+
+                return;
+            }
+
+            if (Preference.GetLong(PreferenceName.DefaultUserGroup) == 0)
+            {
+                if (isAuthorizedSecurityAdmin)
+                {
+                    var result =
+                        MessageBox.Show(
+                            "Default user group is not set. Would you like to set the default user group now?",
+                            "Default User Group", 
+                            MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                    if (result == DialogResult.Yes)
+                    {
+                        using (var formGlobalSecurity = new FormGlobalSecurity())
+                        {
+                            formGlobalSecurity.ShowDialog();
+                        }
+                    }
+                }
+                else
+                {
+                    MessageBox.Show(
+                        "Default user group is not set. A user with the SecurityAdmin permission must set a default user group. To view the default user group, in the Main Menu, click Setup, Security, Security Settings, Global Security Settings.",
+                        "Default User Group", 
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+
+                return;
+            }
+
+            using (var formUserEdit = new FormUserEdit(new User(), true))
+            {
+                formUserEdit.IsNew = true;
+                formUserEdit.ShowDialog();
+            }
+        }
+
+        #endregion
+
+        /// <summary>
+        ///     <para>
+        ///         Opens the dialog to manage sheets.
+        ///     </para>
+        /// </summary>
+        private void MenuItemSheets_Click(object sender, EventArgs e) =>
+            ShowSetupForm<FormSheetDefs>("Sheets");
+
+        /// <summary>
+        ///     <para>
+        ///         Opens the dialog to setup spell check.
+        ///     </para>
+        /// </summary>
+        private void MenuItemSpellCheck_Click(object sender, EventArgs e)
+        {
+            using (var formSpellCheck = new FormSpellCheck())
+            {
+                formSpellCheck.ShowDialog();
+            }
+        }
+
+        /// <summary>
+        ///     <para>
+        ///         Opens the dialog to setup tasks.
+        ///     </para>
+        /// </summary>
+        private void MenuItemTasks_Click(object sender, EventArgs e)
+        {
+            if (!Security.IsAuthorized(Permissions.Setup)) return;
+
+            using (var formTaskPreferences = new FormTaskPreferences())
+            {
+                if (formTaskPreferences.ShowDialog() != DialogResult.OK)
+                {
+                    return;
+                }
+            }
+
+            if (userControlTasks1.Visible)
+            {
+                userControlTasks1.InitializeOnStartup();
+            }
+
+            SecurityLog.Write(SecurityLogEvents.Setup, "Task");
+        }
+
+        #endregion
+
+
         /*
-		private void menuItem_ProviderAllocatorSetup_Click(object sender,EventArgs e) {
-			// Check Permissions
-			if(!Security.IsAuthorized(Permissions.Setup)) {
-				// Failed security prompts message box. Consider adding overload to not show message.
-				//MessageBox.Show("Not Authorized to Run Setup for Provider Allocation Tool");
-				return;
-			}
-			Reporting.Allocators.MyAllocator1.FormInstallAllocator_Provider fap = new OpenDental.Reporting.Allocators.MyAllocator1.FormInstallAllocator_Provider();
-			fap.ShowDialog();
-		}*/
+ private void menuItem_ProviderAllocatorSetup_Click(object sender,EventArgs e) {
+     // Check Permissions
+     if(!Security.IsAuthorized(Permissions.Setup)) {
+         // Failed security prompts message box. Consider adding overload to not show message.
+         //MessageBox.Show("Not Authorized to Run Setup for Provider Allocation Tool");
+         return;
+     }
+     Reporting.Allocators.MyAllocator1.FormInstallAllocator_Provider fap = new OpenDental.Reporting.Allocators.MyAllocator1.FormInstallAllocator_Provider();
+     fap.ShowDialog();
+ }*/
 
-        private void menuItemAsapList_Click(object sender, EventArgs e)
-        {
-            if (!Security.IsAuthorized(Permissions.Setup))
-            {
-                return;
-            }
-            FormAsapSetup FormAS = new FormAsapSetup();
-            FormAS.ShowDialog();
-            SecurityLog.Write(SecurityLogEvents.Setup, "ASAP List Setup");
-        }
-
-        private void menuItemConfirmations_Click(object sender, EventArgs e)
-        {
-            if (!Security.IsAuthorized(Permissions.Setup))
-            {
-                return;
-            }
-            FormConfirmationSetup FormCS = new FormConfirmationSetup();
-            FormCS.ShowDialog();
-            SecurityLog.Write(SecurityLogEvents.Setup, "Confirmation Setup");
-        }
-
-        private void menuItemInsVerify_Click(object sender, EventArgs e)
-        {
-            if (!Security.IsAuthorized(Permissions.Setup))
-            {
-                return;
-            }
-            FormInsVerificationSetup FormIV = new FormInsVerificationSetup();
-            FormIV.ShowDialog();
-            SecurityLog.Write(SecurityLogEvents.Setup, "Insurance Verification");
-        }
-
-        private void menuItemQuestions_Click(object sender, EventArgs e)
-        {
-            if (!Security.IsAuthorized(Permissions.Setup))
-            {
-                return;
-            }
-            FormQuestionDefs FormQ = new FormQuestionDefs();
-            FormQ.ShowDialog();
-            //RefreshCurrentModule();
-            SecurityLog.Write(SecurityLogEvents.Setup, "Questionnaire");
-        }
-
-        private void menuItemRecall_Click(object sender, System.EventArgs e)
-        {
-            if (!Security.IsAuthorized(Permissions.Setup))
-            {
-                return;
-            }
-            FormRecallSetup FormRS = new FormRecallSetup();
-            FormRS.ShowDialog();
-            SecurityLog.Write(SecurityLogEvents.Setup, "Recall");
-        }
-
-        private void menuItemRecallTypes_Click(object sender, EventArgs e)
-        {
-            if (!Security.IsAuthorized(Permissions.Setup))
-            {
-                return;
-            }
-            FormRecallTypes FormRT = new FormRecallTypes();
-            FormRT.ShowDialog();
-            SecurityLog.Write(SecurityLogEvents.Setup, "Recall Types");
-        }
-
-        private void menuItemReactivation_Click(object sender, System.EventArgs e)
-        {
-            if (!Security.IsAuthorized(Permissions.Setup))
-            {
-                return;
-            }
-            FormReactivationSetup FormRS = new FormReactivationSetup();
-            FormRS.ShowDialog();
-            SecurityLog.Write(SecurityLogEvents.Setup, "Reactivation");
-        }
 
         private void menuItemReplication_Click(object sender, EventArgs e)
         {
@@ -4607,133 +4742,6 @@ namespace OpenDental
             //SecurityLog.Write(Permissions.ReplicationSetup, 0, "Replication setup.");
         }
 
-        private void menuItemReports_Click(object sender, EventArgs e)
-        {
-            if (!Security.IsAuthorized(Permissions.Setup))
-            {
-                return;
-            }
-            FormReportSetup FormRS = new FormReportSetup(0, false);
-            FormRS.ShowDialog();
-        }
-
-        private void menuItemRequiredFields_Click(object sender, EventArgs e)
-        {
-            if (!Security.IsAuthorized(Permissions.Setup))
-            {
-                return;
-            }
-            FormRequiredFields FormRF = new FormRequiredFields();
-            FormRF.ShowDialog();
-            SecurityLog.Write(SecurityLogEvents.Setup, "Required Fields");
-        }
-
-        private void menuItemRequirementsNeeded_Click(object sender, EventArgs e)
-        {
-            if (!Security.IsAuthorized(Permissions.Setup))
-            {
-                return;
-            }
-            FormReqNeededs FormR = new FormReqNeededs();
-            FormR.ShowDialog();
-            SecurityLog.Write(SecurityLogEvents.Setup, "Requirements Needed");
-        }
-
-        private void menuItemSched_Click(object sender, EventArgs e)
-        {
-            //anyone should be able to view. Security must be inside schedule window.
-            //if(!Security.IsAuthorized(Permissions.Schedules)) {
-            //	return;
-            //}
-            FormSchedule FormS = new FormSchedule();
-            FormS.ShowDialog();
-            //SecurityLog.Write(Permissions.Schedules,0,"");
-        }
-
-        /*private void menuItemBlockoutDefault_Click(object sender,System.EventArgs e) {
-			if(!Security.IsAuthorized(Permissions.Blockouts)) {
-				return;
-			}
-			FormSchedDefault FormSD=new FormSchedDefault(ScheduleType.Blockout);
-			FormSD.ShowDialog();
-			SecurityLog.Write(Permissions.Blockouts,0,"Default");
-		}*/
-
-        public static void S_MenuItemSecurity_Click(object sender, EventArgs e)
-        {
-            _formOpenDentalS.menuItemSecuritySettings_Click(sender, e);
-        }
-
-        private void menuItemSecuritySettings_Click(object sender, EventArgs e)
-        {
-            if (!Security.IsAuthorized(Permissions.SecurityAdmin))
-            {
-                return;
-            }
-            FormSecurity FormS = new FormSecurity();
-            FormS.ShowDialog();
-            SecurityLog.Write(SecurityLogEvents.SecurityAdmin, "Security Window");
-            if (!Preferences.HasClinicsEnabled)
-            {//clinics not enabled, refresh current module and return
-                RefreshCurrentModule();
-                return;
-            }
-            //clinics is enabled
-            if (Security.CurrentUser.ClinicId.HasValue)
-            {
-                Clinics.ClinicNum = Security.CurrentUser.ClinicId.Value;
-            }
-            Text = PatientL.GetMainTitle(Patients.GetPat(CurPatNum), Clinics.ClinicNum);
-            SetSmsNotificationText();
-            RefreshMenuClinics();//this calls ModuleSelected, so no need to call RefreshCurrentModule
-            RefreshMenuDashboards();
-        }
-
-        private void menuItemAddUser_Click(object sender, EventArgs e)
-        {
-            bool isAuthorizedAddNewUser = Security.IsAuthorized(Permissions.AddNewUser, true);
-            bool isAuthorizedSecurityAdmin = Security.IsAuthorized(Permissions.SecurityAdmin, true);
-            if (!(isAuthorizedAddNewUser || isAuthorizedSecurityAdmin))
-            {
-                MsgBox.Show(this, "Not authorized to add a new user.");
-                return;
-            }
-            if (Preference.GetLong(PreferenceName.DefaultUserGroup) == 0)
-            {
-                if (isAuthorizedSecurityAdmin)
-                {
-                    //Prompt to go to form.
-                    string msg = "Default user group is not set.  Would you like to set the default user group now?";
-                    if (MsgBox.Show(this, MsgBoxButtons.YesNo, msg, "Default user group"))
-                    {
-                        FormGlobalSecurity FormGS = new FormGlobalSecurity();
-                        FormGS.ShowDialog();//No refresh needed; Signals sent from this form.
-                    }
-                }
-                else
-                {
-                    //Using verbage similar to that found in the manual for describing how to navigate to a window in the program.
-                    string msg = "Default user group is not set.  A user with the SecurityAdmin permission must set a default user group.  "
-                        + "To view the default user group, in the Main Menu, click Setup, Security, Security Settings, Global Security Settings.";
-                    MsgBox.Show(this, msg, "Default user group");
-                }
-                return;
-            }
-            FormUserEdit FormUE = new FormUserEdit(new User(), true);
-            FormUE.IsNew = true;
-            FormUE.ShowDialog();
-        }
-
-        private void menuItemSheets_Click(object sender, EventArgs e)
-        {
-            if (!Security.IsAuthorized(Permissions.Setup))
-            {
-                return;
-            }
-            FormSheetDefs FormSD = new FormSheetDefs();
-            FormSD.ShowDialog();
-            SecurityLog.Write(SecurityLogEvents.Setup, "Sheets");
-        }
 
         //This shows as "Show Features"
         private void menuItemEasy_Click(object sender, System.EventArgs e)
@@ -4751,252 +4759,280 @@ namespace OpenDental
             SecurityLog.Write(SecurityLogEvents.Setup, "Show Features");
         }
 
-        private void menuItemSpellCheck_Click(object sender, EventArgs e)
-        {
-            FormSpellCheck FormD = new FormSpellCheck();
-            FormD.ShowDialog();
-        }
+        #region Menu: Lists
 
-        private void menuItemTimeCards_Click(object sender, EventArgs e)
+        private void MenuItemProcedureCodes_Click(object sender, EventArgs e)
         {
-            if (!Security.IsAuthorized(Permissions.Setup))
+            using (var formProcCodes = new FormProcCodes(true))
             {
-                return;
+                formProcCodes.ProcCodeSort = (ProcCodeListSort)Preference.GetInt(PreferenceName.ProcCodeListSortOrder);
+                formProcCodes.ShowDialog();
             }
-            FormTimeCardSetup FormTCS = new FormTimeCardSetup();
-            FormTCS.ShowDialog();
-            SecurityLog.Write(SecurityLogEvents.Setup, "Time Card Setup");
         }
 
-        private void menuItemTask_Click(object sender, EventArgs e)
+        /// <summary>
+        ///     <para>
+        ///         Open the dialog to manage allergies.
+        ///     </para>
+        /// </summary>
+        private void MenuItemAllergies_Click(object sender, EventArgs e)
         {
-            if (!Security.IsAuthorized(Permissions.Setup))
+            using (var formAllergySetup = new FormAllergySetup())
             {
-                return;
+                formAllergySetup.ShowDialog();
             }
-            FormTaskPreferences formTaskSetup = new FormTaskPreferences();
-            if (formTaskSetup.ShowDialog() != DialogResult.OK)
+        }
+
+        /// <summary>
+        ///     <para>
+        ///         Opens the dialog to manage clinics.
+        ///     </para>
+        /// </summary>
+        private void MenuItemClinics_Click(object sender, EventArgs e)
+        {
+            if (!Security.IsAuthorized(Permissions.Setup)) return;
+            
+            using (var formClinics = new FormClinics())
             {
-                return;
+                formClinics.IncludeHQInList = true;
+                formClinics.IsMultiSelect = true;
+                formClinics.ShowDialog();
             }
-            if (userControlTasks1.Visible)
-            {
-                userControlTasks1.InitializeOnStartup();
-            }
-            SecurityLog.Write(SecurityLogEvents.Setup, "Task");
-        }
 
-        private void menuItemQuickPasteNotes_Click(object sender, EventArgs e)
-        {
-            FormQuickPaste formQP = new FormQuickPaste(true);
-            formQP.QuickType = QuickPasteType.None;
-            formQP.ShowDialog();
-        }
-
-        #endregion
-
-        #region Lists
-
-        //Lists
-        private void menuItemProcCodes_Click(object sender, System.EventArgs e)
-        {
-            //security handled within form
-            FormProcCodes FormP = new FormProcCodes(true);
-            FormP.ProcCodeSort = (ProcCodeListSort)Preference.GetInt(PreferenceName.ProcCodeListSortOrder);
-            FormP.ShowDialog();
-        }
-
-        private void menuItemAllergies_Click(object sender, EventArgs e)
-        {
-            new FormAllergySetup().ShowDialog();
-        }
-
-        private void menuItemClinics_Click(object sender, System.EventArgs e)
-        {
-            if (!Security.IsAuthorized(Permissions.Setup))
-            {
-                return;
-            }
-            FormClinics FormC = new FormClinics();
-            FormC.IncludeHQInList = true;
-            FormC.IsMultiSelect = true;
-            FormC.ShowDialog();
             SecurityLog.Write(SecurityLogEvents.Setup, "Clinics");
-            //this menu item is only visible if the clinics show feature is enabled (!EasyNoClinics)
-            if (Clinics.GetDesc(Clinics.ClinicNum) == "")
-            {//will be empty string if ClinicNum is not valid, in case they deleted the clinic
-                Clinics.ClinicNum = Security.CurrentUser.ClinicId.GetValueOrDefault();
+
+            if (Clinic.GetById(Clinics.ClinicId) == null)
+            {
+                // TODO: Fix this... Must select clinic properly...
+
+                Clinics.ClinicId = Security.CurrentUser.ClinicId.GetValueOrDefault();
+
                 SetSmsNotificationText();
-                Text = PatientL.GetMainTitle(Patients.GetPat(CurPatNum), Clinics.ClinicNum);
             }
+
             RefreshMenuClinics();
-            //reset the main title bar in case the user changes the clinic description for the selected clinic
-            Patient pat = Patients.GetPat(CurPatNum);
-            Text = PatientL.GetMainTitle(pat, Clinics.ClinicNum);
-            //reset the tip text in case the user changes the clinic description
+
+            var patient = Patients.GetPat(CurrentPatientId);
+
+            Text = PatientL.GetMainTitle(patient, Clinics.ClinicId);
         }
 
-        private void menuItemContacts_Click(object sender, System.EventArgs e)
+        /// <summary>
+        ///     <para>
+        ///         Opens the dialog to manage clinic contacts.
+        ///     </para>
+        /// </summary>
+        private void MenuItemContacts_Click(object sender, EventArgs e)
         {
-            FormContacts FormC = new FormContacts();
-            FormC.ShowDialog();
-        }
-
-        private void menuItemCounties_Click(object sender, System.EventArgs e)
-        {
-            if (!Security.IsAuthorized(Permissions.Setup))
+            using (var formContacts = new FormContacts())
             {
-                return;
-            }
-            FormCounties FormC = new FormCounties();
-            FormC.ShowDialog();
-            SecurityLog.Write(SecurityLogEvents.Setup, "Counties");
-        }
-
-        private void menuItemEmployees_Click(object sender, System.EventArgs e)
-        {
-            if (!Security.IsAuthorized(Permissions.Setup))
-            {
-                return;
-            }
-            FormEmployeeSelect FormEmp = new FormEmployeeSelect();
-            FormEmp.ShowDialog();
-            SecurityLog.Write(SecurityLogEvents.Setup, "Employees");
-        }
-
-        private void menuItemEmployers_Click(object sender, System.EventArgs e)
-        {
-            FormEmployers FormE = new FormEmployers();
-            FormE.ShowDialog();
-        }
-
-        private void menuItemInstructors_Click(object sender, System.EventArgs e)
-        {
-            /*if(!Security.IsAuthorized(Permissions.Setup)){
-				return;
-			}
-			FormInstructors FormI=new FormInstructors();
-			FormI.ShowDialog();
-			SecurityLog.Write(Permissions.Setup,0,"Dental School Instructors");*/
-        }
-
-        private void menuItemCarriers_Click(object sender, System.EventArgs e)
-        {
-            FormCarriers FormC = new FormCarriers();
-            FormC.ShowDialog();
-            RefreshCurrentModule();
-        }
-
-        private void menuItemInsPlans_Click(object sender, System.EventArgs e)
-        {
-            FormInsPlans FormIP = new FormInsPlans();
-            FormIP.ShowDialog();
-            RefreshCurrentModule(true);
-        }
-
-        private void menuItemLabCases_Click(object sender, EventArgs e)
-        {
-            FormLabCases FormL = new FormLabCases();
-            FormL.ShowDialog();
-            if (FormL.GoToAptNum != 0)
-            {
-                Appointment apt = Appointments.GetOneApt(FormL.GoToAptNum);
-                Patient pat = Patients.GetPat(apt.PatNum);
-                S_Contr_PatientSelected(pat, false);
-                //OnPatientSelected(pat.PatNum,pat.GetNameLF(),pat.Email!="",pat.ChartNumber);
-                GotoModule.GotoAppointment(apt.AptDateTime, apt.AptNum);
+                formContacts.ShowDialog();
             }
         }
 
-        private void menuItemMedications_Click(object sender, System.EventArgs e)
-        {
-            FormMedications FormM = new FormMedications();
-            FormM.ShowDialog();
-        }
+        /// <summary>
+        ///     <para>
+        ///         Opens the dialog to manage counties.
+        ///     </para>
+        /// </summary>
+        private void MenuItemCounties_Click(object sender, EventArgs e) => 
+            ShowSetupForm<FormCounties>("Counties");
 
-        private void menuItemPharmacies_Click(object sender, EventArgs e)
-        {
-            FormPharmacies FormP = new FormPharmacies();
-            FormP.ShowDialog();
-        }
+        /// <summary>
+        ///     <para>
+        ///         Opens the dialog to manage discount plans.
+        ///     </para>
+        /// </summary>
+        private void MenuItemDiscountPlans_Click(object sender, EventArgs e) =>
+            ShowSetupForm<FormDiscountPlans>("Discount Plans");
 
-        private void menuItemProviders_Click(object sender, System.EventArgs e)
+        /// <summary>
+        ///     <para>
+        ///         Opens the dialog to manage employees.
+        ///     </para>
+        /// </summary>
+        private void MenuItemEmployees_Click(object sender, EventArgs e) => 
+            ShowSetupForm<FormEmployeeSelect>("Employees");
+
+        /// <summary>
+        ///     <para>
+        ///         Opens the dialog to manage employers.
+        ///     </para>
+        /// </summary>
+        private void MenuItemEmployers_Click(object sender, EventArgs e)
         {
-            if (!Security.IsAuthorized(Permissions.Providers, true) && !Security.IsAuthorized(Permissions.AdminDentalStudents, true))
+            using (var formEmployers = new FormEmployers())
             {
-                MessageBox.Show(
-                    "Not authorized for\r\n" + UserGroupPermission.GetDescription(Permissions.Providers) + " " + Lans.g("Security", "or") + " " + UserGroupPermission.GetDescription(Permissions.AdminDentalStudents));
-                return;
+                formEmployers.ShowDialog();
             }
-            FormProviderSetup FormPS = new FormProviderSetup();
-            FormPS.ShowDialog();
+        }
+
+        /// <summary>
+        ///     <para>
+        ///         Opens the dialog to manage insurance carriers.
+        ///     </para>
+        /// </summary>
+        private void MenuItemInsuranceCarriers_Click(object sender, EventArgs e)
+        {
+            using (var formCarriers = new FormCarriers())
+            {
+                formCarriers.ShowDialog();
+
+                RefreshCurrentModule();
+            }
+        }
+
+        /// <summary>
+        ///     <para>
+        ///         Opens the dialog to manage insurance plans.
+        ///     </para>
+        /// </summary>
+        private void MenuItemInsurancePlans_Click(object sender, EventArgs e)
+        {
+            using (var formInsPlans = new FormInsPlans())
+            {
+                formInsPlans.ShowDialog();
+
+                RefreshCurrentModule(true);
+            }
+        }
+
+        /// <summary>
+        ///     <para>
+        ///         Opens the dialog to manage lab cases.
+        ///     </para>
+        /// </summary>
+        private void MenuItemLabCases_Click(object sender, EventArgs e)
+        {
+            using (var formLabCases = new FormLabCases())
+            {
+                formLabCases.ShowDialog();
+
+                if (formLabCases.GoToAptNum != 0)
+                {
+                    var appointment = Appointments.GetOneApt(formLabCases.GoToAptNum);
+
+                    var patient = Patients.GetPat(appointment.PatNum);
+
+                    S_Contr_PatientSelected(patient, false);
+
+                    GotoModule.GotoAppointment(
+                        appointment.AptDateTime,
+                        appointment.AptNum);
+                }
+            }
+        }
+
+        /// <summary>
+        ///     <para>
+        ///         Opens the dialog to manage medications.
+        ///     </para>
+        /// </summary>
+        private void MenuItemMedications_Click(object sender, EventArgs e)
+        {
+            using (var formMedications = new FormMedications())
+            {
+                formMedications.ShowDialog();
+            }
+        }
+
+        /// <summary>
+        ///     <para>
+        ///         Opens the dialog to manage pharmacies.
+        ///     </para>
+        /// </summary>
+        private void MenuItemPharmacies_Click(object sender, EventArgs e)
+        {
+            using (var formPharmacies = new FormPharmacies())
+            {
+                formPharmacies.ShowDialog();
+            }
+        }
+
+        /// <summary>
+        ///     <para>
+        ///         Opens the dialog to manage problems.
+        ///     </para>
+        /// </summary>
+        private void MenuItemProblems_Click(object sender, EventArgs e) =>
+            ShowSetupForm(() => new FormDiseaseDefs(), "Disease Defs");
+
+        /// <summary>
+        ///     <para>
+        ///         Opens the dialog to manage providers.
+        ///     </para>
+        /// </summary>
+        private void MenuItemProviders_Click(object sender, EventArgs e)
+        {
+            if (!Security.IsAuthorized(Permissions.Providers, false)) return;
+
+            using (var formProviderSetup = new FormProviderSetup())
+            {
+                formProviderSetup.ShowDialog();
+            }
+
             SecurityLog.Write(SecurityLogEvents.Setup, "Providers");
         }
 
-        private void menuItemPrescriptions_Click(object sender, System.EventArgs e)
+        /// <summary>
+        ///     <para>
+        ///         Opens the dialog to manage prescriptions.
+        ///     </para>
+        /// </summary>
+        private void MenuItemPrescriptions_Click(object sender, EventArgs e) =>
+            ShowSetupForm<FormRxSetup>("Rx");
+
+        /// <summary>
+        ///     <para>
+        ///         Opens the dialog to manage referrals.
+        ///     </para>
+        /// </summary>
+        private void MenuItemReferrals_Click(object sender, EventArgs e)
         {
-            if (!Security.IsAuthorized(Permissions.Setup))
+            using (var formReferralSelect = new FormReferralSelect())
             {
-                return;
+                formReferralSelect.ShowDialog();
             }
-            FormRxSetup FormRxSetup2 = new FormRxSetup();
-            FormRxSetup2.ShowDialog();
-            SecurityLog.Write(SecurityLogEvents.Setup, "Rx");
         }
 
-        private void menuItemReferrals_Click(object sender, System.EventArgs e)
-        {
-            FormReferralSelect FormRS = new FormReferralSelect();
-            FormRS.ShowDialog();
-        }
+        /// <summary>
+        ///     <para>
+        ///         Opens the dialog to manage the clinic sites.
+        ///     </para>
+        /// </summary>
+        private void menuItemSites_Click(object sender, EventArgs e) =>
+            ShowSetupForm<FormSites>("Sites", true);
+        
+        /// <summary>
+        ///     <para>
+        ///         Opens the dialog to manage state abbreviations.
+        ///     </para>
+        /// </summary>
+        private void MenuItemStateAbbreviations_Click(object sender, EventArgs e) =>
+            ShowSetupForm<FormStateAbbrs>("State Abbreviations");
 
-        private void menuItemSites_Click(object sender, System.EventArgs e)
-        {
-            if (!Security.IsAuthorized(Permissions.Setup))
-            {
-                return;
-            }
-            FormSites FormS = new FormSites();
-            FormS.ShowDialog();
-            RefreshCurrentModule();
-            SecurityLog.Write(SecurityLogEvents.Setup, "Sites");
-        }
-
-        private void menuItemStateAbbrs_Click(object sender, System.EventArgs e)
-        {
-            if (!Security.IsAuthorized(Permissions.Setup))
-            {
-                return;
-            }
-            FormStateAbbrs formSA = new FormStateAbbrs();
-            formSA.ShowDialog();
-            RefreshCurrentModule();
-            SecurityLog.Write(SecurityLogEvents.Setup, "StateAbbrs");
-        }
-
-        private void menuItemZipCodes_Click(object sender, System.EventArgs e)
-        {
-            //if(!Security.IsAuthorized(Permissions.Setup)){
-            //	return;
-            //}
-            FormZipCodes FormZ = new FormZipCodes();
-            FormZ.ShowDialog();
-            //SecurityLog.Write(Permissions.Setup,"Zip Codes");
-        }
+        /// <summary>
+        ///     <para>
+        ///         Opens the dialog to manage zip codes.
+        ///     </para>
+        /// </summary>
+        private void MenuItemZipCodes_Click(object sender, EventArgs e) =>
+            ShowSetupForm<FormZipCodes>("Zip Codes");
 
         #endregion
 
-        #region Reports
+        #region Menu: Reports
 
         private void menuItemReportsStandard_Click(object sender, EventArgs e)
         {
-            if (!Security.IsAuthorized(Permissions.Reports))
+            if (!Security.IsAuthorized(Permissions.Reports)) return;
+
+            using (var formReportsMore = new FormReportsMore())
             {
-                return;
+                formReportsMore.ShowDialog();
+
+                NonModalReportSelectionHelper(formReportsMore.RpNonModalSelection);
             }
-            FormReportsMore FormR = new FormReportsMore();
-            FormR.ShowDialog();
-            NonModalReportSelectionHelper(FormR.RpNonModalSelection);
         }
 
         private void menuItemReportsGraphic_Click(object sender, EventArgs e)
@@ -5007,25 +5043,38 @@ namespace OpenDental
             {
                 return;
             }
+
             if (_formDashboardEditTab != null)
             {
                 _formDashboardEditTab.BringToFront();
                 return;
             }
+
             //on extremely large dbs, the ctor can take a few seconds to load, so show the wait cursor.
             Cursor = Cursors.WaitCursor;
+
             //Check if the user has permission to view all providers in production and income reports
             bool hasAllProvsPermission = Security.IsAuthorized(Permissions.ReportProdIncAllProviders, true);
             if (!hasAllProvsPermission && Security.CurrentUser.ProviderId == 0)
             {
-                if (!MsgBox.Show(this, true, "The current user must be a provider or have the 'All Providers' permission to view provider reports. Continue?"))
+                var result =
+                    MessageBox.Show(
+                        "The current user must be a provider or have the 'All Providers' permission to view provider reports. Continue?", 
+                        "Reports", 
+                        MessageBoxButtons.YesNo, 
+                        MessageBoxIcon.Question);
+
+                if (result == DialogResult.No)
                 {
                     return;
                 }
             }
+
             _formDashboardEditTab = new OpenDentalGraph.FormDashboardEditTab(Security.CurrentUser.ProviderId.Value, !Security.IsAuthorized(Permissions.ReportProdIncAllProviders, true)) { IsEditMode = false };
             _formDashboardEditTab.FormClosed += new FormClosedEventHandler((object senderF, FormClosedEventArgs eF) => { _formDashboardEditTab = null; });
+            
             Cursor = Cursors.Default;
+
             _formDashboardEditTab.Show();
         }
 
@@ -5114,7 +5163,7 @@ namespace OpenDental
         {
             MenuItem menuItem = (MenuItem)sender;
             ToolButItem toolButItemCur = ((ToolButItem)menuItem.Tag);
-            ProgramL.Execute(toolButItemCur.ProgramNum, Patients.GetPat(CurPatNum));
+            ProgramL.Execute(toolButItemCur.ProgramNum, Patients.GetPat(CurrentPatientId));
         }
 
         #endregion
@@ -5134,26 +5183,31 @@ namespace OpenDental
 
         #endregion
 
-        #region Tools
+        #region Menu: Tools
 
-        //Tools
-        private void menuItemPrintScreen_Click(object sender, System.EventArgs e)
+        private void menuItemPrintScreen_Click(object sender, EventArgs e)
         {
-            FormPrntScrn FormPS = new FormPrntScrn();
-            FormPS.ShowDialog();
+            using (var formPrntScrn = new FormPrntScrn())
+            {
+                formPrntScrn.ShowDialog(this);
+            }  
         }
 
-        #region MiscTools
+        #region Menu: Tools > Misc Tools
+
         private void menuItemDuplicateBlockouts_Click(object sender, EventArgs e)
         {
-            if (!Security.IsAuthorized(Permissions.Setup))
+            if (!Security.IsAuthorized(Permissions.Setup))   return;
+
+            using (var formBlockoutDuplicatesFix = new FormBlockoutDuplicatesFix())
             {
-                return;
+                Cursor = Cursors.WaitCursor;
+
+                formBlockoutDuplicatesFix.ShowDialog(this);
+
+                Cursor = Cursors.Default;
             }
-            FormBlockoutDuplicatesFix form = new FormBlockoutDuplicatesFix();
-            Cursor = Cursors.WaitCursor;
-            form.ShowDialog();
-            Cursor = Cursors.Default;
+
             //Security log entries are made from within the form.
         }
 
@@ -5161,7 +5215,7 @@ namespace OpenDental
         {
             //Purposefully not checking permissions.  All users need the ability to call patient specific DBMs ATM.
             //Get all patient specific DBM methods via reflection.
-            List<MethodInfo> listPatDbmMethods = DatabaseMaintenances.GetMethodsForDisplay(Clinics.ClinicNum, true);
+            List<MethodInfo> listPatDbmMethods = DatabaseMaintenances.GetMethodsForDisplay(Clinics.ClinicId, true);
             //Add any missing patient specific DBM methods to the database that are not currently present.
             DatabaseMaintenances.InsertMissingDBMs(listPatDbmMethods.Select(x => x.Name).ToList());
             //Get the names of all DBM methods that are not hidden.
@@ -5175,36 +5229,41 @@ namespace OpenDental
                 MsgBox.Show(this, "All patient database maintenance methods are marked as hidden.");
                 return;
             }
-            FormDatabaseMaintenancePat FormDMP = new FormDatabaseMaintenancePat(listPatDbmMethods, CurPatNum);
+            FormDatabaseMaintenancePat FormDMP = new FormDatabaseMaintenancePat(listPatDbmMethods, CurrentPatientId);
             FormDMP.ShowDialog();
         }
 
-        private void menuItemMergeDPs_Click(object sender, EventArgs e)
+        /// <summary>
+        ///     <para>
+        ///         Opens the dialog to merge discount plans.
+        ///     </para>
+        /// </summary>
+        private void MenuItemMergeDiscountPlans_Click(object sender, EventArgs e)
         {
-            FormDiscountPlanMerge FormDPM = new FormDiscountPlanMerge();
-            FormDPM.ShowDialog();
+            using (var formDiscountPlanMerge = new FormDiscountPlanMerge())
+            {
+                formDiscountPlanMerge.ShowDialog(this);
+            }
         }
 
         private void menuItemMergeMedications_Click(object sender, EventArgs e)
         {
-            if (!Security.IsAuthorized(Permissions.MedicationMerge))
+            if (!Security.IsAuthorized(Permissions.MedicationMerge)) return;
+
+            using (var formMedicationMerge = new FormMedicationMerge())
             {
-                return;
+                formMedicationMerge.ShowDialog(this);
             }
-            FormMedicationMerge FormMM = new FormMedicationMerge();
-            FormMM.ShowDialog();
-            //Securitylog entries are handled within the form.
         }
 
         private void menuItemMergePatients_Click(object sender, EventArgs e)
         {
-            if (!Security.IsAuthorized(Permissions.PatientMerge))
+            if (!Security.IsAuthorized(Permissions.PatientMerge)) return;
+
+            using (var formPatientMerge = new FormPatientMerge())
             {
-                return;
+                formPatientMerge.ShowDialog(this);
             }
-            FormPatientMerge fpm = new FormPatientMerge();
-            fpm.ShowDialog();
-            //Security log entries are made from within the form.
         }
 
         private void menuItemMergeReferrals_Click(object sender, EventArgs e)
@@ -5341,7 +5400,7 @@ namespace OpenDental
             {
                 return;
             }
-            FormAudit FormA = new FormAudit(CurPatNum);
+            FormAudit FormA = new FormAudit(CurrentPatientId);
             FormA.ShowDialog();
             SecurityLog.Write(SecurityLogEvents.AuditTrail, "Audit Trail");
         }
@@ -5604,7 +5663,7 @@ namespace OpenDental
         {
             if (!userControlPatientDashboard.IsInitialized)
             {//Dashboard is not open currently.
-                InitDashboards(Security.CurrentUser.Id, CurPatNum, true);
+                InitDashboards(Security.CurrentUser.Id, CurrentPatientId, true);
                 if (!userControlPatientDashboard.IsInitialized)
                 {//Failed to initialize, possibly due to Task docking.
                     return;
@@ -6400,8 +6459,8 @@ namespace OpenDental
                 myOutlookBar.SelectedIndex = Security.GetModule(LastModule);
                 myOutlookBar.Invalidate();
                 SetModuleSelected();
-                Patient pat = Patients.GetPat(CurPatNum);//pat could be null
-                Text = PatientL.GetMainTitle(pat, Clinics.ClinicNum);//handles pat==null by not displaying pat name in title bar
+                Patient pat = Patients.GetPat(CurrentPatientId);//pat could be null
+                Text = PatientL.GetMainTitle(pat, Clinics.ClinicId);//handles pat==null by not displaying pat name in title bar
                 if (userControlTasks1.Visible)
                 {
                     userControlTasks1.InitializeOnStartup();
@@ -6425,13 +6484,13 @@ namespace OpenDental
                 Patient pat = Patients.GetPat(patNum);
                 if (pat == null)
                 {
-                    CurPatNum = 0;
+                    CurrentPatientId = 0;
                     RefreshCurrentModule();
                     FillPatientButton(null);
                 }
                 else
                 {
-                    CurPatNum = patNum;
+                    CurrentPatientId = patNum;
                     RefreshCurrentModule();
                     FillPatientButton(pat);
                 }
@@ -6442,13 +6501,13 @@ namespace OpenDental
                 if (pat == null)
                 {
                     //todo: decide action
-                    CurPatNum = 0;
+                    CurrentPatientId = 0;
                     RefreshCurrentModule();
                     FillPatientButton(null);
                 }
                 else
                 {
-                    CurPatNum = pat.PatNum;
+                    CurrentPatientId = pat.PatNum;
                     RefreshCurrentModule();
                     FillPatientButton(pat);
                 }
@@ -6459,13 +6518,13 @@ namespace OpenDental
                 if (pat == null)
                 {
                     //todo: decide action
-                    CurPatNum = 0;
+                    CurrentPatientId = 0;
                     RefreshCurrentModule();
                     FillPatientButton(null);
                 }
                 else
                 {
-                    CurPatNum = pat.PatNum;
+                    CurrentPatientId = pat.PatNum;
                     RefreshCurrentModule();
                     FillPatientButton(pat);
                 }
@@ -6492,16 +6551,16 @@ namespace OpenDental
         }
         private void TryNonPatientPopup()
         {
-            if (CurPatNum != 0 && _previousPatNum != CurPatNum)
+            if (CurrentPatientId != 0 && _previousPatNum != CurrentPatientId)
             {
                 _datePopupDelay = DateTime.Now;
-                _previousPatNum = CurPatNum;
+                _previousPatNum = CurrentPatientId;
             }
             if (!Preference.GetBool(PreferenceName.ChartNonPatientWarn))
             {
                 return;
             }
-            Patient patCur = Patients.GetPat(CurPatNum);
+            Patient patCur = Patients.GetPat(CurrentPatientId);
             if (patCur != null
                         && patCur.PatStatus.ToString() == "NonPatient"
                         && _datePopupDelay <= DateTime.Now)
@@ -6886,21 +6945,20 @@ namespace OpenDental
             ShowLogOn();
             //If a different user logs on and they have clinics enabled, then clear the patient drop down history
             //since the current user may not have permission to access patients from the same clinic(s) as the old user
-            if (oldUser.Id != Security.CurrentUser.Id && Preferences.HasClinicsEnabled)
+            if (oldUser.Id != Security.CurrentUser.Id)
             {
-                CurPatNum = 0;
+                CurrentPatientId = 0;
                 PatientL.RemoveAllFromMenu(menuPatient);
             }
             myOutlookBar.SelectedIndex = Security.GetModule(LastModule);
             myOutlookBar.Invalidate();
-            if (Preferences.HasClinicsEnabled)
-            {
-                Clinics.LoadClinicNumForUser();
-                RefreshMenuClinics();
-            }
+
+            Clinics.RestoreLastSelectedClinicForUser();
+            RefreshMenuClinics();
+
             SetModuleSelected();
-            Patient pat = Patients.GetPat(CurPatNum);//pat could be null
-            Text = PatientL.GetMainTitle(pat, Clinics.ClinicNum);//handles pat==null by not displaying pat name in title bar
+            Patient pat = Patients.GetPat(CurrentPatientId);//pat could be null
+            Text = PatientL.GetMainTitle(pat, Clinics.ClinicId);//handles pat==null by not displaying pat name in title bar
             FillPatientButton(pat);
             if (userControlTasks1.Visible)
             {

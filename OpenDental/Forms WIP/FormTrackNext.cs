@@ -377,7 +377,7 @@ namespace OpenDental{
 					comboSite.Items.Add(_listSites[i].Description);
 				}
 			}
-			labelClinic.Visible=Preferences.HasClinicsEnabled;
+			labelClinic.Visible= true;
 			InitDateRange();
 			RefreshAptList();
 			FillGrid();

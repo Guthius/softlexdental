@@ -89,7 +89,7 @@ namespace OpenDental
 
         private void RefreshPatient()
         {
-            _pat = Patients.GetPat(FormOpenDental.CurPatNum);
+            _pat = Patients.GetPat(FormOpenDental.CurrentPatientId);
         }
 
         private void RefreshDefAndFields()

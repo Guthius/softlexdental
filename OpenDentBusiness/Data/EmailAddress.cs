@@ -106,13 +106,10 @@ namespace OpenDentBusiness
         {
             EmailAddress emailAddress = null;
 
-            if (Preferences.HasClinicsEnabled)
+            var clinic = Clinic.GetById(clinicId);
+            if (clinic != null && clinic.EmailAddressId.HasValue)
             {
-                var clinic = Clinics.GetClinic(clinicId);
-                if (clinic != null)
-                {
-                    emailAddress = GetById(clinic.EmailAddressNum);
-                }
+                emailAddress = GetById(clinic.EmailAddressId.Value);
             }
 
             return emailAddress ?? GetById(Preference.GetLong(PreferenceName.EmailDefaultAddressNum));

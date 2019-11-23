@@ -41,7 +41,7 @@ namespace OpenDental {
 				_listLanguages=Preference.GetString(PreferenceName.LanguagesUsedByPatients).Split(new char[] { ',' },StringSplitOptions.RemoveEmptyEntries).ToList();
 			}
 			_listBillingTypeDefs=Definition.GetByCategory(DefinitionCategory.BillingTypes);
-			_listClinics=Clinics.GetDeepCopy();
+            _listClinics = Clinic.All().ToList();
 			_listProvs=Providers.GetDeepCopy(true);
 			comboOperator1.Items.Add(">");
 			comboOperator1.Items.Add("<");
@@ -57,9 +57,8 @@ namespace OpenDental {
 			}
 			AddListConditionType(RequiredFieldName.Birthdate);
 			AddListConditionType(RequiredFieldName.BillingType);
-			if(Preferences.HasClinicsEnabled) {
 				AddListConditionType(RequiredFieldName.Clinic);
-			}
+			
 			if(Preference.GetBool(PreferenceName.ShowFeatureEhr)) {
 				AddListConditionType(RequiredFieldName.DateTimeDeceased);
 			}
@@ -292,7 +291,7 @@ namespace OpenDental {
 				}
 				if(selectedType==RequiredFieldName.Clinic
 					&& i>0
-					&& _listReqFieldConds.Exists(x => x.ConditionValue==_listClinics[i-1].ClinicNum.ToString()))//subtract 1 for 'Unassigned'
+					&& _listReqFieldConds.Exists(x => x.ConditionValue==_listClinics[i-1].Id.ToString()))//subtract 1 for 'Unassigned'
 				{
 					listConditionValues.SelectedIndices.Add(i);
 					continue;
@@ -445,7 +444,7 @@ namespace OpenDental {
 								listFkNums.Add(0);
 							}
 							else {
-								listFkNums.Add(_listClinics[listConditionValues.SelectedIndices[i]-1].ClinicNum);//Subtract 1 to account for 'Unassigned'
+								listFkNums.Add(_listClinics[listConditionValues.SelectedIndices[i]-1].Id);//Subtract 1 to account for 'Unassigned'
 							}
 						}
 					}

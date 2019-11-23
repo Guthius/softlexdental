@@ -882,10 +882,8 @@ namespace OpenDentBusiness
                         //should already be verified to have no procedure and positive amount
                         split.AdjNum = charge.PriKey;
                     }
-                    if (Preferences.HasClinicsEnabled)
-                    {//Clinics
-                        split.ClinicNum = charge.ClinicNum;
-                    }
+
+                    split.ClinicNum = charge.ClinicNum;
                     split.SplitAmt = amt;
                     charge.AmountEnd -= (decimal)amt;
                     split.DatePay = DateTime.Today;
@@ -1284,7 +1282,7 @@ namespace OpenDentBusiness
                     if (groupIdx == 1)
                     {//Grouped by provider
                      //listCharges should all have same provider and patient.
-                        paySplit.ClinicNum = Clinics.ClinicNum;//Use current clinic
+                        paySplit.ClinicNum = Clinics.ClinicId;//Use current clinic
                     }
                     else
                     {//Grouped by provider and clinic
@@ -1411,10 +1409,8 @@ namespace OpenDentBusiness
                     split.SplitAmt = (double)payAmt;
                 }
             }
-            if (Preferences.HasClinicsEnabled)
-            {
-                split.ClinicNum = charge.ClinicNum;
-            }
+            split.ClinicNum = charge.ClinicNum;
+            
             payCur.PayAmt -= split.SplitAmt;
             split.ProvNum = charge.ProvNum;
             split.PatNum = (int)charge.PatNum;
@@ -1568,10 +1564,8 @@ namespace OpenDentBusiness
                 split.DatePay = autoSplitData.Payment.PayDate;
                 split.PatNum = (int)charge.PatNum;
                 split.ProvNum = charge.ProvNum;
-                if (Preferences.HasClinicsEnabled)
-                {
-                    split.ClinicNum = charge.ClinicNum;
-                }
+                split.ClinicNum = charge.ClinicNum;
+                
                 if (charge.GetType() == typeof(Procedure))
                 {
                     split.ProcNum = charge.PriKey;
@@ -1597,10 +1591,7 @@ namespace OpenDentBusiness
                 split.PatNum = (int)autoSplitData.Payment.PatNum;
                 split.ProvNum = 0;
                 split.UnearnedType = Preference.GetLong(PreferenceName.PrepaymentUnearnedType);//Use default unallocated type
-                if (Preferences.HasClinicsEnabled)
-                {
-                    split.ClinicNum = autoSplitData.Payment.ClinicNum;
-                }
+                split.ClinicNum = autoSplitData.Payment.ClinicNum;
                 split.PayNum = autoSplitData.Payment.PayNum;
                 autoSplitData.ListAutoSplits.Add(split);
             }
@@ -1612,12 +1603,8 @@ namespace OpenDentBusiness
                 split.DatePay = autoSplitData.Payment.PayDate;
                 split.PatNum = (int)autoSplitData.Payment.PatNum;
                 split.ProvNum = 0;
-                
                 split.UnearnedType = Preference.GetLong(PreferenceName.PrepaymentUnearnedType);//Use default unallocated type
-                if (Preferences.HasClinicsEnabled)
-                {
-                    split.ClinicNum = autoSplitData.Payment.ClinicNum;
-                }
+                split.ClinicNum = autoSplitData.Payment.ClinicNum;
                 split.PayNum = autoSplitData.Payment.PayNum;
                 autoSplitData.ListAutoSplits.Add(split);
             }

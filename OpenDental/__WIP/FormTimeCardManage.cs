@@ -24,9 +24,6 @@ namespace OpenDental
         private TimeAdjustment timeAdjustNote;
         private int pagesPrinted;
         private bool headingPrinted;
-
-
-
         private DataTable MainTable;
         private string totalTime;
         private string overTime;
@@ -35,9 +32,6 @@ namespace OpenDental
         private string overTime2;
         private string rate2Time2;
         
-
-
-
         public DateTime X_DateStart
         {
             get
@@ -78,35 +72,32 @@ namespace OpenDental
             {
                 MessageBox.Show(
                     "At least one pay period needs to exist before you can manage time cards.",
-                    "Manage Time Cards", 
-                    MessageBoxButtons.OK, 
+                    "Manage Time Cards",
+                    MessageBoxButtons.OK,
                     MessageBoxIcon.Information);
 
                 DialogResult = DialogResult.Cancel;
                 return;
             }
 
-            if (Preferences.HasClinicsEnabled)
+            clinicLabel.Visible = true;
+            clinicComboBox.Visible = true;
+            clinicComboBox.Items.Clear();
+
+            if (!Security.CurrentUser.ClinicRestricted)
             {
-                clinicLabel.Visible = true;
-                clinicComboBox.Visible = true;
-                clinicComboBox.Items.Clear();
+                clinicComboBox.Items.Add("All");
+                clinicComboBox.Items.Add("Headquarters");
+                clinicComboBox.SelectedIndex = 1;
+            }
 
-                if (!Security.CurrentUser.ClinicRestricted)
+            var clinics = Clinic.GetByUser(Security.CurrentUser);
+            foreach (var clinic in clinics)
+            {
+                int curIndex = clinicComboBox.Items.Add(clinic);
+                if (clinic.Id == Clinics.ClinicId)
                 {
-                    clinicComboBox.Items.Add("All");
-                    clinicComboBox.Items.Add("Headquarters");
-                    clinicComboBox.SelectedIndex = 1;
-                }
-
-                var clinics = Clinics.GetForUserod(Security.CurrentUser);
-                foreach (var clinic in clinics)
-                {
-                    int curIndex = clinicComboBox.Items.Add(clinic);
-                    if (clinic.ClinicNum == Clinics.ClinicNum)
-                    {
-                        clinicComboBox.SelectedItem = clinic;
-                    }
+                    clinicComboBox.SelectedItem = clinic;
                 }
             }
 
@@ -122,37 +113,32 @@ namespace OpenDental
             long clinicId = 0;
             bool isAll = false;
 
-            if (Preferences.HasClinicsEnabled)
+
+            if (Security.CurrentUser.ClinicRestricted)
             {
-                if (Security.CurrentUser.ClinicRestricted)
-                {
-                    clinicId = clinics[clinicComboBox.SelectedIndex].ClinicNum;
-                }
-                else
-                {//All and Headquarters are the first two available options.
-                    if (clinicComboBox.SelectedIndex == 0)
-                    {//All is selected.
-                        isAll = true;
-                    }
-                    else if (clinicComboBox.SelectedIndex == 1)
-                    {
-                        //Do nothing since the defaults are this selection
-                    }
-                    else
-                    {//A specific clinic was selected.
-                        clinicId = clinics[clinicComboBox.SelectedIndex - 2].ClinicNum;//Subtract 2, because All and Headquarters are added to the list.
-                    }
-                }
+                clinicId = clinics[clinicComboBox.SelectedIndex].Id;
             }
             else
-            {
-                isAll = true;
+            {//All and Headquarters are the first two available options.
+                if (clinicComboBox.SelectedIndex == 0)
+                {//All is selected.
+                    isAll = true;
+                }
+                else if (clinicComboBox.SelectedIndex == 1)
+                {
+                    //Do nothing since the defaults are this selection
+                }
+                else
+                {//A specific clinic was selected.
+                    clinicId = clinics[clinicComboBox.SelectedIndex - 2].Id;//Subtract 2, because All and Headquarters are added to the list.
+                }
             }
 
-            MainTable = 
+
+            MainTable =
                 ClockEvent.GetTimeCardManage(
-                    selectedPayPeriod.DateStart, 
-                    selectedPayPeriod.DateEnd, 
+                    selectedPayPeriod.DateStart,
+                    selectedPayPeriod.DateEnd,
                     clinicId, isAll);
 
             grid.BeginUpdate();
@@ -234,9 +220,6 @@ namespace OpenDental
             List<ClockEvent> clockEventList = ClockEvent.GetByEmployee(emp.Id, PIn.Date(dateStartTextBox.Text), PIn.Date(dateEndTextBox.Text), false);
             List<TimeAdjustment> timeAdjustList = TimeAdjustment.Refresh(emp.Id, PIn.Date(dateStartTextBox.Text), PIn.Date(dateEndTextBox.Text));
 
-
-
-
             DateTime date = selectedPayPeriod.DateStart.Date;
             DateTime midnightFirstDay = new DateTime(date.Year, date.Month, date.Day, 0, 0, 0);
 
@@ -245,8 +228,6 @@ namespace OpenDental
             {
                 timeAdjustList.RemoveAll(x => x.Id == timeAdjustNote.Id);
             }
-
-
 
             var mergedClockEvents = new List<IDateTimeStamped>();
             mergedClockEvents.AddRange(clockEventList);
@@ -265,10 +246,8 @@ namespace OpenDental
             gridTimeCard.Columns.Add(new ODGridColumn("Overtime", 55, HorizontalAlignment.Right));
             gridTimeCard.Columns.Add(new ODGridColumn("Daily", 50, HorizontalAlignment.Right));
             gridTimeCard.Columns.Add(new ODGridColumn("Weekly", 50, HorizontalAlignment.Right));
-            if (Preferences.HasClinicsEnabled)
-            {
-                gridTimeCard.Columns.Add(new ODGridColumn("Clinic", 50, HorizontalAlignment.Left));
-            }
+            gridTimeCard.Columns.Add(new ODGridColumn("Clinic", 50, HorizontalAlignment.Left));
+            
             gridTimeCard.Columns.Add(new ODGridColumn("Note", 5));
             gridTimeCard.Rows.Clear();
 
@@ -351,8 +330,8 @@ namespace OpenDental
                         periodSpan += oneSpan;
                     }
                     //Adjust---------------------------------
-                    oneAdj = clock.Adjust ?? clock.AdjustAuto;  oneAdj += clock.AdjustAuto;//typically zero
-                    
+                    oneAdj = clock.Adjust ?? clock.AdjustAuto; oneAdj += clock.AdjustAuto;//typically zero
+
                     daySpan += oneAdj;
                     weekSpan += oneAdj;
                     periodSpan += oneAdj;
@@ -412,19 +391,14 @@ namespace OpenDental
                         row.Cells.Add("");
                     }
                     //Clinic---------------------------------------
-                    if (Preferences.HasClinicsEnabled)
-                    {
                         if (clock.ClinicId.HasValue)
                         {
-                            row.Cells.Add(Clinics.GetAbbr(clock.ClinicId.Value));
+                            row.Cells.Add(Clinic.GetById(clock.ClinicId.Value).Abbr);
                         }
                         else
                         {
                             row.Cells.Add("");
                         }
-
-                       
-                    }
                     //Note-----------------------------------------
                     row.Cells.Add(clock.Note);
                 }
@@ -451,20 +425,20 @@ namespace OpenDental
                     row.Cells.Add("");//4
                                       //time-----------------------------
                     row.Cells.Add(adjust.Date.ToShortTimeString());//5
-                                                                        //total-------------------------------
+                                                                   //total-------------------------------
                     row.Cells.Add("");//
                                       //Adjust------------------------------
                     daySpan += adjust.HoursRegular;//might be negative
                     weekSpan += adjust.HoursRegular;
                     periodSpan += adjust.HoursRegular;
                     row.Cells.Add(ClockEvent.Format(adjust.HoursRegular));//6
-                                                                       //Rate2-------------------------------
+                                                                          //Rate2-------------------------------
                     row.Cells.Add("");//
                                       //Overtime------------------------------
                     otspan += adjust.HoursOvertime;
                     row.Cells.Add(ClockEvent.Format(adjust.HoursOvertime));//7
-                                                                         //Daily-----------------------------------
-                                                                         //if this is the last entry for a given date
+                                                                           //Daily-----------------------------------
+                                                                           //if this is the last entry for a given date
                     if (i == mergedClockEvents.Count - 1//if this is the last row
                         || GetDateForRow(i + 1, mergedClockEvents) != curDate)//or the next row is a different date
                     {
@@ -492,18 +466,15 @@ namespace OpenDental
                         row.Cells.Add("");
                     }
                     //Clinic---------------------------------------
-                    if (Preferences.HasClinicsEnabled)
+                    if (adjust.ClinicId.HasValue)
                     {
-                        if (adjust.ClinicId.HasValue)
-                        {
-                            row.Cells.Add(Clinics.GetAbbr(adjust.ClinicId.Value));
-                        }
-                        else
-                        {
-                            row.Cells.Add("");
-                        }
-                        
+                        row.Cells.Add(Clinic.GetById(adjust.ClinicId.Value).Abbr);
                     }
+                    else
+                    {
+                        row.Cells.Add("");
+                    }
+
                     //Note-----------------------------------------
                     row.Cells.Add("(Adjust)" + adjust.Note);//used to indicate adjust rows.
                     row.Cells[row.Cells.Count - 1].ColorText = Color.Red;
@@ -557,11 +528,8 @@ namespace OpenDental
             g.DrawString(str, fontTitle, brush, xPos, yPos);
             yPos += 42;
             //define columns
-            int[] colW = new int[11];
-            if (Preferences.HasClinicsEnabled)
-            {
-                colW = new int[12];
-            }
+            int[] colW = new int[12];
+            
             colW[0] = 70;//date
             colW[1] = 70;//weekday
                          //colW[2]=50;//altered
@@ -574,22 +542,16 @@ namespace OpenDental
             colW[8] = 50;//daily
             colW[9] = 50;//weekly
             colW[10] = 160;//note
-            if (Preferences.HasClinicsEnabled)
-            {
                 colW[10] = 50;//clinic
                 colW[11] = 160;//note
-            }
+            
             int[] colPos = new int[colW.Length + 1];
             colPos[0] = 45;
             for (int i = 1; i < colPos.Length; i++)
             {
                 colPos[i] = colPos[i - 1] + colW[i - 1];
             }
-            string[] ColCaption = new string[11];
-            if (Preferences.HasClinicsEnabled)
-            {
-                ColCaption = new string[12];
-            }
+            string[] ColCaption = new string[12];
             ColCaption[0] = "Date";
             ColCaption[1] = "Weekday";
             ColCaption[2] = "In";
@@ -601,11 +563,9 @@ namespace OpenDental
             ColCaption[8] = "Daily";
             ColCaption[9] = "Weekly";
             ColCaption[10] = "Note";
-            if (Preferences.HasClinicsEnabled)
-            {
                 ColCaption[10] = "Clinic";
                 ColCaption[11] = "Note";
-            }
+            
             //column headers-----------------------------------------------------------------------------------------
             e.Graphics.FillRectangle(Brushes.LightGray, colPos[0], yPos, colPos[colPos.Length - 1] - colPos[0], 18);
             e.Graphics.DrawRectangle(pen, colPos[0], yPos, colPos[colPos.Length - 1] - colPos[0], 18);
@@ -707,11 +667,8 @@ namespace OpenDental
             g.DrawString(str, fontTitle, brush, xPos, yPos);
             yPos += 42;
             //define columns
-            int[] colW = new int[11];
-            if (Preferences.HasClinicsEnabled)
-            {
-                colW = new int[12];
-            }
+            int[] colW = new int[12];
+            
             colW[0] = 70;//date
             colW[1] = 70;//weekday
                          //colW[2]=50;//altered
@@ -724,22 +681,18 @@ namespace OpenDental
             colW[8] = 50;//daily
             colW[9] = 50;//weekly
             colW[10] = 160;//note
-            if (Preferences.HasClinicsEnabled)
-            {
                 colW[10] = 50;//clinic
                 colW[11] = 160;//note
-            }
+            
             int[] colPos = new int[colW.Length + 1];
             colPos[0] = 45;
             for (int i = 1; i < colPos.Length; i++)
             {
                 colPos[i] = colPos[i - 1] + colW[i - 1];
             }
-            string[] ColCaption = new string[11];
-            if (Preferences.HasClinicsEnabled)
-            {
-                ColCaption = new string[12];
-            }
+
+            var ColCaption = new string[12];
+            
             ColCaption[0] = "Date";
             ColCaption[1] = "Weekday";
             ColCaption[2] = "In";
@@ -751,11 +704,9 @@ namespace OpenDental
             ColCaption[8] = "Daily";
             ColCaption[9] = "Weekly";
             ColCaption[10] = "Note";
-            if (Preferences.HasClinicsEnabled)
-            {
-                ColCaption[10] = "Clinic";
-                ColCaption[11] = "Note";
-            }
+            ColCaption[10] = "Clinic";
+            ColCaption[11] = "Note";
+            
             //column headers-----------------------------------------------------------------------------------------
             e.Graphics.FillRectangle(Brushes.LightGray, colPos[0], yPos, colPos[colPos.Length - 1] - colPos[0], 18);
             e.Graphics.DrawRectangle(pen, colPos[0], yPos, colPos[colPos.Length - 1] - colPos[0], 18);
@@ -1084,41 +1035,28 @@ namespace OpenDental
                     "Pay Period: " + dateStartTextBox.Text + " - " + dateEndTextBox.Text + "\r\n" +
                     "Paycheck Date: " + datePaycheckTextBox.Text;
 
-                if (Preferences.HasClinicsEnabled)
+                text += "\r\nClinic: ";
+                if (Security.CurrentUser.ClinicRestricted)
                 {
-                    text += "\r\nClinic: ";
-                    if (Security.CurrentUser.ClinicRestricted)
+                    text += clinics[clinicComboBox.SelectedIndex].Abbr;
+                }
+                else
+                {
+                    if (clinicComboBox.SelectedIndex == 0)
                     {
-                        text += Clinics.GetAbbr(clinics[clinicComboBox.SelectedIndex].ClinicNum);
+                        text += "All";
                     }
                     else
                     {
-                        if (clinicComboBox.SelectedIndex == 0)
-                        {
-                            text += "All";
-                        }
-                        else if (clinicComboBox.SelectedIndex == 1)
-                        {
-                            text += "Headquarters";
-                        }
-                        else
-                        {
-                            text += Clinics.GetAbbr(clinics[clinicComboBox.SelectedIndex - 2].ClinicNum); ;//Subtract 2, because All and Headquarters are in the list.
-                        }
+                        text += clinics[clinicComboBox.SelectedIndex - 1].Abbr;
                     }
                 }
 
                 using (var font = new Font("Arial", 13, FontStyle.Bold))
                 {
                     e.Graphics.DrawString(text, font, Brushes.Black, center - e.Graphics.MeasureString(text, font).Width / 2, y);
-                    if (Preferences.HasClinicsEnabled)
-                    {
-                        y += 75;
-                    }
-                    else
-                    {
-                        y += 50;
-                    }
+
+                    y += 75;
                 }
 
                 headingPrinted = true;

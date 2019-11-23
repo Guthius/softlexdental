@@ -195,9 +195,9 @@ namespace OpenDental{
 			_listPharmacies=Pharmacies.GetDeepCopy();
             //Key=>PharmacyNum & Value=>List of clinics
             Dictionary<long,List<Clinic>> dictPharmClinics=null;
-			if(Preferences.HasClinicsEnabled) {
+
 				dictPharmClinics=Clinics.GetDictClinicsForPharmacy(_listPharmacies.Select(x => x.PharmacyNum).ToArray());
-			}
+			
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("TablePharmacies","Store Name"),130);
@@ -210,10 +210,10 @@ namespace OpenDental{
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TablePharmacies","City"),90);
 			gridMain.Columns.Add(col);
-			if(Preferences.HasClinicsEnabled) {
+
 				col=new ODGridColumn(Lan.g("TablePharmacies","Clinics"),115);
 				gridMain.Columns.Add(col);
-			}
+			
 			col=new ODGridColumn(Lan.g("TablePharmacies","Note"),100);
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
@@ -234,13 +234,13 @@ namespace OpenDental{
 				}
 				row.Cells.Add(txt);
 				row.Cells.Add(pharm.City);
-				if(Preferences.HasClinicsEnabled) {
+
 					List<Clinic> listClinics;
 					if(!dictPharmClinics.TryGetValue(pharm.PharmacyNum,out listClinics)) {
 						listClinics=new List<Clinic>();
 					}
 					row.Cells.Add(string.Join(",",listClinics.Select(x => x.Abbr)));
-				}
+				
 				row.Cells.Add(pharm.Note);
 				gridMain.Rows.Add(row);
 			}

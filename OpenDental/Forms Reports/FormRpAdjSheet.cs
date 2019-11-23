@@ -252,14 +252,8 @@ namespace OpenDental{
 			if(checkAllProv.Enabled==false && _listProviders.Count>0) {
 				listProv.SetSelected(0,true);
 			}
-			if(!Preferences.HasClinicsEnabled) {
-				listClin.Visible=false;
-				labelClin.Visible=false;
-				checkAllClin.Visible=false;
-				_hasClinicsEnabled=false;
-			}
-			else {
-				_listClinics=Clinics.GetForUserod(Security.CurrentUser);
+
+				_listClinics=Clinic.GetByUser(Security.CurrentUser).ToList();
 				_hasClinicsEnabled=true;
 				if(!Security.CurrentUser.ClinicRestricted) {
 					listClin.Items.Add(Lan.g(this,"Unassigned"));
@@ -267,16 +261,16 @@ namespace OpenDental{
 				}
 				for(int i=0;i<_listClinics.Count;i++) {
 					int curIndex=listClin.Items.Add(_listClinics[i].Abbr);
-					if(Clinics.ClinicNum==0) {
+					if(Clinics.ClinicId==0) {
 						listClin.SetSelected(curIndex,true);
 						checkAllClin.Checked=true;
 					}
-					if(_listClinics[i].ClinicNum==Clinics.ClinicNum) {
+					if(_listClinics[i].Id==Clinics.ClinicId) {
 						listClin.SelectedIndices.Clear();
 						listClin.SetSelected(curIndex,true);
 					}
 				}
-			}
+			
 			_listAdjTypeDefs=Definition.GetByCategory(DefinitionCategory.AdjTypes);//Exclude hidden.
 			checkAllAdjs.Checked=true;
 			for(int i=0;i<_listAdjTypeDefs.Count;i++) {
@@ -347,14 +341,14 @@ namespace OpenDental{
 			List<long> listClinicNums=new List<long>();
 			for(int i=0;i<listClin.SelectedIndices.Count;i++) {
 				if(Security.CurrentUser.ClinicRestricted) {
-						listClinicNums.Add(_listClinics[listClin.SelectedIndices[i]].ClinicNum);//we know that the list is a 1:1 to _listClinics
+						listClinicNums.Add(_listClinics[listClin.SelectedIndices[i]].Id);//we know that the list is a 1:1 to _listClinics
 					}
 				else {
 					if(listClin.SelectedIndices[i]==0) {
 						listClinicNums.Add(0);
 					}
 					else {
-						listClinicNums.Add(_listClinics[listClin.SelectedIndices[i]-1].ClinicNum);//Minus 1 from the selected index
+						listClinicNums.Add(_listClinics[listClin.SelectedIndices[i]-1].Id);//Minus 1 from the selected index
 					}
 				}
 			}

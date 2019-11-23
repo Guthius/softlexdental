@@ -24,13 +24,13 @@ namespace OpenDental
 
         private void FormDoseSpotAssignUserId_Load(object sender, EventArgs e)
         {
-            _listClinicsInComboBox = Clinics.GetForUserod(Security.CurrentUser, true, "Headquarters");
+            _listClinicsInComboBox = Clinic.GetByUser(Security.CurrentUser).ToList();
             List<ProgramProperty> listProgramProperties = ProgramProperties.GetForProgram(Programs.GetCur(ProgramName.eRx).ProgramNum);
             _listClinicIDs = listProgramProperties.FindAll(x => x.Key == Erx.PropertyDescs.ClinicID);
             _listClinicKeys = listProgramProperties.FindAll(x => x.Key == Erx.PropertyDescs.ClinicKey);
             _listClinicsInComboBox.RemoveAll(x =>//Remove all clinics that already have a DoseSpot Clinic ID OR Clinic Key entered
-              _listClinicIDs.FindAll(y => !string.IsNullOrWhiteSpace(y.Value)).Select(y => y.ClinicId).Contains(x.ClinicNum)
-              || _listClinicKeys.FindAll(y => !string.IsNullOrWhiteSpace(y.Value)).Select(y => y.ClinicId).Contains(x.ClinicNum)
+              _listClinicIDs.FindAll(y => !string.IsNullOrWhiteSpace(y.Value)).Select(y => y.ClinicId).Contains(x.Id)
+              || _listClinicKeys.FindAll(y => !string.IsNullOrWhiteSpace(y.Value)).Select(y => y.ClinicId).Contains(x.Id)
             );
             FillComboBox();
             textClinicId.Text = _clinicErxCur.ClinicId;//ClinicID passed from Alert
@@ -45,7 +45,7 @@ namespace OpenDental
             {
                 ODBoxItem<Clinic> boxItemCur = new ODBoxItem<Clinic>(clinicCur.Description, clinicCur);
                 comboClinics.Items.Add(boxItemCur);
-                if (clinicCur.ClinicNum == selectedClinicNum)
+                if (clinicCur.Id == selectedClinicNum)
                 {
                     comboClinics.SelectedIndex = comboClinics.Items.Count - 1;//Select The item that was just added if it is the selected num.
                 }

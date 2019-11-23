@@ -83,12 +83,10 @@ namespace OpenDentBusiness
             List<long> retVal = new List<long>();
             if (apptViewNum == 0)
             {
-                bool hasClinicsEnabled = Preferences.HasClinicsEnabled;
-
                 // Simply return all visible ops.  These are the ops that the 'none' appointment view currently displays.
                 // Do not consider operatories that are not associated with the currently selected clinic.
                 return 
-                    Operatories.GetWhere(x => !hasClinicsEnabled || Clinics.ClinicNum == 0 || x.ClinicNum == Clinics.ClinicNum, true).Select(x => x.OperatoryNum).ToList();
+                    Operatories.GetWhere(x => Clinics.ClinicId == 0 || x.ClinicNum == Clinics.ClinicId, true).Select(x => x.OperatoryNum).ToList();
             }
             return GetWhere(x => x.ApptViewNum == apptViewNum && x.OpNum != 0).Select(x => x.OpNum).ToList();
         }
@@ -102,7 +100,7 @@ namespace OpenDentBusiness
             if (apptViewNum == 0)
             {
                 // Simply return all visible ops.  These are the ops that the 'none' appointment view currently displays.
-                List<Operatory> listVisibleOps = Operatories.GetWhere(x => !Preferences.HasClinicsEnabled || Clinics.ClinicNum == 0 || x.ClinicNum == Clinics.ClinicNum, true);
+                List<Operatory> listVisibleOps = Operatories.GetWhere(x => Clinics.ClinicId == 0 || x.ClinicNum == Clinics.ClinicId, true);
                 List<long> listProvNums = listVisibleOps.Select(x => x.ProvDentist).ToList();
                 listProvNums.AddRange(listVisibleOps.Select(x => x.ProvHygienist));
 

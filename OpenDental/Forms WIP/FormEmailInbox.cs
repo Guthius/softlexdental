@@ -331,26 +331,26 @@ namespace OpenDental
             emailAddressList.RemoveAll(x => x.Id == Preference.GetLong(PreferenceName.EmailDefaultAddressNum));
 
             // Remove all the clinic mail addresses and then add back only the ones the user has access to.
-            if (Preferences.HasClinicsEnabled)
+
+            foreach (var clinic in Clinic.All())
             {
-                var clinicList = Clinics.GetDeepCopy();
-                foreach (var clinic in clinicList)
-                {
-                    emailAddressList.RemoveAll(emailAddress => emailAddress.Id == clinic.EmailAddressNum);
-                }
-
-                var clinicListForUser = Clinics.GetForUserod(Security.CurrentUser);
-                foreach (var clinic in clinicListForUser)
-                {
-                    var emailAddress = EmailAddress.GetByClinic(clinic.EmailAddressNum);
-                    if (emailAddress == null || emailAddressList.Any(x => x.Id == emailAddress.Id))
-                    {
-                        continue;
-                    }
-
-                    emailAddressList.Add(emailAddress);
-                }
+                emailAddressList.RemoveAll(emailAddress => emailAddress.Id == clinic.EmailAddressId);
             }
+
+            var clinicListForUser = Clinic.GetByUser(Security.CurrentUser);
+            foreach (var clinic in clinicListForUser)
+            {
+                if (!clinic.EmailAddressId.HasValue) continue;
+
+                var emailAddress = EmailAddress.GetByClinic(clinic.EmailAddressId.Value);
+                if (emailAddress == null || emailAddressList.Any(x => x.Id == emailAddress.Id))
+                {
+                    continue;
+                }
+
+                emailAddressList.Add(emailAddress);
+            }
+
 
             SynchronizeEmailAddresses(emailAddressList);
         }

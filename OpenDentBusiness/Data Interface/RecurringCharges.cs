@@ -154,13 +154,13 @@ namespace OpenDentBusiness
         {
             DeleteNotYetCharged();
             List<long> listClinicNums = new List<long>();
-            if (Preferences.HasClinicsEnabled && Security.CurrentUser.ClinicRestricted)
+            if (Security.CurrentUser.ClinicRestricted)
             {
-                listClinicNums = listUserClinics.Select(x => x.ClinicNum).ToList();
+                listClinicNums = listUserClinics.Select(x => x.Id).ToList();
             }
             //if no clinics are selected but clinics are enabled and the user is restricted, the results will be empty so no need to run the report
             //if clinics are enabled and the user is not restricted and selects no clinics, there will not be a clinic filter in the query, so all clinics
-            if (Preferences.HasClinicsEnabled && Security.CurrentUser.ClinicRestricted && listClinicNums.Count == 0)
+            if (Security.CurrentUser.ClinicRestricted && listClinicNums.Count == 0)
             {
                 ListRecurringChargeData = new List<RecurringChargeData>();
             }
@@ -370,11 +370,10 @@ namespace OpenDentBusiness
             amount = 0;
             receipt = new StringBuilder();
             long clinicNumCur = 0;
-            if (Preferences.HasClinicsEnabled)
-            {
+
                 //this is patient.ClinicNum or if it's a payplan row it's the ClinicNum from one of the payplancharges on the payplan
                 clinicNumCur = chargeData.RecurringCharge.ClinicNum;//If clinics were enabled but no longer are, use credentials for headquarters.
-            }
+            
             if (listClinicNumsBadCredentials.Contains(clinicNumCur))
             {//username or password is blank, don't try to process
                 MarkFailed(chargeData, Lans.g(_lanThis, "The X-Charge Username or Password for the clinic has not been set."), LogLevel.Info);
@@ -387,7 +386,7 @@ namespace OpenDentBusiness
                 string clinicAbbr = "Headquarters";
                 if (clinicNumCur > 0)
                 {
-                    clinicAbbr = Clinics.GetAbbr(clinicNumCur);
+                    clinicAbbr = Clinic.GetById(clinicNumCur).Abbr;
                 }
                 MarkFailed(chargeData, Lans.g(_lanThis, "The X-Charge Username or Password for the following clinic has not been set") + ":\r\n" + clinicAbbr + "\r\n"
                     + Lans.g(_lanThis, "All charges for that clinic will be skipped."));
@@ -687,10 +686,8 @@ namespace OpenDentBusiness
             //Explicitly set ClinicNum=0, since a pat's ClinicNum will remain set if the user enabled clinics, assigned patients to clinics, and then
             //disabled clinics because we use the ClinicNum to determine which PayConnect or XCharge/XWeb credentials to use for payments.
             paymentCur.ClinicNum = 0;
-            if (Preferences.HasClinicsEnabled)
-            {
-                paymentCur.ClinicNum = recCharge.RecurringCharge.ClinicNum;
-            }
+            paymentCur.ClinicNum = recCharge.RecurringCharge.ClinicNum;
+            
             //ClinicNum can be 0 for 'Headquarters' or clinics not enabled, PayType will be account module pref if set OR the 0 clinic or headquarters 
             //PayType if using PayConnect
             string ppPayTypeDesc = "PaymentType";

@@ -4303,9 +4303,9 @@ namespace OpenDentBusiness
         /// </summary>
         public static void HasSpecialtyConflict(long patNum, long clinicNum)
         {
-            if (!Preferences.HasClinicsEnabled || (ApptSchedEnforceSpecialty)Preference.GetInt(PreferenceName.ApptSchedEnforceSpecialty) == ApptSchedEnforceSpecialty.DontEnforce)
+            if ((ApptSchedEnforceSpecialty)Preference.GetInt(PreferenceName.ApptSchedEnforceSpecialty) == ApptSchedEnforceSpecialty.DontEnforce)
             {
-                return; // Clinics off OR enforce preference off
+                return; // enforce preference off
             }
 
             Definition def = Patients.GetPatientSpecialtyDef(patNum);
@@ -4454,7 +4454,7 @@ namespace OpenDentBusiness
             try
             {
                 Patient pat = Patients.GetPat(appt.PatNum);
-                Clinic clinic = Clinics.GetClinic(appt.ClinicNum);
+                Clinic clinic = Clinic.GetById(appt.ClinicNum);
                 WebSchedVerifyType verificationType = (WebSchedVerifyType)PIn.Int(ClinicPrefs.GetPrefValue(typePref, appt.ClinicNum));
                 if (verificationType == WebSchedVerifyType.None)
                 {

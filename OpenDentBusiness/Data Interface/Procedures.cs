@@ -694,7 +694,7 @@ namespace OpenDentBusiness
             }
             Procedure proc = new Procedure();
             proc.PatNum = pat.PatNum;
-            proc.ClinicNum = Clinics.ClinicNum;
+            proc.ClinicNum = Clinics.ClinicId;
             proc.ProcStatus = procStatus;
             proc.ProvNum = provNum;
             proc.AptNum = aptNum;
@@ -3491,7 +3491,7 @@ namespace OpenDentBusiness
                 procCur.PlaceService = (PlaceOfService)Preference.GetLong(PreferenceName.DefaultProcedurePlaceService);
                 procCur.ClinicNum = apt.ClinicNum;
                 procCur.SiteNum = patient.SiteNum;
-                procCur.PlaceService = Clinics.GetPlaceService(apt.ClinicNum);
+                procCur.PlaceService = Clinic.GetById(apt.ClinicNum).DefaultPlaceOfService;
                 procCur.ProvNum = GetProvNumFromAppointment(apt, procCur, procCode);
                 //if procedure was already complete, then don't add more notes.
                 if (procOld.ProcStatus != ProcStat.C)

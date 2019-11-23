@@ -400,11 +400,11 @@ namespace OpenDental{
 			}
 			_listClinics=new List<Clinic>() { new Clinic() { Abbr=Lan.g(this,"Unassigned") } }; //Seed with "None"
 			if(Security.IsAuthorized(Permissions.UnrestrictedSearch,true)) {//user has permission to search all clinics though restricted
-				Clinics.GetDeepCopy(true).ForEach(x => _listClinics.Add(x));
+				Clinic.All().ForEach(x => _listClinics.Add(x));
 			}
 			else {
 				//do not re-organize from cache. They could either be alphabetized or sorted by item order.
-				Clinics.GetForUserod(Security.CurrentUser).ForEach(x => _listClinics.Add(x));
+				Clinic.GetByUser(Security.CurrentUser).ForEach(x => _listClinics.Add(x));
 			}
 			_listClinics.ForEach(x => comboClinic.Items.Add(x.Abbr));
 			//Set Selected Nums
@@ -414,7 +414,7 @@ namespace OpenDental{
 			//Set selected indexes to -1 for compatibility with fillComboProvHyg
 			comboPriProv.SelectedIndex=-1;
 			comboSecProv.SelectedIndex=-1;
-			comboClinic.IndexSelectOrSetText(_listClinics.FindIndex(x => x.ClinicNum==_selectedClinicNum),() => { return Clinics.GetAbbr(_selectedClinicNum); });
+			comboClinic.IndexSelectOrSetText(_listClinics.FindIndex(x => x.Id==_selectedClinicNum),() => { return Clinic.GetById(_selectedClinicNum).Abbr; });
 			fillComboProvHyg();
 			if(!Security.IsAuthorized(Permissions.PatPriProvEdit,DateTime.MinValue,true,true) && _selectedProvNum>0) {
 				string strToolTip=Lan.g("Security","Not authorized for")+" "+UserGroupPermission.GetDescription(Permissions.PatPriProvEdit);
@@ -452,10 +452,6 @@ namespace OpenDental{
 				labelPutInInsPlan.Visible=false;
 				textMedicaidID.Visible=false;
 				textMedicaidState.Visible=false;
-			}
-			if(!Preferences.HasClinicsEnabled){
-				comboClinic.Visible=false;
-				labelClinic.Visible=false;
 			}
 			if(_isUsingNewRaceFeature) {
 				_listPatRaces=PatientRaces.GetForPatient(PatCur.PatNum);
@@ -624,7 +620,7 @@ namespace OpenDental{
 
 		private void comboClinic_SelectedIndexChanged(object sender,EventArgs e) {
 			if(comboClinic.SelectedIndex>-1) {
-				_selectedClinicNum=_listClinics[comboClinic.SelectedIndex].ClinicNum;
+				_selectedClinicNum=_listClinics[comboClinic.SelectedIndex].Id;
 			}
 			fillComboProvHyg();
 		}
@@ -1141,10 +1137,6 @@ namespace OpenDental{
 						areConditionsMet=listAreCondsMet.Contains(true);
 						break;
 					case RequiredFieldName.Clinic:
-						if(!Preferences.HasClinicsEnabled) {
-							areConditionsMet=true;
-							break;
-						}
 						areConditionsMet=ConditionComparerHelper(_selectedClinicNum.ToString(),i,listConditions);//includes none clinic
 						break;								
 					case RequiredFieldName.DateTimeDeceased:
@@ -2703,7 +2695,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Invalid Specialty selected.");
 				return;
 			}
-			if(IsNew && Preferences.HasClinicsEnabled && !Preference.GetBool(PreferenceName.ClinicAllowPatientsAtHeadquarters) && _selectedClinicNum==0) {
+			if(IsNew && !Preference.GetBool(PreferenceName.ClinicAllowPatientsAtHeadquarters) && _selectedClinicNum==0) {
 				MsgBox.Show(this,"Current settings for clinics do not allow patients to be added to the 'Unassigned' clinic. Please select a clinic.");
 				return;
 			}

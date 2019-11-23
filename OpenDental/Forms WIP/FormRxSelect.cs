@@ -357,7 +357,7 @@ namespace OpenDental{
 			RxPatCur.PatNum=PatCur.PatNum;
 			RxPatCur.Drug=RxDefCur.Drug;
 			RxPatCur.IsControlled=RxDefCur.IsControlled;
-			if(Preference.GetBool(PreferenceName.RxHasProc) && (Clinics.ClinicNum==0 || Clinics.GetClinic(Clinics.ClinicNum).HasProcOnRx)) {
+			if(Preference.GetBool(PreferenceName.RxHasProc) && (Clinics.ClinicId==0 || Clinic.GetById(Clinics.ClinicId).RequireProcedureOnRx)) {
 				RxPatCur.IsProcRequired=RxDefCur.IsProcRequired;
 			}
 			RxPatCur.Sig=RxDefCur.Sig;

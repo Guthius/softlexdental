@@ -738,17 +738,14 @@ namespace OpenDental{
 			}
 			if(IsNew) {
 				textDateStart.Text=PIn.Date(Preference.GetString(PreferenceName.DateDepositsStarted)).ToShortDateString();
-				if(!Preferences.HasClinicsEnabled) {
-					comboClinic.Visible=false;
-					labelClinic.Visible=false;
-				}
+
 				comboClinic.Items.Clear();
 				comboClinic.Items.Add(Lan.g(this,"All"));
 				comboClinic.SelectedIndex=0;
-				_listClinics=Clinics.GetForUserod(Security.CurrentUser);
+				_listClinics=Clinic.GetByUser(Security.CurrentUser).ToList();
 				for(int i=0;i<_listClinics.Count;i++) {
 					comboClinic.Items.Add(_listClinics[i].Abbr);
-					if(_listClinics[i].ClinicNum==Clinics.ClinicNum) {
+					if(_listClinics[i].Id==Clinics.ClinicId) {
 						comboClinic.SelectedIndex=i+1;//Plus 1 to account for 'All'
 					}
 				}
@@ -867,7 +864,7 @@ namespace OpenDental{
 				DateTime dateStart=PIn.Date(textDateStart.Text);
 				long clinicNum=0;
 				if(comboClinic.SelectedIndex!=0){
-					clinicNum=_listClinics[comboClinic.SelectedIndex-1].ClinicNum;
+					clinicNum=_listClinics[comboClinic.SelectedIndex-1].Id;
 				}
 				List<long> payTypes=new List<long>();//[listPayType.SelectedIndices.Count];
 				for(int i=0;i<listPayType.SelectedIndices.Count;i++) {
@@ -1344,7 +1341,7 @@ namespace OpenDental{
 			SheetPrinting.CreatePdf(sheet,tempFile,null);
             Storage.Local.CopyFile(tempFile, filePathAndName, Storage.Default);
 			EmailMessage message=new EmailMessage();
-			EmailAddress address=EmailAddress.GetByClinic(Clinics.ClinicNum);
+			EmailAddress address=EmailAddress.GetByClinic(Clinics.ClinicId);
 			message.FromAddress=address.GetFrom();
 			message.Subject=sheet.Description;
 			EmailAttachment attach=new EmailAttachment();

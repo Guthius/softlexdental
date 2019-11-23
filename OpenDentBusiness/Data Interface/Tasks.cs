@@ -374,10 +374,10 @@ namespace OpenDentBusiness
             "INNER JOIN tasklist ON tasklist.TaskListNum=taskancestor.TaskListNum "
             + "INNER JOIN tasksubscription ON tasksubscription.TaskListNum=tasklist.TaskListNum AND tasksubscription.UserNum=" + POut.Long(userNum) + " "
             + "LEFT JOIN taskunread ON taskunread.TaskNum=task.TaskNum AND taskunread.UserNum=" + POut.Long(userNum);
-            if (Clinics.ClinicNum != 0 || !Preferences.HasClinicsEnabled)
+            if (Clinics.ClinicId != 0)
             {
                 command += TaskLists.BuildFilterJoins(clinicNum);
-                command += " WHERE TRUE " + TaskLists.BuildFilterWhereClause(userNum, clinicNum, Clinics.GetClinic(clinicNum)?.Region ?? 0);
+                command += " WHERE TRUE " + TaskLists.BuildFilterWhereClause(userNum, clinicNum, Clinic.GetById(clinicNum)?.RegionId ?? 0);
             }
             List<Task> ret = TableToList(DataConnection.ExecuteDataTable(command));//This is how we set the IsUnread column.
             return ret;
@@ -791,7 +791,7 @@ namespace OpenDentBusiness
             string command = string.Empty;
             //Only add JOINs if filtering.  Filtering will never happen if clinics are turned off, because regions link via clinics.
             if ((GlobalTaskFilterType)Preference.GetInt(PreferenceName.TasksGlobalFilterType) == GlobalTaskFilterType.Disabled
-                || globalFilterType == GlobalTaskFilterType.None || !Preferences.HasClinicsEnabled)
+                || globalFilterType == GlobalTaskFilterType.None)
             {
                 return command;
             }
@@ -807,17 +807,16 @@ namespace OpenDentBusiness
         private static string BuildFilterWhereClause(long currentUserNum, GlobalTaskFilterType globalFilterType, long filterFkey)
         {
             //Only add WHERE clauses if filtering.  Filtering will never happen if clinics are turned off, because regions link via clinics.
-            if ((GlobalTaskFilterType)Preference.GetInt(PreferenceName.TasksGlobalFilterType) == GlobalTaskFilterType.Disabled
-                || globalFilterType == GlobalTaskFilterType.None || !Preferences.HasClinicsEnabled)
+            if ((GlobalTaskFilterType)Preference.GetInt(PreferenceName.TasksGlobalFilterType) == GlobalTaskFilterType.Disabled || globalFilterType == GlobalTaskFilterType.None)
             {
                 return "";
             }
-            List<Clinic> listUnrestrictedClinics = Clinics.GetAllForUserod(User.GetById(currentUserNum));
+            List<Clinic> listUnrestrictedClinics = Clinic.GetByUser(User.GetById(currentUserNum), true).ToList();
             List<long> listFkeys = new List<long>() { 0 };//All users can see Tasks associated to HQ clinic or "0" region.
             switch (globalFilterType)
             {
                 case GlobalTaskFilterType.Clinic:
-                    List<long> listUnrestrictedClinicNums = listUnrestrictedClinics.Select(x => x.ClinicNum).ToList();//User can view these clinicnums.
+                    List<long> listUnrestrictedClinicNums = listUnrestrictedClinics.Select(x => x.Id).ToList();//User can view these clinicnums.
                     if (filterFkey == 0)
                     {//filtering using HQ.  Let all unrestricted clinics through the fitler.
                         listFkeys.AddRange(listUnrestrictedClinicNums);
@@ -828,7 +827,7 @@ namespace OpenDentBusiness
                     }
                     break;
                 case GlobalTaskFilterType.Region:
-                    List<long> listInRegionUnrestrictedClinicNums = listUnrestrictedClinics.FindAll(x => x.Region == filterFkey).Select(x => x.ClinicNum).ToList();
+                    List<long> listInRegionUnrestrictedClinicNums = listUnrestrictedClinics.FindAll(x => x.RegionId == filterFkey).Select(x => x.Id).ToList();
                     listFkeys.AddRange(listInRegionUnrestrictedClinicNums);
                     break;
                 case GlobalTaskFilterType.None:

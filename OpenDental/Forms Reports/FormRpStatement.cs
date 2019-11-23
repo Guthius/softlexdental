@@ -458,10 +458,9 @@ namespace OpenDental{
 				frame.Top=TopPosition.Parse("0.5 in");
 				frame.Left=LeftPosition.Parse("0.3 in");
 				frame.Width=Unit.FromInch(3);
-				if(Preferences.HasClinicsEnabled && Clinics.GetCount() > 0 //if using clinics
-						&& Clinics.GetClinic(PatGuar.ClinicNum)!=null)//and this patient assigned to a clinic
+				if(Clinic.GetById(PatGuar.ClinicNum)!=null)//and this patient assigned to a clinic
 					{
-					Clinic clinic=Clinics.GetClinic(PatGuar.ClinicNum);
+					Clinic clinic=Clinic.GetById(PatGuar.ClinicNum);
 					par=frame.AddParagraph();
 					par.Format.Font=font;
 					par.AddText(clinic.Description);
@@ -476,10 +475,10 @@ namespace OpenDental{
 						par.AddText("GST: "+defaultProv.SSN);
 						par.AddLineBreak();
 					}
-					par.AddText(clinic.Address);
+					par.AddText(clinic.AddressLine1);
 					par.AddLineBreak();
-					if(clinic.Address2!="") {
-						par.AddText(clinic.Address2);
+					if(clinic.AddressLine2!="") {
+						par.AddText(clinic.AddressLine2);
 						par.AddLineBreak();
 					}
 					if(CultureInfo.CurrentCulture.Name.EndsWith("CH")) {//CH is for switzerland. eg de-CH
@@ -1123,7 +1122,7 @@ namespace OpenDental{
 			gcol=new ODGridColumn(Lan.g(this,"Patient"),100);
 			gridPat.Columns.Add(gcol);
 			//prov
-			if(Clinics.IsMedicalPracticeOrClinic(Clinics.ClinicNum)) {
+			if(Clinic.GetById(Clinics.ClinicId).IsMedicalOnly) {
 				gcol=new ODGridColumn(Lan.g(this,"Code"),87);
 				gridPat.Columns.Add(gcol);
 			}
@@ -1209,14 +1208,14 @@ namespace OpenDental{
 						}
 						else {
 							grow.Cells.Add(rowCur["ProcCode"].ToString());
-							if(!Clinics.IsMedicalPracticeOrClinic(Clinics.ClinicNum)) {
+							if(!Clinic.GetById(Clinics.ClinicId).IsMedicalOnly) {
 								grow.Cells.Add(rowCur["tth"].ToString());
 							}
 						}
 					}
 					else {
 						grow.Cells.Add(rowCur["ProcCode"].ToString());
-						if(!Clinics.IsMedicalPracticeOrClinic(Clinics.ClinicNum)) {
+						if(!Clinic.GetById(Clinics.ClinicId).IsMedicalOnly) {
 							grow.Cells.Add(rowCur["tth"].ToString());
 						}
 					}

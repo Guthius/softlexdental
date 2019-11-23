@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using OpenDentBusiness;
 using System.Collections.Generic;
 using OpenDental.ReportingComplex;
+using System.Linq;
 
 namespace OpenDental{
 ///<summary></summary>
@@ -218,17 +219,17 @@ namespace OpenDental{
 		private void FormRpProcCodes_Load(object sender, System.EventArgs e) {
 			_listFeeScheds=FeeScheds.GetDeepCopy(true);
 			_listProviders=Providers.GetListReports();
-			_listClinics=Clinics.GetDeepCopy(true);
+			_listClinics=Clinic.All().ToList();
 			for(int i=0;i<_listFeeScheds.Count;i++){
 				listBoxFeeSched.Items.Add(_listFeeScheds[i].Description);
 			}		
 			listBoxFeeSched.SelectedIndex=0;	
 			listBoxClinics.Items.Add(Lan.g(this,"Default"));
-			if(Preferences.HasClinicsEnabled) {
+
 				for(int i=0;i<_listClinics.Count;i++) {
 					listBoxClinics.Items.Add(_listClinics[i].Abbr);
 				}
-			}
+			
 			listBoxClinics.SelectedIndex=0;
 			listBoxProviders.Items.Add(Lan.g(this,"Default"));
 			for(int i=0;i<_listProviders.Count;i++) {
@@ -242,7 +243,7 @@ namespace OpenDental{
 			FeeSched feeSched=_listFeeScheds[listBoxFeeSched.SelectedIndex];
 			long clinicNum=0;
 			if(listBoxClinics.SelectedIndex>0){
-				clinicNum=_listClinics[listBoxClinics.SelectedIndex-1].ClinicNum;
+				clinicNum=_listClinics[listBoxClinics.SelectedIndex-1].Id;
 			}
 			long provNum=0;
 			if(listBoxProviders.SelectedIndex>0){

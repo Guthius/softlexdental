@@ -5,6 +5,7 @@ using System.Net;
 using System.Collections.Generic;
 using OpenDental.UI;
 using System.Globalization;
+using System.Linq;
 
 namespace OpenDental{
 	/// <summary>
@@ -388,11 +389,11 @@ namespace OpenDental{
 			_listClearinghousesClinicAll=Clearinghouses.GetAllNonHq();
 			_listClearinghousesClinicCur=new List<Clearinghouse>();
 			_selectedClinicNum=0;
-			if(Preferences.HasClinicsEnabled) {
+
 				comboClinic.Visible=true;
 				labelClinic.Visible=true;
 				FillClinics();
-			}
+			
 			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {
 				butEligibility.Visible=false;
 			}
@@ -472,23 +473,22 @@ namespace OpenDental{
 		}
 
 		private void FillClinics() {
-			_listClinics=Clinics.GetForUserod(Security.CurrentUser);
+			_listClinics=Clinic.GetByUser(Security.CurrentUser).ToList();
 			if(!Security.CurrentUser.ClinicRestricted) {
 				Clinic clinicHq=new Clinic();
-				clinicHq.ClinicNum=0;
 				clinicHq.Abbr=Lan.g(this,"Unassigned/Default");
 				_listClinics.Insert(0,clinicHq);//Insert at top.
 			}
 			for(int i=0;i<_listClinics.Count;i++) {
 				comboClinic.Items.Add(_listClinics[i].Abbr);
-				if(_listClinics[i].ClinicNum==Clinics.ClinicNum) {
+				if(_listClinics[i].Id==Clinics.ClinicId) {
 					comboClinic.SelectedIndex=i;
 				}
 			}
 			if(comboClinic.SelectedIndex==-1) {//This should not happen, but just in case.
 				comboClinic.SelectedIndex=0;
 			}
-			_selectedClinicNum=_listClinics[comboClinic.SelectedIndex].ClinicNum;
+			_selectedClinicNum=_listClinics[comboClinic.SelectedIndex].Id;
 		}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
@@ -728,7 +728,7 @@ namespace OpenDental{
 		}
 
 		private void comboClinic_SelectionChangeCommitted(object sender,EventArgs e) {
-			_selectedClinicNum=_listClinics[comboClinic.SelectedIndex].ClinicNum;
+			_selectedClinicNum=_listClinics[comboClinic.SelectedIndex].Id;
 			FillGrid();
 		}
 

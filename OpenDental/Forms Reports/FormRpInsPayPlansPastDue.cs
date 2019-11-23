@@ -30,11 +30,11 @@ namespace OpenDental {
 				(int)TimeSpan.FromSeconds(0.3).TotalMilliseconds,
 				textDaysPastDue);
 			FillProvs();
-			if(Preferences.HasClinicsEnabled) {
+
 				comboBoxMultiClinics.Visible=true;
 				labelClinic.Visible=true;
 				FillClinics();
-			}
+			
 			if(!LoadData()) {
 				DialogResult=DialogResult.Cancel;
 				return;
@@ -53,7 +53,7 @@ namespace OpenDental {
 
 		private void FillClinics() {
 			List <int> listSelectedItems=new List<int>();
-			_listClinics=Clinics.GetForUserod(Security.CurrentUser);
+			_listClinics=Clinic.GetByUser(Security.CurrentUser).ToList();
 			comboBoxMultiClinics.Items.Add(Lan.g(this,"All"));
 			if(!Security.CurrentUser.ClinicRestricted) {
 				comboBoxMultiClinics.Items.Add(Lan.g(this,"Unassigned"));
@@ -61,10 +61,10 @@ namespace OpenDental {
 			}
 			for(int i = 0;i<_listClinics.Count;i++) {
 				int curIndex=comboBoxMultiClinics.Items.Add(_listClinics[i].Abbr);
-				if(Clinics.ClinicNum==0) {
+				if(Clinics.ClinicId==0) {
 					listSelectedItems.Add(curIndex);
 				}
-				if(_listClinics[i].ClinicNum==Clinics.ClinicNum) {
+				if(_listClinics[i].Id==Clinics.ClinicId) {
 					listSelectedItems.Clear();
 					listSelectedItems.Add(curIndex);
 				}
@@ -119,10 +119,10 @@ namespace OpenDental {
 				}
 			}
 			List<long> listClinicNums=new List<long>();
-			if(Preferences.HasClinicsEnabled) {
+
 				if(comboBoxMultiClinics.ListSelectedIndices.Contains(0)) {
 					for(int j = 0;j<_listClinics.Count;j++) {
-						listClinicNums.Add(_listClinics[j].ClinicNum);//Add all clinics this person has access to.
+						listClinicNums.Add(_listClinics[j].Id);//Add all clinics this person has access to.
 					}
 					if(!Security.CurrentUser.ClinicRestricted) {
 						listClinicNums.Add(0);
@@ -131,17 +131,17 @@ namespace OpenDental {
 				else {
 					for(int i = 0;i<comboBoxMultiClinics.ListSelectedIndices.Count;i++) {
 						if(Security.CurrentUser.ClinicRestricted) {
-							listClinicNums.Add(_listClinics[comboBoxMultiClinics.ListSelectedIndices[i]-1].ClinicNum);
+							listClinicNums.Add(_listClinics[comboBoxMultiClinics.ListSelectedIndices[i]-1].Id);
 						}
 						else if(comboBoxMultiClinics.ListSelectedIndices[i]==1) {
 							listClinicNums.Add(0);
 						}
 						else {
-							listClinicNums.Add(_listClinics[comboBoxMultiClinics.ListSelectedIndices[i]-2].ClinicNum);
+							listClinicNums.Add(_listClinics[comboBoxMultiClinics.ListSelectedIndices[i]-2].Id);
 						}
 					}
 				}
-			}
+			
 			//fill the grid
 			gridMain.BeginUpdate();
 			//columns
@@ -168,7 +168,7 @@ namespace OpenDental {
 				if(!listProvNums.Contains(payPlanCur.ListPayPlanCharges[0].ProvNum)) {
 					continue;
 				}
-				if(Preferences.HasClinicsEnabled && (!listClinicNums.Contains(payPlanCur.ListPayPlanCharges[0].ClinicNum))) {
+				if((!listClinicNums.Contains(payPlanCur.ListPayPlanCharges[0].ClinicNum))) {
 					continue;
 				}
 				row = new ODGridRow();

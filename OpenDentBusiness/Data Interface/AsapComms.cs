@@ -174,7 +174,7 @@ namespace OpenDentBusiness
             }
             if (clinicNum > -1)
             {
-                Clinic clinic = ODMethodsT.Coalesce(Clinics.GetClinic(clinicNum), Clinics.GetPracticeAsClinicZero());
+                Clinic clinic = Clinic.GetById(clinicNum);
                 newTemplate.RegReplace("\\[OfficeName]", clinic.Description);
                 newTemplate.RegReplace("\\[OfficePhone]", clinic.Phone);
             }

@@ -182,7 +182,7 @@ namespace OpenDentBusiness.UI
                  //or the holiday applies to all ops for the clinic), color all of the op columns in the view for this day with the holiday brush
                     if (SchedListPeriod.FindAll(x => x.SchedType == ScheduleType.Practice && x.Status == SchedStatus.Holiday) //find all holidays
                         .Any(x => (int)x.SchedDate.DayOfWeek == d + 1 //for this day of the week
-                            && (x.ClinicNum == 0 || (Preferences.HasClinicsEnabled && x.ClinicNum == Clinics.ClinicNum)))) //and either practice or for this clinic
+                            && (x.ClinicNum == 0 || x.ClinicNum == Clinics.ClinicId))) //and either practice or for this clinic
                     {
                         g.FillRectangle(holidayBrush,
                             TimeWidth + 1 + d * WeekDayWidth,
@@ -213,7 +213,7 @@ namespace OpenDentBusiness.UI
              //are enabled and the schedule.ClinicNum is the currently selected clinic
              //SchedListPeriod contains scheds for only one day, not for a week
                 if (SchedListPeriod.FindAll(x => x.SchedType == ScheduleType.Practice && x.Status == SchedStatus.Holiday) //find all holidays
-                    .Any(x => x.ClinicNum == 0 || (Preferences.HasClinicsEnabled && x.ClinicNum == Clinics.ClinicNum)))//for the practice or clinic
+                    .Any(x => x.ClinicNum == 0 || x.ClinicNum == Clinics.ClinicId))//for the practice or clinic
                 {
                     g.FillRectangle(holidayBrush, TimeWidth + 1, 0, ColWidth * ColCount + ProvWidth * ProvCount, ApptSheetHeight);
                 }

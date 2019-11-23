@@ -29,12 +29,12 @@ namespace OpenDental {
 			if(ClinicIdVal.Trim()!="" && ClinicKeyVal.Trim()!="") {//The clinic has values for the clinicId/clinicKey, so they are effectively registered.
 				butRegisterClinic.Enabled=false;
 			}
-			if(_clinicCur.ClinicNum==0) {//Clinics disabled or is HQ.
+			if(_clinicCur.Id==0) {//Clinics disabled or is HQ.
 				menuItemSetup.Enabled=false;//There is no clinic record to edit.
 			}
 			Program programErx=Programs.GetCur(ProgramName.eRx);
 			ProgramProperty ppClinicID=ListProperties
-					.FirstOrDefault(x => x.ClinicId!=_clinicCur.ClinicNum && x.Key==Erx.PropertyDescs.ClinicID && x.Value!="");
+					.FirstOrDefault(x => x.ClinicId!=_clinicCur.Id && x.Key==Erx.PropertyDescs.ClinicID && x.Value!="");
 			ProgramProperty ppClinicKey=null;
 			if(ppClinicID!=null) {
 				ppClinicKey=ListProperties
@@ -53,12 +53,11 @@ namespace OpenDental {
 		}
 
 		private void menuItemSetup_Click(object sender,EventArgs e) {
-			FormClinicEdit form=new FormClinicEdit(_clinicCur.Copy());
+			FormClinicEdit form=new FormClinicEdit(_clinicCur);
 			form.ShowDialog();
 			if(form.DialogResult==DialogResult.OK) {
-				Clinics.Update(form.ClinicCur,_clinicCur);
+				Clinic.Update(_clinicCur);
 				DataValid.SetInvalid(InvalidType.Providers);
-				_clinicCur=form.ClinicCur.Copy();
 			}
 		}
 

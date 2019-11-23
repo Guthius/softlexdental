@@ -349,10 +349,8 @@ namespace OpenDental {
 			gridMain.ContextMenu=contextMenuGrid;
 			dateRangePicker.SetDateTimeTo(DateTime.Today);
 			dateRangePicker.SetDateTimeFrom(DateTime.Today.AddMonths(-1));
-			if(!Preferences.HasClinicsEnabled) {
-				labelClinic.Visible=false;
-			}
-			_patNum=FormOpenDental.CurPatNum;
+
+			_patNum=FormOpenDental.CurrentPatientId;
 			if(_patNum>0) {
 				textPatient.Text=Patients.GetLim(_patNum).GetNameLF();
 			}
@@ -458,9 +456,9 @@ namespace OpenDental {
 				_myReport.AddSubTitle("Patient",Patients.GetLim(_patNum).GetNameFL());
 			}
 			_myReport.AddSubTitle("Providers",subTitleProviders);
-			if(Preferences.HasClinicsEnabled) {
+
 				_myReport.AddSubTitle("Clinics",subtitleClinics);
-			}
+			
 			QueryObject query=_myReport.AddQuery(tableOverpaidProcs,DateTimeOD.Today.ToShortDateString());
 			query.AddColumn("Patient Name",_colWidthPatName,FieldValueType.String);
 			query.AddColumn("Date",_colWidthProcDate,FieldValueType.Date);
@@ -497,7 +495,7 @@ namespace OpenDental {
 		}
 
 		private void butCurrent_Click(object sender,EventArgs e) {
-			_patNum=FormOpenDental.CurPatNum;
+			_patNum=FormOpenDental.CurrentPatientId;
 			if(_patNum==0) {
 				textPatient.Text="";
 			}

@@ -579,21 +579,16 @@ namespace OpenDental{
 			SetFilterControlsAndAction(() => FillGrid(),textSearch);
 			butOkSchedule.Visible=ShowOkSchedule;
 			_listClinics=new List<Clinic>();
-			if(!Security.CurrentUser.ClinicRestricted) {
-				_listClinics.Add(new Clinic() { Abbr=Lan.g(this,"Headquarters") }); //Seed with "Headquarters"
-			}
+
 			//do not re-organize from cache. They could either be alphabetizeded or sorted by item order.
-			Clinics.GetForUserod(Security.CurrentUser).ForEach(x => _listClinics.Add(x));
+			Clinic.GetByUser(Security.CurrentUser).ForEach(x => _listClinics.Add(x));
 			_listClinics.ForEach(x => comboClinic.Items.Add(x.Abbr));
-			comboClinic.IndexSelectOrSetText(_listClinics.FindIndex(x => x.ClinicNum==_selectedClinicNum)
-				,() => { return Clinics.GetAbbr(_selectedClinicNum); });
+			comboClinic.IndexSelectOrSetText(_listClinics.FindIndex(x => x.Id==_selectedClinicNum)
+				,() => { return Clinic.GetById(_selectedClinicNum).Abbr; });
 			//filled here instead of FillGrid since the list of clinics doesn't change when the grid is filtered and refilled.
-			_dictClinicNumClinic=_listClinics.ToDictionary(x => x.ClinicNum);//speed up sorting of schedules.
+			_dictClinicNumClinic=_listClinics.ToDictionary(x => x.Id);//speed up sorting of schedules.
 			_dictClinicNumClinic[0]=new Clinic() { Abbr="" };//so HQ always comes before other clinics in the sort order; only for notes and holidays
-			if(!Preferences.HasClinicsEnabled) {
-				comboClinic.Visible=false;
-				labelClinic.Visible=false;
-			}
+
 			FillProvsAndEmps();
 			//Fill Provider Override
 			_listProviders=Providers.GetDeepCopy(true);
@@ -618,7 +613,7 @@ namespace OpenDental{
 		private void comboClinic_SelectedIndexChanged(object sender,EventArgs e) {
 			long clinicNumOrig=_selectedClinicNum;
 			if(comboClinic.SelectedIndex>-1) {
-				_selectedClinicNum=_listClinics[comboClinic.SelectedIndex].ClinicNum;
+				_selectedClinicNum=_listClinics[comboClinic.SelectedIndex].Id;
 			}
 			this.Text=Lan.g(this,"Edit Day")+" - "+comboClinic.Text;
 			if(comboClinic.SelectedIndex<1) {
@@ -653,14 +648,11 @@ namespace OpenDental{
 			//That way we don't have to add/subtract one in order when selecting from the list based on selected indexes.
 			_listEmps=new List<Employee>() { new Employee() { FirstName="none" } };
 			_listProvs=new List<Provider>() { new Provider() { ProvNum=0,Abbr="none" } };
-			if(Preferences.HasClinicsEnabled) {
+	
 				_listProvs.AddRange(Providers.GetProvsForClinic(_selectedClinicNum));
 				_listEmps.AddRange(Employee.GetEmpsForClinic(_selectedClinicNum));
-			}
-			else {
-				_listProvs.AddRange(Providers.GetDeepCopy(true));
-				_listEmps.AddRange(Employee.All());
-			}
+			
+
 			//Prov Listbox
 			List<long> listPreviouslySelectedProvNums=listProv.SelectedTags<Provider>().Select(x => x.ProvNum).ToList();
 			listProv.Items.Clear();
@@ -755,8 +747,8 @@ namespace OpenDental{
 				note="";
 				if(schedCur.SchedType==ScheduleType.Practice) {//note or holiday
 					string clinicAbbr="";
-					if(Preferences.HasClinicsEnabled) {
-						clinicAbbr=Clinics.GetAbbr(schedCur.ClinicNum);
+
+						clinicAbbr=Clinic.GetById(schedCur.ClinicNum).Abbr;
 						if(string.IsNullOrEmpty(clinicAbbr)) {
 							clinicAbbr="Headquarters";
 						}
@@ -764,7 +756,7 @@ namespace OpenDental{
 						if(schedCur.Status!=SchedStatus.Holiday) {//must be a Note, only add 'Note' if clinics are enabled
 							note=Lan.g(this,"Note")+clinicAbbr+": ";
 						}
-					}
+					
 					if(schedCur.Status==SchedStatus.Holiday) {
 						note=Lan.g(this,"Holiday")+clinicAbbr+": ";
 					}

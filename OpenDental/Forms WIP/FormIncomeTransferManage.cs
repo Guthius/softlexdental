@@ -52,9 +52,8 @@ namespace OpenDental {
 			gridSplits.Columns.Clear();
 			gridSplits.Columns.Add(new ODGridColumn(Lan.g(this,"Date"),65,HorizontalAlignment.Center));
 			gridSplits.Columns.Add(new ODGridColumn(Lan.g(this,"Prov"),40));
-			if(Preferences.HasClinicsEnabled) {//Clinics
 				gridSplits.Columns.Add(new ODGridColumn(Lan.g(this,"Clinic"),40));
-			}
+			
 			gridSplits.Columns.Add(new ODGridColumn(Lan.g(this,"Patient"),100));
 			gridSplits.Columns.Add(new ODGridColumn(Lan.g(this,"ProcCode"),60));
 			gridSplits.Columns.Add(new ODGridColumn(Lan.g(this,"Type"),100));
@@ -69,14 +68,13 @@ namespace OpenDental {
 				row.Tag=_listSplitsCur[i];
 				row.Cells.Add(_listSplitsCur[i].DatePay.ToShortDateString());//Date
 				row.Cells.Add(Providers.GetAbbr(_listSplitsCur[i].ProvNum));//Prov
-				if(Preferences.HasClinicsEnabled) {//Clinics
 					if(_listSplitsCur[i].ClinicNum!=0) {
-						row.Cells.Add(Clinics.GetClinic(_listSplitsCur[i].ClinicNum).Description);//Clinic
+						row.Cells.Add(Clinic.GetById(_listSplitsCur[i].ClinicNum).Description);//Clinic
 					}
 					else {
 						row.Cells.Add("");//Clinic
 					}
-				}
+				
 				Patient patCur;
 				if(!_dictPatients.TryGetValue(_listSplitsCur[i].PatNum,out patCur)) {
 					patCur=Patients.GetPat(_listSplitsCur[i].PatNum);
@@ -132,9 +130,8 @@ namespace OpenDental {
 			gridCharges.Columns.Clear();
 			gridCharges.Columns.Add(new ODGridColumn(Lan.g(this,"Prov"),100));
 			gridCharges.Columns.Add(new ODGridColumn(Lan.g(this,"Patient"),100));
-			if(Preferences.HasClinicsEnabled) {
 				gridCharges.Columns.Add(new ODGridColumn(Lan.g(this,"Clinic"),60));
-			}
+			
 			gridCharges.Columns.Add(new ODGridColumn(Lan.g(this,"Codes"),-200));//negative so it will dynamically grow when no clinic column is present
 			gridCharges.Columns.Add(new ODGridColumn(Lan.g(this,"Amt Orig"),61,HorizontalAlignment.Right,ODGridSortingStrategy.AmountParse));
 			gridCharges.Columns.Add(new ODGridColumn(Lan.g(this,"Amt Start"),61,HorizontalAlignment.Right,ODGridSortingStrategy.AmountParse));
@@ -184,9 +181,8 @@ namespace OpenDental {
 				_dictPatients[pat.PatNum]=pat;
 			}
 			row.Cells.Add(pat.LName+", "+pat.FName);//Patient
-			if(Preferences.HasClinicsEnabled) {
-				row.Cells.Add(Clinics.GetAbbr(listEntries[0].ClinicNum));
-			}
+            row.Cells.Add(Clinic.GetById(listEntries[0].ClinicNum).Abbr);
+			
 			string procCodes="";
 			int addedCodes=0;
 			for(int i=0;i<listEntries.Count;i++) {
@@ -247,9 +243,8 @@ namespace OpenDental {
 				childRow.Tag=entryCharge; 
 				childRow.Cells.Add("     "+Providers.GetAbbr(entryCharge.ProvNum));//Provider
 				childRow.Cells.Add(pat.LName+", "+pat.FName);//Patient
-				if(Preferences.HasClinicsEnabled) {
-					childRow.Cells.Add(Clinics.GetAbbr(entryCharge.ClinicNum));
-				}
+				childRow.Cells.Add(Clinic.GetById(entryCharge.ClinicNum).Abbr);
+				
 				procCodes="";
 				if(entryCharge.GetType()==typeof(Procedure)) {
 					procCodes=ProcedureCodes.GetStringProcCode(((Procedure)entryCharge.Tag).CodeNum)+" - "+((Procedure)entryCharge.Tag).ProcDate.ToShortDateString();

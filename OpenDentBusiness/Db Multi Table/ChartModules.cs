@@ -290,7 +290,7 @@ namespace OpenDentBusiness
                     row["AbbrDesc"] = rowProc["AbbrDesc"].ToString();
                     row["aptDateTime"] = PIn.DateT(rowProc["AptDateTime"].ToString());
                     row["AptNum"] = 0;
-                    row["clinic"] = Clinics.GetDesc(PIn.Long(rowProc["ClinicNum"].ToString()));
+                    row["clinic"] = Clinic.GetById(PIn.Long(rowProc["ClinicNum"].ToString())).Description;
                     row["ClinicNum"] = PIn.Long(rowProc["ClinicNum"].ToString());
                     row["CodeNum"] = rowProc["CodeNum"].ToString();
                     row["colorBackG"] = Color.White.ToArgb();

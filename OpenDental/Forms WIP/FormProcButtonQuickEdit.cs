@@ -24,7 +24,7 @@ namespace OpenDental
             surfacesTextBox.Text = pbqCur.Surf;
             labelCheckBox.Checked = pbqCur.IsLabel;
 
-            if (Clinics.IsMedicalPracticeOrClinic(Clinics.ClinicNum))
+            if (Clinic.GetById(Clinics.ClinicId).IsMedicalOnly)
             {
                 surfacesLabel.Visible = false;
                 surfacesTextBox.Visible = false;

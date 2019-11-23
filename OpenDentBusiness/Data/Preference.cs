@@ -523,15 +523,6 @@ namespace OpenDentBusiness
             };
         }
 
-        ///<summary>Same as <see cref="Preferences.HasClinicsEnabled"/> but doesn't use the cache.</summary>
-        public static bool HasClinicsEnabledNoCache
-        {
-            get
-            {
-                return !GetBoolNoCache(PreferenceName.EasyNoClinics) && Clinics.GetClinicsNoCache().Count(x => !x.IsHidden) > 0;
-            }
-        }
-
         #endregion
     }
 }

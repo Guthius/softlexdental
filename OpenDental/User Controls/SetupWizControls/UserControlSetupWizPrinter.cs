@@ -23,7 +23,7 @@ namespace OpenDental.User_Controls.SetupWizard
             SetSimple();
             SetControls(groupPrinter);
 
-            if (Clinics.IsMedicalPracticeOrClinic(Clinics.ClinicNum))
+            if (Clinic.GetById(Clinics.ClinicId).IsMedicalOnly)
             {
                 labelTPandPerio.Text = "Treatment Plans";
             }

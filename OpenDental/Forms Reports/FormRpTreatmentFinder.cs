@@ -558,11 +558,9 @@ namespace OpenDental{
 			}
 			comboBoxMultiBilling.SetSelected(0,true);
 			comboMonthStart.SelectedIndex=0;
-			if(Preferences.HasClinicsEnabled) {
 				comboBoxMultiClinics.Visible=true;
 				labelClinic.Visible=true;
 				FillClinics();
-			}
 			checkBenefitAssumeGeneral.Checked=Preference.GetBool(PreferenceName.TreatFinderProcsAllGeneral);
 			FillGrid();
 		}
@@ -590,9 +588,8 @@ namespace OpenDental{
 				aboveAmount=0;
 			}
 			List<long> listClinicNums=new List<long>();
-			if(Preferences.HasClinicsEnabled) {
 				if(comboBoxMultiClinics.ListSelectedIndices.Contains(0)) {//'All' is selected.
-					listClinicNums=_listClinics.Select(x => x.ClinicNum).ToList();//Add all clinics this person has access to.
+					listClinicNums=_listClinics.Select(x => x.Id).ToList();//Add all clinics this person has access to.
 					if(!Security.CurrentUser.ClinicRestricted) {
 						listClinicNums.Add(0);
 					}
@@ -600,17 +597,17 @@ namespace OpenDental{
 				else {
 					for(int i=0;i<comboBoxMultiClinics.ListSelectedIndices.Count;i++) {
 						if(Security.CurrentUser.ClinicRestricted) {
-							listClinicNums.Add(_listClinics[comboBoxMultiClinics.ListSelectedIndices[i]-1].ClinicNum);
+							listClinicNums.Add(_listClinics[comboBoxMultiClinics.ListSelectedIndices[i]-1].Id);
 						}
 						else if(comboBoxMultiClinics.ListSelectedIndices[i]==1) {//'Unassigned' is selected.
 							listClinicNums.Add(0);
 						}
 						else {
-							listClinicNums.Add(_listClinics[comboBoxMultiClinics.ListSelectedIndices[i]-2].ClinicNum);
+							listClinicNums.Add(_listClinics[comboBoxMultiClinics.ListSelectedIndices[i]-2].Id);
 						}
 					}
 				}
-			}
+			
 #if DEBUG
 			Stopwatch sw=new Stopwatch();
 			sw.Start();
@@ -638,10 +635,9 @@ namespace OpenDental{
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableTreatmentFinder","Insurance Carrier"),225);
 			gridMain.Columns.Add(col);
-			if(Preferences.HasClinicsEnabled) {
 				col=new ODGridColumn(Lan.g("TableTreatmentFinder","Clinic"),120);
 				gridMain.Columns.Add(col);
-			}
+			
 			gridMain.Rows.Clear();
 			Cursor=Cursors.WaitCursor;
 			table=RpTreatmentFinder.GetTreatmentFinderList(checkIncludeNoIns.Checked,checkIncludePatsWithApts.Checked,monthStart,dateSince,aboveAmount,
@@ -732,9 +728,6 @@ namespace OpenDental{
 						row.Cells.Add(cellData);
 						continue;
 					}
-					if(j==18 && !Preferences.HasClinicsEnabled) {//Clinics
-						continue;
-					}
 					row.Cells.Add(table.Rows[i][j].ToString());
 			  }
 			  gridMain.Rows.Add(row);
@@ -750,18 +743,18 @@ namespace OpenDental{
 		private void FillClinics() {
 			comboBoxMultiClinics.Items.Clear();
 			if(_listClinics==null) {//Not initialized yet
-				_listClinics=Clinics.GetForUserod(Security.CurrentUser);
+				_listClinics=Clinic.GetByUser(Security.CurrentUser).ToList();
 			}
 			comboBoxMultiClinics.Items.Add(Lan.g(this,"All"));
 			if(!Security.CurrentUser.ClinicRestricted) {
 				int idx=comboBoxMultiClinics.Items.Add(Lan.g(this,"Unassigned"));			
-				if(Clinics.ClinicNum==0) {	
+				if(Clinics.ClinicId==0) {	
 					comboBoxMultiClinics.SetSelected(idx,true);
 				}
 			}
 			for(int i = 0;i<_listClinics.Count;i++) {
 				int idx=comboBoxMultiClinics.Items.Add(_listClinics[i].Abbr);
-				if(Clinics.ClinicNum==_listClinics[i].ClinicNum) {
+				if(Clinics.ClinicId==_listClinics[i].Id) {
 					comboBoxMultiClinics.SetSelected(idx,true);
 				}
 			}

@@ -479,10 +479,7 @@ namespace OpenDentBusiness
                 //the split should always go to the payplancharge's guarantor.
                 interest.PatNum = payPlanChargeCur.Guarantor;
                 interest.ProvNum = payPlanChargeCur.ProvNum;
-                if (Preferences.HasClinicsEnabled)
-                {//Clinics
-                    interest.ClinicNum = payPlanChargeCur.ClinicNum;
-                }
+                interest.ClinicNum = payPlanChargeCur.ClinicNum;
                 interest.PayPlanNum = payPlanChargeCur.PayPlanNum;
                 interest.PayNum = payNum;
                 //if it's an autoSplit, then only use up to the global PaymentAmt.

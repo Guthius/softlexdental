@@ -1,12 +1,9 @@
+using CodeBase;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Reflection;
-using System.Globalization;
 using System.Text;
-using CodeBase;
 
 namespace OpenDentBusiness
 {
@@ -260,8 +257,7 @@ namespace OpenDentBusiness
         {
             string command = string.Empty;
             //Only add JOINs if filtering.  Filtering will never happen if clinics are turned off, because regions link via clinics.
-            if ((GlobalTaskFilterType)Preference.GetInt(PreferenceName.TasksGlobalFilterType) == GlobalTaskFilterType.Disabled || filterClinicFkey == 0
-                || !Preferences.HasClinicsEnabled)
+            if ((GlobalTaskFilterType)Preference.GetInt(PreferenceName.TasksGlobalFilterType) == GlobalTaskFilterType.Disabled || filterClinicFkey == 0)
             {
                 return command;
             }
@@ -278,15 +274,15 @@ namespace OpenDentBusiness
             string command = string.Empty;
             //Only add WHERE clauses if filtering.  Filtering will never happen if clinics are turned off, because regions link via clinics.
             if ((GlobalTaskFilterType)Preference.GetInt(PreferenceName.TasksGlobalFilterType) == GlobalTaskFilterType.Disabled
-                || (filterClinicFkey == 0 && filterRegionFkey == 0) || !Preferences.HasClinicsEnabled)
+                || (filterClinicFkey == 0 && filterRegionFkey == 0))
             {
                 return command;
             }
-            List<Clinic> listUnrestrictedClinics = Clinics.GetAllForUserod(User.GetById(currentUserNum));
+            List<Clinic> listUnrestrictedClinics = Clinic.GetByUser(User.GetById(currentUserNum), true).ToList();
             List<long> listClinicNums = new List<long>() { 0 };//All users can see Tasks associated to HQ clinic or "0" region.
             List<long> listClinicNumsInRegion = new List<long>() { 0 };//All users can see Tasks associated to HQ clinic or "0" region.
-            List<long> listUnrestrictedClinicNums = listUnrestrictedClinics.Select(x => x.ClinicNum).ToList();//User can view these clinicnums.
-            List<long> listUnrestrictedClinicNumsInRegion = listUnrestrictedClinics.FindAll(x => x.Region == filterRegionFkey).Select(x => x.ClinicNum).ToList();
+            List<long> listUnrestrictedClinicNums = listUnrestrictedClinics.Select(x => x.Id).ToList();//User can view these clinicnums.
+            List<long> listUnrestrictedClinicNumsInRegion = listUnrestrictedClinics.FindAll(x => x.RegionId == filterRegionFkey).Select(x => x.Id).ToList();
             if (filterClinicFkey.In(listUnrestrictedClinicNums))
             {//Make sure user is not restricted for this clinic.
                 listClinicNums.Add(filterClinicFkey);

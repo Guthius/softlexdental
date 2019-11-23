@@ -42,10 +42,7 @@ namespace OpenDental
         /// </summary>
         public FormSupplyOrders() => InitializeComponent();
 
-        /// <summary>
-        /// Loads the form.
-        /// </summary>
-        void FormSupplyOrders_Load(object sender, EventArgs e)
+        private void FormSupplyOrders_Load(object sender, EventArgs e)
         {
             allOrders = SupplyOrder.All();
             orders = new List<SupplyOrder>();
@@ -56,10 +53,7 @@ namespace OpenDental
             ordersGrid.ScrollToEnd();
         }
 
-        /// <summary>
-        /// Loads the list of the suppliers and populates the combobox.
-        /// </summary>
-        void LoadSuppliers()
+        private void LoadSuppliers()
         {
             suppliers = Supplier.All();
 
@@ -73,10 +67,7 @@ namespace OpenDental
             }
         }
 
-        /// <summary>
-        /// Loads the list of orders and populates the orders grid.
-        /// </summary>
-        void LoadOrders()
+        private void LoadOrders()
         {
             FilterListOrder();
 
@@ -107,10 +98,7 @@ namespace OpenDental
             ordersGrid.EndUpdate();
         }
 
-        /// <summary>
-        /// Loads the list of order items and populates the order items grid.
-        /// </summary>
-        void LoadOrderItems()
+        private void LoadOrderItems()
         {
             long orderId = 0;
             if (ordersGrid.GetSelectedIndex() != -1)
@@ -147,10 +135,7 @@ namespace OpenDental
             orderItemsGrid.EndUpdate();
         }
 
-        /// <summary>
-        /// Filters the list of orders using the current filters.
-        /// </summary>
-        void FilterListOrder()
+        private void FilterListOrder()
         {
             orders.Clear();
 
@@ -169,10 +154,7 @@ namespace OpenDental
             }
         }
 
-        /// <summary>
-        /// Creates a new order.
-        /// </summary>
-        void NewOrderButton_Click(object sender, EventArgs e)
+        private void NewOrderButton_Click(object sender, EventArgs e)
         {
             if (supplierComboBox.SelectedIndex < 1)
             {
@@ -225,10 +207,7 @@ namespace OpenDental
             LoadOrderItems();
         }
 
-        /// <summary>
-        /// Reload the orders and order items when the selected supplier is changed.
-        /// </summary>
-        void SupplierComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        private void SupplierComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             LoadOrders();
 
@@ -237,15 +216,9 @@ namespace OpenDental
             LoadOrderItems();
         }
 
-        /// <summary>
-        /// Load the items of a order when a order is selected from the orders grid.
-        /// </summary>
-        void OrdersGrid_CellClick(object sender, ODGridClickEventArgs e) => LoadOrderItems();
+        private void OrdersGrid_CellClick(object sender, ODGridClickEventArgs e) => LoadOrderItems();
 
-        /// <summary>
-        /// Opens the form to edit a order.
-        /// </summary>
-        void OrdersGrid_CellDoubleClick(object sender, ODGridClickEventArgs e)
+        private void OrdersGrid_CellDoubleClick(object sender, ODGridClickEventArgs e)
         {
             using (var formSupplyOrderEdit = new FormSupplyOrderEdit())
             {
@@ -264,10 +237,7 @@ namespace OpenDental
             }
         }
 
-        /// <summary>
-        /// Opens the form to add a new item to the selected order.
-        /// </summary>
-        void AddOrderItemButton_Click(object sender, EventArgs e)
+        private void AddOrderItemButton_Click(object sender, EventArgs e)
         {
             if (ordersGrid.GetSelectedIndex() == -1)
             {
@@ -311,10 +281,7 @@ namespace OpenDental
             }
         }
 
-        /// <summary>
-        /// Opens the form to edit a order item.
-        /// </summary>
-        void OrderItemsGrid_CellDoubleClick(object sender, ODGridClickEventArgs e)
+        private void OrderItemsGrid_CellDoubleClick(object sender, ODGridClickEventArgs e)
         {
             using (var formSupplyOrderItemEdit = new FormSupplyOrderItemEdit())
             {
@@ -332,11 +299,7 @@ namespace OpenDental
             }
         }
 
-        /// <summary>
-        /// Update the quantity, price and total columns of the order items grid when the quantity
-        /// or price is modified and reload the orders list.
-        /// </summary>
-        void OrderItemsGrid_CellLeave(object sender, ODGridClickEventArgs e)
+        private void OrderItemsGrid_CellLeave(object sender, ODGridClickEventArgs e)
         {
             int.TryParse(orderItemsGrid.Rows[e.Row].Cells[2].Text, out int qtyNew);
             double.TryParse(orderItemsGrid.Rows[e.Row].Cells[3].Text, out double priceNew);
@@ -361,10 +324,7 @@ namespace OpenDental
             ordersGrid.SetSelected(selectedIndex, true);
         }
 
-        /// <summary>
-        /// Prints the list of items in the selected order.
-        /// </summary>
-        void PrintButton_Click(object sender, EventArgs e)
+        private void PrintButton_Click(object sender, EventArgs e)
         {
             if (orderItemsTable.Rows.Count < 1)
             {
@@ -389,7 +349,7 @@ namespace OpenDental
             );
         }
 
-        void PrintPage(object sender, PrintPageEventArgs e)
+        private void PrintPage(object sender, PrintPageEventArgs e)
         {
             Rectangle bounds = e.MarginBounds;
             Graphics g = e.Graphics;
@@ -435,12 +395,10 @@ namespace OpenDental
             }
         }
 
-        /// <summary>
-        /// Updates the price of the selected order and reload the data.
-        /// </summary>
-        void UpdatePriceAndRefresh()
+        private void UpdatePriceAndRefresh()
         {
             var supplyOrder = ordersGrid.SelectedTag<SupplyOrder>();
+
             SupplyOrder.UpdateOrderPrice(orders[ordersGrid.GetSelectedIndex()].Id);
 
             allOrders = SupplyOrder.All();

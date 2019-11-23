@@ -109,7 +109,7 @@ namespace OpenDental {
 			}
 			if(listSelectRx.Count==1) {//old way of printing one rx
 				//This logic is an exact copy of FormRxEdit.butPrint_Click()'s logic.  If this is updated, that method needs to be updated as well.
-				sheetDef=SheetDefs.GetSheetsDefault(SheetTypeEnum.Rx,Clinics.ClinicNum);
+				sheetDef=SheetDefs.GetSheetsDefault(SheetTypeEnum.Rx,Clinics.ClinicId);
 				sheet=SheetUtil.CreateSheet(sheetDef,_patCur.PatNum);
 				SheetParameter.SetParameter(sheet,"RxNum",listSelectRx[0].RxNum);
 				SheetFiller.FillFields(sheet);

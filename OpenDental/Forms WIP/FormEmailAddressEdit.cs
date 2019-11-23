@@ -10,6 +10,7 @@
 using CodeBase;
 using OpenDentBusiness;
 using System;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace OpenDental
@@ -88,7 +89,7 @@ namespace OpenDental
                 return;
             }
 
-            var clinic = Clinics.GetFirstOrDefault(x => x.EmailAddressNum == emailAddress.Id); // TODO: Add a Clinic.GetByEmailAddress method...
+            var clinic = Clinic.All().FirstOrDefault(x => x.EmailAddressId == emailAddress.Id); // TODO: Add a Clinic.GetByEmailAddress method...
             if (clinic != null)
             {
                 MessageBox.Show(

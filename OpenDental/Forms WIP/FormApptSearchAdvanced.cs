@@ -130,10 +130,6 @@ namespace OpenDental
         ///<summary>Puts the form into clinic mode when using the clinics feature.  Otherwise; does nothing.</summary>
         private void FillClinics()
         {
-            if (!Preferences.HasClinicsEnabled)
-            {
-                return;
-            }
             labelClinic.Visible = true;
             browseClinicButton.Visible = true;
             if (comboBoxClinic.IsNothingSelected)
@@ -150,7 +146,7 @@ namespace OpenDental
         ///<summary>Only fill appt views when clinic is HQ. </summary>
         private void FillApptViews()
         {
-            if (!Preferences.HasClinicsEnabled || comboBoxClinic.SelectedTag<Clinic>().ClinicNum != 0)
+            if (comboBoxClinic.SelectedTag<Clinic>().Id != 0)
             {
                 return;//Either clinics are enabled and we're on a sepecific clinic OR clinics are not enabled. In either case don't fill appt views. 
             }
@@ -272,8 +268,7 @@ namespace OpenDental
                     listProvNums.Add(provBoxItem.Tag.ProvNum);
                 }
             }
-            if (Preferences.HasClinicsEnabled)
-            {
+
                 if (comboBoxClinic.SelectedClinicNum != 0)
                 {
                     listClinicNums.Add(comboBoxClinic.SelectedClinicNum);
@@ -288,11 +283,8 @@ namespace OpenDental
                     listClinicNums = listOperatories.Select(x => x.ClinicNum).Distinct().ToList();
                     listOpNums = listOperatories.Select(x => x.OperatoryNum).ToList();
                 }
-            }
-            else
-            {//no clinics
-                listOpNums = Operatories.GetDeepCopy(true).Select(x => x.OperatoryNum).ToList();
-            }
+            
+
             if (blockoutType != 0 && listProvNums.Max() > 0)
             {
                 _listOpenings.AddRange(ApptSearch.GetSearchResultsForBlockoutAndProvider(listProvNums, appointment.AptNum, startDate, endDate, listOpNums, listClinicNums
@@ -381,7 +373,7 @@ namespace OpenDental
 
         private void comboBoxClinic_SelectionChangeCommitted(object sender, EventArgs e)
         {
-            if (comboBoxClinic.SelectedTag<Clinic>().ClinicNum == 0)
+            if (comboBoxClinic.SelectedTag<Clinic>().Id == 0)
             {
                 comboApptView.Visible = true;
                 labelAptViews.Visible = true;

@@ -195,10 +195,7 @@ namespace OpenDental{
 				groupEnterPayment.Text=Lan.g(this,"Enter Estimate");
 				this.Text=Lan.g(this,"Edit Preauthorization");
 			}
-			if(!Preferences.HasClinicsEnabled){
-				labelClinic.Visible=false;
-				comboClinic.Visible=false;
-			}
+
 			comboClaimType.Items.Add(Lan.g(this,"Primary"));
 			comboClaimType.Items.Add(Lan.g(this,"Secondary"));
 			comboClaimType.Items.Add(Lan.g(this,"PreAuth"));
@@ -276,11 +273,11 @@ namespace OpenDental{
 			ClaimCondCodeLogCur=_loadData.ClaimCondCodeLogCur;
 			//Fill Clinics
 			_listClinics=new List<Clinic>() { new Clinic() { Abbr=Lan.g(this,"None") } }; //Seed with "None"
-			List<Clinic> listUserClinics=Clinics.GetForUserod(Security.CurrentUser);
+			List<Clinic> listUserClinics=Clinic.GetByUser(Security.CurrentUser).ToList();
 			listUserClinics.ForEach(x => _listClinics.Add(x));//do not re-organize from cache. They could either be alphabetizeded or sorted by item order.
 			//If current user is restricted to specific clinics, we need to make sure and add the claim clinic to our list.
-			if(_listClinics.All(x =>x.ClinicNum!=ClaimCur.ClinicNum)) {//Does not contain ClaimCur clinic.
-				_listClinics.Add(Clinics.GetClinic(ClaimCur.ClinicNum));
+			if(_listClinics.All(x =>x.Id!=ClaimCur.ClinicNum)) {//Does not contain ClaimCur clinic.
+				_listClinics.Add(Clinic.GetById(ClaimCur.ClinicNum));
 				//_listClinics.OrderBy(x => x.ItemOrder);//Currently comboClinics is never enabled, so we do not care about order.
 			}
 			//Set selected Nums
@@ -305,9 +302,9 @@ namespace OpenDental{
 			//Set combo SelectedIndex to -1 so that fillComboBillTreatOrder works properly.
 			comboProvBill.SelectedIndex=-1;
 			comboProvTreat.SelectedIndex=-1;
-			comboClinic.IndexSelectOrSetText(_listClinics.FindIndex(x => x.ClinicNum==_selectedClinicNum),() => { return Clinics.GetAbbr(_selectedClinicNum); });
+			comboClinic.IndexSelectOrSetText(_listClinics.FindIndex(x => x.Id==_selectedClinicNum),() => { return Clinic.GetById(_selectedClinicNum).Abbr; });
 			FillComboBillTreatOrder();
-			if(Clinics.IsMedicalPracticeOrClinic(_selectedClinicNum)) {
+			if(Clinic.GetById(_selectedClinicNum).IsMedicalOnly) {
 				groupProsth.Visible=false;
 				groupOrtho.Visible=false;
 				labelOralImages.Visible=false;
@@ -331,9 +328,8 @@ namespace OpenDental{
 				}
 			}
 			FillCanadian();
-			if(Preferences.HasClinicsEnabled//Clinics enabled.
-					&& Security.CurrentUser.ClinicRestricted//User is restricted.
-					&& !listUserClinics.Any(x => x.ClinicNum==ClaimCur.ClinicNum))//User does not have access to clinic associated to claim.
+			if(Security.CurrentUser.ClinicRestricted//User is restricted.
+					&& !listUserClinics.Any(x => x.Id==ClaimCur.ClinicNum))//User does not have access to clinic associated to claim.
 			{
 				SetFormReadOnly(this);
 				this.Text+=" - "+Lan.g(this,"READ ONLY - USER RESTRICTED TO A DIFFERENT CLINIC");
@@ -395,7 +391,7 @@ namespace OpenDental{
 		#region Provider Controls
 		private void comboClinic_SelectedIndexChanged(object sender,EventArgs e) {
 			if(comboClinic.SelectedIndex>-1) {
-				_selectedClinicNum=_listClinics[comboClinic.SelectedIndex].ClinicNum;
+				_selectedClinicNum=_listClinics[comboClinic.SelectedIndex].Id;
 			}
 			FillComboBillTreatOrder();
 		}
@@ -586,7 +582,7 @@ namespace OpenDental{
 			comboClinic.Items.Clear();
 			for(int i=0;i<_listClinics.Count;i++){//_listClinics contains None as first item.
 				comboClinic.Items.Add(_listClinics[i].Abbr);
-				if(_listClinics[i].ClinicNum==ClaimCur.ClinicNum) {
+				if(_listClinics[i].Id==ClaimCur.ClinicNum) {
 					comboClinic.SelectedIndex=i;
 				}
 			}
@@ -800,11 +796,11 @@ namespace OpenDental{
 			comboReferralReason.Items.Add("Seizure Disorders");
 			comboReferralReason.Items.Add("Extensive Surgery");
 			comboReferralReason.Items.Add("Surgical Complexity");
-			if(!Clinics.IsMedicalPracticeOrClinic(Clinics.ClinicNum)) {
+			if(!Clinic.GetById(Clinics.ClinicId).IsMedicalOnly) {
 				comboReferralReason.Items.Add("Rampant decay");
 			}
 			comboReferralReason.Items.Add("Medical History (to provide details upon request)");
-			if(!Clinics.IsMedicalPracticeOrClinic(Clinics.ClinicNum)) {
+			if(!Clinic.GetById(Clinics.ClinicId).IsMedicalOnly) {
 				comboReferralReason.Items.Add("Temporal Mandibular Joint Anomalies");
 			}
 			comboReferralReason.Items.Add("Accidental Injury");
@@ -908,7 +904,7 @@ namespace OpenDental{
 				missingstr+=Tooth.ToInternat(al[i]);
 			}
 			textMissingTeeth.Text=missingstr;
-			if(Clinics.IsMedicalPracticeOrClinic(Clinics.ClinicNum)) {
+			if(Clinic.GetById(Clinics.ClinicId).IsMedicalOnly) {
 				checkCanadianIsOrtho.Visible=false;
 				groupCanadaOrthoPredeterm.Visible=false;
 				groupMaxPros.Visible=false;
@@ -968,7 +964,7 @@ namespace OpenDental{
 			gridProc.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableClaimProc","Prov"),62);
 			gridProc.Columns.Add(col);
-			if(Clinics.IsMedicalPracticeOrClinic(Clinics.ClinicNum)) {
+			if(Clinic.GetById(Clinics.ClinicId).IsMedicalOnly) {
 				col=new ODGridColumn(Lan.g("TableClaimProc","Code"),75);
 				gridProc.Columns.Add(col);
 			}
@@ -1153,7 +1149,7 @@ namespace OpenDental{
 			string feeAcct="";
 			if(claimProcCur.ProcNum==0) {
 				row.Cells.Add("");//code
-				if(!Clinics.IsMedicalPracticeOrClinic(Clinics.ClinicNum)) {
+				if(!Clinic.GetById(Clinics.ClinicId).IsMedicalOnly) {
 					row.Cells.Add("");//tooth
 				}
 				if(claimProcCur.Status==ClaimProcStatus.NotReceived)
@@ -1166,7 +1162,7 @@ namespace OpenDental{
 				ProcCur=Procedures.GetProcFromList(ProcList,claimProcCur.ProcNum);
 				feeAcct=ProcCur.ProcFeeTotal.ToString("F");
 				row.Cells.Add(claimProcCur.CodeSent);
-				if(!Clinics.IsMedicalPracticeOrClinic(Clinics.ClinicNum)) {
+				if(!Clinic.GetById(Clinics.ClinicId).IsMedicalOnly) {
 					row.Cells.Add(Tooth.ToInternat(ProcCur.ToothNum));
 				}
 				ProcedureCode procCodeCur=ProcedureCodes.GetProcCode(ProcCur.CodeNum);
@@ -2042,10 +2038,8 @@ namespace OpenDental{
 			PaymentCur.PatNum=patCur.PatNum;
 			//Explicitly set ClinicNum=0, since a pat's ClinicNum will remain set if the user enabled clinics, assigned patients to clinics, and then
 			//disabled clinics because we use the ClinicNum to determine which PayConnect or XCharge/XWeb credentials to use for payments.
-			PaymentCur.ClinicNum=0;
-			if(Preferences.HasClinicsEnabled) {//if clinics aren't enabled default to 0
 				PaymentCur.ClinicNum=patCur.ClinicNum;
-			}
+			
 			PaymentCur.PayType=0;//txfr
 			PaymentCur.DateEntry=DateTimeOD.Today;//So that it will show properly in the new window.
 			PaymentCur.PaymentSource=CreditCardSource.None;
@@ -2445,10 +2439,8 @@ namespace OpenDental{
 				MsgBox.Show(this,"This carrier is marked to only receive primary insurance e-claims.");
 				return;
 			}
-			long clinicNum=0;
-			if(Preferences.HasClinicsEnabled) {
-				clinicNum=ClaimCur.ClinicNum;
-			}
+			long clinicNum=ClaimCur.ClinicNum;
+			
 			Clearinghouse clearinghouseHq=ClearinghouseL.GetClearinghouseHq(listQueue[0].ClearinghouseNum);
 			Clearinghouse clearinghouseClin=Clearinghouses.OverrideFields(clearinghouseHq,clinicNum);
 			//string warnings;
@@ -2576,7 +2568,7 @@ namespace OpenDental{
 			InsSub insSub=InsSubs.GetOne(ClaimCur.InsSubNum);
 			Carrier carrier=Carriers.GetCarrier(insPlan.CarrierNum);
 			Clearinghouse clearinghouseHq=Canadian.GetCanadianClearinghouseHq(carrier);
-			Clearinghouse clearinghouseClin=Clearinghouses.OverrideFields(clearinghouseHq,Clinics.ClinicNum);
+			Clearinghouse clearinghouseClin=Clearinghouses.OverrideFields(clearinghouseHq,Clinics.ClinicId);
 			try {
 				long etransNumAck=CanadianOutput.SendClaimReversal(clearinghouseClin,ClaimCur,insPlan,insSub,false,FormCCDPrint.PrintCCD);
 				Etrans etransAck=Etranss.GetEtrans(etransNumAck);
@@ -3299,7 +3291,7 @@ namespace OpenDental{
 				//string warnings;
 				//string missingData=
 				Clearinghouse clearinghouseHq=ClearinghouseL.GetClearinghouseHq(listQueue[0].ClearinghouseNum);
-				Clearinghouse clearinghouseClin=Clearinghouses.OverrideFields(clearinghouseHq,Clinics.ClinicNum);
+				Clearinghouse clearinghouseClin=Clearinghouses.OverrideFields(clearinghouseHq,Clinics.ClinicId);
 				listQueue[0]=Eclaims.GetMissingData(clearinghouseClin,listQueue[0]);
 				if(listQueue[0].MissingData!="") {
 					if(MessageBox.Show(Lan.g(this,"Cannot send claim until missing data is fixed:")+"\r\n"+listQueue[0].MissingData+"\r\n\r\nContinue anyway?",

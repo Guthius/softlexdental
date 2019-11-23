@@ -19,7 +19,7 @@ namespace OpenDental.User_Controls.SetupWizard {
 			checkMedicaid.Checked=!Preference.GetBool(PreferenceName.EasyHideMedicaid);
 			checkInsurance.Checked=!Preference.GetBool(PreferenceName.EasyHideInsurance);
 			checkClinical.Checked=!Preference.GetBool(PreferenceName.EasyHideClinical);
-			checkNoClinics.Checked=Preferences.HasClinicsEnabled;
+			checkNoClinics.Checked=true;
 			checkMedicalIns.Checked=Preference.GetBool(PreferenceName.ShowFeatureMedicalInsurance);
 			checkEhr.Checked=Preference.GetBool(PreferenceName.ShowFeatureEhr);
 			IsDone=true;

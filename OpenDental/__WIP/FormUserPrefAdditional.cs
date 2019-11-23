@@ -70,13 +70,13 @@ namespace OpenDental
             row.Tag = userPrefDefault;
             userPropertiesGrid.Rows.Add(row);
 
-            foreach (var clinic in Clinics.GetForUserod(Security.CurrentUser))
+            foreach (var clinic in Clinic.GetByUser(Security.CurrentUser))
             {
                 row = new ODGridRow();
-                var userPreference = userPreferences.Find(x => x.ClinicId == clinic.ClinicNum);
+                var userPreference = userPreferences.Find(x => x.ClinicId == clinic.Id);
                 if (userPreference == null)
                 {
-                    userPrefDefault = UserPreference.GetByKey(clinic.ClinicNum, user.Id, UserPreferenceName.DoseSpotUserId);
+                    userPrefDefault = UserPreference.GetByKey(clinic.Id, user.Id, UserPreferenceName.DoseSpotUserId);
 
                     userPreferences.Add(userPreference);
                 }

@@ -172,10 +172,8 @@ namespace OpenDental {
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("FormApptsOther","Prov"),50);
 			gridMain.Columns.Add(col);
-			if(Preferences.HasClinicsEnabled) {
-				col=new ODGridColumn(Lan.g("FormApptsOther","Clinic"),80);
-				gridMain.Columns.Add(col);
-			}
+			col=new ODGridColumn(Lan.g("FormApptsOther","Clinic"),80);
+		    gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("FormApptsOther","Date"),70);//If the order changes, reflect the change for dateIndex below.
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("FormApptsOther","Time"),70);//Must immediately follow Date column.
@@ -189,16 +187,12 @@ namespace OpenDental {
 			gridMain.Rows.Clear();
 			ODGridRow row;
 			int dateIndex=3;
-			if(!Preferences.HasClinicsEnabled) {
-				dateIndex=2;
-			}
+
 			for(int i=0;i<_listApptOthers.Count;i++) {
 				row=new ODGridRow();
 				row.Cells.Add(_listApptOthers[i].AptStatus.ToString());
 				row.Cells.Add(Providers.GetAbbr(_listApptOthers[i].ProvNum));
-				if(Preferences.HasClinicsEnabled) {
-					row.Cells.Add(Clinics.GetAbbr(_listApptOthers[i].ClinicNum));
-				}
+                row.Cells.Add(Clinic.GetById(_listApptOthers[i].ClinicNum).Abbr);
 				row.Cells.Add("");//Date
 				row.Cells.Add("");//Time
 				if(_listApptOthers[i].AptDateTime.Year > 1880) {

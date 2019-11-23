@@ -410,25 +410,15 @@ namespace OpenDentBusiness
                 return "";
             }
 
-            string address =
-                Preference.GetString(PreferenceName.PracticeTitle) + "\r\n" +
-                    Patients.GetAddressFull(
-                        Preference.GetString(PreferenceName.PracticeAddress),
-                        Preference.GetString(PreferenceName.PracticeAddress2),
-                        Preference.GetString(PreferenceName.PracticeCity),
-                        Preference.GetString(PreferenceName.PracticeST),
-                        Preference.GetString(PreferenceName.PracticeZip));
+            string address = "";
 
-            if (Preferences.HasClinicsEnabled)
+            var clinic = Clinic.GetById(clinicId);
+            if (clinic != null)
             {
-                var clinic = Clinics.GetClinic(clinicId);
-                if (clinic != null)
+                string clinicAddress = Patients.GetAddressFull(clinic.AddressLine1, clinic.AddressLine2, clinic.City, clinic.State, clinic.Zip);
+                if (!string.IsNullOrWhiteSpace(clinicAddress.Replace(" ", "").Replace("\r\n", "").Replace(",", "")))
                 {
-                    string clinicAddress = Patients.GetAddressFull(clinic.Address, clinic.Address2, clinic.City, clinic.State, clinic.Zip);
-                    if (!string.IsNullOrWhiteSpace(clinicAddress.Replace(" ", "").Replace("\r\n", "").Replace(",", "")))
-                    {
-                        address = clinic.Description + "\r\n" + clinicAddress;
-                    }
+                    address = clinic.Description + "\r\n" + clinicAddress;
                 }
             }
 

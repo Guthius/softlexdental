@@ -29,13 +29,12 @@ namespace OpenDental.Bridges {
 			//writer.WriteAttributeString("CreditCardChoice",PrefC.GetString(PrefName.BillingElectCreditCardChoices"));
 			//remit address----------------------------------------------------------
 			writer.WriteStartElement("RemitAddress");
-			if(Preferences.HasClinicsEnabled && Clinics.GetCount() > 0 //if using clinics
-				&& Clinics.GetClinic(guar.ClinicNum)!=null)//and this guar is assigned to a clinic
+			if(Clinic.GetById(guar.ClinicNum)!=null)//and this guar is assigned to a clinic
 			{
-				Clinic clinic=Clinics.GetClinic(guar.ClinicNum);
+				Clinic clinic=Clinic.GetById(guar.ClinicNum);
 				writer.WriteElementString("Name",clinic.Description);
-				writer.WriteElementString("Address",clinic.Address);
-				writer.WriteElementString("Address2",clinic.Address2);
+				writer.WriteElementString("Address",clinic.AddressLine1);
+				writer.WriteElementString("Address2",clinic.AddressLine2);
 				writer.WriteElementString("City",clinic.City);
 				writer.WriteElementString("State",clinic.State);
 				writer.WriteElementString("Zip",clinic.Zip);

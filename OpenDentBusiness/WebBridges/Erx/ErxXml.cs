@@ -12,11 +12,10 @@ namespace OpenDentBusiness
 {
     public class ErxXml
     {
-
         ///<summary>Only called from Chart for now.  No validation is performed here.  Validate before calling.  There are many validtion checks, including the NPI must be exactly 10 digits.</summary>
         public static string BuildNewCropClickThroughXml(Provider prov, Employee emp, Patient pat)
         {
-            string deaNumDefault = ProviderClinics.GetDEANum(prov.ProvNum);
+            string deaNumDefault = ""; // TODO: ProviderClinics.GetDEANum(prov.ProvNum); // TODO: Add default dea_number to provider...
             NCScript ncScript = new NCScript();
             ncScript.Credentials = new CredentialsType();
             ncScript.Credentials.partnerName = NewCrop.NewCropPartnerName;
@@ -82,9 +81,8 @@ namespace OpenDentBusiness
             ncScript.Account.accountPrimaryFaxNumber = practiceFax;//Validated to be 10 digits within the chart.
             ncScript.Location = new LocationType();
             ProviderClinic provClinic = null;
-            if (!Preferences.HasClinicsEnabled
-                || (!Preference.GetBool(PreferenceName.ElectronicRxClinicUseSelected) && pat.ClinicNum == 0)
-                || (Preference.GetBool(PreferenceName.ElectronicRxClinicUseSelected) && Clinics.ClinicNum == 0 && pat.ClinicNum == 0))
+            if ((!Preference.GetBool(PreferenceName.ElectronicRxClinicUseSelected) && pat.ClinicNum == 0)
+                || (Preference.GetBool(PreferenceName.ElectronicRxClinicUseSelected) && Clinics.ClinicId == 0 && pat.ClinicNum == 0))
             { //No clinic.
                 ncScript.Location.ID = "0";//Always 0, since clinicnums must be >= 1, will never overlap with a clinic if the office turns clinics on after first use.
                 ncScript.Location.locationName = practiceTitle;//May be blank.
@@ -103,20 +101,20 @@ namespace OpenDentBusiness
             else
             { //Using clinics.
                 Clinic clinic = null;
-                if (Preference.GetBool(PreferenceName.ElectronicRxClinicUseSelected) && Clinics.ClinicNum != 0)
+                if (Preference.GetBool(PreferenceName.ElectronicRxClinicUseSelected) && Clinics.ClinicId != 0)
                 {
-                    clinic = Clinics.GetClinic(Clinics.ClinicNum);
+                    clinic = Clinic.GetById(Clinics.ClinicId);
                 }
                 else
                 {
-                    clinic = Clinics.GetClinic(pat.ClinicNum);
+                    clinic = Clinic.GetById(pat.ClinicNum);
                 }
-                provClinic = ProviderClinics.GetOne(prov.ProvNum, clinic.ClinicNum);
-                ncScript.Location.ID = clinic.ClinicNum.ToString();//A positive integer.
+                provClinic = ProviderClinic.GetByProviderAndClinic(prov.ProvNum, clinic.Id);
+                ncScript.Location.ID = clinic.Id.ToString();//A positive integer.
                 ncScript.Location.locationName = clinic.Description;//May be blank.
                 ncScript.Location.LocationAddress = new AddressType();
-                ncScript.Location.LocationAddress.address1 = clinic.Address;//Validated to exist in chart.
-                ncScript.Location.LocationAddress.address2 = clinic.Address2;//May be blank.
+                ncScript.Location.LocationAddress.address1 = clinic.AddressLine1;//Validated to exist in chart.
+                ncScript.Location.LocationAddress.address2 = clinic.AddressLine2;//May be blank.
                 ncScript.Location.LocationAddress.city = clinic.City;//Validated to exist in chart.
                 ncScript.Location.LocationAddress.state = clinic.State.ToUpper();//Validated to be a US state code in chart.
                 string clinicZip = Regex.Replace(clinic.Zip, "[^0-9]*", "");//Zip with all non-numeric characters removed. Validated to be 9 digits in chart.
@@ -332,6 +330,5 @@ namespace OpenDentBusiness
             }
             return result;
         }
-
     }
 }

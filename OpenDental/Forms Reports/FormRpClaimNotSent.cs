@@ -229,9 +229,7 @@ namespace OpenDental{
 			_listClaimSentEditUsers=User.GetByPermission(Permissions.ClaimSentEdit,false);
 			_listOldClaimTrackings=ClaimTrackings.RefreshForUsers(ClaimTrackingType.ClaimUser,_listClaimSentEditUsers.Select(x => x.Id).ToList());
 			_listNewClaimTrackings=_listOldClaimTrackings.Select(x => x.Copy()).ToList();
-			if(!Preferences.HasClinicsEnabled) {
-				labelClinics.Visible=false;
-			}
+
 			//Fill the Ins Filter box
 			//comboBoxInsFilter.Items.Add(Lan.g(this,"All"));//always adding an 'All' option first
 			foreach(ClaimNotSentStatuses claimStat in Enum.GetValues(typeof(ClaimNotSentStatuses))) {
@@ -261,10 +259,10 @@ namespace OpenDental{
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col;
-			if(Preferences.HasClinicsEnabled) {
+
 				col=new ODGridColumn("Clinic",90);
 				gridMain.Columns.Add(col);
-			}
+			
 			col=new ODGridColumn("Date of Service",90, sortingStrategy: ODGridSortingStrategy.DateParse);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn("Claim Type",90);
@@ -283,9 +281,9 @@ namespace OpenDental{
 			ODGridRow row;
 			for(int i = 0;i<table.Rows.Count;i++) {
 				row=new ODGridRow();
-				if(Preferences.HasClinicsEnabled) {
+				
 					row.Cells.Add(table.Rows[i]["Clinic"].ToString());
-				}
+				
 				DateTime dateService=PIn.Date(table.Rows[i]["DateService"].ToString());
 				row.Cells.Add(dateService.ToShortDateString());
 				string type=table.Rows[i]["ClaimType"].ToString();
@@ -343,7 +341,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"End date cannot be before start date.");
 				return false;
 			}
-			if(Preferences.HasClinicsEnabled && comboClinicMulti.ListSelectedClinicNums.Count==0) {
+			if(comboClinicMulti.ListSelectedClinicNums.Count==0) {
 				MsgBox.Show(this,"At least one clinic must be selected.");
 				return false;
 			}
@@ -369,13 +367,12 @@ namespace OpenDental{
 			}
 			report.ReportName=Lan.g(this,"Claims Not Sent");
 			report.AddTitle("Title",Lan.g(this,"Claims Not Sent"));
-			if(Preferences.HasClinicsEnabled) {
+
 				report.AddSubTitle("Clinics",subtitleClinics);
-			}
-			QueryObject query=report.AddQuery(table,"Date: " + DateTimeOD.Today.ToShortDateString());
-			if(Preferences.HasClinicsEnabled) {
-				query.AddColumn("Clinic",60,FieldValueType.String);
-			}
+			
+			QueryObject query=report.AddQuery(table,"Date: " + DateTime.Today.ToShortDateString());
+
+			query.AddColumn("Clinic",60,FieldValueType.String);
 			query.AddColumn("Date",85,FieldValueType.Date);
 			query.GetColumnDetail("Date").StringFormat="d";
 			query.AddColumn("Type",90,FieldValueType.String);

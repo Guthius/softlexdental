@@ -309,12 +309,12 @@ namespace OpenDentBusiness
                 string custodianCity = Preference.GetString(PreferenceName.PracticeCity);//Validated
                 string custodianState = Preference.GetString(PreferenceName.PracticeST);//Validated
                 string custodianPhone = strPracticePhone;
-                if (Preferences.HasClinicsEnabled && _patOutCcd.ClinicNum != 0)
+                if (_patOutCcd.ClinicNum != 0)
                 {
-                    Clinic clinicCustodian = Clinics.GetClinic(_patOutCcd.ClinicNum);
+                    Clinic clinicCustodian = Clinic.GetById(_patOutCcd.ClinicNum);
                     custodianTitle = clinicCustodian.Description;
-                    custodianAddress = clinicCustodian.Address;//Validated
-                    custodianAddress2 = clinicCustodian.Address2;//Validated
+                    custodianAddress = clinicCustodian.AddressLine1;//Validated
+                    custodianAddress2 = clinicCustodian.AddressLine2;//Validated
                     custodianCity = clinicCustodian.City;//Validated
                     custodianState = clinicCustodian.State;//Validated
                     custodianPhone = clinicCustodian.Phone;//Validated
@@ -345,11 +345,11 @@ namespace OpenDentBusiness
                     string legalAuthCity = Preference.GetString(PreferenceName.PracticeCity);//Validated
                     string legalAuthState = Preference.GetString(PreferenceName.PracticeST);//Validated
                     string legalAuthPhone = strPracticePhone;
-                    if (Preferences.HasClinicsEnabled && _patOutCcd.ClinicNum != 0)
+                    if (_patOutCcd.ClinicNum != 0)
                     {
-                        Clinic clinicAuth = Clinics.GetClinic(_patOutCcd.ClinicNum);
-                        legalAuthAddress = clinicAuth.Address;//Validated
-                        legalAuthAddress2 = clinicAuth.Address2;//Validated
+                        Clinic clinicAuth = Clinic.GetById(_patOutCcd.ClinicNum);
+                        legalAuthAddress = clinicAuth.AddressLine1;//Validated
+                        legalAuthAddress2 = clinicAuth.AddressLine2;//Validated
                         legalAuthCity = clinicAuth.City;//Validated
                         legalAuthState = clinicAuth.State;//Validated
                         legalAuthPhone = clinicAuth.Phone;//Validated
@@ -2963,9 +2963,8 @@ Vital Signs
                 }
                 strErrors += "Missing patient phone. Must have home, wireless, or work phone.";
             }
-            if (Preferences.HasClinicsEnabled && pat.ClinicNum != 0)
-            {
-                Clinic clinic = Clinics.GetClinic(pat.ClinicNum);
+
+                Clinic clinic = Clinic.GetById(pat.ClinicNum);
                 if (clinic.Description.Trim() == "")
                 {
                     if (strErrors != "")
@@ -2982,7 +2981,7 @@ Vital Signs
                     }
                     strErrors += "Missing clinic '" + clinic.Description + "' phone.";
                 }
-                if (clinic.Address.Trim() == "")
+                if (clinic.AddressLine1.Trim() == "")
                 {
                     if (strErrors != "")
                     {
@@ -3006,7 +3005,7 @@ Vital Signs
                     }
                     strErrors += "Invalid clinic '" + clinic.Description + "' state.  Must be two letters.";
                 }
-            }
+            
             Provider provPractice = Providers.GetProv(Preference.GetLong(PreferenceName.PracticeDefaultProv));
             if (provPractice.FName.Trim() == "" && !provPractice.IsNotPerson)
             {

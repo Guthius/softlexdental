@@ -290,7 +290,7 @@ namespace OpenDentBusiness
         {
             //No need to check RemotingRole; no call to db.
             List<Employee> listEmpsShort = Employee.All();
-            if (!Preferences.HasClinicsEnabled || (clinicNum == 0 && isAll))
+            if (clinicNum == 0 && isAll)
             {//Simply return all employees.
                 return listEmpsShort;
             }

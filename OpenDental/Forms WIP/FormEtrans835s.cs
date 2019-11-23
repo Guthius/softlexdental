@@ -35,40 +35,41 @@ namespace OpenDental {
 			InitializeComponent();
 			
 		}
-		
-		private void FormEtrans835s_Load(object sender,EventArgs e) {
-			textDateFrom.Text=DateTimeOD.Today.AddDays(-7).ToShortDateString();
-			textDateTo.Text=DateTimeOD.Today.ToShortDateString();
-			#region User Clinics
-			if(Preferences.HasClinicsEnabled) {
-				comboClinics.Visible=true;
-				labelClinic.Visible=true;
-				comboClinics.Items.Clear();
-				comboClinics.Items.Add(Lan.g(this,"All"));
-				comboClinics.Items.Add(Lan.g(this,"Unassigned"));
-				_listUserClinics=Clinics.GetForUserod(Security.CurrentUser);
-				_listUserClinics.ForEach(x => comboClinics.Items.Add(x.Abbr));
-				comboClinics.SetSelected(0,true);//Defaults to 'All' so that 835s with missing clinic will show.
-			}
-			#endregion
-			#region Statuses
-			foreach(X835Status status in Enum.GetValues(typeof(X835Status))) {
-				if(status.In(X835Status.None,X835Status.FinalizedSomeDetached,X835Status.FinalizedAllDetached)) {
-					//FinalizedSomeDetached and FinalizedAllDetached are shown via Finalized.
-					continue;
-				}
-				listStatus.Items.Add(Lan.g(this,status.GetDescription()));
-				bool isSelected=true;
-				if(status==X835Status.Finalized) {
-					isSelected=false;
-				}
-				listStatus.SetSelected(listStatus.Items.Count-1,isSelected);
-			}
-			#endregion
-			_listClinics=Clinics.GetDeepCopy(true);
-			RefreshAndFillGrid();//Will not run query, simply initilizes the grid.
-			gridMain.AllowSortingByColumn=true;
-		}
+
+        private void FormEtrans835s_Load(object sender, EventArgs e)
+        {
+            textDateFrom.Text = DateTime.Today.AddDays(-7).ToShortDateString();
+            textDateTo.Text = DateTime.Today.ToShortDateString();
+
+            comboClinics.Visible = true;
+            labelClinic.Visible = true;
+            comboClinics.Items.Clear();
+            comboClinics.Items.Add(Lan.g(this, "All"));
+            comboClinics.Items.Add(Lan.g(this, "Unassigned"));
+            _listUserClinics = Clinic.GetByUser(Security.CurrentUser).ToList();
+            _listUserClinics.ForEach(x => comboClinics.Items.Add(x.Abbr));
+            comboClinics.SetSelected(0, true);//Defaults to 'All' so that 835s with missing clinic will show.
+
+            foreach (X835Status status in Enum.GetValues(typeof(X835Status)))
+            {
+                if (status.In(X835Status.None, X835Status.FinalizedSomeDetached, X835Status.FinalizedAllDetached))
+                {
+                    //FinalizedSomeDetached and FinalizedAllDetached are shown via Finalized.
+                    continue;
+                }
+                listStatus.Items.Add(Lan.g(this, status.GetDescription()));
+                bool isSelected = true;
+                if (status == X835Status.Finalized)
+                {
+                    isSelected = false;
+                }
+                listStatus.SetSelected(listStatus.Items.Count - 1, isSelected);
+            }
+
+            _listClinics = Clinic.All().ToList();
+            RefreshAndFillGrid();//Will not run query, simply initilizes the grid.
+            gridMain.AllowSortingByColumn = true;
+        }
 
 		///<summary>Called when we want to refresh form list and data. Also calls FillGrid().
 		///Set hasFilters to true when we want to refresh and apply current filters.</summary>
@@ -91,21 +92,24 @@ namespace OpenDental {
 			FilterAndFillGrid(true);
 		}
 
-		///<summary>Returns false when either _reportDateFrom or _reportDateTo are invalid.</summary>
-		private bool ValidateFields() {
-			_reportDateFrom=GetDateFrom();
-			_reportDateTo=GetDateTo();
-			if(Preferences.HasClinicsEnabled) {
-				bool isAllClinics=comboClinics.ListSelectedIndices.Contains(0);
-				if(!isAllClinics && comboClinics.SelectedIndices.Count==0) {
-					comboClinics.SetSelected(0,true);//All clinics.
-				}
-			}
-			if(_reportDateFrom==DateTime.MinValue || _reportDateTo==DateTime.MinValue) {
-				return false;
-			}
-			return true;
-		}
+        ///<summary>Returns false when either _reportDateFrom or _reportDateTo are invalid.</summary>
+        private bool ValidateFields()
+        {
+            _reportDateFrom = GetDateFrom();
+            _reportDateTo = GetDateTo();
+
+            bool isAllClinics = comboClinics.ListSelectedIndices.Contains(0);
+            if (!isAllClinics && comboClinics.SelectedIndices.Count == 0)
+            {
+                comboClinics.SetSelected(0, true);//All clinics.
+            }
+
+            if (_reportDateFrom == DateTime.MinValue || _reportDateTo == DateTime.MinValue)
+            {
+                return false;
+            }
+            return true;
+        }
 		
 		private DateTime GetDateFrom() {
 			try {
@@ -204,10 +208,9 @@ namespace OpenDental {
 				gridMain.Columns.Add(col);
 				col=new ODGridColumn(Lan.g("TableEtrans835s","Amount"),80);
 				gridMain.Columns.Add(col);
-				if(Preferences.HasClinicsEnabled) {
 					col=new ODGridColumn(Lan.g("TableEtrans835s","Clinic"),70);
 					gridMain.Columns.Add(col);
-				}
+				
 				col=new ODGridColumn(Lan.g("TableEtrans835s","Code"),37,HorizontalAlignment.Center);
 				gridMain.Columns.Add(col);
 				col=new ODGridColumn(Lan.g("TableEtrans835s","Note"),0);
@@ -231,7 +234,7 @@ namespace OpenDental {
 				//List of ClinicNums for the current etrans.ListClaimsPaid from the DB.
 				List<long> listClinicNums=_dictEtransClaims[etrans.EtransNum].Select(x => x==null? 0 :x.ClinicNum).Distinct().ToList();
 				#region Filter: Clinics
-				if(Preferences.HasClinicsEnabled && !listClinicNums.Exists(x => listSelectedClinicNums.Contains(x))) {
+				if(!listClinicNums.Exists(x => listSelectedClinicNums.Contains(x))) {
 					continue;//The ClinicNums associated to the 835 do not match any of the selected ClinicNums, so nothing to show in this 835.
 				}
 				#endregion
@@ -259,21 +262,21 @@ namespace OpenDental {
 				row.Cells.Add(POut.Date(etrans.DateTimeTrans));
 				row.Cells.Add(POut.Decimal(x835.InsPaid));
 				#region Column: Clinic
-				if(Preferences.HasClinicsEnabled) {	
+
 					string clinicAbbr="";
 					if(listClinicNums.Count==1) {
 						if(listClinicNums[0]==0) {
 							clinicAbbr=Lan.g(this,"Unassigned");
 						}
 						else {
-							clinicAbbr=Clinics.GetAbbr(listClinicNums[0]);
+							clinicAbbr=Clinic.GetById(listClinicNums[0]).Abbr;
 						}
 					}
 					else if(listClinicNums.Count>1) {
 						clinicAbbr="("+Lan.g(this,"Multiple")+")";
 					}
 					row.Cells.Add(clinicAbbr);
-				}
+				
 				#endregion
 				row.Cells.Add(x835._paymentMethodCode);
 				row.Cells.Add(etrans.Note);
@@ -433,21 +436,21 @@ namespace OpenDental {
 				listSelectedStatuses.Add(listStatus.Items[index].ToString());
 			}
 			List<long> listClinicNums=null;//A null signifies that clinics are disabled.
-			if(Preferences.HasClinicsEnabled) {
+
 				if(comboClinics.SelectedIndices.Contains(0)) {//'All' is selected
-					listClinicNums=_listUserClinics.Select(x => x.ClinicNum).ToList();
+					listClinicNums=_listUserClinics.Select(x => x.Id).ToList();
 					listClinicNums.Add(0);//'Unassigned'
 				}
 				else {//'All' is not selected
 					int offset=2;//Skip the 'All' option.  Skip the 'Unassigned' option.
 					listClinicNums=comboClinics.ListSelectedIndices.FindAll(x => x > offset-1)//Ignore 'All' and 'Unassigned'.
 						.Select(x => _listUserClinics[x-offset])
-						.Select(x => x.ClinicNum).ToList();
+						.Select(x => x.Id).ToList();
 					if(comboClinics.SelectedIndices.Contains(1)) {//Unassigned
 						listClinicNums.Add(0);
 					}
 				}
-			}
+			
 			FillGrid(
 				isRefreshNeeded:				isRefreshNeeded,
 				listSelectedStatuses:		listSelectedStatuses,

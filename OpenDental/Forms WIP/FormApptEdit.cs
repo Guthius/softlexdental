@@ -348,11 +348,6 @@ namespace OpenDental
                 butSyndromicObservations.Visible = true;
                 labelSyndromicObservations.Visible = true;
             }
-            if (!Preferences.HasClinicsEnabled)
-            {
-                labelClinic.Visible = false;
-                comboClinic.Visible = false;
-            }
             if (!PinIsVisible)
             {
                 butPin.Visible = false;
@@ -466,7 +461,7 @@ namespace OpenDental
             }
             //Fill Clinics
             _listClinics = new List<Clinic>() { new Clinic() { Abbr = Lan.g(this, "None") } }; //Seed with "None"
-            Clinics.GetForUserod(Security.CurrentUser).ForEach(x => _listClinics.Add(x));//do not re-organize from cache. They could either be alphabetizeded or sorted by item order.
+            Clinic.GetByUser(Security.CurrentUser).ForEach(x => _listClinics.Add(x));//do not re-organize from cache. They could either be alphabetizeded or sorted by item order.
             _listClinics.ForEach(x => comboClinic.Items.Add(x.Abbr));
             //Set Selected Nums
             _selectedClinicNum = AptCur.ClinicNum;
@@ -480,7 +475,7 @@ namespace OpenDental
             //Set combo indexes for first pass through fillComboProvHyg
             comboProv.SelectedIndex = -1;//initializes to 0. Must be -1 for fillComboProvHyg.
             comboProvHyg.SelectedIndex = -1;//initializes to 0. Must be -1 for fillComboProvHyg.
-            comboClinic.IndexSelectOrSetText(_listClinics.FindIndex(x => x.ClinicNum == _selectedClinicNum), () => { return Clinics.GetAbbr(_selectedClinicNum); });
+            comboClinic.IndexSelectOrSetText(_listClinics.FindIndex(x => x.Id == _selectedClinicNum), () => { return Clinic.GetById(_selectedClinicNum).Abbr; });
             fillComboProvHyg();
             checkIsHygiene.Checked = AptCur.IsHygiene;
             //Fill comboAssistant with employees and none option
@@ -651,7 +646,7 @@ namespace OpenDental
         {
             if (comboClinic.SelectedIndex > -1)
             {
-                _selectedClinicNum = _listClinics[comboClinic.SelectedIndex].ClinicNum;
+                _selectedClinicNum = _listClinics[comboClinic.SelectedIndex].Id;
             }
             if (!_isOnLoad)
             {//If not called when loading form
@@ -930,7 +925,7 @@ namespace OpenDental
             {//Filling the grid later on.
                 listNumsSelected.AddRange(gridProc.SelectedIndices.OfType<int>().Select(x => ((Procedure)gridProc.Rows[x].Tag).ProcNum));
             }
-            bool isMedical = Clinics.IsMedicalPracticeOrClinic(_selectedClinicNum);
+            bool isMedical = Clinic.GetById(_selectedClinicNum).IsMedicalOnly;
             gridProc.BeginUpdate();
             gridProc.Rows.Clear();
             gridProc.Columns.Clear();

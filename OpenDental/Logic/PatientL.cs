@@ -121,153 +121,167 @@ namespace OpenDental
             return fam.Members[index - buttonLastFivePatNums.Count - 2].PatNum;
         }
 
-        ///<summary>Returns a string representation of the current state of the application designed for display in the main title.
-        ///Accepts null for pat and 0 for clinicNum.</summary>
-        public static string GetMainTitle(Patient pat, long clinicNum)
+        /// <summary>
+        ///     <para>
+        ///         Returns a string representation of the current state of the application 
+        ///         designed for display in the main title. Accepts null for <paramref name="patient"/> and 0 for clinicNum.
+        ///     </para>
+        /// </summary>
+        public static string GetMainTitle(Patient patient, long? clinicId)
         {
-            string retVal = Preference.GetString(PreferenceName.MainWindowTitle);
+            string title = Preference.GetString(PreferenceName.MainWindowTitle);
 
-            retVal = Plugin.Filter(null, "Patient_FilterMainTitle", retVal);
+            title = Plugin.Filter(null, "Patient_FilterMainTitle", title);
 
-            //Figure out if the patient passed in is different than the currently selected patient.
-            bool hasPatChanged = ((_patSelectedCur == null && pat != null)
-                || (_patSelectedCur != null && pat == null)
-                || (_patSelectedCur != null && pat != null && _patSelectedCur.PatNum != pat.PatNum)
-            );
-            _patSelectedCur = pat;
-            _clinSelectedCur = clinicNum;
-            if (Preferences.HasClinicsEnabled && clinicNum > 0)
+            // Figure out if the patient passed in is different than the currently selected patient.
+            bool hasPatChanged = 
+                (_patSelectedCur == null && patient != null) || 
+                (_patSelectedCur != null && patient == null) || 
+                (_patSelectedCur != null && patient != null && _patSelectedCur.PatNum != patient.PatNum);
+
+            _patSelectedCur = patient;
+            _clinSelectedCur = clinicId.Value;
+
+            if (clinicId.HasValue)
             {
-                if (retVal != "")
+                if (title != "")
                 {
-                    retVal += " - " + Lan.g("FormOpenDental", "Clinic") + ": ";
+                    title += " - Clinic: ";
                 }
-                if (Preference.GetBool(PreferenceName.TitleBarClinicUseAbbr))
-                {
-                    retVal += Clinics.GetAbbr(clinicNum);
-                }
-                else
-                {
-                    retVal += Clinics.GetDesc(clinicNum);
-                }
+
+                title +=
+                    Preference.GetBool(PreferenceName.TitleBarClinicUseAbbr) ?
+                        Clinic.GetById(clinicId.Value).Abbr :
+                        Clinic.GetById(clinicId.Value).Description;
             }
+
             if (Security.CurrentUser != null)
             {
-                retVal += " {" + Security.CurrentUser.UserName + "}";
+                title += " {" + Security.CurrentUser.UserName + "}";
             }
-            if (pat == null || pat.PatNum == 0 || pat.PatNum == -1)
+
+            if (patient == null || patient.PatNum == 0 || patient.PatNum == -1)
             {
                 if (FormOpenDental.RegKeyIsForTesting)
                 {
-                    retVal += " - " + Lan.g("FormOpenDental", "Developer Only License") + " - " + Lan.g("FormOpenDental", "Not for use with live patient data") + " - ";
+                    title += " - Developer Only License - Not for use with live patient data - ";
                 }
-                return retVal;
+
+                return title;
             }
-            retVal += " - " + pat.GetNameLF();
+
+            title += " - " + patient.GetNameLF();
             //A query is required to get the Specialty for the selected patient so only run this code if the patient has changed.
             if (Preference.GetBool(PreferenceName.TitleBarShowSpecialty) && hasPatChanged)
             {
-                string specialty = Patients.GetPatientSpecialtyDef(pat.PatNum)?.Description ?? "";
-                retVal += string.IsNullOrWhiteSpace(specialty) ? "" : " (" + specialty + ")";
+                string specialty = Patients.GetPatientSpecialtyDef(patient.PatNum)?.Description ?? "";
+                title += string.IsNullOrWhiteSpace(specialty) ? "" : " (" + specialty + ")";
             }
             if (Preference.GetLong(PreferenceName.ShowIDinTitleBar) == 1)
             {
-                retVal += " - " + pat.PatNum.ToString();
+                title += " - " + patient.PatNum.ToString();
             }
             else if (Preference.GetLong(PreferenceName.ShowIDinTitleBar) == 2)
             {
-                retVal += " - " + pat.ChartNumber;
+                title += " - " + patient.ChartNumber;
             }
             else if (Preference.GetLong(PreferenceName.ShowIDinTitleBar) == 3)
             {
-                if (pat.Birthdate.Year > 1880)
+                if (patient.Birthdate.Year > 1880)
                 {
-                    retVal += " - " + pat.Birthdate.ToShortDateString();
+                    title += " - " + patient.Birthdate.ToShortDateString();
                 }
             }
-            if (pat.SiteNum != 0)
+            if (patient.SiteNum != 0)
             {
-                retVal += " - " + Sites.GetDescription(pat.SiteNum);
+                title += " - " + Sites.GetDescription(patient.SiteNum);
             }
+
             if (FormOpenDental.RegKeyIsForTesting)
             {
-                retVal += " - " + Lan.g("FormOpenDental", "Developer Only License") + " - " + Lan.g("FormOpenDental", "Not for use with live patient data") + " - ";
+                title += " - " + "Developer Only License - Not for use with live patient data - ";
             }
-            return retVal;
+
+            return title;
         }
 
         ///<summary>Used to update the main title bar when neither the patient nor the clinic need to change. 
         ///Currently only used to refresh the title bar when the timer ticks for the update time countdown.</summary>
         public static string GetMainTitleSamePat()
         {
-            string retVal = Preference.GetString(PreferenceName.MainWindowTitle);
-            if (Preferences.HasClinicsEnabled && _clinSelectedCur > 0)
+            string title = Preference.GetString(PreferenceName.MainWindowTitle);
+            if (_clinSelectedCur > 0)
             {
-                if (retVal != "")
+                if (title != "")
                 {
-                    retVal += " - " + Lan.g("FormOpenDental", "Clinic") + ": ";
+                    title += " - Clinic: ";
                 }
-                if (Preference.GetBool(PreferenceName.TitleBarClinicUseAbbr))
-                {
-                    retVal += Clinics.GetAbbr(_clinSelectedCur);
-                }
-                else
-                {
-                    retVal += Clinics.GetDesc(_clinSelectedCur);
-                }
+
+                title +=
+                    Preference.GetBool(PreferenceName.TitleBarClinicUseAbbr) ?
+                        Clinic.GetById(_clinSelectedCur).Abbr :
+                        Clinic.GetById(_clinSelectedCur).Description;
             }
+
             if (Security.CurrentUser != null)
             {
-                retVal += " {" + Security.CurrentUser.UserName + "}";
+                title += " {" + Security.CurrentUser.UserName + "}";
             }
+
             if (_patSelectedCur == null || _patSelectedCur.PatNum == 0 || _patSelectedCur.PatNum == -1)
             {
                 if (FormOpenDental.RegKeyIsForTesting)
                 {
-                    retVal += " - " + Lan.g("FormOpenDental", "Developer Only License") + " - " + Lan.g("FormOpenDental", "Not for use with live patient data") + " - ";
+                    title += " - Developer Only License - Not for use with live patient data - ";
                 }
                 //Now check to see if this database has been put into "Testing Mode"
                 if (Introspection.IsTestingMode)
                 {
-                    retVal += " <TESTING MODE ENABLED> ";
+                    title += " <TESTING MODE ENABLED> ";
                 }
-                return retVal;
+                return title;
             }
-            retVal += " - " + _patSelectedCur.GetNameLF();
+
+            title += " - " + _patSelectedCur.GetNameLF();
             if (Preference.GetBool(PreferenceName.TitleBarShowSpecialty))
             {
                 string specialty = Patients.GetPatientSpecialtyDef(_patSelectedCur.PatNum)?.Description ?? "";
-                retVal += string.IsNullOrWhiteSpace(specialty) ? "" : " (" + specialty + ")";
+                title += string.IsNullOrWhiteSpace(specialty) ? "" : " (" + specialty + ")";
             }
+
             if (Preference.GetLong(PreferenceName.ShowIDinTitleBar) == 1)
             {
-                retVal += " - " + _patSelectedCur.PatNum.ToString();
+                title += " - " + _patSelectedCur.PatNum.ToString();
             }
             else if (Preference.GetLong(PreferenceName.ShowIDinTitleBar) == 2)
             {
-                retVal += " - " + _patSelectedCur.ChartNumber;
+                title += " - " + _patSelectedCur.ChartNumber;
             }
             else if (Preference.GetLong(PreferenceName.ShowIDinTitleBar) == 3)
             {
                 if (_patSelectedCur.Birthdate.Year > 1880)
                 {
-                    retVal += " - " + _patSelectedCur.Birthdate.ToShortDateString();
+                    title += " - " + _patSelectedCur.Birthdate.ToShortDateString();
                 }
             }
+
             if (_patSelectedCur.SiteNum != 0)
             {
-                retVal += " - " + Sites.GetDescription(_patSelectedCur.SiteNum);
+                title += " - " + Sites.GetDescription(_patSelectedCur.SiteNum);
             }
+
             if (FormOpenDental.RegKeyIsForTesting)
             {
-                retVal += " - " + Lan.g("FormOpenDental", "Developer Only License") + " - " + Lan.g("FormOpenDental", "Not for use with live patient data") + " - ";
+                title += " - Developer Only License - Not for use with live patient data - ";
             }
+
             //Now check to see if this database has been put into "Testing Mode"
             if (Introspection.IsTestingMode)
             {
-                retVal += " <TESTING MODE ENABLED> ";
+                title += " <TESTING MODE ENABLED> ";
             }
-            return retVal;
+
+            return title;
         }
     }
 }

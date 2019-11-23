@@ -17,7 +17,7 @@ namespace OpenDental.Bridges {
 		
 		///<summary>Generates all the xml up to the point where the first statement would go.</summary>
 		public static void GeneratePracticeInfo(XmlWriter writer,long clinicNum) {
-			Clinic clinic=Clinics.GetClinic(clinicNum);
+			Clinic clinic=Clinic.GetById(clinicNum);
 			Ebill eBillClinic=Ebills.GetForClinic(clinicNum);
 			if(eBillClinic==null) {//Clinic specific Ebill doesn't exist, use the defaults.
 				eBillClinic=Ebills.GetForClinic(0);
@@ -64,24 +64,24 @@ namespace OpenDental.Bridges {
 				writer.WriteElementString("Phone",Preference.GetString(PreferenceName.PracticePhone));//enforced to be 10 digit fairly rigidly by the UI
 			}
 			else if(eBillAddress==EbillAddress.ClinicPhysical) {
-				writer.WriteElementString("Address1",clinic.Address);
-				writer.WriteElementString("Address2",clinic.Address2);
+				writer.WriteElementString("Address1",clinic.AddressLine1);
+				writer.WriteElementString("Address2",clinic.AddressLine2);
 				writer.WriteElementString("City",clinic.City);
 				writer.WriteElementString("State",clinic.State);
 				writer.WriteElementString("Zip",clinic.Zip);
 				writer.WriteElementString("Phone",clinic.Phone);//enforced to be 10 digit fairly rigidly by the UI
 			}
 			else if(eBillAddress==EbillAddress.ClinicPayTo) {
-				writer.WriteElementString("Address1",clinic.PayToAddress);
-				writer.WriteElementString("Address2",clinic.PayToAddress2);
+				writer.WriteElementString("Address1",clinic.PayToAddressLine1);
+				writer.WriteElementString("Address2",clinic.PayToAddressLine2);
 				writer.WriteElementString("City",clinic.PayToCity);
 				writer.WriteElementString("State",clinic.PayToState);
 				writer.WriteElementString("Zip",clinic.PayToZip);
 				writer.WriteElementString("Phone",clinic.Phone);//enforced to be 10 digit fairly rigidly by the UI
 			}
 			else if(eBillAddress==EbillAddress.ClinicBilling) {
-				writer.WriteElementString("Address1",clinic.BillingAddress);
-				writer.WriteElementString("Address2",clinic.BillingAddress2);
+				writer.WriteElementString("Address1",clinic.BillingAddressLine1);
+				writer.WriteElementString("Address2",clinic.BillingAddressLine2);
 				writer.WriteElementString("City",clinic.BillingCity);
 				writer.WriteElementString("State",clinic.BillingState);
 				writer.WriteElementString("Zip",clinic.BillingZip);

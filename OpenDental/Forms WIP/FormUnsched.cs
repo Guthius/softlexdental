@@ -396,7 +396,7 @@ namespace OpenDental{
 					comboSite.Items.Add(_listSites[i].Description);
 				}
 			}
-			labelClinic.Visible=Preferences.HasClinicsEnabled;
+			labelClinic.Visible=true;
 			_listAptSelected=new List<long>();
 			InitDateRange();
 			FillGrid();

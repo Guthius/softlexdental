@@ -28,86 +28,86 @@ namespace OpenDental {
 			
 		}
 
-		private void FormClaimPayList_Load(object sender,EventArgs e) {
-			textDateFrom.Text=DateTime.Now.AddDays(-10).ToShortDateString();
-			textDateTo.Text=DateTime.Now.ToShortDateString();
-			if(!Preferences.HasClinicsEnabled) {
-				comboClinic.Visible=false;
-				labelClinic.Visible=false;
-			}
-			else {
-				comboClinic.Items.Add(Lan.g(this,"All"));
-				comboClinic.SelectedIndex=0;
-				_listClinics=Clinics.GetDeepCopy(true);
-				foreach(Clinic clin in _listClinics) {
-					comboClinic.Items.Add(clin.Abbr);
-				}
-			}
-			_listCPGroups=Definition.GetByCategory(DefinitionCategory.ClaimPaymentGroups);
-			FillComboPaymentGroup();
-			FillGrid();
-		}
+        private void FormClaimPayList_Load(object sender, EventArgs e)
+        {
+            textDateFrom.Text = DateTime.Now.AddDays(-10).ToShortDateString();
+            textDateTo.Text = DateTime.Now.ToShortDateString();
 
-		private void FillGrid(){
-			DateTime dateFrom=PIn.Date(textDateFrom.Text);
-			DateTime dateTo=PIn.Date(textDateTo.Text);
-			long clinicNum=0;
-			if(comboClinic.SelectedIndex>0) {
-				clinicNum=_listClinics[comboClinic.SelectedIndex-1].ClinicNum;
-			}
-			long selectedGroupNum=0;
-			if(comboPayGroup.SelectedIndex!=0) {
-				selectedGroupNum=_listCPGroups[comboPayGroup.SelectedIndex-1].Id;
-			}
-			DataTable tableClaimPayments=ClaimPayments.GetForDateRange(dateFrom,dateTo,clinicNum,selectedGroupNum);
-			ListClaimPay=ClaimPaymentCrud.TableToList(tableClaimPayments);
-			gridMain.BeginUpdate();
-			gridMain.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g(this,"Date"),65);
-			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Type"),70);
-			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Amount"),75,HorizontalAlignment.Right);
-			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Partial"),40,HorizontalAlignment.Center);
-			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Carrier"),180);
-			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"PayGroup"),80);
-			gridMain.Columns.Add(col);
-			if(Preferences.HasClinicsEnabled) {
-				col=new ODGridColumn(Lan.g(this,"Clinic"),80);
-				gridMain.Columns.Add(col);
-			}
-			col=new ODGridColumn(Lan.g(this,"Note"),180);
-			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Scanned"),40,HorizontalAlignment.Center);
-			gridMain.Columns.Add(col);			
-			gridMain.Rows.Clear();
-			ODGridRow row;
-			for(int i=0;i<ListClaimPay.Count;i++){
-				row=new ODGridRow();
-				if(ListClaimPay[i].CheckDate.Year<1800) {
-					row.Cells.Add("");
-				}
-				else{
-					row.Cells.Add(ListClaimPay[i].CheckDate.ToShortDateString());
-				}
-				row.Cells.Add(Defs.GetName(DefinitionCategory.InsurancePaymentType,ListClaimPay[i].PayType));
-				row.Cells.Add(ListClaimPay[i].CheckAmt.ToString("c"));
-				row.Cells.Add(ListClaimPay[i].IsPartial?"X":"");
-				row.Cells.Add(ListClaimPay[i].CarrierName);
-				row.Cells.Add(Defs.GetName(DefinitionCategory.ClaimPaymentGroups,ListClaimPay[i].PayGroup));
-				if(Preferences.HasClinicsEnabled) {
-					row.Cells.Add(Clinics.GetAbbr(ListClaimPay[i].ClinicNum));
-				}
-				row.Cells.Add(ListClaimPay[i].Note);
-				row.Cells.Add((tableClaimPayments.Rows[i]["hasEobAttach"].ToString()=="1")?"X":"");
-				gridMain.Rows.Add(row);
-			}
-			gridMain.EndUpdate();
-			gridMain.ScrollToEnd();
-		}
+            comboClinic.Items.Add(Lan.g(this, "All"));
+            comboClinic.SelectedIndex = 0;
+            _listClinics = Clinic.All().ToList();
+            foreach (Clinic clin in _listClinics)
+            {
+                comboClinic.Items.Add(clin.Abbr);
+            }
+
+            _listCPGroups = Definition.GetByCategory(DefinitionCategory.ClaimPaymentGroups);
+            FillComboPaymentGroup();
+            FillGrid();
+        }
+
+        private void FillGrid()
+        {
+            DateTime dateFrom = PIn.Date(textDateFrom.Text);
+            DateTime dateTo = PIn.Date(textDateTo.Text);
+            long clinicNum = 0;
+            if (comboClinic.SelectedIndex > 0)
+            {
+                clinicNum = _listClinics[comboClinic.SelectedIndex - 1].Id;
+            }
+            long selectedGroupNum = 0;
+            if (comboPayGroup.SelectedIndex != 0)
+            {
+                selectedGroupNum = _listCPGroups[comboPayGroup.SelectedIndex - 1].Id;
+            }
+            DataTable tableClaimPayments = ClaimPayments.GetForDateRange(dateFrom, dateTo, clinicNum, selectedGroupNum);
+            ListClaimPay = ClaimPaymentCrud.TableToList(tableClaimPayments);
+            gridMain.BeginUpdate();
+            gridMain.Columns.Clear();
+            ODGridColumn col = new ODGridColumn(Lan.g(this, "Date"), 65);
+            gridMain.Columns.Add(col);
+            col = new ODGridColumn(Lan.g(this, "Type"), 70);
+            gridMain.Columns.Add(col);
+            col = new ODGridColumn(Lan.g(this, "Amount"), 75, HorizontalAlignment.Right);
+            gridMain.Columns.Add(col);
+            col = new ODGridColumn(Lan.g(this, "Partial"), 40, HorizontalAlignment.Center);
+            gridMain.Columns.Add(col);
+            col = new ODGridColumn(Lan.g(this, "Carrier"), 180);
+            gridMain.Columns.Add(col);
+            col = new ODGridColumn(Lan.g(this, "PayGroup"), 80);
+            gridMain.Columns.Add(col);
+                col = new ODGridColumn(Lan.g(this, "Clinic"), 80);
+                gridMain.Columns.Add(col);
+            col = new ODGridColumn(Lan.g(this, "Note"), 180);
+            gridMain.Columns.Add(col);
+            col = new ODGridColumn(Lan.g(this, "Scanned"), 40, HorizontalAlignment.Center);
+            gridMain.Columns.Add(col);
+            gridMain.Rows.Clear();
+            ODGridRow row;
+            for (int i = 0; i < ListClaimPay.Count; i++)
+            {
+                row = new ODGridRow();
+                if (ListClaimPay[i].CheckDate.Year < 1800)
+                {
+                    row.Cells.Add("");
+                }
+                else
+                {
+                    row.Cells.Add(ListClaimPay[i].CheckDate.ToShortDateString());
+                }
+                row.Cells.Add(Defs.GetName(DefinitionCategory.InsurancePaymentType, ListClaimPay[i].PayType));
+                row.Cells.Add(ListClaimPay[i].CheckAmt.ToString("c"));
+                row.Cells.Add(ListClaimPay[i].IsPartial ? "X" : "");
+                row.Cells.Add(ListClaimPay[i].CarrierName);
+                row.Cells.Add(Defs.GetName(DefinitionCategory.ClaimPaymentGroups, ListClaimPay[i].PayGroup));
+                row.Cells.Add(Clinic.GetById(ListClaimPay[i].ClinicNum).Abbr);
+                row.Cells.Add(ListClaimPay[i].Note);
+                row.Cells.Add((tableClaimPayments.Rows[i]["hasEobAttach"].ToString() == "1") ? "X" : "");
+                gridMain.Rows.Add(row);
+            }
+            gridMain.EndUpdate();
+            gridMain.ScrollToEnd();
+        }
 		
 		private void butAdd_Click(object sender,EventArgs e) {
 			if(!Security.IsAuthorized(Permissions.InsPayCreate)) {//date not checked here, but it will be checked when saving the check to prevent backdating

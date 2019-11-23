@@ -111,7 +111,7 @@ namespace OpenDentBusiness.HL7 {
 					if(apt==null) {
 						return "";
 					}
-					string aptClinicDescript=Clinics.GetDesc(apt.ClinicNum);
+					string aptClinicDescript=Clinic.GetById(apt.ClinicNum).Description;
 					Operatory opCur=Operatories.GetOperatory(apt.Op);
 					string opName="";
 					if(opCur!=null) {
@@ -320,7 +320,7 @@ namespace OpenDentBusiness.HL7 {
 					if(pat.ClinicNum==0) {
 						return "";
 					}
-					string patClinicDescript=Clinics.GetDesc(pat.ClinicNum);
+					string patClinicDescript=Clinic.GetById(pat.ClinicNum).Description;
 					practiceName= Preference.GetString(PreferenceName.PracticeTitle);
 					return gConcat(def.ComponentSeparator,patClinicDescript,"","",def.SubcomponentSeparator+practiceName,"","C");
 				case "pat.nameLFM":
@@ -439,9 +439,9 @@ namespace OpenDentBusiness.HL7 {
 					if(proc==null || (proc.ClinicNum==0 && pat.ClinicNum==0)) {//if proc is null and both pat.ClinicNum and proc.ClinicNum are 0, return empty string
 						return "";
 					}
-					string procClinicDescript=Clinics.GetDesc(proc.ClinicNum);//could be blank if proc.ClinicNum is invalid
+					string procClinicDescript=Clinic.GetById(proc.ClinicNum).Description;//could be blank if proc.ClinicNum is invalid
 					if(procClinicDescript=="") {
-						procClinicDescript=Clinics.GetDesc(pat.ClinicNum);//could be blank if pat.ClinicNum is invalid
+						procClinicDescript=Clinic.GetById(pat.ClinicNum).Description;//could be blank if pat.ClinicNum is invalid
 					}
 					string procOpName="";
 					if(apt!=null) {

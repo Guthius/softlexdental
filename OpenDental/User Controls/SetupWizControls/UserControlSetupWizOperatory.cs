@@ -27,7 +27,7 @@ namespace OpenDental.User_Controls.SetupWizard {
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col;
-			if(Preferences.HasClinicsEnabled) {
+
 				col = new ODGridColumn(Lan.g("FormSetupWizard","OpName"),110);
 				gridMain.Columns.Add(col);
 				col = new ODGridColumn(Lan.g("FormSetupWizard","Abbrev"),110);
@@ -42,21 +42,7 @@ namespace OpenDental.User_Controls.SetupWizard {
 				gridMain.Columns.Add(col);
 				col = new ODGridColumn(Lan.g("FormSetupWizard","IsHidden"),60,HorizontalAlignment.Center);
 				gridMain.Columns.Add(col);
-			}
-			else {
-				col = new ODGridColumn(Lan.g("FormSetupWizard","OpName"),135);
-				gridMain.Columns.Add(col);
-				col = new ODGridColumn(Lan.g("FormSetupWizard","Abbrev"),120);
-				gridMain.Columns.Add(col);
-				col = new ODGridColumn(Lan.g("FormSetupWizard","ProvDentist"),130);
-				gridMain.Columns.Add(col);
-				col = new ODGridColumn(Lan.g("FormSetupWizard","ProvHygienist"),130);
-				gridMain.Columns.Add(col);
-				col = new ODGridColumn(Lan.g("FormSetupWizard","IsHygiene"),80,HorizontalAlignment.Center);
-				gridMain.Columns.Add(col);
-				col = new ODGridColumn(Lan.g("FormSetupWizard","IsHidden"),80,HorizontalAlignment.Center);
-				gridMain.Columns.Add(col);
-			}
+
 			//col = new ODGridColumn("Clinic",120);
 			//gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
@@ -77,9 +63,9 @@ namespace OpenDental.User_Controls.SetupWizard {
 					row.Cells[row.Cells.Count-1].CellColor=needsAttnCol;
 					IsAllComplete=false;
 				}
-				if(Preferences.HasClinicsEnabled) {
-					row.Cells.Add(Clinics.GetAbbr(opCur.ClinicNum));
-				}
+
+					row.Cells.Add(Clinic.GetById(opCur.ClinicNum).Abbr);
+				
 				//not a required field
 				row.Cells.Add(Providers.GetAbbr(opCur.ProvDentist));
 				//not a required field
@@ -117,37 +103,33 @@ namespace OpenDental.User_Controls.SetupWizard {
 			_blink++;
 		}
 
-		private void butAdd_Click(object sender,EventArgs e) {
-			FormOperatoryEdit FormOE = new FormOperatoryEdit(new Operatory());
-			FormOE.IsNew=true;
-			List<Operatory> listOld = new List<Operatory>();
-			foreach(Operatory op in _listOps) {
-				listOld.Add(op.Copy());
-			}
-			FormOE.ListOps=_listOps;
-			FormOE.ShowDialog();
-			if(FormOE.DialogResult==DialogResult.OK) {
-				Operatories.Sync(_listOps,listOld);
-				FillGrid();
-				DataValid.SetInvalid(InvalidType.Operatories);
-			}
-		}
+        private void butAdd_Click(object sender, EventArgs e)
+        {
+            FormOperatoryEdit FormOE = new FormOperatoryEdit(new Operatory());
 
-		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			Operatory opCur = (Operatory)gridMain.Rows[e.Row].Tag;
-			FormOperatoryEdit FormOE = new FormOperatoryEdit(opCur);
-			List<Operatory> listOld = new List<Operatory>();
-			foreach(Operatory op in _listOps) {
-				listOld.Add(op.Copy());
-			}
-			FormOE.ListOps=_listOps;
-			FormOE.ShowDialog();
-			if(FormOE.DialogResult==DialogResult.OK) {
-				Operatories.Sync(_listOps,listOld);
-				FillGrid();
-				DataValid.SetInvalid(InvalidType.Operatories);
-			}
-		}
+            FormOE.ShowDialog();
+            if (FormOE.DialogResult == DialogResult.OK)
+            {
+                _listOps.Add(FormOE.Operatory);
+
+                FillGrid();
+                DataValid.SetInvalid(InvalidType.Operatories);
+            }
+        }
+
+        private void gridMain_CellDoubleClick(object sender, ODGridClickEventArgs e)
+        {
+            Operatory opCur = (Operatory)gridMain.Rows[e.Row].Tag;
+            FormOperatoryEdit FormOE = new FormOperatoryEdit(opCur);
+
+            FormOE.ShowDialog();
+            if (FormOE.DialogResult == DialogResult.OK)
+            {
+                FillGrid();
+
+                DataValid.SetInvalid(InvalidType.Operatories);
+            }
+        }
 
 		private void butAdvanced_Click(object sender,EventArgs e) {
 			new FormOperatories().ShowDialog();

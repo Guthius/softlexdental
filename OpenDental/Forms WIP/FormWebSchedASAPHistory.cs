@@ -23,18 +23,16 @@ namespace OpenDental {
 		private void FormWebSchedASAPHistory_Load(object sender,EventArgs e) {
 			datePicker.SetDateTimeFrom(DateTime.Today.AddDays(-7));
 			datePicker.SetDateTimeTo(DateTime.Today);
-			if(!Preferences.HasClinicsEnabled) {
-				labelClinic.Visible=false;
-			}
+
 			FillGrid();
 		}
 
 		private void GetData() {
 			Cursor=Cursors.WaitCursor;
 			List<long> listClinicNums=null;
-			if(Preferences.HasClinicsEnabled) {
+
 				listClinicNums=comboClinic.ListSelectedClinicNums;
-			}
+			
 			_listAsapCommHists=AsapComms.GetHist(datePicker.GetDateTimeFrom(),datePicker.GetDateTimeTo(),listClinicNums:listClinicNums);
 			_prevDateFrom=datePicker.GetDateTimeFrom();
 			_prevDateTo=datePicker.GetDateTimeTo();
@@ -49,10 +47,10 @@ namespace OpenDental {
 				//The user is asking for data that we have not fetched yet.
 				GetData();
 			}
-			bool isClinicsEnabled=Preferences.HasClinicsEnabled;
+
 			List<AsapComms.AsapCommHist> listHist=_listAsapCommHists.Where(x => x.AsapComm.DateTimeEntry
 				.Between(datePicker.GetDateTimeFrom(),datePicker.GetDateTimeTo()))
-				.Where(x => !isClinicsEnabled || x.AsapComm.ClinicNum.In(comboClinic.ListSelectedClinicNums)).ToList();
+				.Where(x => x.AsapComm.ClinicNum.In(comboClinic.ListSelectedClinicNums)).ToList();
 			gridHistory.BeginUpdate();
 			gridHistory.Columns.Clear();
 			ODGridColumn col;
@@ -64,10 +62,10 @@ namespace OpenDental {
 			gridHistory.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"Email Send Time"),140);
 			gridHistory.Columns.Add(col);
-			if(Preferences.HasClinicsEnabled) {
+
 				col=new ODGridColumn(Lan.g(this,"Clinic"),120);
 				gridHistory.Columns.Add(col);
-			}
+			
 			col=new ODGridColumn(Lan.g(this,"Original Appt Time"),140);
 			gridHistory.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"Slot Start"),140);
@@ -106,9 +104,8 @@ namespace OpenDental {
 					emailSent="";
 				}
 				row.Cells.Add(emailSent);
-				if(Preferences.HasClinicsEnabled) {
-					row.Cells.Add(ODMethodsT.Coalesce(Clinics.GetClinic(asapHist.AsapComm.ClinicNum)).Abbr);
-				}
+
+                row.Cells.Add(ODMethodsT.Coalesce(Clinic.GetById(asapHist.AsapComm.ClinicNum)).Abbr);
 				row.Cells.Add(asapHist.AsapComm.DateTimeOrig.Year > 1880 ? asapHist.AsapComm.DateTimeOrig.ToString() : "");
 				row.Cells.Add(asapHist.DateTimeSlotStart.ToString());
 				row.Cells.Add(asapHist.DateTimeSlotEnd.ToString());

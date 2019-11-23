@@ -102,14 +102,9 @@ namespace OpenDentBusiness
             //clinicNum will be 0 if clinics are not enabled or if the payment.ClinicNum=0, which will happen if the patient.ClinicNum=0 and the user
             //does not change the clinic on the payment before sending to PayConnect or if the user decides to process the payment for 'Headquarters'
             //and manually changes the clinic on the payment from the patient's clinic to 'none'
-            if (clinicNum == 0)
-            {
-                clinicCur = Clinics.GetPracticeAsClinicZero();
-            }
-            else
-            {
-                clinicCur = Clinics.GetClinic(clinicNum);
-            }
+
+            clinicCur = Clinic.GetById(clinicNum);
+            
 
             if (clinicCur != null)
             {
@@ -117,13 +112,13 @@ namespace OpenDentBusiness
                 {
                     result += clinicCur.Description + Environment.NewLine;
                 }
-                if (clinicCur.Address.Length > 0)
+                if (clinicCur.AddressLine1.Length > 0)
                 {
-                    result += clinicCur.Address + Environment.NewLine;
+                    result += clinicCur.AddressLine1 + Environment.NewLine;
                 }
-                if (clinicCur.Address2.Length > 0)
+                if (clinicCur.AddressLine2.Length > 0)
                 {
-                    result += clinicCur.Address2 + Environment.NewLine;
+                    result += clinicCur.AddressLine2 + Environment.NewLine;
                 }
                 if (clinicCur.City.Length > 0 || clinicCur.State.Length > 0 || clinicCur.Zip.Length > 0)
                 {

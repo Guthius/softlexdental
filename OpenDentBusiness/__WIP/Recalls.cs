@@ -283,7 +283,7 @@ namespace OpenDentBusiness
             Stopwatch swTotal = new Stopwatch();
             swTotal.Restart();
             string info = $"Start: {DateTime.Now.ToString(Logger.DATETIME_FORMAT)}\r\n  groupByFamilies={groupByFamilies}\r\n  provNum={provNum}" +
-                $"\r\n  provName={Providers.GetAbbr(provNum)}\r\n  clinicNum={clinicNum}\r\n  clinicName={Clinics.GetAbbr(clinicNum)}" +
+                $"\r\n  provName={Providers.GetAbbr(provNum)}\r\n  clinicNum={clinicNum}\r\n  clinicName={Clinic.GetById(clinicNum)}" +
                 $"\r\n  siteNum={siteNum}\r\n  sortBy={sortBy}\r\n  showReminders={showReminders}\r\n  isAsap={isAsap}" +
                 $"\r\n  fromDate={fromDate.ToString("MM/dd/yy")}\r\n  toDate={toDate.ToString("MM/dd/yy")}";
             string verbose = "INFO";

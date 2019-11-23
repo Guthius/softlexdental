@@ -63,13 +63,13 @@ namespace OpenDental{
 			if(apptViewCur==null) {
 				//make visible ops exactly the same as the short ops list (all except hidden)
 				visOps.AddRange(
-					Operatories.GetWhere(x => !Preferences.HasClinicsEnabled //if clinics disabled
-							|| Clinics.ClinicNum==0 //or if program level ClinicNum set to Headquarters
-							|| x.ClinicNum==Clinics.ClinicNum //or this is the program level ClinicNum
+					Operatories.GetWhere(x => 
+                            Clinics.ClinicId==0 //or if program level ClinicNum set to Headquarters
+							|| x.ClinicNum==Clinics.ClinicId //or this is the program level ClinicNum
 						,true)
 				);
 				if(isFillVisProvs) {
-					if(Preferences.HasClinicsEnabled) {
+
 						foreach(Operatory op in visOps) {
 							Provider provDent=Providers.GetProv(op.ProvDentist);
 							Provider provHyg=Providers.GetProv(op.ProvHygienist);
@@ -80,11 +80,7 @@ namespace OpenDental{
 								visProvs.Add(provHyg);
 							}
 						}
-					}
-					else {
-						//make visible provs exactly the same as the prov list (all except hidden)
-						visProvs.AddRange(Providers.GetDeepCopy(true));
-					}
+
 				}
 				//Hard coded elements showing
 				apptRows.Add(new ApptViewItem("PatientName",0,Color.Black));

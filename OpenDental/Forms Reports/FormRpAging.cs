@@ -588,23 +588,18 @@ namespace OpenDental{
 			}
 			checkProvAll.Checked=true;
 			listProv.Visible=false;
-			if(!Preferences.HasClinicsEnabled) {
-				listClin.Visible=false;
-				labelClin.Visible=false;
-				checkAllClin.Visible=false;
-			}
-			else {
-				List<Clinic> listClinics = Clinics.GetForUserod(Security.CurrentUser,true,"Unassigned").ToList();
-				if(!listClinics.Exists(x => x.ClinicNum==Clinics.ClinicNum)) {//Could have a hidden clinic selected
-					listClinics.Add(Clinics.GetClinic(Clinics.ClinicNum));
+
+				List<Clinic> listClinics = Clinic.GetByUser(Security.CurrentUser).ToList();
+				if(!listClinics.Exists(x => x.Id==Clinics.ClinicId)) {//Could have a hidden clinic selected
+					listClinics.Add(Clinic.GetById(Clinics.ClinicId));
 				}
 				listClin.Items.AddRange(listClinics.Select(x => new ODBoxItem<Clinic>(x.Abbr+(x.IsHidden?(" "+Lan.g(this,"(hidden)")):""),x)).ToArray());
-				listClin.SelectedIndex=listClinics.FindIndex(x => x.ClinicNum==Clinics.ClinicNum);//FindIndex could return -1, which is fine
-				if(Clinics.ClinicNum==0) {
+				listClin.SelectedIndex=listClinics.FindIndex(x => x.Id==Clinics.ClinicId);//FindIndex could return -1, which is fine
+				if(Clinics.ClinicId==0) {
 					checkAllClin.Checked=true;
 					listClin.Visible=false;
 				}
-			}
+			
 			checkAgeNegAdjs.Checked=Preference.GetBool(PreferenceName.AgingNegativeAdjsByAdjDate);
 			if(Preference.GetBool(PreferenceName.AgingReportShowAgePatPayplanPayments)) {
 				//Visibility set to false in designer, only set to visible here.  No UI for pref, only set true via query for specific customer.
@@ -681,7 +676,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"At least one provider must be selected.");
 				return false;
 			}
-			if(Preferences.HasClinicsEnabled && !checkAllClin.Checked && listClin.SelectedIndices.Count==0) {
+			if(!checkAllClin.Checked && listClin.SelectedIndices.Count==0) {
 				MsgBox.Show(this,"At least one clinic must be selected.");
 				return false;
 			}
@@ -719,17 +714,17 @@ namespace OpenDental{
 			if(!checkProvAll.Checked) {
 				rpo.ListProvNums=listProv.SelectedIndices.OfType<int>().Select(x => _listProviders[x].ProvNum).ToList();
 			}
-			if(Preferences.HasClinicsEnabled) {
+
 				//if "All" is selected and the user is not restricted, show ALL clinics, including the 0 clinic.
 				if(checkAllClin.Checked && !Security.CurrentUser.ClinicRestricted){
 					rpo.ListClinicNums.Clear();
 					rpo.ListClinicNums.Add(0);
-					rpo.ListClinicNums.AddRange(Clinics.GetDeepCopy().Select(x => x.ClinicNum));
+					rpo.ListClinicNums.AddRange(Clinic.All().Select(x => x.Id));
 				}
 				else {
-					rpo.ListClinicNums=listClin.SelectedTags<Clinic>().Select(x => x.ClinicNum).ToList();
+					rpo.ListClinicNums=listClin.SelectedTags<Clinic>().Select(x => x.Id).ToList();
 				}
-			}
+			
 			rpo.AccountAge=AgeOfAccount.Any;
 			if(radio30.Checked) {
 				rpo.AccountAge=AgeOfAccount.Over30;

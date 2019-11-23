@@ -175,6 +175,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bridges\IBridge.cs" />
+    <Compile Include="CacheManager.cs" />
     <Compile Include="Cache\CacheAbs.cs" />
     <Compile Include="Cache\CacheDictAbs.cs" />
     <Compile Include="Cache\CacheDictNonPkAbs.cs" />
@@ -192,7 +193,6 @@
     <Compile Include="Crud\PayConnectResponseWebCrud.cs" />
     <Compile Include="Crud\PharmClinicCrud.cs" />
     <Compile Include="Crud\ProcMultiVisitCrud.cs" />
-    <Compile Include="Crud\ProviderClinicLinkCrud.cs" />
     <Compile Include="Crud\ReactivationCrud.cs" />
     <Compile Include="Crud\ClaimTrackingCrud.cs" />
     <Compile Include="Crud\ClinicErxCrud.cs" />
@@ -206,7 +206,6 @@
     <Compile Include="Crud\InsEditLogCrud.cs" />
     <Compile Include="Crud\PatientLinkCrud.cs" />
     <Compile Include="Crud\PatientPortalInviteCrud.cs" />
-    <Compile Include="Crud\ProviderClinicCrud.cs" />
     <Compile Include="Crud\RecurringChargeCrud.cs" />
     <Compile Include="Crud\SmsBlockPhoneCrud.cs" />
     <Compile Include="Crud\SubstitutionLinkCrud.cs" />
@@ -226,11 +225,12 @@
     <Compile Include="Data Interface\PayConnectResponseWebs.cs" />
     <Compile Include="Data Interface\PharmClinics.cs" />
     <Compile Include="Data Interface\ProcMultiVisits.cs" />
-    <Compile Include="Data Interface\ProviderClinicLinks.cs" />
+    <Compile Include="__WIP_Clinic\ProviderClinicLinks.cs" />
     <Compile Include="Data Interface\Reactivations.cs" />
     <Compile Include="DataException.cs" />
     <Compile Include="DataRecord.cs" />
     <Compile Include="DataRecordCache.cs" />
+    <Compile Include="DataRecordCacheBase.cs" />
     <Compile Include="Data\AlertType.cs" />
     <Compile Include="Data\GradingScaleType.cs" />
     <Compile Include="Data\PreferenceName.cs" />
@@ -241,11 +241,13 @@
     <Compile Include="Db\SOut.cs" />
     <Compile Include="Data\DefinitionCategory.cs" />
     <Compile Include="DefCatOptions.cs" />
-    <Compile Include="Data Interface\ProviderClinics.cs" />
+    <Compile Include="__WIP_Clinic\ProviderClinics.cs" />
     <Compile Include="Data Interface\RecurringCharges.cs" />
     <Compile Include="Db Multi Table\AgingData.cs" />
     <Compile Include="Db Multi Table\MarkupEdit.cs" />
     <Compile Include="Db Multi Table\PayPlanEdit.cs" />
+    <Compile Include="IDataRecordCache.cs" />
+    <Compile Include="IDataRecordCacheBase.cs" />
     <Compile Include="Logic\USlocales.cs" />
     <Compile Include="Misc\Authentication.cs" />
     <Compile Include="Misc\Introspection.cs" />
@@ -262,7 +264,6 @@
     <Compile Include="TableTypes\PharmClinic.cs" />
     <Compile Include="TableTypes\ProcMultiVisit.cs" />
     <Compile Include="TableTypes\Reactivation.cs" />
-    <Compile Include="TableTypes\ProviderClinicLink.cs" />
     <Compile Include="UI\GridSelectionMode.cs" />
     <Compile Include="UI\ODGridClickEventArgs.cs" />
     <Compile Include="UI\ODGridKeyEventArgs.cs" />
@@ -292,7 +293,7 @@
     <Compile Include="WebBridges\CloudStorage.cs" />
     <Compile Include="TableTypes\CommOptOut.cs" />
     <Compile Include="TableTypes\DbmLog.cs" />
-    <Compile Include="TableTypes\ProviderClinic.cs" />
+    <Compile Include="__WIP_Clinic\ProviderClinic.cs" />
     <Compile Include="Misc\CreditCardUtils\CreditCardUtils.cs" />
     <Compile Include="Misc\CreditCardUtils\MagstripCardParser.cs" />
     <Compile Include="TableTypes\RecurringCharge.cs" />
@@ -394,7 +395,6 @@
     <Compile Include="Crud\ClaimProcCrud.cs" />
     <Compile Include="Crud\ClaimValCodeLogCrud.cs" />
     <Compile Include="Crud\ClearinghouseCrud.cs" />
-    <Compile Include="Crud\ClinicCrud.cs" />
     <Compile Include="Crud\CommlogCrud.cs" />
     <Compile Include="Crud\ComputerPrefCrud.cs" />
     <Compile Include="Crud\CountyCrud.cs" />
@@ -788,7 +788,8 @@
     <Compile Include="Data Interface\Claims.cs" />
     <Compile Include="Data Interface\ClaimValCodeLogs.cs" />
     <Compile Include="Data Interface\Clearinghouses.cs" />
-    <Compile Include="Data Interface\Clinics.cs" />
+    <Compile Include="__WIP_Clinic\ClinicOptions.cs" />
+    <Compile Include="__WIP_Clinic\Clinics.cs" />
     <Compile Include="Data Interface\Commlogs.cs" />
     <Compile Include="Data Interface\ComputerPrefs.cs" />
     <Compile Include="Data Interface\Counties.cs" />
@@ -1212,7 +1213,7 @@
     <Compile Include="TableTypes\ClaimProc.cs" />
     <Compile Include="TableTypes\ClaimValCodeLog.cs" />
     <Compile Include="TableTypes\Clearinghouse.cs" />
-    <Compile Include="TableTypes\Clinic.cs" />
+    <Compile Include="__WIP_Clinic\Clinic.cs" />
     <Compile Include="Data\ClockEvent.cs" />
     <Compile Include="TableTypes\Commlog.cs" />
     <Compile Include="Data\Computer.cs" />

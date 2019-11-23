@@ -3613,10 +3613,16 @@ namespace OpenDental
                 }
             }
             ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "LabCase"), null, "", "LabCase"));
-            if (!Clinics.IsMedicalPracticeOrClinic(Clinics.ClinicNum))
+
+            var clinic = Clinic.GetById(Clinics.ClinicId);
+            if (clinic != null)
             {
-                ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Perio Chart"), Resources.IconChartLine, "", "Perio"));
+                if (!clinic.IsMedicalOnly)
+                {
+                    ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Perio Chart"), Resources.IconChartLine, "", "Perio"));
+                }
             }
+
             //button = new ODToolBarButton(OrthoChartTabs.GetFirst(true).TabName, null, "", "Ortho");
             //if (OrthoChartTabs.GetCount(true) > 1)
             //{
@@ -3634,13 +3640,18 @@ namespace OpenDental
             //if(PrefC.GetBool(PrefName.ToothChartMoveMenuToRight)) {
             //	ToolBarMain.Buttons.Add(new ODToolBarButton("                   .",-1,"",""));
             //}
-            if (!Clinics.IsMedicalPracticeOrClinic(Clinics.ClinicNum))
+
+            if (clinic != null)
             {
-                button = new ODToolBarButton(Lan.g(this, "Tooth Chart"), null, "", "ToothChart");
-                button.Style = ODToolBarButtonStyle.DropDownButton;
-                button.DropDownMenu = menuToothChart;
-                ToolBarMain.Buttons.Add(button);
+                if (!clinic.IsMedicalOnly)
+                {
+                    button = new ODToolBarButton(Lan.g(this, "Tooth Chart"), null, "", "ToothChart");
+                    button.Style = ODToolBarButtonStyle.DropDownButton;
+                    button.DropDownMenu = menuToothChart;
+                    ToolBarMain.Buttons.Add(button);
+                }
             }
+
             button = new ODToolBarButton(Lan.g(this, "Exam Sheet"), null, "", "ExamSheet");
             button.Style = ODToolBarButtonStyle.PushButton;
             ToolBarMain.Buttons.Add(button);
@@ -4103,7 +4114,7 @@ namespace OpenDental
             }
             if (!UsingEcwTightOrFull() && isClinicRefresh)
             {
-                if (Clinics.IsMedicalPracticeOrClinic(Clinics.ClinicNum))
+                if (Clinic.GetById(Clinics.ClinicId).IsMedicalOnly)
                 {
                     tabProc.TabPages.Remove(tabMissing);
                     tabProc.TabPages.Remove(tabMovements);
@@ -7109,7 +7120,7 @@ namespace OpenDental
                 }
             }
             bool showSelectedTeeth = checkShowTeeth.Checked;
-            if (Clinics.IsMedicalPracticeOrClinic(Clinics.ClinicNum))
+            if (Clinic.GetById(Clinics.ClinicId).IsMedicalOnly)
             {
                 checkShowTeeth.Checked = false;
             }
@@ -7568,10 +7579,10 @@ namespace OpenDental
                         row.Cells.Add(rowCur["hl7Sent"].ToString());
                         break;
                     case "Clinic":
-                        row.Cells.Add(Clinics.GetAbbr(PIn.Long(rowCur["ClinicNum"].ToString())));
+                        row.Cells.Add(Clinic.GetById(PIn.Long(rowCur["ClinicNum"].ToString())).Abbr);
                         break;
                     case "ClinicDesc":
-                        row.Cells.Add(Clinics.GetDesc(PIn.Long(rowCur["ClinicNum"].ToString())));
+                        row.Cells.Add(Clinic.GetById(PIn.Long(rowCur["ClinicNum"].ToString())).Description);
                         break;
                     //If you add something here, you should also add it to SearchProgNotesMethod.
                     default:
@@ -11818,14 +11829,14 @@ namespace OpenDental
             {
                 if (isClinicAbbr)
                 {
-                    if (Clinics.GetAbbr(PIn.Long((rowCur["ClinicNum"].ToString().ToLower()))).Contains(searchInput[i]))
+                    if (Clinic.GetById(PIn.Long((rowCur["ClinicNum"].ToString().ToLower()))).Abbr.Contains(searchInput[i]))
                     {
                         searchInput.RemoveAt(i);
                     }
                 }
                 else if (isClinicDesc)
                 {
-                    if (Clinics.GetDesc(PIn.Long((rowCur["ClinicNum"].ToString().ToLower()))).Contains(searchInput[i]))
+                    if (Clinic.GetById(PIn.Long((rowCur["ClinicNum"].ToString().ToLower()))).Description.Contains(searchInput[i]))
                     {
                         searchInput.RemoveAt(i);
                     }
@@ -12815,7 +12826,7 @@ namespace OpenDental
                     Appointment apt = Appointments.GetOneApt(procNew.AptNum);
                     procNew.ClinicNum = apt.ClinicNum;
                     procNew.ProcDate = apt.AptDateTime;
-                    procNew.PlaceService = Clinics.GetPlaceService(apt.ClinicNum);
+                    procNew.PlaceService = Clinic.GetById(apt.ClinicNum).DefaultPlaceOfService;
                 }
                 else
                 {
@@ -13338,8 +13349,7 @@ namespace OpenDental
                 yPos += (int)g.MeasureString(text, headingFont).Height;
                 //practice
                 text = Preference.GetString(PreferenceName.PracticeTitle);
-                if (Preferences.HasClinicsEnabled)
-                {
+
                     DataRow row;
                     long procNum;
                     long clinicNum;
@@ -13355,11 +13365,11 @@ namespace OpenDental
                         if (clinicNum != 0)
                         {//The first clinicNum that's encountered
                          //Description is used here because it can be printed and shown to the patient.
-                            text = Clinics.GetDesc(clinicNum);
+                            text = Clinic.GetById(clinicNum).Description;
                             break;
                         }
                     }
-                }
+                
                 g.DrawString(text, subHeadingFont, Brushes.Black, center - g.MeasureString(text, subHeadingFont).Width / 2, yPos);
                 yPos += (int)g.MeasureString(text, subHeadingFont).Height;
                 //name
@@ -14667,7 +14677,7 @@ namespace OpenDental
                 }
                 tabProc.TabPages.Remove(tabPatInfo);
             }
-            else if (Clinics.IsMedicalPracticeOrClinic(Clinics.ClinicNum))
+            else if (Clinic.GetById(Clinics.ClinicId).IsMedicalOnly)
             {
                 if (checkTreatPlans.Checked)
                 {

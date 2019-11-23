@@ -79,5 +79,17 @@ namespace OpenDentBusiness
         /// <param name="supplyNeeded">The supply needed.</param>
         public static void Delete(SupplyNeeded supplyNeeded) =>
             DataConnection.ExecuteNonQuery("DELETE FROM `supply_needed` WHERE `id` = " + supplyNeeded.Id);
+
+        /// <summary>
+        /// Saves this needed supply to the database.
+        /// </summary>
+        public void Save()
+        {
+            if (IsNew) Insert(this);
+            else
+            {
+                Update(this);
+            }
+        }
     }
 }

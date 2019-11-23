@@ -15,7 +15,7 @@ namespace OpenDentBusiness
             Stopwatch s = new Stopwatch();
             s.Start();
 #endif
-            bool hasClinicsEnabled = Preference.HasClinicsEnabledNoCache;
+
             string query = "SELECT procedurelog.ProcDate,CONCAT(patient.LName,', ',patient.FName)AS Patient, procedurecode.AbbrDesc, "
                 + "procedurelog.ProcFee*(procedurelog.BaseUnits+procedurelog.UnitQty)-IFNULL(cp.CapWriteOff,0) Fee,"
                 + "IFNULL((procedurelog.ProcFee*(procedurelog.BaseUnits+procedurelog.UnitQty))-IFNULL(cp.CapWriteOff,0)-IFNULL(cp.InsAmt,0)"
@@ -67,10 +67,9 @@ namespace OpenDentBusiness
                 + "AND procedurelog.ProcDate BETWEEN " + POut.Date(dateFrom) + " AND  " + POut.Date(dateTo) + " "
                 + "AND IFNULL((procedurelog.ProcFee*(procedurelog.BaseUnits+procedurelog.UnitQty))-IFNULL(cp.CapWriteOff,0)-IFNULL(cp.InsAmt,0)-"
                     + "IFNULL(cp.WriteOff,0),0)+IFNULL(adj.AdjAmt,0)-IFNULL(pay.SplitAmt,0) > 0.005";
-            if (hasClinicsEnabled && listClinicNums.Count > 0)
-            {
+
                 query += "AND procedurelog.ClinicNum IN(" + string.Join(",", listClinicNums.Select(x => POut.Long(x))) + ") ";
-            }
+            
             query += "ORDER BY procedurelog.ProcDate,patient.LName,patient.FName,procedurecode.ProcCode";
             DataTable table = DataConnection.ExecuteDataTable(query);
 #if DEBUG

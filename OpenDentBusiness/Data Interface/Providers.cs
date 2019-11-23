@@ -568,7 +568,7 @@ namespace OpenDentBusiness
             if (clinicNum > 0)
             {
                 useClinic = true;
-                clinicInsBillingProv = Clinics.GetClinic(clinicNum).InsBillingProv;
+                clinicInsBillingProv = Clinic.GetById(clinicNum).InsuranceBillingProviderId.GetValueOrDefault();
             }
             if (useClinic)
             {
@@ -621,16 +621,11 @@ namespace OpenDentBusiness
         ///Passing ClinicNum=0 returns all unrestricted providers. Ordered by provider.Abbr.</summary>
         public static List<Provider> GetProvsForClinic(long clinicNum)
         {
-            //No need to check RemotingRole; no call to db.
-            if (!Preferences.HasClinicsEnabled)
-            {
-                return Providers.GetDeepCopy(true);//if clinics not enabled, return all visible providers.
-            }
             Dictionary<long, List<long>> dictUserClinics = User.All()
                 .ToDictionary(x => x.Id, x => ClinicUser.GetForUser(x.Id).Select(y => y.ClinicId).ToList());
             Dictionary<long, List<long>> dictProvUsers = User.AllProviders().GroupBy(x => x.ProviderId.Value)
                 .ToDictionary(x => x.Key, x => x.Select(y => y.Id).ToList());
-            HashSet<long> hashSetProvsRestrictedOtherClinic = new HashSet<long>(ProviderClinicLinks.GetProvsRestrictedToOtherClinics(clinicNum));
+            HashSet<long> hashSetProvsRestrictedOtherClinic = new HashSet<long>(ProviderClinic.GetProvsRestrictedToOtherClinics(clinicNum).Select(x => x.ProviderId));
             return Providers.GetWhere(x =>
                 (!dictProvUsers.ContainsKey(x.ProvNum) //provider not associated to any users.
                 || dictProvUsers[x.ProvNum].Any(y => dictUserClinics[y].Count == 0) //provider associated with user not restricted to any clinics
@@ -659,11 +654,11 @@ namespace OpenDentBusiness
         public static Provider GetDefaultProvider(long clinicNum)
         {
             //No need to check RemotingRole; no call to db.
-            Clinic clinic = Clinics.GetClinic(clinicNum);
+            Clinic clinic = Clinic.GetById(clinicNum);
             Provider provider = null;
-            if (clinic != null && clinic.DefaultProv != 0)
+            if (clinic != null && clinic.ProviderId.HasValue)
             {//the clinic exists
-                provider = Providers.GetProv(clinic.DefaultProv);
+                provider = Providers.GetProv(clinic.ProviderId.Value);
             }
             if (provider == null)
             {//If not using clinics or if the specified clinic does not have a valid default provider set.
@@ -947,7 +942,7 @@ namespace OpenDentBusiness
         public static List<Provider> GetProvsScheduledToday(long clinicNum = -1)
         {
             List<Schedule> listSchedulesForDate = Schedules.GetAllForDateAndType(DateTime.Today, ScheduleType.Provider);
-            if (Preferences.HasClinicsEnabled && clinicNum >= 0)
+            if (clinicNum >= 0)
             {
                 listSchedulesForDate.FindAll(x => x.ClinicNum == clinicNum);
             }

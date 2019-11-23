@@ -365,10 +365,7 @@ namespace OpenDental{
 			checkNoNotes.Checked=Preference.GetBool(PreferenceName.ReportsIncompleteProcsNoNotes);
 			checkUnsignedNote.Checked=Preference.GetBool(PreferenceName.ReportsIncompleteProcsUnsigned);
 			FillProvs();
-			if(!Preferences.HasClinicsEnabled) {
-				comboBoxMultiClinics.Visible=false;
-				labelClin.Visible=false;
-			}
+
 			dateRangePicker.SetDateTimeFrom(DateTime.Today);
 			dateRangePicker.SetDateTimeTo(DateTime.Today);
 			FillGrid();
@@ -394,7 +391,7 @@ namespace OpenDental{
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"Patient Name"),120);
 			gridMain.Columns.Add(col);
-			if(Clinics.IsMedicalPracticeOrClinic(Clinics.ClinicNum)) {
+			if(Clinic.GetById(Clinics.ClinicId).IsMedicalOnly) {
 				col=new ODGridColumn(Lan.g(this,"Code"),150);
 				gridMain.Columns.Add(col);
 				col=new ODGridColumn(Lan.g(this,"Description"),220);
@@ -428,7 +425,7 @@ namespace OpenDental{
 				ODGridRow newRow=new ODGridRow();
 				newRow.Cells.Add(PIn.Date(row["ProcDate"].ToString()).ToString("d"));
 				newRow.Cells.Add(row["PatName"].ToString());
-				if(Clinics.IsMedicalPracticeOrClinic(Clinics.ClinicNum)) {
+				if(Clinic.GetById(Clinics.ClinicId).IsMedicalOnly) {
 					newRow.Cells.Add(row["ProcCode"].ToString());
 					newRow.Cells.Add(row["Descript"].ToString());
 				}

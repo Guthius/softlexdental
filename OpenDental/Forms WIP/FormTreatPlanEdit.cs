@@ -543,7 +543,7 @@ namespace OpenDental{
 
 		private void butPickPresenter_Click(object sender,EventArgs e) {
 			FormUserPick FormUP=new FormUserPick();
-			List<User> listUsers= User.AllActive().FindAll(x => x.ClinicRestricted == false || x.ClinicId == Clinics.ClinicNum);
+			List<User> listUsers= User.AllActive().FindAll(x => x.ClinicRestricted == false || x.ClinicId == Clinics.ClinicId);
 			FormUP.Users=listUsers;
 			if(_presenterCur!=null) {
 				FormUP.SuggestedUserId=_presenterCur.Id;

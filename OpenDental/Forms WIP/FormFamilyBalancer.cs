@@ -238,7 +238,7 @@ namespace OpenDental {
 				//If clinics are not enabled, it will get all entries, regardless of ClinicNum.
 				//This is to guard against people who disable clinics after using.
 				listMatchingEntries=listNegCharges.FindAll(x => x.ProvNum==posCharge.ProvNum && x.PatNum==posCharge.PatNum
-					&& (Preferences.HasClinicsEnabled ? x.ClinicNum==posCharge.ClinicNum : true) && x.AmountEnd<0);
+					&& (x.ClinicNum==posCharge.ClinicNum) && x.AmountEnd<0);
 				foreach(AccountEntry negCharge in listMatchingEntries) {
 					summaryText+=CreateTransferHelper(posCharge,negCharge,listAccountEntriesForPat,payCur,famAccount);
 					if(posCharge.AmountEnd==0) {
@@ -407,15 +407,14 @@ namespace OpenDental {
 		///<summary>Creates and inserts a payment similar to the load logic for the income transfer manager.</summary>
 		private Payment CreatePaymentTransferHelper(Patient pat) {
 			Payment payCur=new Payment();
-			payCur.ClinicNum=0;
-			if(Preferences.HasClinicsEnabled) {//if clinics aren't enabled default to 0
-				payCur.ClinicNum=Clinics.ClinicNum;
+
+				payCur.ClinicNum=Clinics.ClinicId;
 				if((PayClinicSetting)Preference.GetInt(PreferenceName.PaymentClinicSetting)==PayClinicSetting.PatientDefaultClinic
-					|| (Clinics.ClinicNum==0 && (PayClinicSetting)Preference.GetInt(PreferenceName.PaymentClinicSetting)==PayClinicSetting.SelectedExceptHQ))
+					|| (Clinics.ClinicId==0 && (PayClinicSetting)Preference.GetInt(PreferenceName.PaymentClinicSetting)==PayClinicSetting.SelectedExceptHQ))
 				{
 					payCur.ClinicNum=pat.ClinicNum;
 				}
-			}
+			
 			payCur.DateEntry=DateTime.Now;
 			payCur.PatNum=pat.PatNum;
 			payCur.PayDate=datePicker.Value;

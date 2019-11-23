@@ -41,7 +41,7 @@ namespace OpenDental
         /// <summary>
         /// Loads the form.
         /// </summary>
-        void FormSupplyNeededEdit_Load(object sender, EventArgs e)
+        private void FormSupplyNeededEdit_Load(object sender, EventArgs e)
         {
             dateTextBox.Text = SupplyNeeded.DateAdded.ToShortDateString();
             descriptionTextBox.Text = SupplyNeeded.Description;
@@ -50,7 +50,7 @@ namespace OpenDental
         /// <summary>
         /// Deletes the needed supply.
         /// </summary>
-        void DeleteButton_Click(object sender, EventArgs e)
+        private void DeleteButton_Click(object sender, EventArgs e)
         {
             if (SupplyNeeded.IsNew)
             {
@@ -65,30 +65,24 @@ namespace OpenDental
         /// <summary>
         /// Saves the needed supply and closes the form.
         /// </summary>
-        void AcceptButton_Click(object sender, EventArgs e)
+        private void AcceptButton_Click(object sender, EventArgs e)
         {
-            if (dateTextBox.errorProvider1.GetError(dateTextBox) != "")
+            if (!DateTime.TryParse(dateTextBox.Text, out var dateAdded))
             {
                 MessageBox.Show(
-                    Translation.Language.PleaseFixDataEntryErrors,
+                    "Please enter a valid date.",
                     Translation.Language.SupplyNeeded,
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 
+                dateTextBox.Focus();
+
                 return;
             }
 
-            SupplyNeeded.DateAdded = PIn.Date(dateTextBox.Text);
+            SupplyNeeded.DateAdded = dateAdded;
             SupplyNeeded.Description = descriptionTextBox.Text;
-
-            if (SupplyNeeded.IsNew)
-            {
-                SupplyNeeded.Insert(SupplyNeeded);
-            }
-            else
-            {
-                SupplyNeeded.Update(SupplyNeeded);
-            }
+            SupplyNeeded.Save();
 
             DialogResult = DialogResult.OK;
         }

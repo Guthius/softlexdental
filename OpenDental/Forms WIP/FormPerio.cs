@@ -2230,7 +2230,7 @@ namespace OpenDental
             //Perhaps if there were a perioexam.ClinicNum column.
             if (PatCur.ClinicNum != 0)
             {
-                Clinic clinic = Clinics.GetClinic(PatCur.ClinicNum);
+                Clinic clinic = Clinic.GetById(PatCur.ClinicNum);
                 clinicName = clinic.Description;
             }
             else
@@ -2355,7 +2355,7 @@ namespace OpenDental
             //Perhaps if there were a perioexam.ClinicNum column.
             if (PatCur.ClinicNum != 0)
             {
-                Clinic clinic = Clinics.GetClinic(PatCur.ClinicNum);
+                Clinic clinic = Clinic.GetById(PatCur.ClinicNum);
                 clinicName = clinic.Description;
             }
             else

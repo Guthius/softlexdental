@@ -1035,7 +1035,7 @@ namespace OpenDental {
 		#endregion
 
 		private void FormDatabaseMaintenance_Load(object sender,System.EventArgs e) {
-			_listDbmMethods=DatabaseMaintenances.GetMethodsForDisplay(Clinics.ClinicNum);
+			_listDbmMethods=DatabaseMaintenances.GetMethodsForDisplay(Clinics.ClinicId);
 			DatabaseMaintenances.InsertMissingDBMs(_listDbmMethods.Select(x => x.Name).ToList());
 			_listDatabaseMaintenances=DatabaseMaintenances.GetAll();
 			//Users get stopped from launching FormDatabaseMaintenance when they do not have the Setup permission.
@@ -1043,7 +1043,7 @@ namespace OpenDental {
 			if(Security.IsAuthorized(Permissions.SecurityAdmin,true)){
 				butEtrans.Enabled=true;
 			}
-			if(Clinics.IsMedicalPracticeOrClinic(Clinics.ClinicNum)) {
+			if(Clinic.GetById(Clinics.ClinicId).IsMedicalOnly) {
 				butApptProcs.Visible=false;
 				labelApptProcs.Visible=false;
 			}

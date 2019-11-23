@@ -17,7 +17,7 @@ namespace OpenDental {
 		private List<Definition> _listPosAdjTypes=new List<Definition>();
 		private List<BrokenApptProcedure> _listBrokenProcOptions=new List<BrokenApptProcedure>();
 		private List<Provider> _listProviders;
-		private bool _hasClinicsEnabled;
+
 
 		///<summary></summary>
 		public FormRpBrokenAppointments() {
@@ -26,41 +26,31 @@ namespace OpenDental {
 		}
 
 		private void FormRpBrokenAppointments_Load(object sender,EventArgs e) {
-			if(Preferences.HasClinicsEnabled) {
-				_hasClinicsEnabled=true;
-			}
-			else {
-				_hasClinicsEnabled=false;
-			}
+
 			_listProviders=Providers.GetListReports();
 			dateStart.SelectionStart=DateTime.Today;
 			dateEnd.SelectionStart=DateTime.Today;
 			for(int i=0;i<_listProviders.Count;i++) {
 				listProvs.Items.Add(_listProviders[i].GetLongDesc());
 			}
-			if(!_hasClinicsEnabled) {
-				listClinics.Visible=false;
-				labelClinics.Visible=false;
-				checkAllClinics.Visible=false;
-			}
-			else {
-				_listClinics=Clinics.GetForUserod(Security.CurrentUser);
+
+				_listClinics=Clinic.GetByUser(Security.CurrentUser).ToList();
 				if(!Security.CurrentUser.ClinicRestricted) {
 					listClinics.Items.Add(Lan.g(this,"Unassigned"));
 					listClinics.SetSelected(0,true);
 				}
 				for(int i=0;i<_listClinics.Count;i++) {
 					int curIndex=listClinics.Items.Add(_listClinics[i].Abbr);
-					if(Clinics.ClinicNum==0) {
+					if(Clinics.ClinicId==0) {
 						listClinics.SetSelected(curIndex,true);
 						checkAllClinics.Checked=true;
 					}
-					if(_listClinics[i].ClinicNum==Clinics.ClinicNum) {
+					if(_listClinics[i].Id==Clinics.ClinicId) {
 						listClinics.SelectedIndices.Clear();
 						listClinics.SetSelected(curIndex,true);
 					}
 				}
-			}
+			
 			int value=Preference.GetInt(PreferenceName.BrokenApptProcedure);
 			if(value==(int)BrokenApptProcedure.None) {//
 				radioProcs.Visible=false;
@@ -171,12 +161,12 @@ namespace OpenDental {
 				MsgBox.Show(this,"At least one provider must be selected.");
 				return;
 			}
-			if(_hasClinicsEnabled) {
+
 				if(!checkAllClinics.Checked && listClinics.SelectedIndices.Count==0) {
 					MsgBox.Show(this,"At least one clinic must be selected.");
 					return;
 				}
-			}
+			
 			if(radioAdj.Checked && listOptions.SelectedIndices.Count==0) {
 				MsgBox.Show(this,"At least one adjustment type must be selected.");
 				return;
@@ -188,14 +178,14 @@ namespace OpenDental {
 			List<long> listClinicNums=new List<long>();
 			for(int i=0;i<listClinics.SelectedIndices.Count;i++) {
 				if(Security.CurrentUser.ClinicRestricted) {
-						listClinicNums.Add(_listClinics[listClinics.SelectedIndices[i]].ClinicNum);//we know that the list is a 1:1 to _listClinics
+						listClinicNums.Add(_listClinics[listClinics.SelectedIndices[i]].Id);//we know that the list is a 1:1 to _listClinics
 					}
 				else {
 					if(listClinics.SelectedIndices[i]==0) {
 						listClinicNums.Add(0);
 					}
 					else {
-						listClinicNums.Add(_listClinics[listClinics.SelectedIndices[i]-1].ClinicNum);//Minus 1 from the selected index
+						listClinicNums.Add(_listClinics[listClinics.SelectedIndices[i]-1].Id);//Minus 1 from the selected index
 					}
 				}
 			}
@@ -223,7 +213,7 @@ namespace OpenDental {
 			ReportComplex report=new ReportComplex(true,false);
 			DataTable table = new DataTable();
 			table=RpBrokenAppointments.GetBrokenApptTable(dateStart.SelectionStart,dateEnd.SelectionStart,listProvNums,listClinicNums,listAdjDefNums,brokenApptSelection
-				,checkAllClinics.Checked,radioProcs.Checked,radioAptStatus.Checked,radioAdj.Checked,_hasClinicsEnabled);
+				,checkAllClinics.Checked,radioProcs.Checked,radioAptStatus.Checked,radioAdj.Checked,true);
 			string subtitleProvs="";
 			string subtitleClinics="";
 			if(checkAllProvs.Checked) {
@@ -237,7 +227,7 @@ namespace OpenDental {
 					subtitleProvs+=_listProviders[listProvs.SelectedIndices[i]].Abbr;
 				}
 			}
-			if(_hasClinicsEnabled) {
+
 				if(checkAllClinics.Checked) {
 					subtitleClinics=Lan.g(this,"All Clinics");
 				}
@@ -259,7 +249,7 @@ namespace OpenDental {
 						}
 					}
 				}
-			}
+			
 			Font font=new Font("Tahoma",10);
 			Font fontBold=new Font("Tahoma",10,FontStyle.Bold);
 			Font fontTitle=new Font("Tahoma",17,FontStyle.Bold);
@@ -291,12 +281,9 @@ namespace OpenDental {
 			report.AddSubTitle("Providers",subtitleProvs,fontSubTitle);
 			report.AddSubTitle("Clinics",subtitleClinics,fontSubTitle);
 			QueryObject query;
-			if(Preferences.HasClinicsEnabled) {//Split the query up by clinics.
-				query=report.AddQuery(table,Lan.g(this,"Date")+": "+DateTimeOD.Today.ToString("d"),"ClinicDesc",SplitByKind.Value,0,true);
-			}
-			else {
-				query=report.AddQuery(table,Lan.g(this,"Date")+": "+DateTimeOD.Today.ToString("d"),"",SplitByKind.None,0,true);
-			}
+
+				query=report.AddQuery(table,Lan.g(this,"Date")+": "+DateTime.Today.ToString("d"),"ClinicDesc",SplitByKind.Value,0,true);
+
 			//Add columns to report
 			if(radioProcs.Checked) {//Report looking at ADA procedure code D9986 or D9987
 				query.AddColumn(Lan.g(this,"Date"),85,FieldValueType.Date,font);

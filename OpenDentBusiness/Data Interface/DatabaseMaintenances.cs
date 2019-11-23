@@ -3089,10 +3089,7 @@ namespace OpenDentBusiness
                         for (int i = 0; i < table.Rows.Count; i++)
                         {
                             log += "	" + table.Rows[i]["Description"].ToString();
-                            if (Preferences.HasClinicsEnabled)
-                            {
-                                log += " " + Lans.g("FormDatabaseMaintenance", "for Clinic") + ": " + table.Rows[i]["Abbr"].ToString();
-                            }
+                            log += " " + Lans.g("FormDatabaseMaintenance", "for Clinic") + ": " + table.Rows[i]["Abbr"].ToString();
                             log += "\r\n";
                         }
                         log += Lans.g("FormDatabaseMaintenance", "They need to be fixed manually.");
@@ -3133,10 +3130,7 @@ namespace OpenDentBusiness
                         for (int i = 0; i < table.Rows.Count; i++)
                         {
                             log += "	" + table.Rows[i]["Description"].ToString();
-                            if (Preferences.HasClinicsEnabled)
-                            {
-                                log += " " + Lans.g("FormDatabaseMaintenance", "for Clinic") + ": " + table.Rows[i]["Abbr"].ToString();
-                            }
+                            log += " " + Lans.g("FormDatabaseMaintenance", "for Clinic") + ": " + table.Rows[i]["Abbr"].ToString();
                             log += "\r\n";
                         }
                         log += Lans.g("FormDatabaseMaintenance", "They need to be fixed manually.");
@@ -3145,65 +3139,6 @@ namespace OpenDentBusiness
             }
             return log;
         }
-        #endregion
-        #region Clinic
-
-        ///<summary>Inserts missing/invalid clinics.</summary>
-        [DatabaseMaintenanceAttribute]
-        public static string ClinicNumMissingInvalid(bool verbose, DatabaseMaintenanceMode modeCur)
-        {
-            //look at the procedurelog and patient table because they will most likely have all possible clinics.
-            string command = @"
-				SELECT procedurelog.ClinicNum 
-				FROM procedurelog 
-				WHERE procedurelog.ClinicNum > 0 
-				AND procedurelog.ClinicNum NOT IN (SELECT ClinicNum FROM clinic) 
-				UNION 
-				SELECT patient.ClinicNum 
-				FROM patient
-				WHERE patient.ClinicNum > 0 
-				AND patient.ClinicNum NOT IN (SELECT ClinicNum FROM clinic) ";
-            List<long> listInvalidClinicNums = Db.GetListLong(command);
-            string log = "";
-            switch (modeCur)
-            {
-                case DatabaseMaintenanceMode.Check:
-                    if (listInvalidClinicNums.Count > 0 || verbose)
-                    {
-                        log += Lans.g("FormDatabaseMaintenance", "Clinics missing") + ": " + listInvalidClinicNums.Count + "\r\n";
-                    }
-                    break;
-                case DatabaseMaintenanceMode.Fix:
-                    if (listInvalidClinicNums.Count > 0)
-                    {
-                        List<DbmLog> listDbmLogs = new List<DbmLog>();
-                        string methodName = MethodBase.GetCurrentMethod().Name;
-                        foreach (long clinicNumInvalid in listInvalidClinicNums)
-                        {
-                            command = "SELECT MAX(ItemOrder) FROM clinic";
-                            int itemOrd = DataConnection.ExecuteInt(command) + 1;
-                            Clinic missingClinic = new Clinic()
-                            {
-                                ClinicNum = clinicNumInvalid,
-                                Description = "INVALID CLINIC #" + clinicNumInvalid,
-                                Abbr = "INVALID #" + clinicNumInvalid,
-                                ItemOrder = itemOrd
-                            };
-                            Clinics.Insert(missingClinic, true);
-                            listDbmLogs.Add(new DbmLog(Security.CurrentUser.Id, missingClinic.ClinicNum, DbmLogFKeyType.Clinic,
-                                DbmLogActionType.Insert, methodName, "Inserted clinic from ClinicNumMissingInvalid."));
-                        }
-                        if (listInvalidClinicNums.Count > 0 || verbose)
-                        {
-                            log += Lans.g("FormDatabaseMaintenance", "Missing clinics added") + ": " + listInvalidClinicNums.Count + "\r\n";
-                            Crud.DbmLogCrud.InsertMany(listDbmLogs);
-                        }
-                    }
-                    break;
-            }
-            return log;
-        }
-
         #endregion
         #region ClockEvent, Deposit, Disease, Document--------------------------------------------------------------------------------------------------
 
@@ -5571,10 +5506,6 @@ namespace OpenDentBusiness
         [DatabaseMaintenanceAttribute(HasBreakDown = true)]
         public static string PatientsNoClinicSet(bool verbose, DatabaseMaintenanceMode modeCur)
         {
-            if (!Preferences.HasClinicsEnabled)
-            {
-                return "";
-            }
             //Get patients not assigned to a clinic:
             string command = @"SELECT PatNum,LName,FName FROM patient WHERE ClinicNum=0 AND PatStatus!=" + POut.Int((int)PatientStatus.Deleted);
             DataTable table = Db.GetTable(command);
@@ -9593,7 +9524,7 @@ HAVING cnt>1";
             MethodInfo[] arrayDbmMethodsAll = (typeof(DatabaseMaintenances)).GetMethods();
             //Sort the methods by name so that they are easier for users to find desired methods to run.
             Array.Sort(arrayDbmMethodsAll, new MethodInfoComparer());
-            bool isMedicalClinic = Clinics.IsMedicalPracticeOrClinic(clinicId);
+            bool isMedicalClinic = Clinic.GetById(clinicId).IsMedicalOnly;
             foreach (MethodInfo meth in arrayDbmMethodsAll)
             {
                 DatabaseMaintenanceAttribute dbmAttribute = (DatabaseMaintenanceAttribute)Attribute.GetCustomAttribute(meth, typeof(DatabaseMaintenanceAttribute));

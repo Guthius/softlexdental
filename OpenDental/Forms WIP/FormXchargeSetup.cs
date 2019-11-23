@@ -499,48 +499,38 @@ namespace OpenDental
             {
                 return;//should never happen
             }
-            if (Preferences.HasClinicsEnabled)
+
+            groupPaySettings.Text = Lan.g(this, "Clinic Payment Settings");
+            _listUserClinicNums = new List<long>();
+            comboClinic.Items.Clear();
+            if (Security.CurrentUser.ClinicRestricted)
             {
-                groupPaySettings.Text = Lan.g(this, "Clinic Payment Settings");
-                _listUserClinicNums = new List<long>();
-                comboClinic.Items.Clear();
-                if (Security.CurrentUser.ClinicRestricted)
-                {
-                    //if program link is enabled, disable the enable check box so the restricted user cannot disable for all clinics
-                    checkEnabled.Enabled = !_progCur.Enabled;
-                }
-                else
-                {
-                    comboClinic.Items.Add(Lan.g(this, "Headquarters"));
-                    //this way both lists have the same number of items in it and if 'Headquarters' is selected the programproperty.ClinicNum will be set to 0
-                    _listUserClinicNums.Add(0);
-                    comboClinic.SelectedIndex = 0;
-                }
-                List<Clinic> listClinics = Clinics.GetForUserod(Security.CurrentUser);
-                for (int i = 0; i < listClinics.Count; i++)
-                {
-                    comboClinic.Items.Add(listClinics[i].Abbr);
-                    _listUserClinicNums.Add(listClinics[i].ClinicNum);
-                    if (Clinics.ClinicNum == listClinics[i].ClinicNum)
-                    {
-                        comboClinic.SelectedIndex = i;
-                        if (!Security.CurrentUser.ClinicRestricted)
-                        {
-                            comboClinic.SelectedIndex++;//increment SelectedIndex for 'Headquarters' in the list at position 0 if the user is not restricted
-                        }
-                    }
-                }
-                _indexClinicRevert = comboClinic.SelectedIndex;
+                //if program link is enabled, disable the enable check box so the restricted user cannot disable for all clinics
+                checkEnabled.Enabled = !_progCur.Enabled;
             }
             else
-            {//clinics not enabled
-                checkEnabled.Text = Lan.g(this, "Enabled");
-                labelClinicEnable.Visible = false;
-                labelClinic.Visible = false;
-                comboClinic.Visible = false;
-                groupPaySettings.Text = Lan.g(this, "Payment Settings");
-                _listUserClinicNums = new List<long>() { 0 };//if clinics are disabled, programproperty.ClinicNum will be set to 0
+            {
+                comboClinic.Items.Add(Lan.g(this, "Headquarters"));
+                //this way both lists have the same number of items in it and if 'Headquarters' is selected the programproperty.ClinicNum will be set to 0
+                _listUserClinicNums.Add(0);
+                comboClinic.SelectedIndex = 0;
             }
+            List<Clinic> listClinics = Clinic.GetByUser(Security.CurrentUser).ToList();
+            for (int i = 0; i < listClinics.Count; i++)
+            {
+                comboClinic.Items.Add(listClinics[i].Abbr);
+                _listUserClinicNums.Add(listClinics[i].Id);
+                if (Clinics.ClinicId == listClinics[i].Id)
+                {
+                    comboClinic.SelectedIndex = i;
+                    if (!Security.CurrentUser.ClinicRestricted)
+                    {
+                        comboClinic.SelectedIndex++;//increment SelectedIndex for 'Headquarters' in the list at position 0 if the user is not restricted
+                    }
+                }
+            }
+            _indexClinicRevert = comboClinic.SelectedIndex;
+
             checkEnabled.Checked = _progCur.Enabled;
             textPath.Text = _progCur.Path;
             //textOverride.Text = ProgramProperties.GetLocalPathOverrideForProgram(_progCur.ProgramNum);
@@ -552,7 +542,7 @@ namespace OpenDental
         private void FillFields()
         {
             long clinicNum = 0;
-            if (Preferences.HasClinicsEnabled && comboClinic.SelectedIndex > -1)
+            if (comboClinic.SelectedIndex > -1)
             {
                 clinicNum = _listUserClinicNums[comboClinic.SelectedIndex];
             }
@@ -785,13 +775,13 @@ namespace OpenDental
             bool isXWebEnabled = checkWebPayEnabled.Checked
                 && (textXWebID.Text.Trim().Length > 0 || textAuthKey.Text.Trim().Length > 0 || textTerminalID.Text.Trim().Length > 0);
             //X-Charge will be enabled if the enabled checkbox is checked and either clinics are disabled OR both Username and Password are set
-            bool isClientEnabled = !Preferences.HasClinicsEnabled || (textUsername.Text.Trim().Length > 0 && textPassword.Text.Trim().Length > 0);
+            bool isClientEnabled = (textUsername.Text.Trim().Length > 0 && textPassword.Text.Trim().Length > 0);
             if ((isClientEnabled || isXWebEnabled) && comboPaymentType.SelectedIndex < 0)
             {
                 MsgBox.Show(this, "Please select a payment type first.");
                 return false;
             }
-            if (!isAllClinics || !Preferences.HasClinicsEnabled || Security.CurrentUser.ClinicRestricted)
+            if (!isAllClinics || Security.CurrentUser.ClinicRestricted)
             {
                 return true;
             }
@@ -828,7 +818,7 @@ namespace OpenDental
         ///The values in the local list for HQ, or for the clinic modified if it was not HQ, have to be updated after calling this method.</summary>
         private void SyncWithHQ()
         {
-            if (!Preferences.HasClinicsEnabled || _listUserClinicNums[_indexClinicRevert] > 0)
+            if (_listUserClinicNums[_indexClinicRevert] > 0)
             {
                 return;
             }
@@ -925,7 +915,7 @@ namespace OpenDental
             //If clinics are not enabled and the X-Charge program link is enabled, make sure there is a username and password set.
             //If clinics are enabled, the program link can be enabled with blank username and/or password fields for some clinics.
             //X-Charge will be disabled for any clinic with a blank username or password.
-            if (checkEnabled.Checked && !Preferences.HasClinicsEnabled && (textUsername.Text.Trim().Length == 0 || textPassword.Text.Trim().Length == 0))
+            if (checkEnabled.Checked && (textUsername.Text.Trim().Length == 0 || textPassword.Text.Trim().Length == 0))
             {
                 MsgBox.Show(this, "Please enter a username and password first.");
                 return;
@@ -947,10 +937,9 @@ namespace OpenDental
             SyncWithHQ();
             //get selected ClinicNum (if enabled), PaymentType, encrypted Password, and encrypted AuthKey
             long clinicNum = 0;
-            if (Preferences.HasClinicsEnabled)
-            {
+
                 clinicNum = _listUserClinicNums[comboClinic.SelectedIndex];
-            }
+            
             string passwordEncrypted = "";
             if (textPassword.Text.Trim().Length > 0)
             {

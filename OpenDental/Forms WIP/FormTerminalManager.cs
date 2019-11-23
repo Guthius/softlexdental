@@ -322,7 +322,7 @@ namespace OpenDental {
 
 		///<summary>Refills form based on FormOpenDental.CurPatNum</summary>
 		private void FillPat() {
-			if(FormOpenDental.CurPatNum==0) {
+			if(FormOpenDental.CurrentPatientId==0) {
 				_patNumCur=0;
 				labelPatient.Text=Lan.g(this,"none");
 				labelSheets.Visible=false;
@@ -330,8 +330,8 @@ namespace OpenDental {
 				butLoad.Visible=false;
 			}
 			else {
-				if(FormOpenDental.CurPatNum!=_patNumCur) {//if pat changed or on load, get the patient name from db
-					_patNumCur=FormOpenDental.CurPatNum;
+				if(FormOpenDental.CurrentPatientId!=_patNumCur) {//if pat changed or on load, get the patient name from db
+					_patNumCur=FormOpenDental.CurrentPatientId;
 					labelPatient.Text=Patients.GetLim(_patNumCur).GetNameFL();
 				}
 				labelSheets.Visible=true;

@@ -270,7 +270,7 @@ namespace OpenDental{
 			List<Operatory> listOpsShort=Operatories.GetDeepCopy(true);
 			_listOps=new List<Operatory>();
 			for(int i=0;i<listOpsShort.Count;i++) {
-				if(Preferences.HasClinicsEnabled && _clinicNum!=0) {//Using clinics and a clinic filter was passed in.
+				if( _clinicNum!=0) {//Using clinics and a clinic filter was passed in.
 					if(listOpsShort[i].ClinicNum!=_clinicNum) {
 						continue;
 					}

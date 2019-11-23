@@ -252,18 +252,17 @@ namespace OpenDental {
 			paymentCur.PatNum=patcur.PatNum;
 			//Explicitly set ClinicNum=0, since a pat's ClinicNum will remain set if the user enabled clinics, assigned patients to clinics, and then
 			//disabled clinics because we use the ClinicNum to determine which PayConnect or XCharge/XWeb credentials to use for payments.
-			paymentCur.ClinicNum=0;
-			if(Preferences.HasClinicsEnabled) {//if clinics aren't enabled default to 0
+
 				if((PayClinicSetting)Preference.GetInt(PreferenceName.PaymentClinicSetting)==PayClinicSetting.PatientDefaultClinic) {
 					paymentCur.ClinicNum=patcur.ClinicNum;
 				}
 				else if((PayClinicSetting)Preference.GetInt(PreferenceName.PaymentClinicSetting)==PayClinicSetting.SelectedExceptHQ) {
-					paymentCur.ClinicNum=(Clinics.ClinicNum==0)?patcur.ClinicNum:Clinics.ClinicNum;
+					paymentCur.ClinicNum=(Clinics.ClinicId==0)?patcur.ClinicNum:Clinics.ClinicId;
 				}
 				else {
-					paymentCur.ClinicNum=Clinics.ClinicNum;
+					paymentCur.ClinicNum=Clinics.ClinicId;
 				}
-			}
+			
 			paymentCur.DateEntry=DateTimeOD.Today;//So that it will show properly in the new window.
 			List<Definition> listDefs= Definition.GetByCategory(DefinitionCategory.PaymentTypes);;
 			if(listDefs.Count>0) {
@@ -498,7 +497,7 @@ namespace OpenDental {
 			if(listClaimSendQueueItems.Count==0) {
 				return retVal;
 			}
-			if(Preferences.HasClinicsEnabled) {//Clinics is in use
+
 				long clinicNum0=Claims.GetClaim(listClaimSendQueueItems[0].ClaimNum).ClinicNum;
 				for(int i=1;i<listClaimSendQueueItems.Count;i++) {
 					long clinicNum=Claims.GetClaim(listClaimSendQueueItems[i].ClaimNum).ClinicNum;
@@ -507,7 +506,7 @@ namespace OpenDental {
 						return retVal;
 					}
 				}
-			}
+			
 			long clearinghouseNum0=listClaimSendQueueItems[0].ClearinghouseNum;
 			EnumClaimMedType medType0=Claims.GetClaim(listClaimSendQueueItems[0].ClaimNum).MedType;
 			int index=0;
@@ -567,9 +566,9 @@ namespace OpenDental {
 			}
 			Claim claim0=Claims.GetClaim(listClaimSendQueueItems[0].ClaimNum);
 			long claimClinicNum=0;
-			if(Preferences.HasClinicsEnabled) {
+
 				claimClinicNum=claim0.ClinicNum;//All claims for the queueItems have same clinic, due to validation above.
-			}
+			
 			Clearinghouse clearinghouseHq=ClearinghouseL.GetClearinghouseHq(retVal[0].ClearinghouseNum);
 			Clearinghouse clearinghouseClin=Clearinghouses.OverrideFields(clearinghouseHq,claimClinicNum);
 			EnumClaimMedType medType=claim0.MedType;

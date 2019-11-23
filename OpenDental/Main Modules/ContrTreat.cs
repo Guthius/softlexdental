@@ -761,7 +761,7 @@ namespace OpenDental{
 			FillSummary();
       FillPreAuth();
 			//FillMisc();
-			if(Clinics.IsMedicalPracticeOrClinic(Clinics.ClinicNum)) {
+			if(Clinic.GetById(Clinics.ClinicId).IsMedicalOnly) {
 				checkShowCompleted.Visible=false;
 			}
 			else {
@@ -1971,7 +1971,7 @@ namespace OpenDental{
 			//benefitsPrinted=false;
 			//notePrinted=false;
 			//pagesPrinted=0;
-			if(Clinics.IsMedicalPracticeOrClinic(Clinics.ClinicNum))
+			if(Clinic.GetById(Clinics.ClinicId).IsMedicalOnly)
 			{
 				return;
 			}
@@ -2495,19 +2495,13 @@ namespace OpenDental{
 			text=_listTreatPlans[gridPlans.SelectedIndices[0]].Heading;
 			par.AddFormattedText(text,headingFont);
 			par.AddLineBreak();
-			if(PatCur.ClinicNum==0 || !Preferences.HasClinicsEnabled) {
-				text=Preference.GetString(PreferenceName.PracticeTitle);
-				par.AddText(text);
-				par.AddLineBreak();
-				text=Preference.GetString(PreferenceName.PracticePhone);
-			}
-			else {
-				Clinic clinic=Clinics.GetClinic(PatCur.ClinicNum);
+
+				Clinic clinic=Clinic.GetById(PatCur.ClinicNum);
 				text=clinic.Description;
 				par.AddText(text);
 				par.AddLineBreak();
 				text=clinic.Phone;
-			}
+			
 			if(text.Length==10 && Application.CurrentCulture.Name=="en-US") {
 				text="("+text.Substring(0,3)+")"+text.Substring(3,3)+"-"+text.Substring(6);
 			}
@@ -2536,7 +2530,7 @@ namespace OpenDental{
 			#region PrintGraphics
 			TextFrame frame;
 			int widthDoc=MigraDocHelper.GetDocWidth();
-			if(!Clinics.IsMedicalPracticeOrClinic(Clinics.ClinicNum))
+			if(!Clinic.GetById(Clinics.ClinicId).IsMedicalOnly)
 			{	
 				frame=MigraDocHelper.CreateContainer(section);
 				MigraDocHelper.DrawString(frame,Lan.g(this,"Your")+"\r\n"+Lan.g(this,"Right"),bodyFontx,
@@ -3414,7 +3408,7 @@ namespace OpenDental{
 					continue;
 				}
 				Procedure proc=listProcsSelected[i];
-				if(Preferences.HasClinicsEnabled && procClinicNum!=proc.ClinicNum) {
+				if(procClinicNum!=proc.ClinicNum) {
 					MsgBox.Show(this,"All procedures do not have the same clinic.");
 					return;
 				}

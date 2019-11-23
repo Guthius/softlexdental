@@ -854,7 +854,7 @@ namespace OpenDental {
 					comboSite.Items.Add(_listSites[i].Description);
 				}
 			}
-			labelClinic.Visible=Preferences.HasClinicsEnabled;
+            labelClinic.Visible = true;
 			splitContainer.Panel2Collapsed=true;
 			if(Preference.GetBool(PreferenceName.WebSchedAsapEnabled)) {
 				if(_isSendingWebSched) {
@@ -1345,7 +1345,7 @@ namespace OpenDental {
 		}
 
 		private void butText_Click(object sender,EventArgs e) {
-			Clinic curClinic=Clinics.GetClinic(Clinics.ClinicNum)??Clinics.GetDefaultForTexting()??Clinics.GetPracticeAsClinicZero();
+			Clinic curClinic=Clinic.GetById(Clinics.ClinicId)??Clinic.GetDefaultForTexting();
 			List<PatComm> listPatCommsToSend;
 			if(tabControl.SelectedIndex==0) {//Appt Tab selected
 				Func<int,long> getPatNumFromGridRow=new Func<int,long>((rowIdx) =>	{
@@ -1367,7 +1367,7 @@ namespace OpenDental {
 				return;
 			}
 			string textTemplate=GetTextMessageText(curClinic);
-			FormTxtMsgMany FormTMM=new FormTxtMsgMany(listPatCommsToSend,textTemplate,curClinic.ClinicNum,SmsMessageSource.AsapManual);
+			FormTxtMsgMany FormTMM=new FormTxtMsgMany(listPatCommsToSend,textTemplate,curClinic.Id,SmsMessageSource.AsapManual);
 			FormTMM.ShowDialog();
 		}
 
@@ -1418,7 +1418,7 @@ namespace OpenDental {
 		///<summary>Gets the template for this clinic and fills in the tags.</summary>
 		private string GetTextMessageText(Clinic curClinic) {
 			string textTemplate;
-			ClinicPref clinicPref=ClinicPrefs.GetPref(PreferenceName.ASAPTextTemplate,Clinics.ClinicNum);
+			ClinicPref clinicPref=ClinicPrefs.GetPref(PreferenceName.ASAPTextTemplate,Clinics.ClinicId);
 			if(clinicPref==null) {
 				textTemplate=Preference.GetString(PreferenceName.ASAPTextTemplate);
 			}
@@ -1704,9 +1704,7 @@ namespace OpenDental {
 				return;
 			}
 			if(_listClinicNumsWebSched.Count==0) {//No clinics are signed up for Web Sched
-				string message=Preferences.HasClinicsEnabled ?
-					"No clinics are signed up for Web Sched ASAP. Open Sign Up Portal?" :
-					"This practice is not signed up for Web Sched ASAP. Open Sign Up Portal?";
+				string message="No clinics are signed up for Web Sched ASAP. Open Sign Up Portal?";
 				if(!MsgBox.Show(this,MsgBoxButtons.YesNo,message)) {
 					return;
 				}
@@ -1728,7 +1726,7 @@ namespace OpenDental {
 				return;
 			}
 			long clinicNum=ODMethodsT.Coalesce(Operatories.GetOperatory(_opNum)).ClinicNum;
-			bool isSignedUp=(clinicNum.In(_listClinicNumsWebSched) || (!Preferences.HasClinicsEnabled && _listClinicNumsWebSched.Count > 0));
+			bool isSignedUp=clinicNum.In(_listClinicNumsWebSched);
 			if(!isSignedUp) {
 				if(!MsgBox.Show(this,MsgBoxButtons.YesNo,
 					"The clinic the selected operatory belongs to is not signed up for Web Sched ASAP. Open Sign Up Portal?")) 

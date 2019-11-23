@@ -366,14 +366,9 @@ namespace OpenDental{
 				contextMenuEclaims.MenuItems.Add(_listClearinghouses[i].Description,new EventHandler(menuItemClearinghouse_Click));
 			}
 			LayoutToolBars();
-			if(!Preferences.HasClinicsEnabled) {
-				comboClinic.Visible=false;
-				labelClinic.Visible=false;
-				butNextUnsent.Visible=false;
-			}
-			else {
-				_listClinics=Clinics.GetForUserod(Security.CurrentUser);
-			}
+
+				_listClinics=Clinic.GetByUser(Security.CurrentUser).ToList();
+			
 			comboCustomTracking.Items.Add(Lan.g(this,"all"));
 			comboCustomTracking.SelectedIndex=0;
 			_listClaimCustomTrackingDefs=Definition.GetByCategory(DefinitionCategory.ClaimCustomTracking);;
@@ -386,14 +381,17 @@ namespace OpenDental{
 					comboCustomTracking.Items.Add(_listClaimCustomTrackingDefs[i].Description);
 				}
 			}
-			if(Preferences.RandomKeys && Preferences.HasClinicsEnabled){//using random keys and clinics
-				//Does not pull in reports automatically, because they could easily get assigned to the wrong clearinghouse
-			}
-			else{
-				FormClaimReports FormC=new FormClaimReports(); //the currently selected clinic is what the combobox defaults to.
-				FormC.AutomaticMode=true;
-				FormC.ShowDialog();
-			}
+
+            // TODO: Fix this...
+			//if(Preferences.RandomKeys && Preferences.HasClinicsEnabled){//using random keys and clinics
+			//	//Does not pull in reports automatically, because they could easily get assigned to the wrong clearinghouse
+			//}
+			//else{
+			//	FormClaimReports FormC=new FormClaimReports(); //the currently selected clinic is what the combobox defaults to.
+			//	FormC.AutomaticMode=true;
+			//	FormC.ShowDialog();
+			//}
+
 			FillGrid();
 			//Validate all claims if the preference is enabled.
 			if(Preference.GetBool(PreferenceName.ClaimsSendWindowValidatesOnLoad)) {
@@ -452,14 +450,14 @@ namespace OpenDental{
 			for(int i=0;i<_listClinics.Count;i++) {
 				_listNumberOfClaims.Add(0);
 				for(int j=0;j<_arrayQueueAll.Length;j++) {
-					if(_arrayQueueAll[j].ClinicNum==_listClinics[i].ClinicNum) {
+					if(_arrayQueueAll[j].ClinicNum==_listClinics[i].Id) {
 						if(claimCustomTracking==0 || _arrayQueueAll[j].CustomTracking==claimCustomTracking) {
 							_listNumberOfClaims[i]=_listNumberOfClaims[i]+1;
 						}
 					}
 				}
 				int curIndex=comboClinic.Items.Add(_listClinics[i].Abbr+"  ("+_listNumberOfClaims[i]+")");
-				if(_listClinics[i].ClinicNum==Clinics.ClinicNum) {
+				if(_listClinics[i].Id==Clinics.ClinicId) {
 					comboClinic.SelectedIndex=curIndex;
 				}
 			}
@@ -546,13 +544,12 @@ namespace OpenDental{
 		}
 
 		private void FillGrid(bool rememberSelection){
-			if(Preferences.HasClinicsEnabled) {
 				long claimCustomTracking=0;
 				if(comboCustomTracking.SelectedIndex!=0) {
 					claimCustomTracking=Definition.GetByCategory(DefinitionCategory.ClaimCustomTracking)[comboCustomTracking.SelectedIndex-1].Id;
 				}
 				FillClinicsList(claimCustomTracking);
-			}
+			
 			int oldScrollValue=0;
 			List<long> listOldSelectedClaimNums=new List<long>();
 			if(rememberSelection) {
@@ -585,10 +582,8 @@ namespace OpenDental{
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableQueue","Carrier Name"),220);//was 100
 			gridMain.Columns.Add(col);
-			if(Preferences.HasClinicsEnabled) {
 				col=new ODGridColumn(Lan.g("TableQueue","Clinic"),80);
 				gridMain.Columns.Add(col);
-			}
 			col=new ODGridColumn(Lan.g("TableQueue","M/D"),40);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableQueue","Clearinghouse"),80);
@@ -605,9 +600,9 @@ namespace OpenDental{
 				row.Cells.Add(queueItem.DateService.ToShortDateString());
 				row.Cells.Add(queueItem.PatName);
 				row.Cells.Add(queueItem.Carrier);
-				if(Preferences.HasClinicsEnabled) {
-					row.Cells.Add(Clinics.GetAbbr(queueItem.ClinicNum));
-				}
+
+					row.Cells.Add(Clinic.GetById(queueItem.ClinicNum).Abbr);
+				
 				switch(queueItem.MedType){
 					case EnumClaimMedType.Dental:
 						row.Cells.Add("Dent");
@@ -651,14 +646,14 @@ namespace OpenDental{
 		private ClaimSendQueueItem[] GetListQueueFiltered() {
 			long clinicNum=0;
 			long customTracking=0;
-			if(Preferences.HasClinicsEnabled) {
+
 				if(Security.CurrentUser.ClinicRestricted) {//If the user is restricted to specific clinics (has no Unassigned/Default option)
-					clinicNum=_listClinics[comboClinic.SelectedIndex].ClinicNum;
+					clinicNum=_listClinics[comboClinic.SelectedIndex].Id;
 				}
 				else if(comboClinic.SelectedIndex!=0) {//If not restricted to specific clinics and not selecting Unassigned/Default
-					clinicNum=_listClinics[comboClinic.SelectedIndex-1].ClinicNum;
+					clinicNum=_listClinics[comboClinic.SelectedIndex-1].Id;
 				}
-			}
+			
 			if(comboCustomTracking.SelectedIndex!=0) {
 				customTracking=_listClaimCustomTrackingDefs[comboCustomTracking.SelectedIndex-1].Id;
 			}
@@ -666,9 +661,9 @@ namespace OpenDental{
 			listClaimSend.AddRange(_arrayQueueAll);
 			//Remove any non-matches
 			//Creating a subset of listClaimSend with all entries c such that c.ClinicNum==clinicNum
-			if(Preferences.HasClinicsEnabled) {//Filter by clinic only when clinics are enabled.
+
 				listClaimSend=listClaimSend.FindAll(c => c.ClinicNum==clinicNum);
-			}
+			
 			if(customTracking>0) {
 				//Creating a subset of listClaimSend with all entries c such that c.CustomTracking==customTracking
 				listClaimSend=listClaimSend.FindAll(c => c.CustomTracking==customTracking);
@@ -877,12 +872,12 @@ namespace OpenDental{
 
 		///<Summary>Use clearinghouseNum of 0 to indicate automatic calculation of clearinghouses.</Summary>
 		private void SendEclaimsToClearinghouse(long hqClearinghouseNum) {
-			if(Preferences.HasClinicsEnabled) {//Clinics is in use
+
 				if(hqClearinghouseNum==0){
 					MsgBox.Show(this,"When the Clinics option is enabled, you must use the dropdown list to select the clearinghouse to send to.");
 					return;
 				}
-			}
+			
 			Clearinghouse clearDefault;
 			if(hqClearinghouseNum==0){
 				clearDefault=Clearinghouses.GetDefaultDental();
@@ -1037,7 +1032,7 @@ namespace OpenDental{
 			Cursor.Current=Cursors.WaitCursor;
 			//Loop through and validate all claims.
 			Clearinghouse clearinghouseHq=ClearinghouseL.GetClearinghouseHq(listClaimsToValidate[0].ClearinghouseNum);
-			Clearinghouse clearinghouseClin=Clearinghouses.OverrideFields(clearinghouseHq,Clinics.ClinicNum);
+			Clearinghouse clearinghouseClin=Clearinghouses.OverrideFields(clearinghouseHq,Clinics.ClinicId);
 			//Grabs list of claims here to prevent multiple database calls. Needed to extract provnums
 			List<Claim> listClaims=Claims.GetClaimsFromClaimNums(listClaimsToValidate.Select(x => x.ClaimNum).ToList());
 			for(int i=0;i<listClaimsToValidate.Count;i++) {

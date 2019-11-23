@@ -574,23 +574,14 @@ namespace OpenDental{
 		}
 
 		private void RefreshClinicData() {
-			if(!Preferences.HasClinicsEnabled) {
-				labelClinic.Visible=false;
-				comboClinic.Visible=false;
-				checkShowClinicSchedules.Visible=false;
-				checkClinicNotes.Visible=false;
-				checkClinicNotes.Checked=false;
-				return;
-			}
+
 			List<Clinic> listClinics=new List<Clinic>();
-			if(!Security.CurrentUser.ClinicRestricted) {
-				listClinics.Add(new Clinic() { Abbr=Lan.g(this,"Headquarters") }); //Seed with "Headquarters"
-			}
+
 			//Do not re-organize from cache. They could either be alphabetized or sorted by item order.
-			listClinics.AddRange(Clinics.GetForUserod(Security.CurrentUser));
+			listClinics.AddRange(Clinic.GetByUser(Security.CurrentUser));
 			foreach(Clinic clinic in listClinics) {
 				comboClinic.Items.Add(new ODBoxItem<Clinic>(clinic.Abbr,clinic));
-				if(clinic.ClinicNum==Clinics.ClinicNum) {
+				if(clinic.Id==Clinics.ClinicId) {
 					comboClinic.SelectedIndex=comboClinic.Items.Count-1;
 				}
 			}
@@ -604,18 +595,14 @@ namespace OpenDental{
 			//That way we don't have to add/subtract one in order when selecting from the list based on selected indexes.
 			_listEmps=new List<Employee>() { new Employee() { FirstName="none" } };
 			_listProviders=new List<Provider>() { new Provider() { ProvNum=0,Abbr="none" } };
-			if(Preferences.HasClinicsEnabled) {
+
 				Clinic selectedClinic=comboClinic.SelectedTag<Clinic>();
 				if(selectedClinic!=null) {
 					//clinicNum will be 0 for unrestricted users with HQ selected in which case this will get only emps/provs not assigned to a clinic
-					_listEmps.AddRange(Employee.GetEmpsForClinic(selectedClinic.ClinicNum));
-					_listProviders.AddRange(Providers.GetProvsForClinic(selectedClinic.ClinicNum));
+					_listEmps.AddRange(Employee.GetEmpsForClinic(selectedClinic.Id));
+					_listProviders.AddRange(Providers.GetProvsForClinic(selectedClinic.Id));
 				}
-			}
-			else {//Not using clinics
-				_listEmps.AddRange(Employee.All());
-				_listProviders.AddRange(Providers.GetDeepCopy(true));
-			}
+
 			List<long> listPreviouslySelectedEmpNums=listBoxEmps.SelectedTags<Employee>().Select(x => x.Id).ToList();
 			listBoxEmps.Items.Clear();
 			_listEmps.ForEach(x => listBoxEmps.Items.Add(new ODBoxItem<Employee>(x.FirstName,x)));
@@ -741,12 +728,12 @@ namespace OpenDental{
 			provNums.RemoveAll(x => x==0);
 			empNums.RemoveAll(x => x==0);
 			long clinicNum=0;
-			if(Preferences.HasClinicsEnabled) {
+
 				if(comboClinic.SelectedTag<Clinic>()==null) {//Attemped bug fix, comboClinic and _listClinics out of sync.
 					RefreshClinicData();
 				}
-				clinicNum=comboClinic.SelectedTag<Clinic>()?.ClinicNum??-1;
-			}
+				clinicNum=comboClinic.SelectedTag<Clinic>()?.Id??-1;
+			
 			if(isFromDb || this._tableScheds==null) {
 				bool canViewNotes=true;
 
@@ -875,9 +862,9 @@ namespace OpenDental{
 				listEmployeeNums=listBoxEmps.SelectedTags<Employee>().Select(x => x.Id).ToList();
 			}
 			clinicNum=0;
-			if(Preferences.HasClinicsEnabled) {
-				clinicNum=comboClinic.SelectedTag<Clinic>().ClinicNum;
-			}
+
+				clinicNum=comboClinic.SelectedTag<Clinic>().Id;
+			
 		}
 
 		private void listProv_SelectedIndexChanged(object sender,EventArgs e) {
@@ -972,14 +959,14 @@ namespace OpenDental{
 			}
 			//MessageBox.Show(selectedDate.ToShortDateString());
 			long clinicNum=0;
-			if(Preferences.HasClinicsEnabled) {
+
 				Clinic selectedClinic=comboClinic.SelectedTag<Clinic>();
 				if(selectedClinic==null) {
 					MsgBox.Show(this,"Please select a clinic.");
 					return;
 				}
-				clinicNum=selectedClinic.ClinicNum;
-			}
+				clinicNum=selectedClinic.Id;
+			
 			string provAbbr="";
 			string empFName="";
 			//Get all of the selected providers and employees (removing the "none" options).

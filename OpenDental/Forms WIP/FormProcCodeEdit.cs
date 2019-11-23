@@ -1219,7 +1219,7 @@ namespace OpenDental{
 			_listProviders.ForEach(x => comboProvNumDefault.Items.Add(x.Abbr));
 			comboProvNumDefault.IndexSelectOrSetText(_listProviders.FindIndex(x => x.ProvNum==_selectedProvNumDefault)
 				,() => { return Providers.GetAbbr(_selectedProvNumDefault); });
-			if(Clinics.IsMedicalPracticeOrClinic(Clinics.ClinicNum)) {
+			if(Clinic.GetById(Clinics.ClinicId).IsMedicalOnly) {
 				labelTreatArea.Visible=false;
 				listTreatArea.Visible=false;
 			}

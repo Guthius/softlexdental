@@ -98,13 +98,15 @@ namespace OpenDentBusiness
                 {
                     PatientCur = patCur;
                 }
-                ClinicCur = Clinics.GetClinic(clinicNumCur) ??
-                    new Clinic
-                    {//creating new clinic with Unassigned as description. The clinic will not get inserted into the db.
-                        ClinicNum = 0,
-                        Description = "Unassigned",
-                        Abbr = "Unassigned"
-                    };
+
+                ClinicCur = 
+                    Clinic.GetById(clinicNumCur) ??
+                        new Clinic
+                        {
+                            Description = "Unassigned",
+                            Abbr = "Unassigned"
+                        };
+
                 //find CarrierCur. GetCarrier uses the H List if possible.
                 CarrierCur = Carriers.GetCarrierByName(carrierCur) ?? new Carrier();
                 ClaimPaymentCur = claimPay;

@@ -2602,7 +2602,7 @@ namespace OpenDental{
 			else {
 				textElectBenLastDate.Text=dateLast270.ToShortDateString();
 			}
-			if(Clinics.IsMedicalPracticeOrClinic(Clinics.ClinicNum)) {
+			if(Clinic.GetById(Clinics.ClinicId).IsMedicalOnly) {
 				checkCodeSubst.Visible=false;
 			}
 			_datePatPlanLastVerified=PIn.Date(textDateLastVerifiedPatPlan.Text);
@@ -4061,7 +4061,7 @@ namespace OpenDental{
 				return;
 			}
 			Clearinghouse clearinghouseHq=Canadian.GetCanadianClearinghouseHq(carrier);
-			Clearinghouse clearinghouseClin=Clearinghouses.OverrideFields(clearinghouseHq,Clinics.ClinicNum);
+			Clearinghouse clearinghouseClin=Clearinghouses.OverrideFields(clearinghouseHq,Clinics.ClinicId);
 			Cursor=Cursors.WaitCursor;
 			//string result="";
 			DateTime date=DateTime.Today;
@@ -4465,7 +4465,7 @@ namespace OpenDental{
 			}
 			Cursor=Cursors.WaitCursor;
 			try {
-				Clearinghouse clearinghouseClin=Clearinghouses.OverrideFields(clearinghouseHq,Clinics.ClinicNum);
+				Clearinghouse clearinghouseClin=Clearinghouses.OverrideFields(clearinghouseHq,Clinics.ClinicId);
 				Etrans etrans=x270Controller.RequestBenefits(clearinghouseClin,_planCur,PatPlanCur.PatNum,_carrierCur,benefitList,
 					PatPlanCur.PatPlanNum,_subCur);
 				if(etrans != null) {

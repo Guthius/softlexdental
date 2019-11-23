@@ -12,7 +12,6 @@ namespace OpenDentBusiness
         /// <returns></returns>
         public static DataTable GetLineItemUnearnedData(List<long> listClinics, DateTime date1Start, DateTime date2Start)
         {
-            bool hasClinicsEnabled = Preference.HasClinicsEnabledNoCache;
             string command = "";
             string whereClin = "";
             //This query is kind-of a mess, but we're trying to account for bugs in previous versions.
@@ -24,10 +23,9 @@ namespace OpenDentBusiness
             //Outer Select
             command = "SELECT results.DatePay," + DbHelper.Concat("patient.LName", "', '", "patient.FName", "' '", "patient.MiddleI") + " Patient,"
                 + "definition.ItemName,";
-            if (hasClinicsEnabled)
-            {
+
                 command += "clinic.Abbr Clinic,";
-            }
+            
             command += "results.SplitAmt FROM (";
             //Inner Select - Prepayments
             command += "SELECT SplitNum,DatePay,PatNum,UnearnedType,ClinicNum,SplitAmt FROM paysplit "
@@ -48,10 +46,9 @@ namespace OpenDentBusiness
             command += ") results "
                 + "INNER JOIN patient ON patient.PatNum=results.PatNum "
                 + "LEFT JOIN definition ON definition.DefNum=results.UnearnedType ";
-            if (hasClinicsEnabled)
-            {
+
                 command += "LEFT JOIN clinic ON clinic.ClinicNum=results.ClinicNum ";
-            }
+            
             command += "ORDER BY results.DatePay,Patient,results.SplitNum";
             DataTable raw = DataConnection.ExecuteDataTable(command);
             return raw;
@@ -259,7 +256,6 @@ namespace OpenDentBusiness
         /// <returns></returns>
         public static DataTable GetUnearnedAccountData(List<long> listClinics)
         {
-            bool hasClinicsEnabled = Preference.HasClinicsEnabledNoCache;
             string command = "";
             string whereClin = "";
             //This query is kind-of a mess, but we're trying to account for bugs in previous versions.
@@ -273,10 +269,9 @@ namespace OpenDentBusiness
             }
             command = "SELECT " + DbHelper.Concat("guar.LName", "', '", "guar.FName", "' '", "guar.MiddleI") + ",";
             command += DbHelper.GroupConcat("definition.ItemName", true, true, ",");
-            if (hasClinicsEnabled)
-            {
-                command += ",clinic.Abbr";
-            }
+
+            command += ",clinic.Abbr";
+
             command += ",SUM(splits.Amt) Amount FROM (";
             //Prepay
             command += "SELECT paysplit.PatNum, paysplit.SplitAmt Amt,paysplit.UnearnedType "
@@ -294,10 +289,9 @@ namespace OpenDentBusiness
                 + "INNER JOIN patient ON patient.PatNum=splits.PatNum "
                 + "INNER JOIN patient guar ON guar.PatNum=patient.Guarantor "
                 + "LEFT JOIN definition ON definition.DefNum=splits.UnearnedType ";
-            if (hasClinicsEnabled)
-            {
-                command += "LEFT JOIN clinic ON clinic.ClinicNum=guar.ClinicNum ";
-            }
+
+            command += "LEFT JOIN clinic ON clinic.ClinicNum=guar.ClinicNum ";
+
             command += whereClin;
             command += "GROUP BY guar.PatNum HAVING ABS(Amount) > 0.005 ";//still won't work for oracle
             command += "ORDER BY guar.LName, guar.FName, guar.MiddleI, Amount";

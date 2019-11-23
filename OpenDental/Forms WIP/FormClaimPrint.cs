@@ -499,7 +499,7 @@ namespace OpenDental{
 			//then get the main plan
 			subCur=InsSubs.GetSub(ClaimCur.InsSubNum,ListInsSub2);
 			planCur=InsPlans.GetPlan(ClaimCur.PlanNum,ListInsPlan);
-			Clinic clinic=Preferences.HasClinicsEnabled ? Clinics.GetClinic(ClaimCur.ClinicNum) : null;//null if clinics are not enabled.
+			Clinic clinic=Clinic.GetById(ClaimCur.ClinicNum);//null if clinics are not enabled.
 			carrier=Carriers.GetCarrier(planCur.CarrierNum);
 			//Employers.GetEmployer(InsPlans.Cur.EmployerNum);
 			Patient subsc;
@@ -593,9 +593,9 @@ namespace OpenDental{
 			arrayDiagnoses=Procedures.GetUniqueDiagnosticCodes(Procedures.GetProcsFromClaimProcs(ListClaimProcs),true).ToArray();
 			Provider providerFirst=Providers.GetFirst();//Used in order to preserve old behavior...  If this fails, then old code would have failed.
 			Provider providerClaimTreat=Providers.GetFirstOrDefault(x => x.ProvNum==ClaimCur.ProvTreat)??providerFirst;
-			ProviderClinic provClinicClaimTreat=ProviderClinics.GetOneOrDefault(providerClaimTreat.ProvNum,(clinic==null ? 0 : clinic.ClinicNum));
+			ProviderClinic provClinicClaimTreat=ProviderClinic.GetByProviderAndClinic(providerClaimTreat.ProvNum,clinic.Id);
 			Provider providerClaimBill=Providers.GetFirstOrDefault(x => x.ProvNum==ClaimCur.ProvBill)??providerFirst;
-			ProviderClinic provClinicClaimBill=ProviderClinics.GetOneOrDefault(providerClaimBill.ProvNum,(clinic==null ? 0 : clinic.ClinicNum));
+			ProviderClinic provClinicClaimBill=ProviderClinic.GetByProviderAndClinic(providerClaimBill.ProvNum,clinic.Id);
 			if(ClaimFormCur==null){
 				if(ClaimCur.ClaimForm>0){
 					ClaimFormCur=ClaimForms.GetClaimForm(ClaimCur.ClaimForm);
@@ -1838,14 +1838,14 @@ namespace OpenDental{
 						}
 						break;
 					case "PayToDentistAddress": //Behaves just like the old BillingDentistAddress field, but is overridden by the Pay-To address if the Pay-To address has been specified.
-						if(clinic!=null && clinic.PayToAddress!="") {
-							displayStrings[i]=clinic.PayToAddress;
+						if(clinic!=null && clinic.PayToAddressLine1!="") {
+							displayStrings[i]=clinic.PayToAddressLine1;
 						}
 						else if(Preference.GetString(PreferenceName.PracticePayToAddress)!="") { //All Pay-To address fields are used in 5010 eclaims when Pay-To address line 1 is not blank.
 						  displayStrings[i]=Preference.GetString(PreferenceName.PracticePayToAddress);
 						}
-						else if(clinic!=null && clinic.UseBillAddrOnClaims) {
-							displayStrings[i]=clinic.BillingAddress;
+						else if(clinic!=null && clinic.UseBillingAddressOnClaims) {
+							displayStrings[i]=clinic.BillingAddressLine1;
 						}
 						else if(Preference.GetBool(PreferenceName.UseBillingAddressOnClaims)){
 						  displayStrings[i]=Preference.GetString(PreferenceName.PracticeBillingAddress);
@@ -1854,18 +1854,18 @@ namespace OpenDental{
 						  displayStrings[i]=Preference.GetString(PreferenceName.PracticeAddress);
 						}
 						else {
-							displayStrings[i]=clinic.Address;
+							displayStrings[i]=clinic.AddressLine1;
 						}
 						break;
 					case "PayToDentistAddress2": //Behaves just like the old BillingDentistAddress2 field, but is overridden by the Pay-To address if the Pay-To address has been specified.
-						if(clinic!=null && clinic.PayToAddress!="") {
-							displayStrings[i]=clinic.PayToAddress2;
+						if(clinic!=null && clinic.PayToAddressLine1!="") {
+							displayStrings[i]=clinic.PayToAddressLine2;
 						}
 						else if(Preference.GetString(PreferenceName.PracticePayToAddress)!="") { //All Pay-To address fields are used in 5010 eclaims when Pay-To address line 1 is not blank.
 						  displayStrings[i]=Preference.GetString(PreferenceName.PracticePayToAddress2);
 						}
-						else if(clinic!=null && clinic.UseBillAddrOnClaims) {
-							displayStrings[i]=clinic.BillingAddress2;
+						else if(clinic!=null && clinic.UseBillingAddressOnClaims) {
+							displayStrings[i]=clinic.BillingAddressLine2;
 						}
 						else if(Preference.GetBool(PreferenceName.UseBillingAddressOnClaims)){
 						  displayStrings[i]=Preference.GetString(PreferenceName.PracticeBillingAddress2);
@@ -1874,17 +1874,17 @@ namespace OpenDental{
 						  displayStrings[i]=Preference.GetString(PreferenceName.PracticeAddress2);
 						}
 						else {
-							displayStrings[i]=clinic.Address2;
+							displayStrings[i]=clinic.AddressLine2;
 						}
 						break;
 					case "PayToDentistCity": //Behaves just like the old BillingDentistCity field, but is overridden by the Pay-To address if the Pay-To address has been specified.
-						if(clinic!=null && clinic.PayToAddress!="") {
+						if(clinic!=null && clinic.PayToAddressLine1!="") {
 							displayStrings[i]=clinic.PayToCity;
 						}
 						else if(Preference.GetString(PreferenceName.PracticePayToAddress)!="") { //All Pay-To address fields are used in 5010 eclaims when Pay-To address line 1 is not blank.
 							displayStrings[i]=Preference.GetString(PreferenceName.PracticePayToCity);
 						}
-						else if(clinic!=null && clinic.UseBillAddrOnClaims) {
+						else if(clinic!=null && clinic.UseBillingAddressOnClaims) {
 							displayStrings[i]=clinic.BillingCity;
 						}
 						else if(Preference.GetBool(PreferenceName.UseBillingAddressOnClaims)) {
@@ -1898,13 +1898,13 @@ namespace OpenDental{
 						}
 						break;
 					case "PayToDentistST": //Behaves just like the old BillingDentistST field, but is overridden by the Pay-To address if the Pay-To address has been specified.
-						if(clinic!=null && clinic.PayToAddress!="") {
+						if(clinic!=null && clinic.PayToAddressLine1!="") {
 							displayStrings[i]=clinic.PayToState;
 						}
 						else if(Preference.GetString(PreferenceName.PracticePayToAddress)!="") { //All Pay-To address fields are used in 5010 eclaims when Pay-To address line 1 is not blank.
 							displayStrings[i]=Preference.GetString(PreferenceName.PracticePayToST);
 						}
-						else if(clinic!=null && clinic.UseBillAddrOnClaims) {
+						else if(clinic!=null && clinic.UseBillingAddressOnClaims) {
 							displayStrings[i]=clinic.BillingState;
 						}
 						else if(Preference.GetBool(PreferenceName.UseBillingAddressOnClaims)) {
@@ -1918,13 +1918,13 @@ namespace OpenDental{
 						}
 						break;
 					case "PayToDentistZip": //Behaves just like the old BillingDentistZip field, but is overridden by the Pay-To address if the Pay-To address has been specified.
-						if(clinic!=null && clinic.PayToAddress!="") {
+						if(clinic!=null && clinic.PayToAddressLine1!="") {
 							displayStrings[i]=clinic.PayToZip;
 						}
 						else if(Preference.GetString(PreferenceName.PracticePayToAddress)!="") { //All Pay-To address fields are used in 5010 eclaims when Pay-To address line 1 is not blank.
 							displayStrings[i]=Preference.GetString(PreferenceName.PracticePayToZip);
 						}
-						else if(clinic!=null && clinic.UseBillAddrOnClaims) {
+						else if(clinic!=null && clinic.UseBillingAddressOnClaims) {
 							displayStrings[i]=clinic.BillingZip;
 						}
 						else if(Preference.GetBool(PreferenceName.UseBillingAddressOnClaims)) {
@@ -1983,7 +1983,7 @@ namespace OpenDental{
 							displayStrings[i]=Preference.GetString(PreferenceName.PracticeAddress);
 						}
 						else {
-							displayStrings[i]=clinic.Address;
+							displayStrings[i]=clinic.AddressLine1;
 						}
 						break;
 					case "TreatingDentistCity":

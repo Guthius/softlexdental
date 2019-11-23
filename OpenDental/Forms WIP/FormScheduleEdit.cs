@@ -231,12 +231,12 @@ namespace OpenDental{
 
 		private void FormScheduleEdit_Load(object sender, System.EventArgs e) {
 			_isHolidayOrNote=(SchedCur.StartTime==TimeSpan.Zero && SchedCur.StopTime==TimeSpan.Zero);
-			if(Preferences.HasClinicsEnabled) {
+
 				if(ClinicNum==0) {
-					Text+=" - "+Lan.g(this,"Headquarters");
+					Text+=" - Headquarters";
 				}
 				else {
-					string abbr=Clinics.GetAbbr(ClinicNum);
+					string abbr=Clinic.GetById(ClinicNum).Abbr;
 					if(!string.IsNullOrWhiteSpace(abbr)) {
 						Text+=" - "+abbr;
 					}
@@ -245,24 +245,18 @@ namespace OpenDental{
 				if(_isHolidayOrNote && SchedCur.SchedType==ScheduleType.Practice) {
 					comboClinic.Visible=true;//only visible for holidays and practice notes and only if clinics are enabled
 					labelClinic.Visible=true;
-					_listClinics=Clinics.GetForUserod(Security.CurrentUser);
-					if(!Security.CurrentUser.ClinicRestricted) {
-						comboClinic.Items.Add(Lan.g(this,"Headquarters"));
-						if(SchedCur.ClinicNum==0) {//new sched and HQ selected or opened one from db for HQ
-							comboClinic.SelectedIndex=0;
-						}
-					}
+					_listClinics=Clinic.GetByUser(Security.CurrentUser).ToList();
 					foreach(Clinic clinicCur in _listClinics) {
 						comboClinic.Items.Add(clinicCur.Abbr);
-						if(clinicCur.ClinicNum==SchedCur.ClinicNum) {
+						if(clinicCur.Id==SchedCur.ClinicNum) {
 							comboClinic.SelectedIndex=comboClinic.Items.Count-1;
 						}
 					}
 					if(comboClinic.SelectedIndex<0) {//current sched's clinic not found or set to 0 and user is restricted, default to clinic sent in
-						comboClinic.SelectedIndex=_listClinics.FindIndex(x => x.ClinicNum==ClinicNum)+(Security.CurrentUser.ClinicRestricted?0:1);//add one for HQ if not restricted
+						comboClinic.SelectedIndex=_listClinics.FindIndex(x => x.Id==ClinicNum)+(Security.CurrentUser.ClinicRestricted?0:1);//add one for HQ if not restricted
 					}
 				}
-			}
+			
 			textNote.Text=SchedCur.Note;
 			if(_isHolidayOrNote) {
 				comboStart.Visible=false;
@@ -283,10 +277,10 @@ namespace OpenDental{
 			}
 			comboStart.Text=SchedCur.StartTime.ToShortTimeString();
 			comboStop.Text=SchedCur.StopTime.ToShortTimeString();
-			listOps.Items.Add(Lan.g(this,"not specified"));
+			listOps.Items.Add("not specified");
 			//filter list if using clinics and if a clinic filter was passed in to only ops assigned to the specified clinic, otherwise all non-hidden ops
 			_listOps=Operatories.GetDeepCopy(true);
-			if(Preferences.HasClinicsEnabled && ClinicNum>0) {
+			if(ClinicNum>0) {
 				_listOps.RemoveAll(x => x.ClinicNum!=ClinicNum);
 			}
 			foreach(Operatory opCur in _listOps) {
@@ -350,13 +344,13 @@ namespace OpenDental{
 				return;
 			}
 			long clinicNum=0;
-			if(_isHolidayOrNote && SchedCur.SchedType==ScheduleType.Practice && Preferences.HasClinicsEnabled) {//prov notes do not have a clinic
+			if(_isHolidayOrNote && SchedCur.SchedType==ScheduleType.Practice) {//prov notes do not have a clinic
 				int indexCur=comboClinic.SelectedIndex;
 				if(!Security.CurrentUser.ClinicRestricted) {//user isn't restricted, -1 for HQ
 					indexCur--;
 				}
 				if(indexCur>-1) {//will be -1 if HQ is selected, leave clinicNum=0
-					clinicNum=_listClinics[indexCur].ClinicNum;
+					clinicNum=_listClinics[indexCur].Id;
 				}
 				if(SchedCur.Status==SchedStatus.Holiday) {//duplicate holiday check
 					List<Schedule> listScheds=ListScheds.FindAll(x => x.SchedType==ScheduleType.Practice && x.Status==SchedStatus.Holiday);//scheds in local list

@@ -1056,11 +1056,6 @@ namespace OpenDental
             gridAccount.Columns.Clear();
             ODGridColumn col;
             fieldsForMainGrid = DisplayFields.GetForCategory(DisplayFieldCategory.AccountModule);
-            if (!Preferences.HasClinicsEnabled)
-            {
-                //remove clinics from displayfields if clinics are disabled
-                fieldsForMainGrid.RemoveAll(x => x.InternalName.ToLower().Contains("clinic"));
-            }
             HorizontalAlignment align;
             for (int i = 0; i < fieldsForMainGrid.Count; i++)
             {
@@ -1121,10 +1116,10 @@ namespace OpenDental
                             row.Cells.Add(table.Rows[i]["prov"].ToString());
                             break;
                         case "Clinic":
-                            row.Cells.Add(Clinics.GetAbbr(PIn.Long(table.Rows[i]["ClinicNum"].ToString())));
+                            row.Cells.Add(Clinic.GetById(PIn.Long(table.Rows[i]["ClinicNum"].ToString())).Abbr);
                             break;
                         case "ClinicDesc":
-                            row.Cells.Add(Clinics.GetDesc(PIn.Long(table.Rows[i]["ClinicNum"].ToString())));
+                            row.Cells.Add(Clinic.GetById(PIn.Long(table.Rows[i]["ClinicNum"].ToString())).Description);
                             break;
                         case "Code":
                             row.Cells.Add(table.Rows[i]["ProcCode"].ToString());
@@ -2052,21 +2047,19 @@ namespace OpenDental
             //Explicitly set ClinicNum=0, since a pat's ClinicNum will remain set if the user enabled clinics, assigned patients to clinics, and then
             //disabled clinics because we use the ClinicNum to determine which PayConnect or XCharge/XWeb credentials to use for payments.
             PaymentCur.ClinicNum = 0;
-            if (Preferences.HasClinicsEnabled)
-            {//if clinics aren't enabled default to 0
                 if ((PayClinicSetting)Preference.GetInt(PreferenceName.PaymentClinicSetting) == PayClinicSetting.PatientDefaultClinic)
                 {
                     PaymentCur.ClinicNum = PatCur.ClinicNum;
                 }
                 else if ((PayClinicSetting)Preference.GetInt(PreferenceName.PaymentClinicSetting) == PayClinicSetting.SelectedExceptHQ)
                 {
-                    PaymentCur.ClinicNum = (Clinics.ClinicNum == 0) ? PatCur.ClinicNum : Clinics.ClinicNum;
+                    PaymentCur.ClinicNum = (Clinics.ClinicId == 0) ? PatCur.ClinicNum : Clinics.ClinicId;
                 }
                 else
                 {
-                    PaymentCur.ClinicNum = Clinics.ClinicNum;
+                    PaymentCur.ClinicNum = Clinics.ClinicId;
                 }
-            }
+            
             PaymentCur.DateEntry = DateTimeOD.Today;//So that it will show properly in the new window.
             List<Definition> listDefs = Definition.GetByCategory(DefinitionCategory.PaymentTypes);;
             if (listDefs.Count > 0)
@@ -2162,9 +2155,9 @@ namespace OpenDental
                                 FKeyType = TsiFKeyType.PaySplit,
                                 FKey = splitCur.SplitNum,
                                 RawMsgText = "This was not a message sent to Transworld.  This paysplit was entered due to a payment received from Transworld.",
-                                ClinicNum = (Preferences.HasClinicsEnabled ? pAging.ClinicNum : 0)
+                                ClinicNum = pAging.ClinicNum
                                 //,TransJson=""//only valid for placement msgs
-                            });
+                            }); ;
                         }
                         if (listLogsForInsert.Count > 0)
                         {
@@ -2184,18 +2177,17 @@ namespace OpenDental
             //Explicitly set ClinicNum=0, since a pat's ClinicNum will remain set if the user enabled clinics, assigned patients to clinics, and then
             //disabled clinics because we use the ClinicNum to determine which PayConnect or XCharge/XWeb credentials to use for payments.
             PaymentCur.ClinicNum = 0;
-            if (Preferences.HasClinicsEnabled)
-            {//if clinics aren't enabled default to 0
-                PaymentCur.ClinicNum = Clinics.ClinicNum;
-                if ((PayClinicSetting)Preference.GetInt(PreferenceName.PaymentClinicSetting) == PayClinicSetting.PatientDefaultClinic)
-                {
-                    PaymentCur.ClinicNum = PatCur.ClinicNum;
-                }
-                else if ((PayClinicSetting)Preference.GetInt(PreferenceName.PaymentClinicSetting) == PayClinicSetting.SelectedExceptHQ)
-                {
-                    PaymentCur.ClinicNum = (Clinics.ClinicNum == 0 ? PatCur.ClinicNum : Clinics.ClinicNum);
-                }
+
+            PaymentCur.ClinicNum = Clinics.ClinicId;
+            if ((PayClinicSetting)Preference.GetInt(PreferenceName.PaymentClinicSetting) == PayClinicSetting.PatientDefaultClinic)
+            {
+                PaymentCur.ClinicNum = PatCur.ClinicNum;
             }
+            else if ((PayClinicSetting)Preference.GetInt(PreferenceName.PaymentClinicSetting) == PayClinicSetting.SelectedExceptHQ)
+            {
+                PaymentCur.ClinicNum = (Clinics.ClinicId == 0 ? PatCur.ClinicNum : Clinics.ClinicId);
+            }
+
             PaymentCur.DateEntry = DateTimeOD.Today;//So that it will show properly in the new window.
             PaymentCur.PaymentSource = CreditCardSource.None;
             PaymentCur.ProcessStatus = ProcessStat.OfficeProcessed;
@@ -2345,10 +2337,10 @@ namespace OpenDental
                     ProcNum = proc.ProcNum
                 };
 
-                Clinic procClinic = Clinics.GetClinic(proc.ClinicNum);
-                if (proc.ClinicNum != 0 && procClinic.DefaultProv != 0)
+                Clinic procClinic = Clinic.GetById(proc.ClinicNum);
+                if (procClinic != null && procClinic.ProviderId.HasValue)
                 {
-                    adjustment.ProvNum = procClinic.DefaultProv;
+                    adjustment.ProvNum = procClinic.ProviderId.Value;
                 }
 
                 //adjustment.AdjNote=Lan.g(this,"Sales Tax");
@@ -3884,7 +3876,7 @@ namespace OpenDental
             gridProg.Columns.Clear();
             ODGridColumn col = new ODGridColumn(Lan.g("TableProg", "Date"), 67);
             gridProg.Columns.Add(col);
-            if (!Clinics.IsMedicalPracticeOrClinic(Clinics.ClinicNum))
+            if (!Clinic.GetById(Clinics.ClinicId).IsMedicalOnly)
             {
                 col = new ODGridColumn(Lan.g("TableProg", "Th"), 27);
                 gridProg.Columns.Add(col);
@@ -3966,7 +3958,7 @@ namespace OpenDental
                 row.ColorLborder = Color.Black;
                 //remember that columns that start with lowercase are already altered for display rather than being raw data.
                 row.Cells.Add(table.Rows[i]["procDate"].ToString());
-                if (!Clinics.IsMedicalPracticeOrClinic(Clinics.ClinicNum))
+                if (!Clinic.GetById(Clinics.ClinicId).IsMedicalOnly)
                 {
                     row.Cells.Add(table.Rows[i]["toothNum"].ToString());
                     row.Cells.Add(table.Rows[i]["Surf"].ToString());

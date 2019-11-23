@@ -125,16 +125,13 @@ namespace OpenDental {
 		//Leaving this blank will cause the clinic filter to be ignored in SmsFromMobiles.GetMessages().
 		private List<long> _listClinicNumsSelected {
 			get {
-				if(!Preferences.HasClinicsEnabled) {
-					return new List<long>();
-				}
 				List<long> ret=new List<long>();
 				for(int i=0;i<comboClinic.SelectedIndices.Count;i++) {
 					int index=(int)comboClinic.SelectedIndices[i];
-					ret.Add(_listClinics[index].ClinicNum);
+					ret.Add(_listClinics[index].Id);
 				}
 				if(ret.Contains(0)) { //If 0-clinic is select, just select all.
-					ret=new List<long>(_listClinics.Select(x => x.ClinicNum));
+					ret=new List<long>(_listClinics.Select(x => x.Id));
 				}
 				return ret;
 			}
@@ -188,19 +185,14 @@ namespace OpenDental {
 
 		private void FormSmsTextMessaging_Load(object sender,EventArgs e) {
 			gridMessages.ContextMenu=contextMenuMessages;
-			if(Preferences.HasClinicsEnabled) {
+
 				labelClinic.Visible=true;
 				comboClinic.Visible=true;
 				comboClinic.Items.Clear();
-				_listClinics=Clinics.GetForUserod(Security.CurrentUser);
-				if(!Security.CurrentUser.ClinicRestricted || Security.CurrentUser.ClinicId==0) {
-					Clinic hqClinic=Clinics.GetPracticeAsClinicZero();
-					hqClinic.Abbr=(Preference.GetString(PreferenceName.PracticeTitle)+" ("+Lan.g(this,"Practice")+")");
-					_listClinics.Insert(0,hqClinic);//Add HQ
-				}
+				_listClinics=Clinic.GetByUser(Security.CurrentUser).ToList();
 				for(int i=0;i<_listClinics.Count;i++) {
 					comboClinic.Items.Add(_listClinics[i].Abbr);
-					if(_listClinics[i].ClinicNum==Clinics.ClinicNum) {
+					if(_listClinics[i].Id==Clinics.ClinicId) {
 						//Selected clinlic by default.
 						comboClinic.SetSelected(i,true);
 					}
@@ -209,10 +201,10 @@ namespace OpenDental {
 					comboClinic.SetSelected(0,true);
 				}
 				//HQ clinic is selected so select all clinics in the filter unless EnterpriseApptList is set.
-				if(Clinics.ClinicNum==0 && !Preference.GetBool(PreferenceName.EnterpriseApptList)) {
+				if(Clinics.ClinicId==0 && !Preference.GetBool(PreferenceName.EnterpriseApptList)) {
 					comboClinic.SetSelected(true);
 				}
-			}
+			
 			textDateFrom.Text=DateTimeOD.Today.AddDays(-7).ToShortDateString();
 			textDateTo.Text=DateTimeOD.Today.ToShortDateString();			
 			FillGridTextMessages();
@@ -255,7 +247,7 @@ namespace OpenDental {
 				menuItemBlockNumber
 			}
 			.ForEach(x => x.Visible=!_isGrouped);
-			if(Preferences.HasClinicsEnabled && comboClinic.SelectedIndices.Count==0) {
+			if(comboClinic.SelectedIndices.Count==0) {
 				gridMessages.BeginUpdate();
 				gridMessages.Rows.Clear();
 				gridMessages.EndUpdate();
@@ -298,9 +290,8 @@ namespace OpenDental {
 			gridMessages.Columns.Add(new UI.ODGridColumn("Patient\r\nPhone",100,HorizontalAlignment.Center) { SortingStrategy=UI.ODGridSortingStrategy.StringCompare });
 			gridMessages.Columns.Add(new UI.ODGridColumn("Patient",150,HorizontalAlignment.Left) { SortingStrategy=UI.ODGridSortingStrategy.StringCompare });
 			gridMessages.Columns.Add(new UI.ODGridColumn("Cost",32,HorizontalAlignment.Right) { SortingStrategy=UI.ODGridSortingStrategy.AmountParse });
-			if(Preferences.HasClinicsEnabled) {
-				gridMessages.Columns.Add(new UI.ODGridColumn("Clinic",130,HorizontalAlignment.Left) { SortingStrategy=UI.ODGridSortingStrategy.StringCompare });
-			}
+            gridMessages.Columns.Add(new UI.ODGridColumn("Clinic", 130, HorizontalAlignment.Left) { SortingStrategy = UI.ODGridSortingStrategy.StringCompare });
+			
 			if(checkHidden.Checked) {
 				gridMessages.Columns.Add(new UI.ODGridColumn("Hidden",46,HorizontalAlignment.Center){SortingStrategy=UI.ODGridSortingStrategy.StringCompare});
 			}
@@ -320,15 +311,15 @@ namespace OpenDental {
 				row.Cells.Add(smsFromMobile.MobilePhoneNumber);//Patient Phone
 				row.Cells.Add(smsFromMobile.PatNum==0 ? Lan.g(this,"Unassigned") : GetPatientName(smsFromMobile.PatNum));//Patient
 				row.Cells.Add("0.00");//Cost
-				if(Preferences.HasClinicsEnabled) {
+
 					if(smsFromMobile.ClinicNum==0) {
 						row.Cells.Add(Preference.GetString(PreferenceName.PracticeTitle)+" ("+Lan.g(this,"Practice")+")");
 					}
 					else { 
-						Clinic clinic=Clinics.GetClinic(smsFromMobile.ClinicNum);
+						Clinic clinic=Clinic.GetById(smsFromMobile.ClinicNum);
 						row.Cells.Add(clinic.Abbr);//Clinic
 					}
-				}
+				
 				if(checkHidden.Checked) {
 					row.Cells.Add(smsFromMobile.IsHidden?"X":"");//Hidden
 				}
@@ -337,51 +328,60 @@ namespace OpenDental {
 				}
 				gridMessages.Rows.Add(row);
 			}
-			if(checkSent.Checked) {
-				foreach(SmsToMobile smsToMobile in _listSmsToMobile) {
-					if(!checkHidden.Checked && smsToMobile.IsHidden) {
-						continue;
-					}
-					UI.ODGridRow row=new UI.ODGridRow();
-					row.Tag=smsToMobile;
-					row.Cells.Add(smsToMobile.DateTimeSent.ToString());//DateTime
-					row.Cells.Add(Lan.g(this,"Sent"));//Type
-					string smsStatus=smsToMobile.SmsStatus.ToString(); //Default to the actual status.
-					switch(smsToMobile.SmsStatus) {
-						case SmsDeliveryStatus.DeliveryConf:
-						case SmsDeliveryStatus.DeliveryUnconf:
-							//Treated the same as far as the user is concerned.
-							smsStatus=Lan.g(this,"Delivered");
-							break;
-						case SmsDeliveryStatus.FailWithCharge:
-						case SmsDeliveryStatus.FailNoCharge:
-							//Treated the same as far as the user is concerned.
-							smsStatus=Lan.g(this,"Failed");
-							break;
-					}
-					row.Cells.Add(smsStatus);//Status
-					row.Cells.Add("-");//#Phone Matches, not applicable to outbound messages.
-					row.Cells.Add(smsToMobile.MobilePhoneNumber);//Patient Phone
-					row.Cells.Add(smsToMobile.PatNum==0 ? "" : GetPatientName(smsToMobile.PatNum));//Patient
-					row.Cells.Add(smsToMobile.MsgChargeUSD.ToString("f"));//Cost
-					if(Preferences.HasClinicsEnabled) {
-						if(smsToMobile.ClinicNum==0) {
-							row.Cells.Add(Preference.GetString(PreferenceName.PracticeTitle)+" ("+Lan.g(this,"Practice")+")");
-						}
-						else { 
-							Clinic clinic=Clinics.GetClinic(smsToMobile.ClinicNum);
-							row.Cells.Add(clinic.Abbr);//Clinic
-						}
-					}
-					if(checkHidden.Checked) {
-						row.Cells.Add(smsToMobile.IsHidden?"X":"");//Hidden
-					}
-					if(selectedPatNum!=0 && smsToMobile.PatNum==selectedPatNum) {
-						row.BackColor=_colorSelect;
-					}
-					gridMessages.Rows.Add(row);
-				}
-			}
+            if (checkSent.Checked)
+            {
+                foreach (SmsToMobile smsToMobile in _listSmsToMobile)
+                {
+                    if (!checkHidden.Checked && smsToMobile.IsHidden)
+                    {
+                        continue;
+                    }
+                    UI.ODGridRow row = new UI.ODGridRow();
+                    row.Tag = smsToMobile;
+                    row.Cells.Add(smsToMobile.DateTimeSent.ToString());//DateTime
+                    row.Cells.Add(Lan.g(this, "Sent"));//Type
+                    string smsStatus = smsToMobile.SmsStatus.ToString(); //Default to the actual status.
+                    switch (smsToMobile.SmsStatus)
+                    {
+                        case SmsDeliveryStatus.DeliveryConf:
+                        case SmsDeliveryStatus.DeliveryUnconf:
+                            //Treated the same as far as the user is concerned.
+                            smsStatus = Lan.g(this, "Delivered");
+                            break;
+                        case SmsDeliveryStatus.FailWithCharge:
+                        case SmsDeliveryStatus.FailNoCharge:
+                            //Treated the same as far as the user is concerned.
+                            smsStatus = Lan.g(this, "Failed");
+                            break;
+                    }
+                    row.Cells.Add(smsStatus);//Status
+                    row.Cells.Add("-");//#Phone Matches, not applicable to outbound messages.
+                    row.Cells.Add(smsToMobile.MobilePhoneNumber);//Patient Phone
+                    row.Cells.Add(smsToMobile.PatNum == 0 ? "" : GetPatientName(smsToMobile.PatNum));//Patient
+                    row.Cells.Add(smsToMobile.MsgChargeUSD.ToString("f"));//Cost
+
+                    if (smsToMobile.ClinicNum == 0)
+                    {
+                        row.Cells.Add(Preference.GetString(PreferenceName.PracticeTitle) + " (" + Lan.g(this, "Practice") + ")");
+                    }
+                    else
+                    {
+                        Clinic clinic = Clinic.GetById(smsToMobile.ClinicNum);
+                        row.Cells.Add(clinic.Abbr);//Clinic
+                    }
+
+                    if (checkHidden.Checked)
+                    {
+                        row.Cells.Add(smsToMobile.IsHidden ? "X" : "");//Hidden
+                    }
+                    if (selectedPatNum != 0 && smsToMobile.PatNum == selectedPatNum)
+                    {
+                        row.BackColor = _colorSelect;
+                    }
+                    gridMessages.Rows.Add(row);
+                }
+            }
+
 			gridMessages.EndUpdate();
 			gridMessages.SortForced(sortByColIdx,isSortAsc);
 			//Check new grid rows against previous selection and re-select.			
@@ -407,11 +407,11 @@ namespace OpenDental {
 				case SmsDeliveryStatus.DeliveryConf:
 				case SmsDeliveryStatus.DeliveryUnconf:
 					//Treated the same as far as the user is concerned.
-					return Lan.g(this,"Delivered");
+					return "Delivered";
 				case SmsDeliveryStatus.FailWithCharge:
 				case SmsDeliveryStatus.FailNoCharge:
 					//Treated the same as far as the user is concerned.
-					return Lan.g(this,"Failed");
+					return "Failed";
 			}
 			//Default to the actual status.
 			return smsStatus.ToString();
@@ -427,9 +427,7 @@ namespace OpenDental {
 			_columnStatusIdx=gridMessages.Columns.Count-1;
 			gridMessages.Columns.Add(new UI.ODGridColumn("Patient\r\nPhone",100,HorizontalAlignment.Center) { SortingStrategy=UI.ODGridSortingStrategy.StringCompare });
 			gridMessages.Columns.Add(new UI.ODGridColumn("Patient",150,HorizontalAlignment.Left) { SortingStrategy=UI.ODGridSortingStrategy.StringCompare });
-			if(Preferences.HasClinicsEnabled) {
-				gridMessages.Columns.Add(new UI.ODGridColumn("Clinic",130,HorizontalAlignment.Left) { SortingStrategy=UI.ODGridSortingStrategy.StringCompare });
-			}
+			gridMessages.Columns.Add(new UI.ODGridColumn("Clinic",130,HorizontalAlignment.Left) { SortingStrategy=UI.ODGridSortingStrategy.StringCompare });
 			gridMessages.Columns.Add(new UI.ODGridColumn("Latest Message",150,HorizontalAlignment.Left) { SortingStrategy=UI.ODGridSortingStrategy.StringCompare });			
 			List<TextMessageGrouped> groupAll=GetMessageGroups();
 			foreach(TextMessageGrouped sms in groupAll) {				
@@ -442,9 +440,8 @@ namespace OpenDental {
 				row.Cells.Add(sms.Status);
 				row.Cells.Add(sms.PatPhone);//Patient Phone
 				row.Cells.Add(sms.PatName);
-				if(Preferences.HasClinicsEnabled) {
-					row.Cells.Add(sms.ClinicAbbr);
-				}
+                row.Cells.Add(sms.ClinicAbbr);
+				
 				row.Cells.Add(sms.TextMsg);
 				gridMessages.Rows.Add(row);
 			}
@@ -478,8 +475,7 @@ namespace OpenDental {
 					PatPhone=x.First().MobilePhoneNumber,
 					PatNum=x.First().PatNum,
 					ClinicNum=x.First().ClinicNum,
-					ClinicAbbr=Preferences.HasClinicsEnabled ? (x.First().ClinicNum==0 ? Preference.GetString(PreferenceName.PracticeTitle)+
-						" ("+Lan.g(this,"Practice")+")" : Clinics.GetClinic(x.First().ClinicNum).Abbr) : "",
+					ClinicAbbr=Clinic.GetById(x.First().ClinicNum).Abbr,
 					PatName=x.First().PatNum==0 ? Lan.g(this,"Unassigned") : GetPatientName(x.First().PatNum),
 					TextMsg=x.First().MsgText,
 					HasUnread=x.Any(y => y.SmsStatus==SmsFromStatus.ReceivedUnread),
@@ -498,9 +494,8 @@ namespace OpenDental {
 						PatPhone=x.First().MobilePhoneNumber,
 						PatNum=x.First().PatNum,
 						ClinicNum=x.First().ClinicNum,
-						ClinicAbbr=Preferences.HasClinicsEnabled ? (x.First().ClinicNum==0 ? Preference.GetString(PreferenceName.PracticeTitle)+" ("+Lan.g(this,"Practice")+")"
-							: Clinics.GetClinic(x.First().ClinicNum).Abbr) : "",
-						PatName=x.First().PatNum==0 ? Lan.g(this,"Unassigned") : GetPatientName(x.First().PatNum),
+                        ClinicAbbr = Clinic.GetById(x.First().ClinicNum).Abbr,
+                        PatName =x.First().PatNum==0 ? Lan.g(this,"Unassigned") : GetPatientName(x.First().PatNum),
 						TextMsg=x.First().MsgText,
 						HasUnread=false,
 						Status=Lan.g(this,"Sent")+" - "+GetDeliverStatus(x.First().SmsStatus),
@@ -609,7 +604,7 @@ namespace OpenDental {
 		
 		#region Control Event Handlers
 		private void butPatCurrent_Click(object sender,EventArgs e) {
-			_patNumCur=(FormOpenDental.CurPatNum==0 ? -1 : FormOpenDental.CurPatNum);
+			_patNumCur=(FormOpenDental.CurrentPatientId==0 ? -1 : FormOpenDental.CurrentPatientId);
 			if(_patNumCur==-1) {
 				textPatient.Text="";
 			}
@@ -738,7 +733,7 @@ namespace OpenDental {
 				_selectedSmsFromMobile.MobilePhoneNumber,
 				//Country code of current environment.
 				CultureInfo.CurrentCulture.Name.Substring(CultureInfo.CurrentCulture.Name.Length-2),
-				Clinics.ClinicNum==0?null : _listClinicNumsSelected.Union(new List<long>() { _selectedSmsFromMobile.ClinicNum }).ToList())
+				Clinics.ClinicId==0?null : _listClinicNumsSelected.Union(new List<long>() { _selectedSmsFromMobile.ClinicNum }).ToList())
 				//Convert to a list of patnums.
 				.Select(x=>x[0]).ToList();
 			if(form.ShowDialog()!=DialogResult.OK) {
@@ -880,7 +875,7 @@ namespace OpenDental {
 				MsgBox.Show(this,"Selected message does not have a valid phone number to send to.");
 				return;
 			}
-			if(Preferences.HasClinicsEnabled && clinicNum==0) {
+			if(clinicNum==0) {
 				clinicNum=Preference.GetLong(PreferenceName.TextingDefaultClinicNum);
 				if(clinicNum==0) {
 					MsgBox.Show(this,"No default clinic setup for texting.");
@@ -973,8 +968,7 @@ namespace OpenDental {
 				return;
 			}
 			Random rand=new Random();
-			var clinics=Clinics.GetDeepCopy();
-			clinics.Add(Clinics.GetPracticeAsClinicZero());
+            var clinics = Clinic.All();
 			var vlns=SmsPhones.GetAll();
 			var patients=Patients.GetAllPatients()
 				.FindAll(x => !string.IsNullOrEmpty(x.HmPhone))

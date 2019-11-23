@@ -59,10 +59,10 @@ namespace OpenDental {
 			//Columns
 			gridMain.Columns.Clear();
 			ODGridColumn col;
-			if(Preferences.HasClinicsEnabled) {
+
 				col=new ODGridColumn(Lan.g(this,"Clinic"),100);
 				gridMain.Columns.Add(col);
-			}
+			
 			col=new ODGridColumn(Lan.g(this,"Date Time Created"),150);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"Appt Date Time"),150);
@@ -81,9 +81,9 @@ namespace OpenDental {
 			foreach(DataRow row in table.Rows) {
 				ODGridCell[] cellsArray=new ODGridCell[gridMain.Columns.Count];
 				ODGridRow newRow=new ODGridRow();				
-				if(Preferences.HasClinicsEnabled) {
+
 					newRow.Cells.Add(row["ClinicDesc"].ToString());
-				}
+				
 				newRow.Cells.Add(PIn.Date(row["DateTimeCreated"].ToString()).ToString("d"));
 				newRow.Cells.Add(row["AptDateTime"].ToString());
 				newRow.Cells.Add(row["PatName"].ToString());
@@ -105,7 +105,7 @@ namespace OpenDental {
 				datePicker.GetDateTimeTo(),
 				listProvNums,
 				comboBoxClinicMulti.ListSelectedClinicNums,
-				Preferences.HasClinicsEnabled,
+				true,
 				checkWebSchedRecall.Checked,
 				checkWebSchedNewPat.Checked,
 				checkASAP.Checked,

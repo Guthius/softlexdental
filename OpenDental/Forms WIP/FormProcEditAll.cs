@@ -32,61 +32,73 @@ namespace OpenDental {
 			
 		}
 
-		private void FormProcEditAll_Load(object sender,EventArgs e) {
-			_procOldList=new List<Procedure>();
-			for(int i=0;i<ProcList.Count;i++){
-				_procOldList.Add(ProcList[i].Copy());
-			}
-			_hasCompletedProc=false;
-			_hasExistingProc=false;
-			_canAllBypass=true;
-			DateTime oldestProcDate=DateTime.Today;
-			bool dateLoadedWithValue=true;
-			foreach(Procedure proc in ProcList){
-				if(proc.ProcStatus==ProcStat.C) {
-					_hasCompletedProc=true;
-					if(proc.ProcDate < oldestProcDate){
-						oldestProcDate=proc.ProcDate;
-					}
-				}
-				else if(proc.ProcStatus.In(ProcStat.EO,ProcStat.EC)){
-					_hasExistingProc=true;
-					if(proc.ProcDate < oldestProcDate){
-						oldestProcDate=proc.ProcDate;
-					}
-				}
-				if(ProcList[0].ProcDate!=proc.ProcDate){
-					dateLoadedWithValue=false;
-				}
-				if(!ProcedureCodes.CanBypassLockDate(proc.CodeNum,proc.ProcFee)) {
-					_canAllBypass=false;
-				}
-			}
-			if(!IsUserAuthorizedForProcDate(oldestProcDate)) {
-				butOK.Enabled=false;
-				butEditAnyway.Enabled=false;
-			}
-			List<ClaimProc> ClaimProcList=ClaimProcs.Refresh(ProcList[0].PatNum);
-			if(Procedures.IsAttachedToClaim(ProcList,ClaimProcList)){
-				//StartedAttachedToClaim=true;
-				//however, this doesn't stop someone from creating a claim while this window is open,
-				//so this is checked at the end, too.
-				textDate.Enabled=false;
-				butToday.Enabled=false;
-				butEditAnyway.Visible=true;
-				labelClaim.Visible=true;
-			}
-			if(dateLoadedWithValue){
-				textDate.Text=ProcList[0].ProcDate.ToShortDateString();
-			}
-			if(Preferences.HasClinicsEnabled) {
-				labelClinic.Visible=true;
-				comboClinic.Visible=true;
-				butMoreClinics.Visible=true;
-				FillClinicCombo();//Must be called before FillProviderCombo().
-			}
-			FillProviderCombo();
-		}
+        private void FormProcEditAll_Load(object sender, EventArgs e)
+        {
+            _procOldList = new List<Procedure>();
+            for (int i = 0; i < ProcList.Count; i++)
+            {
+                _procOldList.Add(ProcList[i].Copy());
+            }
+            _hasCompletedProc = false;
+            _hasExistingProc = false;
+            _canAllBypass = true;
+            DateTime oldestProcDate = DateTime.Today;
+            bool dateLoadedWithValue = true;
+            foreach (Procedure proc in ProcList)
+            {
+                if (proc.ProcStatus == ProcStat.C)
+                {
+                    _hasCompletedProc = true;
+                    if (proc.ProcDate < oldestProcDate)
+                    {
+                        oldestProcDate = proc.ProcDate;
+                    }
+                }
+                else if (proc.ProcStatus.In(ProcStat.EO, ProcStat.EC))
+                {
+                    _hasExistingProc = true;
+                    if (proc.ProcDate < oldestProcDate)
+                    {
+                        oldestProcDate = proc.ProcDate;
+                    }
+                }
+                if (ProcList[0].ProcDate != proc.ProcDate)
+                {
+                    dateLoadedWithValue = false;
+                }
+                if (!ProcedureCodes.CanBypassLockDate(proc.CodeNum, proc.ProcFee))
+                {
+                    _canAllBypass = false;
+                }
+            }
+            if (!IsUserAuthorizedForProcDate(oldestProcDate))
+            {
+                butOK.Enabled = false;
+                butEditAnyway.Enabled = false;
+            }
+            List<ClaimProc> ClaimProcList = ClaimProcs.Refresh(ProcList[0].PatNum);
+            if (Procedures.IsAttachedToClaim(ProcList, ClaimProcList))
+            {
+                //StartedAttachedToClaim=true;
+                //however, this doesn't stop someone from creating a claim while this window is open,
+                //so this is checked at the end, too.
+                textDate.Enabled = false;
+                butToday.Enabled = false;
+                butEditAnyway.Visible = true;
+                labelClaim.Visible = true;
+            }
+            if (dateLoadedWithValue)
+            {
+                textDate.Text = ProcList[0].ProcDate.ToShortDateString();
+            }
+
+            labelClinic.Visible = true;
+            comboClinic.Visible = true;
+            butMoreClinics.Visible = true;
+            FillClinicCombo();//Must be called before FillProviderCombo().
+
+            FillProviderCombo();
+        }
 
 		///<summary>Determines if the current user had sufficient permissions to change the ProcDate to 'date' on the procedures in ProcList.</summary>
 		private bool IsUserAuthorizedForProcDate(DateTime date) {
@@ -121,25 +133,26 @@ namespace OpenDental {
 			comboClinic.SelectedIndex=0;//Selection is not changed if isAllProcsForSameClinic is false.
 			bool isAllProcsForSameClinic=ProcList.Select(x => x.ClinicNum).Distinct().ToList().Count==1;
 			bool isListAlpha = Preference.GetBool(PreferenceName.ClinicListIsAlphabetical);
-			_listClinics=Clinics.GetForUserod(Security.CurrentUser);
+			_listClinics=Clinic.GetByUser(Security.CurrentUser).ToList();
 			if(isListAlpha) {
 				_listClinics=_listClinics.OrderBy(x => x.Abbr).ToList();
 			}
 			else {
-				_listClinics=_listClinics.OrderBy(x => x.ItemOrder).ToList();
+				_listClinics=_listClinics.OrderBy(x => x.SortOrder).ToList();
 			}
-			_listClinics.Insert(0,Clinics.GetPracticeAsClinicZero(Lan.g(this,"None")));
+            // TODO: Add 'None' option for clinic selection...
+
 			foreach(Clinic clinic in _listClinics) {//None mimics FormProcEdit
 				ODBoxItem<Clinic> boxItemClinic=new ODBoxItem<Clinic>(clinic.Abbr,clinic);
 				comboClinic.Items.Add(boxItemClinic);
-				if(isAllProcsForSameClinic && clinic.ClinicNum==ProcList[0].ClinicNum) {
+				if(isAllProcsForSameClinic && clinic.Id==ProcList[0].ClinicNum) {
 					comboClinic.SelectedItem=boxItemClinic;
 				}
 			}
-			if(isAllProcsForSameClinic && !_listClinics.Any(x => x.ClinicNum==ProcList[0].ClinicNum)) {
+			if(isAllProcsForSameClinic && !_listClinics.Any(x => x.Id==ProcList[0].ClinicNum)) {
 				//All procedure clinics are the same but value is missing from our list.
 				//We might eventaully check to see how many clincs from proc list do not exists in listClinics.
-				comboClinic.IndexSelectOrSetText(-1,() => { return Clinics.GetAbbr(ProcList[0].ClinicNum); });
+				comboClinic.IndexSelectOrSetText(-1,() => { return Clinic.GetById(ProcList[0].ClinicNum).Abbr; });
 			}
 		}
 
@@ -156,7 +169,7 @@ namespace OpenDental {
 				return;
 			}
 			//x.ClinicNum is null for blank row.
-			comboClinic.SetSelectedItem<Clinic>(x => (x?.ClinicNum??-1)==FormC.SelectedClinicNum,"");
+			comboClinic.SetSelectedItem<Clinic>(x => (x?.Id??-1)==FormC.SelectedClinicNum,"");
 		}
 		
 		private void FillProviderCombo(bool tryMaintainOldSelection=false) {
@@ -167,7 +180,7 @@ namespace OpenDental {
 				_listProvsForClinic=Providers.GetDeepCopy(true);
 			}
 			else {
-				_listProvsForClinic=Providers.GetProvsForClinic(comboClinic.SelectedTag<Clinic>().ClinicNum);
+				_listProvsForClinic=Providers.GetProvsForClinic(comboClinic.SelectedTag<Clinic>().Id);
 			}
 			_listProvsForClinic=_listProvsForClinic.Where(x => !x.IsHidden).OrderBy(x => x.ItemOrder).ToList();
 			ODBoxItem<Provider> oldSelection=null;
@@ -272,8 +285,8 @@ namespace OpenDental {
 			string provNumStrOld=Providers.GetAbbr(procOld.ProvNum);
 			string provNumStrNew=Providers.GetAbbr(proc.ProvNum);
 			logTextForProc+=SecurityLogEntryHelper(code,SecurityLogFields.ProvNum,provNumStrOld,provNumStrNew);
-			string clinicNumStrOld=Clinics.GetAbbr(procOld.ClinicNum);
-			string clinicNumStrNew=Clinics.GetAbbr(proc.ClinicNum);
+			string clinicNumStrOld=Clinic.GetById(procOld.ClinicNum).Abbr;
+			string clinicNumStrNew=Clinic.GetById(proc.ClinicNum).Abbr;
 			logTextForProc+=SecurityLogEntryHelper(code,SecurityLogFields.ClinicNum,clinicNumStrOld,clinicNumStrNew);
 			return logTextForProc;
 		}
@@ -347,8 +360,8 @@ namespace OpenDental {
 					ClaimProcs.TrySetProvFromProc(proc,listClaimProcsForProc);
 					hasChanged=true;
 				}
-				if(comboClinic.SelectedTag<Clinic>()!=null && comboClinic.SelectedTag<Clinic>().ClinicNum!=proc.ClinicNum) {//Using selection
-					proc.ClinicNum=comboClinic.SelectedTag<Clinic>().ClinicNum;
+				if(comboClinic.SelectedTag<Clinic>()!=null && comboClinic.SelectedTag<Clinic>().Id!=proc.ClinicNum) {//Using selection
+					proc.ClinicNum=comboClinic.SelectedTag<Clinic>().Id;
 					listClaimProcsForProc.ForEach(x => x.ClinicNum=proc.ClinicNum);
 					hasChanged=true;
 				}

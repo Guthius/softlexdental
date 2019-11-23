@@ -314,30 +314,25 @@ namespace OpenDental{
 			this.PerformLayout();
 
 		}
-		#endregion
+        #endregion
 
-		private void FormPayPlanCharge_Load(object sender, System.EventArgs e) {
-			textDate.Text=PayPlanChargeCur.ChargeDate.ToShortDateString();
-			//comboProvNum.Items.Clear();
-			//for(int i=0;i<ProviderC.List.Length;i++) {
-			//	comboProvNum.Items.Add(ProviderC.List[i].Abbr);
-			//	if(ProviderC.List[i].ProvNum==PayPlanChargeCur.ProvNum)
-			//		comboProvNum.SelectedIndex=i;
-			//}
-			textPrincipal.Text=PayPlanChargeCur.Principal.ToString("n");
-			textInterest.Text=PayPlanChargeCur.Interest.ToString("n");
-			textNote.Text=PayPlanChargeCur.Note;
-			textProv.Text=Providers.GetAbbr(PayPlanChargeCur.ProvNum);
-			textDateEntry.Text=POut.DateT(PayPlanChargeCur.SecDateTEntry,false);
-			textDateEdit.Text=POut.DateT(PayPlanChargeCur.SecDateTEdit,false);
-			if(!Preferences.HasClinicsEnabled) {
-				labelClinic.Visible=false;
-				textClinic.Visible=false;
-			}
-			else {
-				textClinic.Text=Clinics.GetAbbr(PayPlanChargeCur.ClinicNum);
-			}
-		}
+        private void FormPayPlanCharge_Load(object sender, System.EventArgs e)
+        {
+            textDate.Text = PayPlanChargeCur.ChargeDate.ToShortDateString();
+            //comboProvNum.Items.Clear();
+            //for(int i=0;i<ProviderC.List.Length;i++) {
+            //	comboProvNum.Items.Add(ProviderC.List[i].Abbr);
+            //	if(ProviderC.List[i].ProvNum==PayPlanChargeCur.ProvNum)
+            //		comboProvNum.SelectedIndex=i;
+            //}
+            textPrincipal.Text = PayPlanChargeCur.Principal.ToString("n");
+            textInterest.Text = PayPlanChargeCur.Interest.ToString("n");
+            textNote.Text = PayPlanChargeCur.Note;
+            textProv.Text = Providers.GetAbbr(PayPlanChargeCur.ProvNum);
+            textDateEntry.Text = POut.DateT(PayPlanChargeCur.SecDateTEntry, false);
+            textDateEdit.Text = POut.DateT(PayPlanChargeCur.SecDateTEdit, false);
+            textClinic.Text = Clinic.GetById(PayPlanChargeCur.ClinicNum).Abbr;
+        }
 
 		private void butOK_Click(object sender, System.EventArgs e) {
 			if(PayPlanChargeCur.Principal<0//Payment plan adjustments are always negative

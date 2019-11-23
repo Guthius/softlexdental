@@ -767,27 +767,27 @@ namespace OpenDental{
 		private void FormBillingOptions_Load(object sender, System.EventArgs e) {
 			textLastStatement.Text=DateTime.Today.AddMonths(-1).ToShortDateString();
 			checkUseClinicDefaults.Visible=false;
-			if(Preferences.HasClinicsEnabled) {
+
 				RefreshClinicPrefs();
 				labelSaveDefaults.Text="("+Lan.g(this,"except the date at the top and clinic at the bottom")+")";
 				labelClinic.Visible=true;
 				comboClinic.Visible=true;
 				butPickClinic.Visible=true;
 				//ClinicNum: -1 for All
-				comboClinic.Items.Add(new ODBoxItem<Clinic>(Lan.g(this,"All"),new Clinic() {ClinicNum = -1,Abbr = "All",Description = "All"}));
+				comboClinic.Items.Add(new ODBoxItem<Clinic>(Lan.g(this,"All"),new Clinic() {Abbr = "All",Description = "All"}));
 				comboClinic.SetSelected(0,true); //select 'All' by default
-				_listClinics=Clinics.GetForUserod(Security.CurrentUser);
+				_listClinics=Clinic.GetByUser(Security.CurrentUser).ToList();
 				if(!Security.CurrentUser.ClinicRestricted) {
-					_listClinics.Insert(0,new Clinic() { ClinicNum = 0,Abbr = "Unassigned",Description = "Unassigned" });
+					_listClinics.Insert(0,new Clinic() { Abbr = "Unassigned",Description = "Unassigned" });
 				}
 				foreach(Clinic clinic in _listClinics) {
 					comboClinic.Items.Add(new ODBoxItem<Clinic>(clinic.Abbr,clinic));
-					if(ClinicNum!=0 && clinic.ClinicNum==ClinicNum) {//If ClinicNum=0 then maintain default All selection rather than Unassigned.
+					if(ClinicNum!=0 && clinic.Id==ClinicNum) {//If ClinicNum=0 then maintain default All selection rather than Unassigned.
 						comboClinic.SetSelected(false);
 						comboClinic.SetSelected(comboClinic.Items.Count-1,true);
 					}
 				}
-			}
+			
 			_listBillingTypeDefs=Definition.GetByCategory(DefinitionCategory.BillingTypes);;
 			listBillType.Items.Add(Lan.g(this,"(all)"));
 			listBillType.Items.AddRange(_listBillingTypeDefs.Select(x => x.Description).ToArray());
@@ -972,10 +972,7 @@ namespace OpenDental{
 		///If All is selected, returns -1.
 		///If Unassigned is selected, returns 0.</summary>
 		private List<long> GetSelectedClinicNums() {
-			if(!Preferences.HasClinicsEnabled) {
-				return new List<long>();
-			}
-			return comboClinic.SelectedTags<Clinic>().Select(x => x.ClinicNum).ToList();
+			return comboClinic.SelectedTags<Clinic>().Select(x => x.Id).ToList();
 		}
 
 		private void butSaveDefault_Click(object sender,System.EventArgs e) {
@@ -1090,7 +1087,7 @@ namespace OpenDental{
 				comboClinic.SetSelected(false);
 				foreach(long clinCur in FormC.ListSelectedClinicNums) {
 					for(int i = 0;i < comboClinic.Items.Count;i++) {
-						long comboClinicNum = ((ODBoxItem<Clinic>)(comboClinic.Items[i])).Tag.ClinicNum;
+						long comboClinicNum = ((ODBoxItem<Clinic>)(comboClinic.Items[i])).Tag.Id;
 						if(clinCur == comboClinicNum) {
 							comboClinic.SetSelected(i,true);
 						}
@@ -1389,7 +1386,7 @@ namespace OpenDental{
 		///all clinics visible to the user.</param>
 		private void CreateManyHelper(List<long> listClinicNums=null) {
 			if(listClinicNums==null || listClinicNums.Contains(-1)) { //'All' is selected
-				listClinicNums=_listClinics.Select(x => x.ClinicNum).ToList();
+				listClinicNums=_listClinics.Select(x => x.Id).ToList();
 			}
 			_popUpMessage="";
 			Cursor=Cursors.WaitCursor;
@@ -1432,12 +1429,12 @@ namespace OpenDental{
 			}
 			//If clinics are not enabled, the following list will be empty. Otherwise, it will be filled with the passed in clinicNum.
 			List<long> listClinicNums=new List<long>();
-			if(Preferences.HasClinicsEnabled && clinicNum >= 0) {
+			if(clinicNum >= 0) {
 				listClinicNums.Add(clinicNum);
 			}
 			DateTime lastStatement=PIn.Date(textLastStatement.Text);
 			if(textLastStatement.Text=="") {
-				lastStatement=DateTimeOD.Today;
+				lastStatement=DateTime.Today;
 			}
 			string getAge="";
 			if(comboAge.SelectedIndex==1) getAge="30";
@@ -1465,7 +1462,7 @@ namespace OpenDental{
                 Dictionary<long,DateTime> dictPatNumMaxDate=new Dictionary<long,DateTime>();
 				if(checkExcludeInsPending.Checked || checkExcludeIfProcs.Checked || checkIncludeChanged.Checked) {
 					foreach(KeyValuePair<long,PatAgingData> kvp in dictPatAgingData) {
-						if(Preferences.HasClinicsEnabled && !listClinicNums.IsNullOrEmpty() && !listClinicNums.Contains(kvp.Value.ClinicNum)) {
+						if(!listClinicNums.IsNullOrEmpty() && !listClinicNums.Contains(kvp.Value.ClinicNum)) {
 							continue;
 						}
 						if(checkExcludeInsPending.Checked && kvp.Value.HasPendingIns) {//don't fill list if not excluding if pending ins
@@ -1550,7 +1547,7 @@ namespace OpenDental{
 				listPatAging.AddRange(listSuperAgings);
 			}
 			#region Message Construction
-			if(Preferences.HasClinicsEnabled) {
+
 				string clinicAbbr;
 				switch(clinicNum) {
 					case -1://All
@@ -1560,11 +1557,11 @@ namespace OpenDental{
 						clinicAbbr=Lan.g(this,"Unassigned");
 						break;
 					default:
-						clinicAbbr=_listClinics.First(x => x.ClinicNum==clinicNum).Abbr;
+						clinicAbbr=_listClinics.First(x => x.Id==clinicNum).Abbr;
 						break;
 				}
 				_popUpMessage+=Lan.g(this,clinicAbbr)+" - ";
-			}
+			
 			if(listPatAging.Count==0){
 				if(!suppressPopup) {
 					MsgBox.Show(this,"List of created bills is empty.");

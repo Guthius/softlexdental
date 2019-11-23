@@ -412,12 +412,11 @@ namespace OpenDentBusiness
             List<long> listClinicNums = new List<long>();
             if (isAllClinics)
             {
-                listClinicNums = Clinics.GetDeepCopy(true).Select(x => x.ClinicNum).ToList();
-                listClinicNums.Add(0);//Include HQ.  Especially important for organizations not using Clinics.
+                listClinicNums = Clinic.All().Select(x => x.Id).ToList();
             }
             else
             {
-                listClinicNums = new List<long> { Clinics.ClinicNum };
+                listClinicNums = new List<long> { Clinics.ClinicId };
             }
             string errMsg;
             bool isTimeToRetrieve = IsTimeToRetrieveReports(true, out errMsg);
@@ -519,7 +518,7 @@ namespace OpenDentBusiness
                         try
                         {
                             clearinghouseHq = Eclaims.Canadian.GetCanadianClearinghouseHq(null);
-                            clearinghouseClin = Clearinghouses.OverrideFields(clearinghouseHq, Clinics.ClinicNum);
+                            clearinghouseClin = Clearinghouses.OverrideFields(clearinghouseHq, Clinics.ClinicId);
                             //Run both version 02 and version 04 reports for all carriers and all networks.
                             Eclaims.CanadianOutput.GetOutstandingForDefault(listProvs[j]);
                         }

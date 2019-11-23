@@ -36,11 +36,8 @@ namespace OpenDental
         /// Initializes a new instance of the <see cref="FormSupplyOrderItemEdit"/> class.
         /// </summary>
         public FormSupplyOrderItemEdit() => InitializeComponent();
-        
-        /// <summary>
-        /// Loads the form.
-        /// </summary>
-        void FormSupplyOrderItemEdit_Load(object sender, EventArgs e)
+
+        private void FormSupplyOrderItemEdit_Load(object sender, EventArgs e)
         {
             supply = Supply.GetById(SupplyOrderItem.SupplyId);
 
@@ -51,11 +48,7 @@ namespace OpenDental
             quantityTextBox.Text = (quantity = SupplyOrderItem.Quantity).ToString();
             priceTextBox.Value = SupplyOrderItem.Price;
         }
-
-        /// <summary>
-        /// Recalculates the value of the subtotal textbox.
-        /// </summary>
-        void UpdateSubTotal()
+        private void UpdateSubTotal()
         {
             if (int.TryParse(quantityTextBox.Text, out int quantity) && double.TryParse(priceTextBox.Text, out double price))
             {
@@ -63,10 +56,7 @@ namespace OpenDental
             }
         }
 
-        /// <summary>
-        /// Only allow digits to be entered in the quantity textbox.
-        /// </summary>
-        void QuantityTextBox_KeyPress(object sender, KeyPressEventArgs e)
+        private void QuantityTextBox_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
             {
@@ -74,15 +64,9 @@ namespace OpenDental
             }
         }
 
-        /// <summary>
-        /// Updates the subtotal textbox when the quantity changes.
-        /// </summary>
-        void QuantityTextBox_TextChanged(object sender, EventArgs e) => UpdateSubTotal();
+        private void QuantityTextBox_TextChanged(object sender, EventArgs e) => UpdateSubTotal();
 
-        /// <summary>
-        /// Validates the value entered in the quantity textbox.
-        /// </summary>
-        void QuantityTextBox_Validating(object sender, CancelEventArgs e)
+        private void QuantityTextBox_Validating(object sender, CancelEventArgs e)
         {
             if (string.IsNullOrWhiteSpace(quantityTextBox.Text))
             {
@@ -107,10 +91,7 @@ namespace OpenDental
             quantityTextBox.Text = quantity.ToString();
         }
 
-        /// <summary>
-        /// Deletes the supply order item.
-        /// </summary>
-        void DeleteButton_Click(object sender, EventArgs e)
+        private void DeleteButton_Click(object sender, EventArgs e)
         {
             var result =
                 MessageBox.Show(
@@ -126,10 +107,7 @@ namespace OpenDental
             DialogResult = DialogResult.OK;
         }
 
-        /// <summary>
-        /// Saves the supply order item and closes the form.
-        /// </summary>
-        void AcceptButton_Click(object sender, EventArgs e)
+        private void AcceptButton_Click(object sender, EventArgs e)
         {
             if (quantityTextBox.errorProvider1.GetError(quantityTextBox) != "")
             {

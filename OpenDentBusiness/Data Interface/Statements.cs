@@ -32,7 +32,7 @@ namespace OpenDentBusiness
             {
                 return new List<Statement>();
             }
-            bool sortByPatientName = (Preferences.HasClinicsEnabled && Preference.GetBool(PreferenceName.PrintStatementsAlphabetically));
+            bool sortByPatientName = Preference.GetBool(PreferenceName.PrintStatementsAlphabetically);
             string command = "SELECT * FROM statement ";
             if (sortByPatientName)
             {
@@ -495,7 +495,7 @@ namespace OpenDentBusiness
             retVal.RegReplace("\\[namePref]", pat.Preferred);
             retVal.RegReplace("\\[PatNum]", pat.PatNum.ToString());
             retVal.RegReplace("\\[currentMonth]", DateTime.Now.ToString("MMMM"));
-            Clinic clinic = Clinics.GetClinic(pat.ClinicNum) ?? Clinics.GetPracticeAsClinicZero();
+            Clinic clinic = Clinic.GetById(pat.ClinicNum);
             string officePhone = clinic.Phone;
             if (string.IsNullOrEmpty(officePhone))
             {

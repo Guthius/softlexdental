@@ -42,7 +42,7 @@ namespace OpenDental {
 			GlobalTaskFilterType globalPref=(GlobalTaskFilterType)Preference.GetInt(PreferenceName.TasksGlobalFilterType);
 			comboGlobalFilter.Items.Add(new ODBoxItem<GlobalTaskFilterType>(Lan.g(this,GlobalTaskFilterType.Disabled.GetDescription()),GlobalTaskFilterType.Disabled));
 			comboGlobalFilter.Items.Add(new ODBoxItem<GlobalTaskFilterType>(Lan.g(this,GlobalTaskFilterType.None.GetDescription()),GlobalTaskFilterType.None));
-			if(Preferences.HasClinicsEnabled) {
+			if(true) {
 				SetControlsVisible(true,labelGlobalFilter,comboGlobalFilter);
 				comboGlobalFilter.Items.Add(new ODBoxItem<GlobalTaskFilterType>(Lan.g(this,GlobalTaskFilterType.Clinic.GetDescription()),GlobalTaskFilterType.Clinic));
 				if(Definition.GetByCategory(DefinitionCategory.Regions).Count>0) {

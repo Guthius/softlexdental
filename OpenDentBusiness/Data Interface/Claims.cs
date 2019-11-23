@@ -90,16 +90,7 @@ namespace OpenDentBusiness
         {
             //Per Nathan, it is OK to return the DateService in the query result to display in the batch insurance window,
             //because that is the date which will be displayed in the Account module when you use the GoTo feature from batch insurance window.
-            string command = "SELECT outstanding.*,CONCAT(patient.LName,', ',patient.FName) AS patName_,";
-            if (Preferences.HasClinicsEnabled && Clinics.GetCount() > 0)
-            {
-                command += "IFNULL(clinic.Description,'') ";
-            }
-            else
-            {
-                command += "'' ";
-            }
-            command += "AS Description FROM ("//Start outstanding
+            string command = "SELECT outstanding.*,CONCAT(patient.LName,', ',patient.FName) AS patName_, IFNULL(clinic.Description,'') AS Description FROM ("//Start outstanding
                 + "SELECT * FROM ("
                 + "SELECT claim.DateService,claim.ProvTreat,carrierA.CarrierName,claim.ClaimFee feeBilled_,claim.ClaimStatus,"
                 + "SUM(claimproc.InsPayAmt) insPayAmt_,claim.ClaimNum,0 AS ClaimPaymentNum,claim.ClinicNum,claim.PatNum,0 AS PaymentRow,"
@@ -130,11 +121,9 @@ namespace OpenDentBusiness
                                                                     //Always show Sent claims regardless of preference to match version 16.4 behavior (see job B8189).
                 + "OR (AttachedCount=0" + ((claimPayDate.Year > 1880) ? "" : " AND ClaimStatus='S'") + ")"
                 + ") outstanding "//End outstanding
-                + "INNER JOIN patient ON patient.PatNum = outstanding.PatNum ";
-            if (Preferences.HasClinicsEnabled && Clinics.GetCount() > 0)
-            {
-                command += "LEFT JOIN clinic ON clinic.ClinicNum = outstanding.ClinicNum ";
-            }
+                + "INNER JOIN patient ON patient.PatNum = outstanding.PatNum " +
+                "LEFT JOIN clinic ON clinic.ClinicNum = outstanding.ClinicNum ";
+            
             return ClaimPaySplitTableToList(Db.GetTable(command)).OrderByDescending(x => x.Carrier.StartsWith(carrierName)).ThenBy(x => x.Carrier)
                 .ThenBy(x => x.PatName).ToList();
         }

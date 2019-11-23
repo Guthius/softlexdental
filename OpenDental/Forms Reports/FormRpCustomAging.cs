@@ -59,20 +59,16 @@ namespace OpenDental {
 			}
 		}
 
-		private void FillClinics() {
-			if(!Preferences.HasClinicsEnabled) {
-				listBoxClins.Visible=false;
-				labelClinic.Visible=false;
-				checkAllClin.Visible=false;
-				return;
-			}
-			listBoxClins.Items.Clear();
-			List<Clinic> listClinics=Clinics.GetForUserod(Security.CurrentUser,true);
-			for(int i=0;i<listClinics.Count;i++) {
-				listBoxClins.Items.Add(new ODBoxItem<Clinic>(listClinics[i].Abbr,listClinics[i]));
-				listBoxClins.SetSelected(i,true);
-			}
-		}
+        private void FillClinics()
+        {
+            listBoxClins.Items.Clear();
+            List<Clinic> listClinics = Clinic.GetByUser(Security.CurrentUser, true).ToList();
+            for (int i = 0; i < listClinics.Count; i++)
+            {
+                listBoxClins.Items.Add(new ODBoxItem<Clinic>(listClinics[i].Abbr, listClinics[i]));
+                listBoxClins.SetSelected(i, true);
+            }
+        }
 
 		private void FillGrid(List<AgingPat> listAgingPats) {
 			gridMain.BeginUpdate();

@@ -154,7 +154,7 @@ namespace OpenDental{
 				labelRetrieving.Visible=true;
 				Cursor=Cursors.WaitCursor;
 				Clearinghouse clearinghouseHq=_listHqClearinghouses[comboClearhouse.SelectedIndex];
-				Clearinghouse clearinghouseClin=Clearinghouses.OverrideFields(clearinghouseHq,Clinics.ClinicNum);
+				Clearinghouse clearinghouseClin=Clearinghouses.OverrideFields(clearinghouseHq,Clinics.ClinicId);
 				string errorMessage=Clearinghouses.RetrieveAndImport(clearinghouseClin,AutomaticMode);
 				if(errorMessage!="") {
 					MessageBox.Show(errorMessage);
@@ -173,7 +173,7 @@ namespace OpenDental{
 				return;
 			}
 			Clearinghouse clearhouseHq=_listHqClearinghouses[comboClearhouse.SelectedIndex];
-			Clearinghouse clearinghouseClin=Clearinghouses.OverrideFields(clearhouseHq,Clinics.ClinicNum);
+			Clearinghouse clearinghouseClin=Clearinghouses.OverrideFields(clearhouseHq,Clinics.ClinicId);
 			if(!Directory.Exists(clearinghouseClin.ResponsePath)) {
 				MsgBox.Show(this,"Clearinghouse does not have a valid Report Path set.");
 				return;
@@ -182,8 +182,7 @@ namespace OpenDental{
 				,new ProgressBarHelper((Lans.g(this,"Clearinghouse Progress")),progressBarEventType:ProgBarEventType.Header),lanThis: this.Name);
 			//For Tesia, user wouldn't normally manually retrieve.
 			if(clearhouseHq.ISA08=="113504607") {
-				if((Preferences.RandomKeys && Preferences.HasClinicsEnabled)//See FormClaimsSend_Load
-					|| Preference.GetLong(PreferenceName.ClearinghouseDefaultDent)!=clearhouseHq.ClearinghouseNum) //default
+				if(Preference.GetLong(PreferenceName.ClearinghouseDefaultDent)!=clearhouseHq.ClearinghouseNum) //default
 				{
 					//But they might need to in these situations.
 					string errorMessage=Clearinghouses.RetrieveAndImport(clearinghouseClin,false,progressbar);

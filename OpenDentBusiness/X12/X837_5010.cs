@@ -206,7 +206,7 @@ namespace OpenDentBusiness
 			listClaims=Claims.GetClaimsFromClaimNums(queueItems.Select(x => x.ClaimNum).ToList());
 			listProvNums=listClaims.Select(x => x.ProvBill).Distinct().ToList();
 			listProvNums.AddRange(listClaims.Select(x => x.ProvTreat).Distinct().ToList());
-			listProvClinics=ProviderClinics.GetByProvNums(listProvNums.Distinct().ToList());
+			listProvClinics=ProviderClinic.GetByProviders(listProvNums.Distinct()).ToList();
 			for(int i=0;i<queueItems.Count;i++) {
 				#region Initialize Variables
 				claim=Claims.GetClaim(queueItems[i].ClaimNum);
@@ -234,16 +234,14 @@ namespace OpenDentBusiness
 				if(listSiteProcs.Count > 0) {
 					site=Sites.GetFirstOrDefault(x => x.SiteNum==listSiteProcs[0].SiteNum);
 				}
-				#endregion Initialize Variables
-				#region Billing Provider
-				//Billing address is based on clinic, not provider.  All claims in a batch are guaranteed to be from a single clinic.  That validation is done in FormClaimSend.
-				//Although, now that we have a separate loop for each claim, we might be able to allow a batch with mixed clinics.
-				if(Preferences.HasClinicsEnabled) {//if using clinics
-					clinic=Clinics.GetClinic(claim.ClinicNum);//might be null
-				}
-				provClinicBill=ProviderClinics.GetFromList(claim.ProvBill,(clinic==null ? 0 : clinic.ClinicNum),listProvClinics,true);
-				//2000A HL: (medical,instituational,dental) Billing Provider Hierarchical Level.
-				sw.Write("HL"+s+HLcount.ToString()+s//HL01 1/12 Heirarchical ID Number: 
+                #endregion Initialize Variables
+                #region Billing Provider
+                //Billing address is based on clinic, not provider.  All claims in a batch are guaranteed to be from a single clinic.  That validation is done in FormClaimSend.
+                //Although, now that we have a separate loop for each claim, we might be able to allow a batch with mixed clinics.
+                clinic = Clinic.GetById(claim.ClinicNum);
+                provClinicBill = listProvClinics.SingleOrDefault(x => x.ProviderId == claim.ProvBill && x.ClinicId == clinic.Id);
+                //2000A HL: (medical,instituational,dental) Billing Provider Hierarchical Level.
+                sw.Write("HL"+s+HLcount.ToString()+s//HL01 1/12 Heirarchical ID Number: 
 					+s//HL02 1/12 Hierarchical Parent ID Number: Not used.
 					+"20"+s//HL03 1/2 Heirarchical Level Code: 20=Information Source.
 					+"1");//HL04 1/1 Heirarchical Child Code. 1=Additional Subordinate HL Data Segment in This Hierarchical Structure.
@@ -277,9 +275,9 @@ namespace OpenDentBusiness
 				string billingCity="";
 				string billingState="";
 				string billingZip="";
-				if(clinic!=null && clinic.UseBillAddrOnClaims) {
-					billingAddress1=clinic.BillingAddress;
-					billingAddress2=clinic.BillingAddress2;
+				if(clinic!=null && clinic.UseBillingAddressOnClaims) {
+					billingAddress1=clinic.BillingAddressLine1;
+					billingAddress2=clinic.BillingAddressLine2;
 					billingCity=clinic.BillingCity;
 					billingState=clinic.BillingState;
 					billingZip=clinic.BillingZip;
@@ -299,8 +297,8 @@ namespace OpenDentBusiness
 					billingZip= Preference.GetString(PreferenceName.PracticeZip);
 				}
 				else {
-					billingAddress1=clinic.Address;
-					billingAddress2=clinic.Address2;
+					billingAddress1=clinic.AddressLine1;
+					billingAddress2=clinic.AddressLine2;
 					billingCity=clinic.City;
 					billingState=clinic.State;
 					billingZip=clinic.Zip;
@@ -362,7 +360,7 @@ namespace OpenDentBusiness
 					sw.Write(Sout(clinic.Phone,256));//PER04  1/256 Communication Number: Telephone number.
 				}
 				EndSegment(sw);//PER05 through PER08 are situational and PER09 is not used. We do not use.
-				if(clinic!=null && clinic.PayToAddress!="") {//A clinic Pay To address override is present.
+				if(clinic!=null && clinic.PayToAddressLine1!="") {//A clinic Pay To address override is present.
 					//2010AB NM1: 87 (medical,institutional,dental) Pay-To Address Name.
 					sw.Write("NM1"+
 					s+"87"+s);//NM101 2/3 Entity Identifier Code: 87=Pay-to Provider.
@@ -374,9 +372,9 @@ namespace OpenDentBusiness
 					}
 					EndSegment(sw);//NM103 through NM112 are not used.
 					//2010AB N3: (medical,institutional,dental) Pay-To Address.
-					sw.Write("N3"+s+Sout(clinic.PayToAddress),55);//N301 1/55 Address Information:
-					if(clinic.PayToAddress2!="") {
-						sw.Write(s+Sout(clinic.PayToAddress2,55));//N302 1/55 Address Information:
+					sw.Write("N3"+s+Sout(clinic.PayToAddressLine1),55);//N301 1/55 Address Information:
+					if(clinic.PayToAddressLine2!="") {
+						sw.Write(s+Sout(clinic.PayToAddressLine2,55));//N302 1/55 Address Information:
 					}
 					EndSegment(sw);
 					//2010AB N4: (medical,institutional,dental) Pay-To Address City, State, Zip Code.
@@ -1114,10 +1112,10 @@ namespace OpenDentBusiness
 					sendFacilityNameAndAddress=false;
 				}
 				provTreat=Providers.GetProv(claim.ProvTreat);
-				provClinicTreat=ProviderClinics.GetFromList(claim.ProvTreat,(clinic==null ? 0 : clinic.ClinicNum),listProvClinics,true);
-				#region 2310 Claim Providers (medical)
-				//Since order might be important, we have to handle medical, institutional, and dental separately.
-				if(medType==EnumClaimMedType.Medical) {
+                provClinicTreat = listProvClinics.SingleOrDefault(x => x.ProviderId == claim.ProvTreat && x.ClinicId == clinic.Id);
+                #region 2310 Claim Providers (medical)
+                //Since order might be important, we have to handle medical, institutional, and dental separately.
+                if (medType==EnumClaimMedType.Medical) {
 					//2310A NM1: DN/P3 (medical) Referring Provider Name. Situational.
 					WriteNM1_DN(sw,claim.ReferringProv);
 					//2310A REF: (medical) Referring Provider Secondary Identification. Situational. We do not use.
@@ -1887,7 +1885,7 @@ namespace OpenDentBusiness
 							&& Preference.GetBool(PreferenceName.EclaimsSeparateTreatProv)) {
 							//2420A NM1: 82 (medical) Rendering Provider Name. Only if different from the claim.
 							provTreatProc=Providers.GetProv(proc.ProvNum);
-							provClinicProc=ProviderClinics.GetOneOrDefault(proc.ProvNum,(clinic==null ? 0 : clinic.ClinicNum));
+                            provClinicProc = ProviderClinic.GetByProviderAndClinic(proc.ProvNum, clinic.Id);
 							WriteNM1Provider("82",sw,provTreatProc);
 							//2420A PRV: (medical) Rendering Provider Specialty Information.
 							sw.Write("PRV"+s
@@ -1960,7 +1958,7 @@ namespace OpenDentBusiness
 							&& Preference.GetBool(PreferenceName.EclaimsSeparateTreatProv)) 
 						{
 							provTreatProc=Providers.GetProv(proc.ProvNum);
-							provClinicProc=ProviderClinics.GetOneOrDefault(proc.ProvNum,(clinic==null ? 0 : clinic.ClinicNum));
+							provClinicProc=ProviderClinic.GetByProviderAndClinic(proc.ProvNum,clinic.Id);
 							//2420C NM1: 82 (institutional) Rendering Provider Name. Situational. Only if different than claim attending (treating) prov. Person only, non-person not allowed.
 							WriteNM1Provider("82",sw,provTreatProc.FName,provTreatProc.MI,provTreatProc.LName,provTreatProc.NationalProvID,false);
 							//2420C REF: Rendering Provider Secondary Identification. Situational.
@@ -1980,7 +1978,7 @@ namespace OpenDentBusiness
 						{
 							//2420A NM1: 82 (dental) Rendering Provider Name. Only if different from the claim.
 							provTreatProc=Providers.GetProv(proc.ProvNum);
-							provClinicProc=ProviderClinics.GetOneOrDefault(proc.ProvNum,(clinic==null ? 0 : clinic.ClinicNum));
+							provClinicProc=ProviderClinic.GetByProviderAndClinic(proc.ProvNum,clinic.Id);
 							WriteNM1Provider("82",sw,provTreatProc);
 							//2420A PRV: (dental) Rendering Provider Specialty Information.
 							sw.Write("PRV"+s
@@ -2620,7 +2618,7 @@ namespace OpenDentBusiness
 				return;
 			}
 			Claim claim=Claims.GetClaim(queueItem.ClaimNum);
-			Clinic clinic=Clinics.GetClinic(claim.ClinicNum);
+			Clinic clinic=Clinic.GetById(claim.ClinicNum);
 			//if(clearhouse.Eformat==ElectronicClaimFormat.X12){//not needed since this is always true
 			X12Validate.ISA(clearinghouseClin,strb);
 			if(clearinghouseClin.GS03.Length<2) {
@@ -2680,14 +2678,14 @@ namespace OpenDentBusiness
 					strb.Append("Billing Prov Middle Name may contain letters spaces and apostrophes only");
 				}
 			}
-			if(clinic!=null && clinic.UseBillAddrOnClaims) {
+			if(clinic!=null && clinic.UseBillingAddressOnClaims) {
 				X12Validate.Clinic(clinic,strb);//Tests for 5 or 9 digit zip.
 				if(Regex.IsMatch(clinic.BillingZip,"^[0-9]{5}\\-?$")) {
 					//If the zip is 5 digits in format ##### or #####-, then it passed the first test, but 9 digits zips are required.
 					Comma(strb);
 					strb.Append("Clinic billing zip must contain nine digits.");
 				}
-				if(HasPOBox(clinic.BillingAddress)) {
+				if(HasPOBox(clinic.BillingAddressLine1)) {
 					Comma(strb);
 					strb.Append("Clinic billing address cannot be a P.O. BOX when used for e-claims.");
 				}
@@ -2723,12 +2721,12 @@ namespace OpenDentBusiness
 					Comma(strb);
 					strb.Append("Clinic zip must contain nine digits.");
 				}
-				if(HasPOBox(clinic.Address)) {
+				if(HasPOBox(clinic.AddressLine1)) {
 					Comma(strb);
 					strb.Append("Clinic address cannot be a P.O. BOX when used for e-claims.");
 				}
 			}
-			if(clinic==null || (clinic!=null && clinic.PayToAddress=="")) {//No clinic Pay To address.
+			if(clinic==null || (clinic!=null && clinic.PayToAddressLine1=="")) {//No clinic Pay To address.
 				//If PayTo options exist, we're using them always for PayTo information, so always check them for validity.
 				//We don't check the PayToAddress for validation because simply not being blank is good enough.
 				if(Preference.GetString(PreferenceName.PracticePayToAddress).Trim()!="") {

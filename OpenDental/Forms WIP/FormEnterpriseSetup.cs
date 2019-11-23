@@ -119,7 +119,7 @@ namespace OpenDental {
 			FillOptionalPrefBool(checkDBMDisableOptimize,PreferenceName.DatabaseMaintenanceDisableOptimize);
 			FillOptionalPrefBool(checkDBMSkipCheckTable,PreferenceName.DatabaseMaintenanceSkipCheckTable);
 			validDateAgingServiceTimeDue.Text=Preference.GetDateTime(PreferenceName.AgingServiceTimeDue).ToShortTimeString();
-			checkEnableClinics.Checked=Preferences.HasClinicsEnabled;
+			checkEnableClinics.Checked= true;
 			string updateStreamline=GetHiddenPrefString(PreferenceName.UpdateStreamLinePassword);
 			if(updateStreamline!=null) {
 				checkUpdateStreamlinePassword.Checked=(updateStreamline=="abracadabra");

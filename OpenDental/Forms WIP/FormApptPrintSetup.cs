@@ -41,7 +41,7 @@ namespace OpenDental {
 			}
 			textFontSize.Text=Preference.GetString(PreferenceName.ApptPrintFontSize);
 			textColumnsPerPage.Text=Preference.GetInt(PreferenceName.ApptPrintColumnsPerPage).ToString();
-			if(Preferences.HasClinicsEnabled && Clinics.ClinicNum==0) {//Hide if clinics is enabled and headquarters is selected
+			if(Clinics.ClinicId==0) {//Hide if clinics is enabled and headquarters is selected
 				groupBoxPrintRouting.Enabled=false;
 			}
 			if(ApptDrawing.IsWeeklyView) { //Disable if the user has the weekly view selected in the appt module

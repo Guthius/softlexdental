@@ -38,7 +38,6 @@ namespace OpenDental {
 		}
 
 		private void FormPodiumSetup_Load(object sender,EventArgs e) {
-			if(Preferences.HasClinicsEnabled) {//Using clinics
 				_listUserClinicNums=new List<long>();
 				comboClinic.Items.Clear();
 				if(Security.CurrentUser.ClinicRestricted) {
@@ -54,11 +53,11 @@ namespace OpenDental {
 					comboClinic.SelectedIndex=0;
 					_clinicNumCur=0;
 				}
-				List<Clinic> listClinics=Clinics.GetForUserod(Security.CurrentUser);
+				List<Clinic> listClinics=Clinic.GetByUser(Security.CurrentUser).ToList();
 				for(int i=0;i<listClinics.Count;i++) {
 					comboClinic.Items.Add(listClinics[i].Abbr);
-					_listUserClinicNums.Add(listClinics[i].ClinicNum);
-					if(Clinics.ClinicNum==listClinics[i].ClinicNum) {
+					_listUserClinicNums.Add(listClinics[i].Id);
+					if(Clinics.ClinicId==listClinics[i].Id) {
 						comboClinic.SelectedIndex=i;
 						if(!Security.CurrentUser.ClinicRestricted) {
 							comboClinic.SelectedIndex++;//increment the SelectedIndex to account for 'Headquarters' in the list at position 0 if the user is not restricted.
@@ -66,13 +65,7 @@ namespace OpenDental {
 						_clinicNumCur=_listUserClinicNums[comboClinic.SelectedIndex];
 					}
 				}
-			}
-			else {//clinics are not enabled, use ClinicNum 0 to indicate 'Headquarters' or practice level program properties
-				comboClinic.Visible=false;
-				labelClinic.Visible=false;
-				_listUserClinicNums=new List<long>() { 0 };//if clinics are disabled, programproperty.ClinicNum will be set to 0
-				_clinicNumCur=0;
-			}
+
 			_progCur=Programs.GetCur(ProgramName.Podium);
 			if(_progCur==null) {
 				MsgBox.Show(this,"The Podium bridge is missing from the database.");//should never happen

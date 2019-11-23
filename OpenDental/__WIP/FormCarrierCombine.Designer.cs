@@ -38,18 +38,18 @@
             // 
             this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.butCancel.Location = new System.Drawing.Point(773, 465);
+            this.butCancel.Location = new System.Drawing.Point(752, 454);
             this.butCancel.Name = "butCancel";
-            this.butCancel.Size = new System.Drawing.Size(75, 26);
+            this.butCancel.Size = new System.Drawing.Size(90, 32);
             this.butCancel.TabIndex = 0;
             this.butCancel.Text = "&Cancel";
             // 
             // butOK
             // 
             this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.butOK.Location = new System.Drawing.Point(773, 424);
+            this.butOK.Location = new System.Drawing.Point(752, 404);
             this.butOK.Name = "butOK";
-            this.butOK.Size = new System.Drawing.Size(75, 26);
+            this.butOK.Size = new System.Drawing.Size(90, 32);
             this.butOK.TabIndex = 1;
             this.butOK.Text = "&OK";
             this.butOK.Click += new System.EventHandler(this.AcceptButton_Click);
@@ -57,26 +57,25 @@
             // tbCarriers
             // 
             this.tbCarriers.BackColor = System.Drawing.SystemColors.Window;
-            this.tbCarriers.Location = new System.Drawing.Point(9, 42);
+            this.tbCarriers.Location = new System.Drawing.Point(11, 52);
             this.tbCarriers.Name = "tbCarriers";
             this.tbCarriers.ScrollValue = 363;
             this.tbCarriers.SelectionMode = System.Windows.Forms.SelectionMode.One;
-            this.tbCarriers.Size = new System.Drawing.Size(839, 356);
+            this.tbCarriers.Size = new System.Drawing.Size(1007, 438);
             this.tbCarriers.TabIndex = 2;
             this.tbCarriers.CellDoubleClicked += new OpenDental.ContrTable.CellEventHandler(this.tbCarriers_CellDoubleClicked);
             // 
             // label1
             // 
-            this.label1.Location = new System.Drawing.Point(13, 10);
+            this.label1.Location = new System.Drawing.Point(16, 12);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(476, 23);
+            this.label1.Size = new System.Drawing.Size(571, 29);
             this.label1.TabIndex = 3;
             this.label1.Text = "Please select the carrier to keep when combining";
             this.label1.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
             // 
             // FormCarrierCombine
             // 
-            this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
             this.ClientSize = new System.Drawing.Size(880, 511);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.tbCarriers);
@@ -87,7 +86,6 @@
             this.MinimizeBox = false;
             this.Name = "FormCarrierCombine";
             this.ShowInTaskbar = false;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Combine Carriers";
             this.Load += new System.EventHandler(this.FormCarrierCombine_Load);
             this.ResumeLayout(false);

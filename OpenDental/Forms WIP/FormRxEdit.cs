@@ -798,7 +798,7 @@ namespace OpenDental{
 			textNotes.Text=RxPatCur.Notes;
 			textPharmInfo.Text=RxPatCur.ErxPharmacyInfo;
 			textPharmacy.Text=Pharmacies.GetDescription(RxPatCur.PharmacyNum);
-			labelClinic.Visible=Preferences.HasClinicsEnabled;
+			labelClinic.Visible= true;
 			comboClinic.SelectedClinicNum=RxPatCur.ClinicNum;
 		}
 
@@ -967,7 +967,7 @@ namespace OpenDental{
 				sheetDef=SheetDefs.GetInternalOrCustom(SheetInternalType.RxInstruction);
 			}
 			else {
-				sheetDef=SheetDefs.GetSheetsDefault(SheetTypeEnum.Rx,Clinics.ClinicNum);
+				sheetDef=SheetDefs.GetSheetsDefault(SheetTypeEnum.Rx,Clinics.ClinicId);
 			}
 			sheet=SheetUtil.CreateSheet(sheetDef,PatCur.PatNum);
 			SheetParameter.SetParameter(sheet,"RxNum",RxPatCur.RxNum);

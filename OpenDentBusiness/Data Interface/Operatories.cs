@@ -134,19 +134,7 @@ namespace OpenDentBusiness
                         listOps[i].IsInHQView = PIn.Bool(table.Rows[i]["IsInHQView"].ToString());
                     }
                 });
-                //WSNPA operatory defs are important enough that we want this portion to fail if it has problems.
-                //Create a dictionary comprised of Key: OperatoryNum and value: List of definition DefNums.
-                Dictionary<long, List<long>> dictWSNPAOperatoryDefNums = DefLinks.GetDefLinksByType(DefLinkType.Operatory)
-                    .GroupBy(x => x.FKey)//FKey for DefLinkType.Operatory is OperatoryNum
-                    .ToDictionary(x => x.Key, x => x.Select(y => y.DefNum).ToList());
-                foreach (long operatoryNum in dictWSNPAOperatoryDefNums.Keys)
-                {
-                    Operatory op = listOps.FirstOrDefault(x => x.OperatoryNum == operatoryNum);
-                    if (op != null)
-                    {
-                        op.ListWSNPAOperatoryDefNums = dictWSNPAOperatoryDefNums[operatoryNum];
-                    }
-                }
+
                 return listOps;
             }
             protected override Operatory Copy(Operatory operatory)
@@ -237,13 +225,7 @@ namespace OpenDentBusiness
         public static void Sync(List<Operatory> listNew, List<Operatory> listOld)
         {
             Crud.OperatoryCrud.Sync(listNew, listOld);
-            //Regardless if changes were made during the sync, we need to make sure to sync the DefLinks for WSNPA appointment types.
-            //This needs to happen after the sync call so that the PKs have been correctly set for listNew.
-            List<DefLink> listDefLinksAll = DefLinks.GetDefLinksForWebSchedNewPatApptOperatories();
-            foreach (Operatory operatory in listNew)
-            {
-                DefLinks.SyncWebSchedNewPatApptOpLinks(operatory, listDefLinksAll);
-            }
+
             //Delete any deflinks for operatories that are present within listOld but are not present within listNew.
             List<long> listDeleteOpNums = listOld.Where(x => !listNew.Any(y => y.OperatoryNum == x.OperatoryNum))
                 .Select(x => x.OperatoryNum)

@@ -123,29 +123,6 @@ namespace OpenDentBusiness
             }
         }
 
-        ///<summary>Sync method for inserting all necessary DefNums associated to the operatory passed in.
-        ///Does nothing if operatory.ListWSNPAOperatoryDefNums is null.  Will delete all deflinks if the list is empty.
-        ///Optionally pass in the list of deflinks to consider in order to save database calls.</summary>
-        public static void SyncWebSchedNewPatApptOpLinks(Operatory operatory, List<DefLink> listOpDefLinks = null)
-        {
-            //No need to check RemotingRole; no call to db.
-            if (operatory.ListWSNPAOperatoryDefNums == null)
-            {
-                return;//null means that this column was never even considered.  Save time by simply returning.
-            }
-            //Get all operatory deflinks from the database if a specific list was not passed in.
-            listOpDefLinks = listOpDefLinks ?? GetDefLinksForWebSchedNewPatApptOperatories();
-            //Filter the deflinks down in order to get the current DefNums that are linked to the operatory passed in.
-            listOpDefLinks = listOpDefLinks.Where(x => x.FKey == operatory.OperatoryNum).ToList();
-            //Delete all def links that are associated to DefNums that are not in listDefNums.
-            List<DefLink> listDefLinksToDelete = listOpDefLinks.Where(x => !operatory.ListWSNPAOperatoryDefNums.Contains(x.DefNum)).ToList();
-            DeleteDefLinks(listDefLinksToDelete.Select(x => x.DefLinkNum).ToList());
-            //Insert new DefLinks for all DefNums that were passed in that are not in listOpDefLinks.
-            List<long> listDefNumsToInsert = operatory.ListWSNPAOperatoryDefNums.Where(x => !listOpDefLinks.Select(y => y.DefNum).Contains(x)).ToList();
-            InsertDefLinksForDefs(listDefNumsToInsert, operatory.OperatoryNum, DefLinkType.Operatory);
-            //There is no reason to "update" deflinks so there is nothing else to do.
-        }
-
         public static void InsertDefLinksForDefs(List<long> listDefNums, long fKey, DefLinkType linkType)
         {
             if (listDefNums == null || listDefNums.Count < 1)

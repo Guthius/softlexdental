@@ -11,6 +11,7 @@ using OpenDental.UI;
 using OpenDentBusiness;
 using CodeBase;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace OpenDental
 {
@@ -311,42 +312,42 @@ namespace OpenDental
 			this.ResumeLayout(false);
 
 		}
-		#endregion
+        #endregion
 
-		private void FormRpPayPlans_Load(object sender, System.EventArgs e){
-			dateStart.Value=DateTime.Today;
-			dateEnd.Value=DateTime.Today;
-			checkHideCompletePlans.Checked=true;
-			_listProviders=Providers.GetListReports();
-			for(int i=0;i<_listProviders.Count;i++) {
-				listProv.Items.Add(_listProviders[i].GetLongDesc());
-				listProv.SelectedIndices.Add(i);
-			}
-			checkAllProv.Checked=true;
-			if(!Preferences.HasClinicsEnabled) {
-				listClin.Visible=false;
-				labelClin.Visible=false;
-				checkAllClin.Visible=false;
-			}
-			else {
-				_listClinics=Clinics.GetForUserod(Security.CurrentUser);
-				if(!Security.CurrentUser.ClinicRestricted) {
-					listClin.Items.Add(Lan.g(this,"Unassigned"));
-					listClin.SetSelected(0,true);
-				}
-				for(int i=0;i<_listClinics.Count;i++) {
-					int curIndex=listClin.Items.Add(_listClinics[i].Abbr);
-					if(Clinics.ClinicNum==0) {
-						listClin.SetSelected(curIndex,true);
-						checkAllClin.Checked=true;
-					}
-					if(_listClinics[i].ClinicNum==Clinics.ClinicNum) {
-						listClin.SelectedIndices.Clear();
-						listClin.SetSelected(curIndex,true);
-					}
-				}
-			}
-		}
+        private void FormRpPayPlans_Load(object sender, System.EventArgs e)
+        {
+            dateStart.Value = DateTime.Today;
+            dateEnd.Value = DateTime.Today;
+            checkHideCompletePlans.Checked = true;
+            _listProviders = Providers.GetListReports();
+            for (int i = 0; i < _listProviders.Count; i++)
+            {
+                listProv.Items.Add(_listProviders[i].GetLongDesc());
+                listProv.SelectedIndices.Add(i);
+            }
+            checkAllProv.Checked = true;
+
+            _listClinics = Clinic.GetByUser(Security.CurrentUser).ToList();
+            if (!Security.CurrentUser.ClinicRestricted)
+            {
+                listClin.Items.Add(Lan.g(this, "Unassigned"));
+                listClin.SetSelected(0, true);
+            }
+            for (int i = 0; i < _listClinics.Count; i++)
+            {
+                int curIndex = listClin.Items.Add(_listClinics[i].Abbr);
+                if (Clinics.ClinicId == 0)
+                {
+                    listClin.SetSelected(curIndex, true);
+                    checkAllClin.Checked = true;
+                }
+                if (_listClinics[i].Id == Clinics.ClinicId)
+                {
+                    listClin.SelectedIndices.Clear();
+                    listClin.SetSelected(curIndex, true);
+                }
+            }
+        }
 
 		private void checkAllProv_Click(object sender,EventArgs e) {
 			if(checkAllProv.Checked) {
@@ -398,12 +399,12 @@ namespace OpenDental
 				MsgBox.Show(this,"Please select at least one provider.");
 				return;
 			}
-			if(Preferences.HasClinicsEnabled) {//Using clinics
+
 				if(listClin.SelectedIndices.Count==0) {
 					MsgBox.Show(this,"Please select at least one clinic.");
 					return;
 				}
-			}
+			
 			if(dateStart.Value>dateEnd.Value) {
 				MsgBox.Show(this,"Start date cannot be greater than the end date.");
 				return;
@@ -419,21 +420,21 @@ namespace OpenDental
 					listProvNums.Add(_listProviders[i].ProvNum);
 				}
 			}
-			if(Preferences.HasClinicsEnabled) {
+
 				for(int i=0;i<listClin.SelectedIndices.Count;i++) {
 					if(Security.CurrentUser.ClinicRestricted) {
-						listClinicNums.Add(_listClinics[listClin.SelectedIndices[i]].ClinicNum);//we know that the list is a 1:1 to _listClinics
+						listClinicNums.Add(_listClinics[listClin.SelectedIndices[i]].Id);//we know that the list is a 1:1 to _listClinics
 					}
 					else {
 						if(listClin.SelectedIndices[i]==0) {
 							listClinicNums.Add(0);
 						}
 						else {
-							listClinicNums.Add(_listClinics[listClin.SelectedIndices[i]-1].ClinicNum);//Minus 1 from the selected index
+							listClinicNums.Add(_listClinics[listClin.SelectedIndices[i]-1].Id);//Minus 1 from the selected index
 						}
 					}
 				}
-			}
+			
 			DisplayPayPlanType displayPayPlanType;
 			if(radioInsurance.Checked) {
 				displayPayPlanType=DisplayPayPlanType.Insurance;
@@ -462,12 +463,8 @@ namespace OpenDental
 				report.AddSubTitle("Date SubTitle",DateTimeOD.Today.ToShortDateString(),fontSubTitle);
 			}
 			QueryObject query;
-			if(Preferences.HasClinicsEnabled) {
-				query=report.AddQuery(table,"","clinicName",SplitByKind.Value,1,true);
-			}
-			else {
-				query=report.AddQuery(table,"","",SplitByKind.None,1,true);
-			}
+			query=report.AddQuery(table,"","clinicName",SplitByKind.Value,1,true);
+
 			query.AddColumn("Provider",160,FieldValueType.String,font);
 			query.AddColumn("Guarantor",160,FieldValueType.String,font);
 			query.AddColumn("Ins",40,FieldValueType.String,font);
@@ -499,7 +496,7 @@ namespace OpenDental
 				query.GetColumnDetail("Fam Balance").ContentAlignment=ContentAlignment.MiddleRight;
 				query.GetColumnDetail("Fam Balance").SuppressIfDuplicate=true;
 			}
-			if(Preferences.HasClinicsEnabled) {
+
 				QueryObject queryTotals=report.AddQuery(tableTotal,"Totals");
 				queryTotals.AddColumn("Clinic",360,FieldValueType.String,font);
 				queryTotals.AddColumn("Princ",100,FieldValueType.Number,font);
@@ -528,7 +525,7 @@ namespace OpenDental
 					queryTotals.GetColumnDetail("Fam Balance").ContentAlignment=ContentAlignment.MiddleRight;
 					queryTotals.GetColumnDetail("Fam Balance").SuppressIfDuplicate=true;
 				}
-			}
+			
 			if(!report.SubmitQueries()) {
 				return;
 			}
@@ -540,27 +537,5 @@ namespace OpenDental
 		private void butCancel_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
-
-		
-
-		
-
-
-
-
-
-
-
-
-
-
-
-
-
-		
-
-		
-
-		
 	}
 }

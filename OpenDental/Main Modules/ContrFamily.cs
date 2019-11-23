@@ -676,7 +676,7 @@ namespace OpenDental
                     #endregion City
                     #region Clinic
                     case "Clinic":
-                        row.Cells.Add(Clinics.GetAbbr(PatCur.ClinicNum));
+                        row.Cells.Add(Clinic.GetById(PatCur.ClinicNum).Abbr);
                         break;
                     #endregion Clinic
                     #region Contact Method
@@ -2056,10 +2056,8 @@ namespace OpenDental
             gridPatientClones.BeginUpdate();
             gridPatientClones.Columns.Clear();
             gridPatientClones.Columns.Add(new ODGridColumn("Name", 150));
-            if (Preferences.HasClinicsEnabled)
-            {
                 gridPatientClones.Columns.Add(new ODGridColumn("Clinic", 80));
-            }
+            
             gridPatientClones.Columns.Add(new ODGridColumn( "Specialty", 0));
             gridPatientClones.Rows.Clear();
             if (PatCur == null)
@@ -2078,10 +2076,9 @@ namespace OpenDental
                 }
                 row = new ODGridRow();
                 row.Cells.Add(cloneAndSpecialty.Key.GetNameLF());
-                if (Preferences.HasClinicsEnabled)
-                {
-                    row.Cells.Add(Clinics.GetAbbr(cloneAndSpecialty.Key.ClinicNum));
-                }
+
+                    row.Cells.Add(Clinic.GetById(cloneAndSpecialty.Key.ClinicNum).Abbr);
+                
                 //Check for null because an office could have just turned on clinics and a specialty would not have been required prior.
                 row.Cells.Add((cloneAndSpecialty.Value == null) ? "" : cloneAndSpecialty.Value.Description);
                 row.Tag = cloneAndSpecialty.Key;

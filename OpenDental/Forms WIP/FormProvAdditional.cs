@@ -17,8 +17,8 @@ namespace OpenDental {
 
 		public FormProvAdditional(List<ProviderClinic> listProvClinic,Provider provCur) {
 			InitializeComponent();
-			
-			_listProvClinic=listProvClinic.Select(x => x.Copy()).ToList();
+
+            _listProvClinic = new List<ProviderClinic>(listProvClinic);
 			_provCur=provCur;
 		}
 
@@ -42,58 +42,60 @@ namespace OpenDental {
 			gridProvProperties.Columns.Add(col);
 			gridProvProperties.Rows.Clear();
 			ODGridRow row;
-			ProviderClinic provClinicDefault=_listProvClinic.Find(x => x.ClinicNum==0);
+			ProviderClinic provClinicDefault=_listProvClinic.Find(x => x.ClinicId==0);
 			//Didn't have an HQ row
 			if(provClinicDefault==null) {//Doesn't exist in list
-				provClinicDefault=ProviderClinics.GetOne(_provCur.ProvNum,0);
-				if(provClinicDefault==null) {//Doesn't exist in database
-					provClinicDefault=new ProviderClinic {
-						ProvNum=_provCur.ProvNum,
-						ClinicNum=0,
-						DEANum=_provCur.DEANum,
-						StateLicense=_provCur.StateLicense,
-						StateRxID=_provCur.StateRxID,
-						StateWhereLicensed=_provCur.StateWhereLicensed,
-					};
-				}
-				_listProvClinic.Add(provClinicDefault);//If not in list, add to list.
+                // TODO:
+				//provClinicDefault=ProviderClinics.GetOne(_provCur.ProvNum,0);
+				//if(provClinicDefault==null) {//Doesn't exist in database
+				//	provClinicDefault=new ProviderClinic {
+				//		ProviderId=_provCur.ProvNum,
+				//		ClinicId=0,
+				//		DEANum=_provCur.DEANum,
+				//		StateLicense=_provCur.StateLicense,
+				//		StateRxId=_provCur.StateRxID,
+				//		StateWhereLicensed=_provCur.StateWhereLicensed,
+				//	};
+				//}
+				//_listProvClinic.Add(provClinicDefault);//If not in list, add to list.
 			}
 			row=new ODGridRow();
 			row.Cells.Add("Default");
 			row.Cells.Add(provClinicDefault.DEANum);
 			row.Cells.Add(provClinicDefault.StateLicense);
-			row.Cells.Add(provClinicDefault.StateRxID);
+			row.Cells.Add(provClinicDefault.StateRxId);
 			row.Cells.Add(provClinicDefault.StateWhereLicensed);
 			row.Tag=provClinicDefault;
 			gridProvProperties.Rows.Add(row);
-			if(Preferences.HasClinicsEnabled) {
-				foreach(Clinic clinicCur in Clinics.GetForUserod(Security.CurrentUser)) {
+
+				foreach(Clinic clinicCur in Clinic.GetByUser(Security.CurrentUser)) {
 					row=new ODGridRow();
-					ProviderClinic provClinic=_listProvClinic.Find(x => x.ClinicNum == clinicCur.ClinicNum);
+					ProviderClinic provClinic=_listProvClinic.Find(x => x.ClinicId == clinicCur.Id);
 					//Doesn't exist in Db, create a new one
 					if(provClinic==null) {
-						provClinic=ProviderClinics.GetOne(_provCur.ProvNum,clinicCur.ClinicNum);
+						provClinic=ProviderClinic.GetByProviderAndClinic(_provCur.ProvNum,clinicCur.Id);
 						if(provClinic==null) {
-							provClinic=new ProviderClinic {
-								ProvNum=_provCur.ProvNum,
-								ClinicNum=clinicCur.ClinicNum,
-								DEANum=_provCur.DEANum,
-								StateLicense=_provCur.StateLicense,
-								StateRxID=_provCur.StateRxID,
-								StateWhereLicensed=_provCur.StateWhereLicensed,
-							};
+                        // TODO:
+							//provClinic=new ProviderClinic {
+							//	ProviderId=_provCur.ProvNum,
+							//	ClinicId=clinicCur.Id,
+							//	DEANum=_provCur.DEANum,
+							//	StateLicense=_provCur.StateLicense,
+							//	StateRxId=_provCur.StateRxID,
+							//	StateWhereLicensed=_provCur.StateWhereLicensed,
+							//};
 						}
 						_listProvClinic.Add(provClinic);
 					}
 					row.Cells.Add(clinicCur.Abbr);
 					row.Cells.Add(provClinic.DEANum);
 					row.Cells.Add(provClinic.StateLicense);
-					row.Cells.Add(provClinic.StateRxID);
+					row.Cells.Add(provClinic.StateRxId);
 					row.Cells.Add(provClinic.StateWhereLicensed);
 					row.Tag=provClinic;
 					gridProvProperties.Rows.Add(row);
 				}
-			}
+			
 			gridProvProperties.EndUpdate();
 			Cursor=Cursors.Default;
 		}
@@ -112,7 +114,7 @@ namespace OpenDental {
 				provClin.StateLicense=strNewValue;
 			}
 			else if(e.Column==3) {
-				provClin.StateRxID=strNewValue;
+				provClin.StateRxId=strNewValue;
 			}
 			else if(e.Column==4) {
 				provClin.StateWhereLicensed=strNewValue;

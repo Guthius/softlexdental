@@ -692,9 +692,9 @@ namespace OpenDental
 				case DashApptGrid.SheetFieldName:
 					retVal.Add(new DisplayField { Category=DisplayFieldCategory.None,InternalName="ApptStatus",Description="ApptStatus",ColumnWidth=70,ItemOrder=++i });
 					retVal.Add(new DisplayField { Category=DisplayFieldCategory.None,InternalName="Prov",Description="Prov",ColumnWidth=40,ItemOrder=++i });
-					if(Preferences.HasClinicsEnabled) {
+
 						retVal.Add(new DisplayField { Category=DisplayFieldCategory.None,InternalName="Clinic",Description="Clinic",ColumnWidth=60,ItemOrder=++i });
-					}
+					
 					retVal.Add(new DisplayField { Category=DisplayFieldCategory.None,InternalName="Date",Description="Date",ColumnWidth=65,ItemOrder=++i });
 					retVal.Add(new DisplayField { Category=DisplayFieldCategory.None,InternalName="Time",Description="Time",ColumnWidth=55,ItemOrder=++i });
 					retVal.Add(new DisplayField { Category=DisplayFieldCategory.None,InternalName="Min",Description="Min",ColumnWidth=20,ItemOrder=++i });

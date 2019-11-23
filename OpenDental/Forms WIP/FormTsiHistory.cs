@@ -31,29 +31,26 @@ namespace OpenDental {
 				datePicker,checkShowPatNums);
 			#region Fill Clinics
 			_listClinics=new List<Clinic>();
-			if(Preferences.HasClinicsEnabled) {
+
 				_listClinics.AddRange(
-					Clinics.GetForUserod(Security.CurrentUser,true,Lan.g(this,"Unassigned")).OrderBy(x => x.ClinicNum!=0).ThenBy(x => x.ItemOrder)
+					Clinic.GetByUser(Security.CurrentUser).OrderBy(x => x.Id!=0).ThenBy(x => x.SortOrder)
 				);
 				comboBoxMultiClinics.Visible=true;
 				labelClinics.Visible=true;
 				comboBoxMultiClinics.Items.Add(Lan.g(this,"All"));
-				if(Clinics.ClinicNum==0) {
+				if(Clinics.ClinicId==0) {
 					comboBoxMultiClinics.SetSelected(0,true);
 				}
 				foreach(Clinic clinCur in _listClinics) {
 					comboBoxMultiClinics.Items.Add(clinCur.Abbr);
-					if(Clinics.ClinicNum>0 && clinCur.ClinicNum==Clinics.ClinicNum) {
+					if(Clinics.ClinicId>0 && clinCur.Id==Clinics.ClinicId) {
 						comboBoxMultiClinics.SetSelected(comboBoxMultiClinics.Items.Count-1,true);
 					}
 				}
 				if(comboBoxMultiClinics.SelectedIndices.Count==0) {
 					comboBoxMultiClinics.SetSelected(0,true);
 				}
-			}
-			else {//clinics disabled
-				_listClinics.Add(Clinics.GetPracticeAsClinicZero(Lan.g(this,"Unassigned")));
-			}
+
 			#endregion Fill Clinics
 			#region Fill Client IDs
 			comboBoxMultiClientIDs.Items.Add(Lan.g(this,"All"));
@@ -80,9 +77,9 @@ namespace OpenDental {
 			#endregion Fill Account Statuses
 			#region Get Selected Family PatNums
 			_listSelectedFamPatNums=new List<long>();
-			if(FormOpenDental.CurPatNum>0) {
-				Family fam=Patients.GetFamily(FormOpenDental.CurPatNum);
-				textPatient.Text=fam.GetNameInFamLF(FormOpenDental.CurPatNum);
+			if(FormOpenDental.CurrentPatientId>0) {
+				Family fam=Patients.GetFamily(FormOpenDental.CurrentPatientId);
+				textPatient.Text=fam.GetNameInFamLF(FormOpenDental.CurrentPatientId);
 				_listSelectedFamPatNums=fam.Members.Select(x => x.PatNum).ToList();
 			}
 			#endregion Get Selected Family PatNums
@@ -110,10 +107,8 @@ namespace OpenDental {
 			#region Set Grid Columns
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
-			gridMain.Columns.Add(new ODGridColumn("Guarantor",Preferences.HasClinicsEnabled?-200:-300));
-			if(Preferences.HasClinicsEnabled) {
-				gridMain.Columns.Add(new ODGridColumn("Clinic",-100));
-			}
+			gridMain.Columns.Add(new ODGridColumn("Guarantor",-200));
+			gridMain.Columns.Add(new ODGridColumn("Clinic",-100));
 			gridMain.Columns.Add(new ODGridColumn("User",-100));
 			gridMain.Columns.Add(new ODGridColumn("Trans Type",-80));
 			gridMain.Columns.Add(new ODGridColumn("Trans Date Time",-120,HorizontalAlignment.Center,ODGridSortingStrategy.DateParse));
@@ -128,8 +123,8 @@ namespace OpenDental {
 			List<Patient> listFilteredPatLims=listLogIndexesFiltered.Where(x => _dictPatLims.ContainsKey(_listTsiTransLogsAll[x].PatNum))//Just in case.
 				.Select(x => _dictPatLims[_listTsiTransLogsAll[x].PatNum]).DistinctBy(x => x.PatNum).ToList();
 			Dictionary<long,string> dictPatNames=listFilteredPatLims.ToDictionary(x => x.PatNum,x => x.GetNameLF());
-			Dictionary<long,string> dictClinicAbbrs=_listClinics.Where(x => x.ClinicNum>0).ToDictionary(x => x.ClinicNum,x => x.Abbr);
-			Dictionary<long,string> dictPatClinicAbbrs=listFilteredPatLims.ToDictionary(x => x.PatNum,x => Clinics.GetAbbr(x.ClinicNum));
+			Dictionary<long,string> dictClinicAbbrs=_listClinics.Where(x => x.Id>0).ToDictionary(x => x.Id,x => x.Abbr);
+			Dictionary<long,string> dictPatClinicAbbrs=listFilteredPatLims.ToDictionary(x => x.PatNum,x => Clinic.GetById(x.ClinicNum).Abbr);
 			Dictionary<long,string> dictUserNames= User.GetById(listLogIndexesFiltered.Select(x => _listTsiTransLogsAll[x].UserNum).Distinct().ToList())
 				.ToDictionary(x => x.Id,x => x.UserName);
 			gridMain.Rows.Clear();
@@ -141,10 +136,10 @@ namespace OpenDental {
 				string patName="";
 				row.Cells.Add((checkShowPatNums.Checked?(logCur.PatNum.ToString()+" - "):"")
 					+(dictPatNames.TryGetValue(logCur.PatNum,out patName)?patName:Patients.GetNameLF(logCur.PatNum)));
-				if(Preferences.HasClinicsEnabled) {
+
 					string clinicAbbr="";
 					row.Cells.Add((dictClinicAbbrs.TryGetValue(logCur.ClinicNum,out clinicAbbr) || dictPatClinicAbbrs.TryGetValue(logCur.PatNum,out clinicAbbr))?clinicAbbr:"");
-				}
+				
 				string userName="";
 				row.Cells.Add(dictUserNames.TryGetValue(logCur.UserNum,out userName)?userName:"");
 				row.Cells.Add(logCur.TransType.GetDescription());
@@ -179,71 +174,79 @@ namespace OpenDental {
 			Cursor=Cursors.Default;
 		}
 
-		///<summary>Return a list of filtered indexes relative to the index in _listTsiTransLogsAll.
-		///We use indexes to conserve memory.</summary>
-		private List<int> GetListIndexesFiltered() {
-			List<int> retval=new List<int>();
-			#region Validate Filters
-			ValidateChildren(ValidationConstraints.Enabled|ValidationConstraints.Visible|ValidationConstraints.Selectable);
-			if(!datePicker.IsValid) {
-				MsgBox.Show(this,"Please fix data entry errors first.");
-				return retval;//return empty list, filter inputs cannot be applied since there are errors
-			}
-			#endregion Validate Filters
-			#region Get Filter Data
-			DateTime dateStart=datePicker.GetDateTimeFrom();
-			DateTime dateEnd=datePicker.GetDateTimeTo();
-			dateEnd=(dateEnd==DateTime.MinValue?DateTime.Today:dateEnd);
-			List<TsiTransType> listSelectedTransTypes=new List<TsiTransType>();
-			if(!comboBoxMultiTransTypes.SelectedIndices.Contains(0)) {
-				listSelectedTransTypes=comboBoxMultiTransTypes.ListSelectedIndices.Select(x => _listTransTypes[x-1]).ToList();
-			}
-			List<string> listSelectedAcctStatuses=new List<string>();
-			if(!comboBoxMultiAcctStatuses.SelectedIndices.Contains(0)) {
-				listSelectedAcctStatuses=comboBoxMultiAcctStatuses.ListSelectedIndices.Select(x => _listAcctStatuses[x-1]).ToList();
-			}
-			List<long> listSuspendedGuarNums=TsiTransLogs.GetSuspendedGuarNums();
-			List<long> listActiveCollGuarNums=Patients.GetListCollectionGuarNums(/*false*/);
-			List<long> listClinicNums=new List<long>();
-			Dictionary<long,long> dictLogClinic=new Dictionary<long,long>();
-			if(Preferences.HasClinicsEnabled) {
-				if(comboBoxMultiClinics.ListSelectedIndices.Contains(0)) {
-					listClinicNums=_listClinics.Select(x => x.ClinicNum).ToList();
-				}
-				else {
-					//x-1 works because we know index 0 isn't selected(from above contains(0)) and we -1 for All clinics
-					listClinicNums=comboBoxMultiClinics.ListSelectedIndices.Select(x => _listClinics[x-1].ClinicNum).ToList();
-				}
-				Patient patCur;
-				dictLogClinic=_listTsiTransLogsAll.ToDictionary(x => x.TsiTransLogNum
-					,x => (x.ClinicNum>0?x.ClinicNum:(_dictPatLims.TryGetValue(x.PatNum,out patCur)?patCur.ClinicNum:0))
-				);
-			}
-			List<string> listClientIDs=new List<string>();
-			if(!comboBoxMultiClientIDs.SelectedIndices.Contains(0)) {
-				listClientIDs=comboBoxMultiClientIDs.ListSelectedIndices.Select(x => _listClientIDs[x-1]).ToList();
-			}
-			#endregion Get Filter Data
-			#region Apply Filter Data
-			for(int i=0;i<_listTsiTransLogsAll.Count;i++) {
-				TsiTransLog logCur=_listTsiTransLogsAll[i];
-				if(logCur.TransDateTime.Date<=dateEnd
-					&& logCur.TransDateTime.Date>=dateStart
-					&& (_listSelectedFamPatNums.Count==0 || _listSelectedFamPatNums.Contains(logCur.PatNum))
-					&& (listClinicNums.Count==0 || (dictLogClinic.ContainsKey(logCur.TsiTransLogNum) && listClinicNums.Contains(dictLogClinic[logCur.TsiTransLogNum])))
-					&& (listClientIDs.Count==0 || listClientIDs.Contains(logCur.ClientId))
-					&& (listSelectedTransTypes.Count==0 || listSelectedTransTypes.Contains(logCur.TransType))
-					&& (listSelectedAcctStatuses.Count==0
-						|| (listSelectedAcctStatuses.Contains("Active") && listActiveCollGuarNums.Contains(logCur.PatNum))
-						|| (listSelectedAcctStatuses.Contains("Suspended") && listSuspendedGuarNums.Contains(logCur.PatNum))
-						|| (listSelectedAcctStatuses.Contains("Inactive") && !listActiveCollGuarNums.Concat(listSuspendedGuarNums).Contains(logCur.PatNum))))
-				{
-					retval.Add(i);
-				}
-			}
-			#endregion Apply Filter Data
-			return retval;
-		}
+        ///<summary>Return a list of filtered indexes relative to the index in _listTsiTransLogsAll.
+        ///We use indexes to conserve memory.</summary>
+        private List<int> GetListIndexesFiltered()
+        {
+            List<int> retval = new List<int>();
+            #region Validate Filters
+            ValidateChildren(ValidationConstraints.Enabled | ValidationConstraints.Visible | ValidationConstraints.Selectable);
+            if (!datePicker.IsValid)
+            {
+                MsgBox.Show(this, "Please fix data entry errors first.");
+                return retval;//return empty list, filter inputs cannot be applied since there are errors
+            }
+            #endregion Validate Filters
+            #region Get Filter Data
+            DateTime dateStart = datePicker.GetDateTimeFrom();
+            DateTime dateEnd = datePicker.GetDateTimeTo();
+            dateEnd = (dateEnd == DateTime.MinValue ? DateTime.Today : dateEnd);
+            List<TsiTransType> listSelectedTransTypes = new List<TsiTransType>();
+            if (!comboBoxMultiTransTypes.SelectedIndices.Contains(0))
+            {
+                listSelectedTransTypes = comboBoxMultiTransTypes.ListSelectedIndices.Select(x => _listTransTypes[x - 1]).ToList();
+            }
+            List<string> listSelectedAcctStatuses = new List<string>();
+            if (!comboBoxMultiAcctStatuses.SelectedIndices.Contains(0))
+            {
+                listSelectedAcctStatuses = comboBoxMultiAcctStatuses.ListSelectedIndices.Select(x => _listAcctStatuses[x - 1]).ToList();
+            }
+            List<long> listSuspendedGuarNums = TsiTransLogs.GetSuspendedGuarNums();
+            List<long> listActiveCollGuarNums = Patients.GetListCollectionGuarNums(/*false*/);
+            List<long> listClinicNums = new List<long>();
+            Dictionary<long, long> dictLogClinic = new Dictionary<long, long>();
+
+            if (comboBoxMultiClinics.ListSelectedIndices.Contains(0))
+            {
+                listClinicNums = _listClinics.Select(x => x.Id).ToList();
+            }
+            else
+            {
+                //x-1 works because we know index 0 isn't selected(from above contains(0)) and we -1 for All clinics
+                listClinicNums = comboBoxMultiClinics.ListSelectedIndices.Select(x => _listClinics[x - 1].Id).ToList();
+            }
+            Patient patCur;
+            dictLogClinic = _listTsiTransLogsAll.ToDictionary(x => x.TsiTransLogNum
+                , x => (x.ClinicNum > 0 ? x.ClinicNum : (_dictPatLims.TryGetValue(x.PatNum, out patCur) ? patCur.ClinicNum : 0))
+            );
+
+            List<string> listClientIDs = new List<string>();
+            if (!comboBoxMultiClientIDs.SelectedIndices.Contains(0))
+            {
+                listClientIDs = comboBoxMultiClientIDs.ListSelectedIndices.Select(x => _listClientIDs[x - 1]).ToList();
+            }
+            #endregion Get Filter Data
+            #region Apply Filter Data
+            for (int i = 0; i < _listTsiTransLogsAll.Count; i++)
+            {
+                TsiTransLog logCur = _listTsiTransLogsAll[i];
+                if (logCur.TransDateTime.Date <= dateEnd
+                    && logCur.TransDateTime.Date >= dateStart
+                    && (_listSelectedFamPatNums.Count == 0 || _listSelectedFamPatNums.Contains(logCur.PatNum))
+                    && (listClinicNums.Count == 0 || (dictLogClinic.ContainsKey(logCur.TsiTransLogNum) && listClinicNums.Contains(dictLogClinic[logCur.TsiTransLogNum])))
+                    && (listClientIDs.Count == 0 || listClientIDs.Contains(logCur.ClientId))
+                    && (listSelectedTransTypes.Count == 0 || listSelectedTransTypes.Contains(logCur.TransType))
+                    && (listSelectedAcctStatuses.Count == 0
+                        || (listSelectedAcctStatuses.Contains("Active") && listActiveCollGuarNums.Contains(logCur.PatNum))
+                        || (listSelectedAcctStatuses.Contains("Suspended") && listSuspendedGuarNums.Contains(logCur.PatNum))
+                        || (listSelectedAcctStatuses.Contains("Inactive") && !listActiveCollGuarNums.Concat(listSuspendedGuarNums).Contains(logCur.PatNum))))
+                {
+                    retval.Add(i);
+                }
+            }
+            #endregion Apply Filter Data
+            return retval;
+        }
 
 		private void gridMain_OnSortByColumn(object sender,EventArgs e) {
 			if(_selectedLog==null) {
@@ -471,11 +474,11 @@ namespace OpenDental {
 		}
 
 		private void butCurrent_Click(object sender,EventArgs e) {
-			if(FormOpenDental.CurPatNum==0) {
+			if(FormOpenDental.CurrentPatientId==0) {
 				return;
 			}
-			Family fam=Patients.GetFamily(FormOpenDental.CurPatNum);
-			textPatient.Text=fam.GetNameInFamLF(FormOpenDental.CurPatNum);
+			Family fam=Patients.GetFamily(FormOpenDental.CurrentPatientId);
+			textPatient.Text=fam.GetNameInFamLF(FormOpenDental.CurrentPatientId);
 			_listSelectedFamPatNums=fam.Members.Select(x => x.PatNum).ToList();
 			FillGrid();
 		}

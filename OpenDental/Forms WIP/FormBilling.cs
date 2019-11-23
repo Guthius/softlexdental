@@ -570,19 +570,19 @@ namespace OpenDental{
 			//ListClinics can be called even when Clinics is not turned on, therefore it needs to be set to something to avoid a null reference.
 			ListClinics=new List<Clinic>();
 			_listStatementNumsToSkip=new List<long>();
-			if(Preferences.HasClinicsEnabled) {//Using clinics.
+
 				labelClinic.Visible=true;
 				comboClinic.Visible=true;
 				comboClinic.Items.Add(Lan.g(this,"All"));
 				comboClinic.SelectedIndex=0;
-				ListClinics=Clinics.GetForUserod(Security.CurrentUser);
+				ListClinics=Clinic.GetByUser(Security.CurrentUser).ToList();
 				for(int i=0;i<ListClinics.Count;i++) {
 					comboClinic.Items.Add(ListClinics[i].Abbr);
-					if(ClinicNum==ListClinics[i].ClinicNum) {
+					if(ClinicNum==ListClinics[i].Id) {
 						comboClinic.SelectedIndex=i+1;
 					}
 				}
-			}
+			
 			FillComboEmail();
 			_isActivateFillDisabled=false;
 		}
@@ -623,8 +623,8 @@ namespace OpenDental{
 				dateTo=PIn.Date(textDateEnd.Text);
 			}
 			List<long> clinicNums=new List<long>();//an empty list indicates to Statements.GetBilling to run for all clinics
-			if(Preferences.HasClinicsEnabled && comboClinic.SelectedIndex>0) {
-				clinicNums.Add(ListClinics[comboClinic.SelectedIndex-1].ClinicNum);
+			if(comboClinic.SelectedIndex>0) {
+				clinicNums.Add(ListClinics[comboClinic.SelectedIndex-1].Id);
 			}
 			table=Statements.GetBilling(radioSent.Checked,comboOrder.SelectedIndex,dateFrom,dateTo,clinicNums);
 			gridBill.BeginUpdate();
@@ -695,9 +695,9 @@ namespace OpenDental{
 
 		private void FillComboEmail() {
 			_listEmailAddresses=EmailAddress.All();//Does not include user specific email addresses.
-			List<Clinic> listClinicsAll=Clinics.GetDeepCopy();
+            List<Clinic> listClinicsAll = Clinic.All().ToList();
 			for(int i=0;i<listClinicsAll.Count;i++) {//Exclude any email addresses that are associated to a clinic.
-				_listEmailAddresses.RemoveAll(x => x.Id==listClinicsAll[i].EmailAddressNum);
+				_listEmailAddresses.RemoveAll(x => x.Id==listClinicsAll[i].EmailAddressId);
 			}
 			//Exclude default practice email address.
 			_listEmailAddresses.RemoveAll(x => x.Id==Preference.GetLong(PreferenceName.EmailDefaultAddressNum));
@@ -963,15 +963,7 @@ namespace OpenDental{
 					return;
 				}
 			}
-			if(!Preferences.HasClinicsEnabled) {
-				//If clinics are enabled, the practice has the option to order statements alphabetically. This would have happened in 
-				//Statements.GetStatements. For other practices, we are going to order the statements the way they are displayed in the grid.
-				Dictionary<long,int> dictStatementsOrder=new Dictionary<long, int>();
-				for(int i=0;i<listStatementNums.Count;i++) {
-					dictStatementsOrder[listStatementNums[i]]=i;
-				}
-				listStatements=listStatements.OrderBy(x => dictStatementsOrder[x.StatementNum]).ToList();
-			}
+
 			_dictFams=Patients.GetFamilies(listStatements.Select(x => x.PatNum).ToList())
 				.SelectMany(fam => fam.Members.Select(y => new { y.PatNum,fam }))
 				.Distinct()
@@ -1270,10 +1262,8 @@ namespace OpenDental{
 					EbillStatement ebillStatement = new EbillStatement();
 					ebillStatement.family=fam;
 					ebillStatement.statement=stmt;
-					long clinicNum = 0;//If clinics are disabled, then all bills will go into the same "bucket"
-					if(Preferences.HasClinicsEnabled) {
-						clinicNum=fam.Members[0].ClinicNum;
-					}
+					long clinicNum=fam.Members[0].ClinicNum;
+					
 					List<string> listElectErrors = new List<string>();
 					if(Preference.GetString(PreferenceName.BillingUseElectronic)=="1") {//EHG
 						listElectErrors=Bridges.EHG_statements.Validate(clinicNum);
@@ -1599,16 +1589,13 @@ namespace OpenDental{
 
 		///<summary>The filePath is the full path to the output file if the clinics feature is disabled (for a single location practice).</summary>
 		private string GetEbillFilePathForClinic(string filePath,long clinicNum) {
-			if(!Preferences.HasClinicsEnabled) {
-				return filePath;
-			}
 			string clinicAbbr;
 			//Check for zero clinic
 			if(clinicNum==0) {
 				clinicAbbr=Lan.g(this,"Unassigned");
 			}
 			else {
-				clinicAbbr=Clinics.GetClinic(clinicNum).Abbr;//Abbr is required by our interface, so no need to check if blank.
+				clinicAbbr=Clinic.GetById(clinicNum).Abbr;//Abbr is required by our interface, so no need to check if blank.
 			}
 			string fileName=Path.GetFileNameWithoutExtension(filePath)+'-'+clinicAbbr+Path.GetExtension(filePath);
 			return Storage.Default.CombinePath(Path.GetDirectoryName(filePath),fileName);
@@ -1769,8 +1756,8 @@ namespace OpenDental{
 					if(textDateEnd.Text!=""){
 						dateTo=PIn.Date(textDateEnd.Text);
 					}
-					if(Preferences.HasClinicsEnabled && comboClinic.SelectedIndex>0) {
-						clinicNums.Add(ListClinics[comboClinic.SelectedIndex-1].ClinicNum);
+					if(comboClinic.SelectedIndex>0) {
+						clinicNums.Add(ListClinics[comboClinic.SelectedIndex-1].Id);
 					}
 					DataTable tableCur=Statements.GetBilling(radioSent.Checked,comboOrder.SelectedIndex,dateFrom,dateTo,clinicNums);
 					List<long> listStatementNums=tableCur.Select().Select(x => PIn.Long(x["StatementNum"].ToString())).ToList();

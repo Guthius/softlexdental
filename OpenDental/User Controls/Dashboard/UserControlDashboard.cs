@@ -95,7 +95,7 @@ namespace OpenDental
 
         private void PatientEvent_Fired(ODEventArgs e)
         {
-            if (((e.Tag as Patient)?.PatNum ?? -1) == FormOpenDental.CurPatNum)
+            if (((e.Tag as Patient)?.PatNum ?? -1) == FormOpenDental.CurrentPatientId)
             {
                 RefreshDashboard();
             }

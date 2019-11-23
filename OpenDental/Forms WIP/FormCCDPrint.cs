@@ -154,12 +154,14 @@ namespace OpenDental {
 							break;
 						}
 					}
-					if(clinicNum!=0) {
-						clinic=Clinics.GetClinic(clinicNum);
-					}
-					else if(Preferences.HasClinicsEnabled && Clinics.GetCount() > 0) {
-						clinic=Clinics.GetFirst();
-					}
+                    if (clinicNum != 0)
+                    {
+                        clinic = Clinic.GetById(clinicNum);
+                    }
+                    else
+                    {
+                        clinic = Clinic.All().FirstOrDefault();
+                    }
 				}
 				if(provTreat==null) {
 					provTreat=Providers.GetProv(Patients.GetProvNum(patient));
@@ -2811,7 +2813,7 @@ namespace OpenDental {
 						Preference.GetString(PreferenceName.PracticeCity),Preference.GetString(PreferenceName.PracticeST),Preference.GetString(PreferenceName.PracticeZip));
 				}
 			}else{
-				text=Patients.GetAddressFull(clinic.Address,clinic.Address2,clinic.City,clinic.State,clinic.Zip);
+				text=Patients.GetAddressFull(clinic.AddressLine1,clinic.AddressLine2,clinic.City,clinic.State,clinic.Zip);
 			}
 			doc.DrawString(g,text,xPos,0);
 		}

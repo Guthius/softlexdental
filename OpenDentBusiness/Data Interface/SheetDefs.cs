@@ -196,7 +196,7 @@ namespace OpenDentBusiness
             if (table.Rows.Count > 0)
             {
                 throw new ApplicationException(Lans.g("sheetDefs", "SheetDef is in use by clinics. Not allowed to delete.")
-                    + "\r\n" + string.Join(", ", table.Select().Select(x => Clinics.GetDesc(PIn.Long(x["ClinicNum"].ToString())))));
+                    + "\r\n" + string.Join(", ", table.Select().Select(x => Clinic.GetById(PIn.Long(x["ClinicNum"].ToString())).Description)));
             }
             command = "DELETE FROM sheetfielddef WHERE SheetDefNum=" + POut.Long(sheetDefNum);
             Db.NonQ(command);

@@ -81,7 +81,7 @@ namespace OpenDental
                 SetupWizard.ClinicSetup clinicSetup = new SetupWizard.ClinicSetup();
 
                 // If clinics got enabled but there is no clinic setup item, add it.
-                if (Preferences.HasClinicsEnabled && setupWizardsList.Where(x => x.Name == clinicSetup.Name).Count() == 0)
+                if (setupWizardsList.Where(x => x.Name == clinicSetup.Name).Count() == 0)
                 {
                     int endCat = setupWizardIndex;
                     for (int i = setupWizardIndex; i < setupWizardsList.Count; i++)
@@ -96,11 +96,6 @@ namespace OpenDental
                     setupWizardsList.Insert(endCat++, new SetupWizard.SetupIntro(clinicSetup.Name, clinicSetup.Description));
                     setupWizardsList.Insert(endCat++, clinicSetup);
                     setupWizardsList.Insert(endCat, new SetupWizard.SetupComplete(clinicSetup.Name));
-                }
-                // Otherwise, if clinics got disabled and there is a clinic setup item, remove it.
-                else if (!Preferences.HasClinicsEnabled && setupWizardsList.Where(x => x.Name == clinicSetup.Name).Count() != 0)
-                {
-                    setupWizardsList.RemoveAll(x => x.Name == clinicSetup.Name);
                 }
             }
         }

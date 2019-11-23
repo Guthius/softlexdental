@@ -1,5 +1,6 @@
 ﻿using CodeBase;
 using OpenDentBusiness;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -9,6 +10,7 @@ using System.Windows.Forms;
 
 namespace OpenDental.UI
 {
+    [Obsolete("Use a regular ComobBox instead.")]
     public partial class ComboBoxClinic : ComboBox
     {
         private const long CLINIC_NUM_ALL = -2;
@@ -43,14 +45,14 @@ namespace OpenDental.UI
                 {
                     return -1;
                 }
-                return ((ODBoxItem<Clinic>)SelectedItem).Tag.ClinicNum;
+                return ((ODBoxItem<Clinic>)SelectedItem).Tag.Id;
             }
             set
             {
                 SelectedIndex = -1;
                 for (int i = 0; i < Items.Count; i++)
                 {
-                    if (value == ((ODBoxItem<Clinic>)Items[i]).Tag.ClinicNum)
+                    if (value == ((ODBoxItem<Clinic>)Items[i]).Tag.Id)
                     {
                         SelectedIndex = i;
                     }
@@ -77,7 +79,7 @@ namespace OpenDental.UI
                 SelectedIndex = -1;
                 for (int i = 0; i < Items.Count; i++)
                 {
-                    if (value.ClinicNum == ((ODBoxItem<Clinic>)Items[i]).Tag.ClinicNum)
+                    if (value.Id == ((ODBoxItem<Clinic>)Items[i]).Tag.Id)
                     {
                         SelectedIndex = i;
                     }
@@ -191,11 +193,11 @@ namespace OpenDental.UI
                 List<long> listClinicNums = new List<long>();
                 foreach (object item in Items)
                 {
-                    if (((ODBoxItem<Clinic>)item).Tag.ClinicNum == CLINIC_NUM_ALL)
+                    if (((ODBoxItem<Clinic>)item).Tag.Id == CLINIC_NUM_ALL)
                     {
                         continue;
                     }
-                    listClinicNums.Add(((ODBoxItem<Clinic>)item).Tag.ClinicNum);
+                    listClinicNums.Add(((ODBoxItem<Clinic>)item).Tag.Id);
                 }
                 return listClinicNums;
             }
@@ -211,11 +213,11 @@ namespace OpenDental.UI
                 List<long> listClinicNums = new List<long>();
                 foreach (object item in Items)
                 {
-                    if (((ODBoxItem<Clinic>)item).Tag.ClinicNum == CLINIC_NUM_ALL)
+                    if (((ODBoxItem<Clinic>)item).Tag.Id == CLINIC_NUM_ALL)
                     {
                         continue;
                     }
-                    listClinicNums.Add(((ODBoxItem<Clinic>)item).Tag.ClinicNum);
+                    listClinicNums.Add(((ODBoxItem<Clinic>)item).Tag.Id);
                 }
                 return listClinicNums;
             }
@@ -237,33 +239,18 @@ namespace OpenDental.UI
             }
             try
             {
-                if (!Preferences.HasClinicsEnabled)
-                {
-                    Visible = false;
-                    return;
-                }
                 Items.Clear();
-                List<Clinic> listClinics = Clinics.GetForUserod(Security.CurrentUser, true, Lan.g("ComboBoxClinic", HqDescription));
+                List<Clinic> listClinics = Clinic.GetByUser(Security.CurrentUser).ToList();
                 if (!DoIncludeUnassigned)
                 {
-                    listClinics.RemoveAll(x => x.ClinicNum == CLINIC_NUM_UNASSIGNED);
+                    listClinics.RemoveAll(x => x.Id == CLINIC_NUM_UNASSIGNED);
                 }
-                //Always include the 'All' option regardless of how many clinics are in our list.
-                //This is for the windows that treat 'All' as a way to include items that do not have a clinic set (e.g. Operatories windows).
-                if (DoIncludeAll)
-                {//&& listClinics.Count > 1
-                    Items.Add(new ODBoxItem<Clinic>("All", new Clinic
-                    {
-                        Abbr = "All",
-                        Description = "All",
-                        ClinicNum = CLINIC_NUM_ALL
-                    }));
-                }
+
                 foreach (Clinic clinic in listClinics.OrderBy(x => x.Abbr))
                 {
                     Items.Add(new ODBoxItem<Clinic>(clinic.Abbr, clinic));
                 }
-                if (Clinics.ClinicNum == 0)
+                if (Clinics.ClinicId == 0)
                 {
                     if (DoIncludeUnassigned)
                     {
@@ -276,7 +263,7 @@ namespace OpenDental.UI
                 }
                 else
                 {
-                    SelectedClinicNum = Clinics.ClinicNum;
+                    SelectedClinicNum = Clinics.ClinicId;
                 }
             }
             catch

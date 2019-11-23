@@ -97,7 +97,7 @@ namespace OpenDentBusiness
                 {
                     MessageBox.Show(
                         message, 
-                        "Softlex Dental", 
+                        "Imedisoft", 
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Warning);
                 }

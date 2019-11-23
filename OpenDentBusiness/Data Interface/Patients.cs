@@ -1772,7 +1772,7 @@ namespace OpenDentBusiness
                 r["site"] = Sites.GetDescription(PIn.Long(dRow["SiteNum"].ToString()));
                 r["Email"] = dRow["Email"].ToString();
                 r["Country"] = dRow["Country"].ToString();
-                r["clinic"] = Clinics.GetAbbr(PIn.Long(dRow["ClinicNum"].ToString()));
+                r["clinic"] = Clinic.GetById(PIn.Long(dRow["ClinicNum"].ToString())).Abbr;
                 r["StatementNum"] = dRow["StatementNum"].ToString();
                 r["WirelessPhone"] = dRow["WirelessPhone"].ToString();
                 r["SecProv"] = Providers.GetAbbr(PIn.Long(dRow["SecProv"].ToString()));
@@ -4484,24 +4484,23 @@ namespace OpenDentBusiness
                 + "TxtMsgOk,HmPhone,WkPhone,WirelessPhone,Email,FName,LName,Guarantor,";
             if (clinic != null)
             {
-                command += clinic.ClinicNum;
+                command += clinic.Id;
             }
             command += " ClinicNum FROM patient WHERE PatNum IN (" + string.Join(",", patNumsSearch.Distinct()) + ") ";
             bool isUnknownNo = Preference.GetBool(PreferenceName.TextMsgOkStatusTreatAsNo);
             List<Clinic> listAllClinics;
             if (clinic == null)
             {
-                listAllClinics = Clinics.GetDeepCopy().Concat(new[] { Clinics.GetPracticeAsClinicZero() }).ToList();
+                listAllClinics = Clinic.All().ToList();
             }
             else
             {
                 listAllClinics = new List<Clinic> { clinic };
             }
-            Dictionary<string, bool> dictEmailValidForClinics = listAllClinics
-                .ToDictionary(x => x.ClinicNum.ToString(), x => EmailAddress.GetById(x.EmailAddressNum) != null);
-            Dictionary<string, bool> dictTextingEnabledForClinics = listAllClinics.ToDictionary(x => x.ClinicNum.ToString(), x => Clinics.IsTextingEnabled(x.ClinicNum));
+            Dictionary<string, bool> dictEmailValidForClinics = listAllClinics.ToDictionary(x => x.Id.ToString(), x => x.EmailAddressId.HasValue && EmailAddress.GetById(x.EmailAddressId.Value) != null);
+            Dictionary<string, bool> dictTextingEnabledForClinics = listAllClinics.ToDictionary(x => x.Id.ToString(), x => Clinic.GetById(x.Id).IsTextingEnabled);
             string curCulture = System.Globalization.CultureInfo.CurrentCulture.Name.Right(2);
-            Dictionary<string, string> dictClinicCountryCodes = listAllClinics.ToDictionary(x => x.ClinicNum.ToString(), x => SmsPhones.GetFirstOrDefault(y => y.ClinicNum == x.ClinicNum)?.CountryCode ?? "");
+            Dictionary<string, string> dictClinicCountryCodes = listAllClinics.ToDictionary(x => x.Id.ToString(), x => SmsPhones.GetFirstOrDefault(y => y.ClinicNum == x.Id)?.CountryCode ?? "");
             bool isEmailValidForClinic;
             bool isTextingEnabledForClinic;
             string clinicCountryCode;
@@ -4538,10 +4537,10 @@ namespace OpenDentBusiness
             List<PatComm> listPatComms = new List<PatComm>();
             foreach (Patient pat in listPats)
             {
-                Clinic clinic = Clinics.GetFirstOrDefault(x => x.ClinicNum == pat.ClinicNum) ?? Clinics.GetPracticeAsClinicZero();
-                bool isEmailValidForClinic = (EmailAddress.GetById(clinic.EmailAddressNum) != null);
-                bool isTextingEnabledForClinic = Clinics.IsTextingEnabled(clinic.ClinicNum);
-                string countryCodePhone = SmsPhones.GetFirstOrDefault(x => x.ClinicNum == clinic.ClinicNum)?.CountryCode ?? "";
+                Clinic clinic = Clinic.GetById(pat.ClinicNum);
+                bool isEmailValidForClinic = clinic.EmailAddressId.HasValue;
+                bool isTextingEnabledForClinic = Clinic.GetById(clinic.Id).IsTextingEnabled;
+                string countryCodePhone = SmsPhones.GetFirstOrDefault(x => x.ClinicNum == clinic.Id)?.CountryCode ?? "";
                 listPatComms.Add(new PatComm(pat, isEmailValidForClinic, isTextingEnabledForClinic, isUnknownNo, curCulture, countryCodePhone));
             }
             return listPatComms;

@@ -137,7 +137,7 @@ namespace OpenDental{
 		private UI.Button butClinicOverrides;
 		private GroupBox groupClinicOverrides;
 		///<summary>The clinics this provider is linked to. May include clinics the user does not have access to.</summary>
-		private List<ProviderClinicLink> _listProvClinicLinks=new List<ProviderClinicLink>();
+		private List<ProviderClinic> _listProvClinicLinks=new List<ProviderClinic>();
 		///<summary>The clinics this user has access to.</summary>
 		private List<Clinic> _listClinicsForUser=new List<Clinic>();
 
@@ -1543,29 +1543,27 @@ namespace OpenDental{
 			else {
 				radioSSN.Checked=true;
 			}
-			_listProvClinicsOld=ProviderClinics.GetListForProvider(ProvCur.ProvNum,
-				Clinics.GetForUserod(Security.CurrentUser,true).Select(x => x.ClinicNum)
-				.Union(new List<long>() { 0 })//Always include 0 clinic, this is the default, NOT a headquarters only value.
-				.Distinct()
-				.ToList());
-			_listProvClinicsNew=_listProvClinicsOld.Select(x => x.Copy()).ToList();
-			_provClinicDefault=_listProvClinicsNew.Find(x => x.ClinicNum==0);
+			_listProvClinicsOld=ProviderClinic.GetByProvider(ProvCur.ProvNum).ToList();
+            _listProvClinicsNew = new List<ProviderClinic>(_listProvClinicsOld);
+			_provClinicDefault=_listProvClinicsNew.Find(x => x.ClinicId==0);
 			//Doesn't exist in Db, create a new one.
-			if(_provClinicDefault==null) {
-				_provClinicDefault=new ProviderClinic {
-					ProvNum=ProvCur.ProvNum,
-					ClinicNum=0,
-					DEANum=ProvCur.DEANum,
-					StateLicense=ProvCur.StateLicense,
-					StateRxID=ProvCur.StateRxID,
-					StateWhereLicensed=ProvCur.StateWhereLicensed,
-				};
-				_listProvClinicsNew.Add(_provClinicDefault);
-			}
+
+            // TODO:
+			//if(_provClinicDefault==null) {
+			//	_provClinicDefault=new ProviderClinic {
+			//		ProviderId=ProvCur.ProvNum,
+			//		ClinicId=0,
+			//		DEANum=ProvCur.DEANum,
+			//		StateLicense=ProvCur.StateLicense,
+			//		StateRxId=ProvCur.StateRxID,
+			//		StateWhereLicensed=ProvCur.StateWhereLicensed,
+			//	};
+			//	_listProvClinicsNew.Add(_provClinicDefault);
+			//}
 			textDEANum.Text=_provClinicDefault.DEANum;
 			textStateLicense.Text=_provClinicDefault.StateLicense;
 			textStateWhereLicensed.Text=_provClinicDefault.StateWhereLicensed;
-			textStateRxID.Text=_provClinicDefault.StateRxID;
+			textStateRxID.Text=_provClinicDefault.StateRxId;
 			//textBlueCrossID.Text=ProvCur.BlueCrossID;
 			textMedicaidID.Text=ProvCur.MedicaidID;
 			textNationalProvID.Text=ProvCur.NationalProvID;
@@ -1651,19 +1649,14 @@ namespace OpenDental{
 				//Make the cancel button the only thing the user can click on.
 				butCancel.Enabled=true;
 			}
-			if(Preferences.HasClinicsEnabled) {
-				_listProvClinicLinks=ProviderClinicLinks.GetForProvider(ProvCur.ProvNum);
-				_listClinicsForUser=Clinics.GetForUserod(Security.CurrentUser);
+
+				_listProvClinicLinks= ProviderClinic.GetByProvider(ProvCur.ProvNum).ToList();
+				_listClinicsForUser=Clinic.GetByUser(Security.CurrentUser).ToList();
 				//If there are no ProviderClinicLinks, then the provider is associated to all clinics.
-				bool doSelectAll=(_listProvClinicLinks.Count==0 || _listClinicsForUser.All(x => _listProvClinicLinks.Any(y => y.ClinicNum==x.ClinicNum)));
-				listBoxClinics.SetItems(_listClinicsForUser,x => x.Abbr,x => !doSelectAll && _listProvClinicLinks.Any(y => y.ClinicNum==x.ClinicNum));
+				bool doSelectAll=(_listProvClinicLinks.Count==0 || _listClinicsForUser.All(x => _listProvClinicLinks.Any(y => y.ClinicId==x.Id)));
+				listBoxClinics.SetItems(_listClinicsForUser,x => x.Abbr,x => !doSelectAll && _listProvClinicLinks.Any(y => y.ClinicId == x.Id));
 				checkAllClinics.Checked=doSelectAll;
-			}
-			else {
-				butClinicOverrides.Visible=false;
-				groupClinicOverrides.Text="";
-				tabControlProvider.TabPages.Remove(tabClinics);
-			}
+
 		}
 
 		private void FillImage() {
@@ -1818,16 +1811,16 @@ namespace OpenDental{
 			//Update current changes in the form before going to look at all values
 			_provClinicDefault.DEANum=textDEANum.Text;
 			_provClinicDefault.StateLicense=textStateLicense.Text;
-			_provClinicDefault.StateRxID=textStateRxID.Text;
+			_provClinicDefault.StateRxId=textStateRxID.Text;
 			_provClinicDefault.StateWhereLicensed=textStateWhereLicensed.Text;
 			FormProvAdditional FormPA=new FormProvAdditional(_listProvClinicsNew,ProvCur);
 			FormPA.ShowDialog();
 			if(FormPA.DialogResult==DialogResult.OK) {
 				_listProvClinicsNew=FormPA.ListProviderClinicOut;
-				_provClinicDefault=_listProvClinicsNew.Find(x => x.ClinicNum==0);
+				_provClinicDefault=_listProvClinicsNew.Find(x => x.ClinicId==0);
 				textDEANum.Text=_provClinicDefault.DEANum;
 				textStateLicense.Text=_provClinicDefault.StateLicense;
-				textStateRxID.Text=_provClinicDefault.StateRxID;
+				textStateRxID.Text=_provClinicDefault.StateRxId;
 				textStateWhereLicensed.Text=_provClinicDefault.StateWhereLicensed;
 			}
 		}
@@ -1848,262 +1841,313 @@ namespace OpenDental{
 			}
 		}
 
-		private void butOK_Click(object sender,System.EventArgs e) {
-			if(!dateTerm.IsValid) {
-				MsgBox.Show(this,"Term Date invalid.");
-				return;
-			}
-			if(textAbbr.Text=="") {
-				MessageBox.Show(Lan.g(this,"Abbreviation not allowed to be blank."));
-				return;
-			}
-			if(textSSN.Text.Contains("-")) {
-				MsgBox.Show(this,"SSN/TIN not allowed to have dash.");
-				return;
-			}
-			if(checkIsHidden.Checked) {
-				if(Preference.GetLong(PreferenceName.PracticeDefaultProv)==ProvCur.ProvNum) {
-					MsgBox.Show(this,"Not allowed to hide practice default provider.");
-					return;
-				}
-				if(Clinics.IsDefaultClinicProvider(ProvCur.ProvNum)) {
-					MsgBox.Show(this,"Not allowed to hide a clinic default provider.");
-					return;
-				}
-				if(Preference.GetLong(PreferenceName.InsBillingProv)==ProvCur.ProvNum) {
-					if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"You are about to hide the default ins billing provider. Continue?")) {
-						return;
-					}
-				}
-				if(Clinics.IsInsBillingProvider(ProvCur.ProvNum)) {
-					if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"You are about to hide a clinic ins billing provider. Continue?")) {
-						return;
-					}
-				}
-			}
-			if(Providers.GetExists(x => x.ProvNum!=ProvCur.ProvNum && x.Abbr==textAbbr.Text && Preference.GetBool(PreferenceName.EasyHideDentalSchools))) {
-				if(!MsgBox.Show(this,true,"This abbreviation is already in use by another provider.  Continue anyway?")) {
-					return;
-				}
-			}
-			if(CultureInfo.CurrentCulture.Name.EndsWith("CA") && checkIsCDAnet.Checked) {
-				if(textNationalProvID.Text!=OpenDentBusiness.Eclaims.Canadian.TidyAN(textNationalProvID.Text,9,true)) {
-					MsgBox.Show(this,"CDA number must be 9 characters long and composed of numbers and letters only.");
-					return;
-				}
-				if(textCanadianOfficeNum.Text!=OpenDentBusiness.Eclaims.Canadian.TidyAN(textCanadianOfficeNum.Text,4,true)) {
-					MsgBox.Show(this,"Office number must be 4 characters long and composed of numbers and letters only.");
-					return;
-				}
-			}
-			if(checkIsNotPerson.Checked) {
-				if(textFName.Text!="" || textMI.Text!="") {
-					MsgBox.Show(this,"When the 'Not a Person' box is checked, the provider may not have a First Name or Middle Initial entered.");
-					return;
-				}
-			}
-			if(checkIsHidden.Checked && ProvCur.IsHidden==false) {
-				if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"If there are any future hours on this provider's schedule, they will be removed.  "
-					+"This does not affect scheduled appointments or any other appointments in any way.")) 
-				{
-					return;
-				}
-				Providers.RemoveProvFromFutureSchedule(ProvCur.ProvNum);
-			}
-			if(!Preference.GetBool(PreferenceName.EasyHideDentalSchools) && (ProvCur.IsInstructor || ProvCur.SchoolClassNum!=0)) {//Is an Instructor or a Student
-				if(textUserName.Text=="") {
-					MsgBox.Show(this,"User Name is not allowed to be blank.");
-					return;
-				}
-			}
-			if(_selectedProvNum!=0 && !Providers.GetProv(_selectedProvNum).IsNotPerson) {//Override is a person.
-				MsgBox.Show(this,"E-claim Billing Prov Override cannot be a person.");
-				return;
-			}
-			if(ProvCur.IsNew == false && _selectedProvNum==ProvCur.ProvNum) {//Override is the same provider.
-				MsgBox.Show(this,"E-claim Billing Prov Override cannot be the same provider.");
-				return;
-			}
-			if(ProvCur.IsErxEnabled==ErxEnabledStatus.Disabled && checkUseErx.Checked) {//The user enabled eRx for this provider when it was previously disabled.
-				if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"By clicking Yes, you acknowledge and approve Electronic Rx (eRx) fees for this "
-					+"provider. See the website for more details. ERx only works for the United States and its territories. Do you want to continue?"))
-				{
-					return;
-				}
-			}
-			if(textBirthdate.Text!="" && textBirthdate.errorProvider1.GetError(textBirthdate)!="") {
-				MsgBox.Show(this,"Birthdate invalid.");
-				return;
-			}
-			if(textProdGoalHr.errorProvider1.GetError(textProdGoalHr)!="") {
-				MsgBox.Show(this,"Hourly production goal invalid.");
-				return;
-			}
-			ProvCur.Abbr=textAbbr.Text;
-			ProvCur.LName=textLName.Text;
-			ProvCur.FName=textFName.Text;
-			ProvCur.MI=textMI.Text;
-			ProvCur.Suffix=textSuffix.Text;
-			ProvCur.SSN=textSSN.Text;
-			ProvCur.StateLicense=textStateLicense.Text;
-			_provClinicDefault.StateLicense=textStateLicense.Text;
-			ProvCur.StateWhereLicensed=textStateWhereLicensed.Text;
-			_provClinicDefault.StateWhereLicensed=textStateWhereLicensed.Text;
-			ProvCur.DEANum=textDEANum.Text;
-			_provClinicDefault.DEANum=textDEANum.Text;
-			ProvCur.StateRxID=textStateRxID.Text;
-			_provClinicDefault.StateRxID=textStateRxID.Text;
-			//ProvCur.BlueCrossID=textBlueCrossID.Text;
-			ProvCur.MedicaidID=textMedicaidID.Text;
-			ProvCur.NationalProvID=textNationalProvID.Text;
-			ProvCur.CanadianOfficeNum=textCanadianOfficeNum.Text;
-			//EhrKey and EhrHasReportAccess set when user uses the ... button
-			ProvCur.IsSecondary=checkIsSecondary.Checked;
-			ProvCur.SigOnFile=checkSigOnFile.Checked;
-			ProvCur.IsHidden=checkIsHidden.Checked;
-			ProvCur.IsCDAnet=checkIsCDAnet.Checked;
-			ProvCur.ProvColor=butColor.BackColor;
-			ProvCur.OutlineColor=butOutlineColor.BackColor;
-			ProvCur.IsInstructor=checkIsInstructor.Checked;
-			ProvCur.EhrMuStage=comboEhrMu.SelectedIndex;
-			ProvCur.IsHiddenReport=checkIsHiddenOnReports.Checked;
-			ProvCur.IsErxEnabled=checkUseErx.Checked?ErxEnabledStatus.Enabled:ErxEnabledStatus.Disabled;
-			ErxOption erxOption=Erx.GetErxOption();
-			//If the ErxOption is Legacy, we want to keep the EnabledStatus as EnabledWithLegacy.
-			//If the office switches eRx Options we will know to prompt those providers which eRx solution to use until the office disables legacy.
-			if(erxOption!=ErxOption.Legacy && checkAllowLegacy.Visible && checkAllowLegacy.Checked) {
-				ProvCur.IsErxEnabled=ErxEnabledStatus.EnabledWithLegacy;
-			}
-			ProvCur.CustomID=textCustomID.Text;
-			ProvCur.SchedNote=textSchedRules.Text;
-			ProvCur.Birthdate=PIn.Date(textBirthdate.Text);
-			ProvCur.WebSchedDescript=textWebSchedDescript.Text;
-			ProvCur.HourlyProdGoalAmt=PIn.Double(textProdGoalHr.Text);
-			ProvCur.DateTerm=dateTerm.GetDateTime();
-			if(!Preference.GetBool(PreferenceName.EasyHideDentalSchools)) {
-				if(ProvCur.SchoolClassNum!=0) {
-					ProvCur.SchoolClassNum=_listSchoolClasses[comboSchoolClass.SelectedIndex].SchoolClassNum;
-				}
-			}
-			if(listFeeSched.SelectedIndex!=-1) {
-				ProvCur.FeeSched=_listFeeSchedShort[listFeeSched.SelectedIndex].FeeSchedNum;
-			}
-			//default to first specialty in the list if it can't find the specialty by exact name
-			ProvCur.Specialty=Defs.GetByExactNameNeverZero(DefinitionCategory.ProviderSpecialties,listSpecialty.SelectedItem.ToString());//selected index defaults to 0
-			ProvCur.TaxonomyCodeOverride=textTaxonomyOverride.Text;
-			if(radAnesthSurg.Checked) {
-				ProvCur.AnesthProvType=1;
-			}
-			else if(radAsstCirc.Checked) {
-				ProvCur.AnesthProvType=2;
-			}
-			else {
-				ProvCur.AnesthProvType=0;
-			}
-			ProvCur.IsNotPerson=checkIsNotPerson.Checked;
-			ProvCur.ProvNumBillingOverride=_selectedProvNum;
-			if(IsNew) {
-				long provNum=Providers.Insert(ProvCur);
-				//Set the providerclinics to the new provider's ProvNum that was just retreived from the database.
-				_listProvClinicsNew.ForEach(x => x.ProvNum=provNum);
-				if(ProvCur.IsInstructor) {
-					User user=new User();
-					user.UserName=textUserName.Text;
-					user.Password=Authentication.GenerateLoginDetailsSHA512(textPassword.Text);
-					user.ProviderId=provNum;
-					try {
-                        User.Insert(user,new List<long> { Preference.GetLong(PreferenceName.SecurityGroupForInstructors) });
-					}
-					catch(Exception ex) {
-						Providers.Delete(ProvCur);
-						MessageBox.Show(ex.Message);
-						return;
-					}
-				}
-			}
-			else {
-				try {
-					if(_existingUser!=null && (ProvCur.IsInstructor || ProvCur.SchoolClassNum!=0)) {
-						_existingUser.UserName=textUserName.Text;
-						_existingUser.Password=Authentication.GenerateLoginDetailsSHA512(textPassword.Text);
+        private void butOK_Click(object sender, System.EventArgs e)
+        {
+            if (!dateTerm.IsValid)
+            {
+                MsgBox.Show(this, "Term Date invalid.");
+                return;
+            }
+            if (textAbbr.Text == "")
+            {
+                MessageBox.Show(Lan.g(this, "Abbreviation not allowed to be blank."));
+                return;
+            }
+            if (textSSN.Text.Contains("-"))
+            {
+                MsgBox.Show(this, "SSN/TIN not allowed to have dash.");
+                return;
+            }
+            if (checkIsHidden.Checked)
+            {
+                if (Preference.GetLong(PreferenceName.PracticeDefaultProv) == ProvCur.ProvNum)
+                {
+                    MsgBox.Show(this, "Not allowed to hide practice default provider.");
+                    return;
+                }
+                if (Clinic.IsDefaultProvider(ProvCur.ProvNum))
+                {
+                    MsgBox.Show(this, "Not allowed to hide a clinic default provider.");
+                    return;
+                }
+                if (Preference.GetLong(PreferenceName.InsBillingProv) == ProvCur.ProvNum)
+                {
+                    if (!MsgBox.Show(this, MsgBoxButtons.YesNo, "You are about to hide the default ins billing provider. Continue?"))
+                    {
+                        return;
+                    }
+                }
+                if (Clinic.IsProviderForInsuranceBilling(ProvCur.ProvNum))
+                {
+                    if (!MsgBox.Show(this, MsgBoxButtons.YesNo, "You are about to hide a clinic ins billing provider. Continue?"))
+                    {
+                        return;
+                    }
+                }
+            }
+            if (Providers.GetExists(x => x.ProvNum != ProvCur.ProvNum && x.Abbr == textAbbr.Text && Preference.GetBool(PreferenceName.EasyHideDentalSchools)))
+            {
+                if (!MsgBox.Show(this, true, "This abbreviation is already in use by another provider.  Continue anyway?"))
+                {
+                    return;
+                }
+            }
+            if (CultureInfo.CurrentCulture.Name.EndsWith("CA") && checkIsCDAnet.Checked)
+            {
+                if (textNationalProvID.Text != OpenDentBusiness.Eclaims.Canadian.TidyAN(textNationalProvID.Text, 9, true))
+                {
+                    MsgBox.Show(this, "CDA number must be 9 characters long and composed of numbers and letters only.");
+                    return;
+                }
+                if (textCanadianOfficeNum.Text != OpenDentBusiness.Eclaims.Canadian.TidyAN(textCanadianOfficeNum.Text, 4, true))
+                {
+                    MsgBox.Show(this, "Office number must be 4 characters long and composed of numbers and letters only.");
+                    return;
+                }
+            }
+            if (checkIsNotPerson.Checked)
+            {
+                if (textFName.Text != "" || textMI.Text != "")
+                {
+                    MsgBox.Show(this, "When the 'Not a Person' box is checked, the provider may not have a First Name or Middle Initial entered.");
+                    return;
+                }
+            }
+            if (checkIsHidden.Checked && ProvCur.IsHidden == false)
+            {
+                if (!MsgBox.Show(this, MsgBoxButtons.OKCancel, "If there are any future hours on this provider's schedule, they will be removed.  "
+                    + "This does not affect scheduled appointments or any other appointments in any way."))
+                {
+                    return;
+                }
+                Providers.RemoveProvFromFutureSchedule(ProvCur.ProvNum);
+            }
+            if (!Preference.GetBool(PreferenceName.EasyHideDentalSchools) && (ProvCur.IsInstructor || ProvCur.SchoolClassNum != 0))
+            {//Is an Instructor or a Student
+                if (textUserName.Text == "")
+                {
+                    MsgBox.Show(this, "User Name is not allowed to be blank.");
+                    return;
+                }
+            }
+            if (_selectedProvNum != 0 && !Providers.GetProv(_selectedProvNum).IsNotPerson)
+            {//Override is a person.
+                MsgBox.Show(this, "E-claim Billing Prov Override cannot be a person.");
+                return;
+            }
+            if (ProvCur.IsNew == false && _selectedProvNum == ProvCur.ProvNum)
+            {//Override is the same provider.
+                MsgBox.Show(this, "E-claim Billing Prov Override cannot be the same provider.");
+                return;
+            }
+            if (ProvCur.IsErxEnabled == ErxEnabledStatus.Disabled && checkUseErx.Checked)
+            {//The user enabled eRx for this provider when it was previously disabled.
+                if (!MsgBox.Show(this, MsgBoxButtons.YesNo, "By clicking Yes, you acknowledge and approve Electronic Rx (eRx) fees for this "
+                    + "provider. See the website for more details. ERx only works for the United States and its territories. Do you want to continue?"))
+                {
+                    return;
+                }
+            }
+            if (textBirthdate.Text != "" && textBirthdate.errorProvider1.GetError(textBirthdate) != "")
+            {
+                MsgBox.Show(this, "Birthdate invalid.");
+                return;
+            }
+            if (textProdGoalHr.errorProvider1.GetError(textProdGoalHr) != "")
+            {
+                MsgBox.Show(this, "Hourly production goal invalid.");
+                return;
+            }
+            ProvCur.Abbr = textAbbr.Text;
+            ProvCur.LName = textLName.Text;
+            ProvCur.FName = textFName.Text;
+            ProvCur.MI = textMI.Text;
+            ProvCur.Suffix = textSuffix.Text;
+            ProvCur.SSN = textSSN.Text;
+            ProvCur.StateLicense = textStateLicense.Text;
+            _provClinicDefault.StateLicense = textStateLicense.Text;
+            ProvCur.StateWhereLicensed = textStateWhereLicensed.Text;
+            _provClinicDefault.StateWhereLicensed = textStateWhereLicensed.Text;
+            ProvCur.DEANum = textDEANum.Text;
+            _provClinicDefault.DEANum = textDEANum.Text;
+            ProvCur.StateRxID = textStateRxID.Text;
+            _provClinicDefault.StateRxId = textStateRxID.Text;
+            //ProvCur.BlueCrossID=textBlueCrossID.Text;
+            ProvCur.MedicaidID = textMedicaidID.Text;
+            ProvCur.NationalProvID = textNationalProvID.Text;
+            ProvCur.CanadianOfficeNum = textCanadianOfficeNum.Text;
+            //EhrKey and EhrHasReportAccess set when user uses the ... button
+            ProvCur.IsSecondary = checkIsSecondary.Checked;
+            ProvCur.SigOnFile = checkSigOnFile.Checked;
+            ProvCur.IsHidden = checkIsHidden.Checked;
+            ProvCur.IsCDAnet = checkIsCDAnet.Checked;
+            ProvCur.ProvColor = butColor.BackColor;
+            ProvCur.OutlineColor = butOutlineColor.BackColor;
+            ProvCur.IsInstructor = checkIsInstructor.Checked;
+            ProvCur.EhrMuStage = comboEhrMu.SelectedIndex;
+            ProvCur.IsHiddenReport = checkIsHiddenOnReports.Checked;
+            ProvCur.IsErxEnabled = checkUseErx.Checked ? ErxEnabledStatus.Enabled : ErxEnabledStatus.Disabled;
+            ErxOption erxOption = Erx.GetErxOption();
+            //If the ErxOption is Legacy, we want to keep the EnabledStatus as EnabledWithLegacy.
+            //If the office switches eRx Options we will know to prompt those providers which eRx solution to use until the office disables legacy.
+            if (erxOption != ErxOption.Legacy && checkAllowLegacy.Visible && checkAllowLegacy.Checked)
+            {
+                ProvCur.IsErxEnabled = ErxEnabledStatus.EnabledWithLegacy;
+            }
+            ProvCur.CustomID = textCustomID.Text;
+            ProvCur.SchedNote = textSchedRules.Text;
+            ProvCur.Birthdate = PIn.Date(textBirthdate.Text);
+            ProvCur.WebSchedDescript = textWebSchedDescript.Text;
+            ProvCur.HourlyProdGoalAmt = PIn.Double(textProdGoalHr.Text);
+            ProvCur.DateTerm = dateTerm.GetDateTime();
+            if (!Preference.GetBool(PreferenceName.EasyHideDentalSchools))
+            {
+                if (ProvCur.SchoolClassNum != 0)
+                {
+                    ProvCur.SchoolClassNum = _listSchoolClasses[comboSchoolClass.SelectedIndex].SchoolClassNum;
+                }
+            }
+            if (listFeeSched.SelectedIndex != -1)
+            {
+                ProvCur.FeeSched = _listFeeSchedShort[listFeeSched.SelectedIndex].FeeSchedNum;
+            }
+            //default to first specialty in the list if it can't find the specialty by exact name
+            ProvCur.Specialty = Defs.GetByExactNameNeverZero(DefinitionCategory.ProviderSpecialties, listSpecialty.SelectedItem.ToString());//selected index defaults to 0
+            ProvCur.TaxonomyCodeOverride = textTaxonomyOverride.Text;
+            if (radAnesthSurg.Checked)
+            {
+                ProvCur.AnesthProvType = 1;
+            }
+            else if (radAsstCirc.Checked)
+            {
+                ProvCur.AnesthProvType = 2;
+            }
+            else
+            {
+                ProvCur.AnesthProvType = 0;
+            }
+            ProvCur.IsNotPerson = checkIsNotPerson.Checked;
+            ProvCur.ProvNumBillingOverride = _selectedProvNum;
+            if (IsNew)
+            {
+                long provNum = Providers.Insert(ProvCur);
+                //Set the providerclinics to the new provider's ProvNum that was just retreived from the database.
+                _listProvClinicsNew.ForEach(x => x.ProviderId = provNum);
+                if (ProvCur.IsInstructor)
+                {
+                    User user = new User();
+                    user.UserName = textUserName.Text;
+                    user.Password = Authentication.GenerateLoginDetailsSHA512(textPassword.Text);
+                    user.ProviderId = provNum;
+                    try
+                    {
+                        User.Insert(user, new List<long> { Preference.GetLong(PreferenceName.SecurityGroupForInstructors) });
+                    }
+                    catch (Exception ex)
+                    {
+                        Providers.Delete(ProvCur);
+                        MessageBox.Show(ex.Message);
+                        return;
+                    }
+                }
+            }
+            else
+            {
+                try
+                {
+                    if (_existingUser != null && (ProvCur.IsInstructor || ProvCur.SchoolClassNum != 0))
+                    {
+                        _existingUser.UserName = textUserName.Text;
+                        _existingUser.Password = Authentication.GenerateLoginDetailsSHA512(textPassword.Text);
                         User.Update(_existingUser);
-					}
-				}
-				catch(Exception ex) {
-					MessageBox.Show(ex.Message);
-					return;
-				}
-				Providers.Update(ProvCur);
-				#region Date Term Check
-				if(ProvCur.DateTerm.Year > 1880 && ProvCur.DateTerm < DateTime.Now) {
-					List<ClaimPaySplit> listClaimPaySplits=Claims.GetOutstandingClaimsByProvider(ProvCur.ProvNum,ProvCur.DateTerm);
-					StringBuilder claimMessage=new StringBuilder(Lan.g(this,"Clinic\tPatNum\tPatient Name\tDate of Service\tClaim Status\tFee\tCarrier")+"\r\n");
-					foreach(ClaimPaySplit claimPaySplit in listClaimPaySplits) {
-						claimMessage.Append(claimPaySplit.ClinicDesc+"\t"
-							+POut.Long(claimPaySplit.PatNum)+"\t"
-							+claimPaySplit.PatName+"\t"
-							+claimPaySplit.DateClaim.ToShortDateString()+"\t");
-						switch(claimPaySplit.ClaimStatus) {
-							case "W":
-								claimMessage.Append("Waiting in Queue\t");
-								break;
-							case "H":
-								claimMessage.Append("Hold\t");
-								break;
-							case "U":
-								claimMessage.Append("Unsent\t");
-								break;
-							case "S":
-								claimMessage.Append("Sent\t");
-								break;
-							default:
-								break;
-						}
-						claimMessage.AppendLine(claimPaySplit.FeeBilled+"\t"+claimPaySplit.Carrier);
-					}
-					MsgBoxCopyPaste msg=new MsgBoxCopyPaste(claimMessage.ToString());
-					msg.Text=Lan.g(this,"Outstanding Claims for the Provider Whose Term Has Expired");
-					if(listClaimPaySplits.Count > 0) {
-						msg.ShowDialog();
-					}
-				}
-				#endregion Date Term Check
-			}
-			ProviderClinics.Sync(_listProvClinicsNew,_listProvClinicsOld);
-			if(Preferences.HasClinicsEnabled) {
-				List<long> listSelectedClinicNumLinks=listBoxClinics.SelectedTags<Clinic>().Select(x => x.ClinicNum).ToList();
-				List<Clinic> listClinicsAll=Clinics.GetDeepCopy(true);
-				List<long> listClinicNumsForUser=_listClinicsForUser.Select(x => x.ClinicNum).ToList();
-				bool canUserAccessAllClinics=(_listClinicsForUser.Count==listClinicsAll.Count);
-				if(checkAllClinics.Checked) {
-					if(canUserAccessAllClinics) {
-						listSelectedClinicNumLinks.Clear();//No clinic links means the provider is associated to all clinics
-					}
-					else {
-						listSelectedClinicNumLinks=_listClinicsForUser.Select(x => x.ClinicNum).ToList();
-					}
-				}
-				else {//'All' is not checked
-					if(listSelectedClinicNumLinks.Count==0 
-						&& !_listProvClinicLinks.Any(x => x.ClinicNum > -1 && !x.ClinicNum.In(listClinicNumsForUser))) 
-					{
-						//The user wants to assign this provider to no clinics.
-						listSelectedClinicNumLinks.Add(-1);//Since no clinic links means the provider is associated to all clinics, we're gonna use -1.
-					}
-					else if(!canUserAccessAllClinics && _listProvClinicLinks.Count==0) {
-						//The provider previously was associated to all clinics. We need to add in the clinics this user does not have access to.
-						listSelectedClinicNumLinks.AddRange(listClinicsAll.Where(x => !x.ClinicNum.In(listClinicNumsForUser)).Select(x => x.ClinicNum));
-					}
-				}
-				List<ProviderClinicLink> listProvClinicLinksNew=_listProvClinicLinks.Select(x => x.Copy()).ToList();
-				listProvClinicLinksNew.RemoveAll(x => x.ClinicNum.In(listClinicNumsForUser) || x.ClinicNum==-1);
-				listProvClinicLinksNew.AddRange(listSelectedClinicNumLinks.Select(x => new ProviderClinicLink(x,ProvCur.ProvNum)));
-				if(ProviderClinicLinks.Sync(listProvClinicLinksNew,_listProvClinicLinks)) {
-					DataValid.SetInvalid(InvalidType.ProviderClinicLink);
-				}
-			}
-			DialogResult = DialogResult.OK;
-		}
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                    return;
+                }
+                Providers.Update(ProvCur);
+                #region Date Term Check
+                if (ProvCur.DateTerm.Year > 1880 && ProvCur.DateTerm < DateTime.Now)
+                {
+                    List<ClaimPaySplit> listClaimPaySplits = Claims.GetOutstandingClaimsByProvider(ProvCur.ProvNum, ProvCur.DateTerm);
+                    StringBuilder claimMessage = new StringBuilder(Lan.g(this, "Clinic\tPatNum\tPatient Name\tDate of Service\tClaim Status\tFee\tCarrier") + "\r\n");
+                    foreach (ClaimPaySplit claimPaySplit in listClaimPaySplits)
+                    {
+                        claimMessage.Append(claimPaySplit.ClinicDesc + "\t"
+                            + POut.Long(claimPaySplit.PatNum) + "\t"
+                            + claimPaySplit.PatName + "\t"
+                            + claimPaySplit.DateClaim.ToShortDateString() + "\t");
+                        switch (claimPaySplit.ClaimStatus)
+                        {
+                            case "W":
+                                claimMessage.Append("Waiting in Queue\t");
+                                break;
+                            case "H":
+                                claimMessage.Append("Hold\t");
+                                break;
+                            case "U":
+                                claimMessage.Append("Unsent\t");
+                                break;
+                            case "S":
+                                claimMessage.Append("Sent\t");
+                                break;
+                            default:
+                                break;
+                        }
+                        claimMessage.AppendLine(claimPaySplit.FeeBilled + "\t" + claimPaySplit.Carrier);
+                    }
+                    MsgBoxCopyPaste msg = new MsgBoxCopyPaste(claimMessage.ToString());
+                    msg.Text = Lan.g(this, "Outstanding Claims for the Provider Whose Term Has Expired");
+                    if (listClaimPaySplits.Count > 0)
+                    {
+                        msg.ShowDialog();
+                    }
+                }
+                #endregion Date Term Check
+            }
+            // TODO: ProviderClinics.Sync(_listProvClinicsNew, _listProvClinicsOld);
+
+            List<long> listSelectedClinicNumLinks = listBoxClinics.SelectedTags<Clinic>().Select(x => x.Id).ToList();
+            List<Clinic> listClinicsAll = Clinic.All().ToList();
+            List<long> listClinicNumsForUser = _listClinicsForUser.Select(x => x.Id).ToList();
+            bool canUserAccessAllClinics = (_listClinicsForUser.Count == listClinicsAll.Count);
+            if (checkAllClinics.Checked)
+            {
+                if (canUserAccessAllClinics)
+                {
+                    listSelectedClinicNumLinks.Clear();//No clinic links means the provider is associated to all clinics
+                }
+                else
+                {
+                    listSelectedClinicNumLinks = _listClinicsForUser.Select(x => x.Id).ToList();
+                }
+            }
+            else
+            {//'All' is not checked
+                if (listSelectedClinicNumLinks.Count == 0
+                    && !_listProvClinicLinks.Any(x => x.ClinicId > -1 && !x.ClinicId.In(listClinicNumsForUser)))
+                {
+                    //The user wants to assign this provider to no clinics.
+                    listSelectedClinicNumLinks.Add(-1);//Since no clinic links means the provider is associated to all clinics, we're gonna use -1.
+                }
+                else if (!canUserAccessAllClinics && _listProvClinicLinks.Count == 0)
+                {
+                    //The provider previously was associated to all clinics. We need to add in the clinics this user does not have access to.
+                    listSelectedClinicNumLinks.AddRange(listClinicsAll.Where(x => !x.Id.In(listClinicNumsForUser)).Select(x => x.Id));
+                }
+            }
+            List<ProviderClinic> listProvClinicLinksNew = new List<ProviderClinic>(_listProvClinicLinks);
+            listProvClinicLinksNew.RemoveAll(x => x.ClinicId.In(listClinicNumsForUser));
+            listProvClinicLinksNew.AddRange(listSelectedClinicNumLinks.Select(x => new ProviderClinic(ProvCur.ProvNum, x)));
+            //if (ProviderClinicLinks.Sync(listProvClinicLinksNew, _listProvClinicLinks))
+            //{
+            //    DataValid.SetInvalid(InvalidType.ProviderClinicLink);
+            //}
+
+            DialogResult = DialogResult.OK;
+        }
 
 		private void butCancel_Click(object sender, System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;

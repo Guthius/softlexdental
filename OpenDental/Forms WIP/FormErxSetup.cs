@@ -78,29 +78,26 @@ namespace OpenDental {
 					ppClinicKey.Value="";
 					_listProgramProperties.Add(ppClinicKey);
 				}
-				if(Preferences.HasClinicsEnabled) {
-					foreach(Clinic clinicCur in Clinics.GetAllForUserod(Security.CurrentUser)) {
-						if(!listClinicIDs.Exists(x => x.ClinicId==clinicCur.ClinicNum)) {//Only add a program property if it doesn't already exist.
+
+					foreach(Clinic clinicCur in Clinic.GetByUser(Security.CurrentUser, true)) {
+						if(!listClinicIDs.Exists(x => x.ClinicId==clinicCur.Id)) {//Only add a program property if it doesn't already exist.
 							ProgramProperty ppClinicID=new ProgramProperty();
 							ppClinicID.ProgramId=_progCur.ProgramNum;
-							ppClinicID.ClinicId=clinicCur.ClinicNum;
+							ppClinicID.ClinicId=clinicCur.Id;
 							ppClinicID.Key=Erx.PropertyDescs.ClinicID;
 							ppClinicID.Value="";
 							_listProgramProperties.Add(ppClinicID);
 						}
-						if(!listClinicKeys.Exists(x => x.ClinicId==clinicCur.ClinicNum)) {//Only add a program property if it doesn't already exist.
+						if(!listClinicKeys.Exists(x => x.ClinicId==clinicCur.Id)) {//Only add a program property if it doesn't already exist.
 							ProgramProperty ppClinicKey=new ProgramProperty();
 							ppClinicKey.ProgramId=_progCur.ProgramNum;
-							ppClinicKey.ClinicId=clinicCur.ClinicNum;
+							ppClinicKey.ClinicId=clinicCur.Id;
 							ppClinicKey.Key=Erx.PropertyDescs.ClinicKey;
 							ppClinicKey.Value="";
 							_listProgramProperties.Add(ppClinicKey);
 						}
 					}
-				}
-				else {
-					checkShowHiddenClinics.Visible=false;
-				}
+
 				FillGridDoseSpot();
 				SetRadioButtonChecked(_eRxOption);
 			}
@@ -110,38 +107,40 @@ namespace OpenDental {
 				return;
 			}
 		}
-		
-		private void FillGridDoseSpot() {
-			gridProperties.BeginUpdate();
-			gridProperties.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g(this,"Clinic"),120);
-			gridProperties.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Clinic ID"),160);
-			gridProperties.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Clinic Key"),160);
-			gridProperties.Columns.Add(col);
-			gridProperties.Rows.Clear();
-			DoseSpotGridRowModel clinicHqModel=new DoseSpotGridRowModel();
-			clinicHqModel.Clinic=new Clinic();
-			clinicHqModel.Clinic.ClinicNum=0;
-			clinicHqModel.Clinic.Abbr=Lan.g(this,"Headquarters");
-			clinicHqModel.ClinicIDProperty=GetPropertyForClinic(0,Erx.PropertyDescs.ClinicID);
-			clinicHqModel.ClinicKeyProperty=GetPropertyForClinic(0,Erx.PropertyDescs.ClinicKey);
-			gridProperties.Rows.Add(CreateDoseSpotGridRow(clinicHqModel));//If clinics isn't enabled, this will be the only row in the grid.
-			if(Preferences.HasClinicsEnabled) {
-				foreach(Clinic clinicCur in Clinics.GetAllForUserod(Security.CurrentUser)) {
-					if(!checkShowHiddenClinics.Checked && clinicCur.IsHidden) {
-						continue;
-					}
-					DoseSpotGridRowModel model=new DoseSpotGridRowModel();
-					model.Clinic=clinicCur.Copy();
-					model.ClinicIDProperty=GetPropertyForClinic(clinicCur.ClinicNum,Erx.PropertyDescs.ClinicID);
-					model.ClinicKeyProperty=GetPropertyForClinic(clinicCur.ClinicNum,Erx.PropertyDescs.ClinicKey);
-					gridProperties.Rows.Add(CreateDoseSpotGridRow(model));
-				}
-			}
-			gridProperties.EndUpdate();
-		}
+
+        private void FillGridDoseSpot()
+        {
+            gridProperties.BeginUpdate();
+            gridProperties.Columns.Clear();
+            ODGridColumn col = new ODGridColumn(Lan.g(this, "Clinic"), 120);
+            gridProperties.Columns.Add(col);
+            col = new ODGridColumn(Lan.g(this, "Clinic ID"), 160);
+            gridProperties.Columns.Add(col);
+            col = new ODGridColumn(Lan.g(this, "Clinic Key"), 160);
+            gridProperties.Columns.Add(col);
+            gridProperties.Rows.Clear();
+            DoseSpotGridRowModel clinicHqModel = new DoseSpotGridRowModel();
+            clinicHqModel.Clinic = new Clinic();
+            clinicHqModel.Clinic.Abbr = Lan.g(this, "Headquarters");
+            clinicHqModel.ClinicIDProperty = GetPropertyForClinic(0, Erx.PropertyDescs.ClinicID);
+            clinicHqModel.ClinicKeyProperty = GetPropertyForClinic(0, Erx.PropertyDescs.ClinicKey);
+            gridProperties.Rows.Add(CreateDoseSpotGridRow(clinicHqModel));//If clinics isn't enabled, this will be the only row in the grid.
+
+            foreach (Clinic clinicCur in Clinic.GetByUser(Security.CurrentUser, true))
+            {
+                if (!checkShowHiddenClinics.Checked && clinicCur.IsHidden)
+                {
+                    continue;
+                }
+                DoseSpotGridRowModel model = new DoseSpotGridRowModel();
+                model.Clinic = clinicCur;
+                model.ClinicIDProperty = GetPropertyForClinic(clinicCur.Id, Erx.PropertyDescs.ClinicID);
+                model.ClinicKeyProperty = GetPropertyForClinic(clinicCur.Id, Erx.PropertyDescs.ClinicKey);
+                gridProperties.Rows.Add(CreateDoseSpotGridRow(model));
+            }
+
+            gridProperties.EndUpdate();
+        }
 
 		private ODGridRow CreateDoseSpotGridRow(DoseSpotGridRowModel model) {
 			ODGridRow row=new ODGridRow();
@@ -201,9 +200,9 @@ namespace OpenDental {
 			FormDoseSpotPropertyEdit FormDPE=new FormDoseSpotPropertyEdit(model.Clinic,model.ClinicIDProperty.Value,model.ClinicKeyProperty.Value,_listProgramProperties);
 			FormDPE.ShowDialog();
 			if(FormDPE.DialogResult==DialogResult.OK) {
-				int clinicIdPos=_listProgramProperties.IndexOf(GetPropertyForClinic(model.Clinic.ClinicNum,Erx.PropertyDescs.ClinicID));
+				int clinicIdPos=_listProgramProperties.IndexOf(GetPropertyForClinic(model.Clinic.Id,Erx.PropertyDescs.ClinicID));
 				_listProgramProperties[clinicIdPos].Value=FormDPE.ClinicIdVal;
-				int clinicKeyPos=_listProgramProperties.IndexOf(GetPropertyForClinic(model.Clinic.ClinicNum,Erx.PropertyDescs.ClinicKey));
+				int clinicKeyPos=_listProgramProperties.IndexOf(GetPropertyForClinic(model.Clinic.Id,Erx.PropertyDescs.ClinicKey));
 				_listProgramProperties[clinicKeyPos].Value=FormDPE.ClinicKeyVal;
 			}
 			FillGridDoseSpot();//Always fill grid because clinics could have been editted in FormDoseSpotPropertyEdit.

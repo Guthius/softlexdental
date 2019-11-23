@@ -25,11 +25,10 @@ namespace OpenDental {
 			listOptions.Items.Add(Lan.g(this,"Completed Procedures"));
 			listOptions.Items.Add(Lan.g(this,"Appointments"));
 			//Fill and enable ComboBoxClinic if clinics are enabled
-			if(Preferences.HasClinicsEnabled) {
 				comboClinic.Visible=true;
 				labelClinic.Visible=true;
 				comboClinic.SelectedIndex=0;//Default to All
-			}
+			
 		}
 
 		private void FillGrid() {
@@ -39,14 +38,14 @@ namespace OpenDental {
 			bool includeAppointments=listOptions.SelectedIndices.Contains(2);
 			//Gets clinic selection
 			List<long> listClinicNums=new List<long>();
-			if(Preferences.HasClinicsEnabled) {
+
 				if(comboClinic.IsAllSelected) {
 					listClinicNums=comboClinic.ListAvailableClinicNums;
 				}
 				else {
 					listClinicNums.Add(comboClinic.SelectedClinicNum);
 				}
-			}
+			
 			List<Patient> listPatients=Patients.GetPatsToChangeStatus(_isConvertToPatient,odDatePickerSince.GetDateTime()
 				,includeTPProc,includeCompletedProc,includeAppointments,listClinicNums);
 			gridMain.BeginUpdate();
@@ -57,9 +56,8 @@ namespace OpenDental {
 				gridMain.Columns.Add(new ODGridColumn(Lan.g(this,"First Name"),125));
 				gridMain.Columns.Add(new ODGridColumn(Lan.g(this,"Last Name"),125));
 				gridMain.Columns.Add(new ODGridColumn(Lan.g(this,"Birthdate"),75, sortingStrategy: ODGridSortingStrategy.DateParse));
-				if(Preferences.HasClinicsEnabled) {
 					gridMain.Columns.Add(new ODGridColumn(Lan.g(this,"Clinic"),75));
-				}
+				
 			}
 			gridMain.Rows.Clear();
 			//Mimics FormPatientEdit
@@ -74,9 +72,8 @@ namespace OpenDental {
 				row.Cells.Add(pat.FName);
 				row.Cells.Add(pat.LName);
 				row.Cells.Add(pat.Birthdate.ToShortDateString()=="01/01/0001"?"": pat.Birthdate.ToShortDateString());
-				if(Preferences.HasClinicsEnabled) {
-					row.Cells.Add(Clinics.GetAbbr(pat.ClinicNum));
-				}
+					row.Cells.Add(Clinic.GetById(pat.ClinicNum).Abbr);
+				
 				row.Tag=pat;
 				gridMain.Rows.Add(row);
 			}

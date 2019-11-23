@@ -174,7 +174,7 @@ namespace OpenDentBusiness.Eclaims
                 etrans = Etranss.SetClaimSentOrPrinted(queueItem.ClaimNum, queueItem.PatNum, clearinghouseClin.HqClearinghouseNum, EtransType.Claim_CA, 0, Security.CurrentUser.Id);
             }
             claim = Claims.GetClaim(claim.ClaimNum);//Refresh the claim since the status might have changed above.
-            clinic = Clinics.GetClinic(claim.ClinicNum);
+            clinic = Clinic.GetById(claim.ClinicNum);
             Provider providerFirst = Providers.GetFirst();//Used in order to preserve old behavior...  If this fails, then old code would have failed.
             billProv = Providers.GetFirstOrDefault(x => x.ProvNum == claim.ProvBill) ?? providerFirst;
             treatProv = Providers.GetFirstOrDefault(x => x.ProvNum == claim.ProvTreat) ?? providerFirst;
@@ -2621,7 +2621,7 @@ namespace OpenDentBusiness.Eclaims
         {
             string retVal = "";
             Claim claim = Claims.GetClaim(queueItem.ClaimNum);
-            Clinic clinic = Clinics.GetClinic(claim.ClinicNum);
+            Clinic clinic = Clinic.GetById(claim.ClinicNum);
             Provider providerFirst = Providers.GetFirst();//Used in order to preserve old behavior...  If this fails, then old code would have failed.
             Provider billProv = Providers.GetFirstOrDefault(x => x.ProvNum == claim.ProvBill) ?? providerFirst;
             Provider treatProv = Providers.GetFirstOrDefault(x => x.ProvNum == claim.ProvTreat) ?? providerFirst;

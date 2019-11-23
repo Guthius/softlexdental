@@ -131,16 +131,16 @@ namespace OpenDental {
 			foreach(SchoolClass schoolClassCur in SchoolClasses.GetDeepCopy()) {
 				comboSchoolClass.Items.Add(new ODBoxItem<SchoolClass>(SchoolClasses.GetDescript(schoolClassCur),schoolClassCur));
 			}
-			if(Preferences.HasClinicsEnabled) {
+
 				comboClinic.Visible=true;
 				labelClinic.Visible=true;
 				comboClinic.Items.Clear();
 				comboClinic.Items.Add(new ODBoxItem<Clinic>(Lan.g(this,"All Clinics")));
 				comboClinic.SelectedIndex=0;
-				foreach(Clinic clinicCur in Clinics.GetDeepCopy(true)) {
+				foreach(Clinic clinicCur in Clinic.All()) {
 					comboClinic.Items.Add(new ODBoxItem<Clinic>(clinicCur.Abbr,clinicCur));
 				}
-			}
+			
 			comboGroups.Items.Clear();
 			comboGroups.Items.Add(new ODBoxItem<UserGroup>(Lan.g(this,"All Groups")));
 			comboGroups.SelectedIndex=0;
@@ -205,7 +205,7 @@ namespace OpenDental {
 					break;
 			}
 			if(comboClinic.SelectedIndex>0) {
-				retVal.RemoveAll(x => x.ClinicId!=((ODBoxItem<Clinic>)comboClinic.SelectedItem).Tag.ClinicNum);
+				retVal.RemoveAll(x => x.ClinicId!=((ODBoxItem<Clinic>)comboClinic.SelectedItem).Tag.Id);
 			}
 			if(comboGroups.SelectedIndex>0) {
 				retVal.RemoveAll(x => !x.IsInUserGroup(((ODBoxItem<UserGroup>)comboGroups.SelectedItem).Tag.Id));
@@ -336,10 +336,9 @@ namespace OpenDental {
 			gridUsers.Columns.Add(new ODGridColumn(Lan.g(tableName,"Username"),90));
 			gridUsers.Columns.Add(new ODGridColumn(Lan.g(tableName,"Employee"),90));
 			gridUsers.Columns.Add(new ODGridColumn(Lan.g(tableName,"Provider"),90));
-			if(Preferences.HasClinicsEnabled) {
 				gridUsers.Columns.Add(new ODGridColumn(Lan.g(tableName,"Clinic"),80));
-				gridUsers.Columns.Add(new ODGridColumn(Lan.g(tableName,"Clinic\r\nRestr"),38,HorizontalAlignment.Center));
-			}
+            gridUsers.Columns.Add(new ODGridColumn(Lan.g(tableName, "Clinic\r\nRestr"), 38, HorizontalAlignment.Center));
+			
 			gridUsers.Columns.Add(new ODGridColumn(Lan.g(tableName,"Strong\r\nPwd"),45,HorizontalAlignment.Center));
 			gridUsers.Rows.Clear();
 			List<User> listFilteredUsers=GetFilteredUsersHelper();
@@ -348,10 +347,10 @@ namespace OpenDental {
 				row.Cells.Add(user.UserName);
 				row.Cells.Add(Employee.GetNameFL(user.EmployeeId.GetValueOrDefault()));
 				row.Cells.Add(Providers.GetLongDesc(user.ProviderId.GetValueOrDefault()));
-				if(Preferences.HasClinicsEnabled) {
-					row.Cells.Add(Clinics.GetAbbr(user.ClinicId.GetValueOrDefault()));
+
+					row.Cells.Add(user.ClinicId.HasValue ? Clinic.GetById(user.ClinicId.Value).Abbr : "");
 					row.Cells.Add(user.ClinicRestricted?"X":"");
-				}
+				
 				row.Cells.Add(user.PasswordIsStrong?"X":"");
 				row.Tag=user;
 				gridUsers.Rows.Add(row);

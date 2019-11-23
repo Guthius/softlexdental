@@ -64,9 +64,6 @@ namespace OpenDental {
 						}
 						break;
 					case RequiredFieldName.Clinic:
-						if(!Preferences.HasClinicsEnabled) {
-							continue;//Don't include Clinic in the list if clinics is not enabled
-						}
 						break;
 					case RequiredFieldName.PatientStatus:
 					case RequiredFieldName.Position:
@@ -205,7 +202,7 @@ namespace OpenDental {
 							condVal=Lan.g(this,"Unassigned");
 						}
 						else {
-							condVal=Clinics.GetDesc(PIn.Long(condVal));
+							condVal=Clinic.GetById(PIn.Long(condVal)).Description;
 						}
 						break;
 					case RequiredFieldName.BillingType:

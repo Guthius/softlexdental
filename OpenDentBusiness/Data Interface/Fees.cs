@@ -787,7 +787,7 @@ namespace OpenDentBusiness{
 				return false;
 			}
 			//Make sure the user has permission to edit the clinic of the fee schedule being edited.
-			if(Security.CurrentUser.ClinicRestricted && clinicNum!=Clinics.ClinicNum) {
+			if(Security.CurrentUser.ClinicRestricted && clinicNum!=Clinics.ClinicId) {
 				if(clinicNum==0 && feeSched!=null && feeSched.IsGlobal) {
 					//Allow restricted users to edit the default Fee when the FeeSched is global.
 					//Intentionally blank so logic in more readable, will return true below.

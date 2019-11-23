@@ -215,7 +215,7 @@ namespace OpenDentBusiness
         ///<summary>Clinic passed in must not be null.</summary>
         public static void Clinic(Clinic clinic, StringBuilder strb)
         {
-            if (clinic.UseBillAddrOnClaims)
+            if (clinic.UseBillingAddressOnClaims)
             { //If we're using billing address, check the clinic's billing info for validity.
                 if (clinic.BillingCity.Trim().Length < 2)
                 {
@@ -236,7 +236,7 @@ namespace OpenDentBusiness
             }
             else
             { //If we're not using billing address, check the clinic's regular info for validity.
-                if (clinic.Address.Trim() == "")
+                if (clinic.AddressLine1.Trim() == "")
                 {
                     Comma(strb);
                     strb.Append("Clinic Address");

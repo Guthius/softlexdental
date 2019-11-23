@@ -185,10 +185,7 @@ namespace OpenDental
             return true;
         }
 
-        /// <summary>
-        /// Opens the form to add a new supply.
-        /// </summary>
-        void AddButton_Click(object sender, EventArgs e)
+        private void AddButton_Click(object sender, EventArgs e)
         {
             // No supply categories have been entered, not allowed to enter supply
             if (Definition.GetByCategory(DefinitionCategory.SupplyCats).Count == 0)
@@ -242,18 +239,15 @@ namespace OpenDental
             FillSuppliesGrid();
         }
 
-        void ShowShoppingListCheckBox_Click(object sender, EventArgs e) => FillSuppliesGrid();
-        
-        void ShowHiddenCheckBox_Click(object sender, EventArgs e) => FillSuppliesGrid();
+        private void ShowShoppingListCheckBox_Click(object sender, EventArgs e) => FillSuppliesGrid();
 
-        void SearchTextBox_TextChanged(object sender, EventArgs e) => FillSuppliesGrid();
+        private void ShowHiddenCheckBox_Click(object sender, EventArgs e) => FillSuppliesGrid();
 
-        void SupplierComboBox_SelectionChangeCommitted(object sender, EventArgs e) => FillSuppliesGrid();
-        
-        /// <summary>
-        /// Opens the form to edit a supply when the user double clicks on a supply in the grid.
-        /// </summary>
-        void SuppliesGrid_CellDoubleClick(object sender, ODGridClickEventArgs e)
+        private void SearchTextBox_TextChanged(object sender, EventArgs e) => FillSuppliesGrid();
+
+        private void SupplierComboBox_SelectionChangeCommitted(object sender, EventArgs e) => FillSuppliesGrid();
+
+        private void SuppliesGrid_CellDoubleClick(object sender, ODGridClickEventArgs e)
         {
             if (IsSelectionMode)
             {
@@ -304,10 +298,7 @@ namespace OpenDental
             suppliesGrid.ScrollValue = scroll;
         }
 
-        /// <summary>
-        /// Prints the supply list.
-        /// </summary>
-        void PrintButton_Click(object sender, EventArgs e)
+        private void PrintButton_Click(object sender, EventArgs e)
         {
             if (suppliesGrid.Rows.Count < 1)
             {
@@ -329,10 +320,7 @@ namespace OpenDental
                 margins: new Margins(50, 50, 40, 30));
         }
 
-        /// <summary>
-        /// Adds a new order with all the items currently showing in the grid as a new pending order.
-        /// </summary>
-        void AddToOrderButton_Click(object sender, EventArgs e)
+        private void AddToOrderButton_Click(object sender, EventArgs e)
         {
             if (supplierComboBox.SelectedIndex == 0)
             {
@@ -391,7 +379,7 @@ namespace OpenDental
             DialogResult = DialogResult.OK;
         }
 
-        void PrintPage(object sender, PrintPageEventArgs e)
+        private void PrintPage(object sender, PrintPageEventArgs e)
         {
             Rectangle bounds = e.MarginBounds;
             Graphics g = e.Graphics;

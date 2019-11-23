@@ -76,16 +76,12 @@ namespace OpenDental {
 					comboUnearnedTypes.SelectedIndex=i+1;
 				}
 			}
-			if(Preferences.HasClinicsEnabled) {
+
 				_listClinics=new List<Clinic>() { new Clinic() { Abbr=Lan.g(this,"None") } }; //Seed with "None"
-				Clinics.GetForUserod(Security.CurrentUser).ForEach(x => _listClinics.Add(x));//do not re-organize from cache. They could either be alphabetizeded or sorted by item order.
+				Clinic.GetByUser(Security.CurrentUser).ForEach(x => _listClinics.Add(x));//do not re-organize from cache. They could either be alphabetizeded or sorted by item order.
 				_listClinics.ForEach(x => comboClinic.Items.Add(x.Abbr));
-				comboClinic.IndexSelectOrSetText(_listClinics.FindIndex(x => x.ClinicNum==PaySplitCur.ClinicNum),() => { return Clinics.GetAbbr(PaySplitCur.ClinicNum); });
-			}
-			else {
-				labelClinic.Visible=false;
-				comboClinic.Visible=false;
-			}
+				comboClinic.IndexSelectOrSetText(_listClinics.FindIndex(x => x.Id==PaySplitCur.ClinicNum),() => { return Clinic.GetById(PaySplitCur.ClinicNum).Abbr; });
+
 			comboProvider.SelectedIndex=-1;
 			FillComboProv();
 			if(PaySplitCur.ProvNum==0) {
@@ -97,7 +93,7 @@ namespace OpenDental {
 			else{
 				checkPayPlan.Checked=true;
 			}
-			if(Clinics.IsMedicalPracticeOrClinic(PaySplitCur.ClinicNum)) {
+			if(Clinic.GetById(PaySplitCur.ClinicNum).IsMedicalOnly) {
 				textProcTooth.Visible=false;
 				labelProcTooth.Visible=false;
 			}
@@ -124,38 +120,41 @@ namespace OpenDental {
 			FillAdjustment();
 		}
 
-		///<summary>Sets the patient GroupBox, provider combobox & picker button, 
-		///and clinic combobox enabled/disabled depending on whether a proc is attached.</summary>
-		private void SetEnabledProc() {
-			if((ProcCur!=null || _adjCur!=null) && !_isEditAnyway && Preference.GetInt(PreferenceName.RigorousAccounting)==(int)RigorousAccounting.EnforceFully) {
-				groupPatient.Enabled=false;
-				comboProvider.Enabled=false;
-				butPickProv.Enabled=false;
-				if(Preferences.HasClinicsEnabled) {
-					comboClinic.Enabled=false;
-				}
-				if(Security.IsAuthorized(Permissions.Setup,true)) {
-					labelEditAnyway.Visible=true;
-					butEditAnyway.Visible=true;
-				}
-			}
-			else {
-				groupPatient.Enabled=true;
-				comboProvider.Enabled=true;
-				butPickProv.Enabled=true;
-				if(Preferences.HasClinicsEnabled) {
-					comboClinic.Enabled=true;
-				}
-				comboUnearnedTypes.Enabled=true;
-				labelEditAnyway.Visible=false;
-				butEditAnyway.Visible=false;
-				checkPatOtherFam.Enabled=true;
-			}
-		}
+        ///<summary>Sets the patient GroupBox, provider combobox & picker button, 
+        ///and clinic combobox enabled/disabled depending on whether a proc is attached.</summary>
+        private void SetEnabledProc()
+        {
+            if ((ProcCur != null || _adjCur != null) && !_isEditAnyway && Preference.GetInt(PreferenceName.RigorousAccounting) == (int)RigorousAccounting.EnforceFully)
+            {
+                groupPatient.Enabled = false;
+                comboProvider.Enabled = false;
+                butPickProv.Enabled = false;
+                comboClinic.Enabled = false;
+
+                if (Security.IsAuthorized(Permissions.Setup, true))
+                {
+                    labelEditAnyway.Visible = true;
+                    butEditAnyway.Visible = true;
+                }
+            }
+            else
+            {
+                groupPatient.Enabled = true;
+                comboProvider.Enabled = true;
+                butPickProv.Enabled = true;
+
+                comboClinic.Enabled = true;
+
+                comboUnearnedTypes.Enabled = true;
+                labelEditAnyway.Visible = false;
+                butEditAnyway.Visible = false;
+                checkPatOtherFam.Enabled = true;
+            }
+        }
 
 		private void comboClinic_SelectionChangeCommitted(object sender,EventArgs e) {
 			if(comboClinic.SelectedIndex>-1) {
-				PaySplitCur.ClinicNum=_listClinics[comboClinic.SelectedIndex].ClinicNum;
+				PaySplitCur.ClinicNum=_listClinics[comboClinic.SelectedIndex].Id;
 			}
 			else {
 				PaySplitCur.ClinicNum=0;
@@ -374,7 +373,7 @@ namespace OpenDental {
 				textProcPrevPaid.Text=procPrevPaid.ToString("F");
 			}
 			if(_listClinics!=null) {
-				comboClinic.SelectedIndex=_listClinics.FindIndex(x => x.ClinicNum==PaySplitCur.ClinicNum);
+				comboClinic.SelectedIndex=_listClinics.FindIndex(x => x.Id==PaySplitCur.ClinicNum);
 			}
 			butAttachProc.Enabled=false;
 			if(!_isEditAnyway && Preference.GetInt(PreferenceName.RigorousAccounting)==(int)RigorousAccounting.EnforceFully) {
@@ -389,9 +388,9 @@ namespace OpenDental {
 			checkPatOtherFam.Enabled=false;
 			//Find the combo option for the procedure's clinic and provider.  If they don't exist in the list (are hidden) then it will set the text of the combo box instead.
 			comboProvider.IndexSelectOrSetText(_listProviders.FindIndex(x => x.ProvNum==PaySplitCur.ProvNum),() => { return Providers.GetAbbr(PaySplitCur.ProvNum); });
-			if(Preferences.HasClinicsEnabled) {
-				comboClinic.IndexSelectOrSetText(_listClinics.FindIndex(x => x.ClinicNum==PaySplitCur.ClinicNum),() => { return Clinics.GetAbbr(PaySplitCur.ClinicNum); });
-			}
+
+				comboClinic.IndexSelectOrSetText(_listClinics.FindIndex(x => x.Id==PaySplitCur.ClinicNum),() => { return Clinic.GetById(PaySplitCur.ClinicNum).Abbr; });
+			
 			//Proc selected will always be for the pat this paysplit was made for
 			listPatient.SelectedIndex=_famCur.Members.ToList().FindIndex(x => x.PatNum==PaySplitCur.PatNum);
 			ComputeTotals();
@@ -453,9 +452,9 @@ namespace OpenDental {
 			checkPatOtherFam.Enabled=false;
 			//Find the combo option for the adjustment's clinic and provider.  If they don't exist in the list (are hidden) then it will set the text of the combo box instead.
 			comboProvider.IndexSelectOrSetText(_listProviders.FindIndex(x => x.ProvNum==_adjCur.ProvNum),() => { return Providers.GetAbbr(_adjCur.ProvNum); });
-			if(Preferences.HasClinicsEnabled) {
-				comboClinic.IndexSelectOrSetText(_listClinics.FindIndex(x => x.ClinicNum==_adjCur.ClinicNum),() => { return Clinics.GetAbbr(_adjCur.ClinicNum); });
-			}
+
+            comboClinic.IndexSelectOrSetText(_listClinics.FindIndex(x => x.Id == _adjCur.ClinicNum), () => { return Clinic.GetById(_adjCur.ClinicNum).Abbr; });
+			
 			//Proc selected will always be for the pat this paysplit was made for
 			listPatient.SelectedIndex=_famCur.Members.ToList().FindIndex(x => x.PatNum==_adjCur.PatNum);
 			tabProcedure.Enabled=false;//paysplits cannot have both procedure and adjustment
@@ -860,8 +859,8 @@ namespace OpenDental {
 					secLogText+=" using Edit Anyway";
 				}
 				secLogText+=" with provider "+Providers.GetAbbr(PaySplitCur.ProvNum);
-				if(Clinics.GetAbbr(PaySplitCur.ClinicNum)!="") {
-					secLogText+=", clinic "+Clinics.GetAbbr(PaySplitCur.ClinicNum);
+				if(Clinic.GetById(PaySplitCur.ClinicNum).Abbr!="") {
+					secLogText+=", clinic "+Clinic.GetById(PaySplitCur.ClinicNum).Abbr;
 				}
 				secLogText+=", amount "+PaySplitCur.SplitAmt.ToString("F");
 				SecurityLog.Write(Permissions.PaymentEdit,PaySplitCur.PatNum,secLogText);
@@ -872,7 +871,7 @@ namespace OpenDental {
 					secLogText+=" using Edit Anyway";
 				}
 				secLogText+=SecurityLogEntryHelper(Providers.GetAbbr(_paySplitCopy.ProvNum),Providers.GetAbbr(PaySplitCur.ProvNum),"provider");
-				secLogText+=SecurityLogEntryHelper(Clinics.GetAbbr(_paySplitCopy.ClinicNum),Clinics.GetAbbr(PaySplitCur.ClinicNum),"clinic");
+				secLogText+=SecurityLogEntryHelper(Clinic.GetById(_paySplitCopy.ClinicNum).Abbr,Clinic.GetById(PaySplitCur.ClinicNum).Abbr,"clinic");
 				secLogText+=SecurityLogEntryHelper(_paySplitCopy.SplitAmt.ToString("F"),PaySplitCur.SplitAmt.ToString("F"),"amount");
 				secLogText+=SecurityLogEntryHelper(_paySplitCopy.PatNum.ToString(),PaySplitCur.PatNum.ToString(),"patient number");
 				SecurityLog.Write(Permissions.PaymentEdit,PaySplitCur.PatNum,secLogText,0,_paySplitCopy.SecDateTEdit);

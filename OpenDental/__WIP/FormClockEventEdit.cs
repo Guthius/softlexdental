@@ -135,39 +135,24 @@ namespace OpenDental
 
         private void LoadClinics()
         {
-            if (Preferences.HasClinicsEnabled)
+            var clinics = Clinic.GetByUser(Security.CurrentUser);
+
+            foreach (var clinic in clinics)
             {
-                var clinics = Clinics.GetForUserod(Security.CurrentUser);
-                if (!Security.CurrentUser.ClinicRestricted || Security.CurrentUser.ClinicId == 0)
+                clinicComboBox.Items.Add(clinic);
+                if (clinic.Id == clockEvent.ClinicId)
                 {
-                    clinics.Insert(0, new Clinic
-                    {
-                        Abbr = "Headquarters"
-                    });
+                    clinicComboBox.SelectedItem = clinic;
                 }
-
-                foreach (var clinic in clinics)
-                {
-                    clinicComboBox.Items.Add(clinic);
-                    if (clinic.ClinicNum == clockEvent.ClinicId)
-                    {
-                        clinicComboBox.SelectedItem = clinic;
-                    }
-                }
-
-                if (clinicComboBox.SelectedItem == null && 
-                    clinicComboBox.Items.Count > 0)
-                {
-                    clinicComboBox.SelectedIndex = 0;
-                }
-
-                // TODO: What if a user tries to edit a clock event from a clinic they don't have access to??
             }
-            else
+
+            if (clinicComboBox.SelectedItem == null &&
+                clinicComboBox.Items.Count > 0)
             {
-                clinicLabel.Visible = false;
-                clinicComboBox.Visible = false;
+                clinicComboBox.SelectedIndex = 0;
             }
+
+            // TODO: What if a user tries to edit a clock event from a clinic they don't have access to??
         }
 
         private void CalculateAutoFields()
@@ -485,18 +470,15 @@ namespace OpenDental
                 clockEvent.Date2Entered = MiscData.GetNowDateTime();
             }
 
-            if (Preferences.HasClinicsEnabled)
+            if (clinicComboBox.SelectedItem is Clinic clinic)
             {
-                if (clinicComboBox.SelectedItem is Clinic clinic)
-                {
-                    clockEvent.ClinicId = clinic.ClinicNum;
-                }
-                else
-                {
-                    clockEvent.ClinicId = null;
-                }
+                clockEvent.ClinicId = clinic.Id;
             }
-
+            else
+            {
+                clockEvent.ClinicId = null;
+            }
+            
             clockEvent.Date1Displayed = date1Displayed;
             clockEvent.Date2Displayed = date2Displayed;
             clockEvent.Overtime = clockEvent.OvertimeAuto == Overtime ? null : (TimeSpan?)Overtime;

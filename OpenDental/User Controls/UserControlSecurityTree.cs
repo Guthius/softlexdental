@@ -340,7 +340,7 @@ namespace OpenDental {
 				node.Nodes.Add(node2);
 				node2=SetNode(Permissions.OrthoChartEditUser);
 				node.Nodes.Add(node2);
-				if(!Clinics.IsMedicalPracticeOrClinic(Clinics.ClinicNum)) {
+				if(!Clinic.GetById(Clinics.ClinicId).IsMedicalOnly) {
 					node2=SetNode(Permissions.PerioEdit);
 					node.Nodes.Add(node2);
 				}

@@ -54,22 +54,22 @@ namespace OpenDental
 
             var formOpenDental = new FormOpenDental(args);
 
-            Application.ThreadException += (s, e) =>
-            {
-                UnhandledException(e.Exception);
+            //Application.ThreadException += (s, e) =>
+            //{
+            //    UnhandledException(e.Exception);
 
-                formOpenDental.ProcessKillCommand();
-            };
+            //    formOpenDental.ProcessKillCommand();
+            //};
 
-            AppDomain.CurrentDomain.UnhandledException += (s, e) =>
-            {
-                UnhandledException(e.ExceptionObject as Exception);
+            //AppDomain.CurrentDomain.UnhandledException += (s, e) =>
+            //{
+            //    UnhandledException(e.ExceptionObject as Exception);
 
-                if (e.IsTerminating)
-                {
-                    formOpenDental.ProcessKillCommand();
-                }
-            };
+            //    if (e.IsTerminating)
+            //    {
+            //        formOpenDental.ProcessKillCommand();
+            //    }
+            //};
 
             Application.DoEvents();
             Application.AddMessageFilter(new ODGlobalUserActiveHandler());

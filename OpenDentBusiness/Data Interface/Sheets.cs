@@ -571,7 +571,7 @@ namespace OpenDentBusiness
                 + "DateTimeSheet >= " + POut.Date(dateFrom) + " AND DateTimeSheet <= " + POut.Date(dateTo.AddDays(1)) + " "
                 + "AND IsWebForm = " + POut.Bool(true) + " "
                 + "AND (SheetType=" + POut.Long((int)SheetTypeEnum.PatientForm) + " OR SheetType=" + POut.Long((int)SheetTypeEnum.MedicalHistory) + ") "
-                + (Preferences.HasClinicsEnabled ? "AND ClinicNum IN (" + string.Join(",", listClinicNums) + ") " : "");
+                + "AND ClinicNum IN (" + string.Join(",", listClinicNums) + ") ";
             DataTable rawSheet = Db.GetTable(command);
             DateTime dateT;
             for (int i = 0; i < rawSheet.Rows.Count; i++)

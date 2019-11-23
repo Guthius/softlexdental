@@ -32,17 +32,7 @@ namespace OpenDental {
 				return;
 			}
 			checkEnabled.Checked=_progCur.Enabled;
-			if(!Preferences.HasClinicsEnabled) {//clinics are not enabled, use ClinicNum 0 to indicate 'Headquarters' or practice level program properties
-				checkEnabled.Text=Lan.g(this,"Enabled");
-				groupClinicSettings.Text=Lan.g(this,"Transworld Settings");
-				comboClinic.Visible=false;
-				labelClinic.Visible=false;
-				labelClinicEnable.Visible=false;
-				_listUserClinicNums=new List<long>() { 0 };//if clinics are disabled, programproperty.ClinicNum will be set to 0
-				groupSendActivity.Text=Lan.g(this,"Account Activity Updates");//remove '(affects all clinics)' from text
-				_selectedClinicNum=0;
-			}
-			else {//Using clinics
+
 				groupClinicSettings.Text=Lan.g(this,"Transworld Clinic Settings");
 				_listUserClinicNums=new List<long>();
 				//if Transworld is enabled and the user is restricted to a clinic, don't allow the user to disable for all clinics
@@ -57,16 +47,16 @@ namespace OpenDental {
 					_listUserClinicNums.Add(0);
 					comboClinic.SelectedIndex=0;
 				}
-				List<Clinic> listClinics=Clinics.GetForUserod(Security.CurrentUser);
+				List<Clinic> listClinics=Clinic.GetByUser(Security.CurrentUser).ToList();
 				foreach(Clinic clinicCur in listClinics) {
 					comboClinic.Items.Add(clinicCur.Abbr);
-					_listUserClinicNums.Add(clinicCur.ClinicNum);
-					if(Clinics.ClinicNum==clinicCur.ClinicNum) {//set selected index to the currently selected clinic in FormOpenDental
-						_selectedClinicNum=clinicCur.ClinicNum;
+					_listUserClinicNums.Add(clinicCur.Id);
+					if(Clinics.ClinicId==clinicCur.Id) {//set selected index to the currently selected clinic in FormOpenDental
+						_selectedClinicNum=clinicCur.Id;
 						comboClinic.SelectedIndex=comboClinic.Items.Count-1;
 					}
 				}
-			}
+			
 			//_dictClinicListProgProps=ProgramProperties.GetForProgram(_progCur.ProgramNum)//get list of all props for the program
 			//	.GroupBy(x => x.ClinicId)//group each clinic
 			//	.ToDictionary(x => x.Key,x => x.ToList());//turn list into a dictionary of key=ClinicNum, value=List<ProgramProperty> for the clinic
@@ -117,10 +107,8 @@ namespace OpenDental {
 		///values are modified and the currently selected clinic is not the HQ clinic but the HQ details are being displayed, the HQ clinic details will
 		///remain unchanged and the currently selected clinic will no longer be synced with HQ and will have a set of props added to the dict.</summary>
 		private void FillFields() {
-			long clinicNum=0;
-			if(Preferences.HasClinicsEnabled) {
-				clinicNum=_listUserClinicNums[comboClinic.SelectedIndex];
-			}
+			long clinicNum=_listUserClinicNums[comboClinic.SelectedIndex];
+			
 			List<ProgramProperty> listPropsCurClinic;
 			if(!_dictClinicListProgProps.TryGetValue(clinicNum,out listPropsCurClinic)) {
 				listPropsCurClinic=_dictClinicListProgProps[0];//dictionary guaranteed to have ClinicNum 0 in it

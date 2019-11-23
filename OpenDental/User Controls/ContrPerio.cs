@@ -1234,7 +1234,7 @@ namespace OpenDental
 		///<summary>Returns true if the toothNum passed in has ever had an implant before.</summary>
 		public static bool IsImplant(int toothNum) {
 			if(_listPatProcs==null) {//Not initialized yet.
-				_listPatProcs=Procedures.Refresh(FormOpenDental.CurPatNum);
+				_listPatProcs=Procedures.Refresh(FormOpenDental.CurrentPatientId);
 			}
 			List<Procedure> listProcsForTooth=_listPatProcs.FindAll(x => x.ToothNum==toothNum.ToString() && x.ProcStatus.In(ProcStat.C,ProcStat.EC,ProcStat.EO));
 			for(int i = 0;i<listProcsForTooth.Count;i++) {

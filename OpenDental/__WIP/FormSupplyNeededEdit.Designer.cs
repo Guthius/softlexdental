@@ -32,7 +32,7 @@ namespace OpenDental
             this.descriptionLabel = new System.Windows.Forms.Label();
             this.descriptionTextBox = new System.Windows.Forms.TextBox();
             this.dateLabel = new System.Windows.Forms.Label();
-            this.dateTextBox = new OpenDental.ValidDate();
+            this.dateTextBox = new System.Windows.Forms.TextBox();
             this.deleteButton = new System.Windows.Forms.Button();
             this.acceptButton = new System.Windows.Forms.Button();
             this.cancelButton = new System.Windows.Forms.Button();
@@ -153,7 +153,7 @@ namespace OpenDental
         private System.Windows.Forms.Label descriptionLabel;
         private System.Windows.Forms.TextBox descriptionTextBox;
         private System.Windows.Forms.Button deleteButton;
-        private ValidDate dateTextBox;
+        private System.Windows.Forms.TextBox dateTextBox;
         private System.Windows.Forms.Label dateLabel;
         private System.Windows.Forms.Label label3;
     }

@@ -31,10 +31,6 @@ namespace OpenDental {
 		}
 
 		private void FormReportSetup_Load(object sender,EventArgs e) {
-			if(!Preferences.HasClinicsEnabled) {
-				checkReportPIClinic.Visible=false;
-				checkReportPIClinicInfo.Visible=false;
-			}
 			FillComboReportWriteoff();
 			comboReportWriteoff.SelectedIndex=Preference.GetInt(PreferenceName.ReportsPPOwriteoffDefaultToProcDate);
 			checkProviderPayrollAllowToday.Checked=Preference.GetBool(PreferenceName.ProviderPayrollAllowToday);

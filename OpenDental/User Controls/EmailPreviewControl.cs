@@ -393,7 +393,7 @@ namespace OpenDental
                 nextAppointment = appointmentList[0]; //next sched appt. If none, null.
             }
 
-            Clinic clinic = Clinics.GetClinic(ClinicNum);
+            Clinic clinic = Clinic.GetById(ClinicNum);
             Subject = ReplaceTemplateFields(subject, _patCur, nextAppointment, clinic); ;
             Body = ReplaceTemplateFields(bodyText, _patCur, nextAppointment, clinic);
             _emailMessage.Attachments.AddRange(attachments);

@@ -423,19 +423,19 @@ namespace OpenDental {
 		private void FillClinicCombo() {
 			int idxOld = comboClinic.SelectedIndex;
 			if(comboClinic.SelectedIndex>-1) {
-				_selectedClinicNum=_listClinics[comboClinic.SelectedIndex].ClinicNum;
+				_selectedClinicNum=_listClinics[comboClinic.SelectedIndex].Id;
 			}
 			_listClinics=new List<Clinic>() { new Clinic() { Abbr=Lan.g(this,"None") } };
-			_listClinics.AddRange(Clinics.GetForUserod(_curUser));//Not Security.CurUser
+			_listClinics.AddRange(Clinic.GetByUser(_curUser));//Not Security.CurUser
 			bool isListAlpha = Preference.GetBool(PreferenceName.ClinicListIsAlphabetical);
-			_listClinics=_listClinics.OrderBy(x => x.ClinicNum>0)
-				.ThenBy(x => isListAlpha?x.Abbr:x.ItemOrder.ToString().PadLeft(6,'0'))//sort by Abbr or Item order based on pref. string sort.
+			_listClinics=_listClinics.OrderBy(x => x.Id>0)
+				.ThenBy(x => isListAlpha?x.Abbr:x.SortOrder.ToString().PadLeft(6,'0'))//sort by Abbr or Item order based on pref. string sort.
 				.ToList();
 			//Fill comboClinic
 			comboClinic.Items.Clear();
 			_listClinics.ForEach(x => comboClinic.Items.Add(x.Abbr));
-			comboClinic.IndexSelectOrSetText(_listClinics.FindIndex(x => x.ClinicNum==_selectedClinicNum)
-				,() => { return Clinics.GetAbbr(_selectedClinicNum); });
+			comboClinic.IndexSelectOrSetText(_listClinics.FindIndex(x => x.Id==_selectedClinicNum)
+				,() => { return Clinic.GetById(_selectedClinicNum).Abbr; });
 			if(idxOld==-1 && comboClinic.SelectedIndex==-1) {
 				FillCombosForProviders();//because the comboClinic_SelectedIndexChanged will not fire.
 			}
@@ -443,7 +443,7 @@ namespace OpenDental {
 
 		private void comboClinic_SelectedIndexChanged(object sender,EventArgs e) {
 			if(comboClinic.SelectedIndex>-1) {
-				_selectedClinicNum=_listClinics[comboClinic.SelectedIndex].ClinicNum;
+				_selectedClinicNum=_listClinics[comboClinic.SelectedIndex].Id;
 			}
 			FillCombosForProviders();
 		}
@@ -608,10 +608,7 @@ namespace OpenDental {
 			comboPlaceService.Items.AddRange(Enum.GetNames(typeof(PlaceOfService)));
 			comboPlaceService.SelectedIndex=(int)_procCur.PlaceService;
 			//checkHideGraphical.Checked=ProcCur.HideGraphical;
-			if(!Preferences.HasClinicsEnabled) {
-				comboClinic.Visible=false;
-				labelClinic.Visible=false;
-			}
+
 			textSite.Text=Sites.GetDescription(_procCur.SiteNum);
 			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
 				if(_procCur.CanadianTypeCodes==null || _procCur.CanadianTypeCodes=="") {

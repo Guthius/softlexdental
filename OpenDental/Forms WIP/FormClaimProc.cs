@@ -334,13 +334,9 @@ namespace OpenDental {
 			//if(listProv.SelectedIndex==-1){
 			//	listProv.SelectedIndex=0;//there should always be a provider
 			//}
-			if(!Preferences.HasClinicsEnabled) {
-				labelClinic.Visible=false;
-				textClinic.Visible=false;
-			}
-			else {
-				textClinic.Text=Clinics.GetAbbr(ClaimProcCur.ClinicNum);
-			}
+
+				textClinic.Text=Clinic.GetById(ClaimProcCur.ClinicNum).Abbr;
+			
 			textDateEntry.Text=ClaimProcCur.DateEntry.ToShortDateString();
 			if(ClaimProcCur.ProcDate.Year<1880) {
 				textProcDate.Text="";
