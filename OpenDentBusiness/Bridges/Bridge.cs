@@ -27,7 +27,6 @@ namespace OpenDentBusiness.Bridges
     /// </summary>
     public abstract class Bridge : IBridge
     {
-        private static readonly List<BridgePreference> emptyPreferences = new List<BridgePreference>();
         private readonly List<BridgePreference> preferences;
 
         /// <summary>
@@ -53,7 +52,7 @@ namespace OpenDentBusiness.Bridges
 
             Description = description ?? "";
 
-            this.preferences = preferences?.ToList() ?? emptyPreferences;
+            this.preferences = preferences?.ToList() ?? new List<BridgePreference>();
             this.preferences.Add(BridgePreference.UseChartNumber);
         }
 
@@ -87,7 +86,7 @@ namespace OpenDentBusiness.Bridges
         /// </exception>
         protected static string GetPatientId(long programId, Patient patient)
         {
-            if (ProgramPreference.GetBool(programId, ProgramPreferenceName.UseChartNumber))
+            if (IsUsingChartNumber(programId))
             {
                 if (string.IsNullOrEmpty(patient.ChartNumber))
                 {
@@ -99,5 +98,19 @@ namespace OpenDentBusiness.Bridges
 
             return patient.PatNum.ToString();
         }
+
+        /// <summary>
+        ///     <para>
+        ///         Gets a value indicating whether the bridge is using 
+        ///         <see cref="Patient.ChartNumber"/> to uniquely identify patients. If false, 
+        ///         <see cref="Patient.PatNum"/> is used as identification instead.
+        ///     </para>
+        /// </summary>
+        /// <param name="programId">The ID of the program.</param>
+        /// <returns>
+        ///     True if <see cref="Patient.ChartNumber"/> should be used to identify the patient; 
+        ///     otherwise, false.
+        /// </returns>
+        protected static bool IsUsingChartNumber(long programId) => ProgramPreference.GetBool(programId, ProgramPreferenceName.UseChartNumber);
     }
 }

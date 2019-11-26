@@ -4269,7 +4269,7 @@ namespace OpenDental
                     case "RapidCall":
                         try
                         {
-                            RapidCall.ShowPage();
+                            RapidCallBridge.ShowPage();
                         }
                         catch (Exception ex)
                         {
