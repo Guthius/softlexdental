@@ -21,7 +21,7 @@ using System.Windows.Forms;
 
 namespace OpenDental.Bridges
 {
-    public class Patterson : Bridge
+    public class PattersonBridge : Bridge
     {
         private static readonly BridgePreference[] preferences =
         {
@@ -30,9 +30,9 @@ namespace OpenDental.Bridges
         };
 
         /// <summary>
-        /// Initializes a ne instance of the <see cref="Patterson"/> class.
+        /// Initializes a ne instance of the <see cref="PattersonBridge"/> class.
         /// </summary>
-        public Patterson() : base("Patterson Imaging", "", preferences)
+        public PattersonBridge() : base("Patterson Imaging", "", preferences)
         {
         }
 

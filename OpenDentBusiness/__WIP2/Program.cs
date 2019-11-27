@@ -31,6 +31,8 @@ namespace OpenDentBusiness
     /// </summary>
     public class Program : DataRecord
     {
+        // TODO: Caching...
+
         /// <summary>
         /// This is the full type name of the .NET class that represents the program.
         /// </summary>

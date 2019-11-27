@@ -73,9 +73,9 @@ namespace OpenDentBusiness{
 		/// <summary>FK to definition.DefNum.  Must have a value, or the patient will not show on some reports.</summary>
 		public long BillingType;
 		/// <summary>Name of folder where images will be stored. Not editable for now.</summary>
-		public string ImageFolder;
-		/// <summary>Address or phone note.  Unlimited length in order to handle data from other programs during a conversion.</summary>
-		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob | CrudSpecialColType.CleanText)]
+		public string ImageFolder; // TODO: Should be a property: patient.LName + patient.FName + patient.PatNum;
+                                   /// <summary>Address or phone note.  Unlimited length in order to handle data from other programs during a conversion.</summary>
+        [ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob | CrudSpecialColType.CleanText)]
 		public string AddrNote;
 		/// <summary>Family financial urgent note.  Only stored with guarantor, and shared for family.</summary>
 		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob | CrudSpecialColType.CleanText)]

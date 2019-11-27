@@ -1,27 +1,77 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Data;
-using System.Diagnostics;
-using System.Windows.Forms;
+/**
+ * Copyright (C) 2019 Dental Stars SRL
+ * Copyright (C) 2003-2019 Jordan S. Sparks, D.M.D.
+ * 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; If not, see <http://www.gnu.org/licenses/>
+ */
 using OpenDental.Bridges;
-using OpenDentBusiness;
 using OpenDental.UI;
-using System.Drawing;
-using System.IO;
-using OpenDental.Properties;
+using OpenDentBusiness;
+using OpenDentBusiness.Bridges;
+using System;
+using System.Windows.Forms;
 
 namespace OpenDental
 {
     public class ProgramL
     {
         /// <summary>
+        ///     <para>
+        ///         Determines whether the specified type represents a valid (e.g. usable) bridge 
+        ///         type.
+        ///     </para>
+        ///     <para>
+        ///         If the type is not valid; the <paramref name="errorMessage"/> parameter will be
+        ///         updated with the reason why it is not considered valid. This message is 
+        ///         included with the error message that is displayed to users when they try to use
+        ///         a brige of the given invalid <paramref name="type"/>.
+        ///     </para>
+        /// </summary>
+        /// <param name="type">The type to check.</param>
+        /// <param name="errorMessage">The error, set if the type is not valid.</param>
+        /// <returns>True if the type is valid; otherwise, false.</returns>
+        private static bool IsValidBridgeType(Type type, out string errorMessage)
+        {
+            errorMessage = "";
+
+            if (!type.IsClass)
+            {
+                errorMessage = "The bridge is not a class.";
+            }
+            else if (!type.IsPublic)
+            {
+                errorMessage = "The bridge is marked as private.";
+            }
+            else if (type.IsAbstract)
+            {
+                errorMessage = "The bridge type is marked as abstract.";
+            }
+            else if (!typeof(IBridge).IsAssignableFrom(type))
+            {
+                errorMessage = "The bridge type does not derive from the correct base class.";
+            }
+
+            return errorMessage.Length == 0;
+        }
+
+        /// <summary>
         /// Typically used when user clicks a button to a Program link.
         /// This method attempts to identify and execute the program based on the given programNum.
         /// </summary>
         public static void Execute(long programId, Patient patient)
         {
-            var program = Programs.GetFirstOrDefault(x => x.Id == programId);
+            var program = Program.GetById(programId);
 
             if (program == null)
             {
@@ -39,498 +89,81 @@ namespace OpenDental
                 patient = Patients.GetOriginalPatientForClone(patient);
             }
 
-            if (program.PluginDllName != "")
-            {
-                if (patient == null)
-                {
-                    Plugins.LaunchToolbarButton(programId, 0);
-                }
-                else
-                {
-                    Plugins.LaunchToolbarButton(programId, patient.PatNum);
-                }
-                return;
-            }
-            if (program.TypeName == ProgramName.ActeonImagingSuite.ToString())
-            {
-                ActeonImagingSuite.SendData(program, patient);
-                return;
-            }
-            if (program.TypeName == ProgramName.Adstra.ToString())
-            {
-                AdstraBridge.SendData(program, patient);
-                return;
-            }
-            else if (program.TypeName == ProgramName.Apixia.ToString())
-            {
-                ApixiaBridge.SendData(program, patient);
-                return;
-            }
-            else if (program.TypeName == ProgramName.Apteryx.ToString())
-            {
-                ApteryxBridge.SendData(program, patient);
-                return;
-            }
-            else if (program.TypeName == ProgramName.AudaxCeph.ToString())
-            {
-                AudaxCephBridge.SendData(program, patient);
-                return;
-            }
-            else if (program.TypeName == ProgramName.BioPAK.ToString())
-            {
-                BioPAK.SendData(program, patient);
-                return;
-            }
-            else if (program.TypeName == ProgramName.CADI.ToString())
-            {
-                CadiBridge.SendData(program, patient);
-                return;
-            }
-            else if (program.TypeName == ProgramName.Camsight.ToString())
-            {
-                CamsightBridge.SendData(program, patient);
-                return;
-            }
-            else if (program.TypeName == ProgramName.CaptureLink.ToString())
-            {
-                CaptureLinkBridge.SendData(program, patient);
-                return;
-            }
-            else if (program.TypeName == ProgramName.Carestream.ToString())
-            {
-                CarestreamBridge.SendData(program, patient);
-                return;
-            }
-            else if (program.TypeName == ProgramName.Cerec.ToString())
-            {
-                CerecBridge.SendData(program, patient);
-                return;
-            }
-            else if (program.TypeName == ProgramName.CleaRay.ToString())
-            {
-                CleaRayBridge.SendData(program, patient);
-                return;
-            }
-            else if (program.TypeName == ProgramName.CliniView.ToString())
-            {
-                CliniviewBridge.SendData(program, patient);
-                return;
-            }
-            else if (program.TypeName == ProgramName.ClioSoft.ToString())
-            {
-                ClioSoftBridge.SendData(program, patient);
-                return;
-            }
-            else if (program.TypeName == ProgramName.DBSWin.ToString())
-            {
-                DbsWinBridge.SendData(program, patient);
-                return;
-            }
-            else if (program.TypeName == ProgramName.DemandForce.ToString())
-            {
-                DemandForce.SendData(program, patient);
-                return;
-            }
-#if !DISABLE_WINDOWS_BRIDGES
-            else if (program.TypeName == ProgramName.DentalEye.ToString())
-            {
-                DentalEyeBridge.SendData(program, patient);
-                return;
-            }
-            else if (program.TypeName == ProgramName.DentalStudio.ToString())
-            {
-                DentalStudioBridge.SendData(program, patient);
-                return;
-            }
-            else if (program.TypeName == ProgramName.DentX.ToString())
-            {
-                DentXBridge.SendData(program, patient);
-                return;
-            }
-            else if (program.TypeName == ProgramName.DrCeph.ToString())
-            {
-                DrCephBridge.SendData(program, patient);
-                return;
-            }
-#endif
-            else if (program.TypeName == ProgramName.DentalTekSmartOfficePhone.ToString())
-            {
-                DentalTekBridge.SendData(program, patient);
-                return;
-            }
-            else if (program.TypeName == ProgramName.DentForms.ToString())
-            {
-                DentFormsBridge.SendData(program, patient);
-                return;
-            }
-            else if (program.TypeName == ProgramName.Dexis.ToString())
-            {
-                DexisBridge.SendData(program, patient);
-                return;
-            }
-            else if (program.TypeName == ProgramName.Digora.ToString())
-            {
-                DigoraBridge.SendData(program, patient);
-                return;
-            }
-            else if (program.TypeName == ProgramName.Dimaxis.ToString())
-            {
-                PlanmecaBridge.SendData(program, patient);
-                return;
-            }
-            else if (program.TypeName == ProgramName.Office.ToString())
-            {
-                OfficeBridge.SendData(program, patient);
-                return;
-            }
-            else if (program.TypeName == ProgramName.Dolphin.ToString())
-            {
-                DolphinBridge.SendData(program, patient);
-                return;
-            }
-            else if (program.TypeName == ProgramName.DXCPatientCreditScore.ToString())
-            {
-                DentalXChangeBridge.SendData(program, patient);
-                return;
-            }
-            else if (program.TypeName == ProgramName.Dxis.ToString())
-            {
-                DxisBridge.SendData(program, patient);
-                return;
-            }
-            else if (program.TypeName == ProgramName.EvaSoft.ToString())
-            {
-                EvaSoftBridge.SendData(program, patient);
-                return;
-            }
-            else if (program.TypeName == ProgramName.EwooEZDent.ToString())
-            {
-                EwooBridge.SendData(program, patient);
-                return;
-            }
-            else if (program.TypeName == ProgramName.FloridaProbe.ToString())
-            {
-                FloridaProbeBridge.SendData(program, patient);
-                return;
-            }
-            else if (program.TypeName == ProgramName.Guru.ToString())
-            {
-                Guru.SendData(program, patient);
-                return;
-            }
-            else if (program.TypeName == ProgramName.HandyDentist.ToString())
-            {
-                HandyDentistBridge.SendData(program, patient);
-                return;
-            }
-            else if (program.TypeName == ProgramName.HouseCalls.ToString())
-            {
-                FormHouseCalls FormHC = new FormHouseCalls();
-                FormHC.ProgramCur = program;
-                FormHC.ShowDialog();
-                return;
-            }
-            else if (program.TypeName == ProgramName.iCat.ToString())
-            {
-                ICatBridge.SendData(program, patient);
-                return;
-            }
-            else if (program.TypeName == ProgramName.HdxWill.ToString())
-            {
-                HdxWillBridge.SendData(program, patient);
-                return;
-            }
-            else if (program.TypeName == ProgramName.iDixel.ToString())
-            {
-                IDixelBridge.SendData(program, patient);
-                return;
-            }
-            else if (program.TypeName == ProgramName.ImageFX.ToString())
-            {
-                ImageFXBridge.SendData(program, patient);
-                return;
-            }
-            else if (program.TypeName == ProgramName.iRYS.ToString())
-            {
-                IrysBridge.SendData(program, patient);
-                return;
-            }
-            else if (program.TypeName == ProgramName.Lightyear.ToString())
-            {
-                LightyearBridge.SendData(program, patient);
-                return;
-            }
-            else if (program.TypeName == ProgramName.NewTomNNT.ToString())
-            {
-                NewTomNNTBridge.SendData(program, patient);
-                return;
-            }
-            else if (program.TypeName == ProgramName.MediaDent.ToString())
-            {
-                MediaDentBridge.SendData(program, patient);
-                return;
-            }
-            else if (program.TypeName == ProgramName.Midway.ToString())
-            {
-                MidwayBridge.SendData(program, patient);
-                return;
-            }
-            else if (program.TypeName == ProgramName.MiPACS.ToString())
-            {
-                MiPACSBridge.SendData(program, patient);
-                return;
-            }
-            else if (program.TypeName == ProgramName.OrthoCAD.ToString())
-            {
-                OrthoCadBridge.SendData(program, patient);
-                return;
-            }
-            else if (program.TypeName == ProgramName.Oryx.ToString())
-            {
-                OryxBridge.SendData(program, patient);
-                return;
-            }
-            else if (program.TypeName == ProgramName.OrthoInsight3d.ToString())
-            {
-                OrthoInsight3dBridge.SendData(program, patient);
-                return;
-            }
-            else if (program.TypeName == ProgramName.Owandy.ToString())
-            {
-                OwandyBridge.SendData(program, patient);
-                return;
-            }
-            else if (program.TypeName == ProgramName.PandaPerio.ToString())
-            {
-                PandaPerioBridge.SendData(program, patient);
-                return;
-            }
-            else if (program.TypeName == ProgramName.PandaPeriodAdvanced.ToString())
-            {
-                PandaPerioAdvancedBridge.SendData(program, patient);
-                return;
-            }
-            else if (program.TypeName == ProgramName.Patterson.ToString())
-            {
-                Patterson.SendData(program, patient);
-                return;
-            }
-            else if (program.TypeName == ProgramName.PerioPal.ToString())
-            {
-                PerioPalBridge.SendData(program, patient);
-                return;
-            }
-            else if (program.TypeName == ProgramName.Progeny.ToString())
-            {
-                ProgenyBridge.SendData(program, patient);
-                return;
-            }
-            else if (program.TypeName == ProgramName.PT.ToString())
-            {
-                PaperlessTechnology.SendData(program, patient, false);
-                return;
-            }
-            else if (program.TypeName == ProgramName.PTupdate.ToString())
-            {
-                PaperlessTechnology.SendData(program, patient, true);
-                return;
-            }
-            else if (program.TypeName == ProgramName.RayMage.ToString())
-            {
-                RayMageBridge.SendData(program, patient);
-                return;
-            }
-            else if (program.TypeName == ProgramName.Romexis.ToString())
-            {
-                RomexisBridge.SendData(program, patient);
-                return;
-            }
-            else if (program.TypeName == ProgramName.Scanora.ToString())
-            {
-                ScanoraBridge.SendData(program, patient);
-                return;
-            }
-#if !DISABLE_WINDOWS_BRIDGES
-            else if (program.TypeName == ProgramName.Schick.ToString())
-            {
-                SchickBridge.SendData(program, patient);
-                return;
-            }
-#endif
-            else if (program.TypeName == ProgramName.Sirona.ToString())
-            {
-                SironaBridge.SendData(program, patient);
-                return;
-            }
-            else if (program.TypeName == ProgramName.SMARTDent.ToString())
-            {
-                SmartDentBridge.SendData(program, patient);
-                return;
-            }
-            else if (program.TypeName == ProgramName.Sopro.ToString())
-            {
-                SoproBridge.SendData(program, patient);
-                return;
-            }
-            else if (program.TypeName == ProgramName.TigerView.ToString())
-            {
-                TigerViewBridge.SendData(program, patient);
-                return;
-            }
-            else if (program.TypeName == ProgramName.Triana.ToString())
-            {
-                TrianaBridge.SendData(program, patient);
-                return;
-            }
-            else if (program.TypeName == ProgramName.Trophy.ToString())
-            {
-                TrophyBridge.SendData(program, patient);
-                return;
-            }
-            else if (program.TypeName == ProgramName.TrophyEnhanced.ToString())
-            {
-                TrophyEnhancedBridge.SendData(program, patient);
-                return;
-            }
-            else if (program.TypeName == ProgramName.Tscan.ToString())
-            {
-                TscanBridge.SendData(program, patient);
-                return;
-            }
-#if !DISABLE_WINDOWS_BRIDGES
-            else if (program.TypeName == ProgramName.Vipersoft.ToString())
-            {
-                VipersoftBridge.SendData(program, patient);
-                return;
-            }
-#endif
-            else if (program.TypeName == ProgramName.visOra.ToString())
-            {
-                VisoraBridge.SendData(program, patient);
-                return;
-            }
-            else if (program.TypeName == ProgramName.VistaDent.ToString())
-            {
-                VistaDentBridge.SendData(program, patient);
-                return;
-            }
-            else if (program.TypeName == ProgramName.VixWin.ToString())
-            {
-                VixWinBridge.SendData(program, patient);
-                return;
-            }
-            else if (program.TypeName == ProgramName.VixWinBase36.ToString())
-            {
-                VixWinBase36Bridge.SendData(program, patient);
-                return;
-            }
-            else if (program.TypeName == ProgramName.VixWinBase41.ToString())
-            {
-                VixWinBase41Bridge.SendData(program, patient);
-                return;
-            }
-            else if (program.TypeName == ProgramName.VixWinNumbered.ToString())
-            {
-                VixWinNumberedBridge.SendData(program, patient);
-                return;
-            }
-            else if (program.TypeName == ProgramName.VixWinOld.ToString())
-            {
-                VixWinOldBridge.SendData(program, patient);
-                return;
-            }
-            else if (program.TypeName == ProgramName.XDR.ToString())
-            {
-                DexisBridge.SendData(program, patient);//XDR uses the Dexis protocol
-                return;
-            }
-            else if (program.TypeName == ProgramName.XVWeb.ToString())
-            {
-                XVWeb.SendData(program, patient);
-                return;
-            }
-            else if (program.TypeName == ProgramName.ZImage.ToString())
-            {
-                ZImageBridge.SendData(program, patient);
-                return;
-            }
-
-            //all remaining programs:
-            try
-            {
-                string cmdline = program.CommandLine;
-                string path = Programs.GetProgramPath(program);
-                string outputFilePath = program.FilePath;
-                string fileTemplate = program.FileTemplate;
-
-                if (patient != null)
-                {
-                    cmdline = ReplaceHelper(cmdline, patient);
-                    path = ReplaceHelper(path, patient);
-                    if (!string.IsNullOrEmpty(outputFilePath) && !string.IsNullOrEmpty(fileTemplate))
-                    {
-                        fileTemplate = ReplaceHelper(fileTemplate, patient);
-                        fileTemplate = fileTemplate.Replace("\n", "\r\n");
-
-                        File.WriteAllText(outputFilePath, fileTemplate);
-                    }
-                }
-
-                Process.Start(path, cmdline);
-            }
-            catch
+            // Find the type for the requested program.
+            var type = Type.GetType(program.TypeName);
+            if (type == null)
             {
                 MessageBox.Show(
-                    string.Format("{0} is not available.", program.Description), 
-                    "Program", 
-                    MessageBoxButtons.OK, 
+                    "The bridge interface for the selected program could not be found. " +
+                    "Make sure the program bridge plugin is installed correctly and try again.",
+                    "Program",
+                    MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 
                 return;
             }
+
+            // Make sure the type is valid usable type.
+            if (!IsValidBridgeType(type, out var errorMessage))
+            {
+                MessageBox.Show(
+                    "The bridge interface configured for this program is invalid. " + errorMessage,
+                    "Program",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+
+                return;
+            }
+
+            try
+            {
+                var bridge = (IBridge)Activator.CreateInstance(type);
+                if (bridge != null)
+                {
+                    bridge.Send(program.Id, patient);
+                }
+            }
+            catch (Exception exception)
+            {
+                // TODO: We might want more friendly and informative message here...
+
+                MessageBox.Show(
+                    exception.Message,
+                    "Program",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+
+            if (program.TypeName == ProgramName.XVWeb.ToString())
+            {
+                XVWeb.SendData(program, patient);
+                return;
+            }
         }
 
-
-        ///<summary>Helper method that replaces the message with all of the Message Replacements available for ProgramLinks.</summary>
-        private static string ReplaceHelper(string message, Patient pat)
+        public static void LoadToolbar(ODToolBar toolBar, ToolBarsAvail toolBarsAvail)
         {
-            string retVal = message;
-            retVal = Patients.ReplacePatient(retVal, pat);
-            retVal = Patients.ReplaceGuarantor(retVal, pat);
-            retVal = Referrals.ReplaceRefProvider(retVal, pat);
-            return retVal;
-        }
-
-        public static void LoadToolbar(ODToolBar ToolBarMain, ToolBarsAvail toolBarsAvail)
-        {
-            List<ToolButItem> toolButItems = ToolButItems.GetForToolBar(toolBarsAvail);
+            var toolButItems = ToolButItems.GetForToolBar(toolBarsAvail);
             foreach (var toolButItem in toolButItems)
             {
-                var program = Programs.GetProgram(toolButItem.ProgramNum);
-                //if(ProgramProperties.IsAdvertisingDisabled(programCur)) {
-                //	continue;
-                //}
+                var program = Program.GetById(toolButItem.ProgramNum);
+                if (program == null)
+                {
+                    continue;
+                }
 
-                Image image = null;
-                if (program.ButtonImage != "")
-                {
-                    image = PIn.Bitmap(program.ButtonImage);
-                }
-                else if (program.TypeName == ProgramName.Midway.ToString())
-                {
-                    image = Resources.Midway_Icon_22x22;
-                }
+                // TODO: Set the button image...
 
                 if (toolBarsAvail != ToolBarsAvail.MainToolbar)
                 {
-                    ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
+                    toolBar.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
                 }
 
-                var button = new ODToolBarButton(toolButItem.ButtonText, image, "", program);
+                var button = new ODToolBarButton(toolButItem.ButtonText, null, "", program);
 
                 AddDropDown(button, program);
 
-                ToolBarMain.Buttons.Add(button);
+                toolBar.Buttons.Add(button);
             }
         }
 
@@ -541,7 +174,7 @@ namespace OpenDental
         /// </summary>
         private static void AddDropDown(ODToolBarButton button, Program program)
         {
-            if (program.TypeName == ProgramName.Oryx.ToString())
+            if (program.TypeName == typeof(OryxBridge).FullName)
             {
                 var menuItem = new MenuItem
                 {

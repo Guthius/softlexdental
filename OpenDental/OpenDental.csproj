@@ -263,12 +263,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bridges\DdeBridge.cs" />
+    <Compile Include="Bridges\FormHouseCalls.Designer.cs">
+      <DependentUpon>FormHouseCalls.cs</DependentUpon>
+    </Compile>
     <Compile Include="Bridges\FormOryxUserSettings.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Bridges\FormOryxUserSettings.designer.cs">
       <DependentUpon>FormOryxUserSettings.cs</DependentUpon>
     </Compile>
+    <Compile Include="Bridges\HouseCallsBridge.cs" />
     <Compile Include="Bridges\OryxBridge.cs" />
     <Compile Include="Bridges\DentalXChangeBridge.cs" />
     <Compile Include="Bridges\MidwayBridge.cs" />
@@ -297,7 +301,7 @@
     <Compile Include="Bridges\RapidCallBridge.cs" />
     <Compile Include="Bridges\RomexisBridge.cs" />
     <Compile Include="Bridges\DentalTekBridge.cs" />
-    <Compile Include="Bridges\DemandForce.cs">
+    <Compile Include="Bridges\DemandForceBridge.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Bridges\OfficeBridge.cs" />
@@ -311,7 +315,7 @@
     <Compile Include="Bridges\VisoraBridge.cs" />
     <Compile Include="Bridges\VistaDentBridge.cs" />
     <Compile Include="Bridges\DentalStudioBridge.cs" />
-    <Compile Include="Bridges\Guru.cs">
+    <Compile Include="Bridges\GuruBridge.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Bridges\TscanBridge.cs" />
@@ -323,8 +327,7 @@
     <Compile Include="Bridges\VixWinBase41Bridge.cs" />
     <Compile Include="Bridges\EvaSoftBridge.cs" />
     <Compile Include="Bridges\_WIP\Orion.cs" />
-    <Compile Include="Bridges\PaperlessTechnology.cs" />
-    <Compile Include="Bridges\Patterson.cs" />
+    <Compile Include="Bridges\PattersonBridge.cs" />
     <Compile Include="Bridges\EwooBridge.cs" />
     <Compile Include="Bridges\FormTrophyNamePick.cs">
       <SubType>Form</SubType>

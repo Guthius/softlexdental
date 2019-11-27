@@ -46,7 +46,6 @@ namespace OpenDental.Bridges
         ///     <para>
         ///         Attempt to send a phone number to place a call using DentalTek.
         ///     </para>
-        /// 
         /// </summary>
         /// <param name="programId">The ID of the program.</param>
         /// <param name="phoneNumber">The phone number to call.</param>
