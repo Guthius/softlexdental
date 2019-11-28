@@ -566,13 +566,13 @@ namespace OpenDental
                 }
                 row = new ODGridRow();
                 row.Cells.Add(property.Key);
-                if (ProgramCur.TypeName == ProgramName.XVWeb.ToString() && property.Key == XVWeb.ProgramProps.Password)
+                if (ProgramCur.TypeName == ProgramName.XVWeb.ToString() && property.Key == XVWebBridge.ProgramProps.Password)
                 {
                     string decrypted;
                     Encryption.TryDecrypt(property.Value, out decrypted);
                     row.Cells.Add(new string('*', decrypted.Length));//Show the password as '*'
                 }
-                else if (ProgramCur.TypeName == ProgramName.XVWeb.ToString() && property.Key == XVWeb.ProgramProps.ImageCategory)
+                else if (ProgramCur.TypeName == ProgramName.XVWeb.ToString() && property.Key == XVWebBridge.ProgramProps.ImageCategory)
                 {
                     Definition imageCat = Definition.GetByCategory(DefinitionCategory.ImageCats).FirstOrDefault(x => x.Id == PIn.Long(property.Value));
                     if (imageCat == null)

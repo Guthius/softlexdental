@@ -499,7 +499,7 @@ namespace OpenDental
                 EnableAllTools(false);//Disable entire menu (besides select patient).
             }
             //get the program properties for XVWeb from the cache.
-            if (XVWeb.IsDisplayingImagesInProgram && PatCur != null)
+            if (XVWebBridge.IsDisplayingImagesInProgram && PatCur != null)
             {
                 //start thread to load all apteryx images into OD. 
                 _threadImageRequest?.QuitAsync();//If an old thread is still running, we want to make it stop so the new one can run.
@@ -529,7 +529,7 @@ namespace OpenDental
             Patient patient = (Patient)workerThread.Parameters[0];
             _isFillingXVWebFromThread = true;
             List<ApteryxImage> listAI = new List<ApteryxImage>();
-            listAI = XVWeb.GetImagesList(PatCur);
+            listAI = XVWebBridge.GetImagesList(PatCur);
             lock (_apteryxLocker)
             {
                 _listImageDownload = listAI;
@@ -881,7 +881,7 @@ namespace OpenDental
             //start the thread that will perform the download
             ODThread threadGetBitmap = new ODThread(new ODThread.WorkerDelegate((o) =>
             {
-                apiImage = XVWeb.GetBitmap(img, FormP);
+                apiImage = XVWebBridge.GetBitmap(img, FormP);
             }));
             threadGetBitmap.AddExceptionHandler(new ODThread.ExceptionDelegate((ex) =>
             {
@@ -904,7 +904,7 @@ namespace OpenDental
                 return;
             }
             threadGetBitmap.Join(2000);//give thread some time to finish before trying to display the image. 
-            Document newDoc = XVWeb.SaveApteryxImageToDoc(img, apiImage, PatCur);
+            Document newDoc = XVWebBridge.SaveApteryxImageToDoc(img, apiImage, PatCur);
             if (newDoc != null)
             {
                 nodeOver.Tag = MakeIdDoc(newDoc.DocNum);
@@ -1227,7 +1227,7 @@ namespace OpenDental
                 UserNumPrev = Security.CurrentUser.Id;//Update the Previous user num.
                 hasTreePrefsEnabled = false;//Disable flag
             }
-            if (XVWeb.IsDisplayingImagesInProgram && !_isFillingXVWebFromThread)
+            if (XVWebBridge.IsDisplayingImagesInProgram && !_isFillingXVWebFromThread)
             {//list was already added if this is from module refresh
                 FillTreeXVWebItems(PatCur.PatNum);
             }
@@ -1245,7 +1245,7 @@ namespace OpenDental
             {
                 return;//The patient was changed while the thread was getting the images.
             }
-            string imageCat = ProgramProperties.GetPropVal(Programs.GetProgramNum(ProgramName.XVWeb), XVWeb.ProgramProps.ImageCategory);
+            string imageCat = ProgramProperties.GetPropVal(Programs.GetProgramNum(ProgramName.XVWeb), XVWebBridge.ProgramProps.ImageCategory);
             if (_listImageDownload == null || string.IsNullOrEmpty(imageCat))
             {
                 return;
@@ -2301,7 +2301,7 @@ namespace OpenDental
             ImageNodeTag nodeId = (ImageNodeTag)treeDocuments.SelectedNode.Tag;
             if (nodeId.NodeType == ImageNodeType.ApteryxImage)
             {
-                string imageCat = ProgramProperties.GetPropVal(Programs.GetProgramNum(ProgramName.XVWeb), XVWeb.ProgramProps.ImageCategory);
+                string imageCat = ProgramProperties.GetPropVal(Programs.GetProgramNum(ProgramName.XVWeb), XVWebBridge.ProgramProps.ImageCategory);
                 //save copy to db for temp storage
                 apteryxDoc = ImageStore.Import(ImageRenderingNow, (Defs.GetDef(DefinitionCategory.ImageCats, PIn.Long(imageCat)).Id), ImageType.Photo, PatCur);
             }

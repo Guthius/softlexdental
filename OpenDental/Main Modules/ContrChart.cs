@@ -8728,16 +8728,16 @@ namespace OpenDental
                 _listApteryxThumbnails.RemoveAll(x => x.PatNum != patient.PatNum);
                 listIdsToExclude.AddRange(_listApteryxThumbnails.Select(x => x.Image.Id.ToString()));
             }
-            bool doDisplayXVWebInChart = XVWeb.IsDisplayingImagesInProgram
+            bool doDisplayXVWebInChart = XVWebBridge.IsDisplayingImagesInProgram
                 && Definition.GetByCategory(DefinitionCategory.ImageCats).Any(x => x.Value.Contains("X") //if tagged to show in Chart
-                 && x.Id == PIn.Long(ProgramProperties.GetPropVal(Programs.GetProgramNum(ProgramName.XVWeb), XVWeb.ProgramProps.ImageCategory)));
+                 && x.Id == PIn.Long(ProgramProperties.GetPropVal(Programs.GetProgramNum(ProgramName.XVWeb), XVWebBridge.ProgramProps.ImageCategory)));
             if (!doDisplayXVWebInChart)
             {
                 return;
             }
             //make requests to the XVWeb Api to get a list of images for this patient.
             List<ApteryxThumbnail> listAT = new List<ApteryxThumbnail>();
-            foreach (ApteryxThumbnail thumbnail in XVWeb.GetListThumbnails(patient, listIdsToExclude))
+            foreach (ApteryxThumbnail thumbnail in XVWebBridge.GetThumbnails(patient, listIdsToExclude))
             {
                 lock (_apteryxLocker)
                 {
@@ -8760,7 +8760,7 @@ namespace OpenDental
             {
                 return;
             }
-            long imageCat = PIn.Long(ProgramProperties.GetPropVal(Programs.GetProgramNum(ProgramName.XVWeb), XVWeb.ProgramProps.ImageCategory));
+            long imageCat = PIn.Long(ProgramProperties.GetPropVal(Programs.GetProgramNum(ProgramName.XVWeb), XVWebBridge.ProgramProps.ImageCategory));
             if (tabControlImages.SelectedIndex > 0 //any category except 'all'
                 && imageCat != Definition.GetByCategory(DefinitionCategory.ImageCats)[(int)visImageCats[tabControlImages.SelectedIndex - 1]].Id)
             {
@@ -13612,7 +13612,7 @@ namespace OpenDental
                 FormP.DisplayText = "?currentVal MB of ?maxVal MB copied";
                 ODThread threadGetBitmap = new ODThread(new ODThread.WorkerDelegate((o) =>
                 {
-                    apiImage = XVWeb.GetBitmap(apteryxImg, FormP);
+                    apiImage = XVWebBridge.GetBitmap(apteryxImg, FormP);
                 }));
                 threadGetBitmap.Name = "DownloadApteryxImage" + apteryxImg.Id;
                 threadGetBitmap.Start(true);
@@ -13635,7 +13635,7 @@ namespace OpenDental
                 }
                 formImageViewer.BringToFront();
                 formImageViewer.SetImage(apiImage, text);
-                Document savedImage = XVWeb.SaveApteryxImageToDoc(apteryxImg, apiImage, PatCur);//if they want to save in the db & image doesn't already exist
+                Document savedImage = XVWebBridge.SaveApteryxImageToDoc(apteryxImg, apiImage, PatCur);//if they want to save in the db & image doesn't already exist
                 if (savedImage != null)
                 {
                     listViewImages.SelectedItems[0].Tag = null;

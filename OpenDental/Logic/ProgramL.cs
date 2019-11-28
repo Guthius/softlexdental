@@ -136,7 +136,7 @@ namespace OpenDental
 
             if (program.TypeName == ProgramName.XVWeb.ToString())
             {
-                XVWeb.SendData(program, patient);
+                XVWebBridge.SendData(program, patient);
                 return;
             }
         }

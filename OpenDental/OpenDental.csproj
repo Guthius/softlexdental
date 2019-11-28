@@ -388,7 +388,7 @@
     <Compile Include="Bridges\VixWinBridge.cs" />
     <Compile Include="Bridges\VixWinNumberedBridge.cs" />
     <Compile Include="Bridges\VixWinOldBridge.cs" />
-    <Compile Include="Bridges\XVWeb.cs" />
+    <Compile Include="Bridges\XVWebBridge.cs" />
     <Compile Include="Bridges\ZImageBridge.cs" />
     <Compile Include="FormBase.cs">
       <SubType>Form</SubType>
