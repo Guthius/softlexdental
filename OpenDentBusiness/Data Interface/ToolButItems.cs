@@ -126,7 +126,7 @@ namespace OpenDentBusiness
         ///<summary>Returns a list of toolbutitems for the specified toolbar. Used when laying out toolbars.</summary>
         public static List<ToolButItem> GetForToolBar(ToolBarsAvail toolbar)
         {
-            return GetWhere(x => x.ToolBar == toolbar && Program.IsEnabled(x.ProgramNum));
+            return GetWhere(x => x.ToolBar == toolbar && Program.GetById(x.ProgramNum).Enabled);
         }
     }
 }

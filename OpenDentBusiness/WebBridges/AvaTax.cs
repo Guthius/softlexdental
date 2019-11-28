@@ -15,147 +15,130 @@ namespace OpenDentBusiness
     /// </summary>
     public class AvaTax
     {
-        #region Properties
+        private static Program program;
 
-        /// <summary>A program property.  The adjustment type defnum to be associated with SalesTax adjustments.</summary>
-        public static long SalesTaxAdjType
+        private static long GetAvaTaxProgramId()
         {
-            get
+            if (program == null)
             {
-                return PIn.Long(ProgramProperties.GetPropVal(Programs.GetProgramNum(ProgramName.AvaTax), "Sales Tax Adjustment Type"));
+                program = new Program();
             }
+
+            return program.Id;
         }
 
-        ///<summary>A program property.  The adjustment type defnum to be associated with SalesTax return adjustments.</summary>
-        public static long SalesTaxReturnAdjType
-        {
-            get
-            {
-                return PIn.Long(ProgramProperties.GetPropVal(Programs.GetProgramNum(ProgramName.AvaTax), "Sales Tax Return Adjustment Type"));
-            }
-        }
+        /// <summary>
+        /// The adjustment type defnum to be associated with SalesTax adjustments.
+        /// </summary>
+        public static long SalesTaxAdjType => ProgramPreference.GetLong(GetAvaTaxProgramId(), "Sales Tax Adjustment Type");
 
-        ///<summary>A program property.
-        ///Required by the API when sending transactions to determine the origination company with which to associate the transaction.</summary>
-        public static string CompanyCode
-        {
-            get
-            {
-                return PIn.String(ProgramProperties.GetPropVal(ProgramName.AvaTax, "Company Code"));
-            }
-        }
+        /// <summary>
+        /// The adjustment type defnum to be associated with SalesTax return adjustments.
+        /// </summary>
+        public static long SalesTaxReturnAdjType => ProgramPreference.GetLong(GetAvaTaxProgramId(), "Sales Tax Return Adjustment Type");
 
-        ///<summary>A program property. The list of two-letter state codes where sales tax will be collected. </summary>
-        public static List<string> ListTaxableStates
-        {
-            get
-            {
-                return ProgramProperties.GetPropVal(ProgramName.AvaTax, "Taxable States").Split(',').ToList();
-            }
-        }
+        /// <summary>
+        /// Required by the API when sending transactions to determine the origination company with which to associate the transaction.
+        /// </summary>
+        public static string CompanyCode => ProgramPreference.GetString(GetAvaTaxProgramId(), "Company Code");
 
-        ///<summary>A program property. Indicates if we are currently using the sandbox or production API.</summary>
-        public static bool IsProduction
-        {
-            get
-            {
-                return PIn.String(ProgramProperties.GetPropVal(ProgramName.AvaTax, "Test (T) or Production (P)")) == "P";
-            }
-        }
+        /// <summary>
+        /// The list of two-letter state codes where sales tax will be collected.
+        /// </summary>
+        public static List<string> ListTaxableStates => ProgramPreference.GetString(GetAvaTaxProgramId(), "Taxable States").Split(',').ToList();
 
-        ///<summary>A program property. Indicates the level of detail to log about calls made to the Avalara API.</summary>
-        public static LogLevel LogDetailLevel
-        {
-            get
-            {
-                return PIn.Enum<LogLevel>(ProgramProperties.GetPropVal(ProgramName.AvaTax, "Log Level"));
-            }
-        }
+        /// <summary>
+        /// Indicates if we are currently using the sandbox or production API.
+        /// </summary>
+        public static bool IsProduction => ProgramPreference.GetString(GetAvaTaxProgramId(), "Test (T) or Production (P)") == "P";
 
-        ///<summary>A program property.  The list of procedure codes we will allow users to pre-pay for in the Pre-payment tool.</summary>
+        /// <summary>
+        /// A program property. Indicates the level of detail to log about calls made to the Avalara API.
+        /// </summary>
+        public static LogLevel LogDetailLevel => (LogLevel)ProgramPreference.GetLong(GetAvaTaxProgramId(), "Log Level");
+
+        /// <summary>
+        /// The list of procedure codes we will allow users to pre-pay for in the Pre-payment tool.
+        /// </summary>
         public static List<ProcedureCode> ListPrePayProcCodes
         {
             get
             {
-                List<ProcedureCode> retList = new List<ProcedureCode>();
-                foreach (string procCode in ProgramProperties.GetPropVal(ProgramName.AvaTax, "Prepay Proc Codes").Split(','))
+                var procedureCodes = new List<ProcedureCode>();
+
+                foreach (var procedureCode in ProgramPreference.GetString(GetAvaTaxProgramId(), "Prepay Proc Codes").Split(','))
                 {
-                    retList.Add(ProcedureCodes.GetProcCode(procCode));
+                    procedureCodes.Add(ProcedureCodes.GetProcCode(procedureCode));
                 }
-                return retList;
+
+                return procedureCodes;
             }
         }
 
-        ///<summary>A program property.  The list of procedure codes we will allow users to pre-pay for in the Pre-payment tool.</summary>
+        /// <summary>
+        /// The list of procedure codes we will allow users to pre-pay for in the Pre-payment tool.
+        /// </summary>
         public static List<ProcedureCode> ListDiscountProcCodes
         {
             get
             {
-                List<ProcedureCode> retList = new List<ProcedureCode>();
-                foreach (string procCode in ProgramProperties.GetPropVal(ProgramName.AvaTax, "Discount Proc Codes").Split(','))
+                var procedureCodes = new List<ProcedureCode>();
+
+                foreach (var procedureCode in ProgramPreference.GetString(GetAvaTaxProgramId(), "Discount Proc Codes").Split(','))
                 {
-                    retList.Add(ProcedureCodes.GetProcCode(procCode));
+                    procedureCodes.Add(ProcedureCodes.GetProcCode(procedureCode));
                 }
-                return retList;
+
+                return procedureCodes;
             }
         }
 
-        ///<summary>A program property.  Returns the Pat Field Def Num to be associated with marking patients sales tax exempt.</summary>
-        public static PatFieldDef TaxExemptPatField
-        {
-            get
-            {
-                return PatFieldDefs.GetFirstOrDefault(x => x.PatFieldDefNum == PIn.Long(
-                    ProgramProperties.GetPropVal(Programs.GetProgramNum(ProgramName.AvaTax), "Tax Exempt Pat Field Def")
-                ));
-            }
-        }
+        /// <summary>
+        /// Returns the Pat Field Def Num to be associated with marking patients sales tax exempt.
+        /// </summary>
+        public static PatFieldDef TaxExemptPatField =>
+            PatFieldDefs.GetFirstOrDefault(
+                patFieldDef => patFieldDef.PatFieldDefNum == ProgramPreference.GetLong(GetAvaTaxProgramId(), "Tax Exempt Pat Field Def"));
 
-        ///<summary>A program property.  Returns the date after which we will consider tax adjustments "un-locked" and directly editable.
-        ///Example: lock date of 3/31/2019, so locked on that date, and unlocked if on 4/1/2019.</summary>
-        public static DateTime TaxLockDate
-        {
-            get
-            {
-                return PIn.Date(ProgramProperties.GetPropVal(Programs.GetProgramNum(ProgramName.AvaTax), "Tax Lock Date"));
-            }
-        }
+        /// <summary>
+        /// Returns the date after which we will consider tax adjustments "un-locked" and directly editable.
+        /// Example: lock date of 3/31/2019, so locked on that date, and unlocked if on 4/1/2019.
+        /// </summary>
+        public static DateTime TaxLockDate => ProgramPreference.GetDateTime(GetAvaTaxProgramId(), "Tax Lock Date");
 
-        ///<summary>The API client based on the current environment and credentials provided by the program properties.</summary>
+        /// <summary>
+        /// The API client based on the current environment and credentials provided by the program properties.
+        /// </summary>
         private static AvaTaxClient Client
         {
             get
             {
-                return new AvaTaxClient("AvaTaxClient", "1.0", Environment.MachineName, IsProduction ? AvaTaxEnvironment.Production : AvaTaxEnvironment.Sandbox)
-                .WithSecurity(ProgramProperties.GetPropVal(ProgramName.AvaTax, ProgramProperties.PropertyDescs.Username),
-                    ProgramProperties.GetPropVal(ProgramName.AvaTax, ProgramProperties.PropertyDescs.Password));
+                return 
+                    new AvaTaxClient(
+                        "AvaTaxClient", "1.0", 
+                        Environment.MachineName, 
+                        IsProduction ? AvaTaxEnvironment.Production : AvaTaxEnvironment.Sandbox)
+                            .WithSecurity(
+                                ProgramPreference.GetString(GetAvaTaxProgramId(), "Username"),
+                                ProgramPreference.GetString(GetAvaTaxProgramId(), "Password"));
             }
         }
-
-        #endregion Properties
 
         public AvaTax()
         {
         }
 
-        /// <summary>
-        /// True if we are in HQ and AvaTax is enabled.
-        /// </summary>
-        public static bool IsEnabled()
-        {
-            // TODO: Update this to work for anyone that wants to use it...
-            return Programs.IsEnabled(ProgramName.AvaTax);
-        }
+        public static bool IsEnabled() => Program.IsEnabled(typeof(AvaTax).FullName);
 
         /// <summary>
         /// True if we are in HQ, AvaTax is enabled, we tax the customer's state, and either the
         /// customer's tax exempt field is not defined or they are explicitly not tax exempt.
         /// </summary>
-        public static bool IsTaxable(long patNum)
+        public static bool IsTaxable(long patientId)
         {
             if (!IsEnabled()) return false;
 
-            var patient = Patients.GetPat(patNum);
+            var patient = Patients.GetPat(patientId);
             if (patient == null)
             {
                 return false;
@@ -164,7 +147,7 @@ namespace OpenDentBusiness
             PatField taxExemptField = null;
             if (TaxExemptPatField != null)
             {
-                taxExemptField = PatFields.Refresh(patNum).FirstOrDefault(x => x.FieldName == TaxExemptPatField.FieldName);
+                taxExemptField = PatFields.Refresh(patientId).FirstOrDefault(x => x.FieldName == TaxExemptPatField.FieldName);
             }
 
             return 
@@ -205,7 +188,7 @@ namespace OpenDentBusiness
         ///Exceptions thrown here will bubble up and be recorded into the adjustment note, so the user can see the error message.</summary>
         public static string GetTaxOverrideIfNeeded(Patient pat, ProcedureCode procCode)
         {
-            string overrides = ProgramProperties.GetPropVal(ProgramName.AvaTax, "Tax Code Overrides");
+            string overrides = ProgramPreference.GetString(GetAvaTaxProgramId(), "Tax Code Overrides");
             if (string.IsNullOrWhiteSpace(overrides))
             {
                 return procCode.TaxCode;

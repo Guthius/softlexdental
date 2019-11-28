@@ -1,10 +1,11 @@
-using System.Collections.Generic;
-using System.Windows.Forms;
-using OpenDentBusiness;
 using OpenDental.UI;
-using System.Drawing;
+using OpenDentBusiness;
 using System;
-using CodeBase;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace OpenDental
 {
@@ -19,16 +20,12 @@ namespace OpenDental
         private Label label1;
         private bool changed;
         private UI.ODGrid gridProgram;
-        private List<Program> _listPrograms;
 
-        ///<summary></summary>
         public FormProgramLinks()
         {
-            InitializeComponent();// Required for Windows Form Designer support
-            
+            InitializeComponent();
         }
 
-        ///<summary></summary>
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -67,7 +64,7 @@ namespace OpenDental
             this.butClose.Size = new System.Drawing.Size(75, 26);
             this.butClose.TabIndex = 38;
             this.butClose.Text = "&Close";
-            this.butClose.Click += new System.EventHandler(this.butClose_Click);
+            this.butClose.Click += new System.EventHandler(this.CloseButton_Click);
             // 
             // butAdd
             // 
@@ -84,7 +81,7 @@ namespace OpenDental
             this.butAdd.Size = new System.Drawing.Size(75, 26);
             this.butAdd.TabIndex = 41;
             this.butAdd.Text = "&Add";
-            this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
+            this.butAdd.Click += new System.EventHandler(this.AddButton_Click);
             // 
             // label2
             // 
@@ -146,47 +143,58 @@ namespace OpenDental
         }
         #endregion
 
-        private void FormProgramLinks_Load(object sender, System.EventArgs e)
+        private void FormProgramLinks_Load(object sender, EventArgs e)
         {
             FillList();
         }
 
         private void FillList()
         {
-            Programs.RefreshCache();
-            _listPrograms = Programs.GetListDeep();
+            CacheManager.Invalidate<Program>();
+
             gridProgram.BeginUpdate();
             gridProgram.Columns.Clear();
             gridProgram.Columns.Add(new ODGridColumn("Enabled", 55, HorizontalAlignment.Center));
             gridProgram.Columns.Add(new ODGridColumn("Program Name", -1));
             gridProgram.Rows.Clear();
-            foreach (Program prog in _listPrograms)
+
+            foreach (var program in Program.All)
             {
-                ODGridRow row = new ODGridRow() { Tag = prog };
+                var row = new ODGridRow();
+
                 Color color = Color.FromArgb(230, 255, 238);
-                row.BackColor = prog.Enabled ? color : row.BackColor;
-                ODGridCell cell = new ODGridCell(prog.Enabled ? "X" : "");
-                row.Cells.Add(cell);
-                row.Cells.Add(prog.Description);
+
+                row.BackColor = program.Enabled ? color : row.BackColor;
+                row.Cells.Add(program.Enabled ? "X" : "");
+                row.Cells.Add(program.Description);
+                row.Tag = program;
+
                 gridProgram.Rows.Add(row);
             }
+
             gridProgram.EndUpdate();
         }
 
-        private void butAdd_Click(object sender, System.EventArgs e)
+        private void AddButton_Click(object sender, EventArgs e)
         {
-            FormProgramLinkEdit FormPE = new FormProgramLinkEdit();
-            FormPE.IsNew = true;
-            FormPE.ProgramCur = new Program();
-            FormPE.ShowDialog();
-            changed = true;//because we don't really know what they did, so assume changed.
-            FillList();
+            using (var formProgramLinkEdit = new FormProgramLinkEdit())
+            {
+                formProgramLinkEdit.IsNew = true;
+                formProgramLinkEdit.ProgramCur = new Program();
+                formProgramLinkEdit.ShowDialog(this);
+
+                changed = true; // Because we don't really know what they did, so assume changed.
+
+                FillList();
+            }
         }
 
         private void gridProgram_CellDoubleClick(object sender, ODGridClickEventArgs e)
         {
+            // TODO: Add a method to the IBridge interface for opening the setup UI.
+
             DialogResult dResult = DialogResult.None;
-            Program program = _listPrograms[gridProgram.GetSelectedIndex()].Copy();
+            Program program = gridProgram.SelectedTag<Program>();
             switch (program.TypeName)
             {
                 case "UAppoint":
@@ -194,6 +202,7 @@ namespace OpenDental
                     FormU.ProgramCur = program;
                     dResult = FormU.ShowDialog();
                     break;
+
                 case "eClinicalWorks":
                     if (!Security.IsAuthorized(Permissions.SecurityAdmin))
                     {
@@ -203,54 +212,61 @@ namespace OpenDental
                     FormECW.ProgramCur = program;
                     dResult = FormECW.ShowDialog();
                     break;
+
                 case "eRx":
                     FormErxSetup FormES = new FormErxSetup();
                     dResult = FormES.ShowDialog();
                     break;
+
                 case "Mountainside":
                     FormMountainside FormM = new FormMountainside();
                     FormM.ProgramCur = program;
                     dResult = FormM.ShowDialog();
                     break;
+
                 case "PayConnect":
                     FormPayConnectSetup fpcs = new FormPayConnectSetup();
                     dResult = fpcs.ShowDialog();
                     break;
+
                 case "Podium":
                     FormPodiumSetup FormPS = new FormPodiumSetup();
                     dResult = FormPS.ShowDialog();
                     break;
+
                 case "Xcharge":
                     FormXchargeSetup fxcs = new FormXchargeSetup();
                     dResult = fxcs.ShowDialog();
                     break;
+
                 case "FHIR":
                     FormFHIRSetup FormFS = new FormFHIRSetup();
                     dResult = FormFS.ShowDialog();
                     break;
+
                 case "Transworld":
                     FormTransworldSetup FormTs = new FormTransworldSetup();
                     dResult = FormTs.ShowDialog();
                     break;
+
                 case "PaySimple":
                     FormPaySimpleSetup formPS = new FormPaySimpleSetup();
                     dResult = formPS.ShowDialog();
                     break;
+
                 case "AvaTax":
                     FormAvaTax formAT = new FormAvaTax();
                     formAT.ProgramCur = program;
                     dResult = formAT.ShowDialog();
                     break;
+
                 default:
                     FormProgramLinkEdit FormPE = new FormProgramLinkEdit();
-                    if (Programs.IsStatic(program))
-                    {
-                        FormPE.AllowToolbarChanges = false;
-                    }
                     FormPE.ProgramCur = program;
                     dResult = FormPE.ShowDialog();
                     break;
             }
+
             if (dResult == DialogResult.OK)
             {
                 changed = true;
@@ -258,16 +274,18 @@ namespace OpenDental
             }
         }
 
-        private void butClose_Click(object sender, System.EventArgs e)
+        private void CloseButton_Click(object sender, EventArgs e)
         {
             Close();
         }
 
-        private void FormProgramLinks_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        private void FormProgramLinks_Closing(object sender, CancelEventArgs e)
         {
             if (changed)
             {
-                DataValid.SetInvalid(InvalidType.Programs, InvalidType.ToolBut);
+                CacheManager.Invalidate<Program>();
+
+                DataValid.SetInvalid(InvalidType.ToolBut);
             }
         }
     }

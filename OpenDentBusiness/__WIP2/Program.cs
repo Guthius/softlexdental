@@ -17,7 +17,6 @@
  */
 using MySql.Data.MySqlClient;
 using OpenDentBusiness.Bridges;
-using System;
 using System.Collections.Generic;
 
 namespace OpenDentBusiness

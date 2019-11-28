@@ -515,14 +515,13 @@ namespace OpenDentBusiness
             }
             #region commlog
             List<Definition> listCommLogTypeDefs = Definition.GetByCategory(DefinitionCategory.CommLogTypes);
-            long podiumProgramNum = Programs.GetCur(ProgramName.Podium).Id;
-            bool showPodiumCommlogs = PIn.Bool(ProgramProperties.GetPropVal(podiumProgramNum, Podium.PropertyDescs.ShowCommlogsInChartAndAccount));
-            string andNotPodiumCommlog = " AND (commlog.CommSource!=" + POut.Int((int)CommItemSource.ProgramLink) + " "
-                + "OR commlog.ProgramNum!=" + POut.Long(podiumProgramNum) + ")";
+            //long podiumProgramNum = Programs.GetCur(ProgramName.Podium).Id;
+            //bool showPodiumCommlogs = PIn.Bool(ProgramProperties.GetPropVal(podiumProgramNum, Podium.PropertyDescs.ShowCommlogsInChartAndAccount));
+            //string andNotPodiumCommlog = " AND (commlog.CommSource!=" + POut.Int((int)CommItemSource.ProgramLink) + " "
+            //    + "OR commlog.ProgramNum!=" + POut.Long(podiumProgramNum) + ")";
             string command = "SELECT CommDateTime,CommType,Mode_,SentOrReceived,Note,CommlogNum,commlog.PatNum "
                 + "FROM commlog "
-                + "WHERE PatNum IN (" + familyPatNums + ")"
-                + (showPodiumCommlogs ? "" : andNotPodiumCommlog);//Rows are ordered at the end
+                + "WHERE PatNum IN (" + familyPatNums + ")";
             DataTable rawComm = DataConnection.ExecuteDataTable(command);
             DateTime dateT;
             for (int i = 0; i < rawComm.Rows.Count; i++)

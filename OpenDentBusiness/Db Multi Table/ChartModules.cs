@@ -599,21 +599,21 @@ namespace OpenDentBusiness
             {//TODO: refine to use show Family
                 #region Commlog
                 List<Definition> listCommLogTypeDefs = Definition.GetByCategory(DefinitionCategory.CommLogTypes);
-                long podiumProgramNum = Programs.GetCur(ProgramName.Podium).Id;
-                bool showPodiumCommlogs = PIn.Bool(ProgramProperties.GetPropVal(podiumProgramNum, Podium.PropertyDescs.ShowCommlogsInChartAndAccount));
-                string wherePodiumCommlog = "";
-                if (!showPodiumCommlogs)
-                {
-                    wherePodiumCommlog = "AND (commlog.CommSource!=" + POut.Int((int)CommItemSource.ProgramLink)
-                        + " OR (commlog.CommSource=" + POut.Int((int)CommItemSource.ProgramLink) + " AND commlog.ProgramNum!=" + POut.Long(podiumProgramNum) + ")) ";
-                }
+                //long podiumProgramNum = Programs.GetCur(ProgramName.Podium).Id;
+                //bool showPodiumCommlogs = PIn.Bool(ProgramProperties.GetPropVal(podiumProgramNum, Podium.PropertyDescs.ShowCommlogsInChartAndAccount));
+                //string wherePodiumCommlog = "";
+                //if (!showPodiumCommlogs)
+                //{
+                //    wherePodiumCommlog = "AND (commlog.CommSource!=" + POut.Int((int)CommItemSource.ProgramLink)
+                //        + " OR (commlog.CommSource=" + POut.Int((int)CommItemSource.ProgramLink) + " AND commlog.ProgramNum!=" + POut.Long(podiumProgramNum) + ")) ";
+                //}
                 command = "SELECT CommlogNum,CommDateTime,commlog.DateTimeEnd,CommType,Note,commlog.PatNum,UserNum,p1.FName,"
                 + "CASE WHEN Signature!='' THEN 1 ELSE 0 END SigPresent "
                 + "FROM patient p1,patient p2,commlog "
                 + "WHERE commlog.PatNum=p1.PatNum "
                 + "AND p1.Guarantor=p2.Guarantor "
                 + "AND p2.PatNum=" + POut.Long(patNum) + " "
-                + wherePodiumCommlog
+               // + wherePodiumCommlog
                 + "ORDER BY CommDateTime";
                 DataTable rawComm = DataConnection.ExecuteDataTable(command);
                 for (int i = 0; i < rawComm.Rows.Count; i++)

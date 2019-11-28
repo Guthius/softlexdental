@@ -531,22 +531,22 @@ namespace OpenDentBusiness
         /// <summary>Takes a provNum. Normally returns that provNum. If in Orion mode, returns the user's ProvNum, if that user is a primary provider. Otherwise, in Orion Mode, returns 0.</summary>
         public static long GetOrionProvNum(long providerId)
         {
-            if (Programs.UsingOrion)
-            {
-                var user = Security.CurrentUser;
-                if (user != null && user.ProviderId.HasValue)
-                {
-                    var provider = Providers.GetProv(user.ProviderId.Value);
-                    if (provider != null)
-                    {
-                        if (!provider.IsSecondary)
-                        {
-                            return user.ProviderId.Value;
-                        }
-                    }
-                }
-                return 0;
-            }
+            //if (Programs.UsingOrion)
+            //{
+            //    var user = Security.CurrentUser;
+            //    if (user != null && user.ProviderId.HasValue)
+            //    {
+            //        var provider = Providers.GetProv(user.ProviderId.Value);
+            //        if (provider != null)
+            //        {
+            //            if (!provider.IsSecondary)
+            //            {
+            //                return user.ProviderId.Value;
+            //            }
+            //        }
+            //    }
+            //    return 0;
+            //}
             return providerId;
         }
 

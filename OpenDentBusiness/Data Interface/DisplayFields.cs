@@ -262,7 +262,6 @@ namespace OpenDentBusiness {
 					list.Add(new DisplayField("Pri Ins",0,category));
 					list.Add(new DisplayField("Sec Ins",0,category));
 					list.Add(new DisplayField("Payor Types",0,category));
-					if(!Programs.UsingEcwTightOrFullMode()) {//different default list for eCW:
 						list.Add(new DisplayField("Premedicate",0,category));
 						list.Add(new DisplayField("Problems",0,category));
 						list.Add(new DisplayField("Med Urgent",0,category));
@@ -271,7 +270,7 @@ namespace OpenDentBusiness {
 						list.Add(new DisplayField("Medications",0,category));
 						list.Add(new DisplayField("Allergies",0,category));
 						list.Add(new DisplayField("Pat Restrictions",0,category));
-					}
+					
 					//list.Add(new DisplayField("PatFields",0,category));
 					//list.Add(new DisplayField("Birthdate",0,category));
 					//list.Add(new DisplayField("City",0,category));
@@ -576,17 +575,17 @@ namespace OpenDentBusiness {
 						list.Add(new DisplayField("ClinicDesc",100,category));
 						list.Add(new DisplayField("Clinic",90,category));
 					}
-					if(Programs.UsingOrion){
-						list.Add(new DisplayField("DPC",33,category));
-						list.Add(new DisplayField("Schedule By",72,category));
-						list.Add(new DisplayField("Stop Clock",67,category));
-						list.Add(new DisplayField("Stat 2",36,category));
-						list.Add(new DisplayField("On Call",45,category));
-						list.Add(new DisplayField("Effective Comm",90,category));
-						list.Add(new DisplayField("End Time",56,category));//not visible unless orion
-						list.Add(new DisplayField("Quadrant",55,category));//behavior is specific to orion
-						list.Add(new DisplayField("DPCpost",52,category));
-					}
+					//if(Programs.UsingOrion){
+					//	list.Add(new DisplayField("DPC",33,category));
+					//	list.Add(new DisplayField("Schedule By",72,category));
+					//	list.Add(new DisplayField("Stop Clock",67,category));
+					//	list.Add(new DisplayField("Stat 2",36,category));
+					//	list.Add(new DisplayField("On Call",45,category));
+					//	list.Add(new DisplayField("Effective Comm",90,category));
+					//	list.Add(new DisplayField("End Time",56,category));//not visible unless orion
+					//	list.Add(new DisplayField("Quadrant",55,category));//behavior is specific to orion
+					//	list.Add(new DisplayField("DPCpost",52,category));
+					//}
 					break;
 				#endregion 'None'
 				#region PatientSelect
@@ -745,13 +744,13 @@ namespace OpenDentBusiness {
 					list.Add(new DisplayField("Prov",42,category));
 					list.Add(new DisplayField("Amount",48,category));
 					list.Add(new DisplayField("Proc Code",62,category));
-					if(Programs.UsingOrion){
-						list.Add(new DisplayField("Stat 2",36,category));
-						list.Add(new DisplayField("On Call",45,category));
-						list.Add(new DisplayField("Effective Comm",90,category));
-						list.Add(new DisplayField("Repair",45,category));
-						list.Add(new DisplayField("DPCpost",52,category));
-					}
+					//if(Programs.UsingOrion){
+					//	list.Add(new DisplayField("Stat 2",36,category));
+					//	list.Add(new DisplayField("On Call",45,category));
+					//	list.Add(new DisplayField("Effective Comm",90,category));
+					//	list.Add(new DisplayField("Repair",45,category));
+					//	list.Add(new DisplayField("DPCpost",52,category));
+					//}
 					break;
 				#endregion ProcedureGroupNote
 				#region TreatmentPlanModule

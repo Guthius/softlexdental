@@ -1045,7 +1045,7 @@ namespace OpenDental.ReportingComplex
         ///<summary>Submits the Query to the database and fills ReportTable with the results.  Returns false if the query fails.</summary>
         public bool SubmitQuery()
         {
-            ReportComplexEvent.Fire(ODEventType.ReportComplex, Lan.g("ReportComplex", "Creating Query In Report..."));
+            ReportComplexEvent.Fire(ODEventType.ReportComplex, "Creating Query In Report...");
             if (String.IsNullOrWhiteSpace(_stringQuery))
             {
                 //The programmer must have prefilled the data table already, so no reason to try and run a query.

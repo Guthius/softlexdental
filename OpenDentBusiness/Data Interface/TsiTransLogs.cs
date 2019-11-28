@@ -113,25 +113,25 @@ namespace OpenDentBusiness
         /// <summary>Checks adjustments  </summary>
         public static void CheckAndInsertLogsIfAdjTypeExcluded(Adjustment adj, long patGuar, long patClinic, bool isFromTsi = false)
         {
-            if (!(IsTransworldEnabled(patClinic) && Patients.IsGuarCollections(patGuar)))
-            {
-                return;
-            }
-            string msgText = "Adjustment type is set to excluded type from transworld program properties.";
-            if (isFromTsi)
-            {
-                msgText = "This was not a message sent to Transworld.  This adjustment was entered due to a payment received from Transworld.";
-                InsertTsiLogsForAdjustment(patGuar, adj.Id, adj.AdjAmt, msgText);
-                return;
-            }
-            Program transworldProg = Programs.GetCur(ProgramName.Transworld);
-            List<ProgramPreference> listProperties = ProgramProperties.GetForProgram(transworldProg.Id);
-            string posType = listProperties.FirstOrDefault(x => x.Key == "SyncExcludePosAdjType")?.Value ?? "";
-            string negType = listProperties.FirstOrDefault(x => x.Key == "SyncExcludeNegAdjType")?.Value ?? "";
-            if (adj.AdjType.In(PIn.Long(posType), PIn.Long(negType)))
-            {
-                InsertTsiLogsForAdjustment(patGuar, adj.Id, adj.AdjAmt, msgText);
-            }
+            //if (!(IsTransworldEnabled(patClinic) && Patients.IsGuarCollections(patGuar)))
+            //{
+            //    return;
+            //}
+            //string msgText = "Adjustment type is set to excluded type from transworld program properties.";
+            //if (isFromTsi)
+            //{
+            //    msgText = "This was not a message sent to Transworld.  This adjustment was entered due to a payment received from Transworld.";
+            //    InsertTsiLogsForAdjustment(patGuar, adj.Id, adj.AdjAmt, msgText);
+            //    return;
+            //}
+            //Program transworldProg = Programs.GetCur(ProgramName.Transworld);
+            //List<ProgramPreference> listProperties = ProgramProperties.GetForProgram(transworldProg.Id);
+            //string posType = listProperties.FirstOrDefault(x => x.Key == "SyncExcludePosAdjType")?.Value ?? "";
+            //string negType = listProperties.FirstOrDefault(x => x.Key == "SyncExcludeNegAdjType")?.Value ?? "";
+            //if (adj.AdjType.In(PIn.Long(posType), PIn.Long(negType)))
+            //{
+            //    InsertTsiLogsForAdjustment(patGuar, adj.Id, adj.AdjAmt, msgText);
+            //}
         }
 
         #endregion Insert

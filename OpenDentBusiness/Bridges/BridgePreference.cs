@@ -31,6 +31,25 @@ namespace OpenDentBusiness.Bridges
         public static readonly BridgePreference DateFormat = 
             new BridgePreference(ProgramPreferenceName.DateFormat, "Birthdate format (default yyyyMMdd)", BridgePreferenceType.String);
 
+        /**
+         * TODO: This class needs some more work.
+         * 
+         * The main purpose of this class is to serve as a description of a preference used by a
+         * IBridge implementation. This information is used by the program setup forms.
+         *
+         * Right now a BridgePreference simply contains the internal key of the preference, a 
+         * description and a data type. Ideally it would be nice to also be able to specify a
+         * help text, a scope (e.g. is the preference configured per clinic, per user, per computer
+         * or globally) a validation action and a browse action.
+         * 
+         * The constructor should be private, and construction of BridgePreference instances
+         * should only be done through th 'Custom' method which should be renamed to something
+         * more appropriate (e.g. 'Define' or 'Make').
+         * 
+         * The predefined preferences should be dropped. And also the ProgramPreferenceName class
+         * should be dropped.
+         */
+
         /// <summary>
         ///     <para>
         ///         Creates a custom preference with the specified details.

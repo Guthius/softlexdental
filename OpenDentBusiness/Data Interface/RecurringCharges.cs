@@ -13,10 +13,8 @@ using SLDental.Storage;
 
 namespace OpenDentBusiness
 {
-    ///<summary></summary>
     public class RecurringCharges
     {
-
         ///<summary>Gets one RecurringCharge from the db.</summary>
         public static RecurringCharge GetOne(long recurringChargeNum)
         {
@@ -275,49 +273,49 @@ namespace OpenDentBusiness
         private void WriteResultsToFiles(StringBuilder strBuilderResultFileXCharge, StringBuilder strBuilderResultFilePayConnect,
             StringBuilder strBuilderResultFilePaySimple)
         {
-            if (strBuilderResultFileXCharge.Length > 0)
-            {
-                try
-                {
-                    string xPath = Programs.GetProgramPath(Programs.GetCur(ProgramName.Xcharge));
-                    File.WriteAllText(Storage.Default.CombinePath(Path.GetDirectoryName(xPath), "RecurringChargeResult.txt"), strBuilderResultFileXCharge.ToString());
-                }
-                catch 
-                {
-                }
-            }
-            if (strBuilderResultFilePayConnect.Length > 0)
-            {
-                string payConnectResultDir = "PayConnect";
-                string payConnectResultFile = Storage.Default.CombinePath(payConnectResultDir, "RecurringChargeResult.txt");
-                try
-                {
-                    if (Preferences.AtoZfolderUsed == DataStorageType.LocalAtoZ && !Directory.Exists(payConnectResultDir))
-                    {
-                        Directory.CreateDirectory(payConnectResultDir);
-                    }
-                    Storage.Default.WriteAllText(payConnectResultFile, strBuilderResultFilePayConnect.ToString());
-                }
-                catch 
-                {
-                }
-            }
-            if (strBuilderResultFilePaySimple.Length > 0)
-            {
-                string paySimpleResultDir = "PaySimple";
-                string paySimpleResultFile = Storage.Default.CombinePath(paySimpleResultDir, "RecurringChargeResult.txt");
-                try
-                {
-                    if (Preferences.AtoZfolderUsed == DataStorageType.LocalAtoZ && !Directory.Exists(paySimpleResultDir))
-                    {
-                        Directory.CreateDirectory(paySimpleResultDir);
-                    }
-                    Storage.Default.WriteAllText(paySimpleResultFile, strBuilderResultFilePaySimple.ToString());
-                }
-                catch
-                {
-                }
-            }
+            //if (strBuilderResultFileXCharge.Length > 0)
+            //{
+            //    try
+            //    {
+            //        string xPath = Programs.GetProgramPath(Programs.GetCur(ProgramName.Xcharge));
+            //        File.WriteAllText(Storage.Default.CombinePath(Path.GetDirectoryName(xPath), "RecurringChargeResult.txt"), strBuilderResultFileXCharge.ToString());
+            //    }
+            //    catch 
+            //    {
+            //    }
+            //}
+            //if (strBuilderResultFilePayConnect.Length > 0)
+            //{
+            //    string payConnectResultDir = "PayConnect";
+            //    string payConnectResultFile = Storage.Default.CombinePath(payConnectResultDir, "RecurringChargeResult.txt");
+            //    try
+            //    {
+            //        if (Preferences.AtoZfolderUsed == DataStorageType.LocalAtoZ && !Directory.Exists(payConnectResultDir))
+            //        {
+            //            Directory.CreateDirectory(payConnectResultDir);
+            //        }
+            //        Storage.Default.WriteAllText(payConnectResultFile, strBuilderResultFilePayConnect.ToString());
+            //    }
+            //    catch 
+            //    {
+            //    }
+            //}
+            //if (strBuilderResultFilePaySimple.Length > 0)
+            //{
+            //    string paySimpleResultDir = "PaySimple";
+            //    string paySimpleResultFile = Storage.Default.CombinePath(paySimpleResultDir, "RecurringChargeResult.txt");
+            //    try
+            //    {
+            //        if (Preferences.AtoZfolderUsed == DataStorageType.LocalAtoZ && !Directory.Exists(paySimpleResultDir))
+            //        {
+            //            Directory.CreateDirectory(paySimpleResultDir);
+            //        }
+            //        Storage.Default.WriteAllText(paySimpleResultFile, strBuilderResultFilePaySimple.ToString());
+            //    }
+            //    catch
+            //    {
+            //    }
+            //}
         }
 
         ///<summary>Charges the credit card passed in using XCharge.</summary>
@@ -369,202 +367,206 @@ namespace OpenDentBusiness
             strBuilderResultText = new StringBuilder();
             amount = 0;
             receipt = new StringBuilder();
-            long clinicNumCur = 0;
-            if (Preferences.HasClinicsEnabled)
-            {
-                //this is patient.ClinicNum or if it's a payplan row it's the ClinicNum from one of the payplancharges on the payplan
-                clinicNumCur = chargeData.RecurringCharge.ClinicNum;//If clinics were enabled but no longer are, use credentials for headquarters.
-            }
-            if (listClinicNumsBadCredentials.Contains(clinicNumCur))
-            {//username or password is blank, don't try to process
-                MarkFailed(chargeData, Lans.g(_lanThis, "The X-Charge Username or Password for the clinic has not been set."), LogLevel.Info);
-                return false;
-            }
-            string username = ProgramProperties.GetPropVal(_progCur.Id, "Username", clinicNumCur);
-            string password = ProgramProperties.GetPropVal(_progCur.Id, "Password", clinicNumCur);
-            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
-            {//clinicNumCur is not in listClinicNumsBadCredentials yet
-                string clinicAbbr = "Headquarters";
-                if (clinicNumCur > 0)
-                {
-                    clinicAbbr = Clinics.GetAbbr(clinicNumCur);
-                }
-                MarkFailed(chargeData, Lans.g(_lanThis, "The X-Charge Username or Password for the following clinic has not been set") + ":\r\n" + clinicAbbr + "\r\n"
-                    + Lans.g(_lanThis, "All charges for that clinic will be skipped."));
-                listClinicNumsBadCredentials.Add(clinicNumCur);
-                return false;
-            }
-            password = MiscUtils.Decrypt(password);
-            string resultfile = Preferences.GetRandomTempFile("txt");
-            try
-            {
-                File.Delete(resultfile);//delete the old result file.
-            }
-            catch
-            {
-                //Probably did not have permissions to delete the file.  Don't do anything, because a message will show telling them that the cards left in the grid failed.
-                //They will then go try and run the cards in the Account module and will then get a detailed message telling them what is wrong.
-                MarkFailed(chargeData, Lans.g(_lanThis, "Unable to delete result file."), LogLevel.Info);
-                return false;
-            }
-            string xPath = Programs.GetProgramPath(_progCur);
-            ProcessStartInfo info = new ProcessStartInfo(xPath);
-            info.Arguments = "";
-            double amt = chargeData.RecurringCharge.ChargeAmt;
-            DateTime exp = chargeData.CCExpiration;
-            string address = chargeData.Address;
-            string addressPat = chargeData.AddressPat;
-            string zip = chargeData.Zip;
-            string zipPat = chargeData.ZipPat;
-            long creditCardNum = chargeData.RecurringCharge.CreditCardNum;
-            info.Arguments += "/AMOUNT:" + amt.ToString("F2") + " /LOCKAMOUNT ";
-            info.Arguments += "/TRANSACTIONTYPE:PURCHASE /LOCKTRANTYPE ";
-            if (chargeData.XChargeToken != "")
-            {
-                info.Arguments += "/XCACCOUNTID:" + chargeData.XChargeToken + " ";
-                info.Arguments += "/RECURRING ";
-                info.Arguments += "/GETXCACCOUNTIDSTATUS ";
-            }
-            else
-            {
-                info.Arguments += "/ACCOUNT:" + chargeData.CCNumberMasked + " ";
-            }
-            if (exp.Year > 1880)
-            {
-                info.Arguments += "/EXP:" + exp.ToString("MMyy") + " ";
-            }
-            if (address != "")
-            {
-                info.Arguments += "\"/ADDRESS:" + address + "\" ";
-            }
-            else if (addressPat != "")
-            {
-                info.Arguments += "\"/ADDRESS:" + addressPat + "\" ";
-            }
-            //If ODHQ, do not add the zip code if the customer has an active foreign registration key
-            if (zip != "")
-            {
-                info.Arguments += "\"/ZIP:" + zip + "\" ";
-            }
-            else if (zipPat != "")
-            {
-                info.Arguments += "\"/ZIP:" + zipPat + "\" ";
-            }
-            info.Arguments += "/RECEIPT:Pat" + chargeData.RecurringCharge.PatNum + " ";//aka invoice#
-            info.Arguments += "\"/CLERK:" + Security.CurrentUser.UserName + " R\" /LOCKCLERK ";
-            info.Arguments += "/RESULTFILE:\"" + resultfile + "\" ";
-            info.Arguments += "/USERID:" + username + " ";
-            info.Arguments += "/PASSWORD:" + password + " ";
-            info.Arguments += "/HIDEMAINWINDOW ";
-            info.Arguments += "/AUTOPROCESS ";
-            info.Arguments += "/SMALLWINDOW ";
-            info.Arguments += "/AUTOCLOSE ";
-            info.Arguments += "/NORESULTDIALOG ";
-            if (forceDuplicates)
-            {
-                info.Arguments += "/ALLOWDUPLICATES ";
-            }
-            info.Arguments += "/RECEIPTINRESULT ";
-            Process process = new Process();
-            process.StartInfo = info;
-            process.EnableRaisingEvents = true;
-            process.Start();
-            while (!process.HasExited)
-            {
-                Thread.Sleep(10);
-            }
-            Thread.Sleep(200);//Wait 2/10 second to give time for file to be created.
-            bool updateCard = false;
-            string newAccount = "";
-            DateTime newExpiration = new DateTime();
-            bool isSuccess = false;
-            strBuilderResultFile.AppendLine("PatNum: " + chargeData.RecurringCharge.PatNum + " Name: " + chargeData.PatName);
-            try
-            {
-                using (TextReader reader = new StreamReader(resultfile))
-                {
-                    string line = reader.ReadLine();
-                    while (line != null)
-                    {
-                        if (!line.StartsWith("RECEIPT="))
-                        {//Don't include the receipt string in the PayNote
-                            strBuilderResultText.AppendLine(line);
-                        }
-                        if (line.StartsWith("RESULT="))
-                        {
-                            if (line == "RESULT=SUCCESS")
-                            {
-                                isSuccess = true;
-                            }
-                            else
-                            {
-                                isSuccess = false;
-                            }
-                        }
-                        else if (line == "XCACCOUNTIDUPDATED=T")
-                        {//Decline minimizer updated the account information since the last time this card was charged
-                            updateCard = true;
-                            Updated++;
-                        }
-                        else if (line.StartsWith("ACCOUNT="))
-                        {
-                            newAccount = line.Substring("ACCOUNT=".Length);
-                        }
-                        else if (line.StartsWith("EXPIRATION="))
-                        {
-                            string expStr = line.Substring("EXPIRATION=".Length);//Expiration should be MMYY
-                            newExpiration = new DateTime(PIn.Int("20" + expStr.Substring(2)), PIn.Int(expStr.Substring(0, 2)), 1);//First day of the month
-                        }
-                        else if (line.StartsWith("APPROVEDAMOUNT="))
-                        {
-                            amount = PIn.Double(line.Substring("APPROVEDAMOUNT=".Length));
-                        }
-                        else if (line.StartsWith("RECEIPT="))
-                        {
-                            receipt.Append(line.Substring("RECEIPT=".Length));
-                            receipt.Replace("\\n", "\n");//The receipts from X-Charge escape newline characters.
-                            receipt.Replace("\r", "");//remove any existing \r's before replacing \n's with \r\n's
-                            receipt.Replace("\n", "\r\n");
-                        }
-                        line = reader.ReadLine();
-                    }
-                    strBuilderResultFile.AppendLine(strBuilderResultText.ToString());
-                    strBuilderResultFile.AppendLine();
-                    if (isSuccess)
-                    {
-                        chargeData.RecurringCharge.ChargeStatus = RecurringChargeStatus.ChargeSuccessful;
-                        Success++;
-                    }
-                    else
-                    {
-                        MarkFailed(chargeData, Lans.g(_lanThis, "Result from XCharge:") + " " + strBuilderResultText.ToString(), LogLevel.Info);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MarkFailed(chargeData, Lans.g(_lanThis, "XCharge error:") + " " + ex.Message, LogLevel.Info);
-                return false;
-            }
-            //If the decline minimizer updated the card, returned a value in the ACCOUNT field, and returned a valid exp date.  Update our record.
-            if (updateCard && newAccount != "" && newExpiration.Year > 1880)
-            {
-                CreditCard creditCardCur = CreditCards.GetOne(creditCardNum);
-                //Update the payment note with the changes.
-                if (creditCardCur.CCNumberMasked != newAccount)
-                {
-                    strBuilderResultText.AppendLine(Lans.g(_lanThis, "Account number changed from") + " " + creditCardCur.CCNumberMasked + " "
-                        + Lans.g(_lanThis, "to") + " " + newAccount);
-                }
-                if (creditCardCur.CCExpiration != newExpiration)
-                {
-                    strBuilderResultText.AppendLine(Lans.g(_lanThis, "Expiration changed from") + " " + creditCardCur.CCExpiration.ToString("MMyy") + " "
-                        + Lans.g(_lanThis, "to") + " " + newExpiration.ToString("MMyy"));
-                }
-                creditCardCur.CCNumberMasked = newAccount;
-                creditCardCur.CCExpiration = newExpiration;
-                CreditCards.Update(creditCardCur);
-            }
+
+            //strBuilderResultText = new StringBuilder();
+            //amount = 0;
+            //receipt = new StringBuilder();
+            //long clinicNumCur = 0;
+            //if (Preferences.HasClinicsEnabled)
+            //{
+            //    //this is patient.ClinicNum or if it's a payplan row it's the ClinicNum from one of the payplancharges on the payplan
+            //    clinicNumCur = chargeData.RecurringCharge.ClinicNum;//If clinics were enabled but no longer are, use credentials for headquarters.
+            //}
+            //if (listClinicNumsBadCredentials.Contains(clinicNumCur))
+            //{//username or password is blank, don't try to process
+            //    MarkFailed(chargeData, "The X-Charge Username or Password for the clinic has not been set.", LogLevel.Info);
+            //    return false;
+            //}
+            //string username = ProgramProperties.GetPropVal(_progCur.Id, "Username", clinicNumCur);
+            //string password = ProgramProperties.GetPropVal(_progCur.Id, "Password", clinicNumCur);
+            //if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+            //{//clinicNumCur is not in listClinicNumsBadCredentials yet
+            //    string clinicAbbr = "Headquarters";
+            //    if (clinicNumCur > 0)
+            //    {
+            //        clinicAbbr = Clinics.GetAbbr(clinicNumCur);
+            //    }
+            //    MarkFailed(chargeData, Lans.g(_lanThis, "The X-Charge Username or Password for the following clinic has not been set") + ":\r\n" + clinicAbbr + "\r\n"
+            //        + Lans.g(_lanThis, "All charges for that clinic will be skipped."));
+            //    listClinicNumsBadCredentials.Add(clinicNumCur);
+            //    return false;
+            //}
+            //password = MiscUtils.Decrypt(password);
+            //string resultfile = Preferences.GetRandomTempFile("txt");
+            //try
+            //{
+            //    File.Delete(resultfile);//delete the old result file.
+            //}
+            //catch
+            //{
+            //    //Probably did not have permissions to delete the file.  Don't do anything, because a message will show telling them that the cards left in the grid failed.
+            //    //They will then go try and run the cards in the Account module and will then get a detailed message telling them what is wrong.
+            //    MarkFailed(chargeData, Lans.g(_lanThis, "Unable to delete result file."), LogLevel.Info);
+            //    return false;
+            //}
+            //string xPath = Programs.GetProgramPath(_progCur);
+            //ProcessStartInfo info = new ProcessStartInfo(xPath);
+            //info.Arguments = "";
+            //double amt = chargeData.RecurringCharge.ChargeAmt;
+            //DateTime exp = chargeData.CCExpiration;
+            //string address = chargeData.Address;
+            //string addressPat = chargeData.AddressPat;
+            //string zip = chargeData.Zip;
+            //string zipPat = chargeData.ZipPat;
+            //long creditCardNum = chargeData.RecurringCharge.CreditCardNum;
+            //info.Arguments += "/AMOUNT:" + amt.ToString("F2") + " /LOCKAMOUNT ";
+            //info.Arguments += "/TRANSACTIONTYPE:PURCHASE /LOCKTRANTYPE ";
+            //if (chargeData.XChargeToken != "")
+            //{
+            //    info.Arguments += "/XCACCOUNTID:" + chargeData.XChargeToken + " ";
+            //    info.Arguments += "/RECURRING ";
+            //    info.Arguments += "/GETXCACCOUNTIDSTATUS ";
+            //}
+            //else
+            //{
+            //    info.Arguments += "/ACCOUNT:" + chargeData.CCNumberMasked + " ";
+            //}
+            //if (exp.Year > 1880)
+            //{
+            //    info.Arguments += "/EXP:" + exp.ToString("MMyy") + " ";
+            //}
+            //if (address != "")
+            //{
+            //    info.Arguments += "\"/ADDRESS:" + address + "\" ";
+            //}
+            //else if (addressPat != "")
+            //{
+            //    info.Arguments += "\"/ADDRESS:" + addressPat + "\" ";
+            //}
+            ////If ODHQ, do not add the zip code if the customer has an active foreign registration key
+            //if (zip != "")
+            //{
+            //    info.Arguments += "\"/ZIP:" + zip + "\" ";
+            //}
+            //else if (zipPat != "")
+            //{
+            //    info.Arguments += "\"/ZIP:" + zipPat + "\" ";
+            //}
+            //info.Arguments += "/RECEIPT:Pat" + chargeData.RecurringCharge.PatNum + " ";//aka invoice#
+            //info.Arguments += "\"/CLERK:" + Security.CurrentUser.UserName + " R\" /LOCKCLERK ";
+            //info.Arguments += "/RESULTFILE:\"" + resultfile + "\" ";
+            //info.Arguments += "/USERID:" + username + " ";
+            //info.Arguments += "/PASSWORD:" + password + " ";
+            //info.Arguments += "/HIDEMAINWINDOW ";
+            //info.Arguments += "/AUTOPROCESS ";
+            //info.Arguments += "/SMALLWINDOW ";
+            //info.Arguments += "/AUTOCLOSE ";
+            //info.Arguments += "/NORESULTDIALOG ";
+            //if (forceDuplicates)
+            //{
+            //    info.Arguments += "/ALLOWDUPLICATES ";
+            //}
+            //info.Arguments += "/RECEIPTINRESULT ";
+            //Process process = new Process();
+            //process.StartInfo = info;
+            //process.EnableRaisingEvents = true;
+            //process.Start();
+            //while (!process.HasExited)
+            //{
+            //    Thread.Sleep(10);
+            //}
+            //Thread.Sleep(200);//Wait 2/10 second to give time for file to be created.
+            //bool updateCard = false;
+            //string newAccount = "";
+            //DateTime newExpiration = new DateTime();
+            //bool isSuccess = false;
+            //strBuilderResultFile.AppendLine("PatNum: " + chargeData.RecurringCharge.PatNum + " Name: " + chargeData.PatName);
+            //try
+            //{
+            //    using (TextReader reader = new StreamReader(resultfile))
+            //    {
+            //        string line = reader.ReadLine();
+            //        while (line != null)
+            //        {
+            //            if (!line.StartsWith("RECEIPT="))
+            //            {//Don't include the receipt string in the PayNote
+            //                strBuilderResultText.AppendLine(line);
+            //            }
+            //            if (line.StartsWith("RESULT="))
+            //            {
+            //                if (line == "RESULT=SUCCESS")
+            //                {
+            //                    isSuccess = true;
+            //                }
+            //                else
+            //                {
+            //                    isSuccess = false;
+            //                }
+            //            }
+            //            else if (line == "XCACCOUNTIDUPDATED=T")
+            //            {//Decline minimizer updated the account information since the last time this card was charged
+            //                updateCard = true;
+            //                Updated++;
+            //            }
+            //            else if (line.StartsWith("ACCOUNT="))
+            //            {
+            //                newAccount = line.Substring("ACCOUNT=".Length);
+            //            }
+            //            else if (line.StartsWith("EXPIRATION="))
+            //            {
+            //                string expStr = line.Substring("EXPIRATION=".Length);//Expiration should be MMYY
+            //                newExpiration = new DateTime(PIn.Int("20" + expStr.Substring(2)), PIn.Int(expStr.Substring(0, 2)), 1);//First day of the month
+            //            }
+            //            else if (line.StartsWith("APPROVEDAMOUNT="))
+            //            {
+            //                amount = PIn.Double(line.Substring("APPROVEDAMOUNT=".Length));
+            //            }
+            //            else if (line.StartsWith("RECEIPT="))
+            //            {
+            //                receipt.Append(line.Substring("RECEIPT=".Length));
+            //                receipt.Replace("\\n", "\n");//The receipts from X-Charge escape newline characters.
+            //                receipt.Replace("\r", "");//remove any existing \r's before replacing \n's with \r\n's
+            //                receipt.Replace("\n", "\r\n");
+            //            }
+            //            line = reader.ReadLine();
+            //        }
+            //        strBuilderResultFile.AppendLine(strBuilderResultText.ToString());
+            //        strBuilderResultFile.AppendLine();
+            //        if (isSuccess)
+            //        {
+            //            chargeData.RecurringCharge.ChargeStatus = RecurringChargeStatus.ChargeSuccessful;
+            //            Success++;
+            //        }
+            //        else
+            //        {
+            //            MarkFailed(chargeData, Lans.g(_lanThis, "Result from XCharge:") + " " + strBuilderResultText.ToString(), LogLevel.Info);
+            //        }
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    MarkFailed(chargeData, Lans.g(_lanThis, "XCharge error:") + " " + ex.Message, LogLevel.Info);
+            //    return false;
+            //}
+            ////If the decline minimizer updated the card, returned a value in the ACCOUNT field, and returned a valid exp date.  Update our record.
+            //if (updateCard && newAccount != "" && newExpiration.Year > 1880)
+            //{
+            //    CreditCard creditCardCur = CreditCards.GetOne(creditCardNum);
+            //    //Update the payment note with the changes.
+            //    if (creditCardCur.CCNumberMasked != newAccount)
+            //    {
+            //        strBuilderResultText.AppendLine(Lans.g(_lanThis, "Account number changed from") + " " + creditCardCur.CCNumberMasked + " "
+            //            + Lans.g(_lanThis, "to") + " " + newAccount);
+            //    }
+            //    if (creditCardCur.CCExpiration != newExpiration)
+            //    {
+            //        strBuilderResultText.AppendLine(Lans.g(_lanThis, "Expiration changed from") + " " + creditCardCur.CCExpiration.ToString("MMyy") + " "
+            //            + Lans.g(_lanThis, "to") + " " + newExpiration.ToString("MMyy"));
+            //    }
+            //    creditCardCur.CCNumberMasked = newAccount;
+            //    creditCardCur.CCExpiration = newExpiration;
+            //    CreditCards.Update(creditCardCur);
+            //}
             return true;
         }
 
@@ -679,128 +681,128 @@ namespace OpenDentBusiness
         ///selected index of the gridMain row this payment is for.</summary>
         protected void CreatePayment(Patient patCur, RecurringChargeData recCharge, string note, double amount, string receipt, CreditCardSource ccSource)
         {
-            Payment paymentCur = new Payment();
-            paymentCur.DateEntry = _nowDateTime.Date;
-            paymentCur.PayDate = GetPayDate(recCharge);
-            paymentCur.RecurringChargeDate = recCharge.RecurringChargeDate;
-            paymentCur.PatNum = patCur.PatNum;
-            //Explicitly set ClinicNum=0, since a pat's ClinicNum will remain set if the user enabled clinics, assigned patients to clinics, and then
-            //disabled clinics because we use the ClinicNum to determine which PayConnect or XCharge/XWeb credentials to use for payments.
-            paymentCur.ClinicNum = 0;
-            if (Preferences.HasClinicsEnabled)
-            {
-                paymentCur.ClinicNum = recCharge.RecurringCharge.ClinicNum;
-            }
-            //ClinicNum can be 0 for 'Headquarters' or clinics not enabled, PayType will be account module pref if set OR the 0 clinic or headquarters 
-            //PayType if using PayConnect
-            string ppPayTypeDesc = "PaymentType";
-            //if (ccSource == CreditCardSource.PaySimple)
+            //Payment paymentCur = new Payment();
+            //paymentCur.DateEntry = _nowDateTime.Date;
+            //paymentCur.PayDate = GetPayDate(recCharge);
+            //paymentCur.RecurringChargeDate = recCharge.RecurringChargeDate;
+            //paymentCur.PatNum = patCur.PatNum;
+            ////Explicitly set ClinicNum=0, since a pat's ClinicNum will remain set if the user enabled clinics, assigned patients to clinics, and then
+            ////disabled clinics because we use the ClinicNum to determine which PayConnect or XCharge/XWeb credentials to use for payments.
+            //paymentCur.ClinicNum = 0;
+            //if (Preferences.HasClinicsEnabled)
             //{
-            //    ppPayTypeDesc = PaySimple.PropertyDescs.PaySimplePayTypeCC;
+            //    paymentCur.ClinicNum = recCharge.RecurringCharge.ClinicNum;
             //}
-            //else if (ccSource == CreditCardSource.PaySimpleACH)
+            ////ClinicNum can be 0 for 'Headquarters' or clinics not enabled, PayType will be account module pref if set OR the 0 clinic or headquarters 
+            ////PayType if using PayConnect
+            //string ppPayTypeDesc = "PaymentType";
+            ////if (ccSource == CreditCardSource.PaySimple)
+            ////{
+            ////    ppPayTypeDesc = PaySimple.PropertyDescs.PaySimplePayTypeCC;
+            ////}
+            ////else if (ccSource == CreditCardSource.PaySimpleACH)
+            ////{
+            ////    ppPayTypeDesc = PaySimple.PropertyDescs.PaySimplePayTypeACH;
+            ////}
+            //if (ccSource != CreditCardSource.PaySimpleACH)
             //{
-            //    ppPayTypeDesc = PaySimple.PropertyDescs.PaySimplePayTypeACH;
+            //    paymentCur.PayType = Preference.GetLong(PreferenceName.RecurringChargesPayTypeCC);
             //}
-            if (ccSource != CreditCardSource.PaySimpleACH)
-            {
-                paymentCur.PayType = Preference.GetLong(PreferenceName.RecurringChargesPayTypeCC);
-            }
-            if (paymentCur.PayType == 0)
-            {//Pref default not set or this is ACH
-                paymentCur.PayType = PIn.Int(ProgramProperties.GetPropVal(_progCur.Id, ppPayTypeDesc, paymentCur.ClinicNum));
-            }
-            paymentCur.PayAmt = amount;
-            double payPlanDue = recCharge.RecurringCharge.PayPlanDue;
-            paymentCur.PayNote = note;
-            paymentCur.IsRecurringCC = true;
-            paymentCur.PaymentSource = ccSource;
-            paymentCur.Receipt = receipt;
-            Payments.Insert(paymentCur);
-            SecurityLog.Write(paymentCur.PatNum, SecurityLogEvents.PaymentCreate, patCur.GetNameLF() + ", "
-                + paymentCur.PayAmt.ToString("c") + ", " + Lans.g(_lanThis, "created from the Recurring Charges List"));
-            recCharge.RecurringCharge.PayNum = paymentCur.PayNum;
-            long provNumPayPlan = recCharge.ProvNum;//for payment plans only
-                                                    //Regular payments need to apply to the provider that the family owes the most money to.
-                                                    //Also get provNum for provider owed the most if the card is for a payplan and for other repeating charges and they will be charged for both
-                                                    //the payplan and regular repeating charges
-            long provNumRegPmts = 0;
-            if (provNumPayPlan == 0 || paymentCur.PayAmt - payPlanDue > 0)
-            {//provNum==0 for cards not attached to a payplan.
-                DataTable dt = Patients.GetPaymentStartingBalances(patCur.Guarantor, paymentCur.PayNum);
-                double highestAmt = 0;
-                for (int j = 0; j < dt.Rows.Count; j++)
-                {
-                    double afterIns = PIn.Double(dt.Rows[j]["AfterIns"].ToString());
-                    if (highestAmt >= afterIns)
-                    {
-                        continue;
-                    }
-                    highestAmt = afterIns;
-                    if (Preference.GetBool(PreferenceName.RecurringChargesUsePriProv))
-                    {
-                        provNumRegPmts = patCur.PriProv;
-                    }
-                    else
-                    {
-                        provNumRegPmts = PIn.Long(dt.Rows[j]["ProvNum"].ToString());
-                    }
-                }
-            }
-            long splitPatNum = paymentCur.PatNum;
-            long patNumPayPlan = recCharge.PayPlanPatNum;//for payment plans only
-            if (patNumPayPlan != 0)
-            {//Add the payplan's patnum to the paysplit. 
-                splitPatNum = patNumPayPlan;
-            }
-            PaySplit split = new PaySplit();
-            split.PatNum = splitPatNum;
-            split.ClinicNum = paymentCur.ClinicNum;
-            split.PayNum = paymentCur.PayNum;
-            split.DatePay = paymentCur.PayDate;
-            split.PayPlanNum = recCharge.PayPlanNum;
-            if (split.PayPlanNum == 0 || payPlanDue <= 0)
-            {//this row is not for a payplan or there is no payplandue
-                split.PayPlanNum = 0;//if the payplan does not have any amount due, don't attach split to payplan
-                split.SplitAmt = paymentCur.PayAmt;
-                paymentCur.PayAmt -= split.SplitAmt;
-                split.ProvNum = provNumRegPmts;
-                split.ClinicNum = patCur.ClinicNum;
-            }
-            else
-            {//row includes a payplan amount due, could also include a regular repeating pay amount as part of the total charge amount
-                split.SplitAmt = Math.Min(payPlanDue, paymentCur.PayAmt);//ensures a split is not more than the actual payment amount
-                paymentCur.PayAmt -= split.SplitAmt;//subtract the payplan pay amount from the total payment amount and create another split not attached to payplan
-                split.ProvNum = provNumPayPlan;
-            }
-            PaySplits.Insert(split);
-            //if the above split was for a payment plan and there is still some PayAmt left, insert another split not attached to the payplan
-            if (paymentCur.PayAmt > 0)
-            {
-                split = new PaySplit();
-                split.PatNum = paymentCur.PatNum;
-                split.ClinicNum = patCur.ClinicNum;
-                split.PayNum = paymentCur.PayNum;
-                split.DatePay = paymentCur.PayDate;
-                split.ProvNum = provNumRegPmts;
-                split.SplitAmt = paymentCur.PayAmt;
-                split.PayPlanNum = 0;
-                PaySplits.Insert(split);
-            }
-            //consider moving the aging calls up in the Send methods and building a list of actions to feed into RunParallel to thread them.
-            if (Preference.GetBool(PreferenceName.AgingCalculatedMonthlyInsteadOfDaily))
-            {
-                Ledgers.ComputeAging(patCur.Guarantor, Preference.GetDate(PreferenceName.DateLastAging));
-            }
-            else
-            {
-                Ledgers.ComputeAging(patCur.Guarantor, _nowDateTime.Date);
-                if (Preference.GetDate(PreferenceName.DateLastAging) != _nowDateTime.Date)
-                {
-                    Preference.Update(PreferenceName.DateLastAging, _nowDateTime.Date);
-                    //Since this is always called from UI, the above line works fine to keep the prefs cache current.
-                }
-            }
+            //if (paymentCur.PayType == 0)
+            //{//Pref default not set or this is ACH
+            //    paymentCur.PayType = PIn.Int(ProgramProperties.GetPropVal(_progCur.Id, ppPayTypeDesc, paymentCur.ClinicNum));
+            //}
+            //paymentCur.PayAmt = amount;
+            //double payPlanDue = recCharge.RecurringCharge.PayPlanDue;
+            //paymentCur.PayNote = note;
+            //paymentCur.IsRecurringCC = true;
+            //paymentCur.PaymentSource = ccSource;
+            //paymentCur.Receipt = receipt;
+            //Payments.Insert(paymentCur);
+            //SecurityLog.Write(paymentCur.PatNum, SecurityLogEvents.PaymentCreate, patCur.GetNameLF() + ", "
+            //    + paymentCur.PayAmt.ToString("c") + ", " + Lans.g(_lanThis, "created from the Recurring Charges List"));
+            //recCharge.RecurringCharge.PayNum = paymentCur.PayNum;
+            //long provNumPayPlan = recCharge.ProvNum;//for payment plans only
+            //                                        //Regular payments need to apply to the provider that the family owes the most money to.
+            //                                        //Also get provNum for provider owed the most if the card is for a payplan and for other repeating charges and they will be charged for both
+            //                                        //the payplan and regular repeating charges
+            //long provNumRegPmts = 0;
+            //if (provNumPayPlan == 0 || paymentCur.PayAmt - payPlanDue > 0)
+            //{//provNum==0 for cards not attached to a payplan.
+            //    DataTable dt = Patients.GetPaymentStartingBalances(patCur.Guarantor, paymentCur.PayNum);
+            //    double highestAmt = 0;
+            //    for (int j = 0; j < dt.Rows.Count; j++)
+            //    {
+            //        double afterIns = PIn.Double(dt.Rows[j]["AfterIns"].ToString());
+            //        if (highestAmt >= afterIns)
+            //        {
+            //            continue;
+            //        }
+            //        highestAmt = afterIns;
+            //        if (Preference.GetBool(PreferenceName.RecurringChargesUsePriProv))
+            //        {
+            //            provNumRegPmts = patCur.PriProv;
+            //        }
+            //        else
+            //        {
+            //            provNumRegPmts = PIn.Long(dt.Rows[j]["ProvNum"].ToString());
+            //        }
+            //    }
+            //}
+            //long splitPatNum = paymentCur.PatNum;
+            //long patNumPayPlan = recCharge.PayPlanPatNum;//for payment plans only
+            //if (patNumPayPlan != 0)
+            //{//Add the payplan's patnum to the paysplit. 
+            //    splitPatNum = patNumPayPlan;
+            //}
+            //PaySplit split = new PaySplit();
+            //split.PatNum = splitPatNum;
+            //split.ClinicNum = paymentCur.ClinicNum;
+            //split.PayNum = paymentCur.PayNum;
+            //split.DatePay = paymentCur.PayDate;
+            //split.PayPlanNum = recCharge.PayPlanNum;
+            //if (split.PayPlanNum == 0 || payPlanDue <= 0)
+            //{//this row is not for a payplan or there is no payplandue
+            //    split.PayPlanNum = 0;//if the payplan does not have any amount due, don't attach split to payplan
+            //    split.SplitAmt = paymentCur.PayAmt;
+            //    paymentCur.PayAmt -= split.SplitAmt;
+            //    split.ProvNum = provNumRegPmts;
+            //    split.ClinicNum = patCur.ClinicNum;
+            //}
+            //else
+            //{//row includes a payplan amount due, could also include a regular repeating pay amount as part of the total charge amount
+            //    split.SplitAmt = Math.Min(payPlanDue, paymentCur.PayAmt);//ensures a split is not more than the actual payment amount
+            //    paymentCur.PayAmt -= split.SplitAmt;//subtract the payplan pay amount from the total payment amount and create another split not attached to payplan
+            //    split.ProvNum = provNumPayPlan;
+            //}
+            //PaySplits.Insert(split);
+            ////if the above split was for a payment plan and there is still some PayAmt left, insert another split not attached to the payplan
+            //if (paymentCur.PayAmt > 0)
+            //{
+            //    split = new PaySplit();
+            //    split.PatNum = paymentCur.PatNum;
+            //    split.ClinicNum = patCur.ClinicNum;
+            //    split.PayNum = paymentCur.PayNum;
+            //    split.DatePay = paymentCur.PayDate;
+            //    split.ProvNum = provNumRegPmts;
+            //    split.SplitAmt = paymentCur.PayAmt;
+            //    split.PayPlanNum = 0;
+            //    PaySplits.Insert(split);
+            //}
+            ////consider moving the aging calls up in the Send methods and building a list of actions to feed into RunParallel to thread them.
+            //if (Preference.GetBool(PreferenceName.AgingCalculatedMonthlyInsteadOfDaily))
+            //{
+            //    Ledgers.ComputeAging(patCur.Guarantor, Preference.GetDate(PreferenceName.DateLastAging));
+            //}
+            //else
+            //{
+            //    Ledgers.ComputeAging(patCur.Guarantor, _nowDateTime.Date);
+            //    if (Preference.GetDate(PreferenceName.DateLastAging) != _nowDateTime.Date)
+            //    {
+            //        Preference.Update(PreferenceName.DateLastAging, _nowDateTime.Date);
+            //        //Since this is always called from UI, the above line works fine to keep the prefs cache current.
+            //    }
+            //}
         }
 
         ///<summary>Returns a valid DateTime for the payment's PayDate.  Contains logic if payment should be for the previous or the current month.</summary>

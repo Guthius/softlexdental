@@ -126,9 +126,7 @@ namespace OpenDentBusiness
                 return false;
             }
 
-            var programPropertyList = ProgramProperties.GetForProgram(program.Id);
-
-            return programPropertyList.Any(x => x.Key == "IsOnlinePaymentsEnabled" && x.Value == "1");
+            return ProgramPreference.GetBool(program.Id, "IsOnlinePaymentsEnabled");
         }
 
         /// <summary>

@@ -6,6 +6,7 @@ namespace OpenDentBusiness
     /// This enum is stored in the database as strings rather than as numbers, so we can do the 
     /// order alphabetically and we can change it whenever we want.
     /// </summary>
+    [Obsolete]
     public enum ProgramName
     {
         None,

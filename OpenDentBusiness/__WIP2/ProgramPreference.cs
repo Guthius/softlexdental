@@ -124,6 +124,28 @@ namespace OpenDentBusiness
         }
 
         /// <summary>
+        /// Gets the preference with the specified key for the program with the specified ID from
+        /// the database.
+        /// </summary>
+        /// <param name="programId">The ID of the program</param>
+        /// <param name="preferenceKey">The preference key.</param>
+        /// <param name="defaultValue">The default value of the preference.</param>
+        /// <returns>
+        ///     The value of the preference if one has been set; otherwise the default value.
+        /// </returns>
+        public static DateTime GetDateTime(long programId, string preferenceKey, DateTime defaultValue = default)
+        {
+            // TODO: Should return a nullable datetime...
+
+            if (DateTime.TryParse(GetString(programId, preferenceKey), out var result))
+            {
+                return result;
+            }
+
+            return defaultValue;
+        }
+
+        /// <summary>
         /// Sets the value of the preference with the specified key for the specified program.
         /// </summary>
         /// <param name="programId">The ID of the program.</param>
