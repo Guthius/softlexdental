@@ -3040,14 +3040,14 @@ namespace OpenDental{
 				return;
 			}
 			//Check for duplicate procedures on the appointment before sending the DFT to eCW.
-			if(Programs.UsingEcwTightOrFullMode() && Bridges.ECW.AptNum!=0) {
-				List<Procedure> procs=Procedures.GetProcsForSingle(Bridges.ECW.AptNum,false);
-				string duplicateProcs=ProcedureL.ProcsContainDuplicates(procs);
-				if(duplicateProcs!="") {
-					MessageBox.Show(duplicateProcs);
-					return;
-				}
-			}
+			//if(Programs.UsingEcwTightOrFullMode() && Bridges.ECW.AptNum!=0) {
+			//	List<Procedure> procs=Procedures.GetProcsForSingle(Bridges.ECW.AptNum,false);
+			//	string duplicateProcs=ProcedureL.ProcsContainDuplicates(procs);
+			//	if(duplicateProcs!="") {
+			//		MessageBox.Show(duplicateProcs);
+			//		return;
+			//	}
+			//}
 			if(gridMain.SelectedIndices.Length==0){
 				gridMain.SetSelected(true);//Select all if none selected.
 			}

@@ -2,30 +2,21 @@
 Open Dental GPL license Copyright (C) 2003  Jordan Sparks, DMD.  http://www.open-dent.com,  www.docsparks.com
 See header in FormOpenDental.cs for complete text.  Redistributions must retain this text.
 ===============================================================================================================*/
-using System;
-using System.Data;
-using System.Diagnostics;
-using System.Drawing;
-using System.Drawing.Printing;
-using System.IO;
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Globalization;
-using System.Windows.Forms;
+using CodeBase;
 using OpenDental.UI;
 using OpenDentBusiness;
-using OpenDental.DivvyConnect;
-using System.Net;
-using System.Xml;
-using System.Text;
-using CodeBase;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Drawing;
+using System.Drawing.Printing;
 using System.Linq;
-using System.Threading;
+using System.Windows.Forms;
 
-namespace OpenDental{
-///<summary></summary>
-	public partial class FormRecallList:ODForm {
+namespace OpenDental
+{
+    ///<summary></summary>
+    public partial class FormRecallList:ODForm {
 		private int pagesPrinted;
 		private DataTable addrTable;
 		private int patientsPrinted;
@@ -701,159 +692,159 @@ namespace OpenDental{
 		}
 
 		private void butECards_Click(object sender,EventArgs e) {
-			if(!Programs.IsEnabled(ProgramName.Divvy)) {
-				if(MsgBox.Show(this,MsgBoxButtons.OKCancel,"The Divvy Program Link is not enabled. Would you like to enable it now?")) {
-					FormProgramLinkEdit FormPE=new FormProgramLinkEdit();
-					FormPE.ProgramCur=Programs.GetCur(ProgramName.Divvy);
-					FormPE.ShowDialog();
-					DataValid.SetInvalid(InvalidType.Programs);
-				}
-				if(!Programs.IsEnabled(ProgramName.Divvy)) {
-					return;
-				}
-			}
-			if(gridMain.Rows.Count < 1) {
-				MessageBox.Show(Lan.g(this,"There are no Patients in the Recall table.  Must have at least one to send."));
-				return;
-			}
-			if(Preference.GetLong(PreferenceName.RecallStatusMailed)==0) {
-				MsgBox.Show(this,"You need to set a status first in the Recall Setup window.");
-				return;
-			}
-			if(gridMain.SelectedIndices.Length==0) {
-				ContactMethod cmeth;
-				for(int i=0;i<_tableRecalls.Rows.Count;i++) {
-					cmeth=(ContactMethod)PIn.Long(_tableRecalls.Rows[i]["PreferRecallMethod"].ToString());
-					if(cmeth!=ContactMethod.Mail && cmeth!=ContactMethod.None) {
-						continue;
-					}
-					gridMain.SetSelected(i,true);
-				}
-				if(gridMain.SelectedIndices.Length==0) {
-					MsgBox.Show(this,"No patients of mail type.");
-					return;
-				}
-			}
-			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Send postcards for all of the selected patients?")) {
-				return;
-			}
-			RecallListSort sortBy=(RecallListSort)comboSort.SelectedIndex;
-			List<long> recallNums=new List<long>();
-			for(int i=0;i<gridMain.SelectedIndices.Length;i++) {
-				recallNums.Add(PIn.Long(_tableRecalls.Rows[gridMain.SelectedIndices[i]]["RecallNum"].ToString()));
-			}
-			addrTable=Recalls.GetAddrTable(recallNums,checkGroupFamilies.Checked,sortBy);
-			DivvyConnect.Postcard postcard;
-			DivvyConnect.Recipient recipient;
-			DivvyConnect.Postcard[] listPostcards=new DivvyConnect.Postcard[gridMain.SelectedIndices.Length];
-			string message;
-			long clinicNum;
-			Clinic clinic;
-			string phone;
-			for(int i=0;i<addrTable.Rows.Count;i++) {
-				postcard=new DivvyConnect.Postcard();
-				recipient=new DivvyConnect.Recipient();
-				recipient.Name=addrTable.Rows[i]["patientNameFL"].ToString();
-				recipient.ExternalRecipientID=addrTable.Rows[i]["patNums"].ToString();
-				recipient.Address1=addrTable.Rows[i]["Address"].ToString();//Includes Address2
-				recipient.City=addrTable.Rows[i]["City"].ToString();
-				recipient.State=addrTable.Rows[i]["State"].ToString();
-				recipient.Zip=addrTable.Rows[i]["Zip"].ToString();
-				postcard.AppointmentDateTime=PIn.Date(addrTable.Rows[i]["dateDue"].ToString());//js I don't know why they would ask for this.  We put this in our message.
-				//Body text, family card ------------------------------------------------------------------
-				if(checkGroupFamilies.Checked	&& addrTable.Rows[i]["famList"].ToString()!=""){
-					if(addrTable.Rows[i]["numberOfReminders"].ToString()=="0") {
-						message=Preference.GetString(PreferenceName.RecallPostcardFamMsg);
-					}
-					else if(addrTable.Rows[i]["numberOfReminders"].ToString()=="1") {
-						message=Preference.GetString(PreferenceName.RecallPostcardFamMsg2);
-					}
-					else {
-						message=Preference.GetString(PreferenceName.RecallPostcardFamMsg3);
-					}
-					message=message.Replace("[FamilyList]",addrTable.Rows[i]["famList"].ToString());
-				}
-				//Body text, single card-------------------------------------------------------------------
-				else{
-					if(addrTable.Rows[i]["numberOfReminders"].ToString()=="0") {
-						message=Preference.GetString(PreferenceName.RecallPostcardMessage);
-					}
-					else if(addrTable.Rows[i]["numberOfReminders"].ToString()=="1") {
-						message=Preference.GetString(PreferenceName.RecallPostcardMessage2);
-					}
-					else {
-						message=Preference.GetString(PreferenceName.RecallPostcardMessage3);
-					}
-					message=message.Replace("[DueDate]",addrTable.Rows[i]["dateDue"].ToString());
-					message=message.Replace("[NameF]",addrTable.Rows[i]["patientNameF"].ToString());
-					message=message.Replace("[NameFL]", addrTable.Rows[i]["patientNameFL"].ToString());
-				}
-				Clinic clinicCur=Clinics.GetClinicForRecall(PIn.Long(addrTable.Rows[i]["recallNums"].ToString().Split(',').FirstOrDefault()));
-				message=message.Replace("[ClinicName]",clinicCur.Abbr);
-				message=message.Replace("[ClinicPhone]",clinicCur.Phone);
-				message=message.Replace("[PracticeName]",Preference.GetString(PreferenceName.PracticeTitle));
-				message=message.Replace("[PracticePhone]",Preference.GetString(PreferenceName.PracticePhone));
-				string officePhone=clinicCur.Phone;
-				if(string.IsNullOrEmpty(officePhone)) {
-					officePhone=Preference.GetString(PreferenceName.PracticePhone);
-				}
-				message=message.Replace("[OfficePhone]",clinicCur.Phone);
-				postcard.Message=message;
-				postcard.Recipient=recipient;
-				postcard.DesignID=PIn.Int(ProgramProperties.GetPropVal(ProgramName.Divvy,"DesignID for Recall Cards"));
-				listPostcards[i]=postcard;
-			}
-			DivvyConnect.Practice practice=new DivvyConnect.Practice();
-			clinicNum=PIn.Long(addrTable.Rows[patientsPrinted]["ClinicNum"].ToString());
-			if(Preferences.HasClinicsEnabled && Clinics.GetCount() > 0 //if using clinics
-				&& Clinics.GetClinic(clinicNum)!=null)//and this patient assigned to a clinic
-			{
-				clinic=Clinics.GetClinic(clinicNum);
-				practice.Company=clinic.Description;
-				practice.Address1=clinic.Address;
-				practice.Address2=clinic.Address2;
-				practice.City=clinic.City;
-				practice.State=clinic.State;
-				practice.Zip=clinic.Zip;
-				phone=clinic.Phone;
-			}
-			else {
-				practice.Company=Preference.GetString(PreferenceName.PracticeTitle);
-				practice.Address1=Preference.GetString(PreferenceName.PracticeAddress);
-				practice.Address2=Preference.GetString(PreferenceName.PracticeAddress2);
-				practice.City=Preference.GetString(PreferenceName.PracticeCity);
-				practice.State=Preference.GetString(PreferenceName.PracticeST);
-				practice.Zip=Preference.GetString(PreferenceName.PracticeZip);
-				phone=Preference.GetString(PreferenceName.PracticePhone);
-			}
-			practice.Phone=TelephoneNumbers.ReFormat(phone);
-			DivvyConnect.PostcardServiceClient client=new DivvyConnect.PostcardServiceClient();
-			DivvyConnect.PostcardReturnMessage returnMessage=new DivvyConnect.PostcardReturnMessage();
-			string messages="";
-			Cursor=Cursors.WaitCursor;
-			try {
-				returnMessage=client.SendPostcards(
-				  Guid.Parse(ProgramProperties.GetPropVal(ProgramName.Divvy,"API Key")),
-				  ProgramProperties.GetPropVal(ProgramName.Divvy,"Username"),
-				  ProgramProperties.GetPropVal(ProgramName.Divvy,"Password"),
-				  listPostcards,practice);
-			}
-			catch (Exception ex) {
-				messages+="Exception: "+ex.Message+"\r\nData: "+ex.Data+"\r\n";
-			}
-			messages+="MessageCode: "+returnMessage.MessageCode.ToString();//MessageCode enum. 0=CompletedSuccessfully, 1=CompletedWithErrors, 2=Failure
-			MsgBox.Show(this,"Return Messages: "+returnMessage.Message+"\r\n"+messages);
-			if(returnMessage.MessageCode==DivvyConnect.MessageCode.CompletedSucessfully) {
-				Cursor=Cursors.WaitCursor;
-				ProcessComms((IsRecallGridSelected()?CommItemTypeAuto.RECALL:CommItemTypeAuto.REACT),CommItemMode.Mail);
-			}
-			else if(returnMessage.MessageCode==DivvyConnect.MessageCode.CompletedWithErrors) {
-				for(int i=0;i<returnMessage.PostcardMessages.Length;i++) {
-					//todo: process return messages. Update commlog and change recall statuses for postcards that were sent.
-				}
-			}
-			FillMain();
-			Cursor=Cursors.Default;
+			//if(!Programs.IsEnabled(ProgramName.Divvy)) {
+			//	if(MsgBox.Show(this,MsgBoxButtons.OKCancel,"The Divvy Program Link is not enabled. Would you like to enable it now?")) {
+			//		FormProgramLinkEdit FormPE=new FormProgramLinkEdit();
+			//		FormPE.ProgramCur=Programs.GetCur(ProgramName.Divvy);
+			//		FormPE.ShowDialog();
+			//		DataValid.SetInvalid(InvalidType.Programs);
+			//	}
+			//	if(!Programs.IsEnabled(ProgramName.Divvy)) {
+			//		return;
+			//	}
+			//}
+			//if(gridMain.Rows.Count < 1) {
+			//	MessageBox.Show(Lan.g(this,"There are no Patients in the Recall table.  Must have at least one to send."));
+			//	return;
+			//}
+			//if(Preference.GetLong(PreferenceName.RecallStatusMailed)==0) {
+			//	MsgBox.Show(this,"You need to set a status first in the Recall Setup window.");
+			//	return;
+			//}
+			//if(gridMain.SelectedIndices.Length==0) {
+			//	ContactMethod cmeth;
+			//	for(int i=0;i<_tableRecalls.Rows.Count;i++) {
+			//		cmeth=(ContactMethod)PIn.Long(_tableRecalls.Rows[i]["PreferRecallMethod"].ToString());
+			//		if(cmeth!=ContactMethod.Mail && cmeth!=ContactMethod.None) {
+			//			continue;
+			//		}
+			//		gridMain.SetSelected(i,true);
+			//	}
+			//	if(gridMain.SelectedIndices.Length==0) {
+			//		MsgBox.Show(this,"No patients of mail type.");
+			//		return;
+			//	}
+			//}
+			//if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Send postcards for all of the selected patients?")) {
+			//	return;
+			//}
+			//RecallListSort sortBy=(RecallListSort)comboSort.SelectedIndex;
+			//List<long> recallNums=new List<long>();
+			//for(int i=0;i<gridMain.SelectedIndices.Length;i++) {
+			//	recallNums.Add(PIn.Long(_tableRecalls.Rows[gridMain.SelectedIndices[i]]["RecallNum"].ToString()));
+			//}
+			//addrTable=Recalls.GetAddrTable(recallNums,checkGroupFamilies.Checked,sortBy);
+			//DivvyConnect.Postcard postcard;
+			//DivvyConnect.Recipient recipient;
+			//DivvyConnect.Postcard[] listPostcards=new DivvyConnect.Postcard[gridMain.SelectedIndices.Length];
+			//string message;
+			//long clinicNum;
+			//Clinic clinic;
+			//string phone;
+			//for(int i=0;i<addrTable.Rows.Count;i++) {
+			//	postcard=new DivvyConnect.Postcard();
+			//	recipient=new DivvyConnect.Recipient();
+			//	recipient.Name=addrTable.Rows[i]["patientNameFL"].ToString();
+			//	recipient.ExternalRecipientID=addrTable.Rows[i]["patNums"].ToString();
+			//	recipient.Address1=addrTable.Rows[i]["Address"].ToString();//Includes Address2
+			//	recipient.City=addrTable.Rows[i]["City"].ToString();
+			//	recipient.State=addrTable.Rows[i]["State"].ToString();
+			//	recipient.Zip=addrTable.Rows[i]["Zip"].ToString();
+			//	postcard.AppointmentDateTime=PIn.Date(addrTable.Rows[i]["dateDue"].ToString());//js I don't know why they would ask for this.  We put this in our message.
+			//	//Body text, family card ------------------------------------------------------------------
+			//	if(checkGroupFamilies.Checked	&& addrTable.Rows[i]["famList"].ToString()!=""){
+			//		if(addrTable.Rows[i]["numberOfReminders"].ToString()=="0") {
+			//			message=Preference.GetString(PreferenceName.RecallPostcardFamMsg);
+			//		}
+			//		else if(addrTable.Rows[i]["numberOfReminders"].ToString()=="1") {
+			//			message=Preference.GetString(PreferenceName.RecallPostcardFamMsg2);
+			//		}
+			//		else {
+			//			message=Preference.GetString(PreferenceName.RecallPostcardFamMsg3);
+			//		}
+			//		message=message.Replace("[FamilyList]",addrTable.Rows[i]["famList"].ToString());
+			//	}
+			//	//Body text, single card-------------------------------------------------------------------
+			//	else{
+			//		if(addrTable.Rows[i]["numberOfReminders"].ToString()=="0") {
+			//			message=Preference.GetString(PreferenceName.RecallPostcardMessage);
+			//		}
+			//		else if(addrTable.Rows[i]["numberOfReminders"].ToString()=="1") {
+			//			message=Preference.GetString(PreferenceName.RecallPostcardMessage2);
+			//		}
+			//		else {
+			//			message=Preference.GetString(PreferenceName.RecallPostcardMessage3);
+			//		}
+			//		message=message.Replace("[DueDate]",addrTable.Rows[i]["dateDue"].ToString());
+			//		message=message.Replace("[NameF]",addrTable.Rows[i]["patientNameF"].ToString());
+			//		message=message.Replace("[NameFL]", addrTable.Rows[i]["patientNameFL"].ToString());
+			//	}
+			//	Clinic clinicCur=Clinics.GetClinicForRecall(PIn.Long(addrTable.Rows[i]["recallNums"].ToString().Split(',').FirstOrDefault()));
+			//	message=message.Replace("[ClinicName]",clinicCur.Abbr);
+			//	message=message.Replace("[ClinicPhone]",clinicCur.Phone);
+			//	message=message.Replace("[PracticeName]",Preference.GetString(PreferenceName.PracticeTitle));
+			//	message=message.Replace("[PracticePhone]",Preference.GetString(PreferenceName.PracticePhone));
+			//	string officePhone=clinicCur.Phone;
+			//	if(string.IsNullOrEmpty(officePhone)) {
+			//		officePhone=Preference.GetString(PreferenceName.PracticePhone);
+			//	}
+			//	message=message.Replace("[OfficePhone]",clinicCur.Phone);
+			//	postcard.Message=message;
+			//	postcard.Recipient=recipient;
+			//	postcard.DesignID=PIn.Int(ProgramProperties.GetPropVal(ProgramName.Divvy,"DesignID for Recall Cards"));
+			//	listPostcards[i]=postcard;
+			//}
+			//DivvyConnect.Practice practice=new DivvyConnect.Practice();
+			//clinicNum=PIn.Long(addrTable.Rows[patientsPrinted]["ClinicNum"].ToString());
+			//if(Preferences.HasClinicsEnabled && Clinics.GetCount() > 0 //if using clinics
+			//	&& Clinics.GetClinic(clinicNum)!=null)//and this patient assigned to a clinic
+			//{
+			//	clinic=Clinics.GetClinic(clinicNum);
+			//	practice.Company=clinic.Description;
+			//	practice.Address1=clinic.Address;
+			//	practice.Address2=clinic.Address2;
+			//	practice.City=clinic.City;
+			//	practice.State=clinic.State;
+			//	practice.Zip=clinic.Zip;
+			//	phone=clinic.Phone;
+			//}
+			//else {
+			//	practice.Company=Preference.GetString(PreferenceName.PracticeTitle);
+			//	practice.Address1=Preference.GetString(PreferenceName.PracticeAddress);
+			//	practice.Address2=Preference.GetString(PreferenceName.PracticeAddress2);
+			//	practice.City=Preference.GetString(PreferenceName.PracticeCity);
+			//	practice.State=Preference.GetString(PreferenceName.PracticeST);
+			//	practice.Zip=Preference.GetString(PreferenceName.PracticeZip);
+			//	phone=Preference.GetString(PreferenceName.PracticePhone);
+			//}
+			//practice.Phone=TelephoneNumbers.ReFormat(phone);
+			//DivvyConnect.PostcardServiceClient client=new DivvyConnect.PostcardServiceClient();
+			//DivvyConnect.PostcardReturnMessage returnMessage=new DivvyConnect.PostcardReturnMessage();
+			//string messages="";
+			//Cursor=Cursors.WaitCursor;
+			//try {
+			//	returnMessage=client.SendPostcards(
+			//	  Guid.Parse(ProgramProperties.GetPropVal(ProgramName.Divvy,"API Key")),
+			//	  ProgramProperties.GetPropVal(ProgramName.Divvy,"Username"),
+			//	  ProgramProperties.GetPropVal(ProgramName.Divvy,"Password"),
+			//	  listPostcards,practice);
+			//}
+			//catch (Exception ex) {
+			//	messages+="Exception: "+ex.Message+"\r\nData: "+ex.Data+"\r\n";
+			//}
+			//messages+="MessageCode: "+returnMessage.MessageCode.ToString();//MessageCode enum. 0=CompletedSuccessfully, 1=CompletedWithErrors, 2=Failure
+			//MsgBox.Show(this,"Return Messages: "+returnMessage.Message+"\r\n"+messages);
+			//if(returnMessage.MessageCode==DivvyConnect.MessageCode.CompletedSucessfully) {
+			//	Cursor=Cursors.WaitCursor;
+			//	ProcessComms((IsRecallGridSelected()?CommItemTypeAuto.RECALL:CommItemTypeAuto.REACT),CommItemMode.Mail);
+			//}
+			//else if(returnMessage.MessageCode==DivvyConnect.MessageCode.CompletedWithErrors) {
+			//	for(int i=0;i<returnMessage.PostcardMessages.Length;i++) {
+			//		//todo: process return messages. Update commlog and change recall statuses for postcards that were sent.
+			//	}
+			//}
+			//FillMain();
+			//Cursor=Cursors.Default;
 		}
 
 		///<summary>Shared functionality with Recalls and Reactivations, be careful when making changes.</summary>

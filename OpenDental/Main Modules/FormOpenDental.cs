@@ -513,14 +513,14 @@ namespace OpenDental
                                                   //InvalidType.PatFields is necessary because the appts for the day are drawn in parallel threads and without it the cache is filled in each
                                                   //thread resulting in multiple calls to fill the ApptFieldDef and PatFieldDef caches.
             invalidTypes.Add(InvalidType.PatFields);
-            if (Programs.UsingEcwTightMode())
-            {
+            //if (Programs.UsingEcwTightMode())
+            //{
                 lightSignalGrid1.Visible = false;
-            }
-            else
-            {
-                invalidTypes.Add(InvalidType.SigMessages);//so when mouse moves over light buttons, it won't crash
-            }
+            //}
+            //else
+            //{
+            //    invalidTypes.Add(InvalidType.SigMessages);//so when mouse moves over light buttons, it won't crash
+            //}
             //Plugins.LoadAllPlugins(this);//moved up from right after optimizing tooth chart graphics.  New position might cause problems.
             //It was moved because RefreshLocalData()=>RefreshLocalDataPostCleanup()=>ContrChart2.InitializeLocalData()=>LayoutToolBar() has a hook.
             //Moved it up again on 10/3/13
@@ -606,10 +606,10 @@ namespace OpenDental
                 LayoutControls();
             }
 
-            if (Programs.UsingOrion)
-            {
-                myOutlookBar.SelectedIndex = 1;//Family module
-            }
+            //if (Programs.UsingOrion)
+            //{
+            //    myOutlookBar.SelectedIndex = 1;//Family module
+            //}
 
             myOutlookBar.Invalidate();
             LayoutToolBar();
@@ -1120,11 +1120,11 @@ namespace OpenDental
             #region InvalidType.Programs
             if (arrayITypes.Contains(InvalidType.Programs) || isAll)
             {
-                var program = Programs.GetCur(ProgramName.PT);
-                if (program != null && Programs.GetCur(ProgramName.PT).Enabled)
-                {
-                    Bridges.PaperlessTechnology.InitializeFileWatcher();
-                }
+                //var program = Programs.GetCur(ProgramName.PT);
+                //if (program != null && Programs.GetCur(ProgramName.PT).Enabled)
+                //{
+                //    Bridges.PaperlessTechnology.InitializeFileWatcher();
+                //}
             }
             #endregion
             #region InvalidType.Programs OR InvalidType.Prefs
@@ -1340,55 +1340,54 @@ namespace OpenDental
             button.Style = ODToolBarButtonStyle.DropDownButton;
             button.DropDownMenu = menuPatient;
             ToolBarMain.Buttons.Add(button);
-            if (!Programs.UsingEcwTightMode())
-            {//eCW tight only gets Patient Select and Popups toolbar buttons
-                button = new ODToolBarButton(Lan.g(this, "Commlog"), Resources.IconLog, Lan.g(this, "New Commlog Entry"), "Commlog");
-                //if (Preferences.IsODHQ)
-                //{
-                //    button.Style = ODToolBarButtonStyle.DropDownButton;
-                //    button.DropDownMenu = menuCommlog;
-                //}
-                ToolBarMain.Buttons.Add(button);
-                button = new ODToolBarButton(Lan.g(this, "E-mail"), Resources.IconEmail, Lan.g(this, "Send E-mail"), "Email");
-                button.Style = ODToolBarButtonStyle.DropDownButton;
-                button.DropDownMenu = menuEmail;
-                ToolBarMain.Buttons.Add(button);
-                button = new ODToolBarButton(Lan.g(this, "WebMail"), Resources.IconEmail, Lan.g(this, "Secure WebMail"), "WebMail");
-                button.Enabled = true;//Always enabled.  If the patient does not have an email address, then the user will be blocked from the FormWebMailMessageEdit window.
-                ToolBarMain.Buttons.Add(button);
-                if (_butText == null)
-                {//If laying out again (after modifying setup), we keep the button to preserve the current notification text.
-                    _butText = new ODToolBarButton(Lan.g(this, "Text"), Resources.IconTextMessage, Lan.g(this, "Send Text Message"), "Text");
-                    _butText.Style = ODToolBarButtonStyle.DropDownButton;
-                    _butText.DropDownMenu = menuText;
-                    _butText.Enabled = Programs.IsEnabled(ProgramName.CallFire) || SmsPhones.IsIntegratedTextingEnabled();
-                    //The Notification text has not been set since startup.  We need an accurate starting count.
-                    if (SmsPhones.IsIntegratedTextingEnabled())
-                    {
-                        SetSmsNotificationText();
-                    }
-                }
-                ToolBarMain.Buttons.Add(_butText);
-                button = new ODToolBarButton(Lan.g(this, "Letter"), null, Lan.g(this, "Quick Letter"), "Letter");
-                button.Style = ODToolBarButtonStyle.DropDownButton;
-                button.DropDownMenu = menuLetter;
-                ToolBarMain.Buttons.Add(button);
-                button = new ODToolBarButton(Lan.g(this, "Forms"), null, "", "Form");
-                //button.Style=ODToolBarButtonStyle.DropDownButton;
-                //button.DropDownMenu=menuForm;
-                ToolBarMain.Buttons.Add(button);
-                if (_butTask == null)
+
+            button = new ODToolBarButton(Lan.g(this, "Commlog"), Resources.IconLog, Lan.g(this, "New Commlog Entry"), "Commlog");
+            //if (Preferences.IsODHQ)
+            //{
+            //    button.Style = ODToolBarButtonStyle.DropDownButton;
+            //    button.DropDownMenu = menuCommlog;
+            //}
+            ToolBarMain.Buttons.Add(button);
+            button = new ODToolBarButton(Lan.g(this, "E-mail"), Resources.IconEmail, Lan.g(this, "Send E-mail"), "Email");
+            button.Style = ODToolBarButtonStyle.DropDownButton;
+            button.DropDownMenu = menuEmail;
+            ToolBarMain.Buttons.Add(button);
+            button = new ODToolBarButton(Lan.g(this, "WebMail"), Resources.IconEmail, Lan.g(this, "Secure WebMail"), "WebMail");
+            button.Enabled = true;//Always enabled.  If the patient does not have an email address, then the user will be blocked from the FormWebMailMessageEdit window.
+            ToolBarMain.Buttons.Add(button);
+            if (_butText == null)
+            {//If laying out again (after modifying setup), we keep the button to preserve the current notification text.
+                _butText = new ODToolBarButton(Lan.g(this, "Text"), Resources.IconTextMessage, Lan.g(this, "Send Text Message"), "Text");
+                _butText.Style = ODToolBarButtonStyle.DropDownButton;
+                _butText.DropDownMenu = menuText;
+                _butText.Enabled = Program.IsEnabled(ProgramName.CallFire) || SmsPhones.IsIntegratedTextingEnabled();
+                //The Notification text has not been set since startup.  We need an accurate starting count.
+                if (SmsPhones.IsIntegratedTextingEnabled())
                 {
-                    _butTask = new ODToolBarButton(Lan.g(this, "Tasks"), Resources.IconTasks, Lan.g(this, "Open Tasks"), "Tasklist");
-                    _butTask.Style = ODToolBarButtonStyle.DropDownButton;
-                    _butTask.DropDownMenu = menuTask;
+                    SetSmsNotificationText();
                 }
-                ToolBarMain.Buttons.Add(_butTask);
-                button = new ODToolBarButton(Lan.g(this, "Label"), Resources.IconPrint, Lan.g(this, "Print Label"), "Label");
-                button.Style = ODToolBarButtonStyle.DropDownButton;
-                button.DropDownMenu = menuLabel;
-                ToolBarMain.Buttons.Add(button);
             }
+            ToolBarMain.Buttons.Add(_butText);
+            button = new ODToolBarButton(Lan.g(this, "Letter"), null, Lan.g(this, "Quick Letter"), "Letter");
+            button.Style = ODToolBarButtonStyle.DropDownButton;
+            button.DropDownMenu = menuLetter;
+            ToolBarMain.Buttons.Add(button);
+            button = new ODToolBarButton(Lan.g(this, "Forms"), null, "", "Form");
+            //button.Style=ODToolBarButtonStyle.DropDownButton;
+            //button.DropDownMenu=menuForm;
+            ToolBarMain.Buttons.Add(button);
+            if (_butTask == null)
+            {
+                _butTask = new ODToolBarButton(Lan.g(this, "Tasks"), Resources.IconTasks, Lan.g(this, "Open Tasks"), "Tasklist");
+                _butTask.Style = ODToolBarButtonStyle.DropDownButton;
+                _butTask.DropDownMenu = menuTask;
+            }
+            ToolBarMain.Buttons.Add(_butTask);
+            button = new ODToolBarButton(Lan.g(this, "Label"), Resources.IconPrint, Lan.g(this, "Print Label"), "Label");
+            button.Style = ODToolBarButtonStyle.DropDownButton;
+            button.DropDownMenu = menuLabel;
+            ToolBarMain.Buttons.Add(button);
+
             ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Popups"), null, Lan.g(this, "Edit popups for this patient"), "Popups"));
             ProgramL.LoadToolbar(ToolBarMain, ToolBarsAvail.MainToolbar);
 
@@ -1535,8 +1534,7 @@ namespace OpenDental
             }
             if (CurPatNum == 0)
             {//Only on startup, I think.
-                if (!Programs.UsingEcwTightMode())
-                {//eCW tight only gets Patient Select and Popups toolbar buttons
+
                  //We need a drafts folder the user can view saved emails in before we allow the user to save email without a patient selected.
                     ToolBarMain.Buttons["Email"].Enabled = false;
                     ToolBarMain.Buttons["WebMail"].Enabled = false;
@@ -1545,25 +1543,24 @@ namespace OpenDental
                     ToolBarMain.Buttons["Form"].Enabled = false;
                     ToolBarMain.Buttons["Tasklist"].Enabled = true;
                     ToolBarMain.Buttons["Label"].Enabled = false;
-                }
+                
                 ToolBarMain.Buttons["Popups"].Enabled = false;
             }
             else
             {
-                if (!Programs.UsingEcwTightMode())
-                {//eCW tight only gets Patient Select and Popups toolbar buttons
+
                     ToolBarMain.Buttons["Commlog"].Enabled = true;
                     ToolBarMain.Buttons["Email"].Enabled = true;
                     if (_butText != null)
                     {
-                        _butText.Enabled = Programs.IsEnabled(ProgramName.CallFire) || SmsPhones.IsIntegratedTextingEnabled();
+                        _butText.Enabled = Program.IsEnabled(ProgramName.CallFire) || SmsPhones.IsIntegratedTextingEnabled();
                     }
                     ToolBarMain.Buttons["WebMail"].Enabled = true;
                     ToolBarMain.Buttons["Letter"].Enabled = true;
                     ToolBarMain.Buttons["Form"].Enabled = true;
                     ToolBarMain.Buttons["Tasklist"].Enabled = true;
                     ToolBarMain.Buttons["Label"].Enabled = true;
-                }
+                
                 ToolBarMain.Buttons["Popups"].Enabled = true;
             }
             ToolBarMain.Invalidate();
@@ -6398,17 +6395,17 @@ namespace OpenDental
                     _StrCmdLineShow = args[i].Substring(5).Trim('"').ToLower();
                 }
             }
-            if (ProgramProperties.GetPropVal(Programs.GetProgramNum(ProgramName.eClinicalWorks), "IsLBSessionIdExcluded") == "1" //if check box in Program Links is checked
-                && lbSessionId == "" //if lbSessionId not previously set
-                && args.Length > 0 //there is at least one argument passed in
-                && !args[args.Length - 1].StartsWith("LBSESSIONID="))//if there is an argument that is the last argument that is not called "LBSESSIONID", then use that argument, including the "name=" part
-            {
-                //An example of this is command line includes LBSESSIONID= icookie=ECWAPP3ECFH. The space makes icookie a separate parameter. We want to set lbSessionId="icookie=ECWAPP3ECFH". 
-                //We are not guaranteed that the parameter is always going to be named icookie, in fact it will be different on each load balancer depending on the setup of the LB.  
-                //Therefore, we cannot look for parameter name, but Aislinn from eCW guaranteed that it would be the last parameter every time during our (Cameron and Aislinn's) conversation on 3/5/2014.
-                //jsalmon - This is very much a hack but the customer is very large and needs this change ASAP.  Nathan has suggested that we create a ticket with eCW to complain about this and make them fix it.
-                lbSessionId = args[args.Length - 1].Trim('"');
-            }
+            //if (ProgramProperties.GetPropVal(Programs.GetProgramNum(ProgramName.eClinicalWorks), "IsLBSessionIdExcluded") == "1" //if check box in Program Links is checked
+            //    && lbSessionId == "" //if lbSessionId not previously set
+            //    && args.Length > 0 //there is at least one argument passed in
+            //    && !args[args.Length - 1].StartsWith("LBSESSIONID="))//if there is an argument that is the last argument that is not called "LBSESSIONID", then use that argument, including the "name=" part
+            //{
+            //    //An example of this is command line includes LBSESSIONID= icookie=ECWAPP3ECFH. The space makes icookie a separate parameter. We want to set lbSessionId="icookie=ECWAPP3ECFH". 
+            //    //We are not guaranteed that the parameter is always going to be named icookie, in fact it will be different on each load balancer depending on the setup of the LB.  
+            //    //Therefore, we cannot look for parameter name, but Aislinn from eCW guaranteed that it would be the last parameter every time during our (Cameron and Aislinn's) conversation on 3/5/2014.
+            //    //jsalmon - This is very much a hack but the customer is very large and needs this change ASAP.  Nathan has suggested that we create a ticket with eCW to complain about this and make them fix it.
+            //    lbSessionId = args[args.Length - 1].Trim('"');
+            //}
             //eCW bridge values-------------------------------------------------------------
             Bridges.ECW.AptNum = PIn.Long(aptNum);
             Bridges.ECW.EcwConfigPath = ecwConfigPath;
@@ -6419,8 +6416,7 @@ namespace OpenDental
             //Username and password-----------------------------------------------------
             //users are allowed to use ecw tight integration without command line.  They can manually launch Open Dental.
             //if((Programs.UsingEcwTight() && Security.CurUser==null)//We always want to trigger login window for eCW tight, even if no username was passed in.
-            if ((Programs.UsingEcwTightOrFullMode() && Security.CurrentUser == null)//We always want to trigger login window for eCW tight, even if no username was passed in.
-                || (userName != ""//if a username was passed in, but not in tight eCW mode
+            if ((userName != ""//if a username was passed in, but not in tight eCW mode
                 && (Security.CurrentUser == null || Security.CurrentUser.UserName != userName))//and it's different from the current user
             )
             {
@@ -7051,7 +7047,7 @@ namespace OpenDental
             }
             try
             {
-                Programs.ScrubExportedPatientData();//Required for EHR module d.7.
+                //Programs.ScrubExportedPatientData();//Required for EHR module d.7.
             }
             catch
             {

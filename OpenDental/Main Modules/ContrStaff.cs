@@ -216,7 +216,7 @@ namespace OpenDental
 
             // TODO: This should be moved to a plugin.
 
-            if (!Programs.IsEnabled(ProgramName.Transworld))
+            if (!Program.IsEnabled(ProgramName.Transworld))
             {
                 try
                 {
@@ -421,7 +421,6 @@ namespace OpenDental
                 }
             }
         }
-
 
         bool ValidateConnectionDetails()
         {
