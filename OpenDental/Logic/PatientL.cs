@@ -1,17 +1,10 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Data;
-using System.Diagnostics;
-using System.Text.RegularExpressions;
-using System.Windows.Forms;
 using OpenDentBusiness;
+using System;
+using System.Collections.Generic;
+using System.Windows.Forms;
 
 namespace OpenDental
 {
-
-    ///<summary></summary>
     public class PatientL
     {
         ///<summary>Collection of Patient Names. The last five patients. Gets displayed on dropdown button.</summary>
@@ -134,9 +127,9 @@ namespace OpenDental
             title = Plugin.Filter(null, "Patient_FilterMainTitle", title);
 
             // Figure out if the patient passed in is different than the currently selected patient.
-            bool hasPatChanged = 
-                (_patSelectedCur == null && patient != null) || 
-                (_patSelectedCur != null && patient == null) || 
+            bool hasPatChanged =
+                (_patSelectedCur == null && patient != null) ||
+                (_patSelectedCur != null && patient == null) ||
                 (_patSelectedCur != null && patient != null && _patSelectedCur.PatNum != patient.PatNum);
 
             _patSelectedCur = patient;

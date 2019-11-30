@@ -26,7 +26,7 @@ namespace OpenDental{
 		/// <summary>This Program link is new.</summary>
 		public bool IsNew;
 		public Program ProgramCur;
-		private List<ProgramProperty> PropertyList;
+		private List<ProgramPreference> PropertyList;
 		//private static Thread thread;
 		private TextBox textHL7FolderOut;
 		private Label labelHL7FolderOut;
@@ -227,10 +227,10 @@ namespace OpenDental{
 		}
 
 		private void FillForm(){
-            CacheManager.Invalidate<ProgramProperty>();
-			PropertyList=ProgramProperties.GetForProgram(ProgramCur.ProgramNum);
-			textProgName.Text=ProgramCur.ProgName;
-			textProgDesc.Text=ProgramCur.ProgDesc;
+            CacheManager.Invalidate<ProgramPreference>();
+			PropertyList=ProgramProperties.GetForProgram(ProgramCur.Id);
+			textProgName.Text=ProgramCur.TypeName;
+			textProgDesc.Text=ProgramCur.Description;
 			checkEnabled.Checked=ProgramCur.Enabled;
 			textHL7FolderOut.Text=Preference.GetString(PreferenceName.HL7FolderOut);
 		}
@@ -248,9 +248,9 @@ namespace OpenDental{
 				MsgBox.Show(this,"HL7 out folder may not be blank.");
 				return false;
 			}
-			ProgramCur.ProgDesc=textProgDesc.Text;
+			ProgramCur.Description=textProgDesc.Text;
 			ProgramCur.Enabled=checkEnabled.Checked;
-			Programs.Update(ProgramCur);
+			Program.Update(ProgramCur);
 			Preference.Update(PreferenceName.HL7FolderOut,textHL7FolderOut.Text);
 			DataValid.SetInvalid(InvalidType.Programs,InvalidType.Prefs);
 			return true;

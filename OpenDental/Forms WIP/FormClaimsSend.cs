@@ -620,7 +620,7 @@ namespace OpenDental{
 					row.Cells.Add("");
 				}
 				else{
-					row.Cells.Add(ClearinghouseL.GetDescript(queueItem.ClearinghouseNum));
+					row.Cells.Add(ClearinghouseL.GetDescription(queueItem.ClearinghouseNum));
 					row.Cells.Add(queueItem.Warnings);
 					row.Cells.Add(queueItem.MissingData);
 				}

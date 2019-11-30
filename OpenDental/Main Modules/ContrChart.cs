@@ -3445,10 +3445,10 @@ namespace OpenDental
             this.toothChart.DrawMode = ComputerPrefs.LocalComputer.GraphicsSimple;//triggers ResetControls.
                                                                                   //Passed in controls will maintain their location and be shown but are not part of the dynamic layout fields.
             InitDynamicLayout(SheetTypeEnum.ChartModule, ToolBarMain, tabControlImages, panelImages);
-            if (Programs.UsingOrion)
-            {
-                tabProc.SelectedTab = tabPatInfo;
-            }
+            //if (Programs.UsingOrion)
+            //{
+            //    tabProc.SelectedTab = tabPatInfo;
+            //}
             //Plugins.HookAddCode(this,"ContrChart.InitializeOnStartup_end",PatCur);
         }
 
@@ -3466,12 +3466,12 @@ namespace OpenDental
         ///<summary>Called every time prefs are changed from any workstation.</summary>
         public void InitializeLocalData()
         {
-                butAddKey.Visible = false;
-                butForeignKey.Visible = false;
-                butPhoneNums.Visible = false;
-                butErxAccess.Visible = false;
-                tabProc.TabPages.Remove(tabCustomer);
-            
+            butAddKey.Visible = false;
+            butForeignKey.Visible = false;
+            butPhoneNums.Visible = false;
+            butErxAccess.Visible = false;
+            tabProc.TabPages.Remove(tabCustomer);
+
             //ComputerPref computerPref=ComputerPrefs.GetForLocalComputer();
             toothChart.SetToothNumberingNomenclature((ToothNumberingNomenclature)Preference.GetInt(PreferenceName.UseInternationalToothNumbers));
             toothChart.UseHardware = ComputerPrefs.LocalComputer.GraphicsUseHardware;
@@ -3498,26 +3498,8 @@ namespace OpenDental
                 LayoutToolBar();
                 if (PatCur == null)
                 {
-                    if (HasHideRxButtonsEcw())
-                    {
-                        //Don't show the Rx and eRx buttons.
-                    }
-                    else
-                    {
-                        if (UsingEcwTightOrFull())
-                        {
-                            if (!Environment.Is64BitOperatingSystem)
-                            {
-                                ToolBarMain.Buttons["Rx"].Enabled = false;
-                            }
-                            //eRx already disabled because it is never enabled for eCW Tight or Full
-                        }
-                        else
-                        {
-                            ToolBarMain.Buttons["Rx"].Enabled = false;
-                            ToolBarMain.Buttons["eRx"].Enabled = false;
-                        }
-                    }
+                    ToolBarMain.Buttons["Rx"].Enabled = false;
+                    ToolBarMain.Buttons["eRx"].Enabled = false;
                     ToolBarMain.Buttons["LabCase"].Enabled = false;
                     if (ToolBarMain.Buttons["Perio"] != null)
                     {
@@ -3533,11 +3515,7 @@ namespace OpenDental
                         ToolBarMain.Buttons["ToothChart"].Enabled = false;
                     }
                     ToolBarMain.Buttons["ExamSheet"].Enabled = false;
-                    if (UsingEcwTight())
-                    {
-                        ToolBarMain.Buttons["Commlog"].Enabled = false;
-                        webBrowserEcw.Url = null;
-                    }
+
                     if (Preference.GetBool(PreferenceName.ShowFeatureEhr))
                     {
                         ToolBarMain.Buttons["EHR"].Enabled = false;
@@ -3550,54 +3528,13 @@ namespace OpenDental
             }
         }
 
-        ///<summary>This reduces the number of places where Programs.UsingEcwTight() is called.  This helps with organization.  All calls from ContrChart must pass through here.  They also must have been checked to not involve the Orion bridge or layout logic.</summary>
-        private bool UsingEcwTight()
-        {
-            return Programs.UsingEcwTightMode();
-        }
-
-        ///<summary>This reduces the number of places where Programs.UsingEcwTightOrFull() is called.  This helps with organization.  All calls from ContrChart must pass through here.  They also must have been checked to not involve the Orion bridge or layout logic.</summary>
-        private bool UsingEcwTightOrFull()
-        {
-            return Programs.UsingEcwTightOrFullMode();
-        }
-
-        ///<summary>Returns true if eCW is enabled and they turned on the Hide Chart Rx Buttons setting within the program link.</summary>
-        private bool HasHideRxButtonsEcw()
-        {
-            if (Programs.IsEnabled(ProgramName.eClinicalWorks)
-                && ProgramProperties.GetPropVal(Programs.GetProgramNum(ProgramName.eClinicalWorks), "HideChartRxButtons") == "1")
-            {
-                return true;
-            }
-            return false;
-        }
-
         ///<summary>Causes the toolbars to be laid out again.</summary>
         public void LayoutToolBar()
         {
             ToolBarMain.Buttons.Clear();
             ODToolBarButton button;
-            if (HasHideRxButtonsEcw())
-            {
-                //Don't show the Rx and eRx buttons.
-            }
-            else
-            {
-                if (UsingEcwTightOrFull())
-                {
-                    if (!Environment.Is64BitOperatingSystem)
-                    {
-                        //ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"New Rx"),1,"","Rx"));
-                        button = new ODToolBarButton(Lan.g(this, "New Rx"), Resources.IconReceipt, "", "Rx");
-                        button.Style = ODToolBarButtonStyle.DropDownButton;
-                        button.DropDownMenu = _contextMenuRxManage;
-                        ToolBarMain.Buttons.Add(button);
-                    }
-                    //don't add eRx
-                }
-                else
-                {
+
+
                     //ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"New Rx"),1,"","Rx"));
                     button = new ODToolBarButton(Lan.g(this, "New Rx"), Resources.IconReceipt, "", "Rx");
                     button.Style = ODToolBarButtonStyle.DropDownButton;
@@ -3610,8 +3547,8 @@ namespace OpenDental
                         _butErx.DropDownMenu = menuErx;
                     }
                     ToolBarMain.Buttons.Add(_butErx);
-                }
-            }
+                
+            
             ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "LabCase"), null, "", "LabCase"));
 
             var clinic = Clinic.GetById(Clinics.ClinicId);
@@ -3655,16 +3592,13 @@ namespace OpenDental
             button = new ODToolBarButton(Lan.g(this, "Exam Sheet"), null, "", "ExamSheet");
             button.Style = ODToolBarButtonStyle.PushButton;
             ToolBarMain.Buttons.Add(button);
-            if (UsingEcwTight())
-            {//button will show in this toolbar instead of the usual one.
-                ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Commlog"), Resources.IconRawAccessLog, Lan.g(this, "New Commlog Entry"), "Commlog"));
-            }
+
             if (Preference.GetBool(PreferenceName.ShowFeatureEhr))
             {
                 ToolBarMain.Buttons.Add(new ODToolBarButton("EHR", null, "", "EHR"));
             }
             HL7Def hl7Def = HL7Defs.GetOneDeepEnabled();
-            if (hl7Def != null && !UsingEcwTightOrFull())
+            if (hl7Def != null)
             {
                 ToolBarMain.Buttons.Add(new ODToolBarButton(hl7Def.Description, null, "", "HL7"));
             }
@@ -3872,27 +3806,12 @@ namespace OpenDental
                 //tabPlanned.Enabled=false;
                 toothChart.Enabled = false;
                 gridProg.Enabled = false;
-                if (HasHideRxButtonsEcw())
-                {
-                    //Don't show the Rx and eRx buttons.
-                }
-                else
-                {
-                    //if(UsingEcwTight()) {
-                    if (UsingEcwTightOrFull())
-                    {
-                        if (!Environment.Is64BitOperatingSystem)
-                        {
-                            ToolBarMain.Buttons["Rx"].Enabled = false;
-                        }
-                        //eRx already disabled because it is never enabled for eCW Tight or Full
-                    }
-                    else
-                    {
+
+
                         ToolBarMain.Buttons["Rx"].Enabled = false;
                         ToolBarMain.Buttons["eRx"].Enabled = false;
-                    }
-                }
+                    
+                
                 ToolBarMain.Buttons["LabCase"].Enabled = false;
                 if (ToolBarMain.Buttons["Perio"] != null)
                 {
@@ -3908,11 +3827,7 @@ namespace OpenDental
                     ToolBarMain.Buttons["ToothChart"].Enabled = false;
                 }
                 ToolBarMain.Buttons["ExamSheet"].Enabled = false;
-                if (UsingEcwTight())
-                {
-                    ToolBarMain.Buttons["Commlog"].Enabled = false;
-                    webBrowserEcw.Url = null;
-                }
+
                 //if(FormOpenDental.ObjSomeEhrSuperClass!=null) {//didn't work
                 if (ToolBarMain.Buttons["EHR"] != null)
                 {
@@ -3940,27 +3855,10 @@ namespace OpenDental
                 //groupPlanned.Enabled=true;
                 toothChart.Enabled = true;
                 gridProg.Enabled = true;
-                if (HasHideRxButtonsEcw())
-                {
-                    //Don't show the Rx and eRx buttons.
-                }
-                else
-                {
-                    //if(UsingEcwTight()) {
-                    if (UsingEcwTightOrFull())
-                    {
-                        if (!Environment.Is64BitOperatingSystem)
-                        {
-                            ToolBarMain.Buttons["Rx"].Enabled = true;
-                        }
-                        //don't enable eRx
-                    }
-                    else
-                    {
+
                         ToolBarMain.Buttons["Rx"].Enabled = true;
                         ToolBarMain.Buttons["eRx"].Enabled = true;
-                    }
-                }
+
                 ToolBarMain.Buttons["LabCase"].Enabled = true;
                 if (ToolBarMain.Buttons["Perio"] != null)
                 {
@@ -3976,106 +3874,7 @@ namespace OpenDental
                     ToolBarMain.Buttons["ToothChart"].Enabled = true;
                 }
                 ToolBarMain.Buttons["ExamSheet"].Enabled = true;
-                if (UsingEcwTightOrFull())
-                {
-                    if (UsingEcwTight())
-                    {
-                        ToolBarMain.Buttons["Commlog"].Enabled = true;
-                    }
-                    //the following sequence also gets repeated after exiting the Rx window to refresh.
-                    String strAppServer = "";
-                    try
-                    {
-                        if (Bridges.ECW.UserId == 0 || String.IsNullOrEmpty(Bridges.ECW.EcwConfigPath))
-                        {
-                            webBrowserEcw.Url = null;
-                            labelECWerror.Text = "This panel does not display unless\r\nOpen Dental is launched from inside eCW";
-                            labelECWerror.Visible = true;
-                        }
-                        else
-                        {
-                            //this property will not exist if using Oracle, eCW will never use Oracle
-                            string uristring = ProgramProperties.GetPropVal(Programs.GetProgramNum(ProgramName.eClinicalWorks), "MedicalPanelUrl");
-                            string path = "";
-                            if (uristring == "")
-                            {
-                                XmlTextReader reader = new XmlTextReader(Bridges.ECW.EcwConfigPath);
-                                while (reader.Read())
-                                {
-                                    if (reader.Name.ToString() == "server")
-                                    {
-                                        strAppServer = reader.ReadString().Trim();
-                                    }
-                                }
-                                path = "http://" + strAppServer + "/mobiledoc/jsp/dashboard/Overview.jsp"
-                                    + "?ptId=" + PatCur.PatNum.ToString() + "&panelName=overview&pnencid="
-                                    + Bridges.ECW.AptNum.ToString() + "&context=progressnotes&TrUserId=" + Bridges.ECW.UserId.ToString();
-                                //set cookie
-                                if (!String.IsNullOrEmpty(Bridges.ECW.JSessionId))
-                                {
-                                    InternetSetCookie("http://" + strAppServer, null, "JSESSIONID = " + Bridges.ECW.JSessionId);
-                                }
-                                if (!String.IsNullOrEmpty(Bridges.ECW.JSessionIdSSO))
-                                {
-                                    InternetSetCookie("http://" + strAppServer, null, "JSESSIONIDSSO = " + Bridges.ECW.JSessionIdSSO);
-                                }
-                                if (!String.IsNullOrEmpty(Bridges.ECW.LBSessionId))
-                                {
-                                    if (ProgramProperties.GetPropVal(Programs.GetProgramNum(ProgramName.eClinicalWorks), "IsLBSessionIdExcluded") == "0")
-                                    {
-                                        InternetSetCookie("http://" + strAppServer, null, "LBSESSIONID = " + Bridges.ECW.LBSessionId);
-                                    }
-                                    else
-                                    {
-                                        InternetSetCookie("http://" + strAppServer, null, Bridges.ECW.LBSessionId);
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                path = uristring
-                                    + "?ptId=" + PatCur.PatNum.ToString() + "&panelName=overview&pnencid="
-                                    + Bridges.ECW.AptNum.ToString() + "&context=progressnotes&TrUserId=" + Bridges.ECW.UserId.ToString();
-                                //parse out with regex: uristring
-                                Match match = Regex.Match(uristring, @"\b([^:]+://[^/]+)/");//http://servername
-                                if (!match.Success || match.Groups.Count < 2)
-                                {//if no match, or match but no group 1 to grab
-                                    throw new Exception("Invalid URL saved in the Medical Panel URL field of the eClinicalWorks program link.");
-                                }
-                                string cookieUrl = match.Groups[1].Value;
-                                //set cookie
-                                if (!String.IsNullOrEmpty(Bridges.ECW.JSessionId))
-                                {
-                                    InternetSetCookie(cookieUrl, null, "JSESSIONID = " + Bridges.ECW.JSessionId);
-                                }
-                                if (!String.IsNullOrEmpty(Bridges.ECW.JSessionIdSSO))
-                                {
-                                    InternetSetCookie(cookieUrl, null, "JSESSIONIDSSO = " + Bridges.ECW.JSessionIdSSO);
-                                }
-                                if (!String.IsNullOrEmpty(Bridges.ECW.LBSessionId))
-                                {
-                                    if (ProgramProperties.GetPropVal(Programs.GetProgramNum(ProgramName.eClinicalWorks), "IsLBSessionIdExcluded") == "0")
-                                    {
-                                        InternetSetCookie(cookieUrl, null, "LBSESSIONID = " + Bridges.ECW.LBSessionId);
-                                    }
-                                    else
-                                    {
-                                        InternetSetCookie(cookieUrl, null, Bridges.ECW.LBSessionId);
-                                    }
-                                }
-                            }
-                            //navigate
-                            webBrowserEcw.Navigate(path);
-                            labelECWerror.Visible = false;
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        webBrowserEcw.Url = null;
-                        labelECWerror.Text = "Error: " + ex.Message;
-                        labelECWerror.Visible = true;
-                    }
-                }
+
                 if (Preference.GetBool(PreferenceName.ShowFeatureEhr))
                 { //didn't work either
                   //if(ToolBarMain.Buttons["EHR"]!=null) {
@@ -4100,19 +3899,19 @@ namespace OpenDental
                     PrevPtNum = PatCur.PatNum;
                 }
             }
-            if (Programs.UsingOrion)
-            {
-                radioEntryC.Visible = false;
-                radioEntryEC.Visible = false;
-                radioEntryR.Visible = false;
-                radioEntryCn.Visible = false;
-                radioEntryEO.Location = new Point(radioEntryEO.Location.X, 31);
-                groupBox2.Height = 54;
-                menuItemSetComplete.Visible = false;
-                menuItemSetEC.Visible = false;
-                menuItemSetEO.Visible = false;
-            }
-            if (!UsingEcwTightOrFull() && isClinicRefresh)
+            //if (Programs.UsingOrion)
+            //{
+            //    radioEntryC.Visible = false;
+            //    radioEntryEC.Visible = false;
+            //    radioEntryR.Visible = false;
+            //    radioEntryCn.Visible = false;
+            //    radioEntryEO.Location = new Point(radioEntryEO.Location.X, 31);
+            //    groupBox2.Height = 54;
+            //    menuItemSetComplete.Visible = false;
+            //    menuItemSetEC.Visible = false;
+            //    menuItemSetEO.Visible = false;
+            //}
+            if (isClinicRefresh)
             {
                 if (Clinic.GetById(Clinics.ClinicId).IsMedicalOnly)
                 {
@@ -4274,7 +4073,7 @@ namespace OpenDental
             }
             else if (e.Button.Tag.GetType() == typeof(Program))
             {
-                ProgramL.Execute(((Program)e.Button.Tag).ProgramNum, PatCur);
+                ProgramL.Execute(((Program)e.Button.Tag).Id, PatCur);
             }
         }
 
@@ -4285,33 +4084,12 @@ namespace OpenDental
             {
                 return;
             }
-            if (UsingEcwTightOrFull() && Bridges.ECW.UserId != 0)
-            {
-                VBbridges.Ecw.LoadRxForm((int)Bridges.ECW.UserId, Bridges.ECW.EcwConfigPath, (int)Bridges.ECW.AptNum);
-                //refresh the right panel:
-                try
-                {
-                    string strAppServer = VBbridges.Ecw.GetAppServer((int)Bridges.ECW.UserId, Bridges.ECW.EcwConfigPath);
-                    webBrowserEcw.Url = new Uri("http://" + strAppServer + "/mobiledoc/jsp/dashboard/Overview.jsp?ptId="
-                            + PatCur.PatNum.ToString() + "&panelName=overview&pnencid="
-                            + Bridges.ECW.AptNum.ToString() + "&context=progressnotes&TrUserId=" + Bridges.ECW.UserId.ToString());
-                    labelECWerror.Visible = false;
-                }
-                catch (Exception ex)
-                {
-                    webBrowserEcw.Url = null;
-                    labelECWerror.Text = "Error: " + ex.Message;
-                    labelECWerror.Visible = true;
-                }
-            }
-            else
-            {
-                FormRxSelect FormRS = new FormRxSelect(PatCur);
-                FormRS.ShowDialog();
-                if (FormRS.DialogResult != DialogResult.OK) return;
-                ModuleSelected(PatCur.PatNum);
-                SecurityLog.Write(PatCur.PatNum, Permissions.RxCreate, "Created prescription.");
-            }
+
+            FormRxSelect FormRS = new FormRxSelect(PatCur);
+            FormRS.ShowDialog();
+            if (FormRS.DialogResult != DialogResult.OK) return;
+            ModuleSelected(PatCur.PatNum);
+            SecurityLog.Write(PatCur.PatNum, Permissions.RxCreate, "Created prescription.");
         }
 
         ///<summary>Returns false if account ID is blank or not in format of 1 or more digits, followed by 3 random alpha-numberic characters, followed by a 2 digit checksum. Only returns true when the NewCrop Account ID is one that was created by OD.</summary>
@@ -5667,11 +5445,11 @@ namespace OpenDental
 
         private void Tool_ToothChart_Click()
         {
-            if (Programs.UsingOrion)
-            {
-                menuItemChartSave_Click(this, new EventArgs());
-                return;
-            }
+            //if (Programs.UsingOrion)
+            //{
+            //    menuItemChartSave_Click(this, new EventArgs());
+            //    return;
+            //}
             MsgBox.Show(this, "Please use dropdown list.");
             return;
         }
@@ -6952,13 +6730,13 @@ namespace OpenDental
             {
                 return false;
             }
-            if (Programs.IsEnabled(ProgramName.Orion))
-            {
-                if (!OrionProcStatDesired((row["orionStatus2"].ToString())))
-                {
-                    return false;
-                }
-            }
+            //if (Programs.IsEnabled(ProgramName.Orion))
+            //{
+            //    if (!OrionProcStatDesired((row["orionStatus2"].ToString())))
+            //    {
+            //        return false;
+            //    }
+            //}
             // Put check for showing hygine in here
             // Put check for showing films in here
             return true;
@@ -7618,25 +7396,6 @@ namespace OpenDental
             {
                 return new ChartModuleComponentsToLoad();
             }
-            if (UsingEcwTight())
-            {//ecw customers
-                return new ChartModuleComponentsToLoad(
-                    checkAppt.Checked,                      //showAppointments
-                    checkComm.Checked,                              //showCommLog.  The button is in a different toolbar.
-                    checkShowC.Checked,               //showCompleted
-                    checkShowCn.Checked,              //showConditions
-                    false, //checkEmail.Checked,      //showEmail
-                    checkShowE.Checked,               //showExisting
-                    false, //checkCommFamily.Checked,	//showFamilyCommLog
-                    false,                                                      //showFormPat
-                    checkLabCase.Checked,                   //showLabCases
-                    checkNotes.Checked,                     //showProcNotes
-                    checkShowR.Checked,                     //showReferred
-                    checkRx.Checked,                            //showRX
-                    checkSheets.Checked,                    //showSheets, consent
-                    false, //checkTasks.Checked,			//showTasks (for now)
-                    checkShowTP.Checked);             //showTreatPlan
-            }
             //all other customers and ecw full users
             return new ChartModuleComponentsToLoad(
                 checkAppt.Checked,        //showAppointments
@@ -7660,9 +7419,9 @@ namespace OpenDental
         {
             gridTreatPlans.BeginUpdate();
             gridTreatPlans.Columns.Clear();
-            gridTreatPlans.Columns.Add(new ODGridColumn(Lan.g("ChartTPList", "Status"), 50));
-            gridTreatPlans.Columns.Add(new ODGridColumn(Lan.g("ChartTPList", "Heading"), 0));
-            gridTreatPlans.Columns.Add(new ODGridColumn(Lan.g("ChartTPList", "Procs"), 50, HorizontalAlignment.Center));
+            gridTreatPlans.Columns.Add(new ODGridColumn("Status", 50));
+            gridTreatPlans.Columns.Add(new ODGridColumn("Heading", 0));
+            gridTreatPlans.Columns.Add(new ODGridColumn("Procs", 50, HorizontalAlignment.Center));
             gridTreatPlans.Rows.Clear();
             if (PatCur == null || !checkTreatPlans.Checked)
             {
@@ -8728,75 +8487,79 @@ namespace OpenDental
 
         private void GetXVWebImages(ODThread thread)
         {
-            Patient patient = (Patient)thread.Parameters[0];
-            List<string> listIdsToExclude = (List<string>)thread.Parameters[1];
-            lock (_apteryxLocker)
-            {
-                if (_listApteryxThumbnails == null)
-                {
-                    _listApteryxThumbnails = new List<ApteryxThumbnail>();
-                }
-                _listApteryxThumbnails.RemoveAll(x => x.PatNum != patient.PatNum);
-                listIdsToExclude.AddRange(_listApteryxThumbnails.Select(x => x.Image.Id.ToString()));
-            }
-            bool doDisplayXVWebInChart = XVWeb.IsDisplayingImagesInProgram
-                && Definition.GetByCategory(DefinitionCategory.ImageCats).Any(x => x.Value.Contains("X") //if tagged to show in Chart
-                 && x.Id == PIn.Long(ProgramProperties.GetPropVal(Programs.GetProgramNum(ProgramName.XVWeb), XVWeb.ProgramProps.ImageCategory)));
-            if (!doDisplayXVWebInChart)
-            {
-                return;
-            }
-            //make requests to the XVWeb Api to get a list of images for this patient.
-            List<ApteryxThumbnail> listAT = new List<ApteryxThumbnail>();
-            foreach (ApteryxThumbnail thumbnail in XVWeb.GetListThumbnails(patient, listIdsToExclude))
-            {
-                lock (_apteryxLocker)
-                {
-                    _listApteryxThumbnails.Add(thumbnail);
-                }
-                DisplayXVWebImages(patient.PatNum);
-            }
+            // TODO: Implement me
+
+            //Patient patient = (Patient)thread.Parameters[0];
+            //List<string> listIdsToExclude = (List<string>)thread.Parameters[1];
+            //lock (_apteryxLocker)
+            //{
+            //    if (_listApteryxThumbnails == null)
+            //    {
+            //        _listApteryxThumbnails = new List<ApteryxThumbnail>();
+            //    }
+            //    _listApteryxThumbnails.RemoveAll(x => x.PatNum != patient.PatNum);
+            //    listIdsToExclude.AddRange(_listApteryxThumbnails.Select(x => x.Image.Id.ToString()));
+            //}
+            //bool doDisplayXVWebInChart = XVWebBridge.IsDisplayingImagesInProgram
+            //    && Definition.GetByCategory(DefinitionCategory.ImageCats).Any(x => x.Value.Contains("X") //if tagged to show in Chart
+            //     && x.Id == PIn.Long(ProgramProperties.GetPropVal(Programs.GetProgramNum(ProgramName.XVWeb), XVWebBridge.ProgramProps.ImageCategory)));
+            //if (!doDisplayXVWebInChart)
+            //{
+            //    return;
+            //}
+            ////make requests to the XVWeb Api to get a list of images for this patient.
+            //List<ApteryxThumbnail> listAT = new List<ApteryxThumbnail>();
+            //foreach (ApteryxThumbnail thumbnail in XVWebBridge.GetThumbnails(patient, listIdsToExclude))
+            //{
+            //    lock (_apteryxLocker)
+            //    {
+            //        _listApteryxThumbnails.Add(thumbnail);
+            //    }
+            //    DisplayXVWebImages(patient.PatNum);
+            //}
         }
 
         ///<summary>Displays all XVWeb images to the chart module for the patient selected and the thumbnails we have in our list.</summary>
         private void DisplayXVWebImages(long patNum)
         {
-            if (InvokeRequired)
-            {
-                Invoke((Action)(() => DisplayXVWebImages(patNum)));
-                return;
-            }
-            if (_listApteryxThumbnails == null || PatCur == null
-                || patNum != PatCur.PatNum) //In case the patient was changed while we were downloading images
-            {
-                return;
-            }
-            long imageCat = PIn.Long(ProgramProperties.GetPropVal(Programs.GetProgramNum(ProgramName.XVWeb), XVWeb.ProgramProps.ImageCategory));
-            if (tabControlImages.SelectedIndex > 0 //any category except 'all'
-                && imageCat != Definition.GetByCategory(DefinitionCategory.ImageCats)[(int)visImageCats[tabControlImages.SelectedIndex - 1]].Id)
-            {
-                return;//if the currently selected tab is not for XVWeb
-            }
-            for (int i = listViewImages.Items.Count - 1; i >= 0; i--)
-            {
-                ApteryxImage tag = listViewImages.Items[i].Tag as ApteryxImage;
-                if (tag != null)
-                {
-                    imageListThumbnails.Images.RemoveAt(i);
-                    listViewImages.Items.RemoveAt(i);
-                }
-            }
-            lock (_apteryxLocker)
-            {
-                for (int i = 0; i < _listApteryxThumbnails.Count; i++)
-                {
-                    ApteryxImage imgCur = _listApteryxThumbnails[i].Image;
-                    imageListThumbnails.Images.Add(_listApteryxThumbnails[i].Thumbnail);
-                    ListViewItem item = new ListViewItem(imgCur.AcquisitionDate.ToShortDateString() + ": " + imgCur.FormattedTeeth, imageListThumbnails.Images.Count - 1);
-                    item.Tag = imgCur;
-                    listViewImages.Items.Add(item);
-                }
-            }
+            // TODO: Implement me
+
+            //if (InvokeRequired)
+            //{
+            //    Invoke((Action)(() => DisplayXVWebImages(patNum)));
+            //    return;
+            //}
+            //if (_listApteryxThumbnails == null || PatCur == null
+            //    || patNum != PatCur.PatNum) //In case the patient was changed while we were downloading images
+            //{
+            //    return;
+            //}
+            //long imageCat = PIn.Long(ProgramProperties.GetPropVal(Programs.GetProgramNum(ProgramName.XVWeb), XVWebBridge.ProgramProps.ImageCategory));
+            //if (tabControlImages.SelectedIndex > 0 //any category except 'all'
+            //    && imageCat != Definition.GetByCategory(DefinitionCategory.ImageCats)[(int)visImageCats[tabControlImages.SelectedIndex - 1]].Id)
+            //{
+            //    return;//if the currently selected tab is not for XVWeb
+            //}
+            //for (int i = listViewImages.Items.Count - 1; i >= 0; i--)
+            //{
+            //    ApteryxImage tag = listViewImages.Items[i].Tag as ApteryxImage;
+            //    if (tag != null)
+            //    {
+            //        imageListThumbnails.Images.RemoveAt(i);
+            //        listViewImages.Items.RemoveAt(i);
+            //    }
+            //}
+            //lock (_apteryxLocker)
+            //{
+            //    for (int i = 0; i < _listApteryxThumbnails.Count; i++)
+            //    {
+            //        ApteryxImage imgCur = _listApteryxThumbnails[i].Image;
+            //        imageListThumbnails.Images.Add(_listApteryxThumbnails[i].Thumbnail);
+            //        ListViewItem item = new ListViewItem(imgCur.AcquisitionDate.ToShortDateString() + ": " + imgCur.FormattedTeeth, imageListThumbnails.Images.Count - 1);
+            //        item.Tag = imgCur;
+            //        listViewImages.Items.Add(item);
+            //    }
+            //}
         }
 
         ///<summary>Inserts TreatPlanAttaches that allows the procedure to be charted to one or more treatment plans at the same time.</summary>
@@ -9263,9 +9026,8 @@ namespace OpenDental
             {//User didn't cancel (delete) in FormProcEdit
                 Encounters.InsertDefaultEncounter(ProcCur.PatNum, ProcCur.ProvNum, ProcCur.ProcDate);//Auto-insert default encounter
             }
-            if (!UsingEcwTightOrFull() //no need to synch with eCW
-                && !Programs.UsingOrion //no need to synch with Orion
-                && new[] { ProcStat.C, ProcStat.EC, ProcStat.EO }.Contains(newStatus)) //only run Recalls for completed, existing current, or existing other
+
+            if (new[] { ProcStat.C, ProcStat.EC, ProcStat.EO }.Contains(newStatus)) //only run Recalls for completed, existing current, or existing other
             {
                 Recalls.Synch(PatCur.PatNum);
             }
@@ -9283,36 +9045,37 @@ namespace OpenDental
                 return;
             }
             FormProcEdit FormP = null;
-            if (Programs.UsingOrion)
-            {//Orion requires a DPC to be set. Force the proc edit window open so they can set it.
-             //Get from DB to get updated timestamps for permission checks and to initialize nullable variables, like strings, before filling FormProcEdit.
-                ProcCur = Procedures.GetOneProc(ProcCur.ProcNum, true);//This breaks the reference to the original Procedure object in the calling method.
-                FormP = new FormProcEdit(ProcCur, PatCur.Copy(), FamCur);
-                FormP.IsNew = true;
-                FormP.OrionProvNum = Providers.GetOrionProvNum(ProcCur.ProvNum);
-                FormP.ShowDialog();
-                if (FormP.DialogResult == DialogResult.Cancel)
-                {
-                    try
-                    {
-                        Procedures.Delete(ProcCur.ProcNum);//also deletes the claimprocs
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show(ex.Message);
-                    }
-                    return;//cancelled insert
-                }
-            }
+            //if (Programs.UsingOrion)
+            //{//Orion requires a DPC to be set. Force the proc edit window open so they can set it.
+            // //Get from DB to get updated timestamps for permission checks and to initialize nullable variables, like strings, before filling FormProcEdit.
+            //    ProcCur = Procedures.GetOneProc(ProcCur.ProcNum, true);//This breaks the reference to the original Procedure object in the calling method.
+            //    FormP = new FormProcEdit(ProcCur, PatCur.Copy(), FamCur);
+            //    FormP.IsNew = true;
+            //    FormP.OrionProvNum = Providers.GetOrionProvNum(ProcCur.ProvNum);
+            //    FormP.ShowDialog();
+            //    if (FormP.DialogResult == DialogResult.Cancel)
+            //    {
+            //        try
+            //        {
+            //            Procedures.Delete(ProcCur.ProcNum);//also deletes the claimprocs
+            //        }
+            //        catch (Exception ex)
+            //        {
+            //            MessageBox.Show(ex.Message);
+            //        }
+            //        return;//cancelled insert
+            //    }
+            //}
             if (newStatus == ProcStat.C)
             {//either not using Orion, or user didn't cancel (delete) in FormProcEdit
                 Encounters.InsertDefaultEncounter(ProcCur.PatNum, ProcCur.ProvNum, ProcCur.ProcDate);//Auto-insert default encounter
             }
-            if (!UsingEcwTightOrFull() && !Programs.UsingOrion //no need to synch with eCW or Orion
-                && new[] { ProcStat.C, ProcStat.EC, ProcStat.EO }.Contains(newStatus)) //only run Recalls for completed, existing current, or existing other
+
+            if (new[] { ProcStat.C, ProcStat.EC, ProcStat.EO }.Contains(newStatus)) //only run Recalls for completed, existing current, or existing other
             {
                 Recalls.Synch(PatCur.PatNum);
             }
+
             logComplCreate(ProcCur);
         }
 
@@ -11094,7 +10857,7 @@ namespace OpenDental
             else
             {
                 butNew.Enabled = true;
-                butPin.Enabled = !Programs.UsingEcwTightOrFullMode();
+                butPin.Enabled = true;
                 butClear.Enabled = true;
                 butUp.Enabled = true;
                 butDown.Enabled = true;
@@ -11112,22 +10875,18 @@ namespace OpenDental
             gridPlanned.BeginUpdate();
             gridPlanned.Columns.Clear();
             ODGridColumn col;
-            col = new ODGridColumn(Lan.g("TablePlannedAppts", "#"), 25, HorizontalAlignment.Center);
-            gridPlanned.Columns.Add(col);
-            col = new ODGridColumn(Lan.g("TablePlannedAppts", "Min"), 35);
-            gridPlanned.Columns.Add(col);
-            col = new ODGridColumn(Lan.g("TablePlannedAppts", "Procedures"), 175);
-            gridPlanned.Columns.Add(col);
-            col = new ODGridColumn(Lan.g("TablePlannedAppts", "Note"), 175);
-            gridPlanned.Columns.Add(col);
-            if (Programs.UsingOrion)
-            {
-                col = new ODGridColumn(Lan.g("TablePlannedAppts", "SchedBy"), 80);
-            }
-            else
-            {
-                col = new ODGridColumn(Lan.g("TablePlannedAppts", "DateSched"), 80);
-            }
+            gridPlanned.Columns.Add(new ODGridColumn("#", 25, HorizontalAlignment.Center));
+            gridPlanned.Columns.Add(new ODGridColumn("Min", 35));
+            gridPlanned.Columns.Add(new ODGridColumn("Procedures", 175));
+            gridPlanned.Columns.Add(new ODGridColumn("Note", 175));
+            //if (Programs.UsingOrion)
+            //{
+            //    col = new ODGridColumn("SchedBy", 80);
+            //}
+            //else
+            //{
+                col = new ODGridColumn("DateSched", 80);
+            //}
             gridPlanned.Columns.Add(col);
             gridPlanned.Rows.Clear();
             ODGridRow row;
@@ -11160,58 +10919,58 @@ namespace OpenDental
                 row.Cells.Add(_tablePlannedAll.Rows[i]["minutes"].ToString());
                 row.Cells.Add(_tablePlannedAll.Rows[i]["ProcDescript"].ToString());
                 row.Cells.Add(_tablePlannedAll.Rows[i]["Note"].ToString());
-                if (Programs.UsingOrion)
-                {
-                    string text;
-                    List<Procedure> procsList = Procedures.Refresh(PatCur.PatNum);
-                    DateTime newDateSched = new DateTime();
-                    for (int p = 0; p < procsList.Count; p++)
-                    {
-                        if (procsList[p].PlannedAptNum == PIn.Long(_tablePlannedAll.Rows[i]["AptNum"].ToString()))
-                        {
-                            OrionProc op = OrionProcs.GetOneByProcNum(procsList[p].ProcNum);
-                            if (op != null && op.DateScheduleBy.Year > 1880)
-                            {
-                                if (newDateSched.Year < 1880)
-                                {
-                                    newDateSched = op.DateScheduleBy;
-                                }
-                                else
-                                {
-                                    if (op.DateScheduleBy < newDateSched)
-                                    {
-                                        newDateSched = op.DateScheduleBy;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    if (newDateSched.Year > 1880)
-                    {
-                        text = newDateSched.ToShortDateString();
-                    }
-                    else
-                    {
-                        text = "None";
-                    }
-                    row.Cells.Add(text);
-                }
-                else
-                {//Not Orion
+                //if (Programs.UsingOrion)
+                //{
+                //    string text;
+                //    List<Procedure> procsList = Procedures.Refresh(PatCur.PatNum);
+                //    DateTime newDateSched = new DateTime();
+                //    for (int p = 0; p < procsList.Count; p++)
+                //    {
+                //        if (procsList[p].PlannedAptNum == PIn.Long(_tablePlannedAll.Rows[i]["AptNum"].ToString()))
+                //        {
+                //            OrionProc op = OrionProcs.GetOneByProcNum(procsList[p].ProcNum);
+                //            if (op != null && op.DateScheduleBy.Year > 1880)
+                //            {
+                //                if (newDateSched.Year < 1880)
+                //                {
+                //                    newDateSched = op.DateScheduleBy;
+                //                }
+                //                else
+                //                {
+                //                    if (op.DateScheduleBy < newDateSched)
+                //                    {
+                //                        newDateSched = op.DateScheduleBy;
+                //                    }
+                //                }
+                //            }
+                //        }
+                //    }
+                //    if (newDateSched.Year > 1880)
+                //    {
+                //        text = newDateSched.ToShortDateString();
+                //    }
+                //    else
+                //    {
+                //        text = "None";
+                //    }
+                //    row.Cells.Add(text);
+                //}
+                //else
+                //{//Not Orion
                     ApptStatus aptStatus = (ApptStatus)(PIn.Long(_tablePlannedAll.Rows[i]["AptStatus"].ToString()));
                     if (aptStatus == ApptStatus.UnschedList)
                     {
-                        row.Cells.Add(Lan.g(this, "Unsched"));
+                        row.Cells.Add("Unsched");
                     }
                     else if (aptStatus == ApptStatus.Broken)
                     {
-                        row.Cells.Add(Lan.g(this, "Broken"));
+                        row.Cells.Add("Broken");
                     }
                     else
                     {//scheduled, complete and ASAP
                         row.Cells.Add(_tablePlannedAll.Rows[i]["dateSched"].ToString());
                     }
-                }
+                //}
                 row.ColorText = Color.FromArgb(PIn.Int(_tablePlannedAll.Rows[i]["colorText"].ToString()));
                 row.BackColor = Color.FromArgb(PIn.Int(_tablePlannedAll.Rows[i]["colorBackG"].ToString()));
                 row.Tag = PIn.Long(_tablePlannedAll.Rows[i]["AptNum"].ToString());
@@ -11261,7 +11020,7 @@ namespace OpenDental
         }
 
         ///<summary>This is the listener for the Delete button.</summary>
-        private void butClear_Click(object sender, System.EventArgs e)
+        private void butClear_Click(object sender, EventArgs e)
         {
             if (gridPlanned.SelectedIndices.Length == 0)
             {
@@ -11396,17 +11155,17 @@ namespace OpenDental
             long aptnum = (long)gridPlanned.Rows[e.Row].Tag;
             FormApptEdit FormAE = new FormApptEdit(aptnum);
             FormAE.ShowDialog();
-            if (Programs.UsingOrion)
-            {
-                if (FormAE.DialogResult == DialogResult.OK)
-                {
-                    ModuleSelected(PatCur.PatNum);//if procs were added in appt, then this will display them*/
-                }
-            }
-            else
-            {
+            //if (Programs.UsingOrion)
+            //{
+            //    if (FormAE.DialogResult == DialogResult.OK)
+            //    {
+            //        ModuleSelected(PatCur.PatNum);//if procs were added in appt, then this will display them*/
+            //    }
+            //}
+            //else
+            //{
                 ModuleSelected(PatCur.PatNum);//if procs were added in appt, then this will display them*/
-            }
+            //}
             gridPlanned.SetSelected(false);
             for (int i = 0; i < gridPlanned.Rows.Count; i++)
             {
@@ -13011,13 +12770,13 @@ namespace OpenDental
                 ProcGroupItems.Insert(groupItem);
                 groupItemList.Add(groupItem);
             }
-            if (Programs.UsingOrion)
-            {
-                OrionProc op = new OrionProc();
-                op.ProcNum = group.ProcNum;
-                op.Status2 = OrionStatus.C;
-                OrionProcs.Insert(op);
-            }
+            //if (Programs.UsingOrion)
+            //{
+            //    OrionProc op = new OrionProc();
+            //    op.ProcNum = group.ProcNum;
+            //    op.Status2 = OrionStatus.C;
+            //    OrionProcs.Insert(op);
+            //}
             FormProcGroup FormP = new FormProcGroup();
             FormP.GroupCur = group;
             FormP.GroupItemList = groupItemList;
@@ -13483,18 +13242,6 @@ namespace OpenDental
             if (panelNewH > panelImages.Bottom - toothChart.Bottom)
                 panelNewH = panelImages.Bottom - toothChart.Bottom;//keeps it from going too high
             panelImages.Height = panelNewH;
-            if (UsingEcwTightOrFull())
-            {
-                if (panelImages.Visible)
-                {
-                    panelEcw.Height = tabControlImages.Top - panelEcw.Top + 1
-                        - (panelImages.Height + 2);
-                }
-                else
-                {
-                    panelEcw.Height = tabControlImages.Top - panelEcw.Top + 1;
-                }
-            }
         }
 
         private void panelImages_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e)
@@ -13534,17 +13281,7 @@ namespace OpenDental
             }
             selectedImageTab = tabControlImages.SelectedIndex;
             FillImages();//it will not actually fill the images unless panelImages is visible.
-            if (UsingEcwTightOrFull())
-            {
-                if (panelImages.Visible)
-                {
-                    panelEcw.Height = tabControlImages.Top - panelEcw.Top + 1 - (panelImages.Height + 2);
-                }
-                else
-                {
-                    panelEcw.Height = tabControlImages.Top - panelEcw.Top + 1;
-                }
-            }
+
             RefreshSheetLayout();//This changes the sheet layout.
             RefreshModuleScreen(false);//Update UI to reflect any changed dynamic SheetDefs.
         }
@@ -13612,52 +13349,56 @@ namespace OpenDental
             {
                 return;//clicked on white space.
             }
-            ApteryxImage apteryxImg = listViewImages.SelectedItems[0].Tag as ApteryxImage;
-            if (apteryxImg != null)
-            {//can be other images or documents here. XVWeb downloads have tags to store info.
-                string text = listViewImages.SelectedItems[0].Text;
-                Bitmap apiImage = null;
-                double fileSizeMB = (double)apteryxImg.FileSize / 1024 / 1024;
-                FormProgress FormP = new FormProgress(maxVal: fileSizeMB);
-                FormP.DisplayText = "?currentVal MB of ?maxVal MB copied";
-                ODThread threadGetBitmap = new ODThread(new ODThread.WorkerDelegate((o) =>
-                {
-                    apiImage = XVWeb.GetBitmap(apteryxImg, FormP);
-                }));
-                threadGetBitmap.Name = "DownloadApteryxImage" + apteryxImg.Id;
-                threadGetBitmap.Start(true);
-                //display the progress dialog to the user:
-                FormP.ShowDialog();
-                if (FormP.DialogResult == DialogResult.Cancel)
-                {
-                    threadGetBitmap.QuitAsync();
-                    return;
-                }
-                threadGetBitmap.Join(2000);//give thread some time to finish before trying to display the image.
-                if (formImageViewer == null || !formImageViewer.Visible)
-                {
-                    formImageViewer = new FormImageViewer();
-                    formImageViewer.Show();
-                }
-                if (formImageViewer.WindowState == FormWindowState.Minimized)
-                {
-                    formImageViewer.WindowState = FormWindowState.Normal;
-                }
-                formImageViewer.BringToFront();
-                formImageViewer.SetImage(apiImage, text);
-                Document savedImage = XVWeb.SaveApteryxImageToDoc(apteryxImg, apiImage, PatCur);//if they want to save in the db & image doesn't already exist
-                if (savedImage != null)
-                {
-                    listViewImages.SelectedItems[0].Tag = null;
-                    _listApteryxThumbnails.Remove(_listApteryxThumbnails.Find(x => x.Image.Id == apteryxImg.Id));//So that this image is not displayed twice
-                    int docListIndex = DocumentList.GetLength(0);
-                    Array.Resize(ref DocumentList, docListIndex + 1);
-                    DocumentList[docListIndex] = Documents.GetByNum(savedImage.DocNum);
-                    FillImages();
-                }
-                apiImage.Dispose();
-                return;
-            }
+
+            // TODO: Implement Apteryx
+
+            //ApteryxImage apteryxImg = listViewImages.SelectedItems[0].Tag as ApteryxImage;
+            //if (apteryxImg != null)
+            //{//can be other images or documents here. XVWeb downloads have tags to store info.
+            //    string text = listViewImages.SelectedItems[0].Text;
+            //    Bitmap apiImage = null;
+            //    double fileSizeMB = (double)apteryxImg.FileSize / 1024 / 1024;
+            //    FormProgress FormP = new FormProgress(maxVal: fileSizeMB);
+            //    FormP.DisplayText = "?currentVal MB of ?maxVal MB copied";
+            //    ODThread threadGetBitmap = new ODThread(new ODThread.WorkerDelegate((o) =>
+            //    {
+            //        apiImage = XVWebBridge.GetBitmap(apteryxImg, FormP);
+            //    }));
+            //    threadGetBitmap.Name = "DownloadApteryxImage" + apteryxImg.Id;
+            //    threadGetBitmap.Start(true);
+            //    //display the progress dialog to the user:
+            //    FormP.ShowDialog();
+            //    if (FormP.DialogResult == DialogResult.Cancel)
+            //    {
+            //        threadGetBitmap.QuitAsync();
+            //        return;
+            //    }
+            //    threadGetBitmap.Join(2000);//give thread some time to finish before trying to display the image.
+            //    if (formImageViewer == null || !formImageViewer.Visible)
+            //    {
+            //        formImageViewer = new FormImageViewer();
+            //        formImageViewer.Show();
+            //    }
+            //    if (formImageViewer.WindowState == FormWindowState.Minimized)
+            //    {
+            //        formImageViewer.WindowState = FormWindowState.Normal;
+            //    }
+            //    formImageViewer.BringToFront();
+            //    formImageViewer.SetImage(apiImage, text);
+            //    Document savedImage = XVWebBridge.SaveApteryxImageToDoc(apteryxImg, apiImage, PatCur);//if they want to save in the db & image doesn't already exist
+            //    if (savedImage != null)
+            //    {
+            //        listViewImages.SelectedItems[0].Tag = null;
+            //        _listApteryxThumbnails.Remove(_listApteryxThumbnails.Find(x => x.Image.Id == apteryxImg.Id));//So that this image is not displayed twice
+            //        int docListIndex = DocumentList.GetLength(0);
+            //        Array.Resize(ref DocumentList, docListIndex + 1);
+            //        DocumentList[docListIndex] = Documents.GetByNum(savedImage.DocNum);
+            //        FillImages();
+            //    }
+            //    apiImage.Dispose();
+            //    return;
+            //}
+
             Document docCur = DocumentList[(int)visImages[listViewImages.SelectedIndices[0]]];
             if (!ImageHelper.HasImageExtension(docCur.FileName))
             {
@@ -14350,10 +14091,10 @@ namespace OpenDental
         private void tabProc_MouseDown(object sender, MouseEventArgs e)
         {
             ToggleCheckTreatPlans();
-            if (Programs.UsingOrion)
-            {
-                return;//tabs never minimize
-            }
+            //if (Programs.UsingOrion)
+            //{
+            //    return;//tabs never minimize
+            //}
             if (tabProc.Tag == null)
             {
                 //Save original height, will get reset to null every time it is expanded.
@@ -14665,19 +14406,7 @@ namespace OpenDental
         protected override SheetFieldLayoutMode GetSheetLayoutMode()
         {
             SheetFieldLayoutMode sheetLayoutModeCur;
-            if (UsingEcwTightOrFull())
-            {
-                if (checkTreatPlans.Checked)
-                {
-                    sheetLayoutModeCur = SheetFieldLayoutMode.EcwTreatPlan;
-                }
-                else
-                {
-                    sheetLayoutModeCur = SheetFieldLayoutMode.Ecw;
-                }
-                tabProc.TabPages.Remove(tabPatInfo);
-            }
-            else if (Clinic.GetById(Clinics.ClinicId).IsMedicalOnly)
+            if (Clinic.GetById(Clinics.ClinicId).IsMedicalOnly)
             {
                 if (checkTreatPlans.Checked)
                 {
@@ -14688,27 +14417,27 @@ namespace OpenDental
                     sheetLayoutModeCur = SheetFieldLayoutMode.MedicalPractice;
                 }
             }
-            else if (Programs.UsingOrion)
-            {
-                if (checkTreatPlans.Checked)
-                {
-                    sheetLayoutModeCur = SheetFieldLayoutMode.OrionTreatPlan;
-                }
-                else
-                {
-                    sheetLayoutModeCur = SheetFieldLayoutMode.Orion;
-                }
-                gridPtInfo.Visible = true;
-                //Logic below mimics old ChartLayoutHelper
-                gridPtInfo.Location = new Point(0, 0);
-                gridPtInfo.Size = new Size(tabPatInfo.ClientSize.Width, tabPatInfo.ClientSize.Height);
-                gridPtInfo.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom;
-                tabPatInfo.Controls.Add(gridPtInfo);
-                if (!tabProc.TabPages.Contains(tabPatInfo))
-                {
-                    tabProc.TabPages.Insert(1, tabPatInfo);
-                }
-            }
+            //else if (Programs.UsingOrion)
+            //{
+            //    if (checkTreatPlans.Checked)
+            //    {
+            //        sheetLayoutModeCur = SheetFieldLayoutMode.OrionTreatPlan;
+            //    }
+            //    else
+            //    {
+            //        sheetLayoutModeCur = SheetFieldLayoutMode.Orion;
+            //    }
+            //    gridPtInfo.Visible = true;
+            //    //Logic below mimics old ChartLayoutHelper
+            //    gridPtInfo.Location = new Point(0, 0);
+            //    gridPtInfo.Size = new Size(tabPatInfo.ClientSize.Width, tabPatInfo.ClientSize.Height);
+            //    gridPtInfo.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom;
+            //    tabPatInfo.Controls.Add(gridPtInfo);
+            //    if (!tabProc.TabPages.Contains(tabPatInfo))
+            //    {
+            //        tabProc.TabPages.Insert(1, tabPatInfo);
+            //    }
+            //}
             else if (checkTreatPlans.Checked)
             {
                 sheetLayoutModeCur = SheetFieldLayoutMode.TreatPlan;

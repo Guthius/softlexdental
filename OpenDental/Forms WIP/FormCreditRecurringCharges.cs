@@ -34,103 +34,104 @@ namespace OpenDental
         public FormCreditRecurringCharges()
         {
             InitializeComponent();
-
         }
 
         private void FormRecurringCharges_Load(object sender, EventArgs e)
         {
-            if (Programs.HasMultipleCreditCardProgramsEnabled())
-            {
-                gridMain.HScrollVisible = true;
-            }
-            //if(!Preferences.IsODHQ) {
-            //	checkHideBold.Checked=true;
-            //	checkHideBold.Visible=false;
-            //}
-            Program progCur = null;
-            if (Programs.IsEnabled(ProgramName.PaySimple))
-            {
-                progCur = Programs.GetCur(ProgramName.PaySimple);
-                labelUpdated.Visible = false;
-                checkForceDuplicates.Checked = false;
-                checkForceDuplicates.Visible = false;//PaySimple always rejects identical transactions made within 5 minutes of eachother.
-            }
-            //if(Programs.IsEnabled(ProgramName.PayConnect)) {
-            //	progCur=Programs.GetCur(ProgramName.PayConnect);
-            //	labelUpdated.Visible=false;
-            //	checkForceDuplicates.Visible=true;
-            //	checkForceDuplicates.Checked=PIn.Bool(ProgramProperties.GetPropValForClinicOrDefault(progCur.ProgramNum,
-            //		PayConnect.ProgramProperties.PayConnectForceRecurringCharge,Clinics.ClinicNum));
-            //}
-            if (Programs.IsEnabled(ProgramName.Xcharge))
-            {
-                progCur = Programs.GetCur(ProgramName.Xcharge);
-                labelUpdated.Visible = true;
-                checkForceDuplicates.Visible = true;
-                string xPath = Programs.GetProgramPath(progCur);
-                checkForceDuplicates.Checked = PIn.Bool(ProgramProperties.GetPropValForClinicOrDefault(progCur.ProgramNum,
-                    XCharge.ProgramProperties.XChargeForceRecurringCharge, Clinics.ClinicId));
-                if (!File.Exists(xPath))
-                {//program path is invalid
-                 //if user has setup permission and they want to edit the program path, show the X-Charge setup window
-                    if (Security.IsAuthorized(Permissions.Setup)
-                        && MsgBox.Show(this, MsgBoxButtons.YesNo, "The X-Charge path is not valid.  Would you like to edit the path?"))
-                    {
-                        FormXchargeSetup FormX = new FormXchargeSetup();
-                        FormX.ShowDialog();
-                        if (FormX.DialogResult == DialogResult.OK)
-                        {
-                            //The user could have correctly enabled the X-Charge bridge, we need to update our local _programCur and _xPath variable2
-                            progCur = Programs.GetCur(ProgramName.Xcharge);
-                            xPath = Programs.GetProgramPath(progCur);
-                        }
-                    }
-                    //if the program path still does not exist, whether or not they attempted to edit the program link, tell them to edit and close the form
-                    if (!File.Exists(xPath))
-                    {
-                        MsgBox.Show(this, "The X-Charge program path is not valid.  Edit the program link in order to use the CC Recurring Charges feature.");
-                        Close();
-                        return;
-                    }
-                }
-            }
-            if (progCur == null)
-            {
-                MsgBox.Show(this, "The PayConnect, PaySimple, or X-Charge program link must be enabled in order to use the CC Recurring Charges feature.");
-                Close();
-                return;
-            }
-            _isSelecting = true;
-            _listUserClinics = new List<Clinic>();
+            // TODO: Implement me
 
-            if (!Security.CurrentUser.ClinicRestricted)
-            {
-                _listUserClinics.Add(new Clinic() { Description = Lan.g(this, "Unassigned") });
-            }
-            Clinic.GetByUser(Security.CurrentUser).ForEach(x => _listUserClinics.Add(x));
-            for (int i = 0; i < _listUserClinics.Count; i++)
-            {
-                listClinics.Items.Add(_listUserClinics[i].Description);
-                listClinics.SetSelected(i, true);
-            }
-            //checkAllClin.Checked=true;//checked true by default in designer so we don't trigger the event to select all and fill grid
+            //if (Programs.HasMultipleCreditCardProgramsEnabled())
+            //{
+            //    gridMain.HScrollVisible = true;
+            //}
+            ////if(!Preferences.IsODHQ) {
+            ////	checkHideBold.Checked=true;
+            ////	checkHideBold.Visible=false;
+            ////}
+            //Program progCur = null;
+            //if (Programs.IsEnabled(ProgramName.PaySimple))
+            //{
+            //    progCur = Programs.GetCur(ProgramName.PaySimple);
+            //    labelUpdated.Visible = false;
+            //    checkForceDuplicates.Checked = false;
+            //    checkForceDuplicates.Visible = false;//PaySimple always rejects identical transactions made within 5 minutes of eachother.
+            //}
+            ////if(Programs.IsEnabled(ProgramName.PayConnect)) {
+            ////	progCur=Programs.GetCur(ProgramName.PayConnect);
+            ////	labelUpdated.Visible=false;
+            ////	checkForceDuplicates.Visible=true;
+            ////	checkForceDuplicates.Checked=PIn.Bool(ProgramProperties.GetPropValForClinicOrDefault(progCur.ProgramNum,
+            ////		PayConnect.ProgramProperties.PayConnectForceRecurringCharge,Clinics.ClinicNum));
+            ////}
+            //if (Programs.IsEnabled(ProgramName.Xcharge))
+            //{
+            //    progCur = Programs.GetCur(ProgramName.Xcharge);
+            //    labelUpdated.Visible = true;
+            //    checkForceDuplicates.Visible = true;
+            //    string xPath = Programs.GetProgramPath(progCur);
+            //    checkForceDuplicates.Checked = PIn.Bool(ProgramProperties.GetPropValForClinicOrDefault(progCur.ProgramNum,
+            //        XCharge.ProgramProperties.XChargeForceRecurringCharge, Clinics.ClinicId));
+            //    if (!File.Exists(xPath))
+            //    {//program path is invalid
+            //     //if user has setup permission and they want to edit the program path, show the X-Charge setup window
+            //        if (Security.IsAuthorized(Permissions.Setup)
+            //            && MsgBox.Show(this, MsgBoxButtons.YesNo, "The X-Charge path is not valid.  Would you like to edit the path?"))
+            //        {
+            //            FormXchargeSetup FormX = new FormXchargeSetup();
+            //            FormX.ShowDialog();
+            //            if (FormX.DialogResult == DialogResult.OK)
+            //            {
+            //                //The user could have correctly enabled the X-Charge bridge, we need to update our local _programCur and _xPath variable2
+            //                progCur = Programs.GetCur(ProgramName.Xcharge);
+            //                xPath = Programs.GetProgramPath(progCur);
+            //            }
+            //        }
+            //        //if the program path still does not exist, whether or not they attempted to edit the program link, tell them to edit and close the form
+            //        if (!File.Exists(xPath))
+            //        {
+            //            MsgBox.Show(this, "The X-Charge program path is not valid.  Edit the program link in order to use the CC Recurring Charges feature.");
+            //            Close();
+            //            return;
+            //        }
+            //    }
+            //}
+            //if (progCur == null)
+            //{
+            //    MsgBox.Show(this, "The PayConnect, PaySimple, or X-Charge program link must be enabled in order to use the CC Recurring Charges feature.");
+            //    Close();
+            //    return;
+            //}
+            //_isSelecting = true;
+            //_listUserClinics = new List<Clinic>();
 
-            _charger = new RecurringChargerator(true);
-            _charger.SingleCardFinished = new Action(() =>
-            {
-                this.Invoke(() =>
-                {
-                    labelCharged.Text = Lans.g(this, "Charged=") + _charger.Success;
-                    labelFailed.Text = Lans.g(this, "Failed=") + _charger.Failed;
-                    labelUpdated.Text = Lans.g(this, "Updated=") + _charger.Updated;
-                });
-            });
-            GeneralProgramEvent.Fired += StopRecurringCharges;//This is so we'll be alerted in case of a shutdown.
-            labelCharged.Text = Lan.g(this, "Charged=") + "0";
-            labelFailed.Text = Lan.g(this, "Failed=") + "0";
-            FillGrid(true);
-            gridMain.SetSelected(true);
-            labelSelected.Text = Lan.g(this, "Selected=") + gridMain.SelectedIndices.Length.ToString();
+            //if (!Security.CurrentUser.ClinicRestricted)
+            //{
+            //    _listUserClinics.Add(new Clinic() { Description = Lan.g(this, "Unassigned") });
+            //}
+            //Clinic.GetByUser(Security.CurrentUser).ForEach(x => _listUserClinics.Add(x));
+            //for (int i = 0; i < _listUserClinics.Count; i++)
+            //{
+            //    listClinics.Items.Add(_listUserClinics[i].Description);
+            //    listClinics.SetSelected(i, true);
+            //}
+            ////checkAllClin.Checked=true;//checked true by default in designer so we don't trigger the event to select all and fill grid
+
+            //_charger = new RecurringChargerator(true);
+            //_charger.SingleCardFinished = new Action(() =>
+            //{
+            //    this.Invoke(() =>
+            //    {
+            //        labelCharged.Text = Lans.g(this, "Charged=") + _charger.Success;
+            //        labelFailed.Text = Lans.g(this, "Failed=") + _charger.Failed;
+            //        labelUpdated.Text = Lans.g(this, "Updated=") + _charger.Updated;
+            //    });
+            //});
+            //GeneralProgramEvent.Fired += StopRecurringCharges;//This is so we'll be alerted in case of a shutdown.
+            //labelCharged.Text = Lan.g(this, "Charged=") + "0";
+            //labelFailed.Text = Lan.g(this, "Failed=") + "0";
+            //FillGrid(true);
+            //gridMain.SetSelected(true);
+            //labelSelected.Text = Lan.g(this, "Selected=") + gridMain.SelectedIndices.Length.ToString();
         }
 
         ///<summary>The DataTable used to fill the grid will only be refreshed from the db if isFromDb is true.  Otherwise the grid will be refilled using
@@ -158,21 +159,24 @@ namespace OpenDental
             gridMain.Columns.Add(new ODGridColumn(Lan.g("TableRecurring", "Total Due"), 65, textAlignment: HorizontalAlignment.Right));
             gridMain.Columns.Add(new ODGridColumn(Lan.g("TableRecurring", "Repeat Amt"), 75, textAlignment: HorizontalAlignment.Right));//RptChrgAmt
             gridMain.Columns.Add(new ODGridColumn(Lan.g("TableRecurring", "Charge Amt"), 85, textAlignment: HorizontalAlignment.Right));
-            if (Programs.HasMultipleCreditCardProgramsEnabled())
-            {
-                if (Programs.IsEnabled(ProgramName.Xcharge))
-                {
-                    gridMain.Columns.Add(new ODGridColumn("X-Charge", 70, textAlignment: HorizontalAlignment.Center));
-                }
-                if (Programs.IsEnabled(ProgramName.PayConnect))
-                {
-                    gridMain.Columns.Add(new ODGridColumn("PayConnect", 85, textAlignment: HorizontalAlignment.Center));
-                }
-                if (Programs.IsEnabled(ProgramName.PaySimple))
-                {
-                    gridMain.Columns.Add(new ODGridColumn("PaySimple", 80, textAlignment: HorizontalAlignment.Center));
-                }
-            }
+
+            // TODO: Fix me
+            //if (Programs.HasMultipleCreditCardProgramsEnabled())
+            //{
+            //    if (Programs.IsEnabled(ProgramName.Xcharge))
+            //    {
+            //        gridMain.Columns.Add(new ODGridColumn("X-Charge", 70, textAlignment: HorizontalAlignment.Center));
+            //    }
+            //    if (Programs.IsEnabled(ProgramName.PayConnect))
+            //    {
+            //        gridMain.Columns.Add(new ODGridColumn("PayConnect", 85, textAlignment: HorizontalAlignment.Center));
+            //    }
+            //    if (Programs.IsEnabled(ProgramName.PaySimple))
+            //    {
+            //        gridMain.Columns.Add(new ODGridColumn("PaySimple", 80, textAlignment: HorizontalAlignment.Center));
+            //    }
+            //}
+
             gridMain.Rows.Clear();
             ODGridRow row;
             foreach (RecurringChargeData chargeCur in listChargesCur)
@@ -251,18 +255,19 @@ namespace OpenDental
                 }
                 if (Programs.HasMultipleCreditCardProgramsEnabled())
                 {
-                    if (Programs.IsEnabled(ProgramName.Xcharge))
-                    {
-                        row.Cells.Add(!string.IsNullOrEmpty(chargeCur.XChargeToken) ? "X" : "");
-                    }
-                    if (Programs.IsEnabled(ProgramName.PayConnect))
-                    {
-                        row.Cells.Add(!string.IsNullOrEmpty(chargeCur.PayConnectToken) ? "X" : "");
-                    }
-                    if (Programs.IsEnabled(ProgramName.PaySimple))
-                    {
-                        row.Cells.Add(!string.IsNullOrEmpty(chargeCur.PaySimpleToken) ? "X" : "");
-                    }
+                    // TODO: Fix me
+                    //if (Programs.IsEnabled(ProgramName.Xcharge))
+                    //{
+                    //    row.Cells.Add(!string.IsNullOrEmpty(chargeCur.XChargeToken) ? "X" : "");
+                    //}
+                    //if (Programs.IsEnabled(ProgramName.PayConnect))
+                    //{
+                    //    row.Cells.Add(!string.IsNullOrEmpty(chargeCur.PayConnectToken) ? "X" : "");
+                    //}
+                    //if (Programs.IsEnabled(ProgramName.PaySimple))
+                    //{
+                    //    row.Cells.Add(!string.IsNullOrEmpty(chargeCur.PaySimpleToken) ? "X" : "");
+                    //}
                 }
                 row.Tag = chargeCur;
                 gridMain.Rows.Add(row);

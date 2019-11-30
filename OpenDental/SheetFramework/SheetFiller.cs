@@ -943,39 +943,39 @@ namespace OpenDental
                                 plannedAppointmentInfo += hours.ToString() + " " + Lan.g("Appointments", "hours") + ", ";
                             }
                             plannedAppointmentInfo += minutes.ToString() + " " + Lan.g("Appointments", "min") + "\r\n";
-                            if (Programs.UsingOrion)
-                            {
-                                DateTime newDateSched = new DateTime();
-                                for (int p = 0; p < procsList.Count; p++)
-                                {
-                                    if (procsList[p].PlannedAptNum == apptList[i].AptNum)
-                                    {
-                                        OrionProc op = OrionProcs.GetOneByProcNum(procsList[p].ProcNum);
-                                        if (op != null && op.DateScheduleBy.Year > 1880)
-                                        {
-                                            if (newDateSched.Year < 1880)
-                                            {
-                                                newDateSched = op.DateScheduleBy;
-                                            }
-                                            else
-                                            {
-                                                if (op.DateScheduleBy < newDateSched)
-                                                {
-                                                    newDateSched = op.DateScheduleBy;
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                                if (newDateSched.Year > 1880)
-                                {
-                                    plannedAppointmentInfo += Lan.g("Appointments", "Schedule by") + ": " + newDateSched.ToShortDateString();
-                                }
-                                else
-                                {
-                                    plannedAppointmentInfo += Lan.g("Appointments", "No schedule by date.");
-                                }
-                            }
+                            //if (Programs.UsingOrion)
+                            //{
+                            //    DateTime newDateSched = new DateTime();
+                            //    for (int p = 0; p < procsList.Count; p++)
+                            //    {
+                            //        if (procsList[p].PlannedAptNum == apptList[i].AptNum)
+                            //        {
+                            //            OrionProc op = OrionProcs.GetOneByProcNum(procsList[p].ProcNum);
+                            //            if (op != null && op.DateScheduleBy.Year > 1880)
+                            //            {
+                            //                if (newDateSched.Year < 1880)
+                            //                {
+                            //                    newDateSched = op.DateScheduleBy;
+                            //                }
+                            //                else
+                            //                {
+                            //                    if (op.DateScheduleBy < newDateSched)
+                            //                    {
+                            //                        newDateSched = op.DateScheduleBy;
+                            //                    }
+                            //                }
+                            //            }
+                            //        }
+                            //    }
+                            //    if (newDateSched.Year > 1880)
+                            //    {
+                            //        plannedAppointmentInfo += Lan.g("Appointments", "Schedule by") + ": " + newDateSched.ToShortDateString();
+                            //    }
+                            //    else
+                            //    {
+                            //        plannedAppointmentInfo += Lan.g("Appointments", "No schedule by date.");
+                            //    }
+                            //}
                         }
                     }
                 }

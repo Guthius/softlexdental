@@ -219,23 +219,7 @@ namespace OpenDental
                     }
                 }
             }
-            else
-            {
-                if (Programs.UsingEcwFullMode())
-                {
-                    ToolBarMain.Buttons["Add"].Enabled = false;
-                    ToolBarMain.Buttons["Delete"].Enabled = false;
-                    if (Preference.GetBool(PreferenceName.ShowFeaturePatientClone)
-                        && ToolBarMain.Buttons["AddClone"] != null
-                        && ToolBarMain.Buttons["SynchClone"] != null
-                        && ToolBarMain.Buttons["BreakClone"] != null)
-                    {
-                        ToolBarMain.Buttons["AddClone"].Enabled = false;
-                        ToolBarMain.Buttons["SynchClone"].Enabled = false;
-                        ToolBarMain.Buttons["BreakClone"].Enabled = false;
-                    }
-                }
-            }
+
             FillPatientPicture();
             FillPatientData();
             LoadFamily();
@@ -388,7 +372,7 @@ namespace OpenDental
             }
             else if (e.Button.Tag.GetType() == typeof(Program))
             {
-                ProgramL.Execute(((Program)e.Button.Tag).ProgramNum, PatCur);
+                ProgramL.Execute(((Program)e.Button.Tag).Id, PatCur);
             }
         }
 
@@ -488,13 +472,16 @@ namespace OpenDental
 
         private void gridPat_CellClick(object sender, ODGridClickEventArgs e)
         {
+            // TODO: Implement me
+
+
             ODGridCell gridCellCur = gridPat.Rows[e.Row].Cells[e.Column];
             //Only grid cells with phone numbers are blue and underlined. 
             //If we support color and underline in the future, this might be changed to a regex of the cell text.
-            if (gridCellCur.ColorText == System.Drawing.Color.Blue && gridCellCur.Underline == true && Programs.GetCur(ProgramName.DentalTekSmartOfficePhone).Enabled)
-            {
-                DentalTek.PlaceCall(gridCellCur.Text);
-            }
+            //if (gridCellCur.ColorText == System.Drawing.Color.Blue && gridCellCur.Underline == true && Programs.GetCur(ProgramName.DentalTekSmartOfficePhone).Enabled)
+            //{
+            //    DentalTekBridge.PlaceCall(gridCellCur.Text);
+            //}
         }
 
         private void FillPatientData()

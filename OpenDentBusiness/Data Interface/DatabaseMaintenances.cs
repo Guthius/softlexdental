@@ -7529,42 +7529,6 @@ namespace OpenDentBusiness
         #endregion ProcedureLog-------------------------------------------------------------------------------------------------------------------------
         #region ProgramProperty, Provider, QuickPasteNote-----------------------------------------------------------------------------------------------
 
-        [DatabaseMaintenanceAttribute]
-        public static string ProgramPropertiesDuplicatesForHQ(bool verbose, DatabaseMaintenanceMode modeCur)
-        {
-            string progNumStr = POut.Long(Programs.GetProgramNum(ProgramName.Xcharge)) + "," + POut.Long(Programs.GetProgramNum(ProgramName.PayConnect));
-            //Min may not be the oldest when using random primary keys, but we have to pick one.  In most all cases theyre identical anyway.
-            string command = "SELECT MIN(ProgramPropertyNum) ProgramPropertyNum,COUNT(*) Count "
-                    + "FROM programproperty "
-                    + "WHERE ClinicNum=0 "
-                    + "AND ProgramNum IN (" + progNumStr + ") "
-                    + "GROUP BY ProgramNum,PropertyDesc";
-            DataTable tableProgProps = Db.GetTable(command);
-            string log = "";
-            switch (modeCur)
-            {
-                case DatabaseMaintenanceMode.Check:
-                    int numFound = tableProgProps.Select().Select(x => PIn.Int(x["Count"].ToString()) - 1).Sum();
-                    if (numFound > 0 || verbose)
-                    {
-                        log += Lans.g("FormDatabaseMaintenance", "X-Charge and/or PayConnect duplicate program property entries found: ")
-                            + numFound + "\r\n";
-                    }
-                    break;
-                case DatabaseMaintenanceMode.Fix:
-                    command = "DELETE FROM programproperty WHERE ClinicNum=0 AND ProgramNum IN (" + progNumStr + ") "
-                        + "AND ProgramPropertyNum NOT IN (" + string.Join(",", tableProgProps.Select().Select(x => PIn.Long(x["ProgramPropertyNum"].ToString()))) + ")";
-                    long numberFixed = Db.NonQ(command);
-                    if (numberFixed > 0 || verbose)
-                    {
-                        log += Lans.g("FormDatabaseMaintenance", "X-Charge and/or PayConnect duplicate program property entries deleted: ")
-                            + numberFixed.ToString() + "\r\n";
-                    }
-                    break;
-            }
-            return log;
-        }
-
         [DatabaseMaintenanceAttribute(HasBreakDown = true)]
         public static string ProviderHiddenWithClaimPayments(bool verbose, DatabaseMaintenanceMode modeCur)
         {

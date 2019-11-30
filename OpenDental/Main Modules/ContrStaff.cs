@@ -203,22 +203,22 @@ namespace OpenDental
 
             // TODO: This should be moved to a plugin.
 
-            if (!Programs.IsEnabled(ProgramName.Transworld))
-            {
-                try
-                {
-                    Process.Start("http://www.opendental.com/manual/transworldsystems.html");
-                }
-                catch
-                {
-                    MessageBox.Show(
-                        "Failed to open web browser. Please make sure you have a default browser set and are connected to the internet and then try again.",
-                        "Collections",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Error);
-                }
-                return;
-            }
+            //if (!Program.IsEnabled(ProgramName.Transworld))
+            //{
+            //    try
+            //    {
+            //        Process.Start("http://www.opendental.com/manual/transworldsystems.html");
+            //    }
+            //    catch
+            //    {
+            //        MessageBox.Show(
+            //            "Failed to open web browser. Please make sure you have a default browser set and are connected to the internet and then try again.",
+            //            "Collections",
+            //            MessageBoxButtons.OK,
+            //            MessageBoxIcon.Error);
+            //    }
+            //    return;
+            //}
 
             if (formArManager == null || formArManager.IsDisposed)
             {
@@ -404,43 +404,44 @@ namespace OpenDental
             }
         }
 
-
         bool ValidateConnectionDetails()
         {
-            Program progCur = Programs.GetCur(ProgramName.Transworld);
-            List<long> listClinicNums = new List<long>();
+            // TODO: Implement me
 
-            listClinicNums = Clinic.GetByUser(Security.CurrentUser).Select(x => x.Id).ToList();
-            if (!Security.CurrentUser.ClinicRestricted)
-            {
-                listClinicNums.Add(0);
-            }
+            //Program progCur = Programs.GetCur(ProgramName.Transworld);
+            //List<long> listClinicNums = new List<long>();
 
-            List<ProgramProperty> listProperties = ProgramProperties.GetForProgram(progCur.ProgramNum);
-            foreach (long clinicNum in listClinicNums)
-            {
-                List<ProgramProperty> listPropsForClinic = new List<ProgramProperty>();
-                if (listProperties.All(x => x.ClinicId != clinicNum))
-                {//if no prog props exist for the clinic, continue, clinicNum 0 will be tested once as well
-                    continue;
-                }
-                listPropsForClinic = listProperties.FindAll(x => x.ClinicId == clinicNum);
-                string sftpAddress = listPropsForClinic.Find(x => x.Key == "SftpServerAddress")?.Value ?? "";
-                int sftpPort;
-                if (!int.TryParse(listPropsForClinic.Find(x => x.Key == "SftpServerPort")?.Value ?? "", out sftpPort))
-                {
-                    sftpPort = 22;//default to port 22
-                }
+            //listClinicNums = Clinic.GetByUser(Security.CurrentUser).Select(x => x.Id).ToList();
+            //if (!Security.CurrentUser.ClinicRestricted)
+            //{
+            //    listClinicNums.Add(0);
+            //}
 
-                string userName = listPropsForClinic.Find(x => x.Key == "SftpUsername")?.Value ?? "";
-                string userPassword = listPropsForClinic.Find(x => x.Key == "SftpPassword")?.Value ?? "";
+            //List<ProgramPreference> listProperties = ProgramProperties.GetForProgram(progCur.Id);
+            //foreach (long clinicNum in listClinicNums)
+            //{
+            //    List<ProgramPreference> listPropsForClinic = new List<ProgramPreference>();
+            //    if (listProperties.All(x => x.ClinicId != clinicNum))
+            //    {//if no prog props exist for the clinic, continue, clinicNum 0 will be tested once as well
+            //        continue;
+            //    }
+            //    listPropsForClinic = listProperties.FindAll(x => x.ClinicId == clinicNum);
+            //    string sftpAddress = listPropsForClinic.Find(x => x.Key == "SftpServerAddress")?.Value ?? "";
+            //    int sftpPort;
+            //    if (!int.TryParse(listPropsForClinic.Find(x => x.Key == "SftpServerPort")?.Value ?? "", out sftpPort))
+            //    {
+            //        sftpPort = 22;//default to port 22
+            //    }
 
-                // TODO: Fix me
-                //if (Sftp.IsConnectionValid(sftpAddress, userName, userPassword, sftpPort))
-                //{
-                //    return true;
-                //}
-            }
+            //    string userName = listPropsForClinic.Find(x => x.Key == "SftpUsername")?.Value ?? "";
+            //    string userPassword = listPropsForClinic.Find(x => x.Key == "SftpPassword")?.Value ?? "";
+
+            //    // TODO: Fix me
+            //    //if (Sftp.IsConnectionValid(sftpAddress, userName, userPassword, sftpPort))
+            //    //{
+            //    //    return true;
+            //    //}
+            //}
             return false;
         }
 

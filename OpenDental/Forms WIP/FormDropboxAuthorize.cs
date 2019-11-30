@@ -6,7 +6,7 @@ namespace OpenDental
 {
     public partial class FormDropboxAuthorize:ODForm {
 		// TODO: Fix me
-		public ProgramProperty ProgramPropertyAccessToken;
+		public ProgramPreference ProgramPropertyAccessToken;
 
 		public FormDropboxAuthorize() {
 			InitializeComponent();

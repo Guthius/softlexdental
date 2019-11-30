@@ -499,7 +499,7 @@ namespace OpenDental
                 EnableAllTools(false);//Disable entire menu (besides select patient).
             }
             //get the program properties for XVWeb from the cache.
-            if (XVWeb.IsDisplayingImagesInProgram && PatCur != null)
+            if (XVWebBridge.IsDisplayingImagesInProgram && PatCur != null)
             {
                 //start thread to load all apteryx images into OD. 
                 _threadImageRequest?.QuitAsync();//If an old thread is still running, we want to make it stop so the new one can run.
@@ -528,14 +528,18 @@ namespace OpenDental
         {
             Patient patient = (Patient)workerThread.Parameters[0];
             _isFillingXVWebFromThread = true;
-            List<ApteryxImage> listAI = new List<ApteryxImage>();
-            listAI = XVWeb.GetImagesList(PatCur);
-            lock (_apteryxLocker)
-            {
-                _listImageDownload = listAI;
-            }
-            //put images into desired image category folder from property value
-            FillTreeXVWebItems(patient.PatNum);
+
+            // TODO: Implement me
+
+
+            //List<ApteryxImage> listAI = new List<ApteryxImage>();
+            //listAI = XVWebBridge.GetImagesList(PatCur);
+            //lock (_apteryxLocker)
+            //{
+            //    _listImageDownload = listAI;
+            //}
+            ////put images into desired image category folder from property value
+            //FillTreeXVWebItems(patient.PatNum);
             _isFillingXVWebFromThread = false;
         }
 
@@ -873,56 +877,59 @@ namespace OpenDental
         /// <summary>Special way of selecting and displaying XVWeb downloaded images</summary>
         private void ShowApteryxImage(TreeNode nodeOver)
         {
-            ApteryxImage img = ((ImageNodeTag)nodeOver.Tag).ImgDownload; //cast back to an image to access id,width,height
-            Bitmap apiImage = null;
-            double fileSizeMB = (double)img.FileSize / 1024 / 1024;
-            FormProgress FormP = new FormProgress(maxVal: fileSizeMB);
-            FormP.DisplayText = "?currentVal MB of ?maxVal MB copied";
-            //start the thread that will perform the download
-            ODThread threadGetBitmap = new ODThread(new ODThread.WorkerDelegate((o) =>
-            {
-                apiImage = XVWeb.GetBitmap(img, FormP);
-            }));
-            threadGetBitmap.AddExceptionHandler(new ODThread.ExceptionDelegate((ex) =>
-            {
-                if (InvokeRequired)
-                {
-                    Invoke((Action)(() => FormFriendlyException.Show(Lan.g(this, "Unable to download image."), ex)));
-                }
-                else
-                {
-                    FormFriendlyException.Show(Lan.g(this, "Unable to download image."), ex);
-                }
-            }));
-            //display the progress dialog to the user:
-            threadGetBitmap.Name = "DownloadApteryxImage" + img.Id;
-            threadGetBitmap.Start(true);
-            FormP.ShowDialog();
-            if (FormP.DialogResult == DialogResult.Cancel)
-            {
-                threadGetBitmap.QuitAsync();
-                return;
-            }
-            threadGetBitmap.Join(2000);//give thread some time to finish before trying to display the image. 
-            Document newDoc = XVWeb.SaveApteryxImageToDoc(img, apiImage, PatCur);
-            if (newDoc != null)
-            {
-                nodeOver.Tag = MakeIdDoc(newDoc.DocNum);
-                nodeOver.ImageIndex = 2 + (int)newDoc.ImgType;
-                nodeOver.SelectedImageIndex = nodeOver.ImageIndex;
-                SelectTreeNode(nodeOver);
-            }
-            else
-            {
-                treeDocuments.SelectedNode = nodeOver;
-                treeDocuments.Invalidate();
-                pictureBoxMain.Visible = true;
-                EnableAllTreeItemTools(false);
-                panelNote.Visible = false;
-                ResizeAll();
-                ImagesCur = new Bitmap[] { apiImage };
-                EnableTreeItemTools(true, false, true, true, false, false, false, true, true, true, false, false, false, true);
-            }
+            // TODO: Implement me
+
+
+            //ApteryxImage img = ((ImageNodeTag)nodeOver.Tag).ImgDownload; //cast back to an image to access id,width,height
+            //Bitmap apiImage = null;
+            //double fileSizeMB = (double)img.FileSize / 1024 / 1024;
+            //FormProgress FormP = new FormProgress(maxVal: fileSizeMB);
+            //FormP.DisplayText = "?currentVal MB of ?maxVal MB copied";
+            ////start the thread that will perform the download
+            //ODThread threadGetBitmap = new ODThread(new ODThread.WorkerDelegate((o) =>
+            //{
+            //    apiImage = XVWebBridge.GetBitmap(img, FormP);
+            //}));
+            //threadGetBitmap.AddExceptionHandler(new ODThread.ExceptionDelegate((ex) =>
+            //{
+            //    if (InvokeRequired)
+            //    {
+            //        Invoke((Action)(() => FormFriendlyException.Show(Lan.g(this, "Unable to download image."), ex)));
+            //    }
+            //    else
+            //    {
+            //        FormFriendlyException.Show(Lan.g(this, "Unable to download image."), ex);
+            //    }
+            //}));
+            ////display the progress dialog to the user:
+            //threadGetBitmap.Name = "DownloadApteryxImage" + img.Id;
+            //threadGetBitmap.Start(true);
+            //FormP.ShowDialog();
+            //if (FormP.DialogResult == DialogResult.Cancel)
+            //{
+            //    threadGetBitmap.QuitAsync();
+            //    return;
+            //}
+            //threadGetBitmap.Join(2000);//give thread some time to finish before trying to display the image. 
+            //Document newDoc = XVWebBridge.SaveApteryxImageToDoc(img, apiImage, PatCur);
+            //if (newDoc != null)
+            //{
+            //    nodeOver.Tag = MakeIdDoc(newDoc.DocNum);
+            //    nodeOver.ImageIndex = 2 + (int)newDoc.ImgType;
+            //    nodeOver.SelectedImageIndex = nodeOver.ImageIndex;
+            //    SelectTreeNode(nodeOver);
+            //}
+            //else
+            //{
+            //    treeDocuments.SelectedNode = nodeOver;
+            //    treeDocuments.Invalidate();
+            //    pictureBoxMain.Visible = true;
+            //    EnableAllTreeItemTools(false);
+            //    panelNote.Visible = false;
+            //    ResizeAll();
+            //    ImagesCur = new Bitmap[] { apiImage };
+            //    EnableTreeItemTools(true, false, true, true, false, false, false, true, true, true, false, false, false, true);
+            //}
         }
 
         ///<summary>Gets the category folder name for the given document node.</summary>
@@ -1227,7 +1234,7 @@ namespace OpenDental
                 UserNumPrev = Security.CurrentUser.Id;//Update the Previous user num.
                 hasTreePrefsEnabled = false;//Disable flag
             }
-            if (XVWeb.IsDisplayingImagesInProgram && !_isFillingXVWebFromThread)
+            if (XVWebBridge.IsDisplayingImagesInProgram && !_isFillingXVWebFromThread)
             {//list was already added if this is from module refresh
                 FillTreeXVWebItems(PatCur.PatNum);
             }
@@ -1236,51 +1243,53 @@ namespace OpenDental
         /// <summary>Used with XVWeb bridge to dispaly images in images module</summary>
         private void FillTreeXVWebItems(long patNum)
         {
-            if (InvokeRequired)
-            {
-                Invoke((Action)(() => { FillTreeXVWebItems(patNum); }));
-                return;
-            }
-            if (patNum != PatCur.PatNum)
-            {
-                return;//The patient was changed while the thread was getting the images.
-            }
-            string imageCat = ProgramProperties.GetPropVal(Programs.GetProgramNum(ProgramName.XVWeb), XVWeb.ProgramProps.ImageCategory);
-            if (_listImageDownload == null || string.IsNullOrEmpty(imageCat))
-            {
-                return;
-            }
-            TreeNode apteryxFolderNode = treeDocuments.Nodes[Defs.GetOrder(DefinitionCategory.ImageCats, Defs.GetDef(DefinitionCategory.ImageCats, PIn.Long(imageCat)).Id)];
-            List<TreeNode> listApteryxNodes = new List<TreeNode>();
-            foreach (TreeNode node in apteryxFolderNode.Nodes)
-            {
-                ImageNodeTag nodeTag = ((ImageNodeTag)node.Tag);
-                if (nodeTag.NodeType == ImageNodeType.ApteryxImage)
-                {
-                    listApteryxNodes.Add(node);
-                }
-            }
-            listApteryxNodes.ForEach(x => apteryxFolderNode.Nodes.Remove(x));
-            List<ApteryxImage> listAI = new List<ApteryxImage>();
-            lock (_apteryxLocker)
-            {
-                listAI = _listImageDownload.DeepCopyList<ApteryxImage, ApteryxImage>(true);
-            }
-            foreach (ApteryxImage image in listAI)
-            {
-                if (Documents.DocExternalExists(image.Id.ToString(), ExternalSourceType.XVWeb))
-                {
-                    continue;//don't add the image if it was already saved to the database
-                }
-                //manually add api image nodes
-                TreeNode apiNode = new TreeNode(image.AcquisitionDate.ToShortDateString() + ": " + image.FormattedTeeth);
-                ImageNodeTag nodeTag = new ImageNodeTag();
-                nodeTag.NodeType = ImageNodeType.ApteryxImage;
-                nodeTag.ImgDownload = image;
-                apiNode.Tag = nodeTag;
-                apiNode.Name = "xvweb" + image.Id;
-                apteryxFolderNode.Nodes.Add(apiNode);
-            }
+            // TODO: Implement me
+
+            //if (InvokeRequired)
+            //{
+            //    Invoke((Action)(() => { FillTreeXVWebItems(patNum); }));
+            //    return;
+            //}
+            //if (patNum != PatCur.PatNum)
+            //{
+            //    return;//The patient was changed while the thread was getting the images.
+            //}
+            //string imageCat = ProgramProperties.GetPropVal(Programs.GetProgramNum(ProgramName.XVWeb), XVWebBridge.ProgramProps.ImageCategory);
+            //if (_listImageDownload == null || string.IsNullOrEmpty(imageCat))
+            //{
+            //    return;
+            //}
+            //TreeNode apteryxFolderNode = treeDocuments.Nodes[Defs.GetOrder(DefinitionCategory.ImageCats, Defs.GetDef(DefinitionCategory.ImageCats, PIn.Long(imageCat)).Id)];
+            //List<TreeNode> listApteryxNodes = new List<TreeNode>();
+            //foreach (TreeNode node in apteryxFolderNode.Nodes)
+            //{
+            //    ImageNodeTag nodeTag = ((ImageNodeTag)node.Tag);
+            //    if (nodeTag.NodeType == ImageNodeType.ApteryxImage)
+            //    {
+            //        listApteryxNodes.Add(node);
+            //    }
+            //}
+            //listApteryxNodes.ForEach(x => apteryxFolderNode.Nodes.Remove(x));
+            //List<ApteryxImage> listAI = new List<ApteryxImage>();
+            //lock (_apteryxLocker)
+            //{
+            //    listAI = _listImageDownload.DeepCopyList<ApteryxImage, ApteryxImage>(true);
+            //}
+            //foreach (ApteryxImage image in listAI)
+            //{
+            //    if (Documents.DocExternalExists(image.Id.ToString(), ExternalSourceType.XVWeb))
+            //    {
+            //        continue;//don't add the image if it was already saved to the database
+            //    }
+            //    //manually add api image nodes
+            //    TreeNode apiNode = new TreeNode(image.AcquisitionDate.ToShortDateString() + ": " + image.FormattedTeeth);
+            //    ImageNodeTag nodeTag = new ImageNodeTag();
+            //    nodeTag.NodeType = ImageNodeType.ApteryxImage;
+            //    nodeTag.ImgDownload = image;
+            //    apiNode.Tag = nodeTag;
+            //    apiNode.Name = "xvweb" + image.Id;
+            //    apteryxFolderNode.Nodes.Add(apiNode);
+            //}
         }
 
         private delegate void ToolBarClick();
@@ -1344,7 +1353,7 @@ namespace OpenDental
             }
             else if (e.Button.Tag.GetType() == typeof(Program))
             {
-                ProgramL.Execute(((Program)e.Button.Tag).ProgramNum, PatCur);
+                ProgramL.Execute(((Program)e.Button.Tag).Id, PatCur);
             }
         }
 
@@ -1382,7 +1391,7 @@ namespace OpenDental
             }
             else if (e.Button.Tag.GetType() == typeof(Program))
             {
-                ProgramL.Execute(((Program)e.Button.Tag).ProgramNum, PatCur);
+                ProgramL.Execute(((Program)e.Button.Tag).Id, PatCur);
             }
         }
 
@@ -2301,7 +2310,7 @@ namespace OpenDental
             ImageNodeTag nodeId = (ImageNodeTag)treeDocuments.SelectedNode.Tag;
             if (nodeId.NodeType == ImageNodeType.ApteryxImage)
             {
-                string imageCat = ProgramProperties.GetPropVal(Programs.GetProgramNum(ProgramName.XVWeb), XVWeb.ProgramProps.ImageCategory);
+                string imageCat = ProgramProperties.GetPropVal(Programs.GetProgramNum(ProgramName.XVWeb), XVWebBridge.ProgramProps.ImageCategory);
                 //save copy to db for temp storage
                 apteryxDoc = ImageStore.Import(ImageRenderingNow, (Defs.GetDef(DefinitionCategory.ImageCats, PIn.Long(imageCat)).Id), ImageType.Photo, PatCur);
             }

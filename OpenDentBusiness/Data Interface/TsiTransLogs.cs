@@ -106,32 +106,32 @@ namespace OpenDentBusiness
                     //TransJson=""//only valid for placement msgs
                     ClinicNum = patAgingCur.ClinicNum
                 };
-                TsiTransLogs.InsertMany(new List<TsiTransLog>() { logCur });
+                InsertMany(new List<TsiTransLog>() { logCur });
             }
         }
 
         /// <summary>Checks adjustments  </summary>
         public static void CheckAndInsertLogsIfAdjTypeExcluded(Adjustment adj, long patGuar, long patClinic, bool isFromTsi = false)
         {
-            if (!(TsiTransLogs.IsTransworldEnabled(patClinic) && Patients.IsGuarCollections(patGuar)))
-            {
-                return;
-            }
-            string msgText = "Adjustment type is set to excluded type from transworld program properties.";
-            if (isFromTsi)
-            {
-                msgText = "This was not a message sent to Transworld.  This adjustment was entered due to a payment received from Transworld.";
-                InsertTsiLogsForAdjustment(patGuar, adj.Id, adj.AdjAmt, msgText);
-                return;
-            }
-            Program transworldProg = Programs.GetCur(ProgramName.Transworld);
-            List<ProgramProperty> listProperties = ProgramProperties.GetForProgram(transworldProg.ProgramNum);
-            string posType = listProperties.FirstOrDefault(x => x.Key == "SyncExcludePosAdjType")?.Value ?? "";
-            string negType = listProperties.FirstOrDefault(x => x.Key == "SyncExcludeNegAdjType")?.Value ?? "";
-            if (adj.AdjType.In(PIn.Long(posType), PIn.Long(negType)))
-            {
-                InsertTsiLogsForAdjustment(patGuar, adj.Id, adj.AdjAmt, msgText);
-            }
+            //if (!(IsTransworldEnabled(patClinic) && Patients.IsGuarCollections(patGuar)))
+            //{
+            //    return;
+            //}
+            //string msgText = "Adjustment type is set to excluded type from transworld program properties.";
+            //if (isFromTsi)
+            //{
+            //    msgText = "This was not a message sent to Transworld.  This adjustment was entered due to a payment received from Transworld.";
+            //    InsertTsiLogsForAdjustment(patGuar, adj.Id, adj.AdjAmt, msgText);
+            //    return;
+            //}
+            //Program transworldProg = Programs.GetCur(ProgramName.Transworld);
+            //List<ProgramPreference> listProperties = ProgramProperties.GetForProgram(transworldProg.Id);
+            //string posType = listProperties.FirstOrDefault(x => x.Key == "SyncExcludePosAdjType")?.Value ?? "";
+            //string negType = listProperties.FirstOrDefault(x => x.Key == "SyncExcludeNegAdjType")?.Value ?? "";
+            //if (adj.AdjType.In(PIn.Long(posType), PIn.Long(negType)))
+            //{
+            //    InsertTsiLogsForAdjustment(patGuar, adj.Id, adj.AdjAmt, msgText);
+            //}
         }
 
         #endregion Insert
@@ -150,14 +150,12 @@ namespace OpenDentBusiness
         #endregion Modification Methods
         #region Misc Methods
 
-        public static bool ValidateClinicSftpDetails(ProgramPropertyCollection programProperties, bool doTestConnection = true)
+        public static bool ValidateClinicSftpDetails(long programId, bool doTestConnection = true)
         {
-            if (programProperties.Count == 0) return false;
-
-            var sftpAddress = programProperties.GetString("SftpServerAddress");
-            var sftpPort = programProperties.GetInt("SftpServerPort");
-            var sftpUsername = programProperties.GetString("SftpUsername");
-            var sftpPassword = programProperties.GetString("SftpPassword");
+            var sftpAddress = ProgramPreference.GetString(programId, "SftpServerAddress");
+            var sftpPort = (int)ProgramPreference.GetLong(programId, "SftpServerPort");
+            var sftpUsername = ProgramPreference.GetString(programId, "SftpUsername");
+            var sftpPassword = ProgramPreference.GetString(programId, "SftpPassword");
 
             if (sftpPort == 0 || sftpPort < ushort.MinValue || sftpPort > ushort.MaxValue)
                 sftpPort = 22;
@@ -180,40 +178,51 @@ namespace OpenDentBusiness
 
         public static bool IsTransworldEnabled(long clinicId)
         {
-            var program = Programs.GetCur(ProgramName.Transworld);
-            if (program == null || !program.Enabled)
-            {
-                return false;
-            }
+            //var program = Programs.GetCur(ProgramName.Transworld);
+            //if (program == null || !program.Enabled)
+            //{
+            //    return false;
+            //}
 
-            var programProperties = ProgramProperty.GetByProgram(program.ProgramNum);
-            if (programProperties.Count == 0)
-            {
-                return false;
-            }
+            ////var programProperties = ProgramPreference.GetByProgram(program.Id);
+            ////if (programProperties.Count == 0)
+            ////{
+            ////    return false;
+            ////}
 
-            var programPropertiesPerClinic = programProperties.GroupBy(x => x.ClinicId).ToDictionary(x => x.Key, x => x.ToList());
-            if (programPropertiesPerClinic.Count == 0)
-            {
-                return false;
-            }
+            ////var programPropertiesPerClinic = programProperties.GroupBy(x => x.ClinicId).ToDictionary(x => x.Key, x => x.ToList());
+            ////if (programPropertiesPerClinic.Count == 0)
+            ////{
+            ////    return false;
+            ////}
 
-            var disabledClinicIds = new List<long>();
+            //var disabledClinicIds = new List<long>();
 
-            var clinics = Clinic.All();
+            //if (Preferences.HasClinicsEnabled)
+            //{
+            //    var clinics = Clinics.GetDeepCopy();
 
-            disabledClinicIds.AddRange(
-                programPropertiesPerClinic
-                    .Where(x => x.Key.HasValue && !ValidateClinicSftpDetails(new ProgramPropertyCollection(x.Value), false))
-                    .Select(x => x.Key.Value));
+            //    disabledClinicIds.AddRange(
+            //        programPropertiesPerClinic
+            //            .Where(x => x.Key.HasValue && !ValidateClinicSftpDetails(new ProgramPropertyCollection(x.Value), false))
+            //            .Select(x => x.Key.Value));
 
-            disabledClinicIds.AddRange(
-                clinics
-                    .Where(clinic => clinic.IsHidden || (disabledClinicIds.Contains(0) && !programPropertiesPerClinic.ContainsKey(clinic.Id)))
-                    .Select(clinic => clinic.Id)
-            );
+            //    disabledClinicIds.AddRange(
+            //        clinics
+            //            .FindAll(clinic => clinic.IsHidden || (disabledClinicIds.Contains(0) && !programPropertiesPerClinic.ContainsKey(clinic.ClinicNum)))
+            //            .Select(clinic => clinic.ClinicNum)
+            //    );
+            //}
+            //else
+            //{
+            //    if (!TsiTransLogs.ValidateClinicSftpDetails(new ProgramPropertyCollection(programPropertiesPerClinic[0]), false))
+            //    {
+            //        disabledClinicIds.Add(0);
+            //    }
+            //}
 
-            return !disabledClinicIds.Contains(clinicId);
+            //return !disabledClinicIds.Contains(clinicId);
+            return false;
         }
 
         ///<summary>Sends an SFTP message to TSI to suspend the account for the guarantor passed in.  Returns empty string if successful.

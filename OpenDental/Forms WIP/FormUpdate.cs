@@ -90,7 +90,7 @@ namespace OpenDental
         /// <returns></returns>
         static FormUrlEncodedContent GetPostContent()
         {
-            var programList = Programs.GetWhere(x => x.Enabled && !string.IsNullOrWhiteSpace(x.ProgName)).Select(x => x.ProgName).ToList();
+            var programList = Programs.GetWhere(x => x.Enabled && !string.IsNullOrWhiteSpace(x.TypeName)).Select(x => x.TypeName).ToList();
 
             var postContent = new Dictionary<string, string>
             {

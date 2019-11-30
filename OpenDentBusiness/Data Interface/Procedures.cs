@@ -4115,10 +4115,10 @@ namespace OpenDentBusiness
                 Procedure procOld = listProcsOld.FirstOrDefault(x => x.ProcNum == proc.ProcNum);
                 LogProcComplEdit(proc, procOld);
             }
-            if (Programs.UsingOrion)
-            {
-                OrionProcs.SetCompleteInAppt(listProcsInAppt);
-            }
+            //if (Programs.UsingOrion)
+            //{
+            //    OrionProcs.SetCompleteInAppt(listProcsInAppt);
+            //}
             return listProcsInAppt;
         }
 

@@ -37,13 +37,17 @@ namespace OpenDental {
 			if(PatCur==null){
 				return;
 			}
-			if(PIn.Bool(ProgramProperties.GetPropVal(ProgramName.eClinicalWorks,"FeeSchedulesSetManually"))) {
-				comboFeeSched.Enabled=true;
-			}
-			else {
-				comboFeeSched.Enabled=false;
-			}
-			comboFeeSched.Items.Clear();
+
+            // TODO: Fix me
+
+            //if(PIn.Bool(ProgramProperties.GetPropVal(ProgramName.eClinicalWorks,"FeeSchedulesSetManually"))) {
+            //	comboFeeSched.Enabled=true;
+            //}
+            //else {
+            //	comboFeeSched.Enabled=false;
+            //}
+
+            comboFeeSched.Items.Clear();
 			comboFeeSched.Items.Add(Lan.g(this,"none"));
 			comboFeeSched.SelectedIndex=0;
 			_listFeeSchedShort=FeeScheds.GetDeepCopy(true);

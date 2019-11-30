@@ -137,7 +137,7 @@ namespace OpenDental {
 				MsgBox.Show(this,"Enter a valid tax lock date");
 				return;
 			}
-			long progNum=ProgramCur.ProgramNum;
+			long progNum=ProgramCur.Id;
 			ProgramCur.Enabled=checkEnabled.Checked;
 			Programs.Update(ProgramCur);
 			ProgramProperties.SetProperty(progNum,"Test (T) or Production (P)",radioProdEnv.Checked?"P":"T");

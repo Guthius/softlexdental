@@ -53,10 +53,10 @@ namespace OpenDental
         ///as comboClinic and is used to set programproperty.ClinicNum when saving.</summary>
         private List<long> _listUserClinicNums;
         ///<summary>List of X-Charge prog props for all clinics.  Includes props with ClinicNum=0 for headquarters/props unassigned to a clinic.</summary>
-        private List<ProgramProperty> _listProgProps;
+        private List<ProgramPreference> _listProgProps;
         private CheckBox checkWebPayEnabled;
         private CheckBox checkForceDuplicate;
-        private List<ProgramProperty> _listPayConnectWebPayProgProps = new List<ProgramProperty>();
+        private List<ProgramPreference> _listPayConnectWebPayProgProps = new List<ProgramPreference>();
 
         ///<summary>Used to revert the clinic drop down selected index if the user tries to change clinics and the payment type hasn't been set.</summary>
         private int _indexClinicRevert;
@@ -494,87 +494,92 @@ namespace OpenDental
 
         private void FormXchargeSetup_Load(object sender, EventArgs e)
         {
-            _progCur = Programs.GetCur(ProgramName.Xcharge);
-            if (_progCur == null)
-            {
-                return;//should never happen
-            }
+            // TODO: Implement me
 
-            groupPaySettings.Text = Lan.g(this, "Clinic Payment Settings");
-            _listUserClinicNums = new List<long>();
-            comboClinic.Items.Clear();
-            if (Security.CurrentUser.ClinicRestricted)
-            {
-                //if program link is enabled, disable the enable check box so the restricted user cannot disable for all clinics
-                checkEnabled.Enabled = !_progCur.Enabled;
-            }
-            else
-            {
-                comboClinic.Items.Add(Lan.g(this, "Headquarters"));
-                //this way both lists have the same number of items in it and if 'Headquarters' is selected the programproperty.ClinicNum will be set to 0
-                _listUserClinicNums.Add(0);
-                comboClinic.SelectedIndex = 0;
-            }
-            List<Clinic> listClinics = Clinic.GetByUser(Security.CurrentUser).ToList();
-            for (int i = 0; i < listClinics.Count; i++)
-            {
-                comboClinic.Items.Add(listClinics[i].Abbr);
-                _listUserClinicNums.Add(listClinics[i].Id);
-                if (Clinics.ClinicId == listClinics[i].Id)
-                {
-                    comboClinic.SelectedIndex = i;
-                    if (!Security.CurrentUser.ClinicRestricted)
-                    {
-                        comboClinic.SelectedIndex++;//increment SelectedIndex for 'Headquarters' in the list at position 0 if the user is not restricted
-                    }
-                }
-            }
-            _indexClinicRevert = comboClinic.SelectedIndex;
+            //_progCur = Programs.GetCur(ProgramName.Xcharge);
+            //if (_progCur == null)
+            //{
+            //    return;//should never happen
+            //}
 
-            checkEnabled.Checked = _progCur.Enabled;
-            textPath.Text = _progCur.Path;
-            //textOverride.Text = ProgramProperties.GetLocalPathOverrideForProgram(_progCur.ProgramNum);
-            _listProgProps = ProgramProperties.GetForProgram(_progCur.ProgramNum);
-            FillFields();
+            //groupPaySettings.Text = Lan.g(this, "Clinic Payment Settings");
+            //_listUserClinicNums = new List<long>();
+            //comboClinic.Items.Clear();
+            //if (Security.CurrentUser.ClinicRestricted)
+            //{
+            //    //if program link is enabled, disable the enable check box so the restricted user cannot disable for all clinics
+            //    checkEnabled.Enabled = !_progCur.Enabled;
+            //}
+            //else
+            //{
+            //    comboClinic.Items.Add(Lan.g(this, "Headquarters"));
+            //    //this way both lists have the same number of items in it and if 'Headquarters' is selected the programproperty.ClinicNum will be set to 0
+            //    _listUserClinicNums.Add(0);
+            //    comboClinic.SelectedIndex = 0;
+            //}
+            //List<Clinic> listClinics = Clinic.GetByUser(Security.CurrentUser).ToList();
+            //for (int i = 0; i < listClinics.Count; i++)
+            //{
+            //    comboClinic.Items.Add(listClinics[i].Abbr);
+            //    _listUserClinicNums.Add(listClinics[i].Id);
+            //    if (Clinics.ClinicId == listClinics[i].Id)
+            //    {
+            //        comboClinic.SelectedIndex = i;
+            //        if (!Security.CurrentUser.ClinicRestricted)
+            //        {
+            //            comboClinic.SelectedIndex++;//increment SelectedIndex for 'Headquarters' in the list at position 0 if the user is not restricted
+            //        }
+            //    }
+            //}
+            //_indexClinicRevert = comboClinic.SelectedIndex;
+
+            //checkEnabled.Checked = _progCur.Enabled;
+            //textPath.Text = ProgramPreference.GetString(_progCur.Id, ProgramPreferenceName.ProgramPath);
+            ////textOverride.Text = ProgramProperties.GetLocalPathOverrideForProgram(_progCur.ProgramNum);
+            //_listProgProps = ProgramProperties.GetForProgram(_progCur.Id);
+            //FillFields();
         }
 
         ///<summary>Fills all but comboClinic, checkEnabled, textPath, and textOverride which are filled on load.</summary>
         private void FillFields()
         {
-            long clinicNum = 0;
-            if (comboClinic.SelectedIndex > -1)
-            {
-                clinicNum = _listUserClinicNums[comboClinic.SelectedIndex];
-            }
-            //Password
-            string password = ProgramProperties.GetPropValFromList(_listProgProps, "Password", clinicNum);
-            if (password.Length > 0)
-            {
-                password = CodeBase.MiscUtils.Decrypt(password);
-                textPassword.UseSystemPasswordChar = true;
-            }
-            textPassword.Text = password;
-            //AuthKey had previously been stored as obfuscated text (prior to 16.2). 
-            //The XWeb feature was not publicly available for any of these versions so it safe to remove that restriction.
-            //It was determined that storing in plain-text is good enough as the obfuscation wasn't really making the key any more secure.
-            textAuthKey.Text = ProgramProperties.GetPropValFromList(_listProgProps, "AuthKey", clinicNum);
-            //PaymentType ComboBox
-            string payTypeDefNum = ProgramProperties.GetPropValFromList(_listProgProps, "PaymentType", clinicNum);
-            comboPaymentType.Items.Clear();
-            _listPayTypeDefs = Definition.GetByCategory(DefinitionCategory.PaymentTypes);
-            _listPayTypeDefs.ForEach(x => comboPaymentType.Items.Add(x.Description));
-            comboPaymentType.SelectedIndex = _listPayTypeDefs.FindIndex(x => x.Id.ToString() == payTypeDefNum);
-            //Other text boxes and check boxes
-            textUsername.Text = ProgramProperties.GetPropValFromList(_listProgProps, "Username", clinicNum);
-            textXWebID.Text = ProgramProperties.GetPropValFromList(_listProgProps, "XWebID", clinicNum);
-            textTerminalID.Text = ProgramProperties.GetPropValFromList(_listProgProps, "TerminalID", clinicNum);
-            checkWebPayEnabled.Checked = PIn.Bool(ProgramProperties.GetPropValFromList(_listProgProps, "IsOnlinePaymentsEnabled", clinicNum));
-            checkPromptSig.Checked = PIn.Bool(ProgramProperties.GetPropValFromList(_listProgProps, "PromptSignature", clinicNum));
-            checkPrintReceipt.Checked = PIn.Bool(ProgramProperties.GetPropValFromList(_listProgProps, "PrintReceipt", clinicNum));
-            checkForceDuplicate.Checked = PIn.Bool(ProgramProperties.GetPropValFromList(_listProgProps,
-                XCharge.ProgramProperties.XChargeForceRecurringCharge, clinicNum));
-            checkPreventSavingNewCC.Checked = PIn.Bool(ProgramProperties.GetPropValFromList(_listProgProps,
-                XCharge.ProgramProperties.XChargePreventSavingNewCC, clinicNum));
+            // TODO: Implement me
+
+
+            //long clinicNum = 0;
+            //if (comboClinic.SelectedIndex > -1)
+            //{
+            //    clinicNum = _listUserClinicNums[comboClinic.SelectedIndex];
+            //}
+            ////Password
+            //string password = ProgramProperties.GetPropValFromList(_listProgProps, "Password", clinicNum);
+            //if (password.Length > 0)
+            //{
+            //    password = CodeBase.MiscUtils.Decrypt(password);
+            //    textPassword.UseSystemPasswordChar = true;
+            //}
+            //textPassword.Text = password;
+            ////AuthKey had previously been stored as obfuscated text (prior to 16.2). 
+            ////The XWeb feature was not publicly available for any of these versions so it safe to remove that restriction.
+            ////It was determined that storing in plain-text is good enough as the obfuscation wasn't really making the key any more secure.
+            //textAuthKey.Text = ProgramProperties.GetPropValFromList(_listProgProps, "AuthKey", clinicNum);
+            ////PaymentType ComboBox
+            //string payTypeDefNum = ProgramProperties.GetPropValFromList(_listProgProps, "PaymentType", clinicNum);
+            //comboPaymentType.Items.Clear();
+            //_listPayTypeDefs = Definition.GetByCategory(DefinitionCategory.PaymentTypes);
+            //_listPayTypeDefs.ForEach(x => comboPaymentType.Items.Add(x.Description));
+            //comboPaymentType.SelectedIndex = _listPayTypeDefs.FindIndex(x => x.Id.ToString() == payTypeDefNum);
+            ////Other text boxes and check boxes
+            //textUsername.Text = ProgramProperties.GetPropValFromList(_listProgProps, "Username", clinicNum);
+            //textXWebID.Text = ProgramProperties.GetPropValFromList(_listProgProps, "XWebID", clinicNum);
+            //textTerminalID.Text = ProgramProperties.GetPropValFromList(_listProgProps, "TerminalID", clinicNum);
+            //checkWebPayEnabled.Checked = PIn.Bool(ProgramProperties.GetPropValFromList(_listProgProps, "IsOnlinePaymentsEnabled", clinicNum));
+            //checkPromptSig.Checked = PIn.Bool(ProgramProperties.GetPropValFromList(_listProgProps, "PromptSignature", clinicNum));
+            //checkPrintReceipt.Checked = PIn.Bool(ProgramProperties.GetPropValFromList(_listProgProps, "PrintReceipt", clinicNum));
+            //checkForceDuplicate.Checked = PIn.Bool(ProgramProperties.GetPropValFromList(_listProgProps,
+            //    XChargeBridge.ProgramProperties.XChargeForceRecurringCharge, clinicNum));
+            //checkPreventSavingNewCC.Checked = PIn.Bool(ProgramProperties.GetPropValFromList(_listProgProps,
+            //    XChargeBridge.ProgramProperties.XChargePreventSavingNewCC, clinicNum));
         }
 
         private void comboClinic_SelectionChangeCommitted(object sender, EventArgs e)
@@ -626,12 +631,19 @@ namespace OpenDental
                 .ForEach(x => x.Value = POut.Bool(checkWebPayEnabled.Checked));//always 1 item, null safe
             _listProgProps.FindAll(x => x.ClinicId == _listUserClinicNums[_indexClinicRevert] && x.Key == "PaymentType")//payment type already validated
                 .ForEach(x => x.Value = payTypeCur);//always 1 item, null safe
-            _listProgProps.FindAll(x => x.ClinicId == _listUserClinicNums[_indexClinicRevert] &&
-                x.Key == XCharge.ProgramProperties.XChargeForceRecurringCharge)
-                .ForEach(x => x.Value = POut.Bool(checkForceDuplicate.Checked));
-            _listProgProps.FindAll(x => x.ClinicId == _listUserClinicNums[_indexClinicRevert] &&
-                    x.Key == XCharge.ProgramProperties.XChargePreventSavingNewCC)
-                .ForEach(x => x.Value = POut.Bool(checkPreventSavingNewCC.Checked));
+
+
+            // TODO: Fix me
+
+            //_listProgProps.FindAll(x => x.ClinicId == _listUserClinicNums[_indexClinicRevert] &&
+            //    x.Key == XChargeBridge.ProgramProperties.XChargeForceRecurringCharge)
+            //    .ForEach(x => x.Value = POut.Bool(checkForceDuplicate.Checked));
+            //_listProgProps.FindAll(x => x.ClinicId == _listUserClinicNums[_indexClinicRevert] &&
+            //        x.Key == XChargeBridge.ProgramProperties.XChargePreventSavingNewCC)
+            //    .ForEach(x => x.Value = POut.Bool(checkPreventSavingNewCC.Checked));
+
+
+
             _indexClinicRevert = comboClinic.SelectedIndex;//now that we've updated the values for the clinic we're switching from, update _indexClinicRevert
             textPassword.UseSystemPasswordChar = false;//FillFields will set this to true if the clinic being selected has a password set
             textAuthKey.UseSystemPasswordChar = false;//FillFields will set this to true if the clinic being selected has an AuthKey entered
@@ -765,48 +777,50 @@ namespace OpenDental
         ///clinic with Username and Password set or with any of the XWeb settings set will be validated.</para></summary>
         private bool ValidatePaymentTypes(bool isAllClinics)
         {
-            //if not enabled, don't worry about invalid payment type
-            if (!checkEnabled.Checked)
-            {
-                return true;
-            }
-            //XWeb will be enabled for the clinic if the XWeb enabled checkbox is checked and the 3 XWeb fields are not blank.  Don't let them switch clinics or
-            //close the form with only 1 or 2 of the three fields filled in.  If they fill in 1, they must fill in the other 2.  Per JasonS - 10/12/2015
-            bool isXWebEnabled = checkWebPayEnabled.Checked
-                && (textXWebID.Text.Trim().Length > 0 || textAuthKey.Text.Trim().Length > 0 || textTerminalID.Text.Trim().Length > 0);
-            //X-Charge will be enabled if the enabled checkbox is checked and either clinics are disabled OR both Username and Password are set
-            bool isClientEnabled = (textUsername.Text.Trim().Length > 0 && textPassword.Text.Trim().Length > 0);
-            if ((isClientEnabled || isXWebEnabled) && comboPaymentType.SelectedIndex < 0)
-            {
-                MsgBox.Show(this, "Please select a payment type first.");
-                return false;
-            }
-            if (!isAllClinics || Security.CurrentUser.ClinicRestricted)
-            {
-                return true;
-            }
-            //only validate payment types for all clinics if isAllClinics==true and clinics are enabled and the current user is not restricted to a clinic
-            string payTypeCur = "";
-            //make sure all clinics with X-Charge enabled also have a payment type selected
-            for (int i = 0; i < _listUserClinicNums.Count; i++)
-            {
-                payTypeCur = ProgramProperties.GetPropValFromList(_listProgProps, "PaymentType", _listUserClinicNums[i]);
-                //isClientEnabled will be true if both username and password are set for this clinic
-                isClientEnabled = ProgramProperties.GetPropValFromList(_listProgProps, "Username", _listUserClinicNums[i]).Length > 0
-                    && ProgramProperties.GetPropValFromList(_listProgProps, "Password", _listUserClinicNums[i]).Length > 0;
-                //isXWebEnabled will be true if any of the XWeb values are set
-                isXWebEnabled = checkWebPayEnabled.Checked
-                    && (ProgramProperties.GetPropValFromList(_listProgProps, "XWebID", _listUserClinicNums[i]).Length > 0
-                    || ProgramProperties.GetPropValFromList(_listProgProps, "AuthKey", _listUserClinicNums[i]).Length > 0
-                    || ProgramProperties.GetPropValFromList(_listProgProps, "TerminalID", _listUserClinicNums[i]).Length > 0);
-                //if the program is enabled and the username and password fields are not blank for client, or XWebID, AuthKey, and TerminalID are not blank
-                //for XWeb, then X-Charge is enabled for this clinic so make sure the payment type is also set
-                if ((isClientEnabled || isXWebEnabled) && !_listPayTypeDefs.Any(x => x.Id.ToString() == payTypeCur))
-                {
-                    MsgBox.Show(this, "Please select the payment type for all clinics with X-Charge enabled.");
-                    return false;
-                }
-            }
+            // TODO: Implement me
+
+            ////if not enabled, don't worry about invalid payment type
+            //if (!checkEnabled.Checked)
+            //{
+            //    return true;
+            //}
+            ////XWeb will be enabled for the clinic if the XWeb enabled checkbox is checked and the 3 XWeb fields are not blank.  Don't let them switch clinics or
+            ////close the form with only 1 or 2 of the three fields filled in.  If they fill in 1, they must fill in the other 2.  Per JasonS - 10/12/2015
+            //bool isXWebEnabled = checkWebPayEnabled.Checked
+            //    && (textXWebID.Text.Trim().Length > 0 || textAuthKey.Text.Trim().Length > 0 || textTerminalID.Text.Trim().Length > 0);
+            ////X-Charge will be enabled if the enabled checkbox is checked and either clinics are disabled OR both Username and Password are set
+            //bool isClientEnabled = (textUsername.Text.Trim().Length > 0 && textPassword.Text.Trim().Length > 0);
+            //if ((isClientEnabled || isXWebEnabled) && comboPaymentType.SelectedIndex < 0)
+            //{
+            //    MsgBox.Show(this, "Please select a payment type first.");
+            //    return false;
+            //}
+            //if (!isAllClinics || Security.CurrentUser.ClinicRestricted)
+            //{
+            //    return true;
+            //}
+            ////only validate payment types for all clinics if isAllClinics==true and clinics are enabled and the current user is not restricted to a clinic
+            //string payTypeCur = "";
+            ////make sure all clinics with X-Charge enabled also have a payment type selected
+            //for (int i = 0; i < _listUserClinicNums.Count; i++)
+            //{
+            //    payTypeCur = ProgramProperties.GetPropValFromList(_listProgProps, "PaymentType", _listUserClinicNums[i]);
+            //    //isClientEnabled will be true if both username and password are set for this clinic
+            //    isClientEnabled = ProgramProperties.GetPropValFromList(_listProgProps, "Username", _listUserClinicNums[i]).Length > 0
+            //        && ProgramProperties.GetPropValFromList(_listProgProps, "Password", _listUserClinicNums[i]).Length > 0;
+            //    //isXWebEnabled will be true if any of the XWeb values are set
+            //    isXWebEnabled = checkWebPayEnabled.Checked
+            //        && (ProgramProperties.GetPropValFromList(_listProgProps, "XWebID", _listUserClinicNums[i]).Length > 0
+            //        || ProgramProperties.GetPropValFromList(_listProgProps, "AuthKey", _listUserClinicNums[i]).Length > 0
+            //        || ProgramProperties.GetPropValFromList(_listProgProps, "TerminalID", _listUserClinicNums[i]).Length > 0);
+            //    //if the program is enabled and the username and password fields are not blank for client, or XWebID, AuthKey, and TerminalID are not blank
+            //    //for XWeb, then X-Charge is enabled for this clinic so make sure the payment type is also set
+            //    if ((isClientEnabled || isXWebEnabled) && !_listPayTypeDefs.Any(x => x.Id.ToString() == payTypeCur))
+            //    {
+            //        MsgBox.Show(this, "Please select the payment type for all clinics with X-Charge enabled.");
+            //        return false;
+            //    }
+            //}
             return true;
         }
 
@@ -818,70 +832,72 @@ namespace OpenDental
         ///The values in the local list for HQ, or for the clinic modified if it was not HQ, have to be updated after calling this method.</summary>
         private void SyncWithHQ()
         {
-            if (_listUserClinicNums[_indexClinicRevert] > 0)
-            {
-                return;
-            }
-            string hqUsername = ProgramProperties.GetPropValFromList(_listProgProps, "Username", 0);//HQ Username before updating to value in textbox
-            string hqPassword = ProgramProperties.GetPropValFromList(_listProgProps, "Password", 0);//HQ Password before updating to value in textbox
-            string hqXWebID = ProgramProperties.GetPropValFromList(_listProgProps, "XWebID", 0);//HQ XWebID before updating to value in textbox
-            string hqAuthKey = ProgramProperties.GetPropValFromList(_listProgProps, "AuthKey", 0);//HQ AuthKey before updating to value in textbox
-            string hqTerminalID = ProgramProperties.GetPropValFromList(_listProgProps, "TerminalID", 0);//HQ TerminalID before updating to value in textbox
-            string hqPayType = ProgramProperties.GetPropValFromList(_listProgProps, "PaymentType", 0);//HQ PaymentType before updating to combo box selection
-                                                                                                      //IsOnlinePaymentsEnabled will not be synced with HQ so specific clinics can be disabled for patient portal payments.
-            string payTypeCur = "";
-            if (comboPaymentType.SelectedIndex > -1)
-            {
-                payTypeCur = _listPayTypeDefs[comboPaymentType.SelectedIndex].Id.ToString();
-            }
-            string passwordEncrypted = "";
-            if (textPassword.Text.Trim().Length > 0)
-            {
-                passwordEncrypted = CodeBase.MiscUtils.Encrypt(textPassword.Text.Trim());
-            }
-            //for each distinct ClinicNum in the prog property list for X-Charge except HQ
-            foreach (long clinicNum in _listProgProps.Select(x => x.ClinicId).Where(x => x > 0).Distinct())
-            {
-                //Updates the PaymentType in both if checks, in case the other isn't met so the payment type will be synched if either condition is true.
-                //if this clinic has the same Username and Password, update them
-                bool isClientSynch = _listProgProps.Exists(x => x.ClinicId == clinicNum && x.Key == "Username" && x.Value == hqUsername)
-                    && _listProgProps.Exists(x => x.ClinicId == clinicNum && x.Key == "Password" && x.Value == hqPassword);
-                //only if all three XWeb HQ values are not blank
-                bool isXWebSynch = _listProgProps.Exists(x => x.ClinicId == clinicNum && x.Key == "XWebID" && x.Value == hqXWebID)
-                    && _listProgProps.Exists(x => x.ClinicId == clinicNum && x.Key == "AuthKey" && x.Value == hqAuthKey)
-                    && _listProgProps.Exists(x => x.ClinicId == clinicNum && x.Key == "TerminalID" && x.Value == hqTerminalID);
-                if (!isClientSynch && !isXWebSynch)
-                {
-                    continue;
-                }
-                if (isClientSynch)
-                {
-                    //update the username and password to keep it synched with HQ
-                    _listProgProps.FindAll(x => x.ClinicId == clinicNum && x.Key == "Username")
-                        .ForEach(x => x.Value = textUsername.Text.Trim());//always 1 item; null safe
-                    _listProgProps.FindAll(x => x.ClinicId == clinicNum && x.Key == "Password")
-                        .ForEach(x => x.Value = passwordEncrypted);//always 1 item; null safe
-                }
-                if (isXWebSynch)
-                {
-                    //update the XWebID, AuthKey, and TerminalID to keep it synched with HQ
-                    _listProgProps.FindAll(x => x.ClinicId == clinicNum && x.Key == "XWebID")
-                        .ForEach(x => x.Value = textXWebID.Text.Trim());//always 1 item; null safe
-                    _listProgProps.FindAll(x => x.ClinicId == clinicNum && x.Key == "AuthKey")
-                        .ForEach(x => x.Value = textAuthKey.Text.Trim());//always 1 item; null safe
-                    _listProgProps.FindAll(x => x.ClinicId == clinicNum && x.Key == "TerminalID")
-                        .ForEach(x => x.Value = textTerminalID.Text.Trim());//always 1 item; null safe
-                }
-                //only synch payment type if both client and XWeb values are the same as HQ and the payment type is valid
-                if (isClientSynch && isXWebSynch && !string.IsNullOrEmpty(payTypeCur))
-                {
-                    _listProgProps.FindAll(x => x.ClinicId == clinicNum && x.Key == "PaymentType" && x.Value == hqPayType)
-                        .ForEach(x => x.Value = payTypeCur);//always 1 item; null safe
-                }
-            }
+            // TODO: Implement me
+
+            //if (_listUserClinicNums[_indexClinicRevert] > 0)
+            //{
+            //    return;
+            //}
+            //string hqUsername = ProgramProperties.GetPropValFromList(_listProgProps, "Username", 0);//HQ Username before updating to value in textbox
+            //string hqPassword = ProgramProperties.GetPropValFromList(_listProgProps, "Password", 0);//HQ Password before updating to value in textbox
+            //string hqXWebID = ProgramProperties.GetPropValFromList(_listProgProps, "XWebID", 0);//HQ XWebID before updating to value in textbox
+            //string hqAuthKey = ProgramProperties.GetPropValFromList(_listProgProps, "AuthKey", 0);//HQ AuthKey before updating to value in textbox
+            //string hqTerminalID = ProgramProperties.GetPropValFromList(_listProgProps, "TerminalID", 0);//HQ TerminalID before updating to value in textbox
+            //string hqPayType = ProgramProperties.GetPropValFromList(_listProgProps, "PaymentType", 0);//HQ PaymentType before updating to combo box selection
+            //                                                                                          //IsOnlinePaymentsEnabled will not be synced with HQ so specific clinics can be disabled for patient portal payments.
+            //string payTypeCur = "";
+            //if (comboPaymentType.SelectedIndex > -1)
+            //{
+            //    payTypeCur = _listPayTypeDefs[comboPaymentType.SelectedIndex].Id.ToString();
+            //}
+            //string passwordEncrypted = "";
+            //if (textPassword.Text.Trim().Length > 0)
+            //{
+            //    passwordEncrypted = CodeBase.MiscUtils.Encrypt(textPassword.Text.Trim());
+            //}
+            ////for each distinct ClinicNum in the prog property list for X-Charge except HQ
+            //foreach (long clinicNum in _listProgProps.Select(x => x.ClinicId).Where(x => x > 0).Distinct())
+            //{
+            //    //Updates the PaymentType in both if checks, in case the other isn't met so the payment type will be synched if either condition is true.
+            //    //if this clinic has the same Username and Password, update them
+            //    bool isClientSynch = _listProgProps.Exists(x => x.ClinicId == clinicNum && x.Key == "Username" && x.Value == hqUsername)
+            //        && _listProgProps.Exists(x => x.ClinicId == clinicNum && x.Key == "Password" && x.Value == hqPassword);
+            //    //only if all three XWeb HQ values are not blank
+            //    bool isXWebSynch = _listProgProps.Exists(x => x.ClinicId == clinicNum && x.Key == "XWebID" && x.Value == hqXWebID)
+            //        && _listProgProps.Exists(x => x.ClinicId == clinicNum && x.Key == "AuthKey" && x.Value == hqAuthKey)
+            //        && _listProgProps.Exists(x => x.ClinicId == clinicNum && x.Key == "TerminalID" && x.Value == hqTerminalID);
+            //    if (!isClientSynch && !isXWebSynch)
+            //    {
+            //        continue;
+            //    }
+            //    if (isClientSynch)
+            //    {
+            //        //update the username and password to keep it synched with HQ
+            //        _listProgProps.FindAll(x => x.ClinicId == clinicNum && x.Key == "Username")
+            //            .ForEach(x => x.Value = textUsername.Text.Trim());//always 1 item; null safe
+            //        _listProgProps.FindAll(x => x.ClinicId == clinicNum && x.Key == "Password")
+            //            .ForEach(x => x.Value = passwordEncrypted);//always 1 item; null safe
+            //    }
+            //    if (isXWebSynch)
+            //    {
+            //        //update the XWebID, AuthKey, and TerminalID to keep it synched with HQ
+            //        _listProgProps.FindAll(x => x.ClinicId == clinicNum && x.Key == "XWebID")
+            //            .ForEach(x => x.Value = textXWebID.Text.Trim());//always 1 item; null safe
+            //        _listProgProps.FindAll(x => x.ClinicId == clinicNum && x.Key == "AuthKey")
+            //            .ForEach(x => x.Value = textAuthKey.Text.Trim());//always 1 item; null safe
+            //        _listProgProps.FindAll(x => x.ClinicId == clinicNum && x.Key == "TerminalID")
+            //            .ForEach(x => x.Value = textTerminalID.Text.Trim());//always 1 item; null safe
+            //    }
+            //    //only synch payment type if both client and XWeb values are the same as HQ and the payment type is valid
+            //    if (isClientSynch && isXWebSynch && !string.IsNullOrEmpty(payTypeCur))
+            //    {
+            //        _listProgProps.FindAll(x => x.ClinicId == clinicNum && x.Key == "PaymentType" && x.Value == hqPayType)
+            //            .ForEach(x => x.Value = payTypeCur);//always 1 item; null safe
+            //    }
+            //}
         }
 
-        private void butOK_Click(object sender, System.EventArgs e)
+        private void butOK_Click(object sender, EventArgs e)
         {
             #region Validation and Update Local List
             if (_progCur == null)
@@ -969,10 +985,18 @@ namespace OpenDental
                 .ForEach(x => x.Value = POut.Bool(checkWebPayEnabled.Checked));//always 1 item, null safe
             _listProgProps.FindAll(x => x.ClinicId == clinicNum && x.Key == "PaymentType")
                 .ForEach(x => x.Value = payTypeCur);//always 1 item; null safe
-            _listProgProps.FindAll(x => x.ClinicId == clinicNum && x.Key == XCharge.ProgramProperties.XChargeForceRecurringCharge)
-                .ForEach(x => x.Value = POut.Bool(checkForceDuplicate.Checked));
-            _listProgProps.FindAll(x => x.ClinicId == clinicNum && x.Key == XCharge.ProgramProperties.XChargePreventSavingNewCC)
-                .ForEach(x => x.Value = POut.Bool(checkPreventSavingNewCC.Checked));
+
+
+            // TODO: Fix me
+
+
+            //_listProgProps.FindAll(x => x.ClinicId == clinicNum && x.Key == XChargeBridge.ProgramProperties.XChargeForceRecurringCharge)
+            //    .ForEach(x => x.Value = POut.Bool(checkForceDuplicate.Checked));
+            //_listProgProps.FindAll(x => x.ClinicId == clinicNum && x.Key == XChargeBridge.ProgramProperties.XChargePreventSavingNewCC)
+            //    .ForEach(x => x.Value = POut.Bool(checkPreventSavingNewCC.Checked));
+
+
+
             #endregion Update Local List of Program Properties
             #region Validate PaymentTypes For All Clinics
             //validate the payment type set for all clinics with X-Charge enabled
@@ -983,12 +1007,11 @@ namespace OpenDental
             #endregion Validate PaymentTypes For All Clinics
             #endregion Validation and Update Local List
             #region Save
-            if (_progCur.Enabled != checkEnabled.Checked || _progCur.Path != textPath.Text.Trim())
-            {//update the program if the IsEnabled flag or Path has changed
+
                 _progCur.Enabled = checkEnabled.Checked;
-                _progCur.Path = textPath.Text.Trim();
-                Programs.Update(_progCur);
-            }
+                ProgramPreference.Set(_progCur.Id, ProgramPreferenceName.ProgramPath, textPath.Text.Trim());
+                Program.Update(_progCur);
+            
             //if (ProgramProperties.GetLocalPathOverrideForProgram(_progCur.ProgramNum) != textOverride.Text.Trim())
             //{
             //    ProgramProperties.InsertOrUpdateLocalOverridePath(_progCur.ProgramNum, textOverride.Text.Trim());
@@ -1007,11 +1030,13 @@ namespace OpenDental
             //    }
             //});
             #endregion Save
-            DataValid.SetInvalid(InvalidType.Programs);
+
+            CacheManager.Invalidate<Program>();
+
             DialogResult = DialogResult.OK;
         }
 
-        private void butCancel_Click(object sender, System.EventArgs e)
+        private void butCancel_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.Cancel;
         }

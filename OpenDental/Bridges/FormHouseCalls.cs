@@ -1,350 +1,174 @@
+/**
+ * Copyright (C) 2019 Dental Stars SRL
+ * Copyright (C) 2003-2019 Jordan S. Sparks, D.M.D.
+ * 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; If not, see <http://www.gnu.org/licenses/>
+ */
+using OpenDentBusiness;
 using System;
 using System.Data;
-using System.Drawing;
-using System.Collections;
-using System.ComponentModel;
 using System.IO;
 using System.Windows.Forms;
-using OpenDentBusiness;
-using System.Collections.Generic;
 
-namespace OpenDental{
-	/// <summary></summary>
-	public class FormHouseCalls : ODForm{
-		private OpenDental.UI.Button butCancel;
-		private OpenDental.UI.Button butOK;
-		private System.Windows.Forms.GroupBox groupBox2;
-		private OpenDental.ValidDate textDateFrom;
-		private System.Windows.Forms.Label label2;
-		private System.Windows.Forms.Label label1;
-		private OpenDental.ValidDate textDateTo;
-		private OpenDental.UI.Button butAll;
-		private OpenDental.UI.Button but7;
-		private System.Windows.Forms.RadioButton radioConfirm;
-		/// <summary>
-		/// Required designer variable.
-		/// </summary>
-		private System.ComponentModel.Container components = null;
-		public Program ProgramCur;
+namespace OpenDental
+{
+    public partial class FormHouseCalls : ODForm
+    {
+        private readonly long programId;
+        private readonly bool usePatientIds;
 
-		///<summary></summary>
-		public FormHouseCalls()
-		{
-			//
-			// Required for Windows Form Designer support
-			//
-			InitializeComponent();
-		}
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FormHouseCalls"/> class.
+        /// </summary>
+        /// <param name="programId">The ID of the program.</param>
+        /// <param name="usePatientIds"></param>
+        public FormHouseCalls(long programId, bool usePatientIds)
+        {
+            InitializeComponent();
 
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
-		protected override void Dispose( bool disposing )
-		{
-			if( disposing )
-			{
-				if(components != null)
-				{
-					components.Dispose();
-				}
-			}
-			base.Dispose( disposing );
-		}
+            this.programId = programId;
+            this.usePatientIds = usePatientIds;
+        }
 
-		#region Windows Form Designer generated code
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent()
-		{
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormHouseCalls));
-			this.butCancel = new OpenDental.UI.Button();
-			this.butOK = new OpenDental.UI.Button();
-			this.groupBox2 = new System.Windows.Forms.GroupBox();
-			this.butAll = new OpenDental.UI.Button();
-			this.but7 = new OpenDental.UI.Button();
-			this.textDateFrom = new OpenDental.ValidDate();
-			this.label2 = new System.Windows.Forms.Label();
-			this.label1 = new System.Windows.Forms.Label();
-			this.textDateTo = new OpenDental.ValidDate();
-			this.radioConfirm = new System.Windows.Forms.RadioButton();
-			this.groupBox2.SuspendLayout();
-			this.SuspendLayout();
-			// 
-			// butCancel
-			// 
-			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butCancel.Autosize = true;
-			this.butCancel.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
-			this.butCancel.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
-			this.butCancel.CornerRadius = 4F;
-			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(359,267);
-			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75,26);
-			this.butCancel.TabIndex = 0;
-			this.butCancel.Text = "&Cancel";
-			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
-			// 
-			// butOK
-			// 
-			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butOK.Autosize = true;
-			this.butOK.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
-			this.butOK.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
-			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(359,226);
-			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75,26);
-			this.butOK.TabIndex = 1;
-			this.butOK.Text = "&OK";
-			this.butOK.Click += new System.EventHandler(this.butOK_Click);
-			// 
-			// groupBox2
-			// 
-			this.groupBox2.Controls.Add(this.butAll);
-			this.groupBox2.Controls.Add(this.but7);
-			this.groupBox2.Controls.Add(this.textDateFrom);
-			this.groupBox2.Controls.Add(this.label2);
-			this.groupBox2.Controls.Add(this.label1);
-			this.groupBox2.Controls.Add(this.textDateTo);
-			this.groupBox2.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBox2.Location = new System.Drawing.Point(42,72);
-			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(393,109);
-			this.groupBox2.TabIndex = 8;
-			this.groupBox2.TabStop = false;
-			this.groupBox2.Text = "Date Range";
-			// 
-			// butAll
-			// 
-			this.butAll.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butAll.Autosize = true;
-			this.butAll.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
-			this.butAll.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
-			this.butAll.CornerRadius = 4F;
-			this.butAll.Location = new System.Drawing.Point(263,61);
-			this.butAll.Name = "butAll";
-			this.butAll.Size = new System.Drawing.Size(93,23);
-			this.butAll.TabIndex = 8;
-			this.butAll.Text = "All Future";
-			this.butAll.Click += new System.EventHandler(this.butAll_Click);
-			// 
-			// but7
-			// 
-			this.but7.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.but7.Autosize = true;
-			this.but7.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
-			this.but7.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
-			this.but7.CornerRadius = 4F;
-			this.but7.Location = new System.Drawing.Point(263,35);
-			this.but7.Name = "but7";
-			this.but7.Size = new System.Drawing.Size(93,23);
-			this.but7.TabIndex = 7;
-			this.but7.Text = "Next 7 Days";
-			this.but7.Click += new System.EventHandler(this.but7_Click);
-			// 
-			// textDateFrom
-			// 
-			this.textDateFrom.Location = new System.Drawing.Point(137,37);
-			this.textDateFrom.Name = "textDateFrom";
-			this.textDateFrom.Size = new System.Drawing.Size(84,20);
-			this.textDateFrom.TabIndex = 3;
-			// 
-			// label2
-			// 
-			this.label2.Location = new System.Drawing.Point(30,64);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(100,17);
-			this.label2.TabIndex = 4;
-			this.label2.Text = "To Date";
-			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// label1
-			// 
-			this.label1.Location = new System.Drawing.Point(30,36);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(100,17);
-			this.label1.TabIndex = 2;
-			this.label1.Text = "From Date";
-			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// textDateTo
-			// 
-			this.textDateTo.Location = new System.Drawing.Point(137,65);
-			this.textDateTo.Name = "textDateTo";
-			this.textDateTo.Size = new System.Drawing.Size(85,20);
-			this.textDateTo.TabIndex = 5;
-			// 
-			// radioConfirm
-			// 
-			this.radioConfirm.Checked = true;
-			this.radioConfirm.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.radioConfirm.Location = new System.Drawing.Point(43,30);
-			this.radioConfirm.Name = "radioConfirm";
-			this.radioConfirm.Size = new System.Drawing.Size(329,21);
-			this.radioConfirm.TabIndex = 9;
-			this.radioConfirm.TabStop = true;
-			this.radioConfirm.Text = "Confirm Appointments";
-			// 
-			// FormHouseCalls
-			// 
-			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(486,318);
-			this.Controls.Add(this.radioConfirm);
-			this.Controls.Add(this.groupBox2);
-			this.Controls.Add(this.butOK);
-			this.Controls.Add(this.butCancel);
-			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-			this.MaximizeBox = false;
-			this.MinimizeBox = false;
-			this.Name = "FormHouseCalls";
-			this.ShowInTaskbar = false;
-			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "House Calls";
-			this.Load += new System.EventHandler(this.FormHouseCalls_Load);
-			this.groupBox2.ResumeLayout(false);
-			this.groupBox2.PerformLayout();
-			this.ResumeLayout(false);
+        private void FormHouseCalls_Load(object sender, EventArgs e)
+        {
+            textDateFrom.Text = DateTime.Today.AddDays(1).ToShortDateString();
+            textDateTo.Text = DateTime.Today.AddDays(7).ToShortDateString();
+        }
 
-		}
-		#endregion
+        private void Next7DaysButton_Click(object sender, EventArgs e)
+        {
+            textDateFrom.Text = DateTime.Today.AddDays(1).ToShortDateString();
+            textDateTo.Text = DateTime.Today.AddDays(7).ToShortDateString();
+        }
 
-		private void FormHouseCalls_Load(object sender, System.EventArgs e) {
-			textDateFrom.Text=DateTime.Today.AddDays(1).ToShortDateString();
-			textDateTo.Text=DateTime.Today.AddDays(7).ToShortDateString();
-		}
+        private void AllButton_Click(object sender, EventArgs e)
+        {
+            textDateFrom.Text = DateTime.Today.AddDays(1).ToShortDateString();
+            textDateTo.Text = "";
+        }
 
-		private void but7_Click(object sender, System.EventArgs e) {
-			textDateFrom.Text=DateTime.Today.AddDays(1).ToShortDateString();
-			textDateTo.Text=DateTime.Today.AddDays(7).ToShortDateString();
-		}
+        private void AcceptButton_Click(object sender, EventArgs e)
+        {
+            string Tidy(string input) => '"' + input.Replace("\"", "") + '"';
 
-		private void butAll_Click(object sender, System.EventArgs e) {
-			textDateFrom.Text=DateTime.Today.AddDays(1).ToShortDateString();
-			textDateTo.Text="";
-		}
+            textDateFrom.Text = textDateFrom.Text.Trim();
+            if (textDateFrom.Text.Length == 0)
+            {
+                MessageBox.Show(
+                    "From date cannot be left blank.",
+                    "House Calls",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
 
-		private void butOK_Click(object sender, System.EventArgs e) {
-			if(  textDateFrom.errorProvider1.GetError(textDateFrom)!=""
-				|| textDateTo.errorProvider1.GetError(textDateTo)!=""
-				){
-				MessageBox.Show(Lan.g(this,"Please fix data entry errors first."));
-				return;
-			}
-			DateTime FromDate;
-			DateTime ToDate;
-			if(textDateFrom.Text==""){
-				MessageBox.Show(Lan.g(this,"From Date cannot be left blank."));
-				return;
-			}
-			FromDate=PIn.Date(textDateFrom.Text);
-			if(textDateTo.Text=="")
-				ToDate=DateTime.MaxValue.AddDays(-1);
-			else
-				ToDate=PIn.Date(textDateTo.Text);
-			//Create the file and first row--------------------------------------------------------
-			List<ProgramProperty> ForProgram =ProgramProperties.GetForProgram(ProgramCur.ProgramNum);
-			ProgramProperty PPCur=ProgramProperties.GetCur(ForProgram, "Export Path");
-			string fileName=PPCur.Value+"Appt.txt";
-			if(!Directory.Exists(PPCur.Value)){
-				Directory.CreateDirectory(PPCur.Value);
-			}
-			StreamWriter sr=File.CreateText(fileName);
-			sr.WriteLine("\"LastName\",\"FirstName\",\"PatientNumber\",\"HomePhone\",\"WorkNumber\","
-				+"\"EmailAddress\",\"SendEmail\",\"Address\",\"Address2\",\"City\",\"State\",\"Zip\","
-				+"\"ApptDate\",\"ApptTime\",\"ApptReason\",\"DoctorNumber\",\"DoctorName\",\"IsNewPatient\",\"WirelessPhone\"");
-			DataTable table=HouseCallsQueries.GetHouseCalls(FromDate,ToDate);
-			bool usePatNum=false;
-			PPCur=ProgramProperties.GetCur(ForProgram, "Enter 0 to use PatientNum, or 1 to use ChartNum");;
-			if(PPCur.Value=="0"){
-				usePatNum=true;
-			}
-			DateTime aptDT;
-			for(int i=0;i<table.Rows.Count;i++){
-				sr.Write("\""+Dequote(PIn.String(table.Rows[i][0].ToString()))+"\",");//0-LastName
-				if(table.Rows[i][2].ToString()!=""){//if Preferred Name exists
-					sr.Write("\""+Dequote(PIn.String(table.Rows[i][2].ToString()))+"\",");//2-PrefName
-				}
-				else{
-					sr.Write("\""+Dequote(PIn.String(table.Rows[i][1].ToString()))+"\",");//1-FirstName 
-				}
-				if(usePatNum){
-					sr.Write("\""+table.Rows[i][3].ToString()+"\",");//3-PatNum
-				}
-				else{
-					sr.Write("\""+Dequote(PIn.String(table.Rows[i][4].ToString()))+"\",");//4-ChartNumber
-				}
-				sr.Write("\""+Dequote(PIn.String(table.Rows[i][5].ToString()))+"\",");//5-HomePhone
-				sr.Write("\""+Dequote(PIn.String(table.Rows[i][6].ToString()))+"\",");//6-WorkNumber
-				sr.Write("\""+Dequote(PIn.String(table.Rows[i][7].ToString()))+"\",");//7-EmailAddress
-				if(table.Rows[i][7].ToString()!=""){//if an email exists
-					sr.Write("\"T\",");//SendEmail
-				}
-				else{
-					sr.Write("\"F\",");
-				}
-				sr.Write("\""+Dequote(PIn.String(table.Rows[i][8].ToString()))+"\",");//8-Address
-				sr.Write("\""+Dequote(PIn.String(table.Rows[i][9].ToString()))+"\",");//9-Address2
-				sr.Write("\""+Dequote(PIn.String(table.Rows[i][10].ToString()))+"\",");//10-City
-				sr.Write("\""+Dequote(PIn.String(table.Rows[i][11].ToString()))+"\",");//11-State
-				sr.Write("\""+Dequote(PIn.String(table.Rows[i][12].ToString()))+"\",");//12-Zip
-				aptDT=PIn.DateT(table.Rows[i][13].ToString());
-				sr.Write("\""+aptDT.ToString("MM/dd/yyyy")+"\",");//13-ApptDate
-				sr.Write("\""+aptDT.ToString("hh:mm tt")+"\",");//13-ApptTime eg 01:30 PM
-				sr.Write("\""+Dequote(PIn.String(table.Rows[i][14].ToString()))+"\",");//14-ApptReason
-				sr.Write("\""+table.Rows[i][15].ToString()+"\",");//15-DoctorNumber. might possibly be 0
-				//15-DoctorName. Can handle 0 without any problem.
-				sr.Write("\""+Dequote(Providers.GetLName(PIn.Long(table.Rows[i][15].ToString())))+"\",");
-				if(table.Rows[i][16].ToString()=="1"){//16-IsNewPatient
-					sr.Write("\"T\",");//SendEmail
-				}
-				else{
-					sr.Write("\"F\",");
-				}
-				sr.Write("\""+Dequote(PIn.String(table.Rows[i][17].ToString()))+"\"");//17-WirelessPhone
-				sr.WriteLine();//Must be last.
-			}
-			sr.Close();
-			MessageBox.Show("Done");
-			DialogResult=DialogResult.OK;
-		}
+                return;
+            }
 
-		private string Dequote(string inputStr){
-			return inputStr.Replace("\"","");
-		}
+            if (!DateTime.TryParse(textDateFrom.Text, out var dateFrom))
+            {
+                MessageBox.Show(
+                    "Please enter a valid from date.",
+                    "House Calls",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
 
-		private void butCancel_Click(object sender, System.EventArgs e) {
-			DialogResult=DialogResult.Cancel;
-		}
+                return;
+            }
 
-		
+            textDateTo.Text = textDateTo.Text.Trim();
+            if (textDateFrom.Text.Length == 0 || !DateTime.TryParse(textDateTo.Text, out var dateTo))
+            {
+                dateTo = DateTime.MaxValue.AddDays(-1);
 
-		
+                textDateTo.Text = "";
+            }
 
-	}
+            try
+            {
+                var exportPath = ProgramPreference.GetString(programId, "export_path");
+                if (!Directory.Exists(exportPath))
+                {
+                    Directory.CreateDirectory(exportPath);
+                }
+
+                var fileName = Path.Combine(exportPath, "Appt.txt");
+
+                using (var stream = File.Open(fileName, FileMode.Create, FileAccess.Write, FileShare.None))
+                using (var streamWriter = new StreamWriter(stream))
+                {
+                    streamWriter.WriteLine("\"LastName\",\"FirstName\",\"PatientNumber\",\"HomePhone\",\"WorkNumber\",\"EmailAddress\",\"SendEmail\",\"Address\",\"Address2\",\"City\",\"State\",\"Zip\",\"ApptDate\",\"ApptTime\",\"ApptReason\",\"DoctorNumber\",\"DoctorName\",\"IsNewPatient\",\"WirelessPhone\"");
+
+                    DataTable table = HouseCallsQueries.GetHouseCalls(dateFrom, dateTo);
+
+                    for (int i = 0; i < table.Rows.Count; i++)
+                    {
+                        DateTime.TryParse(table.Rows[i][13].ToString(), out var appointmentDate);
+
+                        // Use the preferred name if one has been set, if not just use normal first name.
+                        var patientName =
+                            table.Rows[i][2].ToString() != "" ?
+                                table.Rows[i][2].ToString() :
+                                table.Rows[i][1].ToString();
+
+                        var patientId =
+                            usePatientIds ?
+                                table.Rows[i][3].ToString() :
+                                table.Rows[i][4].ToString();
+
+                        var providerName =
+                            Providers.GetLName(
+                                long.Parse(table.Rows[i][15].ToString()));
+
+                        streamWriter.Write(Tidy(table.Rows[i][0].ToString()) + ",");                     // 0 - LastName
+                        streamWriter.Write(Tidy(patientName) + ",");                                     // FirstName or PreferredName
+                        streamWriter.Write(Tidy(patientId) + ",");                                       // PatientId or ChartNumber
+                        streamWriter.Write(Tidy(table.Rows[i][5].ToString()) + ",");                     // 5 - HomePhone
+                        streamWriter.Write(Tidy(table.Rows[i][6].ToString()) + ",");                     // 6 - WorkNumber
+                        streamWriter.Write(Tidy(table.Rows[i][7].ToString()) + ",");                     // 7 - EmailAddress
+                        streamWriter.Write(Tidy(table.Rows[i][7].ToString() != "" ? "T" : "F") + ",");   // 7 - EmailAddress (SendEmail True/False)
+                        streamWriter.Write(Tidy(table.Rows[i][8].ToString()) + ",");                     // 8 -Address
+                        streamWriter.Write(Tidy(table.Rows[i][9].ToString()) + ",");                     // 9 -Address2
+                        streamWriter.Write(Tidy(table.Rows[i][10].ToString()) + ",");                    // 10 - City
+                        streamWriter.Write(Tidy(table.Rows[i][11].ToString()) + ",");                    // 11 - State
+                        streamWriter.Write(Tidy(table.Rows[i][12].ToString()) + ",");                    // 12 - Zip
+                        streamWriter.Write(Tidy(appointmentDate.ToString("MM/dd/yyyy")) + ",");          // 13 - ApptDate
+                        streamWriter.Write(Tidy(appointmentDate.ToString("hh:mm tt")) + ",");            // 13 - ApptTime eg 01:30 PM
+                        streamWriter.Write(Tidy(table.Rows[i][14].ToString()) + ",");                    // 14 - ApptReason
+                        streamWriter.Write(Tidy(table.Rows[i][15].ToString()) + ",");                    // 15 - ProviderId (might possibly be 0)
+                        streamWriter.Write(Tidy(providerName) + ",");                                    // ProviderName
+                        streamWriter.Write(Tidy(table.Rows[i][16].ToString() == "1" ? "T" : "F") + ","); // 16 - IsNewPatient (SendEmail True/False)
+                        streamWriter.Write(Tidy(table.Rows[i][17].ToString()) + "");                     // 17 - WirelessPhone
+                        streamWriter.WriteLine();
+                    }
+                }
+
+                MessageBox.Show(
+                    "Done",
+                    "House Calls",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show(
+                    exception.Message,
+                    "House Calls",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+
+            DialogResult = DialogResult.OK;
+        }
+    }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

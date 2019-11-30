@@ -421,11 +421,7 @@ namespace OpenDental
             checkASAP.Checked = AptCur.Priority == ApptPriority.ASAP;
             if (AptCur.AptStatus == ApptStatus.UnschedList)
             {
-                if (Programs.UsingEcwTightOrFullMode())
-                {
-                    statusComboBox.Enabled = true;
-                }
-                else if (HL7Defs.GetOneDeepEnabled() != null && !HL7Defs.GetOneDeepEnabled().ShowAppts)
+                if (HL7Defs.GetOneDeepEnabled() != null && !HL7Defs.GetOneDeepEnabled().ShowAppts)
                 {
                     statusComboBox.Enabled = true;
                 }
@@ -546,51 +542,51 @@ namespace OpenDental
             checkIsNewPatient.Checked = AptCur.IsNewPatient;
             butColor.BackColor = AptCur.ColorOverride;
 
-            if (Programs.UsingEcwTightOrFullMode() && !insertRequired)
-            {
-                //These buttons are ONLY for eCW, not any other HL7 interface.
-                butComplete.Visible = true;
-                butPDF.Visible = true;
-                //for eCW, we need to hide some things--------------------
-                if (Bridges.ECW.AptNum == AptCur.AptNum)
-                {
-                    butDelete.Visible = false;
-                }
-                butPin.Visible = false;
-                butTask.Visible = false;
-                butAddComm.Visible = false;
-                if (HL7Msgs.MessageWasSent(AptCur.AptNum))
-                {
-                    _isEcwHL7Sent = true;
-                    butComplete.Text = "Revise";
-                    //if(!Security.IsAuthorized(Permissions.Setup,true)) {
-                    //	butComplete.Enabled=false;
-                    //	butPDF.Enabled=false;
-                    //}
-                    butOK.Enabled = false;
-                    gridProc.Enabled = false;
-                    quickAddListBox.Enabled = false;
-                    procedureAddButton.Enabled = false;
-                    procedureDeleteButton.Enabled = false;
-                }
-                else
-                {//hl7 was not sent for this appt
-                    _isEcwHL7Sent = false;
-                    butComplete.Text = "Finish && Send";
-                    if (Bridges.ECW.AptNum != AptCur.AptNum)
-                    {
-                        butComplete.Enabled = false;
-                    }
-                    butPDF.Enabled = false;
-                }
-            }
-            else
-            {
+            //if (Programs.UsingEcwTightOrFullMode() && !insertRequired)
+            //{
+            //    //These buttons are ONLY for eCW, not any other HL7 interface.
+            //    butComplete.Visible = true;
+            //    butPDF.Visible = true;
+            //    //for eCW, we need to hide some things--------------------
+            //    if (Bridges.ECW.AptNum == AptCur.AptNum)
+            //    {
+            //        butDelete.Visible = false;
+            //    }
+            //    butPin.Visible = false;
+            //    butTask.Visible = false;
+            //    butAddComm.Visible = false;
+            //    if (HL7Msgs.MessageWasSent(AptCur.AptNum))
+            //    {
+            //        _isEcwHL7Sent = true;
+            //        butComplete.Text = "Revise";
+            //        //if(!Security.IsAuthorized(Permissions.Setup,true)) {
+            //        //	butComplete.Enabled=false;
+            //        //	butPDF.Enabled=false;
+            //        //}
+            //        butOK.Enabled = false;
+            //        gridProc.Enabled = false;
+            //        quickAddListBox.Enabled = false;
+            //        procedureAddButton.Enabled = false;
+            //        procedureDeleteButton.Enabled = false;
+            //    }
+            //    else
+            //    {//hl7 was not sent for this appt
+            //        _isEcwHL7Sent = false;
+            //        butComplete.Text = "Finish && Send";
+            //        if (Bridges.ECW.AptNum != AptCur.AptNum)
+            //        {
+            //            butComplete.Enabled = false;
+            //        }
+            //        butPDF.Enabled = false;
+            //    }
+            //}
+            //else
+            //{
                 butComplete.Visible = false;
                 butPDF.Visible = false;
-            }
+            //}
             //Hide text message button sometimes
-            if (pat.WirelessPhone == "" || (!Programs.IsEnabled(ProgramName.CallFire) && !SmsPhones.IsIntegratedTextingEnabled()))
+            if (pat.WirelessPhone == "" || (!Program.IsEnabled(ProgramName.CallFire) && !SmsPhones.IsIntegratedTextingEnabled()))
             {
                 butText.Enabled = false;
             }
@@ -751,7 +747,7 @@ namespace OpenDental
                 row = new ODGridRow();
                 row.Cells.Add(table.Rows[i]["field"].ToString());
                 row.Cells.Add(table.Rows[i]["value"].ToString());
-                if (table.Rows[i]["field"].ToString().EndsWith("Phone") && Programs.GetCur(ProgramName.DentalTekSmartOfficePhone).Enabled)
+                if (table.Rows[i]["field"].ToString().EndsWith("Phone") && Program.IsEnabled<DentalTekBridge>())
                 {
                     row.Cells[row.Cells.Count - 1].ColorText = System.Drawing.Color.Blue;
                     row.Cells[row.Cells.Count - 1].Underline = true;
@@ -915,11 +911,6 @@ namespace OpenDental
                     _listProcNumsAttachedStart = listProcs.FindAll(x => x.AptNum == AptCur.AptNum).Select(x => x.ProcNum).ToList();
                 }
                 listNumsSelected.AddRange(_listProcNumsAttachedStart);
-                if (Programs.UsingEcwTightOrFullMode() && !_isEcwHL7Sent)
-                {//for eCW only and only if not in 'Revise' mode, select completed procs from _listProcsForAppt with ProcDate==AptDateTime
-                 //Attach procs to this appointment in memory only so that Cancel button still works.
-                    listNumsSelected.AddRange(listProcs.Where(x => x.ProcStatus == ProcStat.C && x.ProcDate.Date == AptCur.AptDateTime.Date).Select(x => x.ProcNum));
-                }
             }
             else
             {//Filling the grid later on.
@@ -1337,11 +1328,11 @@ namespace OpenDental
                     formProcEdit.IsNew = true;
 
                     // TODO: Move this to a plugin...
-                    if (Programs.UsingOrion)
-                    {
-                        formProcEdit.OrionProvNum = _selectedProvNum;
-                        formProcEdit.OrionDentist = true;
-                    }
+                    //if (Programs.UsingOrion)
+                    //{
+                    //    formProcEdit.OrionProvNum = _selectedProvNum;
+                    //    formProcEdit.OrionDentist = true;
+                    //}
 
                     if (formProcEdit.ShowDialog() == DialogResult.Cancel)
                     {
@@ -1409,12 +1400,12 @@ namespace OpenDental
 
         private void gridPatient_CellClick(object sender, ODGridClickEventArgs e)
         {
-            ODGridCell gridCellCur = gridPatient.Rows[e.Row].Cells[e.Column];
-            //Only grid cells with phone numbers are blue and underlined.
-            if (gridCellCur.ColorText == System.Drawing.Color.Blue && gridCellCur.Underline == true && Programs.GetCur(ProgramName.DentalTekSmartOfficePhone).Enabled)
-            {
-                DentalTek.PlaceCall(gridCellCur.Text);
-            }
+            //ODGridCell gridCellCur = gridPatient.Rows[e.Row].Cells[e.Column];
+            ////Only grid cells with phone numbers are blue and underlined.
+            //if (gridCellCur.ColorText == System.Drawing.Color.Blue && gridCellCur.Underline == true && Programs.GetCur(ProgramName.DentalTekSmartOfficePhone).Enabled)
+            //{
+            //    DentalTekBridge.PlaceCall(gridCellCur.Text);
+            //}
         }
 
         void quickAddListBox_MouseDoubleClick(object sender, MouseEventArgs e)
@@ -1468,33 +1459,33 @@ namespace OpenDental
             _listProcsForAppt = result.Item2;
 
             // Orion requires a DPC for every procedure. Force proc edit window open.
-            if (Programs.UsingOrion)
-            {
-                foreach (var procedure in listAddedProcs)
-                {
-                    using (var formProcEdit = new FormProcEdit(procedure, pat.Copy(), fam))
-                    {
-                        formProcEdit.IsNew = true;
-                        formProcEdit.OrionDentist = true;
+            //if (Programs.UsingOrion)
+            //{
+            //    foreach (var procedure in listAddedProcs)
+            //    {
+            //        using (var formProcEdit = new FormProcEdit(procedure, pat.Copy(), fam))
+            //        {
+            //            formProcEdit.IsNew = true;
+            //            formProcEdit.OrionDentist = true;
 
-                        if (formProcEdit.ShowDialog() == DialogResult.Cancel)
-                        {
-                            try
-                            {
-                                Procedures.Delete(procedure.ProcNum);
-                            }
-                            catch (Exception ex)
-                            {
-                                MessageBox.Show(
-                                    ex.Message, 
-                                    "Appointment", 
-                                    MessageBoxButtons.OK, 
-                                    MessageBoxIcon.Error);
-                            }
-                        }
-                    }
-                }
-            }
+            //            if (formProcEdit.ShowDialog() == DialogResult.Cancel)
+            //            {
+            //                try
+            //                {
+            //                    Procedures.Delete(procedure.ProcNum);
+            //                }
+            //                catch (Exception ex)
+            //                {
+            //                    MessageBox.Show(
+            //                        ex.Message, 
+            //                        "Appointment", 
+            //                        MessageBoxButtons.OK, 
+            //                        MessageBoxIcon.Error);
+            //                }
+            //            }
+            //        }
+            //    }
+            //}
 
             // Clear the selection.
             quickAddListBox.SelectedIndex = -1;
@@ -1994,7 +1985,6 @@ namespace OpenDental
                 isAuxiliaryRole = hl7DefEnabled.hl7DefMessages.Any(x => x.MessageType == MessageTypeHL7.SIU && x.InOrOut == InOutHL7.Incoming);
             }
             if ((IsInChartModule || IsInViewPatAppts)
-                && !Programs.UsingEcwTightOrFullMode()//if eCW Tight or Full mode, appts created from inbound SIU messages and appt module always hidden
                 && AptCur.AptStatus != ApptStatus.UnschedList
                 && !isAuxiliaryRole)//generic HL7 def enabled, appt module hidden and an inbound SIU msg defined, appts created from msgs so no overlap check
             {
@@ -2419,22 +2409,22 @@ namespace OpenDental
                 MessageBox.Show(duplicateProcs);
                 return;
             }
-            if (ProgramProperties.GetPropVal(ProgramName.eClinicalWorks, "ProcNotesNoIncomplete") == "1")
-            {
-                if (listProcsForAppt.Any(x => x.Note != null && x.Note.Contains("\"\"")))
-                {
-                    MsgBox.Show(this, "This appointment cannot be sent because there are incomplete procedure notes.");
-                    return;
-                }
-            }
-            if (ProgramProperties.GetPropVal(ProgramName.eClinicalWorks, "ProcRequireSignature") == "1")
-            {
-                if (listProcsForAppt.Any(x => !string.IsNullOrEmpty(x.Note) && string.IsNullOrEmpty(x.Signature)))
-                {
-                    MsgBox.Show(this, "This appointment cannot be sent because there are unsigned procedure notes.");
-                    return;
-                }
-            }
+            //if (ProgramProperties.GetPropVal(ProgramName.eClinicalWorks, "ProcNotesNoIncomplete") == "1")
+            //{
+            //    if (listProcsForAppt.Any(x => x.Note != null && x.Note.Contains("\"\"")))
+            //    {
+            //        MsgBox.Show(this, "This appointment cannot be sent because there are incomplete procedure notes.");
+            //        return;
+            //    }
+            //}
+            //if (ProgramProperties.GetPropVal(ProgramName.eClinicalWorks, "ProcRequireSignature") == "1")
+            //{
+            //    if (listProcsForAppt.Any(x => !string.IsNullOrEmpty(x.Note) && string.IsNullOrEmpty(x.Signature)))
+            //    {
+            //        MsgBox.Show(this, "This appointment cannot be sent because there are unsigned procedure notes.");
+            //        return;
+            //    }
+            //}
             //user can only get this far if aptNum matches visit num previously passed in by eCW.
             if (!MsgBox.Show(this, MsgBoxButtons.OKCancel, "Send attached procedures to eClinicalWorks and exit?"))
             {

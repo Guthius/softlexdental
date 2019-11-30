@@ -7,7 +7,6 @@ using CodeBase;
 
 namespace OpenDentBusiness
 {
-
     public class XChargeTransactions
     {
         #region Get Methods
@@ -76,73 +75,75 @@ namespace OpenDentBusiness
 
         public static DataTable GetMissingPaymentsTable(DateTime dateStart, DateTime dateEnd)
         {
-            string command = "SELECT xchargetransaction.* "
-                + "FROM xchargetransaction "
-                + "WHERE " + DbHelper.BetweenDates("TransactionDateTime", dateStart, dateEnd) + " "
-                + "AND xchargetransaction.ResultCode=0";//Valid entries to count have result code 0
-            List<XChargeTransaction> listTrans = Crud.XChargeTransactionCrud.SelectMany(command);
-            command = "SELECT payment.* "
-                + "FROM payment "
-                //only payments with the same PaymentType as the X-Charge PaymentType for the clinic
-                + "INNER JOIN ("
-                    + "SELECT ClinicNum,PropertyValue PaymentType FROM programproperty "
-                    + "WHERE ProgramNum=" + POut.Long(Programs.GetProgramNum(ProgramName.Xcharge)) + " AND PropertyDesc='PaymentType'"
-                + ") paytypes ON paytypes.ClinicNum=payment.ClinicNum AND paytypes.PaymentType=payment.PayType "
-                + "WHERE DateEntry BETWEEN " + POut.Date(dateStart) + " AND " + POut.Date(dateEnd);
-            List<Payment> listPays = Crud.PaymentCrud.SelectMany(command);
-            for (int i = listTrans.Count - 1; i >= 0; i--)
-            {//Looping backwards in order to remove items
-                XChargeTransaction tran = listTrans[i];
-                Payment pay = listPays.Where(x => x.PatNum == tran.PatNum)
-                    .Where(x => x.DateEntry.Date == tran.TransactionDateTime.Date)
-                    .Where(x => x.PayAmt.Equals(tran.Amount))
-                    .FirstOrDefault();
-                if (pay == null)
-                {//The XCharge transaction does not have a corresponding payment.
-                    continue;
-                }
-                listTrans.RemoveAt(i);
-                listPays.Remove(pay);//So that the same payment does not get counted for more than one XCharge transaction.
-            }
-            DataTable table = Crud.XChargeTransactionCrud.ListToTable(listTrans);
-            List<string> listColumnsToKeep = new List<string> {
-                "TransactionDateTime","TransType","ClerkID","ItemNum","PatNum","CreditCardNum","Expiration","Result","Amount"
-            };
-            //Remove columns we don't want.
-            for (int i = table.Columns.Count - 1; i >= 0; i--)
-            {
-                if (table.Columns[i].ColumnName.In(listColumnsToKeep))
-                {
-                    continue;
-                }
-                table.Columns.RemoveAt(i);
-            }
-            //Reorder the column in the order we want them.
-            for (int i = 0; i < listColumnsToKeep.Count; i++)
-            {
-                table.Columns[listColumnsToKeep[i]].SetOrdinal(i);
-            }
-            return table;
+            return default; // TODO: Fix me...
+            //string command = "SELECT xchargetransaction.* "
+            //    + "FROM xchargetransaction "
+            //    + "WHERE " + DbHelper.BetweenDates("TransactionDateTime", dateStart, dateEnd) + " "
+            //    + "AND xchargetransaction.ResultCode=0";//Valid entries to count have result code 0
+            //List<XChargeTransaction> listTrans = Crud.XChargeTransactionCrud.SelectMany(command);
+            //command = "SELECT payment.* "
+            //    + "FROM payment "
+            //    //only payments with the same PaymentType as the X-Charge PaymentType for the clinic
+            //    + "INNER JOIN ("
+            //        + "SELECT ClinicNum,PropertyValue PaymentType FROM programproperty "
+            //        + "WHERE ProgramNum=" + POut.Long(Programs.GetProgramNum(ProgramName.Xcharge)) + " AND PropertyDesc='PaymentType'"
+            //    + ") paytypes ON paytypes.ClinicNum=payment.ClinicNum AND paytypes.PaymentType=payment.PayType "
+            //    + "WHERE DateEntry BETWEEN " + POut.Date(dateStart) + " AND " + POut.Date(dateEnd);
+            //List<Payment> listPays = Crud.PaymentCrud.SelectMany(command);
+            //for (int i = listTrans.Count - 1; i >= 0; i--)
+            //{//Looping backwards in order to remove items
+            //    XChargeTransaction tran = listTrans[i];
+            //    Payment pay = listPays.Where(x => x.PatNum == tran.PatNum)
+            //        .Where(x => x.DateEntry.Date == tran.TransactionDateTime.Date)
+            //        .Where(x => x.PayAmt.Equals(tran.Amount))
+            //        .FirstOrDefault();
+            //    if (pay == null)
+            //    {//The XCharge transaction does not have a corresponding payment.
+            //        continue;
+            //    }
+            //    listTrans.RemoveAt(i);
+            //    listPays.Remove(pay);//So that the same payment does not get counted for more than one XCharge transaction.
+            //}
+            //DataTable table = Crud.XChargeTransactionCrud.ListToTable(listTrans);
+            //List<string> listColumnsToKeep = new List<string> {
+            //    "TransactionDateTime","TransType","ClerkID","ItemNum","PatNum","CreditCardNum","Expiration","Result","Amount"
+            //};
+            ////Remove columns we don't want.
+            //for (int i = table.Columns.Count - 1; i >= 0; i--)
+            //{
+            //    if (table.Columns[i].ColumnName.In(listColumnsToKeep))
+            //    {
+            //        continue;
+            //    }
+            //    table.Columns.RemoveAt(i);
+            //}
+            ////Reorder the column in the order we want them.
+            //for (int i = 0; i < listColumnsToKeep.Count; i++)
+            //{
+            //    table.Columns[listColumnsToKeep[i]].SetOrdinal(i);
+            //}
+            //return table;
         }
 
         public static DataTable GetMissingXTransTable(DateTime dateStart, DateTime dateEnd)
         {
-            string command = "SELECT payment.PatNum,LName,FName,payment.DateEntry,payment.PayDate,payment.PayNote,payment.PayAmt "
-                + "FROM patient "
-                + "INNER JOIN payment ON payment.PatNum=patient.PatNum "
-                //only payments with the same PaymentType as the X-Charge PaymentType for the clinic
-                + "INNER JOIN ("
-                    + "SELECT ClinicNum,PropertyValue AS PaymentType FROM programproperty "
-                    + "WHERE ProgramNum=" + POut.Long(Programs.GetProgramNum(ProgramName.Xcharge)) + " AND PropertyDesc='PaymentType'"
-                + ") paytypes ON paytypes.ClinicNum=payment.ClinicNum AND paytypes.PaymentType=payment.PayType "
-                + "LEFT JOIN xchargetransaction ON xchargetransaction.PatNum=payment.PatNum "
-                    + "AND " + DbHelper.DtimeToDate("TransactionDateTime") + "=payment.DateEntry "
-                    + "AND (CASE WHEN xchargetransaction.ResultCode=5 THEN 0 ELSE xchargetransaction.Amount END)=payment.PayAmt "
-                    + "AND xchargetransaction.ResultCode IN(0,5,10) "
-                + "WHERE payment.DateEntry BETWEEN " + POut.Date(dateStart) + " AND " + POut.Date(dateEnd) + " "
-                + "AND TransactionDateTime IS NULL "
-                + "ORDER BY payment.PayDate ASC,LName,FName";
-            return Db.GetTable(command);
+            return default; // TODO: Fix me.
+            //string command = "SELECT payment.PatNum,LName,FName,payment.DateEntry,payment.PayDate,payment.PayNote,payment.PayAmt "
+            //    + "FROM patient "
+            //    + "INNER JOIN payment ON payment.PatNum=patient.PatNum "
+            //    //only payments with the same PaymentType as the X-Charge PaymentType for the clinic
+            //    + "INNER JOIN ("
+            //        + "SELECT ClinicNum,PropertyValue AS PaymentType FROM programproperty "
+            //        + "WHERE ProgramNum=" + POut.Long(Programs.GetProgramNum(ProgramName.Xcharge)) + " AND PropertyDesc='PaymentType'"
+            //    + ") paytypes ON paytypes.ClinicNum=payment.ClinicNum AND paytypes.PaymentType=payment.PayType "
+            //    + "LEFT JOIN xchargetransaction ON xchargetransaction.PatNum=payment.PatNum "
+            //        + "AND " + DbHelper.DtimeToDate("TransactionDateTime") + "=payment.DateEntry "
+            //        + "AND (CASE WHEN xchargetransaction.ResultCode=5 THEN 0 ELSE xchargetransaction.Amount END)=payment.PayAmt "
+            //        + "AND xchargetransaction.ResultCode IN(0,5,10) "
+            //    + "WHERE payment.DateEntry BETWEEN " + POut.Date(dateStart) + " AND " + POut.Date(dateEnd) + " "
+            //    + "AND TransactionDateTime IS NULL "
+            //    + "ORDER BY payment.PayDate ASC,LName,FName";
+            //return Db.GetTable(command);
         }
     }
 }

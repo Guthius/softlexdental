@@ -10,11 +10,13 @@ namespace OpenDental
     public class FeeL
     {
         /// <summary>
-        /// Imports fees into the database from the provided file.
+        ///     <para>
+        ///         Imports fees into the database from the provided file.
+        ///     </para>
         /// </summary>
         /// <param name="fileName">
-        /// Must be a tab-delimited .xls or .csv file. Each row must have two columns. 
-        /// The first column must be the proc code and the second column must be the fee amount.
+        ///     Must be a tab-delimited file. Each row must have two columns. The first column must
+        ///     be the procedure code and the second column must be the fee amount.
         /// </param>
         public static void ImportFees(long feeScheduleId, long clinicId, long providerId, string fileName, Form currentForm, bool showMessage = true)
         {

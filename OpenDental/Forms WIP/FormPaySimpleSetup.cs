@@ -13,14 +13,14 @@ namespace OpenDental
 {
     public partial class FormPaySimpleSetup : ODForm
     {
+		private Program _progCur;
+		///<summary>Local cache of all of the ClinicNums the current user has permission to access at the time the form loads.  Filled at the same time
+		///as comboClinic and is used to set programproperty.ClinicNum when saving.</summary>
+		private List<long> _listUserClinicNums;
+		///<summary>List of PaySimple program properties for all clinics.
+		///Includes properties with ClinicNum=0, the headquarters props or props not assigned to a clinic.</summary>
+		private List<ProgramPreference> _listProgProps;
 
-        private Program _progCur;
-        ///<summary>Local cache of all of the ClinicNums the current user has permission to access at the time the form loads.  Filled at the same time
-        ///as comboClinic and is used to set programproperty.ClinicNum when saving.</summary>
-        private List<long> _listUserClinicNums;
-        ///<summary>List of PaySimple program properties for all clinics.
-        ///Includes properties with ClinicNum=0, the headquarters props or props not assigned to a clinic.</summary>
-        private List<ProgramProperty> _listProgProps;
 
         ///<summary>Used to revert the slected index in the clinic drop down box if the user tries to change clinics
         ///and the payment type has not been set.</summary>
@@ -30,61 +30,64 @@ namespace OpenDental
         public FormPaySimpleSetup()
         {
             InitializeComponent();
-
         }
 
         private void FormPaySimpleSetup_Load(object sender, EventArgs e)
         {
-            _progCur = Programs.GetCur(ProgramName.PaySimple);
-            if (_progCur == null)
-            {
-                MsgBox.Show(this, "The PaySimple entry is missing from the database.");//should never happen
-                return;
-            }
-            checkEnabled.Checked = _progCur.Enabled;
+            // TODO: Implement me
 
-            groupPaySettings.Text = Lan.g(this, "Clinic Payment Settings");
-            _listUserClinicNums = new List<long>();
-            comboClinic.Items.Clear();
-            //if PaySimple is enabled and the user is restricted to a clinic, don't allow the user to disable for all clinics
-            if (Security.CurrentUser.ClinicRestricted)
-            {
-                if (checkEnabled.Checked)
-                {
-                    checkEnabled.Enabled = false;
-                }
-            }
-            else
-            {
-                comboClinic.Items.Add(Lan.g(this, "Headquarters"));
-                //this way both lists have the same number of items in it and if 'Headquarters' is selected the programproperty.ClinicNum will be set to 0
-                _listUserClinicNums.Add(0);
-                comboClinic.SelectedIndex = 0;
-            }
-            List<Clinic> listClinics = Clinic.GetByUser(Security.CurrentUser).ToList();
-            for (int i = 0; i < listClinics.Count; i++)
-            {
-                comboClinic.Items.Add(listClinics[i].Abbr);
-                _listUserClinicNums.Add(listClinics[i].Id);
-                if (Clinics.ClinicId == listClinics[i].Id)
-                {
-                    comboClinic.SelectedIndex = i;
-                    if (!Security.CurrentUser.ClinicRestricted)
-                    {
-                        comboClinic.SelectedIndex++;//increment the SelectedIndex to account for 'Headquarters' in the list at position 0 if the user is not restricted.
-                    }
-                }
-            }
-            _indexClinicRevert = comboClinic.SelectedIndex;
+            //_progCur = Programs.GetCur(ProgramName.PaySimple);
+            //if (_progCur == null)
+            //{
+            //    MsgBox.Show(this, "The PaySimple entry is missing from the database.");//should never happen
+            //    return;
+            //}
+            //checkEnabled.Checked = _progCur.Enabled;
 
-            _listProgProps = ProgramProperties.GetForProgram(_progCur.ProgramNum);
+            //groupPaySettings.Text = Lan.g(this, "Clinic Payment Settings");
+            //_listUserClinicNums = new List<long>();
+            //comboClinic.Items.Clear();
+            ////if PaySimple is enabled and the user is restricted to a clinic, don't allow the user to disable for all clinics
+            //if (Security.CurrentUser.ClinicRestricted)
+            //{
+            //    if (checkEnabled.Checked)
+            //    {
+            //        checkEnabled.Enabled = false;
+            //    }
+            //}
+            //else
+            //{
+            //    comboClinic.Items.Add("Headquarters");
+            //    //this way both lists have the same number of items in it and if 'Headquarters' is selected the programproperty.ClinicNum will be set to 0
+            //    _listUserClinicNums.Add(0);
+            //    comboClinic.SelectedIndex = 0;
+            //}
 
-            foreach (Clinic clinicCur in Clinic.GetByUser(Security.CurrentUser))
-            {
-                AddNeededProgramProperties(clinicCur.Id);
-            }
+            //List<Clinic> listClinics = Clinic.GetByUser(Security.CurrentUser).ToList();
+            //for (int i = 0; i < listClinics.Count; i++)
+            //{
+            //    comboClinic.Items.Add(listClinics[i].Abbr);
+            //    _listUserClinicNums.Add(listClinics[i].Id);
+            //    if (Clinics.ClinicId == listClinics[i].Id)
+            //    {
+            //        comboClinic.SelectedIndex = i;
+            //        if (!Security.CurrentUser.ClinicRestricted)
+            //        {
+            //            comboClinic.SelectedIndex++;//increment the SelectedIndex to account for 'Headquarters' in the list at position 0 if the user is not restricted.
+            //        }
+            //    }
+            //}
 
-            FillFields();
+            //_indexClinicRevert = comboClinic.SelectedIndex;
+
+            //_listProgProps = ProgramProperties.GetForProgram(_progCur.ProgramNum);
+
+            //foreach (Clinic clinicCur in Clinic.GetByUser(Security.CurrentUser))
+            //{
+            //    AddNeededProgramProperties(clinicCur.Id);
+            //}
+
+            //FillFields();
         }
 
         private void AddNeededProgramProperties(long clinicNum)

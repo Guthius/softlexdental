@@ -414,27 +414,4 @@ namespace OpenDentBusiness
             return null;
         }
     }
-
-    public class Plugins
-    {
-        public static void LaunchToolbarButton(long programNum, long patNum)
-        {
-            //if (ListPlugins == null)
-            //{
-            //    return;//Fail silently if plugins could not be loaded.
-            //}
-            //PluginContainer pluginContainer = ListPlugins.FirstOrDefault(x => x.ProgramNum == programNum && x.Plugin != null);
-            //if (pluginContainer != null)
-            //{
-            //    try
-            //    {
-            //        pluginContainer.Plugin.LaunchToolbarButton(patNum);
-            //    }
-            //    catch (Exception e)
-            //    {
-            //        pluginContainer.Plugin.HookException(e);
-            //    }
-            //}
-        }
-    }
 }

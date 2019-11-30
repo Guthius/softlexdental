@@ -23,7 +23,7 @@ namespace OpenDental{
 		/// Required designer variable.
 		/// </summary>
 		private System.ComponentModel.Container components = null;
-		public ProgramProperty ProgramPropertyCur;
+		public ProgramPreference ProgramPropertyCur;
 
 		///<summary></summary>
 		public FormProgramProperty(bool isPassword=false)

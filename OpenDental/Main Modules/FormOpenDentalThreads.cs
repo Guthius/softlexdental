@@ -629,18 +629,20 @@ namespace OpenDental
         ///In the future, some sort of identification should be made to tell if this thread is running on any computer.</summary>
         private void BeginPodiumThread()
         {
-            if (IsThreadAlreadyRunning(FormODThreadNames.Podium))
-            {
-                return;
-            }
-            ODThread odThread = new ODThread(Podium.PodiumThreadIntervalMS, ((ODThread o) => { Podium.ThreadPodiumSendInvitations(false); }));
-            odThread.AddExceptionHandler((ex) =>
-            {
-                Logger.Write(ex);
-            });
-            odThread.GroupName = FormODThreadNames.Podium.GetDescription();
-            odThread.Name = FormODThreadNames.Podium.GetDescription();
-            odThread.Start();
+            // TODO: Implement me
+
+            //if (IsThreadAlreadyRunning(FormODThreadNames.Podium))
+            //{
+            //    return;
+            //}
+            //ODThread odThread = new ODThread(Podium.PodiumThreadIntervalMS, ((ODThread o) => { Podium.ThreadPodiumSendInvitations(false); }));
+            //odThread.AddExceptionHandler((ex) =>
+            //{
+            //    Logger.Write(ex);
+            //});
+            //odThread.GroupName = FormODThreadNames.Podium.GetDescription();
+            //odThread.Name = FormODThreadNames.Podium.GetDescription();
+            //odThread.Start();
         }
 
         #endregion

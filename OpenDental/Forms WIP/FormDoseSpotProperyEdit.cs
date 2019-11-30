@@ -10,10 +10,10 @@ namespace OpenDental {
 		
 		public string ClinicIdVal;
 		public string ClinicKeyVal;
-		public List<ProgramProperty> ListProperties;
+		public List<ProgramPreference> ListProperties;
 		private Clinic _clinicCur;
 
-		public FormDoseSpotPropertyEdit(Clinic clinicCur,string ppClinicIdVal,string ppClinicKeyVal,List<ProgramProperty> listProperties) {
+		public FormDoseSpotPropertyEdit(Clinic clinicCur,string ppClinicIdVal,string ppClinicKeyVal,List<ProgramPreference> listProperties) {
 			InitializeComponent();
 			
 			_clinicCur=clinicCur;
@@ -33,9 +33,9 @@ namespace OpenDental {
 				menuItemSetup.Enabled=false;//There is no clinic record to edit.
 			}
 			Program programErx=Programs.GetCur(ProgramName.eRx);
-			ProgramProperty ppClinicID=ListProperties
-					.FirstOrDefault(x => x.ClinicId!=_clinicCur.Id && x.Key==Erx.PropertyDescs.ClinicID && x.Value!="");
+			ProgramProperty ppClinicID=ListProperties.FirstOrDefault(x => x.ClinicId!=_clinicCur.Id && x.Key==Erx.PropertyDescs.ClinicID && x.Value!="");
 			ProgramProperty ppClinicKey=null;
+
 			if(ppClinicID!=null) {
 				ppClinicKey=ListProperties
 					.FirstOrDefault(x => x.ClinicId==ppClinicID.ClinicId && x.Key==Erx.PropertyDescs.ClinicKey && x.Value!="");

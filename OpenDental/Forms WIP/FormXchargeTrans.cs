@@ -40,7 +40,7 @@ namespace OpenDental {
 			}
 			checkSignature.Checked=PromptSignature;
 			checkPrintReceipt.Checked=PrintReceipt;
-			if(PIn.Bool(ProgramProperties.GetPropVal(prog.ProgramNum,XCharge.ProgramProperties.XChargePreventSavingNewCC,ClinicNum))) {
+			if(PIn.Bool(ProgramProperties.GetPropVal(prog.Id,XChargeBridge.ProgramProperties.XChargePreventSavingNewCC,ClinicNum))) {
 				checkSaveToken.Checked=false;
 				checkSaveToken.Enabled=false;
 			}

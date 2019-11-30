@@ -203,7 +203,7 @@ namespace OpenDental
         {
             if (this.GetAllControls().OfType<IValid>().Any(x => !x.IsValid))
             {
-                MsgBox.Show(this, "Please fix data errors first.");
+                MessageBox.Show("Please fix data errors first.");
                 return false;
             }
             return true;

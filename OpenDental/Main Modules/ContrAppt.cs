@@ -177,16 +177,20 @@ namespace OpenDental
 
             menuWeeklyApt = new ContextMenu();
 
-            PicturePat = new ODPictureBox();
-            PicturePat.Location = new Point(6, 17);
-            PicturePat.Size = new Size(100, 100);
-            PicturePat.BackColor = Color.FromArgb(232, 220, 190);
-            PicturePat.TextNullImage = Lan.g(this, "Patient Picture Unavailable");
+            PicturePat = new ODPictureBox
+            {
+                Location = new Point(6, 17),
+                Size = new Size(100, 100),
+                BackColor = Color.FromArgb(232, 220, 190),
+                TextNullImage = "Patient Picture Unavailable"
+            };
             PicturePat.MouseMove += new MouseEventHandler(PicturePat_MouseMove);
 
-            infoBubble = new Panel();
-            infoBubble.Visible = false;
-            infoBubble.Size = new Size(200, 300);
+            infoBubble = new Panel
+            {
+                Visible = false,
+                Size = new Size(200, 300)
+            };
             infoBubble.MouseMove += new MouseEventHandler(InfoBubble_MouseMove);
             infoBubble.BackColor = Color.FromArgb(255, 250, 190);
             infoBubble.Controls.Clear();
@@ -225,7 +229,7 @@ namespace OpenDental
                             if (Security.CurrentUser != null)
                             {
                                 //Make a security log if we still have a valid user logged in.  E.g. clicking Log Off invalidates the user.
-                                string logText = Lan.g(this, "Deleted from pinboard while closing Open Dental") + ": ";
+                                string logText = "Deleted from pinboard while closing Open Dental: ";
                                 if (aptCur.AptDateTime.Year > 1880)
                                 {
                                     logText += aptCur.AptDateTime.ToString() + ", ";
@@ -837,7 +841,7 @@ namespace OpenDental
             FillEmpSched(hasNotes);
             FillWaitingRoom();
             //It is safe to perform drawing from a thread from this point.
-            ContrApptSheet2.RedrawAll(true);
+            ContrApptSheet2.RedrawAll();
         }
 
         ///<summary>This is public so that FormOpenDental can pass refreshed tasks here in order to avoid an extra query.</summary>
@@ -2927,20 +2931,26 @@ namespace OpenDental
                     menuItem.Name = MenuItemNames.WirelessPhone;
                 }
                 //Texting
-                menuItem = menuApt.MenuItems.Add("-");
-                menuItem.Name = MenuItemNames.TextDiv;
-                menuItem = menuApt.MenuItems.Add(Lan.g(this, "Send Text"), menuApt_Click);
-                menuItem.Name = MenuItemNames.SendText;
-                if (!SmsPhones.IsIntegratedTextingEnabled() && !Programs.IsEnabled(ProgramName.CallFire))
-                {
-                    menuItem.Enabled = false;
-                }
-                menuItem = menuApt.MenuItems.Add(Lan.g(this, "Send Confirmation Text"), menuApt_Click);
-                menuItem.Name = MenuItemNames.SendConfirmationText;
-                if (!SmsPhones.IsIntegratedTextingEnabled() && !Programs.IsEnabled(ProgramName.CallFire))
-                {
-                    menuItem.Enabled = false;
-                }
+
+                // TODO: Fix me
+
+                //menuItem = menuApt.MenuItems.Add("-");
+                //menuItem.Name = MenuItemNames.TextDiv;
+                //menuItem = menuApt.MenuItems.Add(Lan.g(this, "Send Text"), menuApt_Click);
+                //menuItem.Name = MenuItemNames.SendText;
+                //if (!SmsPhones.IsIntegratedTextingEnabled() && !Programs.IsEnabled(ProgramName.CallFire))
+                //{
+                //    menuItem.Enabled = false;
+                //}
+                //menuItem = menuApt.MenuItems.Add(Lan.g(this, "Send Confirmation Text"), menuApt_Click);
+                //menuItem.Name = MenuItemNames.SendConfirmationText;
+                //if (!SmsPhones.IsIntegratedTextingEnabled() && !Programs.IsEnabled(ProgramName.CallFire))
+                //{
+                //    menuItem.Enabled = false;
+                //}
+
+
+
                 Plugin.Trigger(this, "ContrAppt_Appointment_ContextMenu", menuApt);
 
                 menuApt.Show(ContrApptSheet2, new Point(e.X, e.Y));
@@ -4245,7 +4255,7 @@ namespace OpenDental
                     case "RapidCall":
                         try
                         {
-                            RapidCall.ShowPage();
+                            // TODO: RapidCallBridge.ShowPage();
                         }
                         catch (Exception ex)
                         {
@@ -4261,7 +4271,7 @@ namespace OpenDental
                 {
                     pat = Patients.GetPat(PatCur.PatNum);
                 }
-                ProgramL.Execute(((Program)e.Button.Tag).ProgramNum, pat);
+                ProgramL.Execute(((Program)e.Button.Tag).Id, pat);
             }
         }
 
@@ -4756,7 +4766,7 @@ namespace OpenDental
             }
             try
             {
-                Bitmap imageTemp = ContrApptSheet2.GetShadowClone(startTime, stopTime);
+                Bitmap imageTemp = ContrApptSheet2.CloneBackBuffer(startTime, stopTime);
                 if (imageTemp != null)
                 {
                     Clipboard.SetDataObject(imageTemp);
@@ -4926,34 +4936,34 @@ namespace OpenDental
                     FormOC.ShowDialog();
                     break;
                 case MenuItemNames.HomePhone: //Call Home Phone
-                    if (Programs.GetCur(ProgramName.DentalTekSmartOfficePhone).Enabled)
-                    {
-                        DentalTek.PlaceCall(PatCur.HmPhone);
-                    }
-                    else
-                    {
+                    //if (Programs.GetCur(ProgramName.DentalTekSmartOfficePhone).Enabled)
+                    //{
+                    //    DentalTekBridge.PlaceCall(PatCur.HmPhone);
+                    //}
+                    //else
+                    //{
                         AutomaticCallDialingDisabledMessage();
-                    }
+                    //}
                     break;
                 case MenuItemNames.WorkPhone: //Call Work Phone
-                    if (Programs.GetCur(ProgramName.DentalTekSmartOfficePhone).Enabled)
-                    {
-                        DentalTek.PlaceCall(PatCur.WkPhone);
-                    }
-                    else
-                    {
+                    //if (Programs.GetCur(ProgramName.DentalTekSmartOfficePhone).Enabled)
+                    //{
+                    //    DentalTekBridge.PlaceCall(PatCur.WkPhone);
+                    //}
+                    //else
+                    //{
                         AutomaticCallDialingDisabledMessage();
-                    }
+                    //}
                     break;
                 case MenuItemNames.WirelessPhone: //Call Wireless Phone
-                    if (Programs.GetCur(ProgramName.DentalTekSmartOfficePhone).Enabled)
-                    {
-                        DentalTek.PlaceCall(PatCur.WirelessPhone);
-                    }
-                    else
-                    {
+                    //if (Programs.GetCur(ProgramName.DentalTekSmartOfficePhone).Enabled)
+                    //{
+                    //    DentalTekBridge.PlaceCall(PatCur.WirelessPhone);
+                    //}
+                    //else
+                    //{
                         AutomaticCallDialingDisabledMessage();
-                    }
+                    //}
                     break;
                 case MenuItemNames.SendText:
                     Appointment appt = Appointments.GetOneApt(ContrApptSingle.ClickedAptNum);

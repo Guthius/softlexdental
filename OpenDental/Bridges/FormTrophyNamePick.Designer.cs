@@ -53,7 +53,7 @@ namespace OpenDental.Bridges{
 			this.butNew.Size = new System.Drawing.Size(84,24);
 			this.butNew.TabIndex = 141;
 			this.butNew.Text = "New Patient";
-			this.butNew.Click += new System.EventHandler(this.butNew_Click);
+			this.butNew.Click += new System.EventHandler(this.NewButton_Click);
 			// 
 			// gridMain
 			// 
@@ -68,7 +68,7 @@ namespace OpenDental.Bridges{
 			this.gridMain.Size = new System.Drawing.Size(439,449);
 			this.gridMain.TabIndex = 140;
 			this.gridMain.Title = "Unpaired Folders";
-			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
+			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.FoldersGrid_CellDoubleClick);
 			// 
 			// butOK
 			// 
@@ -83,7 +83,7 @@ namespace OpenDental.Bridges{
 			this.butOK.Size = new System.Drawing.Size(84,24);
 			this.butOK.TabIndex = 3;
 			this.butOK.Text = "&OK";
-			this.butOK.Click += new System.EventHandler(this.butOK_Click);
+			this.butOK.Click += new System.EventHandler(this.AcceptButton_Click);
 			// 
 			// butCancel
 			// 
@@ -98,7 +98,7 @@ namespace OpenDental.Bridges{
 			this.butCancel.Size = new System.Drawing.Size(84,24);
 			this.butCancel.TabIndex = 2;
 			this.butCancel.Text = "&Cancel";
-			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
+			this.butCancel.Click += new System.EventHandler(this.CancelButton_Click);
 			// 
 			// FormTrophyNamePick
 			// 
