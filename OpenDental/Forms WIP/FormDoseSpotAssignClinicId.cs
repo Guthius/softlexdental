@@ -24,19 +24,19 @@ namespace OpenDental
 
         private void FormDoseSpotAssignUserId_Load(object sender, EventArgs e)
         {
-            _listClinicsInComboBox = Clinic.GetByUser(Security.CurrentUser).ToList();
-            List<ProgramProperty> listProgramProperties = ProgramProperties.GetForProgram(Programs.GetCur(ProgramName.eRx).ProgramNum);
+            //_listClinicsInComboBox = Clinic.GetByUser(Security.CurrentUser).ToList();
+            //List<ProgramProperty> listProgramProperties = ProgramProperties.GetForProgram(Programs.GetCur(ProgramName.eRx).ProgramNum);
 
-            _listClinicIDs = listProgramProperties.FindAll(x => x.Key == Erx.PropertyDescs.ClinicID);
-            _listClinicKeys = listProgramProperties.FindAll(x => x.Key == Erx.PropertyDescs.ClinicKey);
-            _listClinicsInComboBox.RemoveAll(x =>//Remove all clinics that already have a DoseSpot Clinic ID OR Clinic Key entered
-              _listClinicIDs.FindAll(y => !string.IsNullOrWhiteSpace(y.Value)).Select(y => y.ClinicId).Contains(x.Id)
-              || _listClinicKeys.FindAll(y => !string.IsNullOrWhiteSpace(y.Value)).Select(y => y.ClinicId).Contains(x.Id)
-            );
-            FillComboBox();
-            textClinicId.Text = _clinicErxCur.ClinicId;//ClinicID passed from Alert
-            textClinicKey.Text = _clinicErxCur.ClinicKey;//ClinicKey passed from Alert
-            textClinicDesc.Text = _clinicErxCur.ClinicDesc;//ClinicDesc passed from Alert
+            //_listClinicIDs = listProgramProperties.FindAll(x => x.Key == Erx.PropertyDescs.ClinicID);
+            //_listClinicKeys = listProgramProperties.FindAll(x => x.Key == Erx.PropertyDescs.ClinicKey);
+            //_listClinicsInComboBox.RemoveAll(x =>//Remove all clinics that already have a DoseSpot Clinic ID OR Clinic Key entered
+            //  _listClinicIDs.FindAll(y => !string.IsNullOrWhiteSpace(y.Value)).Select(y => y.ClinicId).Contains(x.Id)
+            //  || _listClinicKeys.FindAll(y => !string.IsNullOrWhiteSpace(y.Value)).Select(y => y.ClinicId).Contains(x.Id)
+            //);
+            //FillComboBox();
+            //textClinicId.Text = _clinicErxCur.ClinicId;//ClinicID passed from Alert
+            //textClinicKey.Text = _clinicErxCur.ClinicKey;//ClinicKey passed from Alert
+            //textClinicDesc.Text = _clinicErxCur.ClinicDesc;//ClinicDesc passed from Alert
         }
 
         private void FillComboBox(long selectedClinicNum = -1)

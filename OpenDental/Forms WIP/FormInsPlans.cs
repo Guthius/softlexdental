@@ -427,14 +427,14 @@ namespace OpenDental{
 				butCancel.Text=Lan.g(this,"Close");
 				butOK.Visible=false;
 			}
-			Program prog=Programs.GetCur(ProgramName.Trojan);
-			if(prog!=null && prog.Enabled) {
-				trojan=true;
-			}
-			else{
+			//Program prog=Programs.GetCur(ProgramName.Trojan);
+			//if(prog!=null && prog.Enabled) {
+			//	trojan=true;
+			//}
+			//else{
 				labelTrojanID.Visible=false;
 				textTrojanID.Visible=false;
-			}
+			//}
 			textEmployer.Text=empText;
 			textCarrier.Text=carrierText;
 			textGroupName.Text=groupNameText;

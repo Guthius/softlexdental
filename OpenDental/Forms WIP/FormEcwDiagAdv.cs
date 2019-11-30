@@ -27,67 +27,67 @@ namespace OpenDental {
 
 		public FormEcwDiagAdv() {
 			InitializeComponent();
-			server=ProgramProperties.GetPropVal(Programs.GetProgramNum(ProgramName.eClinicalWorks),"eCWServer");//this property will not exist if using Oracle, eCW will never use Oracle
-			port=ProgramProperties.GetPropVal(Programs.GetProgramNum(ProgramName.eClinicalWorks),"eCWPort");//this property will not exist if using Oracle, eCW will never use Oracle
-			buildConnectionString();
+			//server=ProgramProperties.GetPropVal(Programs.GetProgramNum(ProgramName.eClinicalWorks),"eCWServer");//this property will not exist if using Oracle, eCW will never use Oracle
+			//port=ProgramProperties.GetPropVal(Programs.GetProgramNum(ProgramName.eClinicalWorks),"eCWPort");//this property will not exist if using Oracle, eCW will never use Oracle
+			//buildConnectionString();
 			
 		}
 
 		private void FormEcwDiagAdv_Load(object sender,EventArgs e) {
-			fillQueryList();
-			server=ProgramProperties.GetPropVal(Programs.GetProgramNum(ProgramName.eClinicalWorks),"eCWServer");//this property will not exist if using Oracle, eCW will never use Oracle
-			port=ProgramProperties.GetPropVal(Programs.GetProgramNum(ProgramName.eClinicalWorks),"eCWPort");//this property will not exist if using Oracle, eCW will never use Oracle
-			buildConnectionString();
-			dummyConnString=
-				"Server="+server+";"
-				+"Port="+port+";"//although this does seem to cause a bug in Mono.  We will revisit this bug if needed to exclude the port option only for Mono.
-				+"Database=;"//ecwMaster;"
-				//+"Connect Timeout=20;"
-				+"User ID="+username+";"
-				+"Password=;"//no password information.
-				+"SslMode=none;"
-				+"CharSet=utf8;"
-				+"Treat Tiny As Boolean=false;"
-				+"Allow User Variables=true;"
-				+"Default Command Timeout=300;"//default is 30seconds
-				+"Pooling=false"
-				;
-			textConnString.Text=
-				"Server="+server+";"
-				+"Port="+port+";"//although this does seem to cause a bug in Mono.  We will revisit this bug if needed to exclude the port option only for Mono.
-				+"Database=;"//ecwMaster;"
-				//+"Connect Timeout=20;"
-				+"User ID="+username+";"
-				+"Password=;"//no password information
-				+"SslMode=none;"
-				+"CharSet=utf8;"
-				+"Treat Tiny As Boolean=false;"
-				+"Allow User Variables=true;"
-				+"Default Command Timeout=300;"//default is 30seconds
-				+"Pooling=false"
-				; ;
-			//textQuery.Text="SHOW VARIABLES;";
-			//Show some relevent variables
-			textQuery.Text="SHOW VARIABLES "
-										+"WHERE Variable_name IN "
-										+"('basedir',"
-										+" 'connect_timout',"
-										+" 'datadir',"
-										+" 'default_storage_engine',"
-										+" 'general_log',"
-										+" 'general_log_file',"
-										+" 'hostname',"
-										+" 'log_error',"
-										+" 'pid_file',"
-										+" 'port',"
-										+" 'storage_engine',"
-										+" 'tmpdir',"
-										+" 'version',"
-										+" 'version_compile_machine',"
-										+" 'version_compile_os'"
-										+");";
-			RunQuery();
-			FillTables();
+			//fillQueryList();
+			//server=ProgramProperties.GetPropVal(Programs.GetProgramNum(ProgramName.eClinicalWorks),"eCWServer");//this property will not exist if using Oracle, eCW will never use Oracle
+			//port=ProgramProperties.GetPropVal(Programs.GetProgramNum(ProgramName.eClinicalWorks),"eCWPort");//this property will not exist if using Oracle, eCW will never use Oracle
+			//buildConnectionString();
+			//dummyConnString=
+			//	"Server="+server+";"
+			//	+"Port="+port+";"//although this does seem to cause a bug in Mono.  We will revisit this bug if needed to exclude the port option only for Mono.
+			//	+"Database=;"//ecwMaster;"
+			//	//+"Connect Timeout=20;"
+			//	+"User ID="+username+";"
+			//	+"Password=;"//no password information.
+			//	+"SslMode=none;"
+			//	+"CharSet=utf8;"
+			//	+"Treat Tiny As Boolean=false;"
+			//	+"Allow User Variables=true;"
+			//	+"Default Command Timeout=300;"//default is 30seconds
+			//	+"Pooling=false"
+			//	;
+			//textConnString.Text=
+			//	"Server="+server+";"
+			//	+"Port="+port+";"//although this does seem to cause a bug in Mono.  We will revisit this bug if needed to exclude the port option only for Mono.
+			//	+"Database=;"//ecwMaster;"
+			//	//+"Connect Timeout=20;"
+			//	+"User ID="+username+";"
+			//	+"Password=;"//no password information
+			//	+"SslMode=none;"
+			//	+"CharSet=utf8;"
+			//	+"Treat Tiny As Boolean=false;"
+			//	+"Allow User Variables=true;"
+			//	+"Default Command Timeout=300;"//default is 30seconds
+			//	+"Pooling=false"
+			//	; ;
+			////textQuery.Text="SHOW VARIABLES;";
+			////Show some relevent variables
+			//textQuery.Text="SHOW VARIABLES "
+			//							+"WHERE Variable_name IN "
+			//							+"('basedir',"
+			//							+" 'connect_timout',"
+			//							+" 'datadir',"
+			//							+" 'default_storage_engine',"
+			//							+" 'general_log',"
+			//							+" 'general_log_file',"
+			//							+" 'hostname',"
+			//							+" 'log_error',"
+			//							+" 'pid_file',"
+			//							+" 'port',"
+			//							+" 'storage_engine',"
+			//							+" 'tmpdir',"
+			//							+" 'version',"
+			//							+" 'version_compile_machine',"
+			//							+" 'version_compile_os'"
+			//							+");";
+			//RunQuery();
+			//FillTables();
 		}
 
 		private void fillQueryList() {

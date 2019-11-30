@@ -66,28 +66,28 @@ namespace OpenDental
             var procedures = Appointments.FillAppointmentForRecall(appointment, recall, recalls, patient, procedureCodes, insPlans, insSubs);
             foreach (var procedure in procedures)
             {
-                if (Programs.UsingOrion)
-                {
-                    using (var formProcEdit = new FormProcEdit(procedure, patient, Patients.GetFamily(patient.PatNum)))
-                    {
-                        formProcEdit.IsNew = true;
-                        if (formProcEdit.ShowDialog() == DialogResult.Cancel)
-                        {
-                            try
-                            {
-                                Procedures.Delete(procedure.ProcNum);
-                            }
-                            catch (Exception exception)
-                            {
-                                MessageBox.Show(
-                                    exception.Message, 
-                                    "Appointments", 
-                                    MessageBoxButtons.OK,
-                                    MessageBoxIcon.Error);
-                            }
-                        }
-                    }
-                }
+                //if (Programs.UsingOrion)
+                //{
+                //    using (var formProcEdit = new FormProcEdit(procedure, patient, Patients.GetFamily(patient.PatNum)))
+                //    {
+                //        formProcEdit.IsNew = true;
+                //        if (formProcEdit.ShowDialog() == DialogResult.Cancel)
+                //        {
+                //            try
+                //            {
+                //                Procedures.Delete(procedure.ProcNum);
+                //            }
+                //            catch (Exception exception)
+                //            {
+                //                MessageBox.Show(
+                //                    exception.Message, 
+                //                    "Appointments", 
+                //                    MessageBoxButtons.OK,
+                //                    MessageBoxIcon.Error);
+                //            }
+                //        }
+                //    }
+                //}
             }
             return appointment;
         }

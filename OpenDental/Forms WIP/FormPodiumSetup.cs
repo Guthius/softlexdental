@@ -66,56 +66,56 @@ namespace OpenDental {
 					}
 				}
 
-			_progCur=Programs.GetCur(ProgramName.Podium);
-			if(_progCur==null) {
-				MsgBox.Show(this,"The Podium bridge is missing from the database.");//should never happen
-				DialogResult=DialogResult.Cancel;
-				return;
-			}
-			try {
-				//long clinicNum=0;
-				//if(comboClinic.SelectedIndex>0) {//0 is always "All" so only check for greater than 0.
-				//	clinicNum=_listUserClinicNums[comboClinic.SelectedIndex];
-				//}
-				//_listProgramProperties=ProgramProperties.GetListForProgramAndClinicWithDefault(_progCur.ProgramNum,clinicNum);
-				//_useService=_listProgramProperties.FirstOrDefault(x => x.Key==Podium.PropertyDescs.UseService);
-				//_disableAdvertising=_listProgramProperties.FirstOrDefault(x => x.Key==Podium.PropertyDescs.DisableAdvertising);
-				//_apptSetCompleteMins=_listProgramProperties.FirstOrDefault(x => x.Key==Podium.PropertyDescs.ApptSetCompletedMinutes);
-				//_apptTimeArrivedMins=_listProgramProperties.FirstOrDefault(x => x.Key==Podium.PropertyDescs.ApptTimeArrivedMinutes);
-				//_apptTimeDismissedMins=_listProgramProperties.FirstOrDefault(x => x.Key==Podium.PropertyDescs.ApptTimeDismissedMinutes);
-				//_compName=_listProgramProperties.FirstOrDefault(x => x.Key==Podium.PropertyDescs.ComputerNameOrIP);
-				//_apiToken=_listProgramProperties.FirstOrDefault(x => x.Key==Podium.PropertyDescs.APIToken);
-				//List<ProgramProperty> listLocationIDs=ProgramProperties.GetForProgram(_progCur.ProgramNum).FindAll(x => x.Key==Podium.PropertyDescs.LocationID);
-				//_dictLocationIDs.Clear();
-				//foreach(ProgramProperty ppCur in listLocationIDs) {//If clinics is off, this will only grab the program property with a 0 clinic num (_listUserClinicNums will only have 0).
-				//	if(_dictLocationIDs.ContainsKey(ppCur.ClinicId) || !_listUserClinicNums.Contains(ppCur.ClinicId)) {
-				//		continue;
-				//	}
-				//	_dictLocationIDs.Add(ppCur.ClinicId,ppCur);
-				//}
-				//_newPatTriggerType=_listProgramProperties.FirstOrDefault(x => x.Key==Podium.PropertyDescs.NewPatientTriggerType);
-				//_existingPatTriggerType=_listProgramProperties.FirstOrDefault(x => x.Key==Podium.PropertyDescs.ExistingPatientTriggerType);
-				//_showCommlogsInChartAndAccount=_listProgramProperties.FirstOrDefault(x => x.Key==Podium.PropertyDescs.ShowCommlogsInChartAndAccount);
-			}
-			catch(Exception) {
-				MsgBox.Show(this,"You are missing a program property for Podium.  Please contact support to resolve this issue.");
-				DialogResult=DialogResult.Cancel;
-				return;
-			}
-			FillForm();
-			SetAdvertising();
+			//_progCur=Programs.GetCur(ProgramName.Podium);
+			//if(_progCur==null) {
+			//	MsgBox.Show(this,"The Podium bridge is missing from the database.");//should never happen
+			//	DialogResult=DialogResult.Cancel;
+			//	return;
+			//}
+			//try {
+			//	//long clinicNum=0;
+			//	//if(comboClinic.SelectedIndex>0) {//0 is always "All" so only check for greater than 0.
+			//	//	clinicNum=_listUserClinicNums[comboClinic.SelectedIndex];
+			//	//}
+			//	//_listProgramProperties=ProgramProperties.GetListForProgramAndClinicWithDefault(_progCur.ProgramNum,clinicNum);
+			//	//_useService=_listProgramProperties.FirstOrDefault(x => x.Key==Podium.PropertyDescs.UseService);
+			//	//_disableAdvertising=_listProgramProperties.FirstOrDefault(x => x.Key==Podium.PropertyDescs.DisableAdvertising);
+			//	//_apptSetCompleteMins=_listProgramProperties.FirstOrDefault(x => x.Key==Podium.PropertyDescs.ApptSetCompletedMinutes);
+			//	//_apptTimeArrivedMins=_listProgramProperties.FirstOrDefault(x => x.Key==Podium.PropertyDescs.ApptTimeArrivedMinutes);
+			//	//_apptTimeDismissedMins=_listProgramProperties.FirstOrDefault(x => x.Key==Podium.PropertyDescs.ApptTimeDismissedMinutes);
+			//	//_compName=_listProgramProperties.FirstOrDefault(x => x.Key==Podium.PropertyDescs.ComputerNameOrIP);
+			//	//_apiToken=_listProgramProperties.FirstOrDefault(x => x.Key==Podium.PropertyDescs.APIToken);
+			//	//List<ProgramProperty> listLocationIDs=ProgramProperties.GetForProgram(_progCur.ProgramNum).FindAll(x => x.Key==Podium.PropertyDescs.LocationID);
+			//	//_dictLocationIDs.Clear();
+			//	//foreach(ProgramProperty ppCur in listLocationIDs) {//If clinics is off, this will only grab the program property with a 0 clinic num (_listUserClinicNums will only have 0).
+			//	//	if(_dictLocationIDs.ContainsKey(ppCur.ClinicId) || !_listUserClinicNums.Contains(ppCur.ClinicId)) {
+			//	//		continue;
+			//	//	}
+			//	//	_dictLocationIDs.Add(ppCur.ClinicId,ppCur);
+			//	//}
+			//	//_newPatTriggerType=_listProgramProperties.FirstOrDefault(x => x.Key==Podium.PropertyDescs.NewPatientTriggerType);
+			//	//_existingPatTriggerType=_listProgramProperties.FirstOrDefault(x => x.Key==Podium.PropertyDescs.ExistingPatientTriggerType);
+			//	//_showCommlogsInChartAndAccount=_listProgramProperties.FirstOrDefault(x => x.Key==Podium.PropertyDescs.ShowCommlogsInChartAndAccount);
+			//}
+			//catch(Exception) {
+			//	MsgBox.Show(this,"You are missing a program property for Podium.  Please contact support to resolve this issue.");
+			//	DialogResult=DialogResult.Cancel;
+			//	return;
+			//}
+			//FillForm();
+			//SetAdvertising();
 		}
 
 		///<summary>Handles both visibility and checking of checkHideButtons.</summary>
 		private void SetAdvertising() {
-			checkHideButtons.Visible=true;
-			ProgramPreference prop=ProgramProperties.GetForProgram(_progCur.Id).FirstOrDefault(x => x.Key=="Disable Advertising");
-			if(checkEnabled.Checked || prop==null) {
-				checkHideButtons.Visible=false;
-			}
-			if(prop!=null) {
-				checkHideButtons.Checked=(prop.Value=="1");
-			}
+			//checkHideButtons.Visible=true;
+			//ProgramPreference prop=ProgramProperties.GetForProgram(_progCur.Id).FirstOrDefault(x => x.Key=="Disable Advertising");
+			//if(checkEnabled.Checked || prop==null) {
+			//	checkHideButtons.Visible=false;
+			//}
+			//if(prop!=null) {
+			//	checkHideButtons.Checked=(prop.Value=="1");
+			//}
 		}
 
 		private void comboClinic_SelectionChangeCommitted(object sender,EventArgs e) {
@@ -132,48 +132,48 @@ namespace OpenDental {
 		
 		///<summary>Updates the in memory dictionary with any changes made to the current locationID for each clinic before showing the next one.</summary>
 		private void SaveClinicCurProgramPropertiesToDict() {
-			//First check if Headquarters (default) is selected.
-			if(_clinicNumCur==0) {
-				//Headquarters is selected so only update the location ID (might have changed) on all other location ID properties that match the "old" location ID of HQ.
-				if(_dictLocationIDs.ContainsKey(_clinicNumCur)) {
-					//Get the location ID so that we correctly update all program properties with a matching location ID.
-					string locationIdOld=_dictLocationIDs[_clinicNumCur].Value;
-					foreach(KeyValuePair<long,ProgramPreference> item in _dictLocationIDs) {
-						ProgramPreference ppCur=item.Value;
-						if(ppCur.Value==locationIdOld) {
-							ppCur.Value=textLocationID.Text;
-						}
-					}
-				}
-				return;//No other clinic specific changes could have been made, we need to return.
-			}
-			//Update or Insert clinic specific properties into memory
-			ProgramPreference ppLocationID=new ProgramPreference();
-			if(_dictLocationIDs.ContainsKey(_clinicNumCur)) {
-				ppLocationID=_dictLocationIDs[_clinicNumCur];//Override the database's property with what is in memory.
-			}
-			else {//Get default programproperty from db.
-				ppLocationID=ProgramProperties.GetListForProgramAndClinicWithDefault(_progCur.Id,_clinicNumCur)
-					.FirstOrDefault(x => x.Key==Podium.PropertyDescs.LocationID);
-			}
-			if(ppLocationID.ClinicId==0) {//No program property for current clinic, since _clinicNumCur!=0
-				//ProgramProperty ppLocationIDNew=ppLocationID.Copy();
-				//ppLocationIDNew.ProgramPropertyNum=0;
-				//ppLocationIDNew.ClinicId=_clinicNumCur;
-				//ppLocationIDNew.Value=textLocationID.Text;
-				//if(!_dictLocationIDs.ContainsKey(_clinicNumCur)) {//Should always happen
-				//	_dictLocationIDs.Add(_clinicNumCur,ppLocationIDNew);
-				//}
-				//return;
-			}
-			//At this point we know that the clinicnum isn't 0 and the database has a property for that clinicnum.
-			if(_dictLocationIDs.ContainsKey(_clinicNumCur)) {//Should always happen
-				ppLocationID.Value=textLocationID.Text;
-				_dictLocationIDs[_clinicNumCur]=ppLocationID;
-			}
-			else {
-				_dictLocationIDs.Add(_clinicNumCur,ppLocationID);//Should never happen.
-			}
+			////First check if Headquarters (default) is selected.
+			//if(_clinicNumCur==0) {
+			//	//Headquarters is selected so only update the location ID (might have changed) on all other location ID properties that match the "old" location ID of HQ.
+			//	if(_dictLocationIDs.ContainsKey(_clinicNumCur)) {
+			//		//Get the location ID so that we correctly update all program properties with a matching location ID.
+			//		string locationIdOld=_dictLocationIDs[_clinicNumCur].Value;
+			//		foreach(KeyValuePair<long,ProgramPreference> item in _dictLocationIDs) {
+			//			ProgramPreference ppCur=item.Value;
+			//			if(ppCur.Value==locationIdOld) {
+			//				ppCur.Value=textLocationID.Text;
+			//			}
+			//		}
+			//	}
+			//	return;//No other clinic specific changes could have been made, we need to return.
+			//}
+			////Update or Insert clinic specific properties into memory
+			//ProgramPreference ppLocationID=new ProgramPreference();
+			//if(_dictLocationIDs.ContainsKey(_clinicNumCur)) {
+			//	ppLocationID=_dictLocationIDs[_clinicNumCur];//Override the database's property with what is in memory.
+			//}
+			//else {//Get default programproperty from db.
+			//	ppLocationID=ProgramProperties.GetListForProgramAndClinicWithDefault(_progCur.Id,_clinicNumCur)
+			//		.FirstOrDefault(x => x.Key==Podium.PropertyDescs.LocationID);
+			//}
+			//if(ppLocationID.ClinicId==0) {//No program property for current clinic, since _clinicNumCur!=0
+			//	//ProgramProperty ppLocationIDNew=ppLocationID.Copy();
+			//	//ppLocationIDNew.ProgramPropertyNum=0;
+			//	//ppLocationIDNew.ClinicId=_clinicNumCur;
+			//	//ppLocationIDNew.Value=textLocationID.Text;
+			//	//if(!_dictLocationIDs.ContainsKey(_clinicNumCur)) {//Should always happen
+			//	//	_dictLocationIDs.Add(_clinicNumCur,ppLocationIDNew);
+			//	//}
+			//	//return;
+			//}
+			////At this point we know that the clinicnum isn't 0 and the database has a property for that clinicnum.
+			//if(_dictLocationIDs.ContainsKey(_clinicNumCur)) {//Should always happen
+			//	ppLocationID.Value=textLocationID.Text;
+			//	_dictLocationIDs[_clinicNumCur]=ppLocationID;
+			//}
+			//else {
+			//	_dictLocationIDs.Add(_clinicNumCur,ppLocationID);//Should never happen.
+			//}
 		}
 
 		private void FillForm() {

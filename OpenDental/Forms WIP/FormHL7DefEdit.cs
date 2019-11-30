@@ -310,9 +310,9 @@ namespace OpenDental {
 					MsgBox.Show(this,"Only one HL7 process can be enabled.  Another HL7 definition is enabled.");
 					return;
 				}
-				if(Programs.IsEnabled(ProgramName.eClinicalWorks)) {
-					MsgBox.Show(this,"The eClinicalWorks program link is enabled.  This definition will now control the HL7 messages.");
-				}
+				//if(Programs.IsEnabled(ProgramName.eClinicalWorks)) {
+				//	MsgBox.Show(this,"The eClinicalWorks program link is enabled.  This definition will now control the HL7 messages.");
+				//}
 			}
 			else {
 				//

@@ -688,56 +688,56 @@ namespace OpenDental{
 				ChartViewCur.ItemOrder+=1;
 				textBoxViewDesc.Text=ChartViewCur.ItemOrder.ToString();
 			}
-			if(Programs.UsingOrion) {
-				listProcStatusCodes.Visible=true;
-				labelProcStatus.Visible=true;
-				string[] statusNames=Enum.GetNames(typeof(OrionStatus));
-				for(int i=1;i<statusNames.Length;i++) {
-					listProcStatusCodes.Items.Add(statusNames[i]);
-				}
-				if((ChartViewCur.OrionStatusFlags & OrionStatus.TP)==OrionStatus.TP) {
-					listProcStatusCodes.SetSelected(0,true);
-				}
-				if((ChartViewCur.OrionStatusFlags & OrionStatus.C)==OrionStatus.C) {
-					listProcStatusCodes.SetSelected(1,true);
-				}
-				if((ChartViewCur.OrionStatusFlags & OrionStatus.E)==OrionStatus.E) {
-					listProcStatusCodes.SetSelected(2,true);
-				}
-				if((ChartViewCur.OrionStatusFlags & OrionStatus.R)==OrionStatus.R) {
-					listProcStatusCodes.SetSelected(3,true);
-				}
-				if((ChartViewCur.OrionStatusFlags & OrionStatus.RO)==OrionStatus.RO) {
-					listProcStatusCodes.SetSelected(4,true);
-				}
-				if((ChartViewCur.OrionStatusFlags & OrionStatus.CS)==OrionStatus.CS) {
-					listProcStatusCodes.SetSelected(5,true);
-				}
-				if((ChartViewCur.OrionStatusFlags & OrionStatus.CR)==OrionStatus.CR) {
-					listProcStatusCodes.SetSelected(6,true);
-				}
-				if((ChartViewCur.OrionStatusFlags & OrionStatus.CA_Tx)==OrionStatus.CA_Tx) {
-					listProcStatusCodes.SetSelected(7,true);
-				}
-				if((ChartViewCur.OrionStatusFlags & OrionStatus.CA_EPRD)==OrionStatus.CA_EPRD) {
-					listProcStatusCodes.SetSelected(8,true);
-				}
-				if((ChartViewCur.OrionStatusFlags & OrionStatus.CA_PD)==OrionStatus.CA_PD) {
-					listProcStatusCodes.SetSelected(9,true);
-				}
-				if((ChartViewCur.OrionStatusFlags & OrionStatus.S)==OrionStatus.S) {
-					listProcStatusCodes.SetSelected(10,true);
-				}
-				if((ChartViewCur.OrionStatusFlags & OrionStatus.ST)==OrionStatus.ST) {
-					listProcStatusCodes.SetSelected(11,true);
-				}
-				if((ChartViewCur.OrionStatusFlags & OrionStatus.W)==OrionStatus.W) {
-					listProcStatusCodes.SetSelected(12,true);
-				}
-				if((ChartViewCur.OrionStatusFlags & OrionStatus.A)==OrionStatus.A) {
-					listProcStatusCodes.SetSelected(13,true);
-				}
-			}
+			//if(Programs.UsingOrion) {
+			//	listProcStatusCodes.Visible=true;
+			//	labelProcStatus.Visible=true;
+			//	string[] statusNames=Enum.GetNames(typeof(OrionStatus));
+			//	for(int i=1;i<statusNames.Length;i++) {
+			//		listProcStatusCodes.Items.Add(statusNames[i]);
+			//	}
+			//	if((ChartViewCur.OrionStatusFlags & OrionStatus.TP)==OrionStatus.TP) {
+			//		listProcStatusCodes.SetSelected(0,true);
+			//	}
+			//	if((ChartViewCur.OrionStatusFlags & OrionStatus.C)==OrionStatus.C) {
+			//		listProcStatusCodes.SetSelected(1,true);
+			//	}
+			//	if((ChartViewCur.OrionStatusFlags & OrionStatus.E)==OrionStatus.E) {
+			//		listProcStatusCodes.SetSelected(2,true);
+			//	}
+			//	if((ChartViewCur.OrionStatusFlags & OrionStatus.R)==OrionStatus.R) {
+			//		listProcStatusCodes.SetSelected(3,true);
+			//	}
+			//	if((ChartViewCur.OrionStatusFlags & OrionStatus.RO)==OrionStatus.RO) {
+			//		listProcStatusCodes.SetSelected(4,true);
+			//	}
+			//	if((ChartViewCur.OrionStatusFlags & OrionStatus.CS)==OrionStatus.CS) {
+			//		listProcStatusCodes.SetSelected(5,true);
+			//	}
+			//	if((ChartViewCur.OrionStatusFlags & OrionStatus.CR)==OrionStatus.CR) {
+			//		listProcStatusCodes.SetSelected(6,true);
+			//	}
+			//	if((ChartViewCur.OrionStatusFlags & OrionStatus.CA_Tx)==OrionStatus.CA_Tx) {
+			//		listProcStatusCodes.SetSelected(7,true);
+			//	}
+			//	if((ChartViewCur.OrionStatusFlags & OrionStatus.CA_EPRD)==OrionStatus.CA_EPRD) {
+			//		listProcStatusCodes.SetSelected(8,true);
+			//	}
+			//	if((ChartViewCur.OrionStatusFlags & OrionStatus.CA_PD)==OrionStatus.CA_PD) {
+			//		listProcStatusCodes.SetSelected(9,true);
+			//	}
+			//	if((ChartViewCur.OrionStatusFlags & OrionStatus.S)==OrionStatus.S) {
+			//		listProcStatusCodes.SetSelected(10,true);
+			//	}
+			//	if((ChartViewCur.OrionStatusFlags & OrionStatus.ST)==OrionStatus.ST) {
+			//		listProcStatusCodes.SetSelected(11,true);
+			//	}
+			//	if((ChartViewCur.OrionStatusFlags & OrionStatus.W)==OrionStatus.W) {
+			//		listProcStatusCodes.SetSelected(12,true);
+			//	}
+			//	if((ChartViewCur.OrionStatusFlags & OrionStatus.A)==OrionStatus.A) {
+			//		listProcStatusCodes.SetSelected(13,true);
+			//	}
+			//}
 			checkAppt.Checked=(ChartViewCur.ObjectTypes & ChartViewObjs.Appointments)==ChartViewObjs.Appointments;
 			checkComm.Checked=(ChartViewCur.ObjectTypes & ChartViewObjs.CommLog)==ChartViewObjs.CommLog;
 			checkCommFamily.Checked=(ChartViewCur.ObjectTypes & ChartViewObjs.CommLogFamily)==ChartViewObjs.CommLogFamily;

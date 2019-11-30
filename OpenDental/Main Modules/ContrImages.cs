@@ -2310,9 +2310,10 @@ namespace OpenDental
             ImageNodeTag nodeId = (ImageNodeTag)treeDocuments.SelectedNode.Tag;
             if (nodeId.NodeType == ImageNodeType.ApteryxImage)
             {
-                string imageCat = ProgramProperties.GetPropVal(Programs.GetProgramNum(ProgramName.XVWeb), XVWebBridge.ProgramProps.ImageCategory);
-                //save copy to db for temp storage
-                apteryxDoc = ImageStore.Import(ImageRenderingNow, (Defs.GetDef(DefinitionCategory.ImageCats, PIn.Long(imageCat)).Id), ImageType.Photo, PatCur);
+                // TODO: Fix me
+                //string imageCat = ProgramProperties.GetPropVal(Programs.GetProgramNum(ProgramName.XVWeb), XVWebBridge.ProgramProps.ImageCategory);
+                ////save copy to db for temp storage
+                //apteryxDoc = ImageStore.Import(ImageRenderingNow, (Defs.GetDef(DefinitionCategory.ImageCats, PIn.Long(imageCat)).Id), ImageType.Photo, PatCur);
             }
             if (nodeId.NodeType == ImageNodeType.Category || nodeId.NodeType == ImageNodeType.Mount || nodeId.NodeType == ImageNodeType.None)
             {

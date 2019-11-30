@@ -537,9 +537,9 @@ namespace OpenDental{
 				comboStatus.Enabled=false;
 			}
             labelClinic.Visible = true;
-			if(!Programs.IsEnabled(ProgramName.CallFire) && !SmsPhones.IsIntegratedTextingEnabled()) {
-				butText.Enabled=false;
-			}
+			//if(!Programs.IsEnabled(ProgramName.CallFire) && !SmsPhones.IsIntegratedTextingEnabled()) {
+			//	butText.Enabled=false;
+			//}
 			FillMain();			
 			FillComboEmail();
 			Cursor=Cursors.Default;

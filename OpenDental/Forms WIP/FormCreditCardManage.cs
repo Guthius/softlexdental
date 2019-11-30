@@ -22,13 +22,13 @@ namespace OpenDental {
 		}
 		
 		private void FormCreditCardManage_Load(object sender,EventArgs e) {
-			if(Preference.GetBool(PreferenceName.StoreCCnumbers)
-				&& (Programs.IsEnabled(ProgramName.Xcharge) 
-					|| Programs.IsEnabled(ProgramName.PayConnect) 
-					|| Programs.IsEnabled(ProgramName.PaySimple)))//tokens supported by Xcharge and PayConnect
-			{
-				labelStoreCCNumWarning.Visible=true;
-			}
+			//if(Preference.GetBool(PreferenceName.StoreCCnumbers)
+			//	&& (Programs.IsEnabled(ProgramName.Xcharge) 
+			//		|| Programs.IsEnabled(ProgramName.PayConnect) 
+			//		|| Programs.IsEnabled(ProgramName.PaySimple)))//tokens supported by Xcharge and PayConnect
+			//{
+			//	labelStoreCCNumWarning.Visible=true;
+			//}
 			FillGrid();
 		}
 
@@ -36,16 +36,16 @@ namespace OpenDental {
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			gridMain.Columns.Add(new ODGridColumn("Card Number",140));
-			if(Programs.IsEnabled(ProgramName.Xcharge)) {
-				gridMain.Columns.Add(new ODGridColumn("X-Charge",70,HorizontalAlignment.Center));
-			}
-			if(Programs.IsEnabled(ProgramName.PayConnect)) {
-				gridMain.Columns.Add(new ODGridColumn("PayConnect",85,HorizontalAlignment.Center));
-			}
-			if(Programs.IsEnabled(ProgramName.PaySimple)) {
-				gridMain.Columns.Add(new ODGridColumn("PaySimple",80,HorizontalAlignment.Center));
-				gridMain.Columns.Add(new ODGridColumn("ACH",40,HorizontalAlignment.Center));
-			}
+			//if(Programs.IsEnabled(ProgramName.Xcharge)) {
+			//	gridMain.Columns.Add(new ODGridColumn("X-Charge",70,HorizontalAlignment.Center));
+			//}
+			//if(Programs.IsEnabled(ProgramName.PayConnect)) {
+			//	gridMain.Columns.Add(new ODGridColumn("PayConnect",85,HorizontalAlignment.Center));
+			//}
+			//if(Programs.IsEnabled(ProgramName.PaySimple)) {
+			//	gridMain.Columns.Add(new ODGridColumn("PaySimple",80,HorizontalAlignment.Center));
+			//	gridMain.Columns.Add(new ODGridColumn("ACH",40,HorizontalAlignment.Center));
+			//}
 			if(Preferences.HasOnlinePaymentEnabled()) {
 				gridMain.Columns.Add(new ODGridColumn("XWeb",45,HorizontalAlignment.Center));
 			}
@@ -63,16 +63,16 @@ namespace OpenDental {
 					ccNum=(new string('X',12))+ccNum.Substring(idxLast4Digits);//replace the first 12 with 12 X's
 				}
 				row.Cells.Add(ccNum);
-				if(Programs.IsEnabled(ProgramName.Xcharge)) {
-					row.Cells.Add(!string.IsNullOrEmpty(cc.XChargeToken) && !cc.IsXWeb()?"X":"");
-				}
-				if(Programs.IsEnabled(ProgramName.PayConnect)) {
-					row.Cells.Add(!string.IsNullOrEmpty(cc.PayConnectToken) ? "X" : "");
-				}
-				if(Programs.IsEnabled(ProgramName.PaySimple)) {
-					row.Cells.Add(!string.IsNullOrEmpty(cc.PaySimpleToken) ? "X" : "");
-					row.Cells.Add(cc.CCSource==CreditCardSource.PaySimpleACH ? "X" : "");
-				}
+				//if(Programs.IsEnabled(ProgramName.Xcharge)) {
+				//	row.Cells.Add(!string.IsNullOrEmpty(cc.XChargeToken) && !cc.IsXWeb()?"X":"");
+				//}
+				//if(Programs.IsEnabled(ProgramName.PayConnect)) {
+				//	row.Cells.Add(!string.IsNullOrEmpty(cc.PayConnectToken) ? "X" : "");
+				//}
+				//if(Programs.IsEnabled(ProgramName.PaySimple)) {
+				//	row.Cells.Add(!string.IsNullOrEmpty(cc.PaySimpleToken) ? "X" : "");
+				//	row.Cells.Add(cc.CCSource==CreditCardSource.PaySimpleACH ? "X" : "");
+				//}
 				if(Preferences.HasOnlinePaymentEnabled()) {
 					row.Cells.Add(!string.IsNullOrEmpty(cc.XChargeToken) && cc.IsXWeb()?"X":"");
 				}

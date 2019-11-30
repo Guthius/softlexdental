@@ -1171,7 +1171,7 @@ namespace OpenDental{
 			strBTime=new StringBuilder(ProcCode.ProcTime);
 			butColor.BackColor=ProcCode.GraphicColor;
 			checkMultiVisit.Checked=ProcCode.IsMultiVisit;
-			checkMultiVisit.Visible=Programs.UsingOrion;
+            checkMultiVisit.Visible = false; // TODO: Programs.UsingOrion;
 			checkNoBillIns.Checked=ProcCode.NoBillIns;
 			checkIsHygiene.Checked=ProcCode.IsHygiene;
 			checkIsProsth.Checked=ProcCode.IsProsth;

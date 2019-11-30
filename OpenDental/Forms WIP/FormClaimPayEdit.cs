@@ -758,27 +758,27 @@ namespace OpenDental{
 
 		///<summary>Mimics FormPayment.CheckUIState().</summary>
 		private void CheckUIState() {
-			Program progXcharge=Programs.GetCur(ProgramName.Xcharge);
-			Program progPayConnect=Programs.GetCur(ProgramName.PayConnect);
-			Program progPaySimple=Programs.GetCur(ProgramName.PaySimple);
-			if(progXcharge==null || progPayConnect==null || progPaySimple==null) {//Should not happen.
-				panelXcharge.Visible=(progXcharge!=null);
-				butPayConnect.Visible=(progPayConnect!=null);
-				butPaySimple.Visible=(progPaySimple!=null);
-				groupPrepaid.Visible=(panelXcharge.Visible || butPayConnect.Visible || butPaySimple.Visible);
-				return;
-			}
-			panelXcharge.Visible=false;
-			butPayConnect.Visible=false;
-			butPaySimple.Visible=false;
-			if(!progPayConnect.Enabled && !progXcharge.Enabled && !progPaySimple.Enabled) {//if none enabled
-				//show all so user can pick
-				panelXcharge.Visible=true;
-				butPayConnect.Visible=true;
-				butPaySimple.Visible=true;
-				groupPrepaid.Visible=true;
-				return;
-			}
+			//Program progXcharge=Programs.GetCur(ProgramName.Xcharge);
+			//Program progPayConnect=Programs.GetCur(ProgramName.PayConnect);
+			//Program progPaySimple=Programs.GetCur(ProgramName.PaySimple);
+			//if(progXcharge==null || progPayConnect==null || progPaySimple==null) {//Should not happen.
+			//	panelXcharge.Visible=(progXcharge!=null);
+			//	butPayConnect.Visible=(progPayConnect!=null);
+			//	butPaySimple.Visible=(progPaySimple!=null);
+			//	groupPrepaid.Visible=(panelXcharge.Visible || butPayConnect.Visible || butPaySimple.Visible);
+			//	return;
+			//}
+			//panelXcharge.Visible=false;
+			//butPayConnect.Visible=false;
+			//butPaySimple.Visible=false;
+			//if(!progPayConnect.Enabled && !progXcharge.Enabled && !progPaySimple.Enabled) {//if none enabled
+			//	//show all so user can pick
+			//	panelXcharge.Visible=true;
+			//	butPayConnect.Visible=true;
+			//	butPaySimple.Visible=true;
+			//	groupPrepaid.Visible=true;
+			//	return;
+			//}
 			long clinicNum=GetClinicNumSelected();
 			List<Definition> listDefs=Definition.GetByCategory(DefinitionCategory.PaymentTypes);
             //Show if enabled.  User could have all enabled.
@@ -799,20 +799,20 @@ namespace OpenDental{
             //		}
             //	}
             //}
-            //show if enabled.  User could have both enabled.
-            if (progXcharge.Enabled
-                && !PIn.Bool(ProgramProperties.GetPropVal(progXcharge.Id, XChargeBridge.ProgramProperties.XChargePreventSavingNewCC, clinicNum)))
-            {
-                string paymentType = ProgramProperties.GetPropVal(progXcharge.ProgramNum, "PaymentType", clinicNum);
-                if (!string.IsNullOrEmpty(ProgramProperties.GetPropVal(progXcharge.ProgramNum, "Username", clinicNum))
-                    && !string.IsNullOrEmpty(ProgramProperties.GetPropVal(progXcharge.ProgramNum, "Password", clinicNum))
+            ////show if enabled.  User could have both enabled.
+            //if (progXcharge.Enabled
+            //    && !PIn.Bool(ProgramProperties.GetPropVal(progXcharge.Id, XChargeBridge.ProgramProperties.XChargePreventSavingNewCC, clinicNum)))
+            //{
+            //    string paymentType = ProgramProperties.GetPropVal(progXcharge.ProgramNum, "PaymentType", clinicNum);
+            //    if (!string.IsNullOrEmpty(ProgramProperties.GetPropVal(progXcharge.ProgramNum, "Username", clinicNum))
+            //        && !string.IsNullOrEmpty(ProgramProperties.GetPropVal(progXcharge.ProgramNum, "Password", clinicNum))
 
-                    && listDefs.Any(x => x.Id.ToString() == paymentType))
-                {
-                    panelXcharge.Visible = true;
-                }
+            //        && listDefs.Any(x => x.Id.ToString() == paymentType))
+            //    {
+            //        panelXcharge.Visible = true;
+            //    }
 
-            }
+            //}
 			//if(progPaySimple.Enabled
 			//	&& !PIn.Bool(ProgramProperties.GetPropVal(progPaySimple.ProgramNum,PaySimple.PropertyDescs.PaySimplePreventSavingNewCC,clinicNum)))
 			//{
@@ -830,19 +830,19 @@ namespace OpenDental{
 			//		}
 			//	}
 			//}
-			if(panelXcharge.Visible==false && butPayConnect.Visible==false && butPaySimple.Visible==false) {
-				//This is an office with clinics and one of the payment processing bridges is enabled but this particular clinic doesn't have one set up.
-				if(progXcharge.Enabled) {
-					panelXcharge.Visible=true;
-				}
-				if(progPayConnect.Enabled) {
-					butPayConnect.Visible=true;
-				}
-				if(progPaySimple.Enabled) {
-					butPaySimple.Visible=true;
-				}
-			}
-			groupPrepaid.Visible=(panelXcharge.Visible || butPayConnect.Visible || butPaySimple.Visible);
+			//if(panelXcharge.Visible==false && butPayConnect.Visible==false && butPaySimple.Visible==false) {
+			//	//This is an office with clinics and one of the payment processing bridges is enabled but this particular clinic doesn't have one set up.
+			//	if(progXcharge.Enabled) {
+			//		panelXcharge.Visible=true;
+			//	}
+			//	if(progPayConnect.Enabled) {
+			//		butPayConnect.Visible=true;
+			//	}
+			//	if(progPaySimple.Enabled) {
+			//		butPaySimple.Visible=true;
+			//	}
+			//}
+			//groupPrepaid.Visible=(panelXcharge.Visible || butPayConnect.Visible || butPaySimple.Visible);
 		}
 
 		private long GetClinicNumSelected() {

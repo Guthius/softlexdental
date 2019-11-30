@@ -47,90 +47,90 @@ namespace OpenDental
 
         private void FormErxSetup_Load(object sender, EventArgs e)
         {
-            try
-            {
-                _progCur = Programs.GetCur(ProgramName.eRx);
-                if (_progCur == null)
-                {
-                    throw new Exception("The eRx bridge is missing from the database.");
-                }
-                _listProgramProperties = ProgramProperties.GetForProgram(_progCur.Id);
-                checkEnabled.Checked = _progCur.Enabled;
-                _eRxOption = PIn.Enum<ErxOption>(ErxOptionPP.Value);
-                if (_eRxOption == ErxOption.Legacy)
-                {
-                    radioNewCrop.Checked = true;
-                }
-                else if (_eRxOption == ErxOption.DoseSpot)
-                {
-                    radioDoseSpot.Checked = true;
-                    //HideLegacy();
-                }
-                else if (_eRxOption == ErxOption.DoseSpotWithLegacy)
-                {
-                    radioDoseSpotLegacy.Checked = true;
-                    //HideLegacy();
-                }
-                textNewCropAccountID.Text = Preference.GetString(PreferenceName.NewCropAccountId);
-                List<ProgramPreference> listClinicIDs = _listProgramProperties.FindAll(x => x.Key == Erx.PropertyDescs.ClinicID);
-                List<ProgramPreference> listClinicKeys = _listProgramProperties.FindAll(x => x.Key == Erx.PropertyDescs.ClinicKey);
-                //Always make sure clinicnum 0 (HQ) exists, regardless of if clinics are enabled
-                if (!listClinicIDs.Exists(x => x.ClinicId == 0))
-                {
-                    ProgramPreference ppClinicID = new ProgramPreference();
-                    ppClinicID.ProgramId = _progCur.Id;
-                    ppClinicID.ClinicId = 0;
-                    ppClinicID.Key = Erx.PropertyDescs.ClinicID;
-                    ppClinicID.Value = "";
-                    _listProgramProperties.Add(ppClinicID);
-                }
-                if (!listClinicKeys.Exists(x => x.ClinicId == 0))
-                {
-                    ProgramPreference ppClinicKey = new ProgramPreference();
-                    ppClinicKey.ProgramId = _progCur.Id;
-                    ppClinicKey.ClinicId = 0;
-                    ppClinicKey.Key = Erx.PropertyDescs.ClinicKey;
-                    ppClinicKey.Value = "";
-                    _listProgramProperties.Add(ppClinicKey);
-                }
+            //try
+            //{
+            //    _progCur = Programs.GetCur(ProgramName.eRx);
+            //    if (_progCur == null)
+            //    {
+            //        throw new Exception("The eRx bridge is missing from the database.");
+            //    }
+            //    _listProgramProperties = ProgramProperties.GetForProgram(_progCur.Id);
+            //    checkEnabled.Checked = _progCur.Enabled;
+            //    _eRxOption = PIn.Enum<ErxOption>(ErxOptionPP.Value);
+            //    if (_eRxOption == ErxOption.Legacy)
+            //    {
+            //        radioNewCrop.Checked = true;
+            //    }
+            //    else if (_eRxOption == ErxOption.DoseSpot)
+            //    {
+            //        radioDoseSpot.Checked = true;
+            //        //HideLegacy();
+            //    }
+            //    else if (_eRxOption == ErxOption.DoseSpotWithLegacy)
+            //    {
+            //        radioDoseSpotLegacy.Checked = true;
+            //        //HideLegacy();
+            //    }
+            //    textNewCropAccountID.Text = Preference.GetString(PreferenceName.NewCropAccountId);
+            //    List<ProgramPreference> listClinicIDs = _listProgramProperties.FindAll(x => x.Key == Erx.PropertyDescs.ClinicID);
+            //    List<ProgramPreference> listClinicKeys = _listProgramProperties.FindAll(x => x.Key == Erx.PropertyDescs.ClinicKey);
+            //    //Always make sure clinicnum 0 (HQ) exists, regardless of if clinics are enabled
+            //    if (!listClinicIDs.Exists(x => x.ClinicId == 0))
+            //    {
+            //        ProgramPreference ppClinicID = new ProgramPreference();
+            //        ppClinicID.ProgramId = _progCur.Id;
+            //        ppClinicID.ClinicId = 0;
+            //        ppClinicID.Key = Erx.PropertyDescs.ClinicID;
+            //        ppClinicID.Value = "";
+            //        _listProgramProperties.Add(ppClinicID);
+            //    }
+            //    if (!listClinicKeys.Exists(x => x.ClinicId == 0))
+            //    {
+            //        ProgramPreference ppClinicKey = new ProgramPreference();
+            //        ppClinicKey.ProgramId = _progCur.Id;
+            //        ppClinicKey.ClinicId = 0;
+            //        ppClinicKey.Key = Erx.PropertyDescs.ClinicKey;
+            //        ppClinicKey.Value = "";
+            //        _listProgramProperties.Add(ppClinicKey);
+            //    }
 
 
-                foreach (Clinic clinicCur in Clinic.GetByUser(Security.CurrentUser, true))
-                {
-                    if (!listClinicIDs.Exists(x => x.ClinicId == clinicCur.Id))
-                    {//Only add a program property if it doesn't already exist.
-                        ProgramProperty ppClinicID = new ProgramProperty();
-                        ppClinicID.ProgramId = _progCur.Id;
-                        ppClinicID.ClinicId = clinicCur.Id;
+            //    foreach (Clinic clinicCur in Clinic.GetByUser(Security.CurrentUser, true))
+            //    {
+            //        if (!listClinicIDs.Exists(x => x.ClinicId == clinicCur.Id))
+            //        {//Only add a program property if it doesn't already exist.
+            //            ProgramProperty ppClinicID = new ProgramProperty();
+            //            ppClinicID.ProgramId = _progCur.Id;
+            //            ppClinicID.ClinicId = clinicCur.Id;
 
-                        ppClinicID.Key = Erx.PropertyDescs.ClinicID;
-                        ppClinicID.Value = "";
-                        _listProgramProperties.Add(ppClinicID);
-                    }
+            //            ppClinicID.Key = Erx.PropertyDescs.ClinicID;
+            //            ppClinicID.Value = "";
+            //            _listProgramProperties.Add(ppClinicID);
+            //        }
 
-                    if (!listClinicKeys.Exists(x => x.ClinicId == clinicCur.Id))
-                    {//Only add a program property if it doesn't already exist.
-                        ProgramPreference ppClinicKey = new ProgramPreference();
-                        ppClinicKey.ProgramId = _progCur.Id;
-                        ppClinicKey.ClinicId = clinicCur.Id;
+            //        if (!listClinicKeys.Exists(x => x.ClinicId == clinicCur.Id))
+            //        {//Only add a program property if it doesn't already exist.
+            //            ProgramPreference ppClinicKey = new ProgramPreference();
+            //            ppClinicKey.ProgramId = _progCur.Id;
+            //            ppClinicKey.ClinicId = clinicCur.Id;
 
-                        ppClinicKey.Key = Erx.PropertyDescs.ClinicKey;
-                        ppClinicKey.Value = "";
-                        _listProgramProperties.Add(ppClinicKey);
-                    }
-                }
+            //            ppClinicKey.Key = Erx.PropertyDescs.ClinicKey;
+            //            ppClinicKey.Value = "";
+            //            _listProgramProperties.Add(ppClinicKey);
+            //        }
+            //    }
 
-                FillGridDoseSpot();
-                SetRadioButtonChecked(_eRxOption);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(
-                    "Error loading the eRx program: " + ex.Message);
+            //    FillGridDoseSpot();
+            //    SetRadioButtonChecked(_eRxOption);
+            //}
+            //catch (Exception ex)
+            //{
+            //    MessageBox.Show(
+            //        "Error loading the eRx program: " + ex.Message);
 
-                DialogResult = DialogResult.Cancel;
-                return;
-            }
+            //    DialogResult = DialogResult.Cancel;
+            //    return;
+            //}
         }
 
         private void FillGridDoseSpot()

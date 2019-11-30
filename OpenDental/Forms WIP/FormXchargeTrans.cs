@@ -34,16 +34,16 @@ namespace OpenDental {
 			listTransType.Items.Add("Void");
 			listTransType.SelectedIndex=0;
 			checkSaveToken.Checked=Preference.GetBool(PreferenceName.StoreCCtokens);
-			Program prog=Programs.GetCur(ProgramName.Xcharge);
-			if(prog==null) {
-				return;
-			}
-			checkSignature.Checked=PromptSignature;
-			checkPrintReceipt.Checked=PrintReceipt;
-			if(PIn.Bool(ProgramProperties.GetPropVal(prog.Id,XChargeBridge.ProgramProperties.XChargePreventSavingNewCC,ClinicNum))) {
-				checkSaveToken.Checked=false;
-				checkSaveToken.Enabled=false;
-			}
+			//Program prog=Programs.GetCur(ProgramName.Xcharge);
+			//if(prog==null) {
+			//	return;
+			//}
+			//checkSignature.Checked=PromptSignature;
+			//checkPrintReceipt.Checked=PrintReceipt;
+			//if(PIn.Bool(ProgramProperties.GetPropVal(prog.Id,XChargeBridge.ProgramProperties.XChargePreventSavingNewCC,ClinicNum))) {
+			//	checkSaveToken.Checked=false;
+			//	checkSaveToken.Enabled=false;
+			//}
 		}
 
 		private void listTransType_MouseClick(object sender,MouseEventArgs e) {

@@ -2508,21 +2508,20 @@ namespace OpenDental{
 			if(Preference.GetBool(PreferenceName.EasyHideMedicaid)) {
 				checkAlternateCode.Visible=false;
 			}
-			Program ProgramCur=Programs.GetCur(ProgramName.Trojan);
-			if(ProgramCur!=null && ProgramCur.Enabled) {
-				textTrojanID.Text=_planCur.TrojanID;
-			}
-			else {
-				//labelTrojan.Visible=false;
+			//Program ProgramCur=Programs.GetCur(ProgramName.Trojan);
+			//if(ProgramCur!=null && ProgramCur.Enabled) {
+			//	textTrojanID.Text=_planCur.TrojanID;
+			//}
+			//else {
 				labelTrojanID.Visible=false;
 				butImportTrojan.Visible=false;
 				textTrojanID.Visible=false;
-			}
-			ProgramCur=Programs.GetCur(ProgramName.IAP);
-			if(ProgramCur==null || !ProgramCur.Enabled) {
-				//labelIAP.Visible=false;
-				butIapFind.Visible=false;
-			}
+			//}
+			//ProgramCur=Programs.GetCur(ProgramName.IAP);
+			//if(ProgramCur==null || !ProgramCur.Enabled) {
+			//	//labelIAP.Visible=false;
+			//	butIapFind.Visible=false;
+			//}
 			if(!butIapFind.Visible && !butImportTrojan.Visible) {
 				butBenefitNotes.Visible=false;
 			}

@@ -26,60 +26,60 @@ namespace OpenDental {
 		}
 
 		private void FormTransworldSetup_Load(object sender,EventArgs e) {
-			_progCur=Programs.GetCur(ProgramName.Transworld);
-			if(_progCur==null) {
-				MsgBox.Show(this,"The Transworld entry is missing from the database.  Please contact support.");//should never happen
-				return;
-			}
-			checkEnabled.Checked=_progCur.Enabled;
-
-				groupClinicSettings.Text=Lan.g(this,"Transworld Clinic Settings");
-				_listUserClinicNums=new List<long>();
-				//if Transworld is enabled and the user is restricted to a clinic, don't allow the user to disable for all clinics
-				if(Security.CurrentUser.ClinicRestricted) {
-					if(checkEnabled.Checked) {
-						checkEnabled.Enabled=false;
-					}
-				}
-				else {
-					comboClinic.Items.Add(Lan.g(this,"Headquarters"));
-					//this way both lists have the same number of items in it and if 'Headquarters' is selected the programproperty.ClinicNum will be set to 0
-					_listUserClinicNums.Add(0);
-					comboClinic.SelectedIndex=0;
-				}
-				List<Clinic> listClinics=Clinic.GetByUser(Security.CurrentUser).ToList();
-				foreach(Clinic clinicCur in listClinics) {
-					comboClinic.Items.Add(clinicCur.Abbr);
-					_listUserClinicNums.Add(clinicCur.Id);
-					if(Clinics.ClinicId==clinicCur.Id) {//set selected index to the currently selected clinic in FormOpenDental
-						_selectedClinicNum=clinicCur.Id;
-						comboClinic.SelectedIndex=comboClinic.Items.Count-1;
-					}
-				}
-			
-			//_dictClinicListProgProps=ProgramProperties.GetForProgram(_progCur.ProgramNum)//get list of all props for the program
-			//	.GroupBy(x => x.ClinicId)//group each clinic
-			//	.ToDictionary(x => x.Key,x => x.ToList());//turn list into a dictionary of key=ClinicNum, value=List<ProgramProperty> for the clinic
-			//DateTime dateTSend=Preference.GetDateTime(PreferenceName.TransworldServiceTimeDue);
-			//if(dateTSend!=DateTime.MinValue) {
-			//	textUpdatesTimeOfDay.Text=dateTSend.ToShortTimeString();
+			//_progCur=Programs.GetCur(ProgramName.Transworld);
+			//if(_progCur==null) {
+			//	MsgBox.Show(this,"The Transworld entry is missing from the database.  Please contact support.");//should never happen
+			//	return;
 			//}
-			comboSendFrequencyUnits.Items.AddRange(Enum.GetNames(typeof(FrequencyUnit)));
-			string[] sendFreqStrs=Preference.GetString(PreferenceName.TransworldServiceSendFrequency).Split(new char[] { ' ' },StringSplitOptions.RemoveEmptyEntries);
-			if(sendFreqStrs.Length==2) {
-				int sendFreq=PIn.Int(sendFreqStrs[0],false);
-				FrequencyUnit sendFreqUnit;
-				if(sendFreq>0 && Enum.TryParse(sendFreqStrs[1],out sendFreqUnit)) {
-					numericSendFrequency.Value=sendFreq;
-					comboSendFrequencyUnits.SelectedIndex=(int)sendFreqUnit;
-				}
-			}
-			else {//if not set, default to repeat once a day
-				comboSendFrequencyUnits.SelectedIndex=(int)FrequencyUnit.Days;
-				numericSendFrequency.Value=1;
-			}
-			FillComboBoxes();
-			FillFields();
+			//checkEnabled.Checked=_progCur.Enabled;
+
+			//	groupClinicSettings.Text=Lan.g(this,"Transworld Clinic Settings");
+			//	_listUserClinicNums=new List<long>();
+			//	//if Transworld is enabled and the user is restricted to a clinic, don't allow the user to disable for all clinics
+			//	if(Security.CurrentUser.ClinicRestricted) {
+			//		if(checkEnabled.Checked) {
+			//			checkEnabled.Enabled=false;
+			//		}
+			//	}
+			//	else {
+			//		comboClinic.Items.Add(Lan.g(this,"Headquarters"));
+			//		//this way both lists have the same number of items in it and if 'Headquarters' is selected the programproperty.ClinicNum will be set to 0
+			//		_listUserClinicNums.Add(0);
+			//		comboClinic.SelectedIndex=0;
+			//	}
+			//	List<Clinic> listClinics=Clinic.GetByUser(Security.CurrentUser).ToList();
+			//	foreach(Clinic clinicCur in listClinics) {
+			//		comboClinic.Items.Add(clinicCur.Abbr);
+			//		_listUserClinicNums.Add(clinicCur.Id);
+			//		if(Clinics.ClinicId==clinicCur.Id) {//set selected index to the currently selected clinic in FormOpenDental
+			//			_selectedClinicNum=clinicCur.Id;
+			//			comboClinic.SelectedIndex=comboClinic.Items.Count-1;
+			//		}
+			//	}
+			
+			////_dictClinicListProgProps=ProgramProperties.GetForProgram(_progCur.ProgramNum)//get list of all props for the program
+			////	.GroupBy(x => x.ClinicId)//group each clinic
+			////	.ToDictionary(x => x.Key,x => x.ToList());//turn list into a dictionary of key=ClinicNum, value=List<ProgramProperty> for the clinic
+			////DateTime dateTSend=Preference.GetDateTime(PreferenceName.TransworldServiceTimeDue);
+			////if(dateTSend!=DateTime.MinValue) {
+			////	textUpdatesTimeOfDay.Text=dateTSend.ToShortTimeString();
+			////}
+			//comboSendFrequencyUnits.Items.AddRange(Enum.GetNames(typeof(FrequencyUnit)));
+			//string[] sendFreqStrs=Preference.GetString(PreferenceName.TransworldServiceSendFrequency).Split(new char[] { ' ' },StringSplitOptions.RemoveEmptyEntries);
+			//if(sendFreqStrs.Length==2) {
+			//	int sendFreq=PIn.Int(sendFreqStrs[0],false);
+			//	FrequencyUnit sendFreqUnit;
+			//	if(sendFreq>0 && Enum.TryParse(sendFreqStrs[1],out sendFreqUnit)) {
+			//		numericSendFrequency.Value=sendFreq;
+			//		comboSendFrequencyUnits.SelectedIndex=(int)sendFreqUnit;
+			//	}
+			//}
+			//else {//if not set, default to repeat once a day
+			//	comboSendFrequencyUnits.SelectedIndex=(int)FrequencyUnit.Days;
+			//	numericSendFrequency.Value=1;
+			//}
+			//FillComboBoxes();
+			//FillFields();
 		}
 
 		/// <summary>Fill the combo boxes with items. Some will have their indicies set later in FillFields() </summary>
@@ -107,50 +107,50 @@ namespace OpenDental {
 		///values are modified and the currently selected clinic is not the HQ clinic but the HQ details are being displayed, the HQ clinic details will
 		///remain unchanged and the currently selected clinic will no longer be synced with HQ and will have a set of props added to the dict.</summary>
 		private void FillFields() {
-			long clinicNum=_listUserClinicNums[comboClinic.SelectedIndex];
+			//long clinicNum=_listUserClinicNums[comboClinic.SelectedIndex];
 			
-			List<ProgramProperty> listPropsCurClinic;
+			//List<ProgramProperty> listPropsCurClinic;
 
-			if(!_dictClinicListProgProps.TryGetValue(clinicNum,out listPropsCurClinic)) {
-				listPropsCurClinic=_dictClinicListProgProps[0];//dictionary guaranteed to have ClinicNum 0 in it
-			}
-			foreach(ProgramPreference propCur in listPropsCurClinic) {
-				switch(propCur.Key) {
-					case "SftpServerAddress":
-						textSftpAddress.Text=propCur.Value;
-						continue;
-					case "SftpServerPort":
-						textSftpPort.Text=propCur.Value;
-						continue;
-					case "SftpUsername":
-						textSftpUsername.Text=propCur.Value;
-						continue;
-					case "SftpPassword":
-						textSftpPassword.Text=propCur.Value;
-						continue;
-					case "ClientIdAccelerator":
-						textClientIdAccelerator.Text=propCur.Value;
-						continue;
-					case "ClientIdCollection":
-						textClientIdCollection.Text=propCur.Value;
-						continue;
-					case "IsThankYouLetterEnabled":
-						checkThankYouLetter.Checked=PIn.Bool(propCur.Value);
-						continue;
-					case "SelectedServices":
-						checkAccelService.Checked=propCur.Value.Contains(((int)TsiDemandType.Accelerator).ToString());
-						checkPRService.Checked=propCur.Value.Contains(((int)TsiDemandType.ProfitRecovery).ToString());
-						checkCollService.Checked=propCur.Value.Contains(((int)TsiDemandType.Collection).ToString());
-						continue;
-					case "SyncExcludePosAdjType":
-							comboPosAdjType.SetSelectedItem<Definition>(x => x.Id==PIn.Long(propCur.Value),"");
-						continue;
-					case "SyncExcludeNegAdjType":
-							comboNegAdjType.SetSelectedItem<Definition>(x => x.Id==PIn.Long(propCur.Value),"");
-						continue;
-				}
-			}
-			SetAdvertising();
+			//if(!_dictClinicListProgProps.TryGetValue(clinicNum,out listPropsCurClinic)) {
+			//	listPropsCurClinic=_dictClinicListProgProps[0];//dictionary guaranteed to have ClinicNum 0 in it
+			//}
+			//foreach(ProgramPreference propCur in listPropsCurClinic) {
+			//	switch(propCur.Key) {
+			//		case "SftpServerAddress":
+			//			textSftpAddress.Text=propCur.Value;
+			//			continue;
+			//		case "SftpServerPort":
+			//			textSftpPort.Text=propCur.Value;
+			//			continue;
+			//		case "SftpUsername":
+			//			textSftpUsername.Text=propCur.Value;
+			//			continue;
+			//		case "SftpPassword":
+			//			textSftpPassword.Text=propCur.Value;
+			//			continue;
+			//		case "ClientIdAccelerator":
+			//			textClientIdAccelerator.Text=propCur.Value;
+			//			continue;
+			//		case "ClientIdCollection":
+			//			textClientIdCollection.Text=propCur.Value;
+			//			continue;
+			//		case "IsThankYouLetterEnabled":
+			//			checkThankYouLetter.Checked=PIn.Bool(propCur.Value);
+			//			continue;
+			//		case "SelectedServices":
+			//			checkAccelService.Checked=propCur.Value.Contains(((int)TsiDemandType.Accelerator).ToString());
+			//			checkPRService.Checked=propCur.Value.Contains(((int)TsiDemandType.ProfitRecovery).ToString());
+			//			checkCollService.Checked=propCur.Value.Contains(((int)TsiDemandType.Collection).ToString());
+			//			continue;
+			//		case "SyncExcludePosAdjType":
+			//				comboPosAdjType.SetSelectedItem<Definition>(x => x.Id==PIn.Long(propCur.Value),"");
+			//			continue;
+			//		case "SyncExcludeNegAdjType":
+			//				comboNegAdjType.SetSelectedItem<Definition>(x => x.Id==PIn.Long(propCur.Value),"");
+			//			continue;
+			//	}
+			//}
+			//SetAdvertising();
 		}
 		
 		///<summary>Handles both visibility and checking of checkHideButtons.</summary>

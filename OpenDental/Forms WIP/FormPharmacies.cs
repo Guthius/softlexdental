@@ -223,10 +223,10 @@ namespace OpenDental{
 				row=new ODGridRow();
 				row.Cells.Add(pharm.StoreName);
 				row.Cells.Add(pharm.Phone);
-				if(Programs.GetCur(ProgramName.DentalTekSmartOfficePhone).Enabled) {
-					row.Cells[row.Cells.Count-1].ColorText=Color.Blue;
-					row.Cells[row.Cells.Count-1].Underline=true;
-				}
+				//if(Programs.GetCur(ProgramName.DentalTekSmartOfficePhone).Enabled) {
+				//	row.Cells[row.Cells.Count-1].ColorText=Color.Blue;
+				//	row.Cells[row.Cells.Count-1].Underline=true;
+				//}
 				row.Cells.Add(pharm.Fax);
 				txt=pharm.Address;
 				if(pharm.Address2!="") {
@@ -274,9 +274,9 @@ namespace OpenDental{
 		private void gridMain_CellClick(object sender,ODGridClickEventArgs e) {
 			ODGridCell gridCellCur=gridMain.Rows[e.Row].Cells[e.Column];
 			//Only grid cells with phone numbers are blue and underlined.
-			if(gridCellCur.ColorText==System.Drawing.Color.Blue && gridCellCur.Underline==true && Programs.GetCur(ProgramName.DentalTekSmartOfficePhone).Enabled) {
-				DentalTekBridge.PlaceCall(gridCellCur.Text);
-			}
+			//if(gridCellCur.ColorText==System.Drawing.Color.Blue && gridCellCur.Underline==true && Programs.GetCur(ProgramName.DentalTekSmartOfficePhone).Enabled) {
+			//	DentalTekBridge.PlaceCall(gridCellCur.Text);
+			//}
 		}
 
 		private void butNone_Click(object sender,EventArgs e) {

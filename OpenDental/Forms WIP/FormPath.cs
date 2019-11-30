@@ -1044,39 +1044,39 @@ namespace OpenDental
         private bool LoadSftpSetup(out string errorMsg)
         {
             errorMsg = "";
-            if (_hasSftpLoaded)
-            {
-                return true;
-            }
-            _progCur = Programs.GetCur(ProgramName.SFTP);
-            if (_progCur == null)
-            {//Should never happen.
-                errorMsg = Lan.g(this, "The SFTP bridge is missing from the database.");
-                return false;
-            }
-            try
-            {
-                List<ProgramPreference> listProperties = ProgramProperties.GetForProgram(_progCur.Id);
-                _ppSftpPathAtoZ = listProperties.FirstOrDefault(x => x.Key == ODSftp.PropertyDescs.AtoZPath);
-                _ppSftpHostname = listProperties.FirstOrDefault(x => x.Key == ODSftp.PropertyDescs.SftpHostname);
-                _ppSftpUsername = listProperties.FirstOrDefault(x => x.Key == ODSftp.PropertyDescs.UserName);
-                _ppSftpPassword = listProperties.FirstOrDefault(x => x.Key == ODSftp.PropertyDescs.Password);
-                textSftpAtoZ.Text = _ppSftpPathAtoZ.Value;
-                textSftpHostname.Text = _ppSftpHostname.Value;
-                textSftpUsername.Text = _ppSftpUsername.Value;
-                textSftpPassword.Text = _ppSftpPassword.Value;
-                if (textSftpPassword.Text.Length > 0)
-                {
-                    textSftpPassword.UseSystemPasswordChar = true;
-                    textSftpPassword.ReadOnly = true;
-                }
-            }
-            catch (Exception e)
-            {
-                errorMsg = Lan.g(this, "You are missing a program property for SFTP.  Please contact support to resolve this issue.") + "\r\n" + e.StackTrace;
-                return false;
-            }
-            _hasSftpLoaded = true;
+            //if (_hasSftpLoaded)
+            //{
+            //    return true;
+            //}
+            //_progCur = Programs.GetCur(ProgramName.SFTP);
+            //if (_progCur == null)
+            //{//Should never happen.
+            //    errorMsg = Lan.g(this, "The SFTP bridge is missing from the database.");
+            //    return false;
+            //}
+            //try
+            //{
+            //    List<ProgramPreference> listProperties = ProgramProperties.GetForProgram(_progCur.Id);
+            //    _ppSftpPathAtoZ = listProperties.FirstOrDefault(x => x.Key == ODSftp.PropertyDescs.AtoZPath);
+            //    _ppSftpHostname = listProperties.FirstOrDefault(x => x.Key == ODSftp.PropertyDescs.SftpHostname);
+            //    _ppSftpUsername = listProperties.FirstOrDefault(x => x.Key == ODSftp.PropertyDescs.UserName);
+            //    _ppSftpPassword = listProperties.FirstOrDefault(x => x.Key == ODSftp.PropertyDescs.Password);
+            //    textSftpAtoZ.Text = _ppSftpPathAtoZ.Value;
+            //    textSftpHostname.Text = _ppSftpHostname.Value;
+            //    textSftpUsername.Text = _ppSftpUsername.Value;
+            //    textSftpPassword.Text = _ppSftpPassword.Value;
+            //    if (textSftpPassword.Text.Length > 0)
+            //    {
+            //        textSftpPassword.UseSystemPasswordChar = true;
+            //        textSftpPassword.ReadOnly = true;
+            //    }
+            //}
+            //catch (Exception e)
+            //{
+            //    errorMsg = Lan.g(this, "You are missing a program property for SFTP.  Please contact support to resolve this issue.") + "\r\n" + e.StackTrace;
+            //    return false;
+            //}
+            //_hasSftpLoaded = true;
             return true;
         }
 

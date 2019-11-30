@@ -73,10 +73,10 @@ namespace OpenDental {
 					return false;
 				}
 			}
-			else if(!Programs.IsEnabled(ProgramName.CallFire)) {
-				MsgBox.Show(this,"CallFire Program Link must be enabled.");
-				return false;
-			}
+			//else if(!Programs.IsEnabled(ProgramName.CallFire)) {
+			//	MsgBox.Show(this,"CallFire Program Link must be enabled.");
+			//	return false;
+			//}
 			if(patNum!=0 && txtMsgOk==YN.Unknown && Preference.GetBool(PreferenceName.TextMsgOkStatusTreatAsNo)){
 				MsgBox.Show(this,"It is not OK to text this patient.");
 				return false;

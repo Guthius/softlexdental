@@ -6780,7 +6780,7 @@ namespace OpenDental
                 }
                 else
                 {
-                    ContrApptSheet2.RedrawAll(true);
+                    ContrApptSheet2.RedrawAll();
                 }
                 //Signalods.ApptSignalLastRefreshed = MiscData.GetNowDateTime();
             }

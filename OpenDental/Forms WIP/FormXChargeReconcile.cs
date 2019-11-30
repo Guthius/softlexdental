@@ -118,33 +118,33 @@ namespace OpenDental {
 		}
 
 		private void butPayments_Click(object sender,EventArgs e) {
-			Cursor=Cursors.WaitCursor;
-			ReportSimpleGrid report=new ReportSimpleGrid();
-			report.Query="SET @pos=0; "
-				+"SELECT @pos:=@pos+1 AS 'Count',patient.PatNum,LName,FName,DateEntry,PayDate,PayNote,PayAmt "
-				+"FROM patient INNER JOIN payment ON payment.PatNum=patient.PatNum "
-				+"INNER JOIN ("
-					+"SELECT ClinicNum,PropertyValue AS PaymentType FROM programproperty "
-					+"WHERE ProgramNum="+POut.Long(Programs.GetProgramNum(ProgramName.Xcharge))+" AND PropertyDesc='PaymentType'"
-				+") paytypes ON paytypes.ClinicNum=payment.ClinicNum AND paytypes.PaymentType=payment.PayType "
-				//Must be DateEntry here. PayDate will not work with recurring charges
-				+"WHERE DateEntry BETWEEN "+POut.Date(date1.SelectionStart)+" AND "+POut.Date(date2.SelectionStart)+" "
-				+"ORDER BY Count ASC";
-			FormQuery FormQuery2=new FormQuery(report);
-			FormQuery2.IsReport=true;
-			FormQuery2.SubmitReportQuery();
-			report.Title="Payments From "+date1.SelectionStart.ToShortDateString()+" To "+date2.SelectionStart.ToShortDateString();
-			report.SubTitle.Add(Preference.GetString(PreferenceName.PracticeTitle));
-			report.SetColumn(this,0,"Count",50);
-			report.SetColumn(this,1,"Pat",50);//This name is used to ensure FormQuery does not replace the patnum with the patient name.
-			report.SetColumn(this,2,"LName",100);
-			report.SetColumn(this,3,"FName",100);
-			report.SetColumn(this,4,"DateEntry",100);
-			report.SetColumn(this,5,"PayDate",100);
-			report.SetColumn(this,6,"PayNote",150);
-			report.SetColumn(this,7,"PayAmt",70,HorizontalAlignment.Right);
-			Cursor=Cursors.Default;
-			FormQuery2.ShowDialog();
+			//Cursor=Cursors.WaitCursor;
+			//ReportSimpleGrid report=new ReportSimpleGrid();
+			//report.Query="SET @pos=0; "
+			//	+"SELECT @pos:=@pos+1 AS 'Count',patient.PatNum,LName,FName,DateEntry,PayDate,PayNote,PayAmt "
+			//	+"FROM patient INNER JOIN payment ON payment.PatNum=patient.PatNum "
+			//	+"INNER JOIN ("
+			//		+"SELECT ClinicNum,PropertyValue AS PaymentType FROM programproperty "
+			//		+"WHERE ProgramNum="+POut.Long(Programs.GetProgramNum(ProgramName.Xcharge))+" AND PropertyDesc='PaymentType'"
+			//	+") paytypes ON paytypes.ClinicNum=payment.ClinicNum AND paytypes.PaymentType=payment.PayType "
+			//	//Must be DateEntry here. PayDate will not work with recurring charges
+			//	+"WHERE DateEntry BETWEEN "+POut.Date(date1.SelectionStart)+" AND "+POut.Date(date2.SelectionStart)+" "
+			//	+"ORDER BY Count ASC";
+			//FormQuery FormQuery2=new FormQuery(report);
+			//FormQuery2.IsReport=true;
+			//FormQuery2.SubmitReportQuery();
+			//report.Title="Payments From "+date1.SelectionStart.ToShortDateString()+" To "+date2.SelectionStart.ToShortDateString();
+			//report.SubTitle.Add(Preference.GetString(PreferenceName.PracticeTitle));
+			//report.SetColumn(this,0,"Count",50);
+			//report.SetColumn(this,1,"Pat",50);//This name is used to ensure FormQuery does not replace the patnum with the patient name.
+			//report.SetColumn(this,2,"LName",100);
+			//report.SetColumn(this,3,"FName",100);
+			//report.SetColumn(this,4,"DateEntry",100);
+			//report.SetColumn(this,5,"PayDate",100);
+			//report.SetColumn(this,6,"PayNote",150);
+			//report.SetColumn(this,7,"PayAmt",70,HorizontalAlignment.Right);
+			//Cursor=Cursors.Default;
+			//FormQuery2.ShowDialog();
 		}
 
 		private void butMissing_Click(object sender,EventArgs e) {

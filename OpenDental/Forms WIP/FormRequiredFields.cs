@@ -53,10 +53,10 @@ namespace OpenDental {
 							continue;//Don't include AdmitDate in the list if hospitals is not enabled
 						}
 						break;
-					case RequiredFieldName.TrophyFolder:
-						if(!Programs.IsEnabled(Programs.GetProgramNum(ProgramName.TrophyEnhanced))) {
-							continue;//Don't include TrophyFolder in the list if TrophyEnhanced is not enabled
-						}
+					case RequiredFieldName.TrophyFolder: // TODO: Fix me
+						//if(!Programs.IsEnabled(Programs.GetProgramNum(ProgramName.TrophyEnhanced))) {
+						//	continue;//Don't include TrophyFolder in the list if TrophyEnhanced is not enabled
+						//}
 						break;
 					case RequiredFieldName.Ward:
 						if(Preference.GetBool(PreferenceName.EasyHideHospitals)) {

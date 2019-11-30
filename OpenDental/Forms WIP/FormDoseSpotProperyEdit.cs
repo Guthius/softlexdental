@@ -23,33 +23,33 @@ namespace OpenDental {
 		}
 
 		private void FormDoseSpotPropertyEdit_Load(object sender,EventArgs e) {
-			textClinicAbbr.Text=_clinicCur.Abbr;
-			textClinicID.Text=ClinicIdVal;
-			textClinicKey.Text=ClinicKeyVal;
-			if(ClinicIdVal.Trim()!="" && ClinicKeyVal.Trim()!="") {//The clinic has values for the clinicId/clinicKey, so they are effectively registered.
-				butRegisterClinic.Enabled=false;
-			}
-			if(_clinicCur.Id==0) {//Clinics disabled or is HQ.
-				menuItemSetup.Enabled=false;//There is no clinic record to edit.
-			}
-			Program programErx=Programs.GetCur(ProgramName.eRx);
-			ProgramProperty ppClinicID=ListProperties.FirstOrDefault(x => x.ClinicId!=_clinicCur.Id && x.Key==Erx.PropertyDescs.ClinicID && x.Value!="");
-			ProgramProperty ppClinicKey=null;
+			//textClinicAbbr.Text=_clinicCur.Abbr;
+			//textClinicID.Text=ClinicIdVal;
+			//textClinicKey.Text=ClinicKeyVal;
+			//if(ClinicIdVal.Trim()!="" && ClinicKeyVal.Trim()!="") {//The clinic has values for the clinicId/clinicKey, so they are effectively registered.
+			//	butRegisterClinic.Enabled=false;
+			//}
+			//if(_clinicCur.Id==0) {//Clinics disabled or is HQ.
+			//	menuItemSetup.Enabled=false;//There is no clinic record to edit.
+			//}
+			//Program programErx=Programs.GetCur(ProgramName.eRx);
+			//ProgramProperty ppClinicID=ListProperties.FirstOrDefault(x => x.ClinicId!=_clinicCur.Id && x.Key==Erx.PropertyDescs.ClinicID && x.Value!="");
+			//ProgramProperty ppClinicKey=null;
 
-			if(ppClinicID!=null) {
-				ppClinicKey=ListProperties
-					.FirstOrDefault(x => x.ClinicId==ppClinicID.ClinicId && x.Key==Erx.PropertyDescs.ClinicKey && x.Value!="");
-			}
-			if(ppClinicID==null || string.IsNullOrWhiteSpace(ppClinicID.Value)
-				|| ppClinicKey==null || string.IsNullOrWhiteSpace(ppClinicKey.Value))
-			{
-				//No clinicID/clinicKey found.  This would be the first clinic to register
-				//Allow the first clinic to register the ability to modify the clinicID/clinicKey textboxes.
-				textClinicID.ReadOnly=false;
-				textClinicKey.ReadOnly=false;
-				butRegisterClinic.Enabled=false;
-				butClear.Enabled=false;
-			}
+			//if(ppClinicID!=null) {
+			//	ppClinicKey=ListProperties
+			//		.FirstOrDefault(x => x.ClinicId==ppClinicID.ClinicId && x.Key==Erx.PropertyDescs.ClinicKey && x.Value!="");
+			//}
+			//if(ppClinicID==null || string.IsNullOrWhiteSpace(ppClinicID.Value)
+			//	|| ppClinicKey==null || string.IsNullOrWhiteSpace(ppClinicKey.Value))
+			//{
+			//	//No clinicID/clinicKey found.  This would be the first clinic to register
+			//	//Allow the first clinic to register the ability to modify the clinicID/clinicKey textboxes.
+			//	textClinicID.ReadOnly=false;
+			//	textClinicKey.ReadOnly=false;
+			//	butRegisterClinic.Enabled=false;
+			//	butClear.Enabled=false;
+			//}
 		}
 
 		private void menuItemSetup_Click(object sender,EventArgs e) {

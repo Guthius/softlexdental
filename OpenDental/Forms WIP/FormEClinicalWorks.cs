@@ -639,7 +639,7 @@ namespace OpenDental{
 
 		private void FillForm(){
             CacheManager.Invalidate<ProgramPreference>();
-            PropertyList =ProgramProperties.GetForProgram(ProgramCur.Id);
+            //PropertyList =ProgramProperties.GetForProgram(ProgramCur.Id);
 			textProgName.Text=ProgramCur.TypeName;
 			textProgDesc.Text=ProgramCur.Description;
 			checkEnabled.Checked=ProgramCur.Enabled;
@@ -796,112 +796,112 @@ namespace OpenDental{
 		}
 
 		private bool SaveToDb() {
-			if((radioModeTight.Checked || radioModeFull.Checked) && comboDefaultUserGroup.SelectedIndex==-1) {
-				MsgBox.Show(this,"Please select a default user group first.");
-				return false;
-			}
-			if(checkEnabled.Checked) {
-				if(textProgDesc.Text=="") {
-					MsgBox.Show(this,"Description may not be blank.");
-					return false;
-				}
-				if(!HL7Defs.IsExistingHL7Enabled()) {
-					if((radioModeTight.Checked || radioModeFull.Checked) && textHL7FolderIn.Text=="") {
-						MsgBox.Show(this,"HL7 in folder may not be blank.");
-						return false;
-					}
-					if(textHL7FolderOut.Text=="") {
-						MsgBox.Show(this,"HL7 out folder may not be blank.");
-						return false;
-					}
-					if(textHL7Server.Text=="") {
-						MsgBox.Show(this,"HL7 Server may not be blank.");
-						return false;
-					}
-					if(textHL7ServiceName.Text=="") {
-						MsgBox.Show(this,"HL7 Service Name may not be blank.");
-						return false;
-					}
-				}
-			}
-			ProgramCur.Description=textProgDesc.Text;
-			ProgramCur.Enabled=checkEnabled.Checked;
-			Program.Update(ProgramCur);
-			Preference.Update(PreferenceName.HL7FolderOut,textHL7FolderOut.Text);
-			ProgramProperties.SetProperty(ProgramCur.Id,"HL7Server",textHL7Server.Text);//this property will not exist if using Oracle, eCW will never use Oracle
-			ProgramProperties.SetProperty(ProgramCur.Id,"HL7ServiceName",textHL7ServiceName.Text);//this property will not exist if using Oracle, eCW will never use Oracle
-			ProgramProperties.SetProperty(ProgramCur.Id,"MedicalPanelUrl",textMedPanelURL.Text);//this property will not exist if using Oracle, eCW will never use Oracle
-			if(checkLBSessionId.Checked) {
-				ProgramProperties.SetProperty(ProgramCur.Id,"IsLBSessionIdExcluded","1");
-			}
-			else {
-				ProgramProperties.SetProperty(ProgramCur.Id,"IsLBSessionIdExcluded","0");
-			}
-			if(checkQuadAsToothNum.Checked) {
-				ProgramProperties.SetProperty(ProgramCur.Id,"IsQuadAsToothNum","1");//this property will not exist if using Oracle, eCW will never use Oracle
-			}
-			else {
-				ProgramProperties.SetProperty(ProgramCur.Id,"IsQuadAsToothNum","0");//this property will not exist if using Oracle, eCW will never use Oracle
-			}
-			if(checkHideButChartRx.Checked) {
-				ProgramProperties.SetProperty(ProgramCur.Id,"HideChartRxButtons","1");//this property will not exist if using Oracle, eCW will never use Oracle
-			}
-			else {
-				ProgramProperties.SetProperty(ProgramCur.Id,"HideChartRxButtons","0");//this property will not exist if using Oracle, eCW will never use Oracle
-			}
-			if(checkProcRequireSignature.Checked) {
-				ProgramProperties.SetProperty(ProgramCur.Id,"ProcRequireSignature","1");
-			}
-			else {
-				ProgramProperties.SetProperty(ProgramCur.Id,"ProcRequireSignature","0");
-			}
-			if(checkProcNotesNoIncomplete.Checked) {
-				ProgramProperties.SetProperty(ProgramCur.Id,"ProcNotesNoIncomplete","1");
-			}
-			else {
-				ProgramProperties.SetProperty(ProgramCur.Id,"ProcNotesNoIncomplete","0");
-			}
-			if(radioModeTight.Checked || radioModeFull.Checked) {
-				if(radioModeTight.Checked) {
-					ProgramProperties.SetProperty(ProgramCur.Id,"eClinicalWorksMode","0");//Tight
-				}
-				else {
-					ProgramProperties.SetProperty(ProgramCur.Id,"eClinicalWorksMode","2");//Full
-				}
-				ProgramProperties.SetProperty(ProgramCur.Id,"eCWServer",textECWServer.Text);//this property will not exist if using Oracle, eCW will never use Oracle
-				Preference.Update(PreferenceName.HL7FolderIn,textHL7FolderIn.Text);
-				ProgramProperties.SetProperty(ProgramCur.Id,"DefaultUserGroup",
-					_listUserGroups[comboDefaultUserGroup.SelectedIndex].Id.ToString());
-				if(checkShowImages.Checked) {
-					ProgramProperties.SetProperty(ProgramCur.Id,"ShowImagesModule","1");
-				}
-				else {
-					ProgramProperties.SetProperty(ProgramCur.Id,"ShowImagesModule","0");
-				}
-				if(this.checkFeeSchedules.Checked) {
-					ProgramProperties.SetProperty(ProgramCur.Id,"FeeSchedulesSetManually","1");
-				}
-				else {
-					ProgramProperties.SetProperty(ProgramCur.Id,"FeeSchedulesSetManually","0");
-				}
-			}
-			else if(radioModeStandalone.Checked) {
-				ProgramProperties.SetProperty(ProgramCur.Id,"eClinicalWorksMode","1");
-				Preference.Update(PreferenceName.HL7FolderIn,"");
-				ProgramProperties.SetProperty(ProgramCur.Id,"DefaultUserGroup","0");
-				ProgramProperties.SetProperty(ProgramCur.Id,"ShowImagesModule","1");
-				ProgramProperties.SetProperty(ProgramCur.Id,"FeeSchedulesSetManually","0");
-			}
-			DataValid.SetInvalid(InvalidType.Programs,InvalidType.Prefs);
+			//if((radioModeTight.Checked || radioModeFull.Checked) && comboDefaultUserGroup.SelectedIndex==-1) {
+			//	MsgBox.Show(this,"Please select a default user group first.");
+			//	return false;
+			//}
+			//if(checkEnabled.Checked) {
+			//	if(textProgDesc.Text=="") {
+			//		MsgBox.Show(this,"Description may not be blank.");
+			//		return false;
+			//	}
+			//	if(!HL7Defs.IsExistingHL7Enabled()) {
+			//		if((radioModeTight.Checked || radioModeFull.Checked) && textHL7FolderIn.Text=="") {
+			//			MsgBox.Show(this,"HL7 in folder may not be blank.");
+			//			return false;
+			//		}
+			//		if(textHL7FolderOut.Text=="") {
+			//			MsgBox.Show(this,"HL7 out folder may not be blank.");
+			//			return false;
+			//		}
+			//		if(textHL7Server.Text=="") {
+			//			MsgBox.Show(this,"HL7 Server may not be blank.");
+			//			return false;
+			//		}
+			//		if(textHL7ServiceName.Text=="") {
+			//			MsgBox.Show(this,"HL7 Service Name may not be blank.");
+			//			return false;
+			//		}
+			//	}
+			//}
+			//ProgramCur.Description=textProgDesc.Text;
+			//ProgramCur.Enabled=checkEnabled.Checked;
+			//Program.Update(ProgramCur);
+			//Preference.Update(PreferenceName.HL7FolderOut,textHL7FolderOut.Text);
+			//ProgramProperties.SetProperty(ProgramCur.Id,"HL7Server",textHL7Server.Text);//this property will not exist if using Oracle, eCW will never use Oracle
+			//ProgramProperties.SetProperty(ProgramCur.Id,"HL7ServiceName",textHL7ServiceName.Text);//this property will not exist if using Oracle, eCW will never use Oracle
+			//ProgramProperties.SetProperty(ProgramCur.Id,"MedicalPanelUrl",textMedPanelURL.Text);//this property will not exist if using Oracle, eCW will never use Oracle
+			//if(checkLBSessionId.Checked) {
+			//	ProgramProperties.SetProperty(ProgramCur.Id,"IsLBSessionIdExcluded","1");
+			//}
+			//else {
+			//	ProgramProperties.SetProperty(ProgramCur.Id,"IsLBSessionIdExcluded","0");
+			//}
+			//if(checkQuadAsToothNum.Checked) {
+			//	ProgramProperties.SetProperty(ProgramCur.Id,"IsQuadAsToothNum","1");//this property will not exist if using Oracle, eCW will never use Oracle
+			//}
+			//else {
+			//	ProgramProperties.SetProperty(ProgramCur.Id,"IsQuadAsToothNum","0");//this property will not exist if using Oracle, eCW will never use Oracle
+			//}
+			//if(checkHideButChartRx.Checked) {
+			//	ProgramProperties.SetProperty(ProgramCur.Id,"HideChartRxButtons","1");//this property will not exist if using Oracle, eCW will never use Oracle
+			//}
+			//else {
+			//	ProgramProperties.SetProperty(ProgramCur.Id,"HideChartRxButtons","0");//this property will not exist if using Oracle, eCW will never use Oracle
+			//}
+			//if(checkProcRequireSignature.Checked) {
+			//	ProgramProperties.SetProperty(ProgramCur.Id,"ProcRequireSignature","1");
+			//}
+			//else {
+			//	ProgramProperties.SetProperty(ProgramCur.Id,"ProcRequireSignature","0");
+			//}
+			//if(checkProcNotesNoIncomplete.Checked) {
+			//	ProgramProperties.SetProperty(ProgramCur.Id,"ProcNotesNoIncomplete","1");
+			//}
+			//else {
+			//	ProgramProperties.SetProperty(ProgramCur.Id,"ProcNotesNoIncomplete","0");
+			//}
+			//if(radioModeTight.Checked || radioModeFull.Checked) {
+			//	if(radioModeTight.Checked) {
+			//		ProgramProperties.SetProperty(ProgramCur.Id,"eClinicalWorksMode","0");//Tight
+			//	}
+			//	else {
+			//		ProgramProperties.SetProperty(ProgramCur.Id,"eClinicalWorksMode","2");//Full
+			//	}
+			//	ProgramProperties.SetProperty(ProgramCur.Id,"eCWServer",textECWServer.Text);//this property will not exist if using Oracle, eCW will never use Oracle
+			//	Preference.Update(PreferenceName.HL7FolderIn,textHL7FolderIn.Text);
+			//	ProgramProperties.SetProperty(ProgramCur.Id,"DefaultUserGroup",
+			//		_listUserGroups[comboDefaultUserGroup.SelectedIndex].Id.ToString());
+			//	if(checkShowImages.Checked) {
+			//		ProgramProperties.SetProperty(ProgramCur.Id,"ShowImagesModule","1");
+			//	}
+			//	else {
+			//		ProgramProperties.SetProperty(ProgramCur.Id,"ShowImagesModule","0");
+			//	}
+			//	if(this.checkFeeSchedules.Checked) {
+			//		ProgramProperties.SetProperty(ProgramCur.Id,"FeeSchedulesSetManually","1");
+			//	}
+			//	else {
+			//		ProgramProperties.SetProperty(ProgramCur.Id,"FeeSchedulesSetManually","0");
+			//	}
+			//}
+			//else if(radioModeStandalone.Checked) {
+			//	ProgramProperties.SetProperty(ProgramCur.Id,"eClinicalWorksMode","1");
+			//	Preference.Update(PreferenceName.HL7FolderIn,"");
+			//	ProgramProperties.SetProperty(ProgramCur.Id,"DefaultUserGroup","0");
+			//	ProgramProperties.SetProperty(ProgramCur.Id,"ShowImagesModule","1");
+			//	ProgramProperties.SetProperty(ProgramCur.Id,"FeeSchedulesSetManually","0");
+			//}
+			//DataValid.SetInvalid(InvalidType.Programs,InvalidType.Prefs);
 			return true;
 		}
 
 		private void butDiagnostic_Click(object sender,EventArgs e) {
 			//no need to validate all the other fields on the page.
-			ProgramProperties.SetProperty(ProgramCur.Id,"eCWServer",textECWServer.Text);//this property will not exist if using Oracle, eCW will never use Oracle
-			DataValid.SetInvalid(InvalidType.Programs);
-			FormEcwDiag FormECWD=new FormEcwDiag();
-			FormECWD.ShowDialog();
+			//ProgramProperties.SetProperty(ProgramCur.Id,"eCWServer",textECWServer.Text);//this property will not exist if using Oracle, eCW will never use Oracle
+			//DataValid.SetInvalid(InvalidType.Programs);
+			//FormEcwDiag FormECWD=new FormEcwDiag();
+			//FormECWD.ShowDialog();
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {

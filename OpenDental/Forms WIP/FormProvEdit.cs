@@ -1510,13 +1510,13 @@ namespace OpenDental{
 			else {
 				tabControlProvider.TabPages.Remove(tabDentalSchools);
 			}
-			if(Programs.IsEnabled(ProgramName.eClinicalWorks)) {
+			//if(Programs.IsEnabled(ProgramName.eClinicalWorks)) {
 				textEcwID.Text=ProvCur.EcwID;
-			}
-			else{
-				labelEcwID.Visible=false;
-				textEcwID.Visible=false;
-			}
+			//}
+			//else{
+			//	labelEcwID.Visible=false;
+			//	textEcwID.Visible=false;
+			//}
 			List<EhrProvKey> listProvKey=EhrProvKeys.GetKeysByFLName(ProvCur.LName,ProvCur.FName);
 			if(listProvKey.Count>0) {
 				textLName.Enabled=false;

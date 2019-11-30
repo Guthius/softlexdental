@@ -133,12 +133,6 @@ namespace OpenDental
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
             }
-
-            if (program.TypeName == ProgramName.XVWeb.ToString())
-            {
-                XVWebBridge.SendData(program, patient);
-                return;
-            }
         }
 
         public static void LoadToolbar(ODToolBar toolBar, ToolBarsAvail toolBarsAvail)

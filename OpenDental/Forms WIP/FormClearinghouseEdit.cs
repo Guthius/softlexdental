@@ -1357,11 +1357,11 @@ namespace OpenDental{
 				#endregion
 			}
 			if(ClearinghouseCur.CommBridge==EclaimsCommBridge.ClaimConnect && (ClearinghouseCur.LoginID!=textLoginID.Text || ClearinghouseCur.Password!=textPassword.Text)){
-				Program progPayConnect=Programs.GetCur(ProgramName.PayConnect);
-				int billingUseDentalExchangeIdx=Preference.GetInt(PreferenceName.BillingUseElectronic);//idx of 1= DentalXChange.
-				if(progPayConnect.Enabled || billingUseDentalExchangeIdx==1) {
-					MsgBox.Show(this,"ClaimConnect, PayConnect, and Electronic Billing credentials are usually all changed at the same time when using DentalXChange.");
-				}
+				//Program progPayConnect=Programs.GetCur(ProgramName.PayConnect);
+				//int billingUseDentalExchangeIdx=Preference.GetInt(PreferenceName.BillingUseElectronic);//idx of 1= DentalXChange.
+				//if(progPayConnect.Enabled || billingUseDentalExchangeIdx==1) {
+				//	MsgBox.Show(this,"ClaimConnect, PayConnect, and Electronic Billing credentials are usually all changed at the same time when using DentalXChange.");
+				//}
 			}
 			return true;
 		}

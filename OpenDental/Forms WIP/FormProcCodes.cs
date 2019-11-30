@@ -1738,9 +1738,7 @@ namespace OpenDental{
 			changed=false;
 			_feeCache=Fees.GetCache();
 			_feeCache.BeginTransaction();
-			if(Programs.IsEnabled(ProgramName.eClinicalWorks)) {
-				FillComboBoxes();//To show possible added fee schedule.
-			}
+
 			FillGrid();
 			SecurityLog.Write(Permissions.Setup,0,"Fee Schedule Tools");
 		}

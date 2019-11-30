@@ -122,33 +122,25 @@ namespace OpenDental {
 			}
 		}
 
-		private void butNewRx_Click(object sender,EventArgs e) {
-			//This code is a copy of ContrChart.Tool_Rx_Click().  Any changes to this code need to be changed there too.
-			if(!Security.IsAuthorized(Permissions.RxCreate)) {
-				return;
-			}
-			if(Programs.UsingEcwTightOrFullMode() && Bridges.ECW.UserId!=0) {
-				VBbridges.Ecw.LoadRxForm((int)Bridges.ECW.UserId,Bridges.ECW.EcwConfigPath,(int)Bridges.ECW.AptNum);
-				//refresh the right panel:
-				try {
-					string strAppServer=VBbridges.Ecw.GetAppServer((int)Bridges.ECW.UserId,Bridges.ECW.EcwConfigPath);
-					labelECWerror.Visible=false;
-				}
-				catch(Exception ex) {
-					labelECWerror.Text="Error: "+ex.Message;
-					labelECWerror.Visible=true;
-				}
-			}
-			else {
-				FormRxSelect FormRS=new FormRxSelect(_patCur);
-				FormRS.ShowDialog();
-				if(FormRS.DialogResult!=DialogResult.OK) {
-					return;
-				}
-				SecurityLog.Write(Permissions.RxCreate,_patCur.PatNum,"Created prescription.");
-			}
-			FillGrid();
-		}
+        private void butNewRx_Click(object sender, EventArgs e)
+        {
+            //This code is a copy of ContrChart.Tool_Rx_Click().  Any changes to this code need to be changed there too.
+            if (!Security.IsAuthorized(Permissions.RxCreate))
+            {
+                return;
+            }
+
+            FormRxSelect FormRS = new FormRxSelect(_patCur);
+            FormRS.ShowDialog();
+            if (FormRS.DialogResult != DialogResult.OK)
+            {
+                return;
+            }
+
+            SecurityLog.Write(Permissions.RxCreate, _patCur.PatNum, "Created prescription.");
+
+            FillGrid();
+        }
 
 		private void butClose_Click(object sender,EventArgs e) {
 			Close();

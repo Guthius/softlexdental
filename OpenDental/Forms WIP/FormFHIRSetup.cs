@@ -24,19 +24,19 @@ namespace OpenDental
 		}
 
 		private void FormFHIRSetup_Load(object sender,EventArgs e) {
-			Program prog=Programs.GetCur(ProgramName.FHIR);
-			checkEnabled.Checked=prog.Enabled;
-			textSubInterval.Text=ProgramProperties.GetPropVal(prog.Id,"SubscriptionProcessingFrequency");
-			Cursor=Cursors.WaitCursor;
-			_listApiKeysHQ=GetApiKeys();
-			Cursor=Cursors.Default;
-			if(_listApiKeysHQ==null) {
-				DialogResult=DialogResult.Cancel;//We have already shown them an error message.
-				return;
-			}
-			_listApiKeysLocal=_listApiKeysHQ.Select(x => x.Copy()).ToList();
-			FillGrid();
-			FillPermissions();
+			//Program prog=Programs.GetCur(ProgramName.FHIR);
+			//checkEnabled.Checked=prog.Enabled;
+			//textSubInterval.Text=ProgramProperties.GetPropVal(prog.Id,"SubscriptionProcessingFrequency");
+			//Cursor=Cursors.WaitCursor;
+			//_listApiKeysHQ=GetApiKeys();
+			//Cursor=Cursors.Default;
+			//if(_listApiKeysHQ==null) {
+			//	DialogResult=DialogResult.Cancel;//We have already shown them an error message.
+			//	return;
+			//}
+			//_listApiKeysLocal=_listApiKeysHQ.Select(x => x.Copy()).ToList();
+			//FillGrid();
+			//FillPermissions();
 		}
 
 		private void FillGrid() {

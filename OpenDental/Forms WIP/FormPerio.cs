@@ -1266,12 +1266,12 @@ namespace OpenDental
             List<ToothInitial> initialList = ToothInitials.Refresh(PatCur.PatNum);
             _listMissingTeeth = ToothInitials.GetMissingOrHiddenTeeth(initialList);
             RefreshListExams();
-            if (Programs.UsingOrion)
-            {
-                labelPlaqueHistory.Visible = true;
-                listPlaqueHistory.Visible = true;
-                RefreshListPlaque();
-            }
+            //if (Programs.UsingOrion)
+            //{
+            //    labelPlaqueHistory.Visible = true;
+            //    listPlaqueHistory.Visible = true;
+            //    RefreshListPlaque();
+            //}
             listExams.SelectedIndex = PerioExams.ListExams.Count - 1;//this works even if no items.
             //_userPrefCurrentOnly = UserOdPrefs.GetByUserAndFkeyType(Security.CurrentUser.Id, UserPreferenceName.PerioCurrentExamOnly).FirstOrDefault();
             //if (_userPrefCurrentOnly != null && PIn.Bool(_userPrefCurrentOnly.Value))

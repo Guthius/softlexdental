@@ -227,12 +227,12 @@ namespace OpenDental{
 		}
 
 		private void FillForm(){
-            CacheManager.Invalidate<ProgramPreference>();
-			PropertyList=ProgramProperties.GetForProgram(ProgramCur.Id);
-			textProgName.Text=ProgramCur.TypeName;
-			textProgDesc.Text=ProgramCur.Description;
-			checkEnabled.Checked=ProgramCur.Enabled;
-			textHL7FolderOut.Text=Preference.GetString(PreferenceName.HL7FolderOut);
+   //         CacheManager.Invalidate<ProgramPreference>();
+			//PropertyList=ProgramProperties.GetForProgram(ProgramCur.Id);
+			//textProgName.Text=ProgramCur.TypeName;
+			//textProgDesc.Text=ProgramCur.Description;
+			//checkEnabled.Checked=ProgramCur.Enabled;
+			//textHL7FolderOut.Text=Preference.GetString(PreferenceName.HL7FolderOut);
 		}
 
 		private void checkEnabled_Click(object sender,EventArgs e) {

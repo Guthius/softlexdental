@@ -39,41 +39,41 @@ namespace OpenDental {
 
 		///<summary>Fill the rest of the UI with the current bridge settings.</summary>
 		private void FillSettings() {
-			//Set Enabled
-			checkEnabled.Checked=Programs.IsEnabled(ProgramName.AvaTax);
-			//Set radio buttons
-			if(AvaTax.IsProduction) {
-				radioProdEnv.Checked=true;
-			}
-			else {
-				radioTestEnv.Checked=true;
-			}
-			//Set username and password
-			textUsername.Text=ProgramProperties.GetPropVal(ProgramName.AvaTax,ProgramProperties.PropertyDescs.Username);
-			textPassword.Text=ProgramProperties.GetPropVal(ProgramName.AvaTax,ProgramProperties.PropertyDescs.Password);
-			//Fill Log Level options
-			listBoxLogLevel.Items.Clear();
-			foreach(LogLevel lv in Enum.GetValues(typeof(LogLevel))) {
-				ODBoxItem<LogLevel> currentItem=new ODBoxItem<LogLevel>(lv.ToString(),lv);
-				listBoxLogLevel.Items.Add(currentItem);
-				if(currentItem.Tag==AvaTax.LogDetailLevel) {
-					listBoxLogLevel.SelectedItem=currentItem;
-				}
-			}
-			//Set company code and sales tax def
-			textCompanyCode.Text=AvaTax.CompanyCode;
-			_defCurrentSalesTaxAdjType=Defs.GetDef(DefinitionCategory.AdjTypes,AvaTax.SalesTaxAdjType);
-			textAdjType.Text=_defCurrentSalesTaxAdjType.Description;
-			_defCurrentSalesTaxReturnAdjType=Defs.GetDef(DefinitionCategory.AdjTypes,AvaTax.SalesTaxReturnAdjType)??new Definition();
-			textReturnAdjType.Text=_defCurrentSalesTaxReturnAdjType.Description;
-			_patFieldDefCurrentTaxExempt=AvaTax.TaxExemptPatField;
-			textTaxExempt.Text=(_patFieldDefCurrentTaxExempt!=null) ? _patFieldDefCurrentTaxExempt.FieldName : "";
-			validTaxLockDate.Text=AvaTax.TaxLockDate.ToShortDateString();
-			//Set list of procCodes
-			textPrePayCodes.Text=ProgramProperties.GetPropVal(ProgramName.AvaTax,"Prepay Proc Codes");
-			textDiscountCodes.Text=ProgramProperties.GetPropVal(ProgramName.AvaTax,"Discount Proc Codes");
-			//Set the list of overrides
-			textOverrides.Text=ProgramProperties.GetPropVal(ProgramName.AvaTax,"Tax Code Overrides");
+			////Set Enabled
+			//checkEnabled.Checked=Programs.IsEnabled(ProgramName.AvaTax);
+			////Set radio buttons
+			//if(AvaTax.IsProduction) {
+			//	radioProdEnv.Checked=true;
+			//}
+			//else {
+			//	radioTestEnv.Checked=true;
+			//}
+			////Set username and password
+			//textUsername.Text=ProgramProperties.GetPropVal(ProgramName.AvaTax,ProgramProperties.PropertyDescs.Username);
+			//textPassword.Text=ProgramProperties.GetPropVal(ProgramName.AvaTax,ProgramProperties.PropertyDescs.Password);
+			////Fill Log Level options
+			//listBoxLogLevel.Items.Clear();
+			//foreach(LogLevel lv in Enum.GetValues(typeof(LogLevel))) {
+			//	ODBoxItem<LogLevel> currentItem=new ODBoxItem<LogLevel>(lv.ToString(),lv);
+			//	listBoxLogLevel.Items.Add(currentItem);
+			//	if(currentItem.Tag==AvaTax.LogDetailLevel) {
+			//		listBoxLogLevel.SelectedItem=currentItem;
+			//	}
+			//}
+			////Set company code and sales tax def
+			//textCompanyCode.Text=AvaTax.CompanyCode;
+			//_defCurrentSalesTaxAdjType=Defs.GetDef(DefinitionCategory.AdjTypes,AvaTax.SalesTaxAdjType);
+			//textAdjType.Text=_defCurrentSalesTaxAdjType.Description;
+			//_defCurrentSalesTaxReturnAdjType=Defs.GetDef(DefinitionCategory.AdjTypes,AvaTax.SalesTaxReturnAdjType)??new Definition();
+			//textReturnAdjType.Text=_defCurrentSalesTaxReturnAdjType.Description;
+			//_patFieldDefCurrentTaxExempt=AvaTax.TaxExemptPatField;
+			//textTaxExempt.Text=(_patFieldDefCurrentTaxExempt!=null) ? _patFieldDefCurrentTaxExempt.FieldName : "";
+			//validTaxLockDate.Text=AvaTax.TaxLockDate.ToShortDateString();
+			////Set list of procCodes
+			//textPrePayCodes.Text=ProgramProperties.GetPropVal(ProgramName.AvaTax,"Prepay Proc Codes");
+			//textDiscountCodes.Text=ProgramProperties.GetPropVal(ProgramName.AvaTax,"Discount Proc Codes");
+			////Set the list of overrides
+			//textOverrides.Text=ProgramProperties.GetPropVal(ProgramName.AvaTax,"Tax Code Overrides");
 		}
 
 		private void butPing_Click(object sender,EventArgs e) {
@@ -137,23 +137,23 @@ namespace OpenDental {
 				MsgBox.Show(this,"Enter a valid tax lock date");
 				return;
 			}
-			long progNum=ProgramCur.Id;
-			ProgramCur.Enabled=checkEnabled.Checked;
-			Programs.Update(ProgramCur);
-			ProgramProperties.SetProperty(progNum,"Test (T) or Production (P)",radioProdEnv.Checked?"P":"T");
-			ProgramProperties.SetProperty(progNum,ProgramProperties.PropertyDescs.Username,textUsername.Text);
-			ProgramProperties.SetProperty(progNum,ProgramProperties.PropertyDescs.Password,textPassword.Text);
-			ProgramProperties.SetProperty(progNum,"Company Code",textCompanyCode.Text);
-			ProgramProperties.SetProperty(progNum,"Sales Tax Adjustment Type",POut.Long(_defCurrentSalesTaxAdjType.Id));
-			ProgramProperties.SetProperty(progNum,"Sales Tax Return Adjustment Type",POut.Long(_defCurrentSalesTaxReturnAdjType.Id));
-			ProgramProperties.SetProperty(progNum,"Taxable States",string.Join(",",listBoxTaxedStates.Items.Cast<ODBoxItem<string>>().Select(x => x.Tag)));
-			ProgramProperties.SetProperty(progNum,"Log Level",POut.Int((int)listBoxLogLevel.SelectedTag<LogLevel>()));
-			ProgramProperties.SetProperty(progNum,"Prepay Proc Codes",POut.String(textPrePayCodes.Text));
-			ProgramProperties.SetProperty(progNum,"Discount Proc Codes",POut.String(textDiscountCodes.Text));
-			ProgramProperties.SetProperty(progNum,"Tax Exempt Pat Field Def",_patFieldDefCurrentTaxExempt==null ? "0" : POut.Long(_patFieldDefCurrentTaxExempt.PatFieldDefNum));
-			ProgramProperties.SetProperty(progNum,"Tax Code Overrides",POut.String(textOverrides.Text));
-			ProgramProperties.SetProperty(progNum,"Tax Lock Date",POut.String(validTaxLockDate.Text));
-			DataValid.SetInvalid(InvalidType.Programs);
+			//long progNum=ProgramCur.Id;
+			//ProgramCur.Enabled=checkEnabled.Checked;
+			//Programs.Update(ProgramCur);
+			//ProgramProperties.SetProperty(progNum,"Test (T) or Production (P)",radioProdEnv.Checked?"P":"T");
+			//ProgramProperties.SetProperty(progNum,ProgramProperties.PropertyDescs.Username,textUsername.Text);
+			//ProgramProperties.SetProperty(progNum,ProgramProperties.PropertyDescs.Password,textPassword.Text);
+			//ProgramProperties.SetProperty(progNum,"Company Code",textCompanyCode.Text);
+			//ProgramProperties.SetProperty(progNum,"Sales Tax Adjustment Type",POut.Long(_defCurrentSalesTaxAdjType.Id));
+			//ProgramProperties.SetProperty(progNum,"Sales Tax Return Adjustment Type",POut.Long(_defCurrentSalesTaxReturnAdjType.Id));
+			//ProgramProperties.SetProperty(progNum,"Taxable States",string.Join(",",listBoxTaxedStates.Items.Cast<ODBoxItem<string>>().Select(x => x.Tag)));
+			//ProgramProperties.SetProperty(progNum,"Log Level",POut.Int((int)listBoxLogLevel.SelectedTag<LogLevel>()));
+			//ProgramProperties.SetProperty(progNum,"Prepay Proc Codes",POut.String(textPrePayCodes.Text));
+			//ProgramProperties.SetProperty(progNum,"Discount Proc Codes",POut.String(textDiscountCodes.Text));
+			//ProgramProperties.SetProperty(progNum,"Tax Exempt Pat Field Def",_patFieldDefCurrentTaxExempt==null ? "0" : POut.Long(_patFieldDefCurrentTaxExempt.PatFieldDefNum));
+			//ProgramProperties.SetProperty(progNum,"Tax Code Overrides",POut.String(textOverrides.Text));
+			//ProgramProperties.SetProperty(progNum,"Tax Lock Date",POut.String(validTaxLockDate.Text));
+			//DataValid.SetInvalid(InvalidType.Programs);
 			DialogResult=DialogResult.OK;
 		}
 

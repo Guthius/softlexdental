@@ -1667,15 +1667,7 @@ namespace OpenDentBusiness.HL7
                         pat.ChartNumber = seg.GetFieldComponent(itemOrder);
                         continue;
                     case "pat.FeeSched":
-                        if (Programs.IsEnabled(ProgramName.eClinicalWorks) && ProgramProperties.GetPropVal(ProgramName.eClinicalWorks, "FeeSchedulesSetManually") == "1")
-                        {
-                            //if using eCW and FeeSchedulesSetManually
-                            continue;//do not process fee sched field, manually set by user
-                        }
-                        else
-                        {
-                            pat.FeeSched = FieldParser.FeeScheduleParse(seg.GetFieldComponent(itemOrder));
-                        }
+                        pat.FeeSched = FieldParser.FeeScheduleParse(seg.GetFieldComponent(itemOrder));
                         continue;
                     case "pat.Gender":
                         pat.Gender = FieldParser.GenderParse(seg.GetFieldComponent(itemOrder));

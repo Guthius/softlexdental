@@ -26,7 +26,7 @@ namespace OpenDental
         private void FormReportsMore_Load(object sender, EventArgs e)
         {
             Plugin.Trigger(this, "FormReportsMore_Load");
-            butPW.Visible = Programs.IsEnabled(ProgramName.PracticeWebReports);
+            //butPW.Visible = Programs.IsEnabled(ProgramName.PracticeWebReports);
             //hiding feature for 13.3
             //butPatList.Visible=PrefC.GetBool(PrefName.ShowFeatureEhr);
             ehrPatientExportButton.Visible = Preference.GetBool(PreferenceName.ShowFeatureEhr);

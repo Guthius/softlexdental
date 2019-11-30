@@ -1803,9 +1803,9 @@ namespace OpenDental{
 			FormFeeSchedTools2 FormF=new FormFeeSchedTools2(schedNum,_listFeeScheds,_listProviders,_listClinics);
 			FormF.ShowDialog();
 			//Fees could have changed from within the FeeSchedTools window.  Refresh our local fees.
-			if(Programs.IsEnabled(ProgramName.eClinicalWorks)) {
-				FillComboBoxes();//To show possible added fee schedule.
-			}
+			//if(Programs.IsEnabled(ProgramName.eClinicalWorks)) {
+			//	FillComboBoxes();//To show possible added fee schedule.
+			//}
 			SynchAndFillListFees(false);
 			FillGrid();
 			SecurityLog.Write(Permissions.Setup,0,"Fee Schedule Tools");

@@ -23,13 +23,13 @@ namespace OpenDental {
 		}
 
 		private void FormDoseSpotAssignUserId_Load(object sender,EventArgs e) {
-			_programErx=Programs.GetCur(ProgramName.eRx);
-			_listUsersInComboBox=GetListDoseSpotUsers(true,_providerErxCur.NationalProviderID);
-			if(_listUsersInComboBox.Count==0) {//empty list, populate with all users
-				_listUsersInComboBox=GetListDoseSpotUsers(false);
-			}
-			FillComboBox();
-			textUserId.Text=_providerErxCur.UserId;//UserID passed from Alert
+			//_programErx=Programs.GetCur(ProgramName.eRx);
+			//_listUsersInComboBox=GetListDoseSpotUsers(true,_providerErxCur.NationalProviderID);
+			//if(_listUsersInComboBox.Count==0) {//empty list, populate with all users
+			//	_listUsersInComboBox=GetListDoseSpotUsers(false);
+			//}
+			//FillComboBox();
+			//textUserId.Text=_providerErxCur.UserId;//UserID passed from Alert
 		}
 
 		private List<User> GetListDoseSpotUsers(bool includeProv,string provNpi="") {

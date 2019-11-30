@@ -725,11 +725,11 @@ namespace OpenDental
                         {
                             row.Bold = true;
                         }
-                        if (Programs.GetCur(ProgramName.DentalTekSmartOfficePhone).Enabled)
-                        {
-                            row.Cells[row.Cells.Count - 1].ColorText = Color.Blue;
-                            row.Cells[row.Cells.Count - 1].Underline = true;
-                        }
+                        //if (Programs.GetCur(ProgramName.DentalTekSmartOfficePhone).Enabled)
+                        //{
+                        //    row.Cells[row.Cells.Count - 1].ColorText = Color.Blue;
+                        //    row.Cells[row.Cells.Count - 1].Underline = true;
+                        //}
                         break;
                     #endregion Hm Phone
                     #region ICE Name
@@ -1022,11 +1022,11 @@ namespace OpenDental
                         {
                             row.Bold = true;
                         }
-                        if (Programs.GetCur(ProgramName.DentalTekSmartOfficePhone).Enabled)
-                        {
-                            row.Cells[row.Cells.Count - 1].ColorText = Color.Blue;
-                            row.Cells[row.Cells.Count - 1].Underline = true;
-                        }
+                        //if (Programs.GetCur(ProgramName.DentalTekSmartOfficePhone).Enabled)
+                        //{
+                        //    row.Cells[row.Cells.Count - 1].ColorText = Color.Blue;
+                        //    row.Cells[row.Cells.Count - 1].Underline = true;
+                        //}
                         break;
                     #endregion Wireless Ph
                     #region Wk Phone
@@ -1036,11 +1036,11 @@ namespace OpenDental
                         {
                             row.Bold = true;
                         }
-                        if (Programs.GetCur(ProgramName.DentalTekSmartOfficePhone).Enabled)
-                        {
-                            row.Cells[row.Cells.Count - 1].ColorText = Color.Blue;
-                            row.Cells[row.Cells.Count - 1].Underline = true;
-                        }
+                        //if (Programs.GetCur(ProgramName.DentalTekSmartOfficePhone).Enabled)
+                        //{
+                        //    row.Cells[row.Cells.Count - 1].ColorText = Color.Blue;
+                        //    row.Cells[row.Cells.Count - 1].Underline = true;
+                        //}
                         break;
                     #endregion Wk Phone
                     #region Zip

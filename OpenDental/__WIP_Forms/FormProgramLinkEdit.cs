@@ -495,16 +495,16 @@ namespace OpenDental
         ///<summary>Handles both visibility and checking of checkHideButtons.</summary>
         private void SetAdvertising()
         {
-            checkHideButtons.Visible = true;
-            ProgramPreference prop = ProgramProperties.GetForProgram(ProgramCur.Id).FirstOrDefault(x => x.Key == "Disable Advertising");
-            if (checkEnabled.Checked || prop == null)
-            {
-                checkHideButtons.Visible = false;
-            }
-            if (prop != null)
-            {
-                checkHideButtons.Checked = (prop.Value == "1");
-            }
+            //checkHideButtons.Visible = true;
+            //ProgramPreference prop = ProgramProperties.GetForProgram(ProgramCur.Id).FirstOrDefault(x => x.Key == "Disable Advertising");
+            //if (checkEnabled.Checked || prop == null)
+            //{
+            //    checkHideButtons.Visible = false;
+            //}
+            //if (prop != null)
+            //{
+            //    checkHideButtons.Checked = (prop.Value == "1");
+            //}
         }
 
         private void checkEnabled_CheckedChanged(object sender, EventArgs e)
@@ -548,54 +548,54 @@ namespace OpenDental
 
         private void FillGrid()
         {
-            List<ProgramPreference> ProgramPropertiesForProgram = ProgramProperties.GetForProgram(ProgramCur.Id);
-            Plugin.Trigger(this, "FormProgramLinkEdit_GetProgramProperties", ProgramPropertiesForProgram, ProgramCur);
-            gridMain.BeginUpdate();
-            gridMain.Columns.Clear();
-            ODGridColumn col = new ODGridColumn(Lan.g(this, "Property"), 260);
-            gridMain.Columns.Add(col);
-            col = new ODGridColumn(Lan.g(this, "Value"), 130);
-            gridMain.Columns.Add(col);
-            gridMain.Rows.Clear();
-            ODGridRow row;
-            foreach (ProgramPreference property in ProgramPropertiesForProgram)
-            {
-                if (property.Key == "Disable Advertising")
-                {
-                    continue;
-                }
-                row = new ODGridRow();
-                row.Cells.Add(property.Key);
-                if (ProgramCur.TypeName == ProgramName.XVWeb.ToString() && property.Key == XVWebBridge.ProgramProps.Password)
-                {
-                    string decrypted;
-                    Encryption.TryDecrypt(property.Value, out decrypted);
-                    row.Cells.Add(new string('*', decrypted.Length));//Show the password as '*'
-                }
-                else if (ProgramCur.TypeName == ProgramName.XVWeb.ToString() && property.Key == XVWebBridge.ProgramProps.ImageCategory)
-                {
-                    Definition imageCat = Definition.GetByCategory(DefinitionCategory.ImageCats).FirstOrDefault(x => x.Id == PIn.Long(property.Value));
-                    if (imageCat == null)
-                    {
-                        row.Cells.Add("");
-                    }
-                    else if (imageCat.Hidden)
-                    {
-                        row.Cells.Add(imageCat.Description + " " + Lans.g(this, "(hidden)"));
-                    }
-                    else
-                    {
-                        row.Cells.Add(imageCat.Description);
-                    }
-                }
-                else
-                {
-                    row.Cells.Add(property.Value);
-                }
-                row.Tag = property;
-                gridMain.Rows.Add(row);
-            }
-            gridMain.EndUpdate();
+            //List<ProgramPreference> ProgramPropertiesForProgram = ProgramProperties.GetForProgram(ProgramCur.Id);
+            //Plugin.Trigger(this, "FormProgramLinkEdit_GetProgramProperties", ProgramPropertiesForProgram, ProgramCur);
+            //gridMain.BeginUpdate();
+            //gridMain.Columns.Clear();
+            //ODGridColumn col = new ODGridColumn(Lan.g(this, "Property"), 260);
+            //gridMain.Columns.Add(col);
+            //col = new ODGridColumn(Lan.g(this, "Value"), 130);
+            //gridMain.Columns.Add(col);
+            //gridMain.Rows.Clear();
+            //ODGridRow row;
+            //foreach (ProgramPreference property in ProgramPropertiesForProgram)
+            //{
+            //    if (property.Key == "Disable Advertising")
+            //    {
+            //        continue;
+            //    }
+            //    row = new ODGridRow();
+            //    row.Cells.Add(property.Key);
+            //    if (ProgramCur.TypeName == ProgramName.XVWeb.ToString() && property.Key == XVWebBridge.ProgramProps.Password)
+            //    {
+            //        string decrypted;
+            //        Encryption.TryDecrypt(property.Value, out decrypted);
+            //        row.Cells.Add(new string('*', decrypted.Length));//Show the password as '*'
+            //    }
+            //    else if (ProgramCur.TypeName == ProgramName.XVWeb.ToString() && property.Key == XVWebBridge.ProgramProps.ImageCategory)
+            //    {
+            //        Definition imageCat = Definition.GetByCategory(DefinitionCategory.ImageCats).FirstOrDefault(x => x.Id == PIn.Long(property.Value));
+            //        if (imageCat == null)
+            //        {
+            //            row.Cells.Add("");
+            //        }
+            //        else if (imageCat.Hidden)
+            //        {
+            //            row.Cells.Add(imageCat.Description + " " + Lans.g(this, "(hidden)"));
+            //        }
+            //        else
+            //        {
+            //            row.Cells.Add(imageCat.Description);
+            //        }
+            //    }
+            //    else
+            //    {
+            //        row.Cells.Add(property.Value);
+            //    }
+            //    row.Tag = property;
+            //    gridMain.Rows.Add(row);
+            //}
+            //gridMain.EndUpdate();
         }
 
 

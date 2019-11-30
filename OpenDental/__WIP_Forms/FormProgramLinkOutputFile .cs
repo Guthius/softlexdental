@@ -18,8 +18,8 @@ namespace OpenDental {
 		}
 
 		private void FormProgramLinkOutputFile_Load(object sender,EventArgs e) {
-			textTemplate.Text=_curProg.FileTemplate;
-			textPath.Text=_curProg.FilePath;
+			//textTemplate.Text=_curProg.FileTemplate;
+			//textPath.Text=_curProg.FilePath;
 		}
 
 		private void butImport_Click(object sender,EventArgs e) {
@@ -35,8 +35,8 @@ namespace OpenDental {
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
-			_curProg.FilePath=textPath.Text;
-			_curProg.FileTemplate=textTemplate.Text;
+			//_curProg.FilePath=textPath.Text;
+			//_curProg.FileTemplate=textTemplate.Text;
 			DialogResult=DialogResult.OK;
 		}
 

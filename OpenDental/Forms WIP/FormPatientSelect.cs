@@ -99,14 +99,7 @@ namespace OpenDental
                     addManyButton.Visible = false;
                 }
             }
-            else
-            {
-                if (Programs.UsingEcwTightOrFullMode())
-                {
-                    addPatientButton.Visible = false;
-                    addManyButton.Visible = false;
-                }
-            }
+
             billingTypeComboBox.Items.Add(Lan.g(this, "All"));
             billingTypeComboBox.SelectedIndex = 0;
             _listBillingTypeDefs = Definition.GetByCategory(DefinitionCategory.BillingTypes); ;
@@ -543,19 +536,19 @@ namespace OpenDental
                             break;
                         case "Hm Phone":
                             row.Cells.Add(_DataTablePats.Rows[i]["HmPhone"].ToString());
-                            if (Programs.GetCur(ProgramName.DentalTekSmartOfficePhone).Enabled)
-                            {
-                                row.Cells[row.Cells.Count - 1].ColorText = Color.Blue;
-                                row.Cells[row.Cells.Count - 1].Underline = true;
-                            }
+                            //if (Programs.GetCur(ProgramName.DentalTekSmartOfficePhone).Enabled)
+                            //{
+                            //    row.Cells[row.Cells.Count - 1].ColorText = Color.Blue;
+                            //    row.Cells[row.Cells.Count - 1].Underline = true;
+                            //}
                             break;
                         case "Wk Phone":
                             row.Cells.Add(_DataTablePats.Rows[i]["WkPhone"].ToString());
-                            if (Programs.GetCur(ProgramName.DentalTekSmartOfficePhone).Enabled)
-                            {
-                                row.Cells[row.Cells.Count - 1].ColorText = Color.Blue;
-                                row.Cells[row.Cells.Count - 1].Underline = true;
-                            }
+                            //if (Programs.GetCur(ProgramName.DentalTekSmartOfficePhone).Enabled)
+                            //{
+                            //    row.Cells[row.Cells.Count - 1].ColorText = Color.Blue;
+                            //    row.Cells[row.Cells.Count - 1].Underline = true;
+                            //}
                             break;
                         case "PatNum":
                             row.Cells.Add(_DataTablePats.Rows[i]["PatNum"].ToString());
@@ -604,11 +597,11 @@ namespace OpenDental
                             break;
                         case "Wireless Ph":
                             row.Cells.Add(_DataTablePats.Rows[i]["WirelessPhone"].ToString());
-                            if (Programs.GetCur(ProgramName.DentalTekSmartOfficePhone).Enabled)
-                            {
-                                row.Cells[row.Cells.Count - 1].ColorText = Color.Blue;
-                                row.Cells[row.Cells.Count - 1].Underline = true;
-                            }
+                            //if (Programs.GetCur(ProgramName.DentalTekSmartOfficePhone).Enabled)
+                            //{
+                            //    row.Cells[row.Cells.Count - 1].ColorText = Color.Blue;
+                            //    row.Cells[row.Cells.Count - 1].Underline = true;
+                            //}
                             break;
                         case "Sec Prov":
                             row.Cells.Add(_DataTablePats.Rows[i]["SecProv"].ToString());
@@ -654,10 +647,10 @@ namespace OpenDental
         {
             ODGridCell gridCellCur = gridMain.Rows[e.Row].Cells[e.Column];
             //Only grid cells with phone numbers are blue and underlined.
-            if (gridCellCur.ColorText == Color.Blue && gridCellCur.Underline == true && Programs.GetCur(ProgramName.DentalTekSmartOfficePhone).Enabled)
-            {
-                DentalTekBridge.PlaceCall(gridCellCur.Text);
-            }
+            //if (gridCellCur.ColorText == Color.Blue && gridCellCur.Underline == true && Programs.GetCur(ProgramName.DentalTekSmartOfficePhone).Enabled)
+            //{
+            //    DentalTekBridge.PlaceCall(gridCellCur.Text);
+            //}
         }
 
         void addPatientButton_Click(object sender, System.EventArgs e)

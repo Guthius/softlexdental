@@ -539,13 +539,13 @@ namespace OpenDental{
 			if(PatCur.ResponsParty!=0){
 				textResponsParty.Text=Patients.GetLim(PatCur.ResponsParty).GetNameLF();
 			}
-			if(Programs.IsEnabled(ProgramName.TrophyEnhanced)){
-				textTrophyFolder.Text=PatCur.TrophyFolder;
-			}
-			else{
+			//if(Programs.IsEnabled(ProgramName.TrophyEnhanced)){
+			//	textTrophyFolder.Text=PatCur.TrophyFolder;
+			//}
+			//else{
 				labelTrophyFolder.Visible=false;
 				textTrophyFolder.Visible=false;
-			}
+			//}
 			if(Preference.GetBool(PreferenceName.EasyHideHospitals)){
 				tabControlPatInfo.TabPages.Remove(tabHospitals);
 				//textWard.Visible=false;
@@ -772,9 +772,9 @@ namespace OpenDental{
 				_listRequiredFields.RemoveAll(x => x.FieldName==RequiredFieldName.MothersMaidenLastName);
 				_listRequiredFields.RemoveAll(x => x.FieldName==RequiredFieldName.DateTimeDeceased);
 			}
-			if(!Programs.IsEnabled(Programs.GetProgramNum(ProgramName.TrophyEnhanced))) {
-				_listRequiredFields.RemoveAll(x => x.FieldName==RequiredFieldName.TrophyFolder);
-			}
+			//if(!Programs.IsEnabled(Programs.GetProgramNum(ProgramName.TrophyEnhanced))) {
+			//	_listRequiredFields.RemoveAll(x => x.FieldName==RequiredFieldName.TrophyFolder);
+			//}
 			if(Preference.GetBool(PreferenceName.EasyHideHospitals)) {
 				_listRequiredFields.RemoveAll(x => x.FieldName==RequiredFieldName.Ward);
 				_listRequiredFields.RemoveAll(x => x.FieldName==RequiredFieldName.AdmitDate);
@@ -2905,9 +2905,9 @@ namespace OpenDental{
 			PatCur.GradeLevel=(PatientGrade)comboGradeLevel.SelectedIndex;
 			PatCur.Urgency=(TreatmentUrgency)comboUrgency.SelectedIndex;
 			//ResponsParty handled when buttons are pushed.
-			if(Programs.IsEnabled(ProgramName.TrophyEnhanced)) {
-				PatCur.TrophyFolder=textTrophyFolder.Text;
-			}
+			//if(Programs.IsEnabled(ProgramName.TrophyEnhanced)) {
+			//	PatCur.TrophyFolder=textTrophyFolder.Text;
+			//}
 			PatCur.Ward=textWard.Text;
 			PatCur.PreferContactMethod=(ContactMethod)comboContact.SelectedIndex;
 			PatCur.PreferConfirmMethod=(ContactMethod)comboConfirm.SelectedIndex;

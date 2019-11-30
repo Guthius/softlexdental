@@ -1544,10 +1544,10 @@
     <Compile Include="Forms WIP\FormProviderMerge.designer.cs">
       <DependentUpon>FormProviderMerge.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms WIP\FormProgramLinkOutputFile .cs">
+    <Compile Include="__WIP_Forms\FormProgramLinkOutputFile .cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms WIP\FormProgramLinkOutputFile .designer.cs">
+    <Compile Include="__WIP_Forms\FormProgramLinkOutputFile .designer.cs">
       <DependentUpon>FormProgramLinkOutputFile .cs</DependentUpon>
     </Compile>
     <Compile Include="Forms WIP\FormReqFieldCondEdit.cs">
@@ -4206,13 +4206,13 @@
     <Compile Include="Forms WIP\FormProcTPEdit.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms WIP\FormProgramLinkEdit.cs">
+    <Compile Include="__WIP_Forms\FormProgramLinkEdit.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms WIP\FormProgramLinks.cs">
+    <Compile Include="__WIP_Forms\FormProgramLinks.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms WIP\FormProgramProperty.cs">
+    <Compile Include="__WIP_Forms\FormProgramProperty.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms WIP\FormProgress.cs">
@@ -5311,7 +5311,7 @@
     <EmbeddedResource Include="Forms WIP\FormProviderMerge.resx">
       <DependentUpon>FormProviderMerge.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms WIP\FormProgramLinkOutputFile .resx">
+    <EmbeddedResource Include="__WIP_Forms\FormProgramLinkOutputFile .resx">
       <DependentUpon>FormProgramLinkOutputFile .cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms WIP\FormReqFieldCondEdit.resx">
@@ -7021,15 +7021,15 @@
       <DependentUpon>FormProcTPEdit.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms WIP\FormProgramLinkEdit.resx">
+    <EmbeddedResource Include="__WIP_Forms\FormProgramLinkEdit.resx">
       <DependentUpon>FormProgramLinkEdit.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms WIP\FormProgramLinks.resx">
+    <EmbeddedResource Include="__WIP_Forms\FormProgramLinks.resx">
       <DependentUpon>FormProgramLinks.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms WIP\FormProgramProperty.resx">
+    <EmbeddedResource Include="__WIP_Forms\FormProgramProperty.resx">
       <DependentUpon>FormProgramProperty.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>

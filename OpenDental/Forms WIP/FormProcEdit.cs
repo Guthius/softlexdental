@@ -264,8 +264,8 @@ namespace OpenDental {
 				groupProsth.Visible=false;
 				labelClaimNote.Visible=false;
 				textClaimNote.Visible=false;
-				butBF.Text=Lan.g(this,"B/V");//vestibular instead of facial
-				butV.Text=Lan.g(this,"5");
+				butBF.Text="B/V";//vestibular instead of facial
+				butV.Text="5";
 				if(_procedureCode2.IsCanadianLab) { //Prevent lab fees from having lab fees attached.
 					labelCanadaLabFee1.Visible=false;
 					textCanadaLabFee1.Visible=false;
@@ -292,51 +292,51 @@ namespace OpenDental {
 				tabControl.Controls.Remove(tabPageCanada);
 				//groupCanadianProcType.Visible=false;
 			}
-			if(Programs.UsingOrion) {
-				if(IsNew) {
-					_orionProcCur=new OrionProc();
-					_orionProcCur.ProcNum=_procCur.ProcNum;
-					if(_procCur.ProcStatus==ProcStat.EO) {
-						_orionProcCur.Status2=OrionStatus.E;
-					}
-					else {
-						_orionProcCur.Status2=OrionStatus.TP;
-					}
-				}
-				else {
-					_orionProcCur=OrionProcs.GetOneByProcNum(_procCur.ProcNum);
-					if(_procCur.DateTP<MiscData.GetNowDateTime().Date && 
-						(_orionProcCur.Status2==OrionStatus.CA_EPRD
-						|| _orionProcCur.Status2==OrionStatus.CA_PD
-						|| _orionProcCur.Status2==OrionStatus.CA_Tx
-						|| _orionProcCur.Status2==OrionStatus.R)) {//Not allowed to edit procedures with these statuses that are older than a day.
-						MsgBox.Show(this,"You cannot edit refused or cancelled procedures.");
-						DialogResult=DialogResult.Cancel;
-					}
-					if(_orionProcCur.Status2==OrionStatus.C || _orionProcCur.Status2==OrionStatus.CR || _orionProcCur.Status2==OrionStatus.CS) {
-						textNotes.Enabled=false;
-					}
-				}
-				textDateTP.ReadOnly=true;
-				//panelOrion.Visible=true;
-				butAddEstimate.Visible=false;
-				checkNoBillIns.Visible=false;
-				gridIns.Visible=false;
-				butAddAdjust.Visible=false;
-				gridPay.Visible=false;
-				gridAdj.Visible=false;
-				comboProcStatus.Enabled=false;
-				labelAmount.Visible=false;
-				textProcFee.Visible=false;
-				labelPriority.Visible=false;
-				comboPriority.Visible=false;
-				butSetComplete.Visible=false;
-				labelSetComplete.Visible=false;
-			}
-			else {
+			//if(Programs.UsingOrion) {
+			//	if(IsNew) {
+			//		_orionProcCur=new OrionProc();
+			//		_orionProcCur.ProcNum=_procCur.ProcNum;
+			//		if(_procCur.ProcStatus==ProcStat.EO) {
+			//			_orionProcCur.Status2=OrionStatus.E;
+			//		}
+			//		else {
+			//			_orionProcCur.Status2=OrionStatus.TP;
+			//		}
+			//	}
+			//	else {
+			//		_orionProcCur=OrionProcs.GetOneByProcNum(_procCur.ProcNum);
+			//		if(_procCur.DateTP<MiscData.GetNowDateTime().Date && 
+			//			(_orionProcCur.Status2==OrionStatus.CA_EPRD
+			//			|| _orionProcCur.Status2==OrionStatus.CA_PD
+			//			|| _orionProcCur.Status2==OrionStatus.CA_Tx
+			//			|| _orionProcCur.Status2==OrionStatus.R)) {//Not allowed to edit procedures with these statuses that are older than a day.
+			//			MsgBox.Show(this,"You cannot edit refused or cancelled procedures.");
+			//			DialogResult=DialogResult.Cancel;
+			//		}
+			//		if(_orionProcCur.Status2==OrionStatus.C || _orionProcCur.Status2==OrionStatus.CR || _orionProcCur.Status2==OrionStatus.CS) {
+			//			textNotes.Enabled=false;
+			//		}
+			//	}
+			//	textDateTP.ReadOnly=true;
+			//	//panelOrion.Visible=true;
+			//	butAddEstimate.Visible=false;
+			//	checkNoBillIns.Visible=false;
+			//	gridIns.Visible=false;
+			//	butAddAdjust.Visible=false;
+			//	gridPay.Visible=false;
+			//	gridAdj.Visible=false;
+			//	comboProcStatus.Enabled=false;
+			//	labelAmount.Visible=false;
+			//	textProcFee.Visible=false;
+			//	labelPriority.Visible=false;
+			//	comboPriority.Visible=false;
+			//	butSetComplete.Visible=false;
+			//	labelSetComplete.Visible=false;
+			//}
+			//else {
 				tabControl.Controls.Remove(tabPageOrion);
-			}
-			if(Programs.UsingOrion || Preference.GetBool(PreferenceName.ShowFeatureMedicalInsurance)) {
+			//}
+			if(Preference.GetBool(PreferenceName.ShowFeatureMedicalInsurance)) {
 				labelEndTime.Visible=true;
 				textTimeEnd.Visible=true;
 				butNow.Visible=true;
@@ -573,11 +573,7 @@ namespace OpenDental {
 					comboPrognosis.SelectedIndex=i+1;
 			}
 			checkHideGraphics.Checked=_procCur.HideGraphics;
-			if(Programs.UsingOrion && this.IsNew && !OrionDentist){
-				_selectedProvNum=Providers.GetOrionProvNum(_procCur.ProvNum);
-				_procCur.ProvNum=_selectedProvNum;//Returns 0 if logged in as non provider.
-				FillCombosForProviders();//Second time this is called, but only if using Orion.
-			}//ProvNum of 0 will be required to change before closing form.
+
 			comboPriority.Items.Clear();
 			comboPriority.Items.Add(Lan.g(this,"no priority"));
 			comboPriority.SelectedIndex=0;
@@ -709,87 +705,87 @@ namespace OpenDental {
 			textUser.Text=User.GetName(_procCur.UserNum);//might be blank. Will change automatically if user changes note or alters sig.
 			string keyData=GetSignatureKey();
 			signatureBoxWrapper.FillSignature(_procCur.SigIsTopaz,keyData,_procCur.Signature);
-			if(Programs.UsingOrion) {//panelOrion.Visible) {
-				comboDPC.Items.Clear();
-				//comboDPC.Items.AddRange(Enum.GetNames(typeof(OrionDPC)));
-				comboDPC.Items.Add("Not Specified");
-				comboDPC.Items.Add("None");
-				comboDPC.Items.Add("1A-within 1 day");
-				comboDPC.Items.Add("1B-within 30 days");
-				comboDPC.Items.Add("1C-within 60 days");
-				comboDPC.Items.Add("2-within 120 days");
-				comboDPC.Items.Add("3-within 1 year");
-				comboDPC.Items.Add("4-no further treatment/appt");
-				comboDPC.Items.Add("5-no appointment needed");
-				comboDPCpost.Items.Clear();
-				comboDPCpost.Items.Add("Not Specified");
-				comboDPCpost.Items.Add("None");
-				comboDPCpost.Items.Add("1A-within 1 day");
-				comboDPCpost.Items.Add("1B-within 30 days");
-				comboDPCpost.Items.Add("1C-within 60 days");
-				comboDPCpost.Items.Add("2-within 120 days");
-				comboDPCpost.Items.Add("3-within 1 year");
-				comboDPCpost.Items.Add("4-no further treatment/appt");
-				comboDPCpost.Items.Add("5-no appointment needed");
-				comboStatus.Items.Clear();
-				comboStatus.Items.Add("TP-treatment planned");
-				comboStatus.Items.Add("C-completed");
-				comboStatus.Items.Add("E-existing prior to incarceration");
-				comboStatus.Items.Add("R-refused treatment");
-				comboStatus.Items.Add("RO-referred out to specialist");
-				comboStatus.Items.Add("CS-completed by specialist");
-				comboStatus.Items.Add("CR-completed by registry");
-				comboStatus.Items.Add("CA_Tx-cancelled, tx plan changed");
-				comboStatus.Items.Add("CA_EPRD-cancelled, eligible parole");
-				comboStatus.Items.Add("CA_P/D-cancelled, parole/discharge");
-				comboStatus.Items.Add("S-suspended, unacceptable plaque");
-				comboStatus.Items.Add("ST-stop clock, multi visit");
-				comboStatus.Items.Add("W-watch");
-				comboStatus.Items.Add("A-alternative");
-				comboStatus.SelectedIndex=0;
-				ProcedureCode pc=ProcedureCodes.GetProcCodeFromDb(_procCur.CodeNum);
-				checkIsRepair.Visible=pc.IsProsth;
-				//DateTP doesn't get set sometimes and calculations are made based on the DateTP. So set it to the current date as fail-safe.
-				if(_procCur.DateTP.Year<1880) {
-					textDateTP.Text=MiscData.GetNowDateTime().ToShortDateString();
-				}
-				else {
-					textDateTP.Text=_procCur.DateTP.ToShortDateString();
-				}
-				BitArray ba=new BitArray(new int[] { (int)_orionProcCur.Status2 });//should nearly always be non-zero
-				for(int i=0;i<ba.Length;i++) {
-					if(ba[i]) {
-						comboStatus.SelectedIndex=i;
-						break;
-					}
-				}
-				if(!IsNew) {
-					_orionProcOld=_orionProcCur.Copy();
-					comboDPC.SelectedIndex=(int)_orionProcCur.DPC;
-					comboDPCpost.SelectedIndex=(int)_orionProcCur.DPCpost;
-					if(_orionProcCur.DPC==OrionDPC.NotSpecified ||
-						_orionProcCur.DPC==OrionDPC.None ||
-						_orionProcCur.DPC==OrionDPC._4 ||
-						_orionProcCur.DPC==OrionDPC._5) {
-						labelScheduleBy.Visible=true;
-					}
-					if(_orionProcCur.DateScheduleBy.Year>1880) {
-						textDateScheduled.Text=_orionProcCur.DateScheduleBy.ToShortDateString();
-					}
-					if(_orionProcCur.DateStopClock.Year>1880) {
-						textDateStop.Text=_orionProcCur.DateStopClock.ToShortDateString();
-					}
-					checkIsOnCall.Checked=_orionProcCur.IsOnCall;
-					checkIsEffComm.Checked=_orionProcCur.IsEffectiveComm;
-					checkIsRepair.Checked=_orionProcCur.IsRepair;
-				}
-				else {
-					labelScheduleBy.Visible=true;
-					comboDPC.SelectedIndex=0;
-					comboDPCpost.SelectedIndex=0;
-					textDateStop.Text="";
-				}
-			}
+			//if(Programs.UsingOrion) {//panelOrion.Visible) {
+			//	comboDPC.Items.Clear();
+			//	//comboDPC.Items.AddRange(Enum.GetNames(typeof(OrionDPC)));
+			//	comboDPC.Items.Add("Not Specified");
+			//	comboDPC.Items.Add("None");
+			//	comboDPC.Items.Add("1A-within 1 day");
+			//	comboDPC.Items.Add("1B-within 30 days");
+			//	comboDPC.Items.Add("1C-within 60 days");
+			//	comboDPC.Items.Add("2-within 120 days");
+			//	comboDPC.Items.Add("3-within 1 year");
+			//	comboDPC.Items.Add("4-no further treatment/appt");
+			//	comboDPC.Items.Add("5-no appointment needed");
+			//	comboDPCpost.Items.Clear();
+			//	comboDPCpost.Items.Add("Not Specified");
+			//	comboDPCpost.Items.Add("None");
+			//	comboDPCpost.Items.Add("1A-within 1 day");
+			//	comboDPCpost.Items.Add("1B-within 30 days");
+			//	comboDPCpost.Items.Add("1C-within 60 days");
+			//	comboDPCpost.Items.Add("2-within 120 days");
+			//	comboDPCpost.Items.Add("3-within 1 year");
+			//	comboDPCpost.Items.Add("4-no further treatment/appt");
+			//	comboDPCpost.Items.Add("5-no appointment needed");
+			//	comboStatus.Items.Clear();
+			//	comboStatus.Items.Add("TP-treatment planned");
+			//	comboStatus.Items.Add("C-completed");
+			//	comboStatus.Items.Add("E-existing prior to incarceration");
+			//	comboStatus.Items.Add("R-refused treatment");
+			//	comboStatus.Items.Add("RO-referred out to specialist");
+			//	comboStatus.Items.Add("CS-completed by specialist");
+			//	comboStatus.Items.Add("CR-completed by registry");
+			//	comboStatus.Items.Add("CA_Tx-cancelled, tx plan changed");
+			//	comboStatus.Items.Add("CA_EPRD-cancelled, eligible parole");
+			//	comboStatus.Items.Add("CA_P/D-cancelled, parole/discharge");
+			//	comboStatus.Items.Add("S-suspended, unacceptable plaque");
+			//	comboStatus.Items.Add("ST-stop clock, multi visit");
+			//	comboStatus.Items.Add("W-watch");
+			//	comboStatus.Items.Add("A-alternative");
+			//	comboStatus.SelectedIndex=0;
+			//	ProcedureCode pc=ProcedureCodes.GetProcCodeFromDb(_procCur.CodeNum);
+			//	checkIsRepair.Visible=pc.IsProsth;
+			//	//DateTP doesn't get set sometimes and calculations are made based on the DateTP. So set it to the current date as fail-safe.
+			//	if(_procCur.DateTP.Year<1880) {
+			//		textDateTP.Text=MiscData.GetNowDateTime().ToShortDateString();
+			//	}
+			//	else {
+			//		textDateTP.Text=_procCur.DateTP.ToShortDateString();
+			//	}
+			//	BitArray ba=new BitArray(new int[] { (int)_orionProcCur.Status2 });//should nearly always be non-zero
+			//	for(int i=0;i<ba.Length;i++) {
+			//		if(ba[i]) {
+			//			comboStatus.SelectedIndex=i;
+			//			break;
+			//		}
+			//	}
+			//	if(!IsNew) {
+			//		_orionProcOld=_orionProcCur.Copy();
+			//		comboDPC.SelectedIndex=(int)_orionProcCur.DPC;
+			//		comboDPCpost.SelectedIndex=(int)_orionProcCur.DPCpost;
+			//		if(_orionProcCur.DPC==OrionDPC.NotSpecified ||
+			//			_orionProcCur.DPC==OrionDPC.None ||
+			//			_orionProcCur.DPC==OrionDPC._4 ||
+			//			_orionProcCur.DPC==OrionDPC._5) {
+			//			labelScheduleBy.Visible=true;
+			//		}
+			//		if(_orionProcCur.DateScheduleBy.Year>1880) {
+			//			textDateScheduled.Text=_orionProcCur.DateScheduleBy.ToShortDateString();
+			//		}
+			//		if(_orionProcCur.DateStopClock.Year>1880) {
+			//			textDateStop.Text=_orionProcCur.DateStopClock.ToShortDateString();
+			//		}
+			//		checkIsOnCall.Checked=_orionProcCur.IsOnCall;
+			//		checkIsEffComm.Checked=_orionProcCur.IsEffectiveComm;
+			//		checkIsRepair.Checked=_orionProcCur.IsRepair;
+			//	}
+			//	else {
+			// labelScheduleBy.Visible=true;
+			// comboDPC.SelectedIndex=0;
+			// comboDPCpost.SelectedIndex=0;
+			// textDateStop.Text="";
+			//}
+			//}
 		}
 
 		private void FormProcEdit_Shown(object sender,EventArgs e) {
@@ -877,7 +873,7 @@ namespace OpenDental {
 				if(dateT.ToShortTimeString()!="12:00 AM"){
 					textTimeStart.Text+=dateT.ToShortTimeString();
 				}
-				if(Programs.UsingOrion || Preference.GetBool(PreferenceName.ShowFeatureMedicalInsurance)) {
+				if(Preference.GetBool(PreferenceName.ShowFeatureMedicalInsurance)) {
 					dateT=PIn.DateT(_procCur.ProcTimeEnd.ToString());
 					if(dateT.ToShortTimeString()!="12:00 AM") {
 						textTimeEnd.Text=dateT.ToShortTimeString();
@@ -1814,11 +1810,6 @@ namespace OpenDental {
 			if(!Security.IsAuthorized(Permissions.CreateCompletedProcedure,PIn.Date(textDate.Text),_procCur.CodeNum,PIn.Double(textProcFee.Text))) {
 				return;
 			}
-			//If user is trying to change status to complete and using eCW.
-			if((IsNew || _procOld.ProcStatus!=ProcStat.C) && Programs.UsingEcwTightOrFullMode()) {
-				MsgBox.Show(this,"Procedures cannot be set complete in this window.  Set the procedure complete by setting the appointment complete.");
-				return;
-			}
 			//broken appointment procedure codes shouldn't trigger DateFirstVisit update.
 			if(ProcedureCodes.GetStringProcCode(_procCur.CodeNum)!="D9986" && ProcedureCodes.GetStringProcCode(_procCur.CodeNum)!="D9987") {
 				Procedures.SetDateFirstVisit(DateTimeOD.Today,2,_patCur);
@@ -2657,11 +2648,6 @@ namespace OpenDental {
 			}
 			#endregion
 			#region Procedure Status
-			//If user is trying to change status to complete and using eCW.
-			if(_procCur.ProcStatus==ProcStat.C && (IsNew || _procOld.ProcStatus!=ProcStat.C) && Programs.UsingEcwTightOrFullMode()) {
-				MsgBox.Show(this,"Procedures cannot be set complete in this window.  Set the procedure complete by setting the appointment complete.");
-				return false;
-			}
 			if(_procCur.ProcStatus==ProcStat.C && PIn.Date(textDate.Text).Date > DateTime.Today.Date && !Preference.GetBool(PreferenceName.FutureTransDatesAllowed)) {
 				MsgBox.Show(this,"Completed procedures cannot have future dates.");
 				return false;
@@ -2739,21 +2725,21 @@ namespace OpenDental {
 			}
 #endregion
 			#region Orion Validation
-			if(Programs.UsingOrion) {
-			//if(panelOrion.Visible) {
-				if(comboStatus.SelectedIndex==-1) {
-					MsgBox.Show(this,"Invalid status.");
-					return false;
-				}
-				if(textDateScheduled.errorProvider1.GetError(textDateScheduled)!="") {
-					MsgBox.Show(this,"Invalid schedule date.");
-					return false;
-				}
-				if(textDateStop.errorProvider1.GetError(textDateStop)!="") {
-					MsgBox.Show(this,"Invalid stop clock date.");
-					return false;
-				}
-			}
+			//if(Programs.UsingOrion) {
+			////if(panelOrion.Visible) {
+			//	if(comboStatus.SelectedIndex==-1) {
+			//		MsgBox.Show(this,"Invalid status.");
+			//		return false;
+			//	}
+			//	if(textDateScheduled.errorProvider1.GetError(textDateScheduled)!="") {
+			//		MsgBox.Show(this,"Invalid schedule date.");
+			//		return false;
+			//	}
+			//	if(textDateStop.errorProvider1.GetError(textDateStop)!="") {
+			//		MsgBox.Show(this,"Invalid stop clock date.");
+			//		return false;
+			//	}
+			//}
 			#endregion
 			#region Quadrant UI
 			if(_procedureCode2.TreatArea==TreatmentArea.Quad) {
@@ -2922,7 +2908,7 @@ namespace OpenDental {
 			_procCur.ProcDate=PIn.Date(this.textDate.Text);
 			DateTime dateT=PIn.DateT(this.textTimeStart.Text);
 			_procCur.ProcTime=new TimeSpan(dateT.Hour,dateT.Minute,0);
-			if(Programs.UsingOrion || Preference.GetBool(PreferenceName.ShowFeatureMedicalInsurance)) {
+			if(Preference.GetBool(PreferenceName.ShowFeatureMedicalInsurance)) {
 				dateT=ParseTime(textTimeStart.Text);
 				_procCur.ProcTime=new TimeSpan(dateT.Hour,dateT.Minute,0);
 				dateT=ParseTime(textTimeEnd.Text);
@@ -3190,46 +3176,46 @@ namespace OpenDental {
 			}
 			_procCur.ClaimNote=textClaimNote.Text;
 			//Last chance to run this code before Proc gets updated.
-			if(Programs.UsingOrion){//Ask for an explanation. If they hit cancel here, return and don't save.
-				_orionProcCur.DPC=(OrionDPC)comboDPC.SelectedIndex;
-				_orionProcCur.DPCpost=(OrionDPC)comboDPCpost.SelectedIndex;
-				_orionProcCur.DateScheduleBy=PIn.Date(textDateScheduled.Text);
-				_orionProcCur.DateStopClock=PIn.Date(textDateStop.Text);
-				_orionProcCur.IsOnCall=checkIsOnCall.Checked;
-				_orionProcCur.IsEffectiveComm=checkIsEffComm.Checked;
-				_orionProcCur.IsRepair=checkIsRepair.Checked;
-				if(IsNew) {
-					OrionProcs.Insert(_orionProcCur);
-				}
-				else {//Is not new.
-					if(FormProcEditExplain.GetChanges(_procCur,_procOld,_orionProcCur,_orionProcOld)!="") {//Checks if any changes were made. Also sets static variable Changes.
-						//If a day old and the orion procedure status did not go from TP to C, CS or CR, then show explaination window.
-						if((_procOld.DateTP.Date<MiscData.GetNowDateTime().Date &&
-							(_orionProcOld.Status2!=OrionStatus.TP || (_orionProcCur.Status2!=OrionStatus.C && _orionProcCur.Status2!=OrionStatus.CS && _orionProcCur.Status2!=OrionStatus.CR))))
-						{
-							FormProcEditExplain FormP=new FormProcEditExplain();
-							FormP.dpcChange=((int)_orionProcOld.DPC!=(int)_orionProcCur.DPC);
-							if(FormP.ShowDialog()!=DialogResult.OK) {
-								return;
-							}
-							Procedure ProcPreExplain=_procOld.Copy();
-							_procOld.Note=FormProcEditExplain.Explanation;
-							Procedures.Update(_procOld,ProcPreExplain);
-							Thread.Sleep(1100);
-						}
-					}
-					OrionProcs.Update(_orionProcCur);
-					//Date entry needs to be updated when status changes to cancelled or refused and at least a day old.
-					if(_procOld.DateTP.Date<MiscData.GetNowDateTime().Date &&
-						_orionProcCur.Status2==OrionStatus.CA_EPRD ||
-						_orionProcCur.Status2==OrionStatus.CA_PD ||
-						_orionProcCur.Status2==OrionStatus.CA_Tx ||
-						_orionProcCur.Status2==OrionStatus.R) 
-					{
-						_procCur.DateEntryC=MiscData.GetNowDateTime().Date;
-					}
-				}//End of "is not new."
-			}
+			//if(Programs.UsingOrion){//Ask for an explanation. If they hit cancel here, return and don't save.
+			//	_orionProcCur.DPC=(OrionDPC)comboDPC.SelectedIndex;
+			//	_orionProcCur.DPCpost=(OrionDPC)comboDPCpost.SelectedIndex;
+			//	_orionProcCur.DateScheduleBy=PIn.Date(textDateScheduled.Text);
+			//	_orionProcCur.DateStopClock=PIn.Date(textDateStop.Text);
+			//	_orionProcCur.IsOnCall=checkIsOnCall.Checked;
+			//	_orionProcCur.IsEffectiveComm=checkIsEffComm.Checked;
+			//	_orionProcCur.IsRepair=checkIsRepair.Checked;
+			//	if(IsNew) {
+			//		OrionProcs.Insert(_orionProcCur);
+			//	}
+			//	else {//Is not new.
+			//		if(FormProcEditExplain.GetChanges(_procCur,_procOld,_orionProcCur,_orionProcOld)!="") {//Checks if any changes were made. Also sets static variable Changes.
+			//			//If a day old and the orion procedure status did not go from TP to C, CS or CR, then show explaination window.
+			//			if((_procOld.DateTP.Date<MiscData.GetNowDateTime().Date &&
+			//				(_orionProcOld.Status2!=OrionStatus.TP || (_orionProcCur.Status2!=OrionStatus.C && _orionProcCur.Status2!=OrionStatus.CS && _orionProcCur.Status2!=OrionStatus.CR))))
+			//			{
+			//				FormProcEditExplain FormP=new FormProcEditExplain();
+			//				FormP.dpcChange=((int)_orionProcOld.DPC!=(int)_orionProcCur.DPC);
+			//				if(FormP.ShowDialog()!=DialogResult.OK) {
+			//					return;
+			//				}
+			//				Procedure ProcPreExplain=_procOld.Copy();
+			//				_procOld.Note=FormProcEditExplain.Explanation;
+			//				Procedures.Update(_procOld,ProcPreExplain);
+			//				Thread.Sleep(1100);
+			//			}
+			//		}
+			//		OrionProcs.Update(_orionProcCur);
+			//		//Date entry needs to be updated when status changes to cancelled or refused and at least a day old.
+			//		if(_procOld.DateTP.Date<MiscData.GetNowDateTime().Date &&
+			//			_orionProcCur.Status2==OrionStatus.CA_EPRD ||
+			//			_orionProcCur.Status2==OrionStatus.CA_PD ||
+			//			_orionProcCur.Status2==OrionStatus.CA_Tx ||
+			//			_orionProcCur.Status2==OrionStatus.R) 
+			//		{
+			//			_procCur.DateEntryC=MiscData.GetNowDateTime().Date;
+			//		}
+			//	}//End of "is not new."
+			//}
 			if(_procCur.ProvNum!=_procOld.ProvNum 
 				&& _procCur.ProcFee==_procOld.ProcFee)
 			{
@@ -3313,37 +3299,37 @@ namespace OpenDental {
 			if(!EntriesAreValid()) {
 				return;
 			}
-			if(Programs.UsingOrion) {
-				if(_orionProcOld!=null && _orionProcOld.DateStopClock.Year>1880) {
-					if(PIn.Date(textDateStop.Text)>_orionProcOld.DateStopClock.Date) {
-						MsgBox.Show(this,"Future date not allowed for Date Stop Clock.");
-						return;
-					}
-				}
-				else if(PIn.Date(textDateStop.Text)>MiscData.GetNowDateTime().Date) {
-					MsgBox.Show(this,"Future date not allowed for Date Stop Clock.");
-					return;
-				}
-				//Strange logic for Orion for setting sched by date to a scheduled date from a previously cancelled TP on the same tooth/surf.
-				if(_procCur.Surf!="" || textTooth.Text!="" || textSurfaces.Text!="") {
-					DataTable table=OrionProcs.GetCancelledScheduleDateByToothOrSurf(_procCur.PatNum,textTooth.Text.ToString(),_procCur.Surf);
-					if(table.Rows.Count>0) {
-						if(textDateScheduled.Text!="" && DateTime.Parse(textDateScheduled.Text)>PIn.DateT(table.Rows[0]["DateScheduleBy"].ToString())) {
-							//If the cancelled sched by date is in the past then do nothing.
-							if(PIn.DateT(table.Rows[0]["DateScheduleBy"].ToString())>MiscData.GetNowDateTime().Date) {
-								textDateScheduled.Text=((DateTime)table.Rows[0]["DateScheduleBy"]).ToShortDateString();
-								_cancelledScheduleByDate=DateTime.Parse(textDateScheduled.Text);
-								MsgBox.Show(this,"Schedule by date cannot be later than: "+textDateScheduled.Text+".");
-								return;
-							}
-						}
-					}
-				}
-				if(comboDPC.SelectedIndex==0) {
-					MsgBox.Show(this,"DPC should not be \"Not Specified\".");
-					return;
-				}
-			}
+			//if(Programs.UsingOrion) {
+			//	if(_orionProcOld!=null && _orionProcOld.DateStopClock.Year>1880) {
+			//		if(PIn.Date(textDateStop.Text)>_orionProcOld.DateStopClock.Date) {
+			//			MsgBox.Show(this,"Future date not allowed for Date Stop Clock.");
+			//			return;
+			//		}
+			//	}
+			//	else if(PIn.Date(textDateStop.Text)>MiscData.GetNowDateTime().Date) {
+			//		MsgBox.Show(this,"Future date not allowed for Date Stop Clock.");
+			//		return;
+			//	}
+			//	//Strange logic for Orion for setting sched by date to a scheduled date from a previously cancelled TP on the same tooth/surf.
+			//	if(_procCur.Surf!="" || textTooth.Text!="" || textSurfaces.Text!="") {
+			//		DataTable table=OrionProcs.GetCancelledScheduleDateByToothOrSurf(_procCur.PatNum,textTooth.Text.ToString(),_procCur.Surf);
+			//		if(table.Rows.Count>0) {
+			//			if(textDateScheduled.Text!="" && DateTime.Parse(textDateScheduled.Text)>PIn.DateT(table.Rows[0]["DateScheduleBy"].ToString())) {
+			//				//If the cancelled sched by date is in the past then do nothing.
+			//				if(PIn.DateT(table.Rows[0]["DateScheduleBy"].ToString())>MiscData.GetNowDateTime().Date) {
+			//					textDateScheduled.Text=((DateTime)table.Rows[0]["DateScheduleBy"]).ToShortDateString();
+			//					_cancelledScheduleByDate=DateTime.Parse(textDateScheduled.Text);
+			//					MsgBox.Show(this,"Schedule by date cannot be later than: "+textDateScheduled.Text+".");
+			//					return;
+			//				}
+			//			}
+			//		}
+			//	}
+			//	if(comboDPC.SelectedIndex==0) {
+			//		MsgBox.Show(this,"DPC should not be \"Not Specified\".");
+			//		return;
+			//	}
+			//}
 			if(_hasUserChanged && signatureBoxWrapper.SigIsBlank && !MsgBox.Show(this,MsgBoxButtons.OKCancel,
 				"The signature box has not been re-signed.  Continuing will remove the previous signature from this procedure.  Exit anyway?")) {
 				return;

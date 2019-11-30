@@ -1030,45 +1030,45 @@ namespace OpenDental{
 		}
 
 		private void ModifyForOrionMode(){
-			if(Programs.UsingOrion){
-				OrionProcList=new List<OrionProc>();
-				for(int i=0;i<ProcList.Count;i++){
-					OrionProcList.Add(OrionProcs.GetOneByProcNum(ProcList[i].ProcNum));
-				}
-				labelOnCall.Visible=true;
-				butOnCallY.Visible=true;
-				butOnCallN.Visible=true;
-				labelEffectiveComm.Visible=true;
-				butEffectiveCommY.Visible=true;
-				butEffectiveCommN.Visible=true;
-				for(int i=0;i<ProcList.Count;i++){
-					if(ProcedureCodes.GetProcCodeFromDb(ProcList[i].CodeNum).IsProsth){
-						labelRepair.Visible=true;
-						butRepairY.Visible=true;
-						butRepairN.Visible=true;
-					}
-				}
-				butRx.Visible=true;
-				butExamSheets.Visible=true;
-				panelPlanned.Visible=true;
-				gridPat.Visible=true;
-				textProcDate.ReadOnly=false;
-				labelDPCpost.Visible=true;
-				comboDPCpost.Visible=true;
-				comboDPCpost.Items.Clear();
-				comboDPCpost.Items.Add("Not Specified");
-				comboDPCpost.Items.Add("None");
-				comboDPCpost.Items.Add("1A-within 1 day");
-				comboDPCpost.Items.Add("1B-within 30 days");
-				comboDPCpost.Items.Add("1C-within 60 days");
-				comboDPCpost.Items.Add("2-within 120 days");
-				comboDPCpost.Items.Add("3-within 1 year");
-				comboDPCpost.Items.Add("4-no further treatment/appt");
-				comboDPCpost.Items.Add("5-no appointment needed");
-			}
-			else{
+			//if(Programs.UsingOrion){
+			//	OrionProcList=new List<OrionProc>();
+			//	for(int i=0;i<ProcList.Count;i++){
+			//		OrionProcList.Add(OrionProcs.GetOneByProcNum(ProcList[i].ProcNum));
+			//	}
+			//	labelOnCall.Visible=true;
+			//	butOnCallY.Visible=true;
+			//	butOnCallN.Visible=true;
+			//	labelEffectiveComm.Visible=true;
+			//	butEffectiveCommY.Visible=true;
+			//	butEffectiveCommN.Visible=true;
+			//	for(int i=0;i<ProcList.Count;i++){
+			//		if(ProcedureCodes.GetProcCodeFromDb(ProcList[i].CodeNum).IsProsth){
+			//			labelRepair.Visible=true;
+			//			butRepairY.Visible=true;
+			//			butRepairN.Visible=true;
+			//		}
+			//	}
+			//	butRx.Visible=true;
+			//	butExamSheets.Visible=true;
+			//	panelPlanned.Visible=true;
+			//	gridPat.Visible=true;
+			//	textProcDate.ReadOnly=false;
+			//	labelDPCpost.Visible=true;
+			//	comboDPCpost.Visible=true;
+			//	comboDPCpost.Items.Clear();
+			//	comboDPCpost.Items.Add("Not Specified");
+			//	comboDPCpost.Items.Add("None");
+			//	comboDPCpost.Items.Add("1A-within 1 day");
+			//	comboDPCpost.Items.Add("1B-within 30 days");
+			//	comboDPCpost.Items.Add("1C-within 60 days");
+			//	comboDPCpost.Items.Add("2-within 120 days");
+			//	comboDPCpost.Items.Add("3-within 1 year");
+			//	comboDPCpost.Items.Add("4-no further treatment/appt");
+			//	comboDPCpost.Items.Add("5-no appointment needed");
+			//}
+			//else{
 				this.ClientSize = new System.Drawing.Size(556,645);
-			}
+			//}
 		}
 
 		private void RefreshGrids(){
@@ -1561,11 +1561,11 @@ namespace OpenDental{
 			for(int i=0;i<ProcList.Count;i++){
 				Procedures.Update(ProcList[i],ProcListOld[i]);
 			}
-			if(Programs.UsingOrion){
-				for(int i=0;i<OrionProcList.Count;i++){
-					OrionProcs.Update(OrionProcList[i]);
-				}
-			}
+			//if(Programs.UsingOrion){
+			//	for(int i=0;i<OrionProcList.Count;i++){
+			//		OrionProcs.Update(OrionProcList[i]);
+			//	}
+			//}
 			DialogResult=DialogResult.OK;
 			IsOpen=false;
 		}

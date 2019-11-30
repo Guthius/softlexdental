@@ -208,7 +208,7 @@ namespace OpenDental
 
         public static bool AreTimesValid(string timeStart, string timeEnd)
         {
-            if (Programs.UsingOrion || Preference.GetBool(PreferenceName.ShowFeatureMedicalInsurance))
+            if (Preference.GetBool(PreferenceName.ShowFeatureMedicalInsurance))
             {
                 if (!ValidateTime(timeStart))
                 {

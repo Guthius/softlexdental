@@ -244,15 +244,12 @@ namespace OpenDental
 			//For now it is only implemented in the Chart Module.
 			switch(_sheetDefCur.SheetType) {
 				case SheetTypeEnum.ChartModule:
-					if(Programs.UsingEcwTightOrFullMode()) {
-						_sheetLayoutModeCur=SheetFieldLayoutMode.Ecw;
-					}
-					else if(Clinic.GetById(Clinics.ClinicId).IsMedicalOnly) {
+					if(Clinic.GetById(Clinics.ClinicId).IsMedicalOnly) {
 						_sheetLayoutModeCur=SheetFieldLayoutMode.MedicalPractice;
 					}
-					else if(Programs.UsingOrion) {
-						_sheetLayoutModeCur=SheetFieldLayoutMode.Orion;
-					}
+					//else if(Programs.UsingOrion) {
+					//	_sheetLayoutModeCur=SheetFieldLayoutMode.Orion;
+					//}
 					SheetFieldLayoutMode treatPlanLayout;//The TreatmentPlan counterpart layout mode.
 					switch(_sheetLayoutModeCur) {
 						default:

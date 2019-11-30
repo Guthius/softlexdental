@@ -90,7 +90,7 @@ namespace OpenDental
         /// <returns></returns>
         static FormUrlEncodedContent GetPostContent()
         {
-            var programList = Programs.GetWhere(x => x.Enabled && !string.IsNullOrWhiteSpace(x.TypeName)).Select(x => x.TypeName).ToList();
+            var programList = Program.All.Where(x => x.Enabled && !string.IsNullOrWhiteSpace(x.TypeName)).Select(x => x.TypeName).ToList();
 
             var postContent = new Dictionary<string, string>
             {
@@ -160,18 +160,18 @@ namespace OpenDental
                     Proxy = webProxy
                 };
 
-                var httpClient = new HttpClient(httpClientHandler)
+                using (var httpClient = new HttpClient(httpClientHandler))
                 {
-                    BaseAddress = new Uri(Preference.GetString(PreferenceName.UpdateServerAddress))
-                };
+                    httpClient.BaseAddress = new Uri(Preference.GetString(PreferenceName.UpdateServerAddress));
 
-                var result = await httpClient.PostAsync("/check", GetPostContent());
+                    var result = await httpClient.PostAsync("/check", GetPostContent());
 
-                Log(Translation.Language.ConnectionSuccessful);
+                    Log(Translation.Language.ConnectionSuccessful);
 
-                Cursor = Cursors.Default;
+                    Cursor = Cursors.Default;
 
-                await ParseResponse(result);
+                    await ParseResponse(result);
+                }
             }
             catch (Exception ex)
             {
@@ -259,14 +259,14 @@ namespace OpenDental
         {
             var updateFileName = Path.GetTempFileName();
 
-            var p = updateFileUri.LastIndexOf('.');
-            if (p != -1)
+            var i = updateFileUri.LastIndexOf('.');
+            if (i != -1)
             {
-                updateFileName = updateFileName + updateFileUri.Substring(p);
+                updateFileName += updateFileUri.Substring(i);
             }
             else
             {
-                updateFileName = updateFileName + ".exe";
+                updateFileName += ".exe";
             }
 
             PrefL.DownloadInstallPatchFromURI(updateFileUri, updateFileName, true, false, "");

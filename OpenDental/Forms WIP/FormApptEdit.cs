@@ -586,14 +586,14 @@ namespace OpenDental
                 butPDF.Visible = false;
             //}
             //Hide text message button sometimes
-            if (pat.WirelessPhone == "" || (!Program.IsEnabled(ProgramName.CallFire) && !SmsPhones.IsIntegratedTextingEnabled()))
-            {
-                butText.Enabled = false;
-            }
-            else
-            {//Pat has a wireless phone number and CallFire is enabled
+            //if (pat.WirelessPhone == "" || (!Program.IsEnabled(ProgramName.CallFire) && !SmsPhones.IsIntegratedTextingEnabled()))
+            //{
+            //    butText.Enabled = false;
+            //}
+            //else
+            //{//Pat has a wireless phone number and CallFire is enabled
                 butText.Enabled = true;//TxtMsgOk checking performed on button click.
-            }
+            //}
             //AppointmentType
             _listAppointmentType = AppointmentType.All().Where(x => !x.Hidden || x.Id == AptCur.AppointmentTypeNum).ToList();
             comboApptType.Items.Add(Lan.g(this, "None"));
