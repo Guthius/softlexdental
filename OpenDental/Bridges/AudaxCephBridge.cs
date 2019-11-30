@@ -29,7 +29,7 @@ namespace OpenDental.Bridges
         /// <summary>
         /// Initializes a new instance of the <see cref="AudaxCephBridge"/> class.
         /// </summary>
-        public AudaxCephBridge() : base("AudaxCeph", "AudaxCeph is an integrated orthodontic software suite.")
+        public AudaxCephBridge() : base("AudaxCeph", "AudaxCeph is an integrated orthodontic software suite.", "https://www.audaxceph.com/")
         {
         }
 

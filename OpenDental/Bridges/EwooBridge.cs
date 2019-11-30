@@ -27,7 +27,7 @@ namespace OpenDental.Bridges
         /// <summary>
         /// Initializes a new instance of the <see cref="EwooBridge"/> class.
         /// </summary>
-        public EwooBridge() : base("Ewoo", "")
+        public EwooBridge() : base("EwooEZDent", "", "")
         {
         }
 

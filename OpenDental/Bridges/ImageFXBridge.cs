@@ -25,7 +25,7 @@ namespace OpenDental.Bridges
         /// <summary>
         /// Initializes a new instance of the <see cref="ImageFXBridge"/> class.
         /// </summary>
-        public ImageFXBridge() : base("ImageFX", "")
+        public ImageFXBridge() : base("ImageFX", "", "")
         {
         }
 

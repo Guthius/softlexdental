@@ -25,7 +25,7 @@ namespace OpenDental.Bridges
         /// <summary>
         /// Initializes a new instance of the <see cref="MiPACSBridge"/> class.
         /// </summary>
-        public MiPACSBridge() : base("MiPACS", "")
+        public MiPACSBridge() : base("MiPACS Imaging", "", "https://www.medicorimaging.com/")
         {
         }
 

@@ -25,7 +25,7 @@ namespace OpenDental.Bridges
         /// <summary>
         /// Initializes a new instance of the <see cref="OrthoCadBridge"/> class.
         /// </summary>
-        public OrthoCadBridge() : base("OrthoCad", "")
+        public OrthoCadBridge() : base("OrthoCAD", "", "http://www.itero.com/en")
         {
             RequirePatient = true;
         }

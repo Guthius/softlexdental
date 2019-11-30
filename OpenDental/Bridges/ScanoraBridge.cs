@@ -34,7 +34,7 @@ namespace OpenDental.Bridges
         /// <summary>
         /// Initializes a new instance of the <see cref="ScanoraBridge"/> class.
         /// </summary>
-        public ScanoraBridge() : base("Scanora", "", preferences)
+        public ScanoraBridge() : base("Scanora", "", "https://www.kavo.com/en-us/soredex", preferences)
         {
             RequirePatient = true;
         }

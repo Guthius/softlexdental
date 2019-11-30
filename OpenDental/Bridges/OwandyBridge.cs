@@ -36,7 +36,15 @@ namespace OpenDental.Bridges
         /// <summary>
         /// Initializes a new instance of the <see cref="OwandyBridge"/> class.
         /// </summary>
-        public OwandyBridge() : base("Owandy", "", preferences)
+        public OwandyBridge() : base(
+            "QuickVision", 
+            "QuickVision imaging software is especially designed for dental surgeries. It includes " +
+            "a patient database, an imaging module and a dental diagram. It can be used with " +
+            "digital x-ray equipment as a hub, centralizing all patient images. QuickVision " +
+            "performs all routine dental imaging functions: acquisition, visualization, editing, " +
+            "measurement, zoom, and annotation, as well as data and image sharing.", 
+            "https://www.owandy.com/", 
+            preferences)
         {
         }
 

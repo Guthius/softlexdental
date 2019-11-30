@@ -25,7 +25,10 @@ namespace OpenDental.Bridges
         /// <summary>
         /// Initializes a new instance of the <see cref="OrthoInsight3dBridge"/> class.
         /// </summary>
-        public OrthoInsight3dBridge() : base("OrthoInsight3D", "")
+        public OrthoInsight3dBridge() : base(
+            "Ortho Insight 3D",
+            "", 
+            "http://www.motionview3d.com/")
         {
             RequirePatient = true;
         }

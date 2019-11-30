@@ -30,7 +30,7 @@ namespace OpenDental.Bridges
         /// <summary>
         /// Initializes a new instance of the <see cref="IrysBridge"/> class.
         /// </summary>
-        public IrysBridge() : base("Irys", "", preferences)
+        public IrysBridge() : base("iRYS", "", "https://ceflamedicalna.com/", preferences)
         {
         }
 

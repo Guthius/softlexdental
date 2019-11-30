@@ -25,7 +25,7 @@ namespace OpenDental.Bridges
         /// <summary>
         /// Initializes a new instance of the <see cref="DxisBridge"/> class.
         /// </summary>
-        public DxisBridge() : base("Dxis", "")
+        public DxisBridge() : base("DXIS", "", "")
         {
             RequirePatient = true;
 

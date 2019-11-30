@@ -25,7 +25,7 @@ namespace OpenDental.Bridges
         /// <summary>
         /// Initializes a new instance of the <see cref="ClioSoftBridge"/> class.
         /// </summary>
-        public ClioSoftBridge() : base("ClioSoft", "")
+        public ClioSoftBridge() : base("ClioSoft", "", "https://sotaimaging.com/")
         {
         }
 

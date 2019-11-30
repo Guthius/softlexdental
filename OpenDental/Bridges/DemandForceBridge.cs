@@ -40,7 +40,7 @@ namespace OpenDental.Bridges
         /// <summary>
         /// Initializes a new instance of the <see cref="DemandForceBridge"/> class.
         /// </summary>
-        public DemandForceBridge() : base("DemandForce", "", preferences)
+        public DemandForceBridge() : base("DemandForce", "", "https://www.demandforce.com/", preferences)
         {
         }
 

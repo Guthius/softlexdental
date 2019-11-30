@@ -31,7 +31,7 @@ namespace OpenDental.Bridges
         /// <summary>
         /// Initializes a new instance of the <see cref="CaptureLinkBridge"/> class.
         /// </summary>
-        public CaptureLinkBridge() : base("CaptureLink", "")
+        public CaptureLinkBridge() : base("CaptureLink", "", "https://www.henryschein.ca/")
         {
             RequirePatient = true;
         }

@@ -42,7 +42,11 @@ namespace OpenDental.Bridges
         /// <summary>
         /// Initializes a new instance of the <see cref="DexisBridge"/> class.
         /// </summary>
-        public DexisBridge() : base("Dexis", "", preferences)
+        public DexisBridge() : base(
+            "Dexis", 
+            "From remarkable image quality to award-winning products, the legacy of DEXIS has joined forces with the excellence in training, support, and innovation of KaVo Imaging Solutions.", 
+            "https://www.kavo.com/", 
+            preferences)
         {
         }
 

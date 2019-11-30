@@ -38,7 +38,7 @@ namespace OpenDental.Bridges
         /// <summary>
         /// Initializes a new instance of the <see cref="DentalTekBridge"/> class.
         /// </summary>
-        public DentalTekBridge() : base("DentalTek", "", preferences)
+        public DentalTekBridge() : base("DentalTek", "", "http://dentalsolutionsllc.com/", preferences)
         {
         }
 

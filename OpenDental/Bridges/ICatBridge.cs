@@ -41,7 +41,7 @@ namespace OpenDental.Bridges
         /// <summary>
         /// Initializes a new instance of the <see cref="ICatBridge"/> class.
         /// </summary>
-        public ICatBridge() : base("iCat", "", preferences)
+        public ICatBridge() : base("iCat", "", "", preferences)
         {
         }
 

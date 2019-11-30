@@ -32,7 +32,7 @@ namespace OpenDental.Bridges
         /// <summary>
         /// Initializes a new instance of the <see cref="HdxWillBridge"/> class.
         /// </summary>
-        public HdxWillBridge() : base("HDX WILL", "", preferences)
+        public HdxWillBridge() : base("HDX WILL", "", "http://www.hdx.co.kr/", preferences)
         {
         }
 

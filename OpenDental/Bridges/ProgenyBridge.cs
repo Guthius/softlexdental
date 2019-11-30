@@ -35,7 +35,13 @@ namespace OpenDental.Bridges
         /// <summary>
         /// Initializes a new instance of the <see cref="ProgenyBridge"/> class.
         /// </summary>
-        public ProgenyBridge() : base("Progeny", "", preferences)
+        public ProgenyBridge() : base(
+            "Progeny", 
+            "Progeny Imaging Software is designed to provide easy access to digital images, " +
+            "simplified storage and image recall, as well as many tools that are useful for image " +
+            "evaluation and diagnosis.", 
+            "https://www.midmark.com/dental/products/imaging/software/detail/progeny-imaging", 
+            preferences)
         {
         }
 

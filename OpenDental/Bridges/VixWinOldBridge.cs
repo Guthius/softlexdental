@@ -32,7 +32,7 @@ namespace OpenDental.Bridges
         /// <summary>
         /// Initializes a new instance of the <see cref="VixWinOldBridge"/> class.
         /// </summary>
-        public VixWinOldBridge() : base("VixWin (Legacy)", "", preferences)
+        public VixWinOldBridge() : base("VixWin (Legacy)", "", "https://www.kavo.com/en-us/gendex", preferences)
         {
         }
 

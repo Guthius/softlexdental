@@ -108,7 +108,11 @@ namespace OpenDental.Bridges
         /// <summary>
         /// Initializes a new instance of the <see cref="XVWebBridge"/> class.
         /// </summary>
-        public XVWebBridge() : base("Apteryx XVWeb", "", preferences)
+        public XVWebBridge() : base(
+            "Apteryx XVWeb", 
+            "XVWeb® is a fully-functional DICOM server that can accept images from any DICOM-compliant imaging software.", 
+            "https://apteryx.com/product/xvweb/", 
+            preferences)
         {
         }
 

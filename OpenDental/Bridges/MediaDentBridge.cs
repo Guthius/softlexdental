@@ -34,7 +34,7 @@ namespace OpenDental.Bridges
         /// <summary>
         /// Initializes a new instance of the <see cref="MediaDentBridge"/> class.
         /// </summary>
-        public MediaDentBridge() : base("MediaDent", "", preferences)
+        public MediaDentBridge() : base("MediaDent Digital Imaging", "", "http://www.mediadentusa.com/", preferences)
         {
         }
 

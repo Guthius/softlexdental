@@ -26,7 +26,7 @@ namespace OpenDental.Bridges
         /// <summary>
         /// Initializes a new instance of the <see cref="DigoraBridge"/> class.
         /// </summary>
-        public DigoraBridge() : base("Digora", "")
+        public DigoraBridge() : base("Digora", "", "https://www.kavo.com/")
         {
         }
 

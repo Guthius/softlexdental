@@ -34,7 +34,8 @@ namespace OpenDental.Bridges
         /// </summary>
         public TrianaBridge() : base(
             "Genoray Triana",
-            "Triana is is able to manage Panoramic, Cephalometric, CT, and Portable, with Sensor image, and Triana is compatible with PACS", 
+            "Triana is is able to manage Panoramic, Cephalometric, CT, and Portable, with Sensor image, and Triana is compatible with PACS",
+            "http://genorayamerica.com/",
             preferences)
         {
         }

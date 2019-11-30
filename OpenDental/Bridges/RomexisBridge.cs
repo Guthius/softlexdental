@@ -25,7 +25,12 @@ namespace OpenDental.Bridges
         /// <summary>
         /// Initializes a new instance of the <see cref="RomexisBridge"/> class.
         /// </summary>
-        public RomexisBridge() : base("Romexis", "")
+        public RomexisBridge() : base(
+            "Romexis", 
+            "Flexible and intuitive all-in-one dental software platform. It provides a rich set of " +
+            "tools to meet the imaging needs set by any dental facility – from a small clinic to a " +
+            "large hospital.", 
+            "https://www.planmeca.com/software/")
         {
             RequirePatient = true;
         }

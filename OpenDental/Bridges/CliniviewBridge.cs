@@ -25,7 +25,10 @@ namespace OpenDental.Bridges
         /// <summary>
         /// Initializes a new instance of the <see cref="CliniviewBridge"/> class.
         /// </summary>
-        public CliniviewBridge() : base("Cliniview", "")
+        public CliniviewBridge() : base(
+            "CliniView",
+            "CliniView is a user-friendly software package with powerful functions for digital recording and viewing as well as for the printing and saving of images, including a  a large number of specific dental image processing tools", 
+            "https://www.kavo.com/")
         {
         }
 

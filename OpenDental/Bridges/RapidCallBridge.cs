@@ -25,7 +25,7 @@ namespace OpenDental.Bridges
         /// <summary>
         /// Initializes a new instance of the <see cref="RapidCallBridge"/> class.
         /// </summary>
-        public RapidCallBridge() : base("RapidCall", "")
+        public RapidCallBridge() : base("Rapid Call", "", "https://dentaltek.com/")
         {
         }
 

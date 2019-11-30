@@ -40,7 +40,13 @@ namespace OpenDental.Bridges
         /// <summary>
         /// Initializes a new instance of the <see cref="TigerViewBridge"/> class.
         /// </summary>
-        public TigerViewBridge() : base("TigerView", "", preferences)
+        public TigerViewBridge() : base(
+            "TigerView PACS", 
+            "Advanced Diagnostic Tools – Manipulate crystal clear images. Easily review angles and " +
+            "measurements, find the midline and center point, utilize stitching, cropping and " +
+            "magnification tools which help to better diagnose and communicate with your patients.", 
+            "https://www.televeresystems.com/tigerview-pacs/", 
+            preferences)
         {
         }
 

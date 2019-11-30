@@ -25,7 +25,7 @@ namespace OpenDental.Bridges
         /// <summary>
         /// Initializes a new instance of the <see cref="ApteryxBridge"/> class.
         /// </summary>
-        public ApteryxBridge() : base("Apteryx", "")
+        public ApteryxBridge() : base("Apteryx Imaging", "", "http://www.apteryxware.com/")
         {
         }
 

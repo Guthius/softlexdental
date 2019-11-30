@@ -30,7 +30,7 @@ namespace OpenDental.Bridges
         /// <summary>
         /// Initializes a new instance of the <see cref="CamsightBridge"/> class.
         /// </summary>
-        public CamsightBridge() : base("Camsight", "", preferences)
+        public CamsightBridge() : base("Camsight", "", "", preferences)
         {
             RequirePatient = true;
         }

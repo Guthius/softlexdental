@@ -44,7 +44,7 @@ namespace OpenDental.Bridges
         /// <summary>
         /// Initializes a new instance of the <see cref="CadiBridge"/> class.
         /// </summary>
-        public CadiBridge() : base("CADI", "", preferences)
+        public CadiBridge() : base("CADI", "", "https://www.cadi.net/", preferences)
         {
         }
 

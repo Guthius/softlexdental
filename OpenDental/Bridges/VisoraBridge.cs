@@ -25,7 +25,7 @@ namespace OpenDental.Bridges
         /// <summary>
         /// Initializes a new instance of the <see cref="VisoraBridge"/> class.
         /// </summary>
-        public VisoraBridge() : base("visOra", "")
+        public VisoraBridge() : base("visOra", "", "")
         {
             RequirePatient = true;
         }

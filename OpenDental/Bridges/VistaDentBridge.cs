@@ -25,7 +25,7 @@ namespace OpenDental.Bridges
         /// <summary>
         /// Initializes a new instance of the <see cref="VistaDentBridge"/> class.
         /// </summary>
-        public VistaDentBridge() : base("VistaDent", "")
+        public VistaDentBridge() : base("VistaDent", "", "")
         {
         }
 

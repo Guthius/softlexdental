@@ -25,7 +25,7 @@ namespace OpenDental.Bridges
         /// <summary>
         /// Initializes a new instance of the <see cref="HandyDentistBridge"/> class.
         /// </summary>
-        public HandyDentistBridge() : base("HandyDentist", "")
+        public HandyDentistBridge() : base("HandyDentist", "", "")
         {
         }
 

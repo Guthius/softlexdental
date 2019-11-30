@@ -1292,7 +1292,7 @@ namespace OpenDental
             //        SetSmsNotificationText();
             //    }
             //}
-            ToolBarMain.Buttons.Add(_butText);
+            //ToolBarMain.Buttons.Add(_butText);
             button = new ODToolBarButton(Lan.g(this, "Letter"), null, Lan.g(this, "Quick Letter"), "Letter");
             button.Style = ODToolBarButtonStyle.DropDownButton;
             button.DropDownMenu = menuLetter;

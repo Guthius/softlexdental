@@ -39,7 +39,7 @@ namespace OpenDental.Bridges
         /// <summary>
         /// Initializes a new instance of the <see cref="ApixiaBridge"/> class.
         /// </summary>
-        public ApixiaBridge() : base("Apixia Digital Imaging", "", preferences)
+        public ApixiaBridge() : base("Apixia Digital Imaging", "", "http://www.apixia.net/", preferences)
         {
         }
 

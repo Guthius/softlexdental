@@ -35,7 +35,7 @@ namespace OpenDental.Bridges
         /// <summary>
         /// Initializes a new instance of the <see cref="DolphinBridge"/> class.
         /// </summary>
-        public DolphinBridge() : base("Dolphin", "", preferences)
+        public DolphinBridge() : base("Dolphin", "", "https://www.dolphinimaging.com/", preferences)
         {
         }
 

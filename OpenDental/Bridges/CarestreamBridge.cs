@@ -32,7 +32,7 @@ namespace OpenDental.Bridges
         /// <summary>
         /// Initializes a new instance of the <see cref="CarestreamBridge"/> class.
         /// </summary>
-        public CarestreamBridge() : base("Carestream", "", preferences)
+        public CarestreamBridge() : base("Carestream Ortho/OMS", "", "https://www.carestreamdental.com/", preferences)
         {
             RequirePatient = true;
         }

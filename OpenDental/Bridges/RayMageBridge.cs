@@ -25,7 +25,7 @@ namespace OpenDental.Bridges
         /// <summary>
         /// Initializes a new instance of the <see cref="RayMageBridge"/> class.
         /// </summary>
-        public RayMageBridge() : base("RayMage", "")
+        public RayMageBridge() : base("RayMage", "", "https://www.cefla.com/en/")
         {
         }
 

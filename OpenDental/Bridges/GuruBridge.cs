@@ -34,7 +34,7 @@ namespace OpenDental.Bridges
         /// <summary>
         /// Initializes a new instance of the <see cref="GuruBridge"/> class.
         /// </summary>
-        public GuruBridge() : base("Guru", "", preferences)
+        public GuruBridge() : base("Guru", "", "", preferences)
         {
         }
 

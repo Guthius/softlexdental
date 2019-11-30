@@ -37,7 +37,7 @@ namespace OpenDental.Bridges
         /// <summary>
         /// Initializes a new instance of the <see cref="VipersoftBridge"/> class.
         /// </summary>
-        public VipersoftBridge() : base("Vipersoft", "", preferences)
+        public VipersoftBridge() : base("Vipersoft", "", "", preferences)
         {
             RequirePatient = true;
         }

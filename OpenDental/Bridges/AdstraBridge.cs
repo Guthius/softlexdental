@@ -25,7 +25,7 @@ namespace OpenDental.Bridges
         /// <summary>
         /// Initializes a new instance of the <see cref="AdstraBridge"/> class.
         /// </summary>
-        public AdstraBridge() : base("Adstra", "")
+        public AdstraBridge() : base("ADSTRA Imaging", "", "http://adstra.com/adstra-dental-software/")
         {
         }
 

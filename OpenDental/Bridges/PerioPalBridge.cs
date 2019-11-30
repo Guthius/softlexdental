@@ -25,7 +25,7 @@ namespace OpenDental.Bridges
         /// <summary>
         /// Initializes a new instance of the <see cref="PerioPalBridge"/> class.
         /// </summary>
-        public PerioPalBridge() : base("PerioPal", "")
+        public PerioPalBridge() : base("PerioPal", "", "")
         {
             RequirePatient = true;
         }

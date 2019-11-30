@@ -31,7 +31,7 @@ namespace OpenDental.Bridges
         /// <summary>
         /// Initializes a new instance fo the <see cref="DentalStudioBridge"/> class.
         /// </summary>
-        public DentalStudioBridge() : base("DentalStudio", "", preferences)
+        public DentalStudioBridge() : base("Dental Studio", "", "https://www.villasm.com/", preferences)
         {
             RequirePatient = true;
         }

@@ -32,7 +32,7 @@ namespace OpenDental.Bridges
         /// <summary>
         /// Initializes a ne instance of the <see cref="PattersonBridge"/> class.
         /// </summary>
-        public PattersonBridge() : base("Patterson Imaging", "", preferences)
+        public PattersonBridge() : base("Patterson Imaging", "", "https://www.pattersondental.com/equipment-technology/digital-imaging", preferences)
         {
         }
 

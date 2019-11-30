@@ -31,7 +31,11 @@ namespace OpenDental.Bridges
         /// <summary>
         /// Initializes a new instance of the <see cref="XChargeBridge"/> class.
         /// </summary>
-        public XChargeBridge() : base("XCharge", "XCharge offers the ability to process credit card payments.", preferences)
+        public XChargeBridge() : base(
+            "XCharge", 
+            "XCharge offers the ability to process credit card payments.",
+            "http://x-charge.com/",
+            preferences)
         {
         }
 

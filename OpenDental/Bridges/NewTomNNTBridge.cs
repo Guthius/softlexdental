@@ -22,10 +22,12 @@ namespace OpenDental.Bridges
 {
     public class NewTomNNTBridge : CommandLineBridge
     {
+        // TODO: This is the same as IrysBridge?
+
         /// <summary>
         /// Initializes a new instance of the <see cref="NewTomNNTBridge"/> class.
         /// </summary>
-        public NewTomNNTBridge() : base("NewTomNNT", "")
+        public NewTomNNTBridge() : base("NewTom NNT", "", "https://www.newtom.it/")
         {
         }
 

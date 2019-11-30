@@ -41,7 +41,7 @@ namespace OpenDental.Bridges
         /// </summary>
         /// <param name="name">The name of the bridge.</param>
         /// <param name="description">A description of the bridge.</param>
-        internal VixWinNumberedBridge(string name, string description) : base (name, description, preferences)
+        internal VixWinNumberedBridge(string name, string description) : base (name, description, "https://www.kavo.com/en-us/gendex", preferences)
         {
             RequirePatient = true;
         }

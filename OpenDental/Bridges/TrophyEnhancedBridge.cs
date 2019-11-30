@@ -38,7 +38,7 @@ namespace OpenDental.Bridges
         /// <summary>
         /// Initializes a new instance of the <see cref="TrophyEnhancedBridge"/> class.
         /// </summary>
-        public TrophyEnhancedBridge() : base("Trophy (Enhanced)", "", preferences)
+        public TrophyEnhancedBridge() : base("Trophy (Enhanced)", "", "", preferences)
         {
         }
 

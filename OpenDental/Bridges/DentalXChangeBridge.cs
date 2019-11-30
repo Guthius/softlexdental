@@ -21,16 +21,17 @@ using System.Windows.Forms;
 
 namespace OpenDental
 {
-    /// <summary>
-    /// This class is for the bridge to DentalXCharge. Specifically, this is for patient credit Score.
-    /// </summary>
     public class DentalXChangeBridge : Bridge
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="DentalXChangeBridge"/> class.
         /// </summary>
-        public DentalXChangeBridge() : base("DentalXChange", "")
+        public DentalXChangeBridge() : base(
+            "DentalXChange", 
+            "", 
+            "https://www.dentalxchange.com/")
         {
+            // TODO: The domain for this service is no longer resolving. Delete this bridge?
         }
 
         /// <summary>

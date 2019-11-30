@@ -25,7 +25,10 @@ namespace OpenDental.Bridges
         /// <summary>
         /// Initializes a new instance of the <see cref="DentFormsBridge"/> class.
         /// </summary>
-        public DentFormsBridge() : base("DentForms", "")
+        public DentFormsBridge() : base(
+            "MedicTalk DentForms", 
+            "MedicTalk DentForms software is the most complete \"paperless office\" package on the market today.", 
+            "http://medictalk.com/")
         {
             RequirePatient = true;
         }

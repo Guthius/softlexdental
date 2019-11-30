@@ -25,7 +25,7 @@ namespace OpenDental.Bridges
         /// <summary>
         /// Initializes a new instance of the <see cref="BioPAKBridge"/> class.
         /// </summary>
-        public BioPAKBridge() : base("BioPAK", "")
+        public BioPAKBridge() : base("BioPAK", "", "https://www.bioresearchinc.com/")
         {
         }
 

@@ -37,7 +37,11 @@ namespace OpenDental.Bridges
         /// <summary>
         /// Initializes a new instance of the <see cref="DentalEyeBridge"/> class.
         /// </summary>
-        public DentalEyeBridge() : base("DentalEye", "", preferences)
+        public DentalEyeBridge() : base(
+            "DentalEye",
+            "Captures images from intraoral cameras, digital cameras and scanners. Import and export functions, image enhancement tools. Integration with digital X-ray devices.", 
+            "http://www.dentaleye.com/", 
+            preferences)
         {
             RequirePatient = true;
         }

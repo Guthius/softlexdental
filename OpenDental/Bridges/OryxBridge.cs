@@ -35,7 +35,15 @@ namespace OpenDental.Bridges
         /// <summary>
         /// Initializes a new instance of the <see cref="OryxBridge"/> class.
         /// </summary>
-        public OryxBridge() : base("Oryx", "", preferences)
+        public OryxBridge() : base(
+            "Oryx", 
+            "Oryx is a revolutionary cloud-based dental software. It offers easy patient online " +
+            "forms and an evidence-based clinical module based on Dr. John Kois’ research. The " +
+            "automated personalized patient report guarantees an increase in patient case " +
+            "acceptance and better patient care. In addition, it offers patient engagement tools, " +
+            "administrative management and advanced reporting all in one place.", 
+            "https://oryxdentalsoftware.com/", 
+            preferences)
         {
         }
 

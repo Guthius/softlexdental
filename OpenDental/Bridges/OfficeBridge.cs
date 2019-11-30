@@ -36,7 +36,7 @@ namespace OpenDental.Bridges
         /// <summary>
         /// Initializes a new instance of the <see cref="OfficeBridge"/> class.
         /// </summary>
-        public OfficeBridge() : base("Office", "", preferences)
+        public OfficeBridge() : base("Office", "", "", preferences)
         {
         }
 

@@ -31,7 +31,10 @@ namespace OpenDental.Bridges
         /// <summary>
         /// Initializes a new instance of the <see cref="DbsWinBridge"/> class.
         /// </summary>
-        public DbsWinBridge() : base("DBSWin", "", preferences)
+        public DbsWinBridge() : base(
+            "DBSWIN Imaging Software",
+            "DBSWIN is an image management system that allows the physician to acquire, display, edit (e.g., resize, adjust contrast, etc.), review, store, print, and distribute medical images within a Picture Archiving and Communication System (PACS) environment.", 
+            "https://www.duerrdental.com/", preferences)
         {
         }
 

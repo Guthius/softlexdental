@@ -40,7 +40,8 @@ namespace OpenDental.Bridges
         /// </summary>
         public SironaBridge() : base(
             "Sirona Sidexis",
-            "Sidexis is the software for clear diagnoses. It efficiently structures your workflow and serves as a basis for further planning and diagnosis.")
+            "Sidexis is the software for clear diagnoses. It efficiently structures your workflow and serves as a basis for further planning and diagnosis.",
+            "https://www.dentsplysirona.com/en/explore/imaging-systems/software/sidexis-4.html")
         {
         }
 

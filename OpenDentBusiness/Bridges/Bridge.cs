@@ -40,17 +40,25 @@ namespace OpenDentBusiness.Bridges
         public string Description { get; }
 
         /// <summary>
+        /// Gets the URL of the primary website of the external program.
+        /// </summary>
+        public string Url { get; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="Bridge"/> class.
         /// </summary>
         /// <param name="name">The name of the external progarm or service.</param>
         /// <param name="description">A description of the bridge.</param>
+        /// <param name="url">The URL of the external program.</param>
         /// <param name="preferences">The preferences used by the bridge.</param>
-        public Bridge(string name, string description = "", params BridgePreference[] preferences)
+        public Bridge(string name, string description = "", string url = "", params BridgePreference[] preferences)
         {
             Name = name ??
                 throw new ArgumentNullException(nameof(name));
 
+            
             Description = description ?? "";
+            Url = url ?? "";
 
             this.preferences = preferences?.ToList() ?? new List<BridgePreference>();
             this.preferences.Add(BridgePreference.UseChartNumber);

@@ -30,7 +30,7 @@ namespace OpenDental.Bridges
         /// <summary>
         /// Initializes a new instance of the <see cref="ActeonImagingSuiteBridge"/> class.
         /// </summary>
-        public ActeonImagingSuiteBridge() : base("Acteon Imaging Suite", "", preferences)
+        public ActeonImagingSuiteBridge() : base("Acteon Imaging Suite", "", "https://www.acteongroup.com/", preferences)
         {
         }
 

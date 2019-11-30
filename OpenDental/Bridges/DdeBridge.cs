@@ -50,9 +50,10 @@ namespace OpenDental.Bridges
         /// </summary>
         /// <param name="name"></param>
         /// <param name="description"></param>
+        /// <param name="url">The URL of the external program.</param>
         /// <param name="preferences">The preferences used by the bridge.</param>
-        public DdeBridge(string name, string description, params BridgePreference[] preferences) : 
-            base(name, description,
+        public DdeBridge(string name, string description, string url, params BridgePreference[] preferences) : 
+            base(name, description, url,
                 preferences != null ?
                     DdeBridge.preferences.Concat(preferences).ToArray() :
                     DdeBridge.preferences)

@@ -30,7 +30,8 @@ namespace OpenDental.Bridges
         /// </summary>
         public MidwayBridge() : base(
             "Midway Dental", 
-            "Midway Dental Supply is an independent dental supply company that services Indiana, Michigan and Northeastern Illinois.")
+            "Midway Dental Supply is an independent dental supply company that services Indiana, Michigan and Northeastern Illinois.",
+            "https://midwaydental.com/")
         {
         }
 

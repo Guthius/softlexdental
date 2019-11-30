@@ -25,7 +25,7 @@ namespace OpenDental.Bridges
         /// <summary>
         /// Initializes a new instance of the <see cref="CleaRayBridge"/> class.
         /// </summary>
-        public CleaRayBridge() : base("CleaRay", "")
+        public CleaRayBridge() : base("CleaRay", "", "https://www.clearaydental.com/")
         {
         }
 

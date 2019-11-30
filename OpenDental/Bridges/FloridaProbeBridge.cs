@@ -25,7 +25,7 @@ namespace OpenDental.Bridges
         /// <summary>
         /// Initializes a new instance of the <see cref="FloridaProbeBridge"/> class.
         /// </summary>
-        public FloridaProbeBridge() : base("FloridaProbe", "")
+        public FloridaProbeBridge() : base("Florida Probe", "", "http://www.floridaprobe.com/")
         {
         }
 

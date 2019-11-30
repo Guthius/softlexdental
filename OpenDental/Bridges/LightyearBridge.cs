@@ -25,7 +25,7 @@ namespace OpenDental.Bridges
         /// <summary>
         /// Initializes a new instance of the <see cref="LightyearBridge"/> class.
         /// </summary>
-        public LightyearBridge() : base("Lightyear", "")
+        public LightyearBridge() : base("SpeedVision", "", "")
         {
             RequirePatient = true;
         }

@@ -58,9 +58,10 @@ namespace OpenDentBusiness.Bridges
         /// </summary>
         /// <param name="name">The name of the external progarm or service.</param>
         /// <param name="description">A description of the bridge.</param>
+        /// <param name="url">The URL of the external program.</param>
         /// <param name="preferences">The preferences used by the bridge.</param>
-        public CommandLineBridge(string name, string description, params BridgePreference[] preferences) :
-            base(name, description,
+        public CommandLineBridge(string name, string description, string url, params BridgePreference[] preferences) :
+            base(name, description, url,
                 preferences != null ?
                     CommandLineBridge.preferences.Concat(preferences).ToArray() :
                     CommandLineBridge.preferences)

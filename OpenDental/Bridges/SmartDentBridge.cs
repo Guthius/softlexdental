@@ -25,7 +25,7 @@ namespace OpenDental.Bridges
         /// <summary>
         /// Initializes a new instance of the <see cref="SmartDentBridge"/> class.
         /// </summary>
-        public SmartDentBridge() : base("SmartDent", "")
+        public SmartDentBridge() : base("SMARTDent", "", "http://www.raymedical.com/")
         {
         }
 

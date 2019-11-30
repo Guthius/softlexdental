@@ -43,7 +43,7 @@ namespace OpenDental.Bridges
         /// <summary>
         /// Initializes a new instance of the <see cref="DentXBridge"/> class.
         /// </summary>
-        public DentXBridge() : base("DentX", "")
+        public DentXBridge() : base("DentX", "", "http://www.dent-x.com/")
         {
         }
 

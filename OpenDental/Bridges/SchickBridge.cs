@@ -30,7 +30,7 @@ namespace OpenDental.Bridges
         /// <summary>
         /// Initializes a new instance of the <see cref="SchickBridge"/> class.
         /// </summary>
-        public SchickBridge() : base("Schick CDR", "")
+        public SchickBridge() : base("Schick", "", "https://www.dentsplysironasupport.com/en-us/schickproductlanding.html")
         {
         }
 

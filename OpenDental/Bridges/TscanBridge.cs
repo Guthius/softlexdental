@@ -26,7 +26,7 @@ namespace OpenDental.Bridges
         /// <summary>
         /// Initializes a new instance of the <see cref="TscanBridge"/> class.
         /// </summary>
-        public TscanBridge() : base("Tscan", "")
+        public TscanBridge() : base("T-Scan", "", "https://www.tekscan.com/")
         {
         }
 

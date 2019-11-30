@@ -30,7 +30,13 @@ namespace OpenDental
         /// <summary>
         /// Initializes a new instance of the <see cref="EvaSoftBridge"/> class.
         /// </summary>
-        public EvaSoftBridge() : base("EvaSoft", "")
+        public EvaSoftBridge() : base(
+            "EVAsoft",
+            "EVAsoft Dental Image Management software meets the imaging demands of today’s digital " +
+            "practices. A sophisticated software that is easy to learn and simple to operate, " +
+            "EVAsoft has all of the advanced features necessary to deliver rapid, effective " +
+            "diagnoses from multiple imaging modalities.", 
+            "https://www.imageworkscorporation.com/")
         {
         }
 

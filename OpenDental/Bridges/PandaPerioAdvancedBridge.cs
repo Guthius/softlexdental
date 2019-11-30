@@ -29,7 +29,15 @@ namespace OpenDental.Bridges
         /// <summary>
         /// Initializes a new instance of the <see cref="PandaPerioAdvancedBridge"/> class.
         /// </summary>
-        public PandaPerioAdvancedBridge() : base("Panda Perio (Advanced)", "")
+        public PandaPerioAdvancedBridge() : base(
+            "Panda Perio (Advanced)",
+            "PANDA Perio® is more than a unique and revolutionary dental software application. It " +
+            "represents a new paradigm in the way computer software can enhance the practice of " +
+            "dentistry. On its most basic level PANDA Perio is the most customizable, " +
+            "comprehensive and detailed digital clinical record ever devised. However the real " +
+            "power of PANDA Perio is its ability to formulate detailed treatment plans and " +
+            "automatically generate customizable letters and reports.", 
+            "https://www.pandaperio.com/")
         {
         }
 

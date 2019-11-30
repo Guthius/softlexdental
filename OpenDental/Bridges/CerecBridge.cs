@@ -25,7 +25,7 @@ namespace OpenDental.Bridges
         /// <summary>
         /// Initializes a new instance of the <see cref="CerecBridge"/> class.
         /// </summary>
-        public CerecBridge() : base("Cerec", "")
+        public CerecBridge() : base("Cerec", "", "https://www.dentsplysirona.com/")
         {
         }
 

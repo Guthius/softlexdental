@@ -25,7 +25,10 @@ namespace OpenDental.Bridges
         /// <summary>
         /// Initializes a new instance of the <see cref="IDixelBridge"/> class.
         /// </summary>
-        public IDixelBridge() : base("iDixel", "")
+        public IDixelBridge() : base(
+            "i-Dixel",
+            "i-Dixel imaging software offers a range of features from the initial exposure to the final diagnosis allowing for a thorough examination.", 
+            "https://www.jmoritaeurope.de/en/")
         {
         }
 

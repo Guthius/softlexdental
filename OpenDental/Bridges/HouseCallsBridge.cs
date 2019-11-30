@@ -29,7 +29,7 @@ namespace OpenDental.Bridges
         /// <summary>
         /// Initializes a new instance of the <see cref="HouseCallsBridge"/> class.
         /// </summary>
-        public HouseCallsBridge() : base("HouseCalls", "", preferences)
+        public HouseCallsBridge() : base("HouseCalls", "", "", preferences)
         {
         }
 

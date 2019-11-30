@@ -20,11 +20,10 @@ using OpenDentBusiness.Bridges;
 
 namespace OpenDental.Bridges
 {
-    /// <summary>
-    /// This bridge is now known as "Dimaxis" in the program links list.
-    /// </summary>
     public class PlanmecaBridge : CommandLineBridge
     {
+        // TODO: This is the same as RomexisBridge?
+
         private static readonly BridgePreference[] preferences =
         {
             BridgePreference.Custom("date_format", "Date Format", BridgePreferenceType.String)
@@ -33,7 +32,7 @@ namespace OpenDental.Bridges
         /// <summary>
         /// Initializes a new instance of the <see cref="PlanmecaBridge"/> class.
         /// </summary>
-        public PlanmecaBridge() : base("Planmeca Dimaxis", "", preferences)
+        public PlanmecaBridge() : base("Dimaxis", "", "https://www.planmeca.com/software/", preferences)
         {
             RequirePatient = true;
         }

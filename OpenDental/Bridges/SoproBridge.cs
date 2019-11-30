@@ -25,7 +25,7 @@ namespace OpenDental.Bridges
         /// <summary>
         /// Initializes a new instance of the <see cref="SoproBridge"/> class.
         /// </summary>
-        public SoproBridge() : base("Sopro", "")
+        public SoproBridge() : base("SOPRO", "", "https://www.acteongroup.com/en/")
         {
         }
 

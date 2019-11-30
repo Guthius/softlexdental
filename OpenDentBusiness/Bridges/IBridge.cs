@@ -24,7 +24,7 @@ namespace OpenDentBusiness.Bridges
     public interface IBridge
     {
         /// <summary>
-        /// Gets the name of the external program or service.
+        /// Gets the name of the external program.
         /// </summary>
         string Name { get; }
 
@@ -34,9 +34,13 @@ namespace OpenDentBusiness.Bridges
         string Description { get; }
 
         /// <summary>
+        /// Gets the URL of the primary website of the external program.
+        /// </summary>
+        string Url { get; }
+
+        /// <summary>
         ///     <para>
-        ///         Sends the specified <paramref name="patient"/> data to the remote program or 
-        ///         service.
+        ///         Sends the specified <paramref name="patient"/> data to the remote program.
         ///     </para>
         /// </summary>
         /// <param name="programId">The ID of the program.</param>

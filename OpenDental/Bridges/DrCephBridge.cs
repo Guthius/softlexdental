@@ -35,7 +35,7 @@ namespace OpenDental.Bridges
         /// <summary>
         /// Initializes a new instance of the <see cref="DrCephBridge"/> class.
         /// </summary>
-        public DrCephBridge() : base("DrCeph", "", preferences)
+        public DrCephBridge() : base("Dr. Ceph", "", "http://www.fyitek.com/", preferences)
         {
         }
 
