@@ -1981,11 +1981,10 @@ namespace OpenDental{
 		///<summary>Launches the Clinics window and lets the user pick a specific clinic.
 		///Returns the index of the selected clinic within _arrayClinics.  Returns -1 if the user cancels out of the window.</summary>
 		private int GetClinicIndexFromPicker() {
-			FormClinics FormC=new FormClinics();
+			FormClinics FormC=new FormClinics(_listClinics);
 			FormC.IsSelectionMode=true;
-			FormC.ListClinics=_listClinics.ToList();
 			FormC.ShowDialog();
-			return _listClinics.FindIndex(x => x.Id==FormC.SelectedClinicNum);
+			return _listClinics.FindIndex(x => x.Id==FormC.SelectedClinicId);
 		}
 
 		///<summary>Launches the Fee Schedules window and lets the user pick a specific schedule.

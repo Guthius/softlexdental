@@ -1586,12 +1586,11 @@ namespace OpenDental {
 		}
 
 		private void butPickClinicTo_Click(object sender,EventArgs e){
-			FormClinics FormC=new FormClinics();
+			FormClinics FormC=new FormClinics(_listClinics);
 			FormC.IsSelectionMode=true;
 			FormC.IsMultiSelect=true;
-			FormC.ListClinics=_listClinics;
 			FormC.ShowDialog();
-			_listSelectedClinicNumsTo=FormC.ListSelectedClinicNums;
+			_listSelectedClinicNumsTo=FormC.SelectedClinicIds;
 			if(_listSelectedClinicNumsTo.Count==0) {
 				return;
 			}
@@ -1607,21 +1606,16 @@ namespace OpenDental {
 		}
 
 		private void butGlobalUpdatePickClinic_Click(object sender,EventArgs e) {
-			FormClinics FormC=new FormClinics();
+			FormClinics FormC=new FormClinics(_listClinics);
 			FormC.IsSelectionMode=true;
 			FormC.IsMultiSelect=true;
-            FormC.ListClinics = new List<Clinic>(_listClinics);
-			if(!Security.CurrentUser.ClinicRestricted) {
-				FormC.ListClinics.Insert(0,new Clinic { Description=Lan.g(this,"Headquarters"),Abbr=Lan.g(this,"HQ") });
-				FormC.IncludeHQInList=true;
-			}
-			FormC.ListSelectedClinicNums=_listSelectedClinicsGlobalUpdates.Select(x => x.Id).ToList();
+			FormC.SelectedClinicIds=_listSelectedClinicsGlobalUpdates.Select(x => x.Id).ToList();
 			DialogResult diagRes=FormC.ShowDialog();
 			if(diagRes==DialogResult.Cancel) {
 				return;
 			}
-			_listSelectedClinicsGlobalUpdates=_listClinics.FindAll(x => FormC.ListSelectedClinicNums.Contains(x.Id)).ToList();
-			if(!Security.CurrentUser.ClinicRestricted && FormC.ListSelectedClinicNums.Contains(0)) {
+			_listSelectedClinicsGlobalUpdates=_listClinics.FindAll(x => FormC.SelectedClinicIds.Contains(x.Id)).ToList();
+			if(!Security.CurrentUser.ClinicRestricted && FormC.SelectedClinicIds.Contains(0)) {
 				_listSelectedClinicsGlobalUpdates.Insert(0,new Clinic { Description=Lan.g(this,"Headquarters"),Abbr=Lan.g(this,"HQ") });
 			}
 			if(_listSelectedClinicsGlobalUpdates.Count>1) {
@@ -1669,11 +1663,10 @@ namespace OpenDental {
 		///<summary>Launches the Clinics window and lets the user pick a specific clinic.
 		///Returns the index of the selected clinic within _arrayClinics.  Returns -1 if the user cancels out of the window.</summary>
 		private int GetClinicIndexFromPicker() {
-			FormClinics FormC=new FormClinics();
+			FormClinics FormC=new FormClinics(_listClinics);
 			FormC.IsSelectionMode=true;
-			FormC.ListClinics=_listClinics;
 			FormC.ShowDialog();
-			return _listClinics.FindIndex(x => x.Id==FormC.SelectedClinicNum);
+			return _listClinics.FindIndex(x => x.Id==FormC.SelectedClinicId);
 		}
 
 		///<summary>Launches the Fee Schedules window and lets the user pick a specific schedule.

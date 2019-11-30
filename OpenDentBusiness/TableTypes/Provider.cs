@@ -106,8 +106,10 @@ namespace OpenDentBusiness{
 		///marked complete, prescriptions from being prescribed, and claims from being sent.</summary>
 		public DateTime DateTerm;
 
-		///<summary>Used only for serialization purposes</summary>
-		[XmlElement("ProvColor",typeof(int))]
+        public override string ToString() => Abbr ?? "";
+
+        ///<summary>Used only for serialization purposes</summary>
+        [XmlElement("ProvColor",typeof(int))]
 		public int ProvColorXml {
 			get {
 				return ProvColor.ToArgb();

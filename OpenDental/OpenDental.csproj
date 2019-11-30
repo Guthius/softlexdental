@@ -533,10 +533,16 @@
     <Compile Include="Forms\FormAutoCodeEdit.Designer.cs">
       <DependentUpon>FormAutoCodeEdit.cs</DependentUpon>
     </Compile>
-    <Compile Include="__WIP2\FormOperatories.Designer.cs">
+    <Compile Include="Forms\FormClinicEdit.Designer.cs">
+      <DependentUpon>FormClinicEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormClinics.Designer.cs">
+      <DependentUpon>FormClinics.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormOperatories.Designer.cs">
       <DependentUpon>FormOperatories.cs</DependentUpon>
     </Compile>
-    <Compile Include="__WIP2\FormOperatoryEdit.Designer.cs">
+    <Compile Include="Forms\FormOperatoryEdit.Designer.cs">
       <DependentUpon>FormOperatoryEdit.cs</DependentUpon>
     </Compile>
     <Compile Include="__WIP\FormAutoCodeLessIntrusive.Designer.cs">
@@ -1198,10 +1204,10 @@
     <Compile Include="Forms WIP\FormEtrans835s.Designer.cs">
       <DependentUpon>FormEtrans835s.cs</DependentUpon>
     </Compile>
-    <Compile Include="__WIP2\FormOperatoryPick.cs">
+    <Compile Include="Forms\FormOperatoryPick.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="__WIP2\FormOperatoryPick.Designer.cs">
+    <Compile Include="Forms\FormOperatoryPick.Designer.cs">
       <DependentUpon>FormOperatoryPick.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms WIP\FormOrthoPat.cs">
@@ -3923,10 +3929,10 @@
     <Compile Include="Forms WIP\FormClearinghouses.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms WIP\FormClinicEdit.cs">
+    <Compile Include="Forms\FormClinicEdit.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms WIP\FormClinics.cs">
+    <Compile Include="Forms\FormClinics.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="__WIP\FormClockEventEdit.cs">
@@ -4109,10 +4115,10 @@
     <Compile Include="Forms WIP\FormNotePick.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="__WIP2\FormOperatories.cs">
+    <Compile Include="Forms\FormOperatories.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="__WIP2\FormOperatoryEdit.cs">
+    <Compile Include="Forms\FormOperatoryEdit.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms WIP\FormPasswordReset.cs">
@@ -5126,7 +5132,7 @@
     <EmbeddedResource Include="Forms WIP\FormEtrans835s.resx">
       <DependentUpon>FormEtrans835s.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="__WIP2\FormOperatoryPick.resx">
+    <EmbeddedResource Include="Forms\FormOperatoryPick.resx">
       <DependentUpon>FormOperatoryPick.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms WIP\FormOrthoPat.resx">
@@ -6643,11 +6649,11 @@
       <DependentUpon>FormClearinghouses.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms WIP\FormClinicEdit.resx">
+    <EmbeddedResource Include="Forms\FormClinicEdit.resx">
       <DependentUpon>FormClinicEdit.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms WIP\FormClinics.resx">
+    <EmbeddedResource Include="Forms\FormClinics.resx">
       <DependentUpon>FormClinics.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -6891,11 +6897,11 @@
       <DependentUpon>FormNotePick.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="__WIP2\FormOperatories.resx">
+    <EmbeddedResource Include="Forms\FormOperatories.resx">
       <DependentUpon>FormOperatories.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="__WIP2\FormOperatoryEdit.resx">
+    <EmbeddedResource Include="Forms\FormOperatoryEdit.resx">
       <DependentUpon>FormOperatoryEdit.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>

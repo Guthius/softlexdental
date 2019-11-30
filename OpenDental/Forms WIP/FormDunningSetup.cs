@@ -57,18 +57,17 @@ namespace OpenDental
 
         private void butPickClinic_Click(object sender, EventArgs e)
         {
-            FormClinics FormC = new FormClinics();
+            FormClinics FormC = new FormClinics(_listClinics);
             FormC.IsSelectionMode = true;
-            FormC.ListClinics = _listClinics;//Includes 'Unassigned'
             if (comboClinics.SelectedIndex != 0)
             {//'All'
-                FormC.ListSelectedClinicNums = new List<long> { _listClinics[comboClinics.SelectedIndex - 1].Id };//-1 for 'All'
+                FormC.SelectedClinicIds = new List<long> { _listClinics[comboClinics.SelectedIndex - 1].Id };//-1 for 'All'
             }
             if (FormC.ShowDialog() != DialogResult.OK)
             {
                 return;
             }
-            comboClinics.SelectedIndex = _listClinics.FindIndex(x => x.Id == FormC.SelectedClinicNum) + 1;//+1 for 'All'
+            comboClinics.SelectedIndex = _listClinics.FindIndex(x => x.Id == FormC.SelectedClinicId) + 1;//+1 for 'All'
             FillGrids();
         }
 

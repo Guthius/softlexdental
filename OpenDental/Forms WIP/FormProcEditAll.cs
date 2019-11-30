@@ -161,15 +161,14 @@ namespace OpenDental {
 		}
 
 		private void butMoreClinics_Click(object sender,EventArgs e) {
-			FormClinics FormC=new FormClinics();
+			FormClinics FormC=new FormClinics(_listClinics);
 			FormC.IsMultiSelect=false;
-			FormC.ListClinics=_listClinics;//Only valid clinics that user has access to.
 			FormC.IsSelectionMode=true;
 			if(FormC.ShowDialog(this)!=DialogResult.OK) {
 				return;
 			}
 			//x.ClinicNum is null for blank row.
-			comboClinic.SetSelectedItem<Clinic>(x => (x?.Id??-1)==FormC.SelectedClinicNum,"");
+			comboClinic.SetSelectedItem<Clinic>(x => (x?.Id??-1)==FormC.SelectedClinicId,"");
 		}
 		
 		private void FillProviderCombo(bool tryMaintainOldSelection=false) {

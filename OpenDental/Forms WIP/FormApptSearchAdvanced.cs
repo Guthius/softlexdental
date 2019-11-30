@@ -366,7 +366,7 @@ namespace OpenDental
 
                 if (formClinics.ShowDialog() == DialogResult.OK)
                 {
-                    comboBoxClinic.SelectedClinicNum = formClinics.SelectedClinicNum;
+                    comboBoxClinic.SelectedClinicNum = formClinics.SelectedClinicId;
                 }
             }
         }

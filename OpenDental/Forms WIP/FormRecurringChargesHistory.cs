@@ -138,17 +138,20 @@ namespace OpenDental
 
         private void butPickClinic_Click(object sender, EventArgs e)
         {
-            FormClinics FormC = new FormClinics();
-            FormC.IsSelectionMode = true;
-            FormC.IsMultiSelect = true;
-            FormC.ListClinics = Clinic.GetByUser(Security.CurrentUser).ToList();
-            FormC.ShowDialog();
-            if (FormC.DialogResult != DialogResult.OK)
+            using (var formClinics = new FormClinics(Clinic.GetByUser(Security.CurrentUser)))
             {
-                return;
+                formClinics.IsSelectionMode = true;
+                formClinics.IsMultiSelect = true;
+
+                if (formClinics.ShowDialog() != DialogResult.OK)
+                {
+                    return;
+                }
+
+                comboClinics.ListSelectedClinicNums = formClinics.SelectedClinicIds;
+
+                FillGrid();
             }
-            comboClinics.ListSelectedClinicNums = FormC.ListSelectedClinicNums;
-            FillGrid();
         }
 
         private void butRefresh_Click(object sender, EventArgs e)

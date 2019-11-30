@@ -130,7 +130,7 @@ namespace OpenDentBusiness
         /// <returns>The ID assigned to the e-mail address.</returns>
         public static long Insert(EmailAddress emailAddress) => // TODO: user_id column should be unique and Insert should check for duplicates...
             emailAddress.Id = DataConnection.ExecuteInsert(
-                "INSERT INTO `email_addresses` (`user_id`, `sender`, `smtp_server`, `smpt_username`, `smpt_password`, `smtp_port`, `use_ssl`, `pop3_server`, `pop3_port`) VALUES (?user_id, ?sender, ?smtp_server, ?smtp_username, ?smtp_password, ?smtp_port, ?use_ssl, ?pop3_server, ?pop3_port)",
+                "INSERT INTO `email_addresses` (`user_id`, `sender`, `smtp_server`, `smtp_username`, `smtp_password`, `smtp_port`, `use_ssl`, `pop3_server`, `pop3_port`) VALUES (?user_id, ?sender, ?smtp_server, ?smtp_username, ?smtp_password, ?smtp_port, ?use_ssl, ?pop3_server, ?pop3_port)",
                     new MySqlParameter("user_id", emailAddress.UserId.HasValue ? (object)emailAddress.UserId.Value : DBNull.Value),
                     new MySqlParameter("sender", emailAddress.Sender ?? ""),
                     new MySqlParameter("smtp_server", emailAddress.SmtpServer ?? ""),

@@ -23,8 +23,8 @@ namespace OpenDentBusiness
 {
     /// <summary>
     ///     <para>
-    ///         Allows the user to specify DEA number override and other overrides for the provider 
-    ///         at the specified clinic.
+    ///         Links providers and clinics and holds some provider related information that can be
+    ///         different per clinic.
     ///     </para>
     /// </summary>
     public class ProviderClinic : DataRecordBase
@@ -86,6 +86,11 @@ namespace OpenDentBusiness
         {
         }
 
+        /// <summary>
+        /// Constructs a new instance of the <see cref="ProviderClinic"/> class.
+        /// </summary>
+        /// <param name="dataReader">The data reader containing record data.</param>
+        /// <returns>A <see cref="ProviderClinic"/> instance.</returns>
         public static ProviderClinic FromReader(MySqlDataReader dataReader)
         {
             return new ProviderClinic
@@ -99,15 +104,36 @@ namespace OpenDentBusiness
             };
         }
 
+        /// <summary>
+        /// Gets all provider clinics for the specified clinic.
+        /// </summary>
+        /// <param name="clinicId">The ID of the clinic.</param>
+        /// <returns>A list of provider clinics.</returns>
         public static IEnumerable<ProviderClinic> GetByClinic(long clinicId) =>
             cache.SelectMany(providerClinic => providerClinic.ClinicId == clinicId);
 
+        /// <summary>
+        /// Gets all provider clinics for the specified provider.
+        /// </summary>
+        /// <param name="providerId">The ID of the provider.</param>
+        /// <returns>A list of provider clinics.</returns>
         public static IEnumerable<ProviderClinic> GetByProvider(long providerId) =>
             cache.SelectMany(providerClinic => providerClinic.ProviderId == providerId);
 
+        /// <summary>
+        /// Gets all provider clinics for the specified providers.
+        /// </summary>
+        /// <param name="providerIds">The ID's of the providers.</param>
+        /// <returns>A list of provider clinics.</returns>
         public static IEnumerable<ProviderClinic> GetByProviders(IEnumerable<long> providerIds) =>
             cache.SelectMany(providerClinic => providerIds.Contains(providerClinic.ProviderId));
 
+        /// <summary>
+        /// Gets the provider clinic for the given provider and clinic combination.
+        /// </summary>
+        /// <param name="providerId">The ID of the provider.</param>
+        /// <param name="clinicId">The ID of the clinic.</param>
+        /// <returns>THe provider clinic.</returns>
         public static ProviderClinic GetByProviderAndClinic(long providerId, long clinicId) =>
             cache.SelectOne(providerClinic => providerClinic.ProviderId == providerId && providerClinic.ClinicId == clinicId);
 

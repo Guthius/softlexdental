@@ -225,7 +225,6 @@
     <Compile Include="Data Interface\PayConnectResponseWebs.cs" />
     <Compile Include="Data Interface\PharmClinics.cs" />
     <Compile Include="Data Interface\ProcMultiVisits.cs" />
-    <Compile Include="__WIP_Clinic\ProviderClinicLinks.cs" />
     <Compile Include="Data Interface\Reactivations.cs" />
     <Compile Include="DataException.cs" />
     <Compile Include="DataRecord.cs" />
@@ -241,7 +240,6 @@
     <Compile Include="Db\SOut.cs" />
     <Compile Include="Data\DefinitionCategory.cs" />
     <Compile Include="DefCatOptions.cs" />
-    <Compile Include="__WIP_Clinic\ProviderClinics.cs" />
     <Compile Include="Data Interface\RecurringCharges.cs" />
     <Compile Include="Db Multi Table\AgingData.cs" />
     <Compile Include="Db Multi Table\MarkupEdit.cs" />
@@ -293,7 +291,7 @@
     <Compile Include="WebBridges\CloudStorage.cs" />
     <Compile Include="TableTypes\CommOptOut.cs" />
     <Compile Include="TableTypes\DbmLog.cs" />
-    <Compile Include="__WIP_Clinic\ProviderClinic.cs" />
+    <Compile Include="Data\ProviderClinic.cs" />
     <Compile Include="Misc\CreditCardUtils\CreditCardUtils.cs" />
     <Compile Include="Misc\CreditCardUtils\MagstripCardParser.cs" />
     <Compile Include="TableTypes\RecurringCharge.cs" />
@@ -788,8 +786,8 @@
     <Compile Include="Data Interface\Claims.cs" />
     <Compile Include="Data Interface\ClaimValCodeLogs.cs" />
     <Compile Include="Data Interface\Clearinghouses.cs" />
-    <Compile Include="__WIP_Clinic\ClinicOptions.cs" />
-    <Compile Include="__WIP_Clinic\Clinics.cs" />
+    <Compile Include="Data\ClinicOptions.cs" />
+    <Compile Include="__WIP\Clinics.cs" />
     <Compile Include="Data Interface\Commlogs.cs" />
     <Compile Include="Data Interface\ComputerPrefs.cs" />
     <Compile Include="Data Interface\Counties.cs" />
@@ -1213,7 +1211,7 @@
     <Compile Include="TableTypes\ClaimProc.cs" />
     <Compile Include="TableTypes\ClaimValCodeLog.cs" />
     <Compile Include="TableTypes\Clearinghouse.cs" />
-    <Compile Include="__WIP_Clinic\Clinic.cs" />
+    <Compile Include="Data\Clinic.cs" />
     <Compile Include="Data\ClockEvent.cs" />
     <Compile Include="TableTypes\Commlog.cs" />
     <Compile Include="Data\Computer.cs" />

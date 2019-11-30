@@ -1076,26 +1076,34 @@ namespace OpenDental{
 			SetClinicFilters();
 		}
 
-		private void butPickClinic_Click(object sender,EventArgs e) {
-			FormClinics FormC = new FormClinics();
-			FormC.IsSelectionMode=true;
-			FormC.IsMultiSelect=true;
-			FormC.ListClinics=_listClinics;//To include 'Unassigned'
-			FormC.ListSelectedClinicNums=GetSelectedClinicNums();
-			FormC.ShowDialog();
-			if(FormC.DialogResult==DialogResult.OK) {
-				comboClinic.SetSelected(false);
-				foreach(long clinCur in FormC.ListSelectedClinicNums) {
-					for(int i = 0;i < comboClinic.Items.Count;i++) {
-						long comboClinicNum = ((ODBoxItem<Clinic>)(comboClinic.Items[i])).Tag.Id;
-						if(clinCur == comboClinicNum) {
-							comboClinic.SetSelected(i,true);
-						}
-					}
-				}
-				SetClinicFilters();
-			}
-		}
+        private void butPickClinic_Click(object sender, EventArgs e)
+        {
+            using (var formClinics = new FormClinics(_listClinics))
+            {
+                formClinics.IsSelectionMode = true;
+                formClinics.IsMultiSelect = true;
+                formClinics.SelectedClinicIds = GetSelectedClinicNums();
+
+                if (formClinics.ShowDialog() == DialogResult.OK)
+                {
+                    comboClinic.SetSelected(false);
+
+                    foreach (long clinCur in formClinics.SelectedClinicIds)
+                    {
+                        for (int i = 0; i < comboClinic.Items.Count; i++)
+                        {
+                            long comboClinicNum = ((ODBoxItem<Clinic>)(comboClinic.Items[i])).Tag.Id;
+                            if (clinCur == comboClinicNum)
+                            {
+                                comboClinic.SetSelected(i, true);
+                            }
+                        }
+                    }
+
+                    SetClinicFilters();
+                }
+            }
+        }
 		
 		private void checkUseClinicDefaults_CheckedChanged(object sender,EventArgs e) {
 			UpdateGenMsgUI(GetSelectedClinicNums());

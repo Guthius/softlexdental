@@ -130,7 +130,7 @@ namespace OpenDental
 
                 for (int i = 1; i < clinicComboBox.Items.Count; i++)
                 {
-                    if (clinicComboBox.Items[i] is Clinic clinic && clinic.Id == formClinics.SelectedClinicNum)
+                    if (clinicComboBox.Items[i] is Clinic clinic && clinic.Id == formClinics.SelectedClinicId)
                     {
                         clinicComboBox.SelectedIndex = i;
 

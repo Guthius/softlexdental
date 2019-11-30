@@ -212,7 +212,7 @@ namespace OpenDental
                     return;
                 }
 
-                SelectedClinicId = formClinics.SelectedClinicNum;
+                SelectedClinicId = formClinics.SelectedClinicId;
             }
         }
 
@@ -228,7 +228,6 @@ namespace OpenDental
 
                 ProviderId = formProviderPick.SelectedProvNum;
             }
-
         }
 
         private void PickHygienistButton_Click(object sender, EventArgs e)

@@ -479,19 +479,21 @@ namespace OpenDental
 
         private void butPickClinic_Click(object sender, EventArgs e)
         {
-            FormClinics form = new FormClinics();
-            form.ListClinics = _listClinics;
-            form.IsSelectionMode = true;
-            form.IsMultiSelect = false;
-            if (form.ShowDialog() == DialogResult.OK)
+            using (var formClinics = new FormClinics(_listClinics))
             {
-                comboClinic.SelectedIndex = -1;
-                for (int i = 0; i < comboClinic.Items.Count; i++)
+                formClinics.IsSelectionMode = true;
+                formClinics.IsMultiSelect = false;
+
+                if (formClinics.ShowDialog() == DialogResult.OK)
                 {
-                    if (((ODBoxItem<Clinic>)(comboClinic.Items[i])).Tag.Id == form.SelectedClinicNum)
+                    comboClinic.SelectedIndex = -1;
+                    for (int i = 0; i < comboClinic.Items.Count; i++)
                     {
-                        comboClinic.SelectedIndex = i;
-                        break;
+                        if (((ODBoxItem<Clinic>)(comboClinic.Items[i])).Tag.Id == formClinics.SelectedClinicId)
+                        {
+                            comboClinic.SelectedIndex = i;
+                            break;
+                        }
                     }
                 }
             }

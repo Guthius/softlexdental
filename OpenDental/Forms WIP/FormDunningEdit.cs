@@ -585,13 +585,12 @@ namespace OpenDental
 
         private void butPickClinic_Click(object sender, EventArgs e)
         {
-            FormClinics FormC = new FormClinics();
+            FormClinics FormC = new FormClinics(_listClinics);
             FormC.IsSelectionMode = true;
-            FormC.ListClinics = _listClinics;//Includes 'Unassigned'
-            FormC.ListSelectedClinicNums = new List<long> { _listClinics[comboClinics.SelectedIndex].Id };
+            FormC.SelectedClinicIds = new List<long> { _listClinics[comboClinics.SelectedIndex].Id };
             if (FormC.ShowDialog() == DialogResult.OK)
             {
-                comboClinics.SelectedIndex = _listClinics.FindIndex(x => x.Id == FormC.SelectedClinicNum);
+                comboClinics.SelectedIndex = _listClinics.FindIndex(x => x.Id == FormC.SelectedClinicId);
             }
         }
 

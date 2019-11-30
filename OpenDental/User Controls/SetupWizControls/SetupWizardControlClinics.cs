@@ -116,8 +116,6 @@ namespace OpenDental.User_Controls.SetupWizard
                 formClinicEdit.ShowDialog();
                 if (formClinicEdit.DialogResult == DialogResult.OK)
                 {
-                    Clinic.Insert(formClinicEdit.ClinicCur);
-
                     DataValid.SetInvalid(InvalidType.Providers);
 
                     CacheManager.InvalidateEverywhere<Clinic>();
@@ -153,6 +151,7 @@ namespace OpenDental.User_Controls.SetupWizard
             {
                 formClinics.ShowDialog();
             } 
+
             LoadClinics();
         }
     }

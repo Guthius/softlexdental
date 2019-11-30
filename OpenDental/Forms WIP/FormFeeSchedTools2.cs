@@ -1558,11 +1558,10 @@ namespace OpenDental {
 		}
 
 		private void butPickClinic_Click(object sender,EventArgs e){
-			FormClinics FormC=new FormClinics();
+			FormClinics FormC=new FormClinics(_listClinics);
 			FormC.IsSelectionMode=true;
-			FormC.ListClinics=_listClinics;
 			FormC.ShowDialog();
-			int selectedIndex=_listClinics.FindIndex(x => x.Id==FormC.SelectedClinicNum)+1;//All clinic combo boxes have a none option, so always add 1.
+			int selectedIndex=_listClinics.FindIndex(x => x.Id==FormC.SelectedClinicId)+1;//All clinic combo boxes have a none option, so always add 1.
 			//int selectedIndex=GetClinicIndexFromPicker()+1;
 			//If the selectedIndex is 0, simply return and do not do anything.  There is no such thing as picking 'None' from the picker window.
 			if(selectedIndex==0) {
@@ -1578,12 +1577,11 @@ namespace OpenDental {
 		}
 
 		private void butPickClinicTo_Click(object sender,EventArgs e){
-			FormClinics FormC=new FormClinics();
+			FormClinics FormC=new FormClinics(_listClinics);
 			FormC.IsSelectionMode=true;
 			FormC.IsMultiSelect=true;
-			FormC.ListClinics=_listClinics;
 			FormC.ShowDialog();
-			_listSelectedClinicNumsTo=FormC.ListSelectedClinicNums;
+			_listSelectedClinicNumsTo=FormC.SelectedClinicIds;
 			if(_listSelectedClinicNumsTo.Count==0) {
 				return;
 			}
@@ -1599,21 +1597,16 @@ namespace OpenDental {
 		}
 
 		private void butGlobalUpdatePickClinic_Click(object sender,EventArgs e) {
-			FormClinics FormC=new FormClinics();
+			FormClinics FormC=new FormClinics(_listClinics);
 			FormC.IsSelectionMode=true;
 			FormC.IsMultiSelect=true;
-            FormC.ListClinics = _listClinics;
-			if(!Security.CurrentUser.ClinicRestricted) {
-				FormC.ListClinics.Insert(0,new Clinic { Description=Lan.g(this,"Headquarters"),Abbr=Lan.g(this,"HQ") });
-				FormC.IncludeHQInList=true;
-			}
-			FormC.ListSelectedClinicNums=_listSelectedClinicsGlobalUpdates.Select(x => x.Id).ToList();
+			FormC.SelectedClinicIds=_listSelectedClinicsGlobalUpdates.Select(x => x.Id).ToList();
 			DialogResult diagRes=FormC.ShowDialog();
 			if(diagRes==DialogResult.Cancel) {
 				return;
 			}
-			_listSelectedClinicsGlobalUpdates=_listClinics.FindAll(x => FormC.ListSelectedClinicNums.Contains(x.Id)).ToList();
-			if(!Security.CurrentUser.ClinicRestricted && FormC.ListSelectedClinicNums.Contains(0)) {
+			_listSelectedClinicsGlobalUpdates=_listClinics.FindAll(x => FormC.SelectedClinicIds.Contains(x.Id)).ToList();
+			if(!Security.CurrentUser.ClinicRestricted && FormC.SelectedClinicIds.Contains(0)) {
 				_listSelectedClinicsGlobalUpdates.Insert(0,new Clinic { Description=Lan.g(this,"Headquarters"),Abbr=Lan.g(this,"HQ") });
 			}
 			if(_listSelectedClinicsGlobalUpdates.Count>1) {

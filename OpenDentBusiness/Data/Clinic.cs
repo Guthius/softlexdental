@@ -15,12 +15,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; If not, see <http://www.gnu.org/licenses/>
  */
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Xml.Serialization;
-using MySql.Data.MySqlClient;
-using Newtonsoft.Json;
 
 namespace OpenDentBusiness
 {
@@ -47,9 +45,6 @@ namespace OpenDentBusiness
         /// <summary>
         ///     <para>
         ///         The ID of the default provider of the clinic.
-        ///     </para>
-        ///     <para>
-        ///         Used in place of the default practice provider when making new patients.
         ///     </para>
         /// </summary>
         public long? ProviderId;
@@ -227,37 +222,6 @@ namespace OpenDentBusiness
         /// Returns a string representation of the clinic.
         /// </summary>
         public override string ToString() => Abbr ?? Description ?? "";
-
-
-
-
-
-
-        ///<summary>List of specialty DefLinks for the clinic.  Not a database column.  Filled when the clinic cache is filled.</summary>
-        [ODTableColumn(IsNotDbColumn = true)]
-        private List<DefLink> _listClinicSpecialtyDefLinks;
-
-        ///<summary>List of specialty DefLinks for the clinic.  Not a database column.  Filled when the clinic cache is filled.</summary>
-        [XmlIgnore, JsonIgnore]
-        public List<DefLink> ListClinicSpecialtyDefLinks
-        {
-            get
-            {
-                if (_listClinicSpecialtyDefLinks == null)
-                {
-                    _listClinicSpecialtyDefLinks = new List<DefLink>();
-                    if (Id > 0)
-                    {
-                        _listClinicSpecialtyDefLinks = DefLinks.GetListByFKey(Id, DefLinkType.Clinic);
-                    }
-                }
-                return _listClinicSpecialtyDefLinks;
-            }
-            set
-            {
-                _listClinicSpecialtyDefLinks = value;
-            }
-        }
 
         /// <summary>
         /// Constructs a new instance of the <see cref="Clinic"/> class.
@@ -478,11 +442,11 @@ namespace OpenDentBusiness
             DataConnection.ExecuteNonQuery(
                 "UPDATE `clinics` SET `email_address_id` = ?email_address_id, `provider_id` = ?provider_id, `description` = ?description, " +
                 "`abbr` = ?abbr, `address_line1` = ?address_line1, `address_line2` = ?address_line2, `city` = ?city, `state` = ?state, " +
-                "`zip` = ?zip, `phone` = ?phone, `fax` = ?Fax, `bank_number` = ?bank_nunmber, " +
+                "`zip` = ?zip, `phone` = ?phone, `fax` = ?Fax, `bank_number` = ?bank_number, " +
                 "`default_place_of_service` = ?default_place_of_service, `insurance_provider_id` = ?insurance_provider_id, " +
                 "`billing_address_line1` = ?billing_address_line1, `billing_address_line2` = ?billing_address_line2, " +
                 "`billing_city` = ?billing_city, `billing_state` = ?billing_state, `billing_zip` = ?billing_zip, " +
-                "`pay_to_address_line1` = ?pay_to_address_line1, `pay_to_adress_line2` = ?pay_to_address_line2, `pay_to_city` = ?pay_to_city, " +
+                "`pay_to_address_line1` = ?pay_to_address_line1, `pay_to_address_line2` = ?pay_to_address_line2, `pay_to_city` = ?pay_to_city, " +
                 "`pay_to_zip` = ?pay_to_zip, `region_id` = ?region_id, `medlab_account_id` = ?medlab_account_id, " +
                 "`scheduling_note` = ?scheduling_note, `options` = ?options, `sort_order` = ?sort_order, `hidden` = ?hidden " +
                 "WHERE `id` = ?id",
