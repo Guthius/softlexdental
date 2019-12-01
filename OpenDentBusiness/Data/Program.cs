@@ -17,6 +17,7 @@
  */
 using MySql.Data.MySqlClient;
 using OpenDentBusiness.Bridges;
+using System;
 using System.Collections.Generic;
 
 namespace OpenDentBusiness
@@ -30,7 +31,9 @@ namespace OpenDentBusiness
     /// </summary>
     public class Program : DataRecord
     {
-        // TODO: Caching...
+        private static readonly DataRecordCache<Program> cache =
+            new DataRecordCache<Program>(
+                "SELECT * FROM `programs` WHERE `computer` = '" + MySqlHelper.EscapeString(Environment.MachineName) + "'", FromReader);
 
         /// <summary>
         /// This is the full type name of the .NET class that represents the program.
@@ -52,6 +55,16 @@ namespace OpenDentBusiness
         /// </summary>
         public string Note;
 
+        /// <summary>
+        /// The name of the computer the program is installed on.
+        /// </summary>
+        public string ComputerName;
+
+        /// <summary>
+        /// Constructs a new instance of the <see cref="Program"/> class.
+        /// </summary>
+        /// <param name="dataReader">The data reader containing record data.</param>
+        /// <returns>A <see cref="Program"/> instance.</returns>
         public static Program FromReader(MySqlDataReader dataReader)
         {
             return new Program
@@ -60,29 +73,35 @@ namespace OpenDentBusiness
                 TypeName = (string)dataReader["type"],
                 Description = (string)dataReader["description"],
                 Enabled = (bool)dataReader["enabled"],
-                Note = (string)dataReader["note"]
+                Note = (string)dataReader["note"],
+                ComputerName = (string)dataReader["computer"]
             };
         }
 
         /// <summary>
-        /// Gets the program with the specified ID from the database.
+        ///     <para>
+        ///         Gets the program with the specified ID from the database.
+        ///     </para>
         /// </summary>
         /// <param name="programId">The ID of the program.</param>
         /// <returns>The program.</returns>
-        public static Program GetById(long programId) =>
-            SelectOne("SELECT * FROM `programs` WHERE `id` = " + programId, FromReader);
+        public static Program GetById(long programId) => 
+            cache.SelectOne(program => program.Id == programId);
 
         /// <summary>
-        /// Gets the program with the specified type name from the database..
+        ///     <para>
+        ///         Gets the program with the specified type name from the database.
+        ///     </para>
         /// </summary>
         /// <param name="typeName">The type name of the program.</param>
         /// <returns>The program with the specified type name.</returns>
-        public static Program GetByType(string typeName) =>
-            SelectOne("SELECT * FROM `programs` WHERE `type` = ?type", FromReader, 
-                new MySqlParameter("type", typeName));
+        public static Program GetByType(string typeName) => 
+            cache.SelectOne(program => program.TypeName == typeName);
 
         /// <summary>
-        /// Gets the program for the specified type from the database.
+        ///     <para>
+        ///         Gets the program for the specified type from the database.
+        ///     </para>
         /// </summary>
         /// <typeparam name="T">The program type.</typeparam>
         /// <returns>The program for the specified type.</returns>
@@ -93,7 +112,7 @@ namespace OpenDentBusiness
         /// Gets all programs from the database.
         /// </summary>
         /// <returns>A list of programs.</returns>
-        public static IEnumerable<Program> All => SelectMany("SELECT * FROM `programs` ORDER BY `description`", FromReader);
+        public static IEnumerable<Program> All => cache.All();
 
         /// <summary>
         /// Inserts the specified program into the database.
@@ -102,11 +121,12 @@ namespace OpenDentBusiness
         /// <returns>The ID assigned to the program.</returns>
         public static long Insert(Program program) =>
             program.Id = DataConnection.ExecuteInsert(
-                "INSERT INTO `programs` (`type`, `description`, `enabled`, `note`) VALUES (?type, ?description, ?enabled, ?note)",
+                "INSERT INTO `programs` (`type`, `description`, `enabled`, `note`, `computer`) VALUES (?type, ?description, ?enabled, ?note, ?computer)",
                     new MySqlParameter("type", program.TypeName ?? ""),
                     new MySqlParameter("description", program.Description ?? ""),
                     new MySqlParameter("enabled", program.Enabled),
-                    new MySqlParameter("note", program.Note ?? ""));
+                    new MySqlParameter("note", program.Note ?? ""),
+                    new MySqlParameter("computer", program.ComputerName ?? ""));
 
         /// <summary>
         /// Updates the specified program in the database.
@@ -114,11 +134,12 @@ namespace OpenDentBusiness
         /// <param name="program">The program.</param>
         public static void Update(Program program) =>
             DataConnection.ExecuteNonQuery(
-                "UPDATE `programs` SET `type` = ?type, `description` = ?description, `enabled` = ?enabled, `note` = ?note WHERE `id` = ?id",
+                "UPDATE `programs` SET `type` = ?type, `description` = ?description, `enabled` = ?enabled, `note` = ?note, `computer` = ?computer WHERE `id` = ?id",
                     new MySqlParameter("type", program.TypeName ?? ""),
                     new MySqlParameter("description", program.Description ?? ""),
                     new MySqlParameter("enabled", program.Enabled),
                     new MySqlParameter("note", program.Note ?? ""),
+                    new MySqlParameter("computer", program.ComputerName ?? ""),
                     new MySqlParameter("id", program.Id));
 
         /// <summary>

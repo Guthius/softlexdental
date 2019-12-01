@@ -27,6 +27,7 @@ namespace OpenDentBusiness
     /// </summary>
     public enum DefinitionCategory
     {
+        None,
         // TODO: Fix me
 
         /// <summary>

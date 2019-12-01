@@ -23,7 +23,7 @@ namespace OpenDental.Bridges
     {
         private static readonly BridgePreference[] preferences =
         {
-            BridgePreference.Custom("export_path", "Export Path", BridgePreferenceType.FolderPath)
+            BridgePreference.Define("export_path", "Export Path", BridgePreferenceType.Folder)
         };
 
         /// <summary>

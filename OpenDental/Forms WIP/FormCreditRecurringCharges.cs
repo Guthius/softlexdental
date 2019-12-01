@@ -253,22 +253,26 @@ namespace OpenDental
                         row.Cells[7].Bold = true;//"Charge Amt"
                     }
                 }
-                if (Programs.HasMultipleCreditCardProgramsEnabled())
-                {
-                    // TODO: Fix me
-                    //if (Programs.IsEnabled(ProgramName.Xcharge))
-                    //{
-                    //    row.Cells.Add(!string.IsNullOrEmpty(chargeCur.XChargeToken) ? "X" : "");
-                    //}
-                    //if (Programs.IsEnabled(ProgramName.PayConnect))
-                    //{
-                    //    row.Cells.Add(!string.IsNullOrEmpty(chargeCur.PayConnectToken) ? "X" : "");
-                    //}
-                    //if (Programs.IsEnabled(ProgramName.PaySimple))
-                    //{
-                    //    row.Cells.Add(!string.IsNullOrEmpty(chargeCur.PaySimpleToken) ? "X" : "");
-                    //}
-                }
+
+                // TODO: Fix me
+                //if (Programs.HasMultipleCreditCardProgramsEnabled())
+                //{
+                //    
+                //    if (Programs.IsEnabled(ProgramName.Xcharge))
+                //    {
+                //        row.Cells.Add(!string.IsNullOrEmpty(chargeCur.XChargeToken) ? "X" : "");
+                //    }
+                //    if (Programs.IsEnabled(ProgramName.PayConnect))
+                //    {
+                //        row.Cells.Add(!string.IsNullOrEmpty(chargeCur.PayConnectToken) ? "X" : "");
+                //    }
+                //    if (Programs.IsEnabled(ProgramName.PaySimple))
+                //    {
+                //        row.Cells.Add(!string.IsNullOrEmpty(chargeCur.PaySimpleToken) ? "X" : "");
+                //    }
+                //}
+
+
                 row.Tag = chargeCur;
                 gridMain.Rows.Add(row);
             }

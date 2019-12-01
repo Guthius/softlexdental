@@ -22,15 +22,10 @@ namespace OpenDental.Bridges
 {
     public class CamsightBridge : CommandLineBridge
     {
-        private static readonly BridgePreference[] preferences =
-        {
-            BridgePreference.UseChartNumber
-        };
-
         /// <summary>
         /// Initializes a new instance of the <see cref="CamsightBridge"/> class.
         /// </summary>
-        public CamsightBridge() : base("Camsight", "", "", preferences)
+        public CamsightBridge() : base("Camsight", "", "")
         {
             RequirePatient = true;
         }

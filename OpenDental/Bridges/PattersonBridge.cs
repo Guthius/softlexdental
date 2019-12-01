@@ -25,8 +25,8 @@ namespace OpenDental.Bridges
     {
         private static readonly BridgePreference[] preferences =
         {
-            BridgePreference.Custom("program_path", "Program Path", BridgePreferenceType.String),
-            BridgePreference.Custom("ini_file_path", "Path to Patterson Imaging INI", BridgePreferenceType.String)
+            BridgePreference.Define("program_path", "Program Path", BridgePreferenceType.String),
+            BridgePreference.Define("ini_file_path", "Path to Patterson Imaging INI", BridgePreferenceType.String)
         };
 
         /// <summary>

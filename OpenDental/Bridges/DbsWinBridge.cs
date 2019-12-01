@@ -25,7 +25,7 @@ namespace OpenDental.Bridges
     {
         private static readonly BridgePreference[] preferences =
         {
-            BridgePreference.Custom("file_path", "Patimport.txt path", BridgePreferenceType.FilePath)
+            BridgePreference.Define("file_path", "Patimport.txt path", BridgePreferenceType.File)
         };
 
         /// <summary>

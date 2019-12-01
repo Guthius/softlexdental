@@ -19,37 +19,6 @@ namespace OpenDentBusiness.Bridges
 {
     public class BridgePreference
     {
-        public static readonly BridgePreference ProgramPath = 
-            new BridgePreference(ProgramPreferenceName.ProgramPath, "Executable path", BridgePreferenceType.FilePath);
-
-        public static readonly BridgePreference CommandLineArguments = 
-            new BridgePreference(ProgramPreferenceName.CommandLineArguments, "Command line arguments", BridgePreferenceType.String);
-
-        public static readonly BridgePreference UseChartNumber = 
-            new BridgePreference(ProgramPreferenceName.UseChartNumber, "Use patient chart number instead of ID", BridgePreferenceType.Boolean);
-
-        public static readonly BridgePreference DateFormat = 
-            new BridgePreference(ProgramPreferenceName.DateFormat, "Birthdate format (default yyyyMMdd)", BridgePreferenceType.String);
-
-        /**
-         * TODO: This class needs some more work.
-         * 
-         * The main purpose of this class is to serve as a description of a preference used by a
-         * IBridge implementation. This information is used by the program setup forms.
-         *
-         * Right now a BridgePreference simply contains the internal key of the preference, a 
-         * description and a data type. Ideally it would be nice to also be able to specify a
-         * help text, a scope (e.g. is the preference configured per clinic, per user, per computer
-         * or globally) a validation action and a browse action.
-         * 
-         * The constructor should be private, and construction of BridgePreference instances
-         * should only be done through th 'Custom' method which should be renamed to something
-         * more appropriate (e.g. 'Define' or 'Make').
-         * 
-         * The predefined preferences should be dropped. And also the ProgramPreferenceName class
-         * should be dropped.
-         */
-
         /// <summary>
         ///     <para>
         ///         Creates a custom preference with the specified details.
@@ -58,9 +27,10 @@ namespace OpenDentBusiness.Bridges
         /// <param name="key">The preference key.</param>
         /// <param name="description">A description of the preference.</param>
         /// <param name="type">The data type of the preference.</param>
+        /// <param name="definitionCategory">The definition category.</param>
         /// <returns></returns>
-        public static BridgePreference Custom(string key, string description, BridgePreferenceType type) =>
-            new BridgePreference(key, description, type);
+        public static BridgePreference Define(string key, string description, BridgePreferenceType type, DefinitionCategory definitionCategory = DefinitionCategory.None) =>
+            new BridgePreference(key, description, type, definitionCategory);
 
         /// <summary>
         /// Gets the preference key.
@@ -78,16 +48,26 @@ namespace OpenDentBusiness.Bridges
         public BridgePreferenceType Type { get; }
 
         /// <summary>
+        ///     <para>
+        ///         Gets the definition category. Only used when the preference type is set to
+        ///         <see cref="BridgePreferenceType.Definition"/>.
+        ///     </para>
+        /// </summary>
+        public DefinitionCategory DefinitionCategory { get; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="BridgePreference"/> class.
         /// </summary>
         /// <param name="key">The preference key.</param>
         /// <param name="description">A description of the preference.</param>
         /// <param name="type">The preference data type.</param>
-        public BridgePreference(string key, string description, BridgePreferenceType type)
+        /// <param name="definitionCategory">The definition category.</param>
+        private BridgePreference(string key, string description, BridgePreferenceType type, DefinitionCategory definitionCategory)
         {
             Key = key;
             Description = description;
             Type = type;
+            DefinitionCategory = definitionCategory;
         }
     }
 }

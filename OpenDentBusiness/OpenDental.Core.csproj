@@ -175,6 +175,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bridges\Bridge.cs" />
+    <Compile Include="Bridges\BridgeManager.cs" />
     <Compile Include="Bridges\BridgePreference.cs" />
     <Compile Include="Bridges\BridgePreferenceType.cs" />
     <Compile Include="Bridges\CommandLineBridge.cs" />
@@ -353,7 +354,6 @@
     <Compile Include="X12\X12Transaction.cs" />
     <Compile Include="Data\AlertActionType.cs" />
     <Compile Include="__WIP2\ProgramName.cs" />
-    <Compile Include="__WIP2\ProgramPreferenceName.cs" />
     <Compile Include="__WIP\AlertSeverityType.cs" />
     <Compile Include="Crud\AppointmentCrud.cs" />
     <Compile Include="Crud\AppointmentRuleCrud.cs" />
@@ -832,8 +832,6 @@
     <Compile Include="Data Interface\ProcedureCodes.cs" />
     <Compile Include="Data Interface\Procedures.cs" />
     <Compile Include="Data Interface\ProcTPs.cs" />
-    <Compile Include="__WIP2\ProgramProperties.cs" />
-    <Compile Include="__WIP2\Programs.cs" />
     <Compile Include="Data Interface\ProviderIdents.cs" />
     <Compile Include="Data Interface\QuestionDefs.cs" />
     <Compile Include="Data Interface\Questions.cs" />
@@ -1296,8 +1294,8 @@
     <Compile Include="TableTypes\ProcedureCode.cs" />
     <Compile Include="TableTypes\ProcNote.cs" />
     <Compile Include="TableTypes\ProcTP.cs" />
-    <Compile Include="__WIP2\Program.cs" />
-    <Compile Include="__WIP2\ProgramPreference.cs" />
+    <Compile Include="Data\Program.cs" />
+    <Compile Include="Data\ProgramPreference.cs" />
     <Compile Include="TableTypes\Provider.cs" />
     <Compile Include="TableTypes\ProviderIdent.cs" />
     <Compile Include="TableTypes\Question.cs" />

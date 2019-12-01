@@ -26,7 +26,7 @@ namespace OpenDental.Bridges
     {
         private static readonly BridgePreference[] preferences =
         {
-            BridgePreference.Custom("ini_file_path", "INI File Path", BridgePreferenceType.FilePath)
+            BridgePreference.Define("ini_file_path", "INI File Path", BridgePreferenceType.File)
         };
 
         /// <summary>

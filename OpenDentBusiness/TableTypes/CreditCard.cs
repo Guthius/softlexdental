@@ -73,14 +73,14 @@ namespace OpenDentBusiness {
 
 		///<summary>Gets a string of the companies the credit cards has tokens for.</summary>
 		public string GetTokenString() {
-			if(!Programs.HasMultipleCreditCardProgramsEnabled()
-				|| (string.IsNullOrEmpty(XChargeToken) && string.IsNullOrEmpty(PayConnectToken) && string.IsNullOrEmpty(PaySimpleToken))) 
-			{
-				if(CCSource==CreditCardSource.PaySimpleACH) {
-					return "("+Lans.g(this,"ACH")+")";
-				}
-				return "";
-			}
+			//if(!Programs.HasMultipleCreditCardProgramsEnabled()
+			//	|| (string.IsNullOrEmpty(XChargeToken) && string.IsNullOrEmpty(PayConnectToken) && string.IsNullOrEmpty(PaySimpleToken))) 
+			//{
+			//	if(CCSource==CreditCardSource.PaySimpleACH) {
+			//		return "("+Lans.g(this,"ACH")+")";
+			//	}
+			//	return "";
+			//}
 			List<string> listTokens=new List<string>();
 			if(!string.IsNullOrEmpty(XChargeToken)) {
 				listTokens.Add("XCharge");

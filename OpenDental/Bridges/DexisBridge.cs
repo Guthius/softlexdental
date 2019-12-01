@@ -29,7 +29,7 @@ namespace OpenDental.Bridges
     {
         private static readonly BridgePreference[] preferences =
         {
-            BridgePreference.Custom("info_file_path", "InfoFile Path", BridgePreferenceType.FilePath)
+            BridgePreference.Define("info_file_path", "InfoFile Path", BridgePreferenceType.File)
         };
 
         // Encoding 1252 was specifically requested by the XDR development team to help with accented characters (ex Canadian customers).

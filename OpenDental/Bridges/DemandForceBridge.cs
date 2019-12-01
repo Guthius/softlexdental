@@ -34,7 +34,7 @@ namespace OpenDental.Bridges
 
         private static readonly BridgePreference[] preferences =
         {
-            BridgePreference.Custom("license_key", "DemandForce License Key (required)", BridgePreferenceType.String)
+            BridgePreference.Define("license_key", "DemandForce License Key (required)", BridgePreferenceType.String)
         };
 
         /// <summary>

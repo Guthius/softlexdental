@@ -24,8 +24,8 @@ namespace OpenDental.Bridges
     {
         private static readonly BridgePreference[] preferences =
         {
-            BridgePreference.Custom("force_recurring_charge", "XChargeForceRecurringCharge", BridgePreferenceType.String),
-            BridgePreference.Custom("prevent_saving_new_cc", "XChargePreventSavingNewCC", BridgePreferenceType.String)
+            BridgePreference.Define("force_recurring_charge", "XChargeForceRecurringCharge", BridgePreferenceType.String),
+            BridgePreference.Define("prevent_saving_new_cc", "XChargePreventSavingNewCC", BridgePreferenceType.String)
         };
 
         /// <summary>

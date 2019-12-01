@@ -31,7 +31,7 @@ namespace OpenDental.Bridges
     {
         private static readonly BridgePreference[] preferences =
         {
-            BridgePreference.ProgramPath
+            BridgePreference.Define("program_path", "Executable Path", BridgePreferenceType.File)
         };
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace OpenDental.Bridges
         /// <returns>True if the program is running; otherwise, false.</returns>
         protected override bool RunProgram(long programId, Patient patient)
         {
-            var programPath = ProgramPreference.GetString(programId, ProgramPreferenceName.ProgramPath);
+            var programPath = ProgramPreference.GetString(programId, "program_path");
             if (string.IsNullOrEmpty(programPath) || !File.Exists(programPath))
             {
                 MessageBox.Show(

@@ -30,9 +30,9 @@ namespace OpenDental.Bridges
 
         private static readonly BridgePreference[] preferences =
         {
-            BridgePreference.Custom("acq_computer_name", "Acquisition Computer Name", BridgePreferenceType.String),
-            BridgePreference.Custom("xml_output_file_path", "XML Output File Path", BridgePreferenceType.FilePath),
-            BridgePreference.Custom("return_folder_path", "Return Folder Path", BridgePreferenceType.FolderPath)
+            BridgePreference.Define("acq_computer_name", "Acquisition Computer Name", BridgePreferenceType.String),
+            BridgePreference.Define("xml_output_file_path", "XML Output File Path", BridgePreferenceType.File),
+            BridgePreference.Define("return_folder_path", "Return Folder Path", BridgePreferenceType.Folder)
         };
 
         private static Program program;

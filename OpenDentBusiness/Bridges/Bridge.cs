@@ -28,6 +28,8 @@ namespace OpenDentBusiness.Bridges
     public abstract class Bridge : IBridge
     {
         private readonly List<BridgePreference> preferences;
+        private readonly static BridgePreference useChartNumberPreference = 
+            BridgePreference.Define("use_chart_number", "Use patient chart number instead of ID", BridgePreferenceType.Boolean);
 
         /// <summary>
         /// Gets the name of the external program or service.
@@ -61,7 +63,7 @@ namespace OpenDentBusiness.Bridges
             Url = url ?? "";
 
             this.preferences = preferences?.ToList() ?? new List<BridgePreference>();
-            this.preferences.Add(BridgePreference.UseChartNumber);
+            this.preferences.Add(useChartNumberPreference);
         }
 
         /// <summary>
@@ -119,6 +121,6 @@ namespace OpenDentBusiness.Bridges
         ///     True if <see cref="Patient.ChartNumber"/> should be used to identify the patient; 
         ///     otherwise, false.
         /// </returns>
-        protected static bool IsUsingChartNumber(long programId) => ProgramPreference.GetBool(programId, ProgramPreferenceName.UseChartNumber);
+        protected static bool IsUsingChartNumber(long programId) => ProgramPreference.GetBool(programId, "use_chart_number");
     }
 }

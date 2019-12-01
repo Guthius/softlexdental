@@ -24,7 +24,7 @@ namespace OpenDental.Bridges
     {
         private static readonly BridgePreference[] preferences =
         {
-            BridgePreference.DateFormat
+            BridgePreference.Define("date_format", "Date Format (default yyyyMMdd)", BridgePreferenceType.String)
         };
 
         /// <summary>
@@ -49,7 +49,7 @@ namespace OpenDental.Bridges
         {
             string Tidy(string input) => input.Replace("\"", "");
 
-            var dateFormat = ProgramPreference.GetString(programId, ProgramPreferenceName.DateFormat, "yyyyMMdd");
+            var dateFormat = ProgramPreference.GetString(programId, "date_format", "yyyyMMdd");
 
             arguments =
                 " \"" + Tidy(GetPatientId(programId, patient)) + "\"" +

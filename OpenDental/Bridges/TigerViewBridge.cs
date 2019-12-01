@@ -30,9 +30,9 @@ namespace OpenDental.Bridges
 
         private static readonly BridgePreference[] preferences =
         {
-            BridgePreference.Custom("ini_file_path", "Tiger1.ini Path", BridgePreferenceType.FilePath),
-            BridgePreference.Custom("date_format", "Birthdate Format (default MM/dd/yy)", BridgePreferenceType.String),
-            BridgePreference.Custom("emr_folder_path", "TigerView EMR Folder Path", BridgePreferenceType.FolderPath)
+            BridgePreference.Define("ini_file_path", "Tiger1.ini Path", BridgePreferenceType.File),
+            BridgePreference.Define("date_format", "Birthdate Format (default MM/dd/yy)", BridgePreferenceType.String),
+            BridgePreference.Define("emr_folder_path", "TigerView EMR Folder Path", BridgePreferenceType.Folder)
         };
 
         private static FileSystemWatcher fileSystemWatcher;

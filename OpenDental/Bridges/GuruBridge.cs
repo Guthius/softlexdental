@@ -28,7 +28,7 @@ namespace OpenDental.Bridges
     {
         private static readonly BridgePreference[] preferences =
         {
-            BridgePreference.Custom("image_path", "Guru Image Path", BridgePreferenceType.FolderPath)
+            BridgePreference.Define("image_path", "Guru Image Path", BridgePreferenceType.Folder)
         };
 
         /// <summary>

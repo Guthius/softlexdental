@@ -27,9 +27,8 @@ namespace OpenDental.Bridges
     public class ProgenyBridge : Bridge
     {
         private static readonly BridgePreference[] preferences =
-{
-            BridgePreference.ProgramPath,
-            BridgePreference.CommandLineArguments
+        {
+            BridgePreference.Define("program_path", "Executable Path", BridgePreferenceType.File)
         };
 
         /// <summary>
@@ -57,7 +56,7 @@ namespace OpenDental.Bridges
         {
             string Tidy(string input) => input.Replace("\"", "").Replace(",", "");
 
-            var programPath = ProgramPreference.GetString(programId, ProgramPreferenceName.ProgramPath);
+            var programPath = ProgramPreference.GetString(programId, "program_path");
             if (string.IsNullOrEmpty(programPath))
             {
                 return;

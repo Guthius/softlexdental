@@ -50,15 +50,12 @@ namespace OpenDental.Bridges
 
         private static readonly BridgePreference[] preferences =
         {
-            BridgePreference.Custom("url", "XVWeb URL", BridgePreferenceType.String),
-            BridgePreference.Custom("username", "Username", BridgePreferenceType.String),
-            BridgePreference.Custom("password", "Password", BridgePreferenceType.String),
-            BridgePreference.Custom("date_format", "Birthdate Format (default MM/dd/yyyy)", BridgePreferenceType.String),
-
-            // TODO: Image category should be a preference that links to a definition...
-            BridgePreference.Custom("image_category", "Image Category", BridgePreferenceType.Long),
-
-            BridgePreference.Custom("save_images", "Save Images", BridgePreferenceType.Boolean)
+            BridgePreference.Define("url", "XVWeb URL", BridgePreferenceType.String),
+            BridgePreference.Define("username", "Username", BridgePreferenceType.String),
+            BridgePreference.Define("password", "Password", BridgePreferenceType.String),
+            BridgePreference.Define("date_format", "Date Format (default MM/dd/yyyy)", BridgePreferenceType.String),
+            BridgePreference.Define("image_category", "Image Category", BridgePreferenceType.Definition),
+            BridgePreference.Define("save_images", "Save Images", BridgePreferenceType.Boolean)
         };
 
         private static readonly Dictionary<long, Token> xvwebTokenCache = new Dictionary<long, Token>();
@@ -170,20 +167,15 @@ namespace OpenDental.Bridges
         /// <param name="patient">The patient details.</param>
         public override void Send(long programId, Patient patient)
         {
-            var programPath = ProgramPreference.GetString(programId, ProgramPreferenceName.ProgramPath);
             var programUrl = ProgramPreference.GetString(programId, "url", "https://demo2.apteryxweb.com/");
 
             var queryString = patient != null ? GetQueryString(programId, patient) : "";
 
             try
             {
-                if (string.IsNullOrWhiteSpace(programPath))
+                if (!string.IsNullOrWhiteSpace(programUrl))
                 {
                     Process.Start(programUrl + queryString);
-                }
-                else
-                {
-                    Process.Start(programPath, programUrl + queryString);
                 }
             }
             catch (Exception exception)

@@ -17,11 +17,18 @@
  */
 using MySql.Data.MySqlClient;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace OpenDentBusiness
 {
     public class ProgramPreference : DataRecordBase
     {
+        private static DataRecordCacheBase<ProgramPreference> cache = 
+            new DataRecordCacheBase<ProgramPreference>(
+                "SELECT * FROM `program_preferences` WHERE `computer` = '" + MySqlHelper.EscapeString(Environment.MachineName) + "'", FromReader)
+                .LinkedTo<Program>();
+
         /// <summary>
         ///     <para>
         ///         The optional ID of the clinic the preference applies to. Can be used to 
@@ -60,8 +67,32 @@ namespace OpenDentBusiness
         public string ComputerName;
 
         /// <summary>
-        /// Gets the preference with the specified key for the program with the specified ID from
-        /// the database.
+        /// Constructs a new instance of the <see cref="ProgramPreference"/> class.
+        /// </summary>
+        /// <param name="dataReader">The data reader containing record data.</param>
+        /// <returns>A <see cref="ProgramPreference"/> instance.</returns>
+        public static ProgramPreference FromReader(MySqlDataReader dataReader)
+        {
+            return new ProgramPreference
+            {
+                ClinicId = dataReader["clinic_id"] as long?,
+                ProgramId = (long)dataReader["program_id"],
+                Key = (string)dataReader["key"],
+                Value = (string)dataReader["value"],
+                ComputerName = (string)dataReader["computer"]
+            };
+        }
+
+        /// <summary>
+        /// Gets all preferences of the specified program from the database.
+        /// </summary>
+        /// <param name="programId">The ID of the program.</param>
+        /// <returns>A list of program preferences.</returns>
+        public static IEnumerable<ProgramPreference> GetByProgram(long programId) =>
+            cache.SelectMany(programPreference => programPreference.ProgramId == programId);
+
+        /// <summary>
+        ///     Gets the preference with the specified key for the specified program.
         /// </summary>
         /// <param name="programId">The ID of the program</param>
         /// <param name="preferenceKey">The preference key.</param>
@@ -71,16 +102,25 @@ namespace OpenDentBusiness
         /// </returns>
         public static string GetString(long programId, string preferenceKey, string defaultValue = "")
         {
-            var result = DataConnection.ExecuteScalar(
-                "SELECT `value` FROM `program_preferences` WHERE `program_id` = " + programId + " AND `key` = ?key",
-                    new MySqlParameter("key", preferenceKey ?? ""));
+            ProgramPreference result;
+
+            var preferences = cache.SelectMany(
+                preference =>
+                    preference.ProgramId == programId &&
+                    preference.Key == preferenceKey &&
+                    preference.ComputerName.Equals(Environment.MachineName, StringComparison.InvariantCultureIgnoreCase));
+
+            // Check if there is a instance of the preference that matches the selected clinic.
+            result = preferences.SingleOrDefault(
+                preference =>
+                    preference.ClinicId == Clinics.ClinicId && string.IsNullOrEmpty(preference.ComputerName));
 
             if (result == null)
             {
-                return defaultValue;
+                result = preferences.FirstOrDefault();
             }
 
-            return result;
+            return result?.Value ?? defaultValue;
         }
 
         /// <summary>
@@ -146,23 +186,38 @@ namespace OpenDentBusiness
         }
 
         /// <summary>
-        /// Sets the value of the preference with the specified key for the specified program.
+        /// Gets the preference with the specified key for the program with the specified ID from
+        /// the database.
+        /// </summary>
+        /// <param name="programId">The ID of the program</param>
+        /// <param name="preferenceKey">The preference key.</param>
+        /// <param name="defaultDefinitionId">The ID of the default definition to use if not configured.</param>
+        /// <returns>
+        ///     The value of the preference if one has been set; otherwise the default value.
+        /// </returns>
+        public static Definition GetDefinition(long programId, string preferenceKey, long defaultDefinitionId = 0) =>
+            Definition.GetById(
+                GetLong(programId, preferenceKey, defaultDefinitionId));
+
+        /// <summary>
+        ///     <para>
+        ///         Sets the value of the preference with the specified key for the specified 
+        ///         program.
+        ///     </para>
         /// </summary>
         /// <param name="programId">The ID of the program.</param>
         /// <param name="preferenceKey">The preference key.</param>
         /// <param name="value">The new value of the preference.</param>
         /// <param name="clinicId">The (optional) ID of the clinic the preference applies to.</param>
-        /// <param name="computerName">The (optional) name of the computer the preference applies to.</param>
-        public static void Set(long programId, string preferenceKey, string value, long? clinicId = null, string computerName = null)
+        public static void Set(long programId, string preferenceKey, string value, long? clinicId = null)
         {
             DataConnection.ExecuteNonQuery(
-                "INSERT INTO `program_preferences` (?clinic_id, ?program_id, ?key, ?value, ?computer_name) " +
-                "ON DUPLICATE KEY UPDATE value = ?value",
-                    new MySqlParameter("clinic_id", clinicId.HasValue ? (object)clinicId.Value : DBNull.Value),
+                "CALL `usp_program_preference_set`(?clinic_id, ?program_id, ?key, ?value, ?computer)",
+                    new MySqlParameter("clinic_id", ValueOrDbNull(clinicId)),
                     new MySqlParameter("program_id", programId),
                     new MySqlParameter("key", preferenceKey ?? ""),
                     new MySqlParameter("value", value ?? ""),
-                    new MySqlParameter("computer_name", string.IsNullOrEmpty(computerName) ? DBNull.Value : (object)computerName));
+                    new MySqlParameter("computer", Environment.MachineName));
         }
     }
 }

@@ -65,8 +65,8 @@ namespace OpenDental.Bridges
                 NewLineChars = "\r\n",
                 OmitXmlDeclaration = true
             };
-
-            var programPath = ProgramPreference.GetString(programId, ProgramPreferenceName.ProgramPath);
+            
+            var programPath = GetProgramPath(programId);
             var programXmlPath = Path.Combine(Path.GetDirectoryName(programPath), "update.xml");
 
             using (var stream = File.Open(programXmlPath, FileMode.Create, FileAccess.Write))

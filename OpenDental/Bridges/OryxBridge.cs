@@ -29,7 +29,7 @@ namespace OpenDental.Bridges
     {
         private static BridgePreference[] preferences =
         {
-            BridgePreference.Custom("client_url", "Client URL", BridgePreferenceType.Url)
+            BridgePreference.Define("client_url", "Client URL", BridgePreferenceType.Url)
         };
 
         /// <summary>

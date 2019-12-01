@@ -31,8 +31,8 @@ namespace OpenDental.Bridges
 
         private static readonly BridgePreference[] preferences =
         {
-            BridgePreference.Custom("storage_path", "Storage Path", BridgePreferenceType.FolderPath),
-            BridgePreference.Custom("numbered_mode_enabled", "Enable Numbered Mode", BridgePreferenceType.Boolean)
+            BridgePreference.Define("storage_path", "Storage Path", BridgePreferenceType.Folder),
+            BridgePreference.Define("numbered_mode_enabled", "Enable Numbered Mode", BridgePreferenceType.Boolean)
         };
 
         /// <summary>

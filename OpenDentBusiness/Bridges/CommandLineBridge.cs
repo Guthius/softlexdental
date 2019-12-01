@@ -38,8 +38,8 @@ namespace OpenDentBusiness.Bridges
     {
         private static readonly BridgePreference[] preferences =
         {
-            BridgePreference.ProgramPath,
-            BridgePreference.CommandLineArguments
+            BridgePreference.Define("program_path", "Executable Path", BridgePreferenceType.File),
+            BridgePreference.Define("cmd_line_args", "Command Line Arguments", BridgePreferenceType.String),
         };
 
         /// <summary>
@@ -201,7 +201,7 @@ namespace OpenDentBusiness.Bridges
         /// <param name="programId">The ID of the program.</param>
         /// <returns>The path of the program.</returns>
         protected static string GetProgramPath(long programId) =>
-            ProgramPreference.GetString(programId, ProgramPreferenceName.ProgramPath);
+            ProgramPreference.GetString(programId, "program_path");
 
         /// <summary>
         /// Gets the command line arguments for the program with the specified ID.
@@ -209,6 +209,6 @@ namespace OpenDentBusiness.Bridges
         /// <param name="programId">The ID of the program.</param>
         /// <returns>The command line arguments for the program.</returns>
         protected static string GetCommandLineArguments(long programId) =>
-            ProgramPreference.GetString(programId, ProgramPreferenceName.CommandLineArguments);
+            ProgramPreference.GetString(programId, "cmd_line_args");
     }
 }

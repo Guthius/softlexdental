@@ -29,7 +29,7 @@ namespace OpenDental.Bridges
     {
         private static readonly BridgePreference[] preferences =
         {
-            BridgePreference.ProgramPath
+            BridgePreference.Define("program_path", "Executable path", BridgePreferenceType.File),
         };
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace OpenDental.Bridges
                 return;
             }
 
-            var programPath = ProgramPreference.GetString(programId, ProgramPreferenceName.ProgramPath);
+            var programPath = ProgramPreference.GetString(programId, "program_path");
             if (Process.GetProcessesByName("DrCeph").Length == 0)
             {
                 try

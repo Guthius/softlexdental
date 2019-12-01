@@ -26,7 +26,7 @@ namespace OpenDental.Bridges
 
         private static readonly BridgePreference[] preferences =
         {
-            BridgePreference.Custom("date_format", "Date Format", BridgePreferenceType.String)
+            BridgePreference.Define("date_format", "Date Format", BridgePreferenceType.String)
         };
 
         /// <summary>

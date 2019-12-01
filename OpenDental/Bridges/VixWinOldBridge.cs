@@ -26,7 +26,7 @@ namespace OpenDental.Bridges
     {
         private static readonly BridgePreference[] preferences =
         {
-            BridgePreference.Custom("quick_link_path", "QuikLink directory", BridgePreferenceType.FolderPath)
+            BridgePreference.Define("quick_link_path", "QuikLink directory", BridgePreferenceType.Folder)
         };
 
         /// <summary>

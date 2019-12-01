@@ -28,8 +28,8 @@ namespace OpenDental.Bridges
     {
         private static readonly BridgePreference[] preferences =
         {
-            BridgePreference.Custom("program_folder", "Dolphin Program Folder", BridgePreferenceType.FolderPath),
-            BridgePreference.Custom("file_path", "Info File Path", BridgePreferenceType.FilePath)
+            BridgePreference.Define("program_folder", "Dolphin Program Folder", BridgePreferenceType.Folder),
+            BridgePreference.Define("file_path", "Info File Path", BridgePreferenceType.File)
         };
 
         /// <summary>

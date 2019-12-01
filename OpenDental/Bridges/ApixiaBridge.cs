@@ -33,7 +33,7 @@ namespace OpenDental.Bridges
     {
         private static readonly BridgePreference[] preferences =
         {
-            BridgePreference.Custom("ini_file_path", "System path to Apixia Digital Imaging INI file", BridgePreferenceType.String)
+            BridgePreference.Define("ini_file_path", "System path to Apixia Digital Imaging INI file", BridgePreferenceType.String)
         };
 
         /// <summary>

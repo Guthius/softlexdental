@@ -25,8 +25,10 @@ namespace OpenDentBusiness.Bridges
         String,
         Long,
         Boolean,
-        FilePath,
-        FolderPath,
-        Url
+        File,
+        Folder,
+        Url,
+        Password,
+        Definition
     }
 }

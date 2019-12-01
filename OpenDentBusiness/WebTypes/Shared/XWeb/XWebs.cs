@@ -211,11 +211,11 @@ namespace OpenDentBusiness.WebTypes.Shared.XWeb
                 _clinicNum = pat.ClinicNum;
 
                 OpenDentBusiness.WebTypes.Shared.XWeb.WebPaymentProperties xwebProperties;
-                ProgramProperties.GetXWebCreds(_clinicNum, out xwebProperties);
-                if (ChargeSource == ChargeSource.PatientPortal && !xwebProperties.IsPaymentsAllowed)
-                {
-                    throw new ODException("Clinic or Practice has online payments disabled", ODException.ErrorCodes.XWebProgramProperties);
-                }
+                //ProgramProperties.GetXWebCreds(_clinicNum, out xwebProperties);
+                //if (ChargeSource == ChargeSource.PatientPortal && !xwebProperties.IsPaymentsAllowed)
+                //{
+                //    throw new ODException("Clinic or Practice has online payments disabled", ODException.ErrorCodes.XWebProgramProperties);
+                //}
                 XWebResponse response = CreateGatewayResponse(UploadData(GatewayInput));
                 response.PatNum = _patNum;
                 response.ProvNum = _provNum;

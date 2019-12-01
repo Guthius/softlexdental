@@ -29,8 +29,8 @@ namespace OpenDental.Bridges
     {
         private static readonly BridgePreference[] preferences =
         {
-            BridgePreference.ProgramPath,
-            BridgePreference.CommandLineArguments
+            BridgePreference.Define("program_path", "Executable path", BridgePreferenceType.File),
+            BridgePreference.Define("cmd_line_args", "Command line arguments", BridgePreferenceType.String),
         };
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace OpenDental.Bridges
         {
             const int WM_SETTEXT = 0x000C;
 
-            var programPath = ProgramPreference.GetString(programId, ProgramPreferenceName.ProgramPath);
+            var programPath = ProgramPreference.GetString(programId, "program_path");
             if (string.IsNullOrEmpty(programPath))
             {
                 return;
@@ -77,7 +77,7 @@ namespace OpenDental.Bridges
                 return;
             }
 
-            var commandLineArguments = ProgramPreference.GetString(programId, ProgramPreferenceName.CommandLineArguments);
+            var commandLineArguments = ProgramPreference.GetString(programId, "cmd_line_args");
 
             try
             {

@@ -25,7 +25,7 @@ namespace OpenDental.Bridges
     {
         private static readonly BridgePreference[] preferences =
         {
-            BridgePreference.Custom("storage_path", "Storage Path", BridgePreferenceType.FolderPath)
+            BridgePreference.Define("storage_path", "Storage Path", BridgePreferenceType.Folder)
         };
 
         /// <summary>

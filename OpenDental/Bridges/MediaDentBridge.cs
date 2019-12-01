@@ -26,9 +26,9 @@ namespace OpenDental.Bridges
     {
         private static readonly BridgePreference[] preferences =
         {
-            BridgePreference.Custom("mediadent_version", "MediaDent Version (4 or 5)", BridgePreferenceType.Long),
-            BridgePreference.Custom("image_folder", "Image Folder", BridgePreferenceType.FolderPath),
-            BridgePreference.Custom("file_path", "Text File Path", BridgePreferenceType.FilePath)
+            BridgePreference.Define("mediadent_version", "MediaDent Version (4 or 5)", BridgePreferenceType.Long),
+            BridgePreference.Define("image_folder", "Image Folder", BridgePreferenceType.Folder),
+            BridgePreference.Define("file_path", "Text File Path", BridgePreferenceType.File)
         };
 
         /// <summary>

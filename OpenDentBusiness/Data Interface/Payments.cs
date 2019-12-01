@@ -185,36 +185,38 @@ namespace OpenDentBusiness
         ///<summary>Insert Payment and PaySplit. Returns newly inserted Payment.PayNum.  Throws exceptions if XWeb Program Properties are invalid.</summary>
         public static long InsertFromXWeb(long patNum, long provNum, long clinicNum, double amount, string payNote, string receipt, CreditCardSource ccSource)
         {
-            //No need to check RemotingRole;no call to db.
-            OpenDentBusiness.WebTypes.Shared.XWeb.WebPaymentProperties xwebProperties;
-            OpenDentBusiness.ProgramProperties.GetXWebCreds(clinicNum, out xwebProperties);
-            long ret = Payments.Insert(new Payment()
-            {
-                ClinicNum = clinicNum,
-                IsRecurringCC = false,
-                IsSplit = false,
-                PatNum = patNum,
-                PayAmt = amount,
-                PayDate = DateTime.Now,
-                PaymentSource = ccSource,
-                PayType = xwebProperties.PaymentTypeDefNum,
-                ProcessStatus = ProcessStat.OnlinePending,
-                Receipt = receipt,
-                PayNote = payNote,
-            });
-            PaySplits.Insert(new PaySplit()
-            {
-                ClinicNum = clinicNum,
-                DatePay = DateTime.Now,
-                PatNum = patNum,
-                PayNum = ret,
-                ProvNum = provNum,
-                SplitAmt = amount,
-            });
-            SecurityLog.Write(patNum, SecurityLogEvents.PaymentCreate, 
-                "XWeb payment by " + Patients.GetLim(patNum).GetNameLF() + ", " + amount.ToString("c"), 
-                SecurityLogSource.PatientPortal);
-            return ret;
+            ////No need to check RemotingRole;no call to db.
+            //OpenDentBusiness.WebTypes.Shared.XWeb.WebPaymentProperties xwebProperties;
+            //OpenDentBusiness.ProgramProperties.GetXWebCreds(clinicNum, out xwebProperties);
+            //long ret = Payments.Insert(new Payment()
+            //{
+            //    ClinicNum = clinicNum,
+            //    IsRecurringCC = false,
+            //    IsSplit = false,
+            //    PatNum = patNum,
+            //    PayAmt = amount,
+            //    PayDate = DateTime.Now,
+            //    PaymentSource = ccSource,
+            //    PayType = xwebProperties.PaymentTypeDefNum,
+            //    ProcessStatus = ProcessStat.OnlinePending,
+            //    Receipt = receipt,
+            //    PayNote = payNote,
+            //});
+            //PaySplits.Insert(new PaySplit()
+            //{
+            //    ClinicNum = clinicNum,
+            //    DatePay = DateTime.Now,
+            //    PatNum = patNum,
+            //    PayNum = ret,
+            //    ProvNum = provNum,
+            //    SplitAmt = amount,
+            //});
+            //SecurityLog.Write(patNum, SecurityLogEvents.PaymentCreate, 
+            //    "XWeb payment by " + Patients.GetLim(patNum).GetNameLF() + ", " + amount.ToString("c"), 
+            //    SecurityLogSource.PatientPortal);
+            //return ret;
+
+            return 0; // TODO: Fix me...
         }
         #endregion
 

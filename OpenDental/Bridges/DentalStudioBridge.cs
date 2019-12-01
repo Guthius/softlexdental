@@ -24,8 +24,8 @@ namespace OpenDental.Bridges
     {
         private static readonly BridgePreference[] preferences =
         {
-            BridgePreference.Custom("username", "UserName (clear to use OD username)", BridgePreferenceType.String),
-            BridgePreference.Custom("password", "UserPassword", BridgePreferenceType.String)
+            BridgePreference.Define("username", "UserName (clear to use OD username)", BridgePreferenceType.String),
+            BridgePreference.Define("password", "UserPassword", BridgePreferenceType.String)
         };
 
         /// <summary>

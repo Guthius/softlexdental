@@ -32,7 +32,7 @@ namespace OpenDental.Bridges
     {
         private static readonly BridgePreference[] preferences =
         {
-            BridgePreference.Custom("api_token", "Enter your API Token", BridgePreferenceType.String)
+            BridgePreference.Define("api_token", "Enter your API Token", BridgePreferenceType.String)
         };
 
         /// <summary>

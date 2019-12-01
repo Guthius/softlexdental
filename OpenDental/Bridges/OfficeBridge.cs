@@ -28,9 +28,9 @@ namespace OpenDental.Bridges
     {
         private static readonly BridgePreference[] preferences =
         {
-            BridgePreference.Custom("program_path", "Program Path", BridgePreferenceType.FilePath),
-            BridgePreference.Custom("documents_path", "Document Folder", BridgePreferenceType.FolderPath),
-            BridgePreference.Custom("file_ext", "File Extension", BridgePreferenceType.String)
+            BridgePreference.Define("program_path", "Program Path", BridgePreferenceType.File),
+            BridgePreference.Define("documents_path", "Document Folder", BridgePreferenceType.Folder),
+            BridgePreference.Define("file_ext", "File Extension", BridgePreferenceType.String)
         };
 
         /// <summary>

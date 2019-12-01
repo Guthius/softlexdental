@@ -219,26 +219,26 @@ namespace OpenDental
         {
             if (portalPayEnabledCheckBox.Checked)
             {
-                long clinicNum = _listUserClinicNums[comboClinic.SelectedIndex];
+                //long clinicNum = _listUserClinicNums[comboClinic.SelectedIndex];
                 
-                OpenDentBusiness.WebTypes.Shared.XWeb.WebPaymentProperties xwebProperties = new OpenDentBusiness.WebTypes.Shared.XWeb.WebPaymentProperties();
-                try
-                {
-                    ProgramProperties.GetXWebCreds(clinicNum, out xwebProperties);
-                }
-                catch
-                {
+                //OpenDentBusiness.WebTypes.Shared.XWeb.WebPaymentProperties xwebProperties = new OpenDentBusiness.WebTypes.Shared.XWeb.WebPaymentProperties();
+                //try
+                //{
+                //    ProgramProperties.GetXWebCreds(clinicNum, out xwebProperties);
+                //}
+                //catch
+                //{
 
-                }
-                string msg = 
-                    "Online payments is already enabled for XWeb and must be disabled in order to use PayConnect online payments. " + 
-                    "Would you like to disable XWeb online payments?";
+                //}
+                //string msg = 
+                //    "Online payments is already enabled for XWeb and must be disabled in order to use PayConnect online payments. " + 
+                //    "Would you like to disable XWeb online payments?";
 
-                if (xwebProperties != null && xwebProperties.IsPaymentsAllowed && MessageBox.Show(msg, "", MessageBoxButtons.OKCancel) == DialogResult.Cancel)
-                {
-                    portalPayEnabledCheckBox.Checked = false;
-                    return;
-                }
+                //if (xwebProperties != null && xwebProperties.IsPaymentsAllowed && MessageBox.Show(msg, "", MessageBoxButtons.OKCancel) == DialogResult.Cancel)
+                //{
+                //    portalPayEnabledCheckBox.Checked = false;
+                //    return;
+                //}
 
                 ////User wants to disable XWeb online payments and use PayConnect online payments
                 //ProgramProperty ppOnlinePaymentEnabled = ProgramProperties.GetWhere(x =>

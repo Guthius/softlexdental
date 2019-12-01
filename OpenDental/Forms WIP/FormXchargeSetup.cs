@@ -1009,7 +1009,7 @@ namespace OpenDental
             #region Save
 
                 _progCur.Enabled = checkEnabled.Checked;
-                ProgramPreference.Set(_progCur.Id, ProgramPreferenceName.ProgramPath, textPath.Text.Trim());
+                ProgramPreference.Set(_progCur.Id, "program_path", textPath.Text.Trim());
                 Program.Update(_progCur);
             
             //if (ProgramProperties.GetLocalPathOverrideForProgram(_progCur.ProgramNum) != textOverride.Text.Trim())
