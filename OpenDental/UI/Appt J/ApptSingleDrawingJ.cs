@@ -147,7 +147,7 @@ namespace OpenDental.UI {
 			PointF drawLoc=new PointF(9,0);
 			int elementI=0;
 			while(drawLoc.Y<totalHeight && elementI<apptRows.Count) {
-				if(apptRows[elementI].Alignment!=AppointmentViewLocation.Main) {
+				if(apptRows[elementI].Location!=AppointmentViewLocation.Main) {
 					elementI++;
 					continue;
 				}
@@ -175,7 +175,7 @@ namespace OpenDental.UI {
 			drawLoc=new Point((int)totalWidth-1,0);//in the UR area, we refer to the upper right corner of each element.
 			elementI=0;
 			while(drawLoc.Y<totalHeight && elementI<apptRows.Count) {
-				if(apptRows[elementI].Alignment!=AppointmentViewLocation.UpperRight) {
+				if(apptRows[elementI].Location!=AppointmentViewLocation.UpperRight) {
 					elementI++;
 					continue;
 				}
@@ -187,7 +187,7 @@ namespace OpenDental.UI {
 			drawLoc=new Point((int)totalWidth-1,(int)totalHeight-1);//in the LR area, we refer to the lower right corner of each element.
 			elementI=apptRows.Count-1;//For lower right, draw the list backwards.
 			while(drawLoc.Y>0 && elementI>=0) {
-				if(apptRows[elementI].Alignment!=AppointmentViewLocation.LowerRight) {
+				if(apptRows[elementI].Location!=AppointmentViewLocation.LowerRight) {
 					elementI--;
 					continue;
 				}

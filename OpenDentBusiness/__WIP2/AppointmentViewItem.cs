@@ -51,7 +51,7 @@ namespace OpenDentBusiness
         /// <summary>
         /// Enum:ApptViewAlignment If this is an element, then this is the alignment of the element within the appointment.
         /// </summary>
-        public AppointmentViewLocation Alignment = AppointmentViewLocation.Main;
+        public AppointmentViewLocation Location = AppointmentViewLocation.Main;
 
         /// <summary>
         /// FK to apptfielddef.ApptFieldDefNum.  If this is an element, and the element is an appt field, then this tells us which one.
@@ -106,7 +106,7 @@ namespace OpenDentBusiness
                 Description = (string)dataReader["description"],
                 Order = (int)dataReader["order"],
                 Color = ColorTranslator.FromHtml((string)dataReader["color"]),
-                Alignment = (AppointmentViewLocation)(int)dataReader["alignment"]
+                Location = (AppointmentViewLocation)(int)dataReader["location"]
             };
         }
 
@@ -121,8 +121,8 @@ namespace OpenDentBusiness
         public static long Insert(AppointmentViewItem appointmentViewItem) =>
             appointmentViewItem.Id = DataConnection.ExecuteInsert(
                 "INSERT INTO `appointment_view_items` (`appointment_view_id`, `operatory_id`, `provider_id`, `appointment_field_definition_id`, " +
-                "`patient_field_definition_id`, `description`, `order`, `color`, `alignment`) VALUES (?appointment_view_id, ?operatory_id, ?provider_id, " +
-                "?appointment_field_definition_id, ?patient_field_definition_id, ?description, ?order, ?color, ?alignment)",
+                "`patient_field_definition_id`, `description`, `order`, `color`, `location`) VALUES (?appointment_view_id, ?operatory_id, ?provider_id, " +
+                "?appointment_field_definition_id, ?patient_field_definition_id, ?description, ?order, ?color, ?location)",
                     new MySqlParameter("appointment_view_id", appointmentViewItem.AppointmentViewId),
                     new MySqlParameter("operatory_id", ValueOrDbNull(appointmentViewItem.OperatoryId)),
                     new MySqlParameter("provider_id", ValueOrDbNull(appointmentViewItem.ProviderId)),
@@ -131,7 +131,7 @@ namespace OpenDentBusiness
                     new MySqlParameter("description", appointmentViewItem.Description ?? ""),
                     new MySqlParameter("order", appointmentViewItem.Order),
                     new MySqlParameter("color", ColorTranslator.ToHtml(appointmentViewItem.Color)),
-                    new MySqlParameter("alignment", (int)appointmentViewItem.Alignment));
+                    new MySqlParameter("location", (int)appointmentViewItem.Location));
 
         /// <summary>
         /// Updates the specified appointment view item in the database.
@@ -141,7 +141,7 @@ namespace OpenDentBusiness
            DataConnection.ExecuteNonQuery(
                "UPDATE `appointment_view_items` SET `appointment_view_id` = ?appointment_view_id, `operatory_id` = ?operatory_id, `provider_id` = ?provider_id, " +
                "`appointment_field_definition_id` = ?appointment_field_definition_id, `patient_field_definition_id` = ?patient_field_definition_id, " +
-               "`description` = ?description, `order` = ?order, `color` = ?color, `alignment` = ?alignment WHERE `id` = ?id",
+               "`description` = ?description, `order` = ?order, `color` = ?color, `location` = ?location WHERE `id` = ?id",
                    new MySqlParameter("appointment_view_id", appointmentViewItem.AppointmentViewId),
                    new MySqlParameter("operatory_id", ValueOrDbNull(appointmentViewItem.OperatoryId)),
                    new MySqlParameter("provider_id", ValueOrDbNull(appointmentViewItem.ProviderId)),
@@ -150,7 +150,7 @@ namespace OpenDentBusiness
                    new MySqlParameter("description", appointmentViewItem.Description ?? ""),
                    new MySqlParameter("order", appointmentViewItem.Order),
                    new MySqlParameter("color", ColorTranslator.ToHtml(appointmentViewItem.Color)),
-                   new MySqlParameter("alignment", (int)appointmentViewItem.Alignment),
+                   new MySqlParameter("location", (int)appointmentViewItem.Location),
                    new MySqlParameter("id", appointmentViewItem.Id));
 
         /// <summary>

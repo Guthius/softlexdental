@@ -246,7 +246,7 @@ namespace OpenDental
 
             foreach (var appointmentViewItem in displayedFields)
             {
-                switch (appointmentViewItem.Alignment)
+                switch (appointmentViewItem.Location)
                 {
                     case AppointmentViewLocation.Main:
                         AddAppointmentViewItemToListBox(appointmentViewItem, fieldsMainListBox);
@@ -444,7 +444,7 @@ namespace OpenDental
             if (fieldsAvailableTreeView.SelectedNode.Tag is AppointmentViewItem appointmentViewItem)
             {
                 var targetListBox = fieldsMainListBox;
-                switch (appointmentViewItem.Alignment)
+                switch (appointmentViewItem.Location)
                 {
                     case AppointmentViewLocation.UpperRight:
                         targetListBox = fieldsUpperRightListBox;
@@ -537,7 +537,7 @@ namespace OpenDental
                     }
 
                     var targetListBox = fieldsMainListBox;
-                    switch (item.Alignment)
+                    switch (item.Location)
                     {
                         case AppointmentViewLocation.UpperRight:
                             targetListBox = fieldsUpperRightListBox;

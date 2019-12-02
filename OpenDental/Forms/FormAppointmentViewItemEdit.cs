@@ -49,7 +49,7 @@ namespace OpenDental
 
             colorPanel.BackColor = appointmentViewItem.Color;
 
-            locationListBox.SelectedIndex = (int)appointmentViewItem.Alignment;
+            locationListBox.SelectedIndex = (int)appointmentViewItem.Location;
         }
 
         private void TextColorButton_Click(object sender, EventArgs e)
@@ -69,7 +69,7 @@ namespace OpenDental
         private void AcceptButton_Click(object sender, EventArgs e)
         {
             appointmentViewItem.Color = colorPanel.BackColor;
-            appointmentViewItem.Alignment = (AppointmentViewLocation)locationListBox.SelectedIndex;
+            appointmentViewItem.Location = (AppointmentViewLocation)locationListBox.SelectedIndex;
 
             DialogResult = DialogResult.OK;
         }

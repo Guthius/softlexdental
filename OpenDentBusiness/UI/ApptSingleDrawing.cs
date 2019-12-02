@@ -175,7 +175,7 @@ namespace OpenDentBusiness.UI
             int elementI = 0;
             while (drawLoc.Y < totalHeight && elementI < apptRows.Count)
             {
-                if (apptRows[elementI].Alignment != AppointmentViewLocation.Main)
+                if (apptRows[elementI].Location != AppointmentViewLocation.Main)
                 {
                     elementI++;
                     continue;
@@ -206,7 +206,7 @@ namespace OpenDentBusiness.UI
             elementI = 0;
             while (drawLoc.Y < totalHeight && elementI < apptRows.Count)
             {
-                if (apptRows[elementI].Alignment != AppointmentViewLocation.UpperRight)
+                if (apptRows[elementI].Location != AppointmentViewLocation.UpperRight)
                 {
                     elementI++;
                     continue;
@@ -224,7 +224,7 @@ namespace OpenDentBusiness.UI
             elementI = apptRows.Count - 1;//For lower right, draw the list backwards.
             while (drawLoc.Y > 0 && elementI >= 0)
             {
-                if (apptRows[elementI].Alignment != AppointmentViewLocation.LowerRight)
+                if (apptRows[elementI].Location != AppointmentViewLocation.LowerRight)
                 {
                     elementI--;
                     continue;
