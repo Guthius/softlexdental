@@ -28,18 +28,59 @@ namespace OpenDentBusiness
         private static readonly DataRecordCache<Operatory> cache =
             new DataRecordCache<Operatory>("SELECT * FROM `operatories` ORDER BY `sort_order`", FromReader);
 
+        /// <summary>
+        /// The ID of the clinic the operatory is bound to.
+        /// </summary>
         public long ClinicId;
+        
+        /// <summary>
+        /// The ID of the primary dentist assigned to this operatory.
+        /// </summary>
         public long? ProvDentistId;
+
+        /// <summary>
+        /// The ID of the primary hygienist assigned to this operatory.
+        /// </summary>
         public long? ProvHygienistId;
+
+        /// <summary>
+        /// A description of the operatory.
+        /// </summary>
         public string Description;
+
+        /// <summary>
+        /// A abbreviation of the operatory.
+        /// </summary>
         public string Abbr;
 
-        ///<summary>If true patients put into this operatory will have status set to prospective.</summary>
+        /// <summary>
+        ///     <para>
+        ///         A value indicating whether patients scheduled at the operatory should be 
+        ///         assigned the 'Prospective' status.
+        ///     </para>
+        /// </summary>
         public bool IsProspective;
 
+        /// <summary>
+        ///     <para>
+        ///         A value indicating whether the operatory is hygiene only.
+        ///     </para>
+        /// </summary>
         public bool IsHygiene;
+
+        /// <summary>
+        /// The sort order of the operatory.
+        /// </summary>
         public int SortOrder;
+
+        /// <summary>
+        /// The date and time on which the operatory was last modified.
+        /// </summary>
         public DateTime DateModified;
+
+        /// <summary>
+        /// A value indicating whether the operatory has been hidden.
+        /// </summary>
         public bool IsHidden;
 
         /// <summary>
@@ -134,6 +175,7 @@ namespace OpenDentBusiness
                     new MySqlParameter("hidden", operatory.IsHidden),
                     new MySqlParameter("id", operatory.Id));
 
+        #region CLEANUP
 
         /// <summary>
         ///     <para>
@@ -236,5 +278,7 @@ namespace OpenDentBusiness
                 "The following operatories and all of their appointments were merged into the " + keepOperatory.Abbr + " operatory; " +
                 string.Join(", ", mergeOperatories.Select(operatory => operatory.Abbr)));
         }
+
+        #endregion
     }
 }

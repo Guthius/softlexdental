@@ -120,53 +120,6 @@ namespace OpenDentHL7
             }
             #endregion MedLab HL7
 
-            if (Programs.IsEnabled(ProgramName.eClinicalWorks) && !HL7Defs.IsExistingHL7Enabled())
-            {
-                long programId = Programs.GetProgramNum(ProgramName.eClinicalWorks);
-
-                string hl7Server = ProgramProperties.GetPropVal(programId, "HL7Server");
-                string hl7ServiceName = ProgramProperties.GetPropVal(programId, "HL7ServiceName");
-
-                // If no server is set, we assume the local machine is the server.
-                if (string.IsNullOrEmpty(hl7Server))
-                {
-                    ProgramProperties.SetProperty(programId, "HL7Server",
-                        hl7Server = Environment.MachineName);
-                }
-
-
-                if (string.IsNullOrEmpty(hl7ServiceName))
-                {
-                    ProgramProperties.SetProperty(programId, "HL7ServiceName",
-                        hl7ServiceName = ServiceName);
-                }
-
-                if (hl7Server.ToLower() != Environment.MachineName.ToLower())
-                {
-                    Log.ErrorFormat(
-                        "The HL7 server name does not match the name set in the eClinicalWorks link configuration. " +
-                        "Server name: {0}, Server name in program links: {1}", 
-                        Environment.MachineName, hl7Server);
-
-                    return;
-                }
-
-                if (hl7ServiceName.ToLower() != this.ServiceName.ToLower())
-                {
-                    Log.ErrorFormat(
-                        "The HL7 service name does not match the name set in the eClinicalWorks link configuration. " +
-                        "Service name: {0}, Service name in program links: {1}",
-                        ServiceName, hl7ServiceName);
-
-                    return;
-                }
-
-                EcwOldSendAndReceive();
-
-                return;
-            }
-
-
             #region HL7 Send and Receive New Defs
             HL7Def hL7Def = HL7Defs.GetOneDeepEnabled();
             if (hL7Def == null)

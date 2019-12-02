@@ -22,16 +22,26 @@ using System.Drawing;
 namespace OpenDentBusiness
 {
     /// <summary>
-    /// Each item is attached to a row in the apptview table.  Each item specifies ONE of: OpNum, ProvNum, ElementDesc, or ApptFieldDefNum.  
-    /// The other three will be 0 or "".
+    ///     <para>
+    ///         Represents dynamic informational items that are drawn as parts of appointments in 
+    ///         the scheduling module.
+    ///     </para>
+    ///     <para>
+    ///         The type of information displayed by the item is determined by the
+    ///         <see cref="OperatoryId"/>, <see cref="ProviderId"/>, 
+    ///         <see cref="AppointmentFieldDefinitionId"/>, <see cref="PatientFieldDefinitionId"/> 
+    ///         and <see cref="Description"/> fields. Only one of the ID fields may be set
+    ///         per item. If all the ID fields are null, the item represents a build-in field and
+    ///         <see cref="Description"/> will hold the name of the field.
+    ///     </para>
     /// </summary>
     public class AppointmentViewItem : DataRecord
     {
-        // TODO: Cache this and link cache to AppointmentView...
-
         public long AppointmentViewId;
         public long? OperatoryId;
         public long? ProviderId;
+        public long? AppointmentFieldDefinitionId;
+        public long? PatientFieldDefinitionId;
 
         /// <summary>
         /// Must be one of the hard coded strings picked from the available list.
@@ -39,29 +49,19 @@ namespace OpenDentBusiness
         public string Description;
 
         /// <summary>
-        /// If this is a row Element, then this is the 0-based order within its area.  For example, UR starts over with 0 ordering.
+        /// The sort order of the item.
         /// </summary>
         public int Order;
 
         /// <summary>
-        /// If this is an element, then this is the color.
+        /// The color of the item.
         /// </summary>
         public Color Color = Color.Black;
 
         /// <summary>
-        /// Enum:ApptViewAlignment If this is an element, then this is the alignment of the element within the appointment.
+        /// The location of the item within the appointment.
         /// </summary>
         public AppointmentViewLocation Location = AppointmentViewLocation.Main;
-
-        /// <summary>
-        /// FK to apptfielddef.ApptFieldDefNum.  If this is an element, and the element is an appt field, then this tells us which one.
-        /// </summary>
-        public long? AppointmentFieldDefinitionId;
-
-        /// <summary>
-        /// FK to patfielddef.PatFieldDefNum.  If this is an element, and the element is an appt field, then this tells us which one.  Not implemented yet.
-        /// </summary>
-        public long? PatientFieldDefinitionId;
 
         /// <summary>
         /// Returns a string representation of the appointment view item.
@@ -110,7 +110,12 @@ namespace OpenDentBusiness
             };
         }
 
-        public static IEnumerable<AppointmentViewItem> GetByAppointmentView(long appointmentViewId) =>
+        /// <summary>
+        /// Gets all appointment view items for the appointment view with the specified ID.
+        /// </summary>
+        /// <param name="appointmentViewId">The ID of the appointment view.</param>
+        /// <returns>The appointment view items.</returns>
+        public static IEnumerable<AppointmentViewItem> GetByAppointmentView(long appointmentViewId) => 
             SelectMany("SELECT * FROM `appointment_view_items` WHERE `appointment_view_id` = " + appointmentViewId, FromReader);
 
         /// <summary>

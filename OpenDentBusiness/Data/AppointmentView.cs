@@ -25,10 +25,6 @@ namespace OpenDentBusiness
     public class AppointmentView : DataRecord
     {
         public long ClinicId;
-
-        /// <summary>
-        /// Description of this view.  Gets displayed in Appt module.
-        /// </summary>
         public string Description;
 
         /// <summary>
@@ -37,17 +33,28 @@ namespace OpenDentBusiness
         public int RowsPerIncrement;
 
         /// <summary>
-        /// If set to true, then the only operatories that will show will be for providers that have schedules for the day, ops with no provs assigned.
+        ///     <para>
+        ///         A value indicating whether operatories will only be shown for providers that 
+        ///         have schedules for a given day and operatories that have no provider assigned.
+        ///     </para>
         /// </summary>
         public bool OnlyScheduledProviders;
 
         /// <summary>
-        /// If OnlyScheduledProvs is set to true, and this time is not 0:00, then only provider schedules with start or stop time after this time will be included.
+        ///     <para>
+        ///         When <see cref="OnlyScheduledProviders"/> is true and this time is not 
+        ///         <see cref="TimeSpan.Zero"/>, only provider schedules that start or stop after
+        ///         this time will be included.
+        ///     </para>
         /// </summary>
         public TimeSpan OnlyScheduleAfter;
 
         /// <summary>
-        /// If OnlyScheduledProvs is set to true, and this time is not 0:00, then only provider schedules with start or stop time before this time will be included.
+        ///     <para>
+        ///         When <see cref="OnlyScheduledProviders"/> is true and this time is not 
+        ///         <see cref="TimeSpan.Zero"/>, only provider schedules that start or stop before
+        ///         this time will be included.
+        ///     </para>
         /// </summary>
         public TimeSpan OnlyScheduleBefore;
 
@@ -131,16 +138,31 @@ namespace OpenDentBusiness
                 "SELECT * FROM `appointment_views` WHERE `clinic_id` = " + clinicId + " OR `clinic_id` IS NULL ORDER BY `description`",
                 FromReader);
 
+        /// <summary>
+        /// Gets the ID's of all operatories assigned to the appointment view with the specified ID.
+        /// </summary>
+        /// <param name="appointmentViewId">The ID of the appointment view.</param>
+        /// <returns>The ID's of the operatories assigned to the appointment view.</returns>
         public static IEnumerable<long> GetOperatoryIds(long appointmentViewId) =>
             SelectMany("SELECT * FROM `appointment_view_items` WHERE `appointment_view_id` = " + appointmentViewId, AppointmentViewItem.FromReader)
                 .Where(appointmentViewItem => appointmentViewItem.OperatoryId.HasValue)
                 .Select(appointmentViewItem => appointmentViewItem.OperatoryId.Value);
 
+        /// <summary>
+        /// Gets the ID's of all providers assigned to the appointment view with the specified ID.
+        /// </summary>
+        /// <param name="appointmentViewId">The ID of the appointment view.</param>
+        /// <returns>The ID's of the providers assigned to the appointment view.</returns>
         public static IEnumerable<long> GetProviderIds(long appointmentViewId) =>
             SelectMany("SELECT * FROM `appointment_view_items` WHERE `appointment_view_id` = " + appointmentViewId, AppointmentViewItem.FromReader)
                 .Where(appointmentViewItem => appointmentViewItem.ProviderId.HasValue)
                 .Select(appointmentViewItem => appointmentViewItem.ProviderId.Value);
 
+        /// <summary>
+        /// Inserts the specified appointment view into the database.
+        /// </summary>
+        /// <param name="appointmentView">The appointment view.</param>
+        /// <returns>The ID assigned to the appointment view.</returns>
         public static long Insert(AppointmentView appointmentView) =>
             appointmentView.Id = DataConnection.ExecuteInsert(
                 "INSERT INTO `appointment_views` (`clinic_id`, `description`, `rows_per_increment`, `only_scheduled_providers`, " +
@@ -160,6 +182,10 @@ namespace OpenDentBusiness
                     new MySqlParameter("scroll_start_dynamic", appointmentView.ScrollStartDynamic),
                     new MySqlParameter("hide_appointment_bubbles", appointmentView.HideAppointmentBubbles));
 
+        /// <summary>
+        /// Updates the specified appointment view in the database.
+        /// </summary>
+        /// <param name="appointmentView">The appointment view.</param>
         public static void Update(AppointmentView appointmentView) =>
             DataConnection.ExecuteNonQuery(
                 "UPDATE `appointment_views` SET `clinic_id` = ?clinic_id, `description` = ?description, `rows_per_increment` = ?rows_per_increment, " +
