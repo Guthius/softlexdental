@@ -585,18 +585,18 @@ namespace OpenDental.UI {
 					}
 					Color colorOp=Color.Empty;
 					//operatory color is based solely on provider colors and IsHygiene.  It has nothing to do with schedules
-					if(VisOps[i].ProvDentist!=0 && !VisOps[i].IsHygiene) {
-						colorOp=Providers.GetColor(VisOps[i].ProvDentist);
+					if(VisOps[i].ProvDentistId.HasValue && !VisOps[i].IsHygiene) {
+						colorOp=Providers.GetColor(VisOps[i].ProvDentistId.Value);
 					}
-					else if(VisOps[i].ProvHygienist!=0 && VisOps[i].IsHygiene) {
-						colorOp=Providers.GetColor(VisOps[i].ProvHygienist);
+					else if(VisOps[i].ProvHygienistId.HasValue && VisOps[i].IsHygiene) {
+						colorOp=Providers.GetColor(VisOps[i].ProvHygienistId.Value);
 					}
 					if(colorOp!=Color.Empty){
 						using(SolidBrush solidBrushProvColor=new SolidBrush(colorOp)) {
 							g.FillRectangle(solidBrushProvColor,_timeWidth+_provWidth*_provCount+i*_colWidth,0,_colWidth,_heightProvOpHeader);
 						}
 					}
-					SizeF sizeTextMeasured=g.MeasureString(VisOps[i].OpName,_fontDefault);
+					SizeF sizeTextMeasured=g.MeasureString(VisOps[i].Description,_fontDefault);
 					float widthText=sizeTextMeasured.Width;
 					float xPos;
 					if(widthText>_colWidth-2){
@@ -608,7 +608,7 @@ namespace OpenDental.UI {
 					}
 					PointF locationText=new PointF(xPos,2);
 					float heightText=_heightProvOpHeader-2;
-					g.DrawString(VisOps[i].OpName,_fontDefault,_brushTextBlack,new RectangleF(locationText.X,locationText.Y,widthText,heightText));
+					g.DrawString(VisOps[i].Description,_fontDefault,_brushTextBlack,new RectangleF(locationText.X,locationText.Y,widthText,heightText));
 					g.DrawLine(_penVertPrimary,_timeWidth+_provWidth*_provCount+i*_colWidth,0,_timeWidth+_provWidth*_provCount+i*_colWidth,_heightProvOpHeader);//to left of op cell
 				}
 			}
@@ -747,7 +747,7 @@ namespace OpenDental.UI {
 		private int GetIndexOp(long opNum,List<Operatory> VisOps) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<VisOps.Count;i++) {
-				if(VisOps[i].OperatoryNum==opNum)
+				if(VisOps[i].Id==opNum)
 					return i;
 			}
 			return -1;

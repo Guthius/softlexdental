@@ -517,7 +517,7 @@ namespace OpenDentBusiness.UI
             //No need to check RemotingRole; no call to db.
             for (int i = 0; i < VisOps.Count; i++)
             {
-                if (VisOps[i].OperatoryNum == opNum)
+                if (VisOps[i].Id == opNum)
                     return i;
             }
             return -1;

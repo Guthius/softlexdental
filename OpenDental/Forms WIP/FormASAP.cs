@@ -1465,7 +1465,7 @@ namespace OpenDental {
 				WindowState=FormWindowState.Normal;
 			}
 			BringToFront();
-			comboClinic.SelectedClinicNum=ODMethodsT.Coalesce(Operatories.GetOperatory(_opNum)).ClinicNum;
+			comboClinic.SelectedClinicNum=ODMethodsT.Coalesce(Operatory.GetById(_opNum)).ClinicId;
 			FillGridAppts();
 			FillTimeCombos();
 			SetSelectedAppts();
@@ -1479,9 +1479,9 @@ namespace OpenDental {
 				_isSendingWebSched=false;
 				return;
 			}
-			comboClinic.SelectedClinicNum=ODMethodsT.Coalesce(Operatories.GetOperatory(_opNum)).ClinicNum;
+			comboClinic.SelectedClinicNum=ODMethodsT.Coalesce(Operatory.GetById(_opNum)).ClinicId;
 			comboClinic.Enabled=false;//We only want them to choose appointments from the clinic of the operatory selected.
-			labelOperatory.Text=Lan.g(this,"Operatory:")+" "+Operatories.GetOperatory(_opNum).Abbrev;
+			labelOperatory.Text=Lan.g(this,"Operatory:")+" "+ Operatory.GetById(_opNum).Abbr;
 			splitContainer.Panel2Collapsed=false;
 			labelOperatory.Visible=true;
 			labelStart.Visible=true;
@@ -1725,7 +1725,7 @@ namespace OpenDental {
 				MsgBox.Show(this,"Please select a valid start and end time.");
 				return;
 			}
-			long clinicNum=ODMethodsT.Coalesce(Operatories.GetOperatory(_opNum)).ClinicNum;
+			long clinicNum=ODMethodsT.Coalesce(Operatory.GetById(_opNum)).ClinicId;
 			bool isSignedUp=clinicNum.In(_listClinicNumsWebSched);
 			if(!isSignedUp) {
 				if(!MsgBox.Show(this,MsgBoxButtons.YesNo,

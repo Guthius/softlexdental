@@ -353,13 +353,13 @@
     <Compile Include="X12\X12FunctionalGroup.cs" />
     <Compile Include="X12\X12Transaction.cs" />
     <Compile Include="Data\AlertActionType.cs" />
+    <Compile Include="Data\AppointmentViewStackBehaviour.cs" />
+    <Compile Include="Data\AppointmentViewLocation.cs" />
     <Compile Include="__WIP2\ProgramName.cs" />
     <Compile Include="__WIP\AlertSeverityType.cs" />
     <Compile Include="Crud\AppointmentCrud.cs" />
     <Compile Include="Crud\AppointmentRuleCrud.cs" />
     <Compile Include="Crud\ApptReminderRuleCrud.cs" />
-    <Compile Include="Crud\ApptViewCrud.cs" />
-    <Compile Include="Crud\ApptViewItemCrud.cs" />
     <Compile Include="Crud\AutomationConditionCrud.cs" />
     <Compile Include="Crud\AutomationCrud.cs" />
     <Compile Include="Crud\CDSPermissionCrud.cs" />
@@ -489,7 +489,6 @@
     <Compile Include="Crud\MountItemDefCrud.cs" />
     <Compile Include="Crud\OIDExternalCrud.cs" />
     <Compile Include="Crud\OIDInternalCrud.cs" />
-    <Compile Include="Crud\OperatoryCrud.cs" />
     <Compile Include="Crud\OrionProcCrud.cs" />
     <Compile Include="Crud\OrthoChartCrud.cs" />
     <Compile Include="Crud\OrthoChartTabCrud.cs" />
@@ -776,8 +775,6 @@
     <Compile Include="Misc\WindowsTime.cs" />
     <Compile Include="Data Interface\Adjustments.cs" />
     <Compile Include="Data Interface\AppointmentRules.cs" />
-    <Compile Include="Data Interface\ApptViewItems.cs" />
-    <Compile Include="Data Interface\ApptViews.cs" />
     <Compile Include="Data Interface\Benefits.cs" />
     <Compile Include="Data Interface\CanadianNetworks.cs" />
     <Compile Include="Data Interface\Carriers.cs" />
@@ -866,7 +863,6 @@
     <Compile Include="__WIP\ClockEventStatus.cs" />
     <Compile Include="__WIP\Defs.cs" />
     <Compile Include="Db Multi Table\FamilyModules.cs" />
-    <Compile Include="Data Interface\Operatories.cs" />
     <Compile Include="Data Interface\SigButDefs.cs" />
     <Compile Include="Data Interface\SigElementDefs.cs" />
     <Compile Include="Data Interface\Statements.cs" />
@@ -1196,8 +1192,8 @@
     <Compile Include="TableTypes\Adjustment.cs" />
     <Compile Include="TableTypes\Appointment.cs" />
     <Compile Include="TableTypes\AppointmentRule.cs" />
-    <Compile Include="TableTypes\ApptView.cs" />
-    <Compile Include="TableTypes\ApptViewItem.cs" />
+    <Compile Include="__WIP2\AppointmentView.cs" />
+    <Compile Include="__WIP2\AppointmentViewItem.cs" />
     <Compile Include="__WIP\AutoCode.cs" />
     <Compile Include="Data\AutoCodeItemCondition.cs" />
     <Compile Include="__WIP\AutoCodeItem.cs" />
@@ -1273,7 +1269,7 @@
     <Compile Include="TableTypes\LetterMergeField.cs" />
     <Compile Include="Data\Medication.cs" />
     <Compile Include="TableTypes\MedicationPat.cs" />
-    <Compile Include="TableTypes\Operatory.cs" />
+    <Compile Include="__WIP2\Operatory.cs" />
     <Compile Include="TableTypes\PatField.cs" />
     <Compile Include="TableTypes\PatFieldDef.cs" />
     <Compile Include="TableTypes\Patient.cs" />

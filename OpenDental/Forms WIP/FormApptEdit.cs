@@ -415,7 +415,7 @@ namespace OpenDental
             }
             if (AptCur.Op != 0)
             {
-                titleText += " | " + Operatories.GetAbbrev(AptCur.Op);
+                titleText += " | " + Operatory.GetById(AptCur.Op).Abbr;
             }
             this.Text = titleText;
             checkASAP.Checked = AptCur.Priority == ApptPriority.ASAP;

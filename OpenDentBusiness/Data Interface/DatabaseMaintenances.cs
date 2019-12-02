@@ -5020,48 +5020,6 @@ namespace OpenDentBusiness
         #region Operatory, OrthoChart, PatField---------------------------------------------------------------------------------------------------------
 
         [DatabaseMaintenanceAttribute]
-        public static string OperatoryInvalidReference(bool verbose, DatabaseMaintenanceMode modeCur)
-        {
-            //Get distinct operatory nums that have been orphaned from appointment, scheduleop, and apptviewitems.  
-            //We use a UNION instead of UNION ALL because we want MySQL or Oracle to group duplicate OpNums together.
-            string command = @"SELECT appointment.Op AS OpNum FROM appointment WHERE appointment.Op!=0 AND NOT EXISTS(SELECT * FROM operatory WHERE operatory.OperatoryNum=appointment.Op)
-									UNION 
-									SELECT scheduleop.OperatoryNum AS OpNum FROM scheduleop WHERE scheduleop.OperatoryNum!=0 AND NOT EXISTS(SELECT * FROM operatory WHERE operatory.OperatoryNum=scheduleop.OperatoryNum) 
-									UNION 
-									SELECT apptviewitem.OpNum AS OpNum FROM apptviewitem WHERE apptviewitem.OpNum!=0 AND NOT EXISTS(SELECT * FROM operatory WHERE operatory.OperatoryNum=apptviewitem.OpNum)";
-            DataTable table = Db.GetTable(command);
-            string log = "";
-            switch (modeCur)
-            {
-                case DatabaseMaintenanceMode.Check:
-                    if (table.Rows.Count > 0 || verbose)
-                    {
-                        log += Lans.g("OperatoryInvalidReference", "Operatory references that are invalid") + ": " + table.Rows.Count + "\r\n";
-                    }
-                    break;
-                case DatabaseMaintenanceMode.Fix:
-                    for (int i = 0; i < table.Rows.Count; i++)
-                    {
-                        long opNum = PIn.Long(table.Rows[i]["OpNum"].ToString());
-                        if (opNum != 0)
-                        {
-                            Operatory op = new Operatory();
-                            op.OperatoryNum = opNum;
-                            op.OpName = "UNKNOWN-" + opNum;
-                            op.Abbrev = "UNKN";
-                            Crud.OperatoryCrud.Insert(op, true);
-                        }
-                    }
-                    if (table.Rows.Count > 0 || verbose)
-                    {
-                        log += Lans.g("OperatoryInvalidReference", "Operatories created from an invalid operatory reference") + ": " + table.Rows.Count + "\r\n";
-                    }
-                    break;
-            }
-            return log;
-        }
-
-        [DatabaseMaintenanceAttribute]
         public static string OrthoChartDeleteDuplicates(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";

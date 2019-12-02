@@ -259,7 +259,7 @@ namespace OpenDental
             {
                 get
                 {
-                    var operatories = Operatories.GetDeepCopy(true);
+                    var operatories = Operatory.All(true).ToList();
                     if (operatories.Count == 0)
                     {
                         return ODSetupStatus.NotStarted;
@@ -267,8 +267,8 @@ namespace OpenDental
 
                     foreach (var operatory in operatories)
                     {
-                        if (string.IsNullOrEmpty(operatory.OpName) || 
-                            string.IsNullOrEmpty(operatory.Abbrev))
+                        if (string.IsNullOrEmpty(operatory.Description) || 
+                            string.IsNullOrEmpty(operatory.Abbr))
                         {
                             return ODSetupStatus.NeedsAttention;
                         }

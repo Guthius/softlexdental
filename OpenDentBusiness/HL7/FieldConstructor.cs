@@ -112,10 +112,10 @@ namespace OpenDentBusiness.HL7 {
 						return "";
 					}
 					string aptClinicDescript=Clinic.GetById(apt.ClinicNum).Description;
-					Operatory opCur=Operatories.GetOperatory(apt.Op);
+					Operatory opCur= Operatory.GetById(apt.Op);
 					string opName="";
 					if(opCur!=null) {
-						opName=opCur.OpName;
+						opName=opCur.Description;
 					}
 					string practiceName= Preference.GetString(PreferenceName.PracticeTitle);
 					return gConcat(def.ComponentSeparator,aptClinicDescript,opName,"",def.SubcomponentSeparator+practiceName,"","C");//all of these could be empty strings and it works fine
@@ -135,11 +135,11 @@ namespace OpenDentBusiness.HL7 {
 					if(apt==null) {
 						return "";
 					}
-					opCur=Operatories.GetOperatory(apt.Op);
+					opCur= Operatory.GetById(apt.Op);
 					if(opCur==null) {
 						return "";
 					}
-					return opCur.OpName;
+					return opCur.Description;
 				case "apt.type":
 					//Suggested values are Normal - Routine schedule request type, Tentative, or Complete - Request to add a completed appt
 					//We will send Normal for all appointment statuses except complete.
@@ -445,9 +445,9 @@ namespace OpenDentBusiness.HL7 {
 					}
 					string procOpName="";
 					if(apt!=null) {
-						Operatory procOp=Operatories.GetOperatory(apt.Op);
+						Operatory procOp= Operatory.GetById(apt.Op);
 						if(procOp!=null) {
-							procOpName=procOp.OpName;
+							procOpName=procOp.Description;
 						}
 					}
 					practiceName= Preference.GetString(PreferenceName.PracticeTitle);

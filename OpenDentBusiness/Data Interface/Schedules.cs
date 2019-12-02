@@ -182,7 +182,7 @@ namespace OpenDentBusiness
         {
             //No need to check RemotingRole; no call to db. Better to do this locally as it may take some time and we do not want Middle Tier to timeout.
             //It is allowed to paste back over the same day or week.
-            List<long> listOpNums = ApptViewItems.GetOpsForView(apptViewNum);
+            List<long> listOpNums = AppointmentView.GetOperatoryIds(apptViewNum).ToList();
             List<Schedule> listSchedulesToCopy = Schedules.RefreshPeriodBlockouts(dateCopyStart, dateCopyEnd, listOpNums);
             //Build a list of blockouts that can't be Cut/Copy/Pasted
             List<Definition> listUserBlockoutDefs = Definition.GetByCategory(DefinitionCategory.BlockoutTypes)
@@ -269,7 +269,7 @@ namespace OpenDentBusiness
                 {
                     logText += ", ";
                 }
-                logText += Operatories.GetOpName(listOpNums[i]);
+                logText += Operatory.GetById(listOpNums[i]).Description;
             }
             logText += " " + Lans.g("Schedule", "copied from") + " " + dateCopyStart.ToShortDateString() + " "
                 + (dateCopyStart == dateCopyEnd ? "" : Lans.g("Schedule", "through") + " " + dateCopyEnd.ToShortDateString() + " ")
@@ -324,7 +324,7 @@ namespace OpenDentBusiness
                 logText += dateTime.Date.ToShortDateString() + " ";
                 if (opNum != 0)
                 {
-                    logText += "for operatory " + Operatories.GetOpName(opNum);
+                    logText += "for operatory " + Operatory.GetById(opNum).Description;
                 }
                 if (clinicNum != -1)
                 {
@@ -355,7 +355,7 @@ namespace OpenDentBusiness
                     {
                         logText += ", ";
                     }
-                    logText += Operatories.GetOpName(blockout.Ops[i]);
+                    logText += Operatory.GetById(blockout.Ops[i]).Description;
                 }
                 logText += " on " + blockout.SchedDate.ToShortDateString() + " for " + blockout.StartTime.ToShortTimeString() + " - " + blockout.StopTime.ToShortTimeString();
             }
@@ -828,11 +828,11 @@ namespace OpenDentBusiness
                 listApptDates.Add(DateTime.Today);
             }
             string command = "SELECT schedule.* FROM schedule INNER JOIN scheduleop ON schedule.ScheduleNum=scheduleop.ScheduleNum "
-                + "WHERE scheduleop.OperatoryNum=" + POut.Long(op.OperatoryNum) + " AND schedule.SchedDate IN(" + string.Join(",", listApptDates.Select(x => POut.Date(x))) + ")";
+                + "WHERE scheduleop.OperatoryNum=" + POut.Long(op.Id) + " AND schedule.SchedDate IN(" + string.Join(",", listApptDates.Select(x => POut.Date(x))) + ")";
             List<Schedule> listScheds = Crud.ScheduleCrud.SelectMany(command);
             foreach (Schedule sched in listScheds)
             {
-                sched.Ops.Add(op.OperatoryNum);//we know this schedule has op's operatorynum.  Add it here for later use.
+                sched.Ops.Add(op.Id);//we know this schedule has op's operatorynum.  Add it here for later use.
             }
             return listScheds;
         }
@@ -853,23 +853,23 @@ namespace OpenDentBusiness
             {//only schedules for provs
                 if (schedCur.Ops.Count(x => x != 0) > 0)
                 {//leaving count only non 0's, but 0's are no longer added in ConvertTableToList with remove empty entries code
-                    if (schedCur.Ops.Contains(op.OperatoryNum))
+                    if (schedCur.Ops.Contains(op.Id))
                     {//the schedule is for specific op(s), add if it is for this op
                         retVal.Add(schedCur.Copy());
                     }
                     continue;
                 }
                 //the schedule is not for specific op(s), check op settings to see whether to add it
-                if (op.ProvDentist > 0 && !op.IsHygiene)
+                if (op.ProvDentistId > 0 && !op.IsHygiene)
                 {//op uses dentist
-                    if (schedCur.ProvNum == op.ProvDentist)
+                    if (schedCur.ProvNum == op.ProvDentistId)
                     {
                         retVal.Add(schedCur.Copy());
                     }
                 }
-                else if (op.ProvHygienist > 0 && op.IsHygiene)
+                else if (op.ProvHygienistId > 0 && op.IsHygiene)
                 {//op uses hygienist
-                    if (schedCur.ProvNum == op.ProvHygienist)
+                    if (schedCur.ProvNum == op.ProvHygienistId)
                     {
                         retVal.Add(schedCur.Copy());
                     }
@@ -900,7 +900,7 @@ namespace OpenDentBusiness
                 {
                     continue;
                 }
-                if (!listForPeriod[i].Ops.Contains(op.OperatoryNum))
+                if (!listForPeriod[i].Ops.Contains(op.Id))
                 {
                     continue;
                 }
@@ -931,11 +931,11 @@ namespace OpenDentBusiness
             Plugin.Trigger(null, "Schedules_GetAssignedProvNumForSpot_None", isSecondary);
             if (isSecondary)
             {
-                return op.ProvHygienist;
+                return op.ProvHygienistId.GetValueOrDefault();
             }
             else
             {
-                return op.ProvDentist;
+                return op.ProvDentistId.GetValueOrDefault();
             }
         }
 
@@ -1078,7 +1078,7 @@ namespace OpenDentBusiness
             List<Schedule> listSchedules = Schedules.GetForDate(dateClear);
             listSchedules.RemoveAll(x => x.SchedType != ScheduleType.Blockout);
             //Find the sched ops that we want to delete.
-            List<long> listOpNums = Operatories.GetOpsForClinic(clinicNum).Select(x => x.OperatoryNum).ToList();
+            List<long> listOpNums = Operatory.GetByClinic(clinicNum).Select(x => x.Id).ToList();
             List<ScheduleOp> listSchedOps = ScheduleOps.GetForSchedList(listSchedules);
             listSchedOps.RemoveAll(x => !listOpNums.Contains(x.OperatoryNum));
             ScheduleOps.DeleteBatch(listSchedOps.Select(x => x.ScheduleOpNum).ToList());
@@ -1358,60 +1358,6 @@ namespace OpenDentBusiness
                 }
             }
             return table;
-        }
-
-        ///<summary>Gets all schedules and blockouts that meet the Web Sched requirements.  Set isRecall to false to get New Pat Appt ops.
-        ///Setting clinicNum to 0 will only consider unassigned operatories.</summary>
-        public static List<Schedule> GetSchedulesAndBlockoutsForWebSched(List<long> listProvNums, DateTime dateStart, DateTime dateEnd, bool isRecall
-            , long clinicNum)
-        {
-            List<long> listProvNumsWithZero = new List<long>();
-            if (listProvNums != null)
-            {
-                listProvNumsWithZero = listProvNums.Distinct().ToList();
-            }
-            if (!listProvNumsWithZero.Contains(0))
-            {
-                listProvNumsWithZero.Add(0);//Always add 0 so that blockouts can be returned.
-            }
-            List<long> listBlockoutTypesToIgnore = new List<long>();
-            List<long> listBlockoutTypeDefNums = new List<long>();
-            List<long> listOperatoryNums = new List<long>();
-            List<Operatory> listOperatories = new List<Operatory>();
-            if (isRecall)
-            {
-                listBlockoutTypesToIgnore = Preference.GetString(PreferenceName.WebSchedRecallIgnoreBlockoutTypes)
-                    .Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
-                    .Select(x => PIn.Long(x)).ToList();
-                listOperatories = Operatories.GetOpsForWebSched();
-            }
-            else
-            {
-                listBlockoutTypesToIgnore = Preference.GetString(PreferenceName.WebSchedNewPatApptIgnoreBlockoutTypes)
-                    .Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
-                    .Select(x => PIn.Long(x)).ToList();
-                //Get all of the operatory nums for operatories that are New Pat ready.
-                listOperatories = Operatories.GetOpsForWebSchedNewPatAppts();
-                if (listOperatories == null || listOperatories.Count < 1)
-                {
-                    return new List<Schedule>(); //No operatories setup for WSNP.
-                }
-            }
-            //Get all blockout types that are not ignored in order to tell GetSchedulesHelper() which blockouts we need to know about.
-            listBlockoutTypeDefNums = Definition.GetByCategory(DefinitionCategory.BlockoutTypes)
-                    .FindAll(x => !x.Id.In(listBlockoutTypesToIgnore))//listBlockoutTypesToIgnore contains a list of blockouts that can be scheduled on.
-                    .Select(x => x.Id).ToList();
-            if (!listBlockoutTypeDefNums.Contains(0))
-            {
-                listBlockoutTypeDefNums.Add(0);//Non-blockouts must always be considered.
-            }
-            listOperatoryNums.AddRange(listOperatories.Select(x => x.OperatoryNum));
-            List<long> listClinicNums = new List<long>();
-
-                listClinicNums.Add(clinicNum);
-            
-            List<int> listSchedTypes = new List<int>() { (int)ScheduleType.Provider, (int)ScheduleType.Blockout };
-            return GetSchedulesHelper(dateStart, dateEnd, listClinicNums, listOperatoryNums, listProvNumsWithZero, listBlockoutTypeDefNums, listSchedTypes);
         }
 
         ///<summary>Gets a list of schedules for different methods.  Explicitly specify blockout types that need to be considered.</summary>

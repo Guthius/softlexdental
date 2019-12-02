@@ -466,16 +466,16 @@ namespace OpenDental {
 					Appointments.Update(aptCur,aptOld);
 				}
 				//Change PatStatus to Prospective or from Prospective.
-				Operatory opCur=Operatories.GetOperatory(aptCur.Op);
+				Operatory opCur= Operatory.GetById(aptCur.Op);
 				if(opCur!=null) {
-					if(opCur.SetProspective && _patCur.PatStatus!=PatientStatus.Prospective) { //Don't need to prompt if patient is already prospective.
+					if(opCur.IsProspective && _patCur.PatStatus!=PatientStatus.Prospective) { //Don't need to prompt if patient is already prospective.
 						if(MsgBox.Show(this,MsgBoxButtons.OKCancel,"Patient's status will be set to Prospective.")) {
 							Patient patOld=_patCur.Copy();
 							_patCur.PatStatus=PatientStatus.Prospective;
 							Patients.Update(_patCur,patOld);
 						}
 					}
-					else if(!opCur.SetProspective && _patCur.PatStatus==PatientStatus.Prospective) {
+					else if(!opCur.IsProspective && _patCur.PatStatus==PatientStatus.Prospective) {
 						if(MsgBox.Show(this,MsgBoxButtons.OKCancel,"Patient's status will change from Prospective to Patient.")) {
 							Patient patOld=_patCur.Copy();
 							_patCur.PatStatus=PatientStatus.Patient;

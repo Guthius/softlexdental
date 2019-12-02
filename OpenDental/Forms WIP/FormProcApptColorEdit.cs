@@ -27,7 +27,7 @@ namespace OpenDental{
 		private Label labelBeforeTime;
 		public ProcApptColor ProcApptColorCur;
 		private CheckBox checkPrevDate;
-		public ApptViewItem ApptVItem;
+		public AppointmentViewItem ApptVItem;
 
 		///<summary></summary>
 		public FormProcApptColorEdit()

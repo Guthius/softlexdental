@@ -267,17 +267,17 @@ namespace OpenDental{
 			}
 			listOp.Items.Clear();
 			//Filter clinics by the clinic passed in.
-			List<Operatory> listOpsShort=Operatories.GetDeepCopy(true);
+			List<Operatory> listOpsShort= Operatory.All(true).ToList();
 			_listOps=new List<Operatory>();
 			for(int i=0;i<listOpsShort.Count;i++) {
 				if( _clinicNum!=0) {//Using clinics and a clinic filter was passed in.
-					if(listOpsShort[i].ClinicNum!=_clinicNum) {
+					if(listOpsShort[i].ClinicId!=_clinicNum) {
 						continue;
 					}
 				}
-				listOp.Items.Add(listOpsShort[i].OpName);
+				listOp.Items.Add(listOpsShort[i].Description);
 				_listOps.Add(listOpsShort[i]);
-				if(_schedCur.Ops.Contains(listOpsShort[i].OperatoryNum)) {
+				if(_schedCur.Ops.Contains(listOpsShort[i].Id)) {
 					listOp.SetSelected(listOp.Items.Count-1,true);//Select the item that was just added.
 				}
 			}
@@ -324,7 +324,7 @@ namespace OpenDental{
 			_schedCur.BlockoutType=_listBlockoutCatDefs[listType.SelectedIndex].Id;
 			_schedCur.Ops=new List<long>();
 			for(int i=0;i<listOp.SelectedIndices.Count;i++){
-				_schedCur.Ops.Add(_listOps[listOp.SelectedIndices[i]].OperatoryNum);
+				_schedCur.Ops.Add(_listOps[listOp.SelectedIndices[i]].Id);
 			}
 			List<Schedule> listOverlapSchedules;
 			if(Schedules.Overlaps(_schedCur,out listOverlapSchedules)) {

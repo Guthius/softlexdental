@@ -2629,7 +2629,7 @@ namespace OpenDentBusiness
             appointment.AptStatus = ApptStatus.Scheduled;
             appointment.AptDateTime = dateTimeStart;
             appointment.DateTimeAskedToArrive = dateTimeAskedToArrive;
-            appointment.Op = operatory.OperatoryNum;
+            appointment.Op = operatory.Id;
             if (apptConfirmed == 0)
             {
                 appointment.Confirmed = Defs.GetFirstForCategory(DefinitionCategory.ApptConfirmed, true).Id;
@@ -2651,13 +2651,13 @@ namespace OpenDentBusiness
             appointment.ProvHyg = assignedHyg;
             appointment.IsHygiene = operatory.IsHygiene;
             appointment.TimeLocked = Preference.GetBool(PreferenceName.AppointmentTimeIsLocked);
-            if (operatory.ClinicNum == 0)
+            if (operatory.ClinicId == 0)
             {
                 appointment.ClinicNum = patCur.ClinicNum;
             }
             else
             {
-                appointment.ClinicNum = operatory.ClinicNum;
+                appointment.ClinicNum = operatory.ClinicId;
             }
             appointment.Note = apptNote;
             if (appointmentType != null)
@@ -3552,11 +3552,11 @@ namespace OpenDentBusiness
                 return true;
             }
             //Our op has an overlap but we are allowed to change so let's try all other ops.
-            int startingOp = visOps.Select(x => x.OperatoryNum).ToList().IndexOf(apt.Op);
+            int startingOp = visOps.Select(x => x.Id).ToList().IndexOf(apt.Op);
             //Left-to-right start at op directly to the right of this one.
             for (int i = startingOp + 1; i < visOps.Count; i++)
             {
-                long opNum = visOps[i].OperatoryNum;
+                long opNum = visOps[i].Id;
                 if (!funcHasOverlap(opNum, out doesOverlapBlockout))
                 { //We found an open op. Set it and return.
                     apt.Op = opNum;
@@ -3566,7 +3566,7 @@ namespace OpenDentBusiness
             //Right-to-left starting at op directly to left of this one.
             for (int i = startingOp; i >= 0; i--)
             {
-                long opNum = visOps[i].OperatoryNum;
+                long opNum = visOps[i].Id;
                 if (!funcHasOverlap(opNum, out doesOverlapBlockout))
                 { //We found an open op. Set it and return.
                     apt.Op = opNum;
@@ -3710,7 +3710,7 @@ namespace OpenDentBusiness
             if (doValidation)
             {//ContrAppt.MoveAppointments(...) has identical validation but allows for YesNo input, mimiced here as booleans.
                 #region Appointment validation and modifications
-                apt.Op = curOp.OperatoryNum;
+                apt.Op = curOp.Id;
                 provChanged = false;
                 hygChanged = false;
                 long assignedDent = Schedules.GetAssignedProvNumForSpot(schedListPeriod, curOp, false, apt.AptDateTime);
@@ -3778,7 +3778,7 @@ namespace OpenDentBusiness
                                     }
                                     //if both dentist and hyg are assigned, it's tricky
                                     //only explicitly set it if user has a dentist assigned to the op
-                                    if (curOp.ProvDentist != 0)
+                                    if (curOp.ProvDentistId != 0)
                                     {
                                         apt.IsHygiene = false;
                                     }
@@ -3834,16 +3834,16 @@ namespace OpenDentBusiness
                 #region Patient status
                 if (!isOpUpdate && doUpdatePatStatus)
                 {
-                    Operatory opCur = Operatories.GetOperatory(apt.Op);
-                    Operatory opOld = Operatories.GetOperatory(aptOld.Op);
-                    if (opOld == null || opCur.SetProspective != opOld.SetProspective)
+                    Operatory opCur = Operatory.GetById(apt.Op);
+                    Operatory opOld = Operatory.GetById(aptOld.Op);
+                    if (opOld == null || opCur.IsProspective != opOld.IsProspective)
                     {
                         Patient patOld = patCur.Copy();
-                        if (opCur.SetProspective && patCur.PatStatus != PatientStatus.Prospective)
+                        if (opCur.IsProspective && patCur.PatStatus != PatientStatus.Prospective)
                         { //Don't need to prompt if patient is already prospective.
                             patCur.PatStatus = PatientStatus.Prospective;
                         }
-                        else if (!opCur.SetProspective && patCur.PatStatus == PatientStatus.Prospective)
+                        else if (!opCur.IsProspective && patCur.PatStatus == PatientStatus.Prospective)
                         {
                             //Do we need to warn about changing FROM prospective? Assume so for now.
                             patCur.PatStatus = PatientStatus.Patient;
@@ -3858,13 +3858,13 @@ namespace OpenDentBusiness
                     apt.AptStatus = ApptStatus.Scheduled;
                 }
                 //original location of provider code
-                if (curOp.ClinicNum == 0)
+                if (curOp.ClinicId == 0)
                 {
                     apt.ClinicNum = patCur.ClinicNum;
                 }
                 else
                 {
-                    apt.ClinicNum = curOp.ClinicNum;
+                    apt.ClinicNum = curOp.ClinicId;
                 }
                 if (apt.AptDateTime != aptOld.AptDateTime
                     && apt.Confirmed != Defs.GetFirstForCategory(DefinitionCategory.ApptConfirmed, true).Id
@@ -4572,7 +4572,7 @@ namespace OpenDentBusiness
         public static Appointment AssignFieldsForOperatory(Appointment aptCur)
         {
             Appointment apt = aptCur.Copy();
-            Operatory curOp = Operatories.GetOperatory(apt.Op);
+            Operatory curOp = Operatory.GetById(apt.Op);
             List<Schedule> schedListPeriod = Schedules.RefreshDayEdit(apt.AptDateTime);
             long assignedDent = Schedules.GetAssignedProvNumForSpot(schedListPeriod, curOp, false, apt.AptDateTime);
             long assignedHyg = Schedules.GetAssignedProvNumForSpot(schedListPeriod, curOp, true, apt.AptDateTime);
@@ -4606,15 +4606,15 @@ namespace OpenDentBusiness
                     }
                     //if both dentist and hyg are assigned, it's tricky
                     //only explicitly set it if user has a dentist assigned to the op
-                    if (curOp.ProvDentist != 0)
+                    if (curOp.ProvDentistId != 0)
                     {
                         apt.IsHygiene = false;
                     }
                 }
             }
-            if (curOp.ClinicNum != 0)
+            if (curOp.ClinicId != 0)
             {
-                apt.ClinicNum = curOp.ClinicNum;
+                apt.ClinicNum = curOp.ClinicId;
             }
             return apt;
         }

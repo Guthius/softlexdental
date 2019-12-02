@@ -435,8 +435,11 @@
     <Compile Include="Forms WIP\FormApptRules.Designer.cs">
       <DependentUpon>FormApptRules.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms WIP\FormApptViews.Designer.cs">
-      <DependentUpon>FormApptViews.cs</DependentUpon>
+    <Compile Include="Forms\FormAppointmentViewEdit.Designer.cs">
+      <DependentUpon>FormAppointmentViewEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormAppointmentViews.Designer.cs">
+      <DependentUpon>FormAppointmentViews.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms WIP\FormAudit.Designer.cs">
       <DependentUpon>FormAudit.cs</DependentUpon>
@@ -767,11 +770,11 @@
     <Compile Include="Forms WIP\FormPrepaymentTool.designer.cs">
       <DependentUpon>FormPrepaymentTool.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms WIP\FormApptSearchAdvanced.cs">
+    <Compile Include="__WIP\FormAppointmentSearchAdvanced.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms WIP\FormApptSearchAdvanced.designer.cs">
-      <DependentUpon>FormApptSearchAdvanced.cs</DependentUpon>
+    <Compile Include="__WIP\FormAppointmentSearchAdvanced.designer.cs">
+      <DependentUpon>FormAppointmentSearchAdvanced.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms WIP\FormBenefitFrequencies.cs">
       <SubType>Form</SubType>
@@ -3182,11 +3185,11 @@
     <Compile Include="Forms WIP\FormApptQuickAdd.designer.cs">
       <DependentUpon>FormApptQuickAdd.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms WIP\FormApptViewItemEdit.cs">
+    <Compile Include="Forms\FormAppointmentViewItemEdit.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms WIP\FormApptViewItemEdit.designer.cs">
-      <DependentUpon>FormApptViewItemEdit.cs</DependentUpon>
+    <Compile Include="Forms\FormAppointmentViewItemEdit.designer.cs">
+      <DependentUpon>FormAppointmentViewItemEdit.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms WIP\FormDatabaseMaintTemp.cs">
       <SubType>Form</SubType>
@@ -3840,10 +3843,10 @@
     <Compile Include="Forms WIP\FormApptsOther.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms WIP\FormApptViewEdit.cs">
+    <Compile Include="Forms\FormAppointmentViewEdit.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms WIP\FormApptViews.cs">
+    <Compile Include="Forms\FormAppointmentViews.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms WIP\FormAudit.cs">
@@ -4200,19 +4203,19 @@
     <Compile Include="Forms WIP\FormProcTPEdit.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="__WIP_Forms\FormProgramLinkEdit.cs">
+    <Compile Include="__WIP\FormProgramLinkEdit.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="__WIP_Forms\FormProgramLinkEdit.Designer.cs">
+    <Compile Include="__WIP\FormProgramLinkEdit.Designer.cs">
       <DependentUpon>FormProgramLinkEdit.cs</DependentUpon>
     </Compile>
-    <Compile Include="__WIP_Forms\FormProgramLinks.cs">
+    <Compile Include="__WIP\FormProgramLinks.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="__WIP_Forms\FormProgramLinks.Designer.cs">
+    <Compile Include="__WIP\FormProgramLinks.Designer.cs">
       <DependentUpon>FormProgramLinks.cs</DependentUpon>
     </Compile>
-    <Compile Include="__WIP_Forms\FormProgramPreference.cs">
+    <Compile Include="__WIP\FormProgramPreference.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms WIP\FormProgress.cs">
@@ -4806,7 +4809,7 @@
     <Compile Include="__WIP_Forms\FormPayment.Designer.cs">
       <DependentUpon>FormPayment.cs</DependentUpon>
     </Compile>
-    <Compile Include="__WIP_Forms\FormProgramPreference.Designer.cs">
+    <Compile Include="__WIP\FormProgramPreference.Designer.cs">
       <DependentUpon>FormProgramPreference.cs</DependentUpon>
     </Compile>
     <EmbeddedResource Include="Forms Reports\FormRpProdGoal.resx">
@@ -4908,8 +4911,8 @@
     <EmbeddedResource Include="Forms WIP\FormPrepaymentTool.resx">
       <DependentUpon>FormPrepaymentTool.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms WIP\FormApptSearchAdvanced.resx">
-      <DependentUpon>FormApptSearchAdvanced.cs</DependentUpon>
+    <EmbeddedResource Include="__WIP\FormAppointmentSearchAdvanced.resx">
+      <DependentUpon>FormAppointmentSearchAdvanced.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms WIP\FormRecurringChargesHistory.resx">
       <DependentUpon>FormRecurringChargesHistory.cs</DependentUpon>
@@ -6541,12 +6544,12 @@
       <DependentUpon>FormApptsOther.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms WIP\FormApptViewEdit.resx">
-      <DependentUpon>FormApptViewEdit.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\FormAppointmentViewEdit.resx">
+      <DependentUpon>FormAppointmentViewEdit.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms WIP\FormApptViews.resx">
-      <DependentUpon>FormApptViews.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\FormAppointmentViews.resx">
+      <DependentUpon>FormAppointmentViews.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms WIP\FormAudit.resx">
@@ -7021,15 +7024,15 @@
       <DependentUpon>FormProcTPEdit.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="__WIP_Forms\FormProgramLinkEdit.resx">
+    <EmbeddedResource Include="__WIP\FormProgramLinkEdit.resx">
       <DependentUpon>FormProgramLinkEdit.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="__WIP_Forms\FormProgramLinks.resx">
+    <EmbeddedResource Include="__WIP\FormProgramLinks.resx">
       <DependentUpon>FormProgramLinks.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="__WIP_Forms\FormProgramPreference.resx">
+    <EmbeddedResource Include="__WIP\FormProgramPreference.resx">
       <DependentUpon>FormProgramPreference.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -7991,8 +7994,8 @@
       <DependentUpon>FormApptQuickAdd.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms WIP\FormApptViewItemEdit.resx">
-      <DependentUpon>FormApptViewItemEdit.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\FormAppointmentViewItemEdit.resx">
+      <DependentUpon>FormAppointmentViewItemEdit.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms WIP\FormDatabaseMaintTemp.resx">

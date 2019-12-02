@@ -37,7 +37,7 @@ namespace OpenDental
                 var selectedIndex = operatoriesGrid.GetSelectedIndex();
                 if (selectedIndex != -1 && operatoriesGrid.Rows[selectedIndex].Tag is Operatory operatory)
                 {
-                    return operatory.OperatoryNum;
+                    return operatory.Id;
                 }
 
                 return -1;
@@ -76,12 +76,12 @@ namespace OpenDental
             {
                 var row = new ODGridRow();
 
-                row.Cells.Add(operatory.OpName);
-                row.Cells.Add(operatory.Abbrev);
+                row.Cells.Add(operatory.Description);
+                row.Cells.Add(operatory.Abbr);
                 row.Cells.Add(operatory.IsHidden ? "X" : "");
-                row.Cells.Add(Clinic.GetById(operatory.ClinicNum).Abbr);
-                row.Cells.Add(Providers.GetAbbr(operatory.ProvDentist));
-                row.Cells.Add(Providers.GetAbbr(operatory.ProvHygienist));
+                row.Cells.Add(Clinic.GetById(operatory.ClinicId).Abbr);
+                row.Cells.Add(Providers.GetAbbr(operatory.ProvDentistId.GetValueOrDefault()));
+                row.Cells.Add(Providers.GetAbbr(operatory.ProvHygienistId.GetValueOrDefault()));
                 row.Cells.Add(operatory.IsHygiene ? "X" : "");
                 row.Tag = operatory;
 

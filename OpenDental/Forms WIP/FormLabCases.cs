@@ -336,12 +336,12 @@ namespace OpenDental
             {//"All" that the user has access to.
                 foreach (Clinic clinic in _listClinics)
                 {
-                    operatoryNums.AddRange(Operatories.GetOpsForClinic(clinic.Id).Select(x => x.OperatoryNum));
+                    operatoryNums.AddRange(Operatory.GetByClinic(clinic.Id).Select(x => x.Id));
                 }
             }
             else
             {
-                operatoryNums.AddRange(Operatories.GetOpsForClinic(_listClinics[comboClinic.SelectedIndex - 1].Id).Select(x => x.OperatoryNum));
+                operatoryNums.AddRange(Operatory.GetByClinic(_listClinics[comboClinic.SelectedIndex - 1].Id).Select(x => x.Id));
             }
 
             for (int i = 0; i < table.Rows.Count; i++)

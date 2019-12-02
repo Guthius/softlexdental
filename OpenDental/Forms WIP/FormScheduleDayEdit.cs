@@ -733,14 +733,14 @@ namespace OpenDental{
 				//ops
 				opdesc="";
 				foreach(long opNumCur in schedCur.Ops) {
-					Operatory opCur=Operatories.GetOperatory(opNumCur);
+					Operatory opCur=Operatory.GetById(opNumCur);
 					if(opCur==null || opCur.IsHidden) {//Skip hidden operatories because it just confuses users.
 						continue;
 					}
 					if(opdesc!="") {
 						opdesc+=",";
 					}
-					opdesc+=opCur.Abbrev;
+					opdesc+=opCur.Abbr;
 				}
 				row.Cells.Add(opdesc);
 				//note

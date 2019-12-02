@@ -4009,7 +4009,7 @@ namespace OpenDental
         ///     </para>
         /// </summary>
         private void MenuItemApptViews_Click(object sender, EventArgs e) =>
-            ShowSetupForm<FormApptViews>("Appointment Views", true);
+            ShowSetupForm<FormAppointmentViews>("Appointment Views", true);
 
         /// <summary>
         ///     <para>

@@ -1068,7 +1068,7 @@ namespace OpenDental{
 							break;
 						case "op":
 							tableOut.Rows[i][j]
-								=Operatories.GetAbbrev(PIn.Long(tableOut.Rows[i][j].ToString()));
+								= Operatory.GetById(PIn.Long(tableOut.Rows[i][j].ToString())).Abbr;
 							break;
 						case "paytype":
 							tableOut.Rows[i][j]

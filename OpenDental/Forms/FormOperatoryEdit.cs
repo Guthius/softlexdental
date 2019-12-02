@@ -24,12 +24,8 @@ namespace OpenDental
 {
     public partial class FormOperatoryEdit : FormBase
     {
+        private readonly Operatory operatory;
         private List<Provider> providers;
-
-        /// <summary>
-        /// Gets the operatory that is being edited.
-        /// </summary>
-        public Operatory Operatory { get; }
 
         /// <summary>
         /// Gets or sets the ID of the selected provider.
@@ -96,7 +92,7 @@ namespace OpenDental
         /// <summary>
         /// Gets or sets the ID of the selected clinic.
         /// </summary>
-        private long? SelectedClinicId
+        private long SelectedClinicId
         {
             get
             {
@@ -105,22 +101,20 @@ namespace OpenDental
                     return clinic.Id;
                 }
 
-                return null;
+                return 0;
             }
             set
             {
-                if (value.HasValue)
+                for (int i = 1; i < clinicComboBox.Items.Count; i++)
                 {
-                    for (int i = 1; i < clinicComboBox.Items.Count; i++)
+                    if (clinicComboBox.Items[i] is Clinic clinic && clinic.Id == value)
                     {
-                        if (clinicComboBox.Items[i] is Clinic clinic && clinic.Id == value.Value)
-                        {
-                            clinicComboBox.SelectedIndex = i;
+                        clinicComboBox.SelectedIndex = i;
 
-                            return;
-                        }
+                        return;
                     }
                 }
+
                 clinicComboBox.SelectedIndex = 0;
             }
         }
@@ -131,39 +125,39 @@ namespace OpenDental
         /// <param name="operatory">The operatory to edit.</param>
 		public FormOperatoryEdit(Operatory operatory)
         {
-            Operatory = operatory;
+            this.operatory = operatory;
 
             InitializeComponent();
         }
 
         private void FormOperatoryEdit_Load(object sender, EventArgs e)
         {
-            nameTextBox.Text = Operatory.OpName;
-            abbrevTextBox.Text = Operatory.Abbrev;
-            hiddenCheckBox.Checked = Operatory.IsHidden;
+            nameTextBox.Text = operatory.Description;
+            abbrevTextBox.Text = operatory.Abbr;
+            hiddenCheckBox.Checked = operatory.IsHidden;
 
             LoadClinics();
             LoadProviders();
 
-            hygieneCheckBox.Checked = Operatory.IsHygiene;
-            prospectiveCheckBox.Checked = Operatory.SetProspective;
+            hygieneCheckBox.Checked = operatory.IsHygiene;
+            prospectiveCheckBox.Checked = operatory.IsProspective;
         }
 
         private void LoadClinics()
         {
             clinicComboBox.Items.Clear();
-            clinicComboBox.Items.Add("None");
 
             foreach (var clinic in Clinic.GetByUser(Security.CurrentUser))
             {
                 clinicComboBox.Items.Add(clinic);
-                if (clinic.Id == Operatory.ClinicNum)
+                if (clinic.Id == operatory.ClinicId)
                 {
                     clinicComboBox.SelectedItem = clinic;
                 }
             }
 
-            if (clinicComboBox.SelectedItem == null)
+            if (clinicComboBox.SelectedItem == null && 
+                clinicComboBox.Items.Count > 0)
             {
                 clinicComboBox.SelectedIndex = 0;
             }
@@ -171,10 +165,7 @@ namespace OpenDental
 
         private void LoadProviders()
         {
-            providers =
-                SelectedClinicId.HasValue ?
-                    Providers.GetProvsByClinic(SelectedClinicId.Value) :
-                    Providers.GetProvsByClinic(0);
+            providers = Providers.GetProvsByClinic(SelectedClinicId);
 
             providerComboBox.Items.Add("None");
 
@@ -183,13 +174,13 @@ namespace OpenDental
             foreach (var provider in providers)
             {
                 providerComboBox.Items.Add(provider);
-                if (provider.ProvNum == Operatory.ProvDentist)
+                if (provider.ProvNum == operatory.ProvDentistId)
                 {
                     providerComboBox.SelectedItem = provider;
                 }
 
                 hygienistComboBox.Items.Add(provider);
-                if (provider.ProvNum == Operatory.ProvHygienist)
+                if (provider.ProvNum == operatory.ProvHygienistId)
                 {
                     hygienistComboBox.SelectedItem = provider;
                 }
@@ -260,7 +251,7 @@ namespace OpenDental
                 return;
             }
 
-            if (hiddenCheckBox.Checked == true && Operatories.HasFutureApts(Operatory.OperatoryNum, ApptStatus.UnschedList))
+            if (hiddenCheckBox.Checked == true && Operatory.HasFutureApts(operatory.Id, ApptStatus.UnschedList))
             {
                 MessageBox.Show(
                     "Can not hide an operatory with future appointments.", 
@@ -272,14 +263,23 @@ namespace OpenDental
                 return;
             }
 
-            Operatory.OpName = nameTextBox.Text;
-            Operatory.Abbrev = abbrevTextBox.Text;
-            Operatory.IsHidden = hiddenCheckBox.Checked;
-            Operatory.ClinicNum = SelectedClinicId.GetValueOrDefault();
-            Operatory.ProvDentist = ProviderId.GetValueOrDefault();
-            Operatory.ProvHygienist = HygienistId.GetValueOrDefault();
-            Operatory.IsHygiene = hygieneCheckBox.Checked;
-            Operatory.SetProspective = prospectiveCheckBox.Checked;
+            operatory.Description = nameTextBox.Text;
+            operatory.Abbr = abbrevTextBox.Text;
+            operatory.IsHidden = hiddenCheckBox.Checked;
+            operatory.ClinicId = SelectedClinicId;
+            operatory.ProvDentistId = ProviderId;
+            operatory.ProvHygienistId = HygienistId;
+            operatory.IsHygiene = hygieneCheckBox.Checked;
+            operatory.IsProspective = prospectiveCheckBox.Checked;
+
+            if (operatory.IsNew)
+            {
+                Operatory.Insert(operatory);
+            }
+            else
+            {
+                Operatory.Update(operatory);
+            }
 
             DialogResult = DialogResult.OK;
         }

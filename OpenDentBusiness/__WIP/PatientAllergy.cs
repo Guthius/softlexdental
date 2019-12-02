@@ -28,7 +28,7 @@ namespace OpenDentBusiness
     {
         public long AllergyId;
         public long PatientId;
-        
+
         /// <summary>
         /// Adverse reaction description.
         /// </summary>
@@ -46,12 +46,12 @@ namespace OpenDentBusiness
         /// To be used for synch with web server for CertTimelyAccess.
         /// </summary>
         public DateTime DateModified;
-        
+
         /// <summary>
         /// The historical date that the patient had the adverse reaction to this agent.
         /// </summary>
         public DateTime? DateAdverseReaction;
-        
+
         /// <summary>
         /// True if still an active allergy.
         /// False helps hide it from the list of active allergies.
@@ -166,10 +166,17 @@ namespace OpenDentBusiness
                 dataReader => (string)dataReader[0])
             .ToArray();
 
-        public static List<long> GetPatientsWithAllergy(List<long> patientIds) =>
-            SelectMany(
+        public static List<long> GetPatientsWithAllergy(List<long> patientIds)
+        {
+            if (patientIds.Count == 0)
+            {
+                return new List<long>();
+            }
+
+            return SelectMany(
                 "SELECT DISTINCT `patient_id` FROM `patient_allergies` WHERE `patient_id` IN (" + string.Join(", ", patientIds) + ")",
                 dataReader => (long)dataReader[0]);
+        }
 
         public static void ResetTimeStamps(long patientId) =>
             DataConnection.ExecuteNonQuery(

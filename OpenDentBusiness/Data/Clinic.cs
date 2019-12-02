@@ -221,7 +221,7 @@ namespace OpenDentBusiness
         /// <summary>
         /// Returns a string representation of the clinic.
         /// </summary>
-        public override string ToString() => Abbr ?? Description ?? "";
+        public override string ToString() => Description ?? Abbr ?? "";
 
         /// <summary>
         /// Constructs a new instance of the <see cref="Clinic"/> class.

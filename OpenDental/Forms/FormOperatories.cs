@@ -28,7 +28,6 @@ namespace OpenDental
     public partial class FormOperatories : FormBase
     {
         private List<Operatory> operatories;
-        private List<Operatory> operatoriesOld;
 
         /// <summary>
         /// List of conflict appointments to show the user. Only used for the combine operatories tool.
@@ -39,26 +38,17 @@ namespace OpenDental
 
         private void FormOperatories_Load(object sender, EventArgs e)
         {
-            LoadClinics();
+            operatories = Operatory.All().ToList();
 
-            RefreshList();
-        }
-
-        private void RefreshList()
-        {
-            operatories = Operatories.GetDeepCopy();
-            operatoriesOld = operatories.Select(x => x.Copy()).ToList();
-
+            FillClinics();
             FillGrid();
         }
 
-        private void LoadClinics()
+        private void FillClinics()
         {
             var clinics = Clinic.GetByUser(Security.CurrentUser, true);
 
             clinicComboBox.Items.Clear();
-            clinicComboBox.Items.Add("All");
-
             foreach (var clinic in clinics)
             {
                 clinicComboBox.Items.Add(clinic);
@@ -85,18 +75,18 @@ namespace OpenDental
 
             foreach (var operatory in operatories)
             {
-                if (clinicComboBox.SelectedItem is Clinic clinic && operatory.ClinicNum != clinic.Id)
+                if (clinicComboBox.SelectedItem is Clinic clinic && operatory.ClinicId != clinic.Id)
                 {
                     continue;
                 }
 
                 var row = new ODGridRow();
-                row.Cells.Add(operatory.OpName);
-                row.Cells.Add(operatory.Abbrev);
+                row.Cells.Add(operatory.Description);
+                row.Cells.Add(operatory.Abbr);
                 row.Cells.Add(operatory.IsHidden ? "X" : "");
-                row.Cells.Add(Clinic.GetById(operatory.ClinicNum).Abbr);
-                row.Cells.Add(Providers.GetAbbr(operatory.ProvDentist));
-                row.Cells.Add(Providers.GetAbbr(operatory.ProvHygienist));
+                row.Cells.Add(Clinic.GetById(operatory.ClinicId).Abbr);
+                row.Cells.Add(Providers.GetAbbr(operatory.ProvDentistId.GetValueOrDefault()));
+                row.Cells.Add(Providers.GetAbbr(operatory.ProvHygienistId.GetValueOrDefault()));
                 row.Cells.Add(operatory.IsHygiene ? "X" : "");
                 row.Tag = operatory;
 
@@ -144,23 +134,20 @@ namespace OpenDental
 
         private void AddButton_Click(object sender, EventArgs e)
         {
-            var newOperatory = new Operatory
-            {
-                IsNew = true,
-            };
+            var newOperatory = new Operatory();
 
             if (clinicComboBox.SelectedItem is Clinic clinic)
             {
-                newOperatory.ClinicNum = clinic.Id;
+                newOperatory.ClinicId = clinic.Id;
             }
 
             if (operatoriesGrid.SelectedIndices.Length > 0)
             {
-                newOperatory.ItemOrder = operatoriesGrid.SelectedIndices[0];
+                newOperatory.SortOrder = operatoriesGrid.SelectedIndices[0];
             }
             else
             {
-                newOperatory.ItemOrder = operatories.Count;
+                newOperatory.SortOrder = operatoriesGrid.Rows.Count;
             }
 
             using (var formOperatoryEdit = new FormOperatoryEdit(newOperatory))
@@ -170,7 +157,7 @@ namespace OpenDental
                     return;
                 }
 
-                operatories.Insert(newOperatory.ItemOrder, newOperatory);
+                operatories.Insert(newOperatory.SortOrder, newOperatory);
             }
 
             FillGrid();
@@ -202,27 +189,15 @@ namespace OpenDental
 
             if (result == DialogResult.No) return;
 
-            bool hasNewOperatory = operatoriesGrid.SelectedIndices.ToList().Exists(x => ((Operatory)operatoriesGrid.Rows[x].Tag).IsNew);
-            if (hasNewOperatory)
-            {
-                // This is needed due to the user adding an operatory then clicking combine.
-                // The newly added operatory does not hava and OperatoryNum , so sync.
-                ReorderAndSync();
-
-                // TODO: CacheManager.Invalidate<Operatory>();
-
-                RefreshList(); // Without this the user could cancel out of a prompt below and quickly close FormOperatories, causing a duplicate op from sync.
-            }
-
-            var selectedOperatoryIds = new List<long>();
+            var mergeOperatories = new List<Operatory>();
             for (int i = 0; i < operatoriesGrid.SelectedIndices.Length; i++)
             {
-                selectedOperatoryIds.Add(((Operatory)operatoriesGrid.Rows[operatoriesGrid.SelectedIndices[i]].Tag).OperatoryNum);
+                mergeOperatories.Add((Operatory)operatoriesGrid.Rows[operatoriesGrid.SelectedIndices[i]].Tag);
             }
 
             // Determine what operatory to keep as the 'master'.
             long masterOperatoryId;
-            using (var formOperatoryPick = new FormOperatoryPick(operatories.FindAll(x => selectedOperatoryIds.Contains(x.OperatoryNum))))
+            using (var formOperatoryPick = new FormOperatoryPick(mergeOperatories))
             {
                 if (formOperatoryPick.ShowDialog() != DialogResult.OK)
                 {
@@ -234,10 +209,10 @@ namespace OpenDental
 
             var masterOperatory =
                 operatories.First(
-                    operatory => operatory.OperatoryNum == masterOperatoryId);
+                    operatory => operatory.Id == masterOperatoryId);
 
             // Determine if any appointment conflict exist and potentially show them.
-            var appointmentsToMergeChecked = Operatories.MergeApptCheck(masterOperatoryId, selectedOperatoryIds.FindAll(x => x != masterOperatoryId));
+            var appointmentsToMergeChecked = Operatory.MergeApptCheck(masterOperatoryId, mergeOperatories.Where(x => x.Id != masterOperatoryId).Select(x => x.Id).ToList());
             var appointmentsToMerge = appointmentsToMergeChecked.Select(x => x.Item1).ToList();
 
             ListConflictingAppts = appointmentsToMergeChecked.Where(x => x.Item2).Select(x => x.Item1).ToList();
@@ -272,7 +247,7 @@ namespace OpenDental
             {
                 result =
                     MessageBox.Show(
-                        "Would you like to move " + numberOfAppointments + " appointments from their current operatories to " + masterOperatory.Abbrev + "?\r\n\r\n" +
+                        "Would you like to move " + numberOfAppointments + " appointments from their current operatories to " + masterOperatory.Abbr + "?\r\n\r\n" +
                         "Warning: This action cannot be undone.",
                         "Operatories",
                         MessageBoxButtons.YesNo,
@@ -281,16 +256,11 @@ namespace OpenDental
                 if (result == DialogResult.No) return;
             }
 
-            if (!hasNewOperatory)
-            {
-                ReorderAndSync();
-
-                // TODO: CacheManager.Invalidate<Operatory>();
-            }
+            ReorderAndSync();
 
             try
             {
-                Operatories.MergeOperatoriesIntoMaster(masterOperatoryId, selectedOperatoryIds, appointmentsToMerge);
+                Operatory.MergeOperatoriesIntoMaster(masterOperatoryId, mergeOperatories, appointmentsToMerge);
             }
             catch (Exception exception)
             {
@@ -304,13 +274,11 @@ namespace OpenDental
             }
 
             MessageBox.Show(
-                "The following operatories and all of their appointments were merged into the " + masterOperatory.Abbrev + " operatory;\r\n" + 
-                string.Join(", ", operatories.FindAll(x => x.OperatoryNum != masterOperatoryId && selectedOperatoryIds.Contains(x.OperatoryNum)).Select(x => x.Abbrev)), 
+                "The following operatories and all of their appointments were merged into the " + masterOperatory.Abbr + " operatory;\r\n" + 
+                string.Join(", ", mergeOperatories.Select(x => x.Abbr)), 
                 "Operatories", 
                 MessageBoxButtons.OK, 
                 MessageBoxIcon.Information);
-
-            RefreshList();
 
             FillGrid();
         }
@@ -337,22 +305,11 @@ namespace OpenDental
             var op1 = (Operatory)operatoriesGrid.Rows[selectedIndex].Tag;
             var op2 = (Operatory)operatoriesGrid.Rows[selectedIndex - 1].Tag;
 
-            if (!CanReorderOperatories(op1, op2, out var errorMessage))
-            {
-                MessageBox.Show(
-                    errorMessage,
-                    "Operatories",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
+            int selectedItemOrder = op1.SortOrder;
+            op1.SortOrder = op2.SortOrder;
+            op2.SortOrder = selectedItemOrder;
 
-                return;
-            }
-
-            int selectedItemOrder = op1.ItemOrder;
-            op1.ItemOrder = op2.ItemOrder;
-            op2.ItemOrder = selectedItemOrder;
-
-            operatories = operatories.OrderBy(x => x.ItemOrder).ToList();
+            operatories = operatories.OrderBy(x => x.SortOrder).ToList();
 
             SwapGridMainLocations(selectedIndex, selectedIndex - 1);
 
@@ -381,50 +338,15 @@ namespace OpenDental
             var op1 = (Operatory)operatoriesGrid.Rows[selected].Tag;
             var op2 = (Operatory)operatoriesGrid.Rows[selected + 1].Tag;
 
-            if (!CanReorderOperatories(op1, op2, out var errorMessage))
-            {
-                MessageBox.Show(
-                    errorMessage, 
-                    "Operatories",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
+            int selectedItemOrder = op1.SortOrder;
+            op1.SortOrder = op2.SortOrder;
+            op2.SortOrder = selectedItemOrder;
 
-                return;
-            }
-
-            int selectedItemOrder = op1.ItemOrder;
-            op1.ItemOrder = op2.ItemOrder;
-            op2.ItemOrder = selectedItemOrder;
-
-            operatories = operatories.OrderBy(x => x.ItemOrder).ToList();
+            operatories = operatories.OrderBy(x => x.SortOrder).ToList();
 
             SwapGridMainLocations(selected, selected + 1);
 
             operatoriesGrid.SetSelected(selected + 1, true);
-        }
-
-        /// <summary>
-        /// Returns true if the two operatories can be reordered. Returns false and fills the
-        /// <paramref name="errorMessage"/> parameter if they cannot.
-        /// </summary>
-        private bool CanReorderOperatories(Operatory op1, Operatory op2, out string errorMessage)
-        {
-            errorMessage = "";
-            if (!(clinicComboBox.SelectedItem is Clinic clinic))
-            {
-                return true;
-            }
-
-            if (!op1.IsInHQView && !op2.IsInHQView)
-            {
-                return true;
-            }
-
-            errorMessage = 
-                "You cannot change the order of the operatories '" + op1.Abbrev + "' and '" + op2.Abbrev + "' with clinic" + " '" + clinic.Abbr + "' selected " +
-                "because it is also a member of a Headquarters Appointment View. You must set your clinic selection to 'All' to reorder these operatories.";
-
-            return false;
         }
 
         /// <summary>
@@ -433,9 +355,11 @@ namespace OpenDental
         private void SwapGridMainLocations(int fromIndex, int toIndex)
         {
             operatoriesGrid.BeginUpdate();
-            var dataRow = operatoriesGrid.Rows[fromIndex];
+
+            var row = operatoriesGrid.Rows[fromIndex];
+
             operatoriesGrid.Rows.RemoveAt(fromIndex);
-            operatoriesGrid.Rows.Insert(toIndex, dataRow);
+            operatoriesGrid.Rows.Insert(toIndex, row);
             operatoriesGrid.EndUpdate();
         }
 
@@ -443,10 +367,13 @@ namespace OpenDental
         {
             for (int i = 0; i < operatories.Count; i++)
             {
-                operatories[i].ItemOrder = i;
-            }
+                if (operatories[i].SortOrder != i)
+                {
+                    operatories[i].SortOrder = i;
 
-            Operatories.Sync(operatories, operatoriesOld);
+                    Operatory.Update(operatories[i]);
+                }
+            }
         }
 
         private void CloseButton_Click(object sender, EventArgs e) => Close();
@@ -455,7 +382,7 @@ namespace OpenDental
         {
             ReorderAndSync();
 
-            //CacheManager.Invalidate<Operatory>();
+            CacheManager.Invalidate<Operatory>();
         }
     }
 }

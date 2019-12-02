@@ -61,7 +61,7 @@ namespace OpenDental {
 				else{
 					row.Cells.Add(apptCur.AptDateTime.ToShortDateString()+"  "+apptCur.AptDateTime.ToShortTimeString());
 				}
-				row.Cells.Add(Operatories.GetAbbrev(apptCur.Op));
+				row.Cells.Add(Operatory.GetById(apptCur.Op).Abbr);
 				if(apptCur.IsHygiene) {
 					row.Cells.Add(Providers.GetAbbr(apptCur.ProvHyg));
 				}

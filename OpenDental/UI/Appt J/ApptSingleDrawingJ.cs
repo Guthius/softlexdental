@@ -45,7 +45,7 @@ namespace OpenDental.UI {
 		///<summary>Set default fontSize to 8 unless printing.</summary>
 		public static void DrawEntireAppt(Graphics g,DataRow dataRoww,string patternShowing,float totalWidth,float totalHeight,
 			//bool isSelected,bool thisIsPinBoard,long selectedAptNum,//these have more to do with outlines than drawing appt
-			List<ApptViewItem> apptRows,ApptView apptViewCur,DataTable tableApptFields,DataTable tablePatFields,
+			List<AppointmentViewItem> apptRows,AppointmentView apptViewCur,DataTable tableApptFields,DataTable tablePatFields,
 			int fontSize,bool isPrinting,List<DateRange> listOverlapTimes)
 		{
 			bool isSelected=false;
@@ -95,8 +95,8 @@ namespace OpenDental.UI {
 			{
 				//Loop through all the appt view items to see if appointments should display the late color.
 				for(int i=0;i<apptRows.Count;i++) {
-					if(apptRows[i].ElementDesc=="LateColor") {
-						backColor=apptRows[i].ElementColor;
+					if(apptRows[i].Description=="LateColor") {
+						backColor=apptRows[i].Color;
 						break;
 					}
 				}
@@ -147,11 +147,11 @@ namespace OpenDental.UI {
 			PointF drawLoc=new PointF(9,0);
 			int elementI=0;
 			while(drawLoc.Y<totalHeight && elementI<apptRows.Count) {
-				if(apptRows[elementI].ElementAlignment!=ApptViewAlignment.Main) {
+				if(apptRows[elementI].Alignment!=AppointmentViewLocation.Main) {
 					elementI++;
 					continue;
 				}
-				drawLoc=DrawElement(g,elementI,drawLoc,ApptViewStackBehavior.Vertical,ApptViewAlignment.Main,backBrush,dataRoww,apptRows,tableApptFields,tablePatFields,totalWidth,totalHeight,fontSize,isPrinting);//set the drawLoc to a new point, based on space used by element
+				drawLoc=DrawElement(g,elementI,drawLoc,AppointmentViewStackBehaviour.Vertical,AppointmentViewLocation.Main,backBrush,dataRoww,apptRows,tableApptFields,tablePatFields,totalWidth,totalHeight,fontSize,isPrinting);//set the drawLoc to a new point, based on space used by element
 				elementI++;
 			}
 			#endregion
@@ -175,11 +175,11 @@ namespace OpenDental.UI {
 			drawLoc=new Point((int)totalWidth-1,0);//in the UR area, we refer to the upper right corner of each element.
 			elementI=0;
 			while(drawLoc.Y<totalHeight && elementI<apptRows.Count) {
-				if(apptRows[elementI].ElementAlignment!=ApptViewAlignment.UR) {
+				if(apptRows[elementI].Alignment!=AppointmentViewLocation.UpperRight) {
 					elementI++;
 					continue;
 				}
-				drawLoc=DrawElement(g,elementI,drawLoc,apptViewCur.StackBehavUR,ApptViewAlignment.UR,backBrush,dataRoww,apptRows,tableApptFields,tablePatFields,totalWidth,totalHeight,fontSize,isPrinting);
+				drawLoc=DrawElement(g,elementI,drawLoc,apptViewCur.StackBehaviourUR,AppointmentViewLocation.UpperRight,backBrush,dataRoww,apptRows,tableApptFields,tablePatFields,totalWidth,totalHeight,fontSize,isPrinting);
 				elementI++;
 			}
 			#endregion
@@ -187,11 +187,11 @@ namespace OpenDental.UI {
 			drawLoc=new Point((int)totalWidth-1,(int)totalHeight-1);//in the LR area, we refer to the lower right corner of each element.
 			elementI=apptRows.Count-1;//For lower right, draw the list backwards.
 			while(drawLoc.Y>0 && elementI>=0) {
-				if(apptRows[elementI].ElementAlignment!=ApptViewAlignment.LR) {
+				if(apptRows[elementI].Alignment!=AppointmentViewLocation.LowerRight) {
 					elementI--;
 					continue;
 				}
-				drawLoc=DrawElement(g,elementI,drawLoc,apptViewCur.StackBehavLR,ApptViewAlignment.LR,backBrush,dataRoww,apptRows,tableApptFields,tablePatFields,totalWidth,totalHeight,fontSize,isPrinting);
+				drawLoc=DrawElement(g,elementI,drawLoc,apptViewCur.StackBehaviourLR,AppointmentViewLocation.LowerRight,backBrush,dataRoww,apptRows,tableApptFields,tablePatFields,totalWidth,totalHeight,fontSize,isPrinting);
 				elementI--;
 			}
 			#endregion
@@ -212,7 +212,7 @@ namespace OpenDental.UI {
 		}
 
 		///<summary></summary>
-		public static PointF DrawElement(Graphics g,int elementI,PointF drawLoc,ApptViewStackBehavior stackBehavior,ApptViewAlignment align,Brush backBrush,DataRow dataRoww,List<ApptViewItem> apptRows,DataTable tableApptFields,DataTable tablePatFields,float totalWidth,float totalHeight,int fontSize,bool isPrinting) {
+		public static PointF DrawElement(Graphics g,int elementI,PointF drawLoc,AppointmentViewStackBehaviour stackBehavior,AppointmentViewLocation align,Brush backBrush,DataRow dataRoww,List<AppointmentViewItem> apptRows,DataTable tableApptFields,DataTable tablePatFields,float totalWidth,float totalHeight,int fontSize,bool isPrinting) {
 			Font baseFont=new Font("Arial",fontSize);
 			string text="";
 			bool isNote=false;
@@ -223,11 +223,11 @@ namespace OpenDental.UI {
 				isNote=true;
 			}
 			bool isGraphic=false;
-			if(apptRows[elementI].ElementDesc=="ConfirmedColor") {
+			if(apptRows[elementI].Description=="ConfirmedColor") {
 				isGraphic=true;
 			}
-			if(apptRows[elementI].ApptFieldDefNum>0) {
-				string fieldName=AppointmentFieldDefinition.GetFieldName(apptRows[elementI].ApptFieldDefNum);
+			if(apptRows[elementI].AppointmentFieldDefinitionId.HasValue) {
+				string fieldName=AppointmentFieldDefinition.GetFieldName(apptRows[elementI].AppointmentFieldDefinitionId.Value);
 				for(int i=0;i<tableApptFields.Rows.Count;i++) {
 					if(tableApptFields.Rows[i]["AptNum"].ToString()!=dataRoww["AptNum"].ToString()) {
 						continue;
@@ -238,8 +238,8 @@ namespace OpenDental.UI {
 					text=tableApptFields.Rows[i]["FieldValue"].ToString();
 				}
 			}
-			else if(apptRows[elementI].PatFieldDefNum>0) {
-				string fieldName=PatFieldDefs.GetFieldName(apptRows[elementI].PatFieldDefNum);
+			else if(apptRows[elementI].PatientFieldDefinitionId.HasValue) {
+				string fieldName=PatFieldDefs.GetFieldName(apptRows[elementI].PatientFieldDefinitionId.Value);
 				for(int i=0;i<tablePatFields.Rows.Count;i++) {
 					if(tablePatFields.Rows[i]["PatNum"].ToString()!=dataRoww["PatNum"].ToString()) {
 						continue;
@@ -250,7 +250,7 @@ namespace OpenDental.UI {
 					text=tablePatFields.Rows[i]["FieldValue"].ToString();
 				}
 			}
-			else switch(apptRows[elementI].ElementDesc) {
+			else switch(apptRows[elementI].Description) {
 					case "Address":
 						if(isNote) {
 							text="";
@@ -446,21 +446,18 @@ namespace OpenDental.UI {
 						int lastH=0;
 						int count=1;
 						for(int i=0;i<lines.Length;i++) {
-							string rgbInt="";
+
 							string proc=lines[i];
 							Match m=Regex.Match(lines[i],"^<span color=\"(-?[0-9]*)\">(.*)$");
 							if(m.Success) {
-								rgbInt=m.Result("$1");
 								proc=m.Result("$2");
 							}
 							if(lines[i]!=lines[lines.Length-1]) {
 								proc+=",";
 							}
-							if(rgbInt=="") {
-								rgbInt=apptRows[elementI].ElementColorXml.ToString();
-							}
-							Color c=Color.FromArgb(PIn.Int(rgbInt,false));
-							SizeF procSize=g.MeasureString(proc,baseFont,(int)totalWidth-9,new StringFormat(StringFormatFlags.MeasureTrailingSpaces));
+
+							Color c= apptRows[elementI].Color;
+                            SizeF procSize=g.MeasureString(proc,baseFont,(int)totalWidth-9,new StringFormat(StringFormatFlags.MeasureTrailingSpaces));
 							procSize.Width=(float)Math.Ceiling((double)procSize.Width);
 							if(tempPt.X+procSize.Width>totalWidth) {
 								tempPt.X=drawLoc.X;
@@ -548,7 +545,7 @@ namespace OpenDental.UI {
 			if(text=="" && !isGraphic) {
 				return drawLoc;//next element will draw at the same position as this one would have.
 			}
-			SolidBrush brush=new SolidBrush(apptRows[elementI].ElementColor);
+			SolidBrush brush=new SolidBrush(apptRows[elementI].Color);
 			//SolidBrush noteTitlebrush = new SolidBrush(Defs.Long[(int)DefCat.AppointmentColors][8].ItemColor);
 			StringFormat format=new StringFormat();
 			format.Alignment=StringAlignment.Near;
@@ -558,7 +555,7 @@ namespace OpenDental.UI {
 			RectangleF rect;
 			RectangleF rectBack;
 			#region Main
-			if(align==ApptViewAlignment.Main) {//always stacks vertical
+			if(align==AppointmentViewLocation.Main) {//always stacks vertical
 				if(isGraphic) {
 					Bitmap bitmap=new Bitmap(12,12);
 					noteSize=new SizeF(bitmap.Width,bitmap.Height);
@@ -621,8 +618,8 @@ namespace OpenDental.UI {
 			}
 			#endregion
 			#region UR
-			else if(align==ApptViewAlignment.UR) {
-				if(stackBehavior==ApptViewStackBehavior.Vertical) {
+			else if(align==AppointmentViewLocation.UpperRight) {
+				if(stackBehavior==AppointmentViewStackBehaviour.Vertical) {
 					float w=totalWidth-9;
 					if(isGraphic) {
 						Bitmap bitmap=new Bitmap(12,12);
@@ -651,9 +648,9 @@ namespace OpenDental.UI {
 						PointF drawLocThis=new PointF(drawLoc.X-(int)noteSize.Width,drawLoc.Y);//upper left corner of this element
 						rect=new RectangleF(drawLocThis,noteSize);
 						rectBack=new RectangleF(drawLocThis.X,drawLocThis.Y+1,noteSize.Width,_lineH);
-						if(apptRows[elementI].ElementDesc=="MedOrPremed[+]"
-							|| apptRows[elementI].ElementDesc=="HasIns[I]"
-							|| apptRows[elementI].ElementDesc=="InsToSend[!]") {
+						if(apptRows[elementI].Description=="MedOrPremed[+]"
+							|| apptRows[elementI].Description=="HasIns[I]"
+							|| apptRows[elementI].Description=="InsToSend[!]") {
 							g.FillRectangle(brush,rectBack);
 							g.DrawString(text,baseFont,_brushBlack,rect,format);
 						}
@@ -694,9 +691,9 @@ namespace OpenDental.UI {
 						PointF drawLocThis=new PointF(drawLoc.X-(int)noteSize.Width,drawLoc.Y);//upper left corner of this element
 						rect=new RectangleF(drawLocThis,noteSize);
 						rectBack=new RectangleF(drawLocThis.X,drawLocThis.Y+1,noteSize.Width,_lineH);
-						if(apptRows[elementI].ElementDesc=="MedOrPremed[+]"
-							|| apptRows[elementI].ElementDesc=="HasIns[I]"
-							|| apptRows[elementI].ElementDesc=="InsToSend[!]") {
+						if(apptRows[elementI].Description=="MedOrPremed[+]"
+							|| apptRows[elementI].Description=="HasIns[I]"
+							|| apptRows[elementI].Description=="InsToSend[!]") {
 							g.FillRectangle(brush,rectBack);
 							g.DrawString(text,baseFont,_brushBlack,rect,format);
 						}
@@ -713,7 +710,7 @@ namespace OpenDental.UI {
 			#endregion
 			#region LR
 			else {//LR
-				if(stackBehavior==ApptViewStackBehavior.Vertical) {
+				if(stackBehavior== AppointmentViewStackBehaviour.Vertical) {
 					float w=totalWidth-9;
 					if(isGraphic) {
 						Bitmap bitmap=new Bitmap(12,12);
@@ -742,9 +739,9 @@ namespace OpenDental.UI {
 						PointF drawLocThis=new PointF(drawLoc.X-(int)noteSize.Width,drawLoc.Y-_lineH);//upper left corner of this element
 						rect=new RectangleF(drawLocThis,noteSize);
 						rectBack=new RectangleF(drawLocThis.X,drawLocThis.Y+1,noteSize.Width,_lineH);
-						if(apptRows[elementI].ElementDesc=="MedOrPremed[+]"
-							|| apptRows[elementI].ElementDesc=="HasIns[I]"
-							|| apptRows[elementI].ElementDesc=="InsToSend[!]") {
+						if(apptRows[elementI].Description=="MedOrPremed[+]"
+							|| apptRows[elementI].Description=="HasIns[I]"
+							|| apptRows[elementI].Description=="InsToSend[!]") {
 							g.FillRectangle(brush,rectBack);
 							g.DrawString(text,baseFont,_brushBlack,rect,format);
 						}
@@ -785,9 +782,9 @@ namespace OpenDental.UI {
 						PointF drawLocThis=new PointF(drawLoc.X-(int)noteSize.Width,(int)(drawLoc.Y-_lineH));//upper left corner of this element
 						rect=new RectangleF(drawLocThis,noteSize);
 						rectBack=new RectangleF(drawLocThis.X,drawLocThis.Y+1,noteSize.Width,_lineH);
-						if(apptRows[elementI].ElementDesc=="MedOrPremed[+]"
-							|| apptRows[elementI].ElementDesc=="HasIns[I]"
-							|| apptRows[elementI].ElementDesc=="InsToSend[!]") {
+						if(apptRows[elementI].Description=="MedOrPremed[+]"
+							|| apptRows[elementI].Description=="HasIns[I]"
+							|| apptRows[elementI].Description=="InsToSend[!]") {
 							g.FillRectangle(brush,rectBack);
 							g.DrawString(text,baseFont,_brushBlack,rect,format);
 						}

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 using OpenDental.UI;
 using OpenDentBusiness;
@@ -8,7 +9,7 @@ using OpenDentBusiness;
 
 namespace OpenDental.User_Controls.SetupWizard {
 	public partial class UserControlSetupWizOperatory:SetupWizardControl {
-		private List<Operatory> _listOps = Operatories.GetDeepCopy();
+		private List<Operatory> _listOps = Operatory.All().ToList();
 		private int _blink;
 		public UserControlSetupWizOperatory() {
 			InitializeComponent();
@@ -16,7 +17,7 @@ namespace OpenDental.User_Controls.SetupWizard {
 
 		private void UserControlSetupWizOperatory_Load(object sender,EventArgs e) {
 			FillGrid();
-			if(Operatories.GetCount(true)==0) {
+			if(Operatory.All(true).Count()==0) {
 				MsgBox.Show("FormSetupWizard","You have no valid operatories. Please click the Add button to add an operatory.");
 				timer1.Start();
 			}
@@ -53,23 +54,23 @@ namespace OpenDental.User_Controls.SetupWizard {
 			}
 			foreach(Operatory opCur in _listOps) {
 				row = new ODGridRow();
-				row.Cells.Add(opCur.OpName);
-				if(string.IsNullOrEmpty(opCur.OpName)) {
+				row.Cells.Add(opCur.Description);
+				if(string.IsNullOrEmpty(opCur.Description)) {
 					row.Cells[row.Cells.Count-1].CellColor=needsAttnCol;
 					IsAllComplete=false;
 				}
-				row.Cells.Add(opCur.Abbrev);
-				if(string.IsNullOrEmpty(opCur.Abbrev)) {
+				row.Cells.Add(opCur.Abbr);
+				if(string.IsNullOrEmpty(opCur.Abbr)) {
 					row.Cells[row.Cells.Count-1].CellColor=needsAttnCol;
 					IsAllComplete=false;
 				}
 
-					row.Cells.Add(Clinic.GetById(opCur.ClinicNum).Abbr);
+					row.Cells.Add(Clinic.GetById(opCur.ClinicId).Abbr);
 				
 				//not a required field
-				row.Cells.Add(Providers.GetAbbr(opCur.ProvDentist));
+				row.Cells.Add(Providers.GetAbbr(opCur.ProvDentistId.GetValueOrDefault()));
 				//not a required field
-				row.Cells.Add(Providers.GetAbbr(opCur.ProvHygienist));
+				row.Cells.Add(Providers.GetAbbr(opCur.ProvHygienistId.GetValueOrDefault()));
 				//not a required field
 				row.Cells.Add(opCur.IsHygiene ? "X" : "");
 				//not a required field
@@ -105,15 +106,18 @@ namespace OpenDental.User_Controls.SetupWizard {
 
         private void butAdd_Click(object sender, EventArgs e)
         {
-            FormOperatoryEdit FormOE = new FormOperatoryEdit(new Operatory());
+            var operatory = new Operatory();
 
-            FormOE.ShowDialog();
-            if (FormOE.DialogResult == DialogResult.OK)
+            using (var formOperatoryEdit = new FormOperatoryEdit(operatory))
             {
-                _listOps.Add(FormOE.Operatory);
+                if (formOperatoryEdit.ShowDialog() == DialogResult.OK)
+                {
+                    _listOps.Add(operatory);
 
-                FillGrid();
-                DataValid.SetInvalid(InvalidType.Operatories);
+                    FillGrid();
+
+                    CacheManager.Invalidate<Operatory>();
+                }
             }
         }
 
