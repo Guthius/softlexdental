@@ -549,10 +549,10 @@ namespace OpenDental.UI {
 							continue;
 						}
 						float provWidthAdj=0f;//use to adjust for primary and secondary provider bars in op
-						if(Providers.GetIsSec(schedCur.ProvNum)) {
+						if(Provider.GetById(schedCur.ProvNum).IsSecondary) {
 							provWidthAdj=_provWidth;//drawing secondary prov bar so shift right
 						}
-						using(SolidBrush solidBrushProvColor=new SolidBrush(Providers.GetColor(schedCur.ProvNum))) {
+						using(SolidBrush solidBrushProvColor=new SolidBrush(Provider.GetById(schedCur.ProvNum).Color)) {
 							g.FillRectangle(solidBrushProvColor
 								,_timeWidth+_provWidth*_provCount+i*_colWidth+provWidthAdj
 								,(schedCur.StartTime.Hours-_timeStart.Hours)*_lineH*_rowsPerHr+(int)schedCur.StartTime.Minutes*_lineH/_minPerRow//6RowsPerHr 10MinPerRow
@@ -574,7 +574,7 @@ namespace OpenDental.UI {
 			}
 			else{//only one day showing
 				for(int i=0;i<VisProvs.Count;i++){
-					using(SolidBrush solidBrushProvColor=new SolidBrush(VisProvs[i].ProvColor)) {
+					using(SolidBrush solidBrushProvColor=new SolidBrush(VisProvs[i].Color)) {
 						g.FillRectangle(solidBrushProvColor,_timeWidth+_provWidth*i,0,_provWidth,_heightProvOpHeader);
 					}
 					g.DrawLine(_penVertPrimary,_timeWidth+_provWidth*i,0,_timeWidth+_provWidth*i,_heightProvOpHeader);//to left of prov cell
@@ -586,10 +586,10 @@ namespace OpenDental.UI {
 					Color colorOp=Color.Empty;
 					//operatory color is based solely on provider colors and IsHygiene.  It has nothing to do with schedules
 					if(VisOps[i].ProvDentistId.HasValue && !VisOps[i].IsHygiene) {
-						colorOp=Providers.GetColor(VisOps[i].ProvDentistId.Value);
+						colorOp=Provider.GetById(VisOps[i].ProvDentistId.Value).Color;
 					}
 					else if(VisOps[i].ProvHygienistId.HasValue && VisOps[i].IsHygiene) {
-						colorOp=Providers.GetColor(VisOps[i].ProvHygienistId.Value);
+						colorOp=Provider.GetById(VisOps[i].ProvHygienistId.Value).Color;
 					}
 					if(colorOp!=Color.Empty){
 						using(SolidBrush solidBrushProvColor=new SolidBrush(colorOp)) {
@@ -763,7 +763,7 @@ namespace OpenDental.UI {
 			}
 			for(int j=0;j<VisProvs.Count;j++) {
 				provCur=VisProvs[j];
-				schedForType=Schedules.GetForType(SchedListPeriod,ScheduleType.Provider,provCur.ProvNum);
+				schedForType=Schedules.GetForType(SchedListPeriod,ScheduleType.Provider,provCur.Id);
 				for(int i=0;i<schedForType.Length;i++) {
 					stopHour=_timeStop.Hours;//Reset stopHour every time.
 					if(stopHour==0) {
@@ -811,7 +811,7 @@ namespace OpenDental.UI {
 							break;
 						case 1:
 							try {
-								using(SolidBrush solidBrushProvColor=new SolidBrush(VisProvs[j].ProvColor)) {
+								using(SolidBrush solidBrushProvColor=new SolidBrush(VisProvs[j].Color)) {
 									g.FillRectangle(solidBrushProvColor,_timeWidth+_provWidth*j+1,((i-startingPoint)*_lineH)+1,_provWidth-1,_lineH-1);
 								}
 							}
@@ -820,7 +820,7 @@ namespace OpenDental.UI {
 							}
 							break;
 						case 2:
-							using(HatchBrush hatchBrushProvColor=new HatchBrush(HatchStyle.DarkUpwardDiagonal,Color.Black,VisProvs[j].ProvColor)) {
+							using(HatchBrush hatchBrushProvColor=new HatchBrush(HatchStyle.DarkUpwardDiagonal,Color.Black,VisProvs[j].Color)) {
 								g.FillRectangle(hatchBrushProvColor,_timeWidth+_provWidth*j+1,((i-startingPoint)*_lineH)+1,_provWidth-1,_lineH-1);
 							}
 							break;

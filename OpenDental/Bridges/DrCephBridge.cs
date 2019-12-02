@@ -86,8 +86,8 @@ namespace OpenDental.Bridges
                 PatientRaceOld raceOld = PatientRaces.GetPatientRaceOldFromPatientRaces(patient.PatNum);
                 List<RefAttach> referalList = RefAttaches.Refresh(patient.PatNum);
 
-                var provider = Providers.GetProv(Patients.GetProvNum(patient));
-                var providerName = provider.FName + " " + provider.MI + " " + provider.LName + " " + provider.Suffix;
+                var provider = Provider.GetById(Patients.GetProvNum(patient));
+                var providerName = provider.FirstName + " " + provider.MiddleInitial + " " + provider.LastName + " " + provider.Suffix;
 
                 var family = Patients.GetFamily(patient.PatNum);
                 var guardian = family.Members[0];

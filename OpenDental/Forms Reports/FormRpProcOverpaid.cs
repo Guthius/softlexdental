@@ -54,7 +54,7 @@ namespace OpenDental {
 			get {
 				List<long> listProvNums = new List<long>();
 				if(!comboBoxMultiProv.ListSelectedItems.Select(x => ((ODBoxItem<Provider>)x).Tag).Contains(null)) { //"All" is selected.
-					listProvNums = comboBoxMultiProv.ListSelectedItems.Select(x => ((ODBoxItem<Provider>)x).Tag.ProvNum).ToList();
+					listProvNums = comboBoxMultiProv.ListSelectedItems.Select(x => ((ODBoxItem<Provider>)x).Tag.Id).ToList();
 				}
 				return listProvNums;
 			}
@@ -412,7 +412,7 @@ namespace OpenDental {
 
 		private void FillProvs() {
 			comboBoxMultiProv.Items.Add(new ODBoxItem<Provider>(Lan.g(this,"All"))); //tag = null
-			foreach(Provider provCur in Providers.GetListReports()) {
+			foreach(Provider provCur in Provider.GetForReporting()) {
 				comboBoxMultiProv.Items.Add(new ODBoxItem<Provider>(provCur.GetLongDesc(),provCur));
 			}
 			comboBoxMultiProv.SetSelected(0,true);
@@ -435,7 +435,7 @@ namespace OpenDental {
 			}
 			string subTitleProviders=Lan.g(this,"All Providers");
 			if(_listSelectedProvNums.Count>0) {
-				subTitleProviders=Lan.g(this,"For Providers:")+" "+string.Join(",",_listSelectedProvNums.Select(x => Providers.GetFormalName(x)));
+				subTitleProviders=Lan.g(this,"For Providers:")+" "+string.Join(",",_listSelectedProvNums.Select(x => Provider.GetById(x).GetFormalName()));
 			}
 			string subtitleClinics=Lan.g(this,"All Clinics");
 			if(comboBoxMultiClinics.ListSelectedClinics.Count>0 && !comboBoxMultiClinics.ListSelectedIndices.Contains(0)) {//All is not selected

@@ -190,7 +190,7 @@ namespace OpenDental
         {
             comboProv.Items.Clear();
             comboProv.Items.Add(new ODBoxItem<Provider>("Inherit"));//Inherit was carefully approved by Nathan (and reluctantly Allen)
-            _listProviders = Providers.GetDeepCopy(true);
+            _listProviders = Provider.All().ToList();
             foreach (Provider prov in _listProviders)
             {
                 comboProv.Items.Add(new ODBoxItem<Provider>(prov.Abbr, prov));//Don't need to lan.g prov names
@@ -319,7 +319,7 @@ namespace OpenDental
             }
             else
             {
-                row.Adj.ProvNum = ((ODBoxItem<Provider>)comboProv.SelectedItem).Tag.ProvNum;
+                row.Adj.ProvNum = ((ODBoxItem<Provider>)comboProv.SelectedItem).Tag.Id;
             }
             //set clinic
             long selectedClinicNum = 0;
@@ -468,7 +468,7 @@ namespace OpenDental
                 comboProv.SelectedIndex = -1;
                 foreach (ODBoxItem<Provider> boxItemProvCur in comboProv.Items.OfType<ODBoxItem<Provider>>())
                 {
-                    if (boxItemProvCur.Tag.ProvNum == FormProvPick.SelectedProvNum)
+                    if (boxItemProvCur.Tag.Id == FormProvPick.SelectedProvNum)
                     {
                         comboProv.SelectedItem = boxItemProvCur;
                         break;

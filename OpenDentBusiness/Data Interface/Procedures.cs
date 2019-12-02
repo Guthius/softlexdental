@@ -747,7 +747,7 @@ namespace OpenDentBusiness
             proc.ProcFee = Fees.GetAmount0(proc.CodeNum, feeSch, proc.ClinicNum, provNum);
             if (insPlanPrimary != null && insPlanPrimary.PlanType == "p")
             {//PPO
-                double provFee = Fees.GetAmount0(proc.CodeNum, Providers.GetProv(provNum).FeeSched, proc.ClinicNum, provNum);
+                double provFee = Fees.GetAmount0(proc.CodeNum, Provider.GetById(provNum).FeeScheduleId, proc.ClinicNum, provNum);
                 proc.ProcFee = Math.Max(proc.ProcFee, provFee);//use greater of standard fee or ins fee
             }
             ProcedureCode procCodeCur = ProcedureCodes.GetProcCode(proc.CodeNum);
@@ -1352,7 +1352,7 @@ namespace OpenDentBusiness
             }
             if (insPlanPrimary != null && insPlanPrimary.PlanType == "p")
             {//PPO
-                double ucrFee = Fees.GetAmount0(procCodeNum, Providers.GetProv(Patients.GetProvNum(pat)).FeeSched, procClinicNum, procProvNum, listFees);
+                double ucrFee = Fees.GetAmount0(procCodeNum, Provider.GetById(Patients.GetProvNum(pat)).FeeScheduleId, procClinicNum, procProvNum, listFees);
                 if (procFeeRet < ucrFee || Preference.GetBool(PreferenceName.InsPpoAlwaysUseUcrFee))
                 {
                     procFeeRet = ucrFee;
@@ -1376,7 +1376,7 @@ namespace OpenDentBusiness
                 if (Benefits.IsExcluded(ProcedureCodes.GetStringProcCode(procCodeNum), listBenefits, priInsPlan.PlanNum, priPatPlan.PatPlanNum))
                 {
                     //Get the fee from the provider's fee schedule (ucr fee)
-                    procFeeRet = Fees.GetAmount0(procCodeNum, Providers.GetProv(Patients.GetProvNum(pat)).FeeSched, procClinicNum, procProvNum, listFees);
+                    procFeeRet = Fees.GetAmount0(procCodeNum, Provider.GetById(Patients.GetProvNum(pat)).FeeScheduleId, procClinicNum, procProvNum, listFees);
                 }
             }
             return procFeeRet;
@@ -1820,7 +1820,7 @@ namespace OpenDentBusiness
                     {
                         continue;
                     }
-                    procCur.ProcFee = Fees.GetAmount0(procCur.CodeNum, Providers.GetProv(procCur.ProvNum).FeeSched, procCur.ClinicNum
+                    procCur.ProcFee = Fees.GetAmount0(procCur.CodeNum, Provider.GetById(procCur.ProvNum).FeeScheduleId, procCur.ClinicNum
                         , procCur.ProvNum);
                 }
             }
@@ -1921,7 +1921,7 @@ namespace OpenDentBusiness
                         {
                             continue;
                         }
-                        proc.ProcFee = Fees.GetAmount0(proc.CodeNum, Providers.GetProv(proc.ProvNum).FeeSched, proc.ClinicNum, proc.ProvNum, listFees);
+                        proc.ProcFee = Fees.GetAmount0(proc.CodeNum, Provider.GetById(proc.ProvNum).FeeScheduleId, proc.ClinicNum, proc.ProvNum, listFees);
                         decimal procCurPatPortion = ClaimProcs.GetPatPortion(proc, listClaimProcs, listAdjustments);
                         decimal procOldPatPortion = ClaimProcs.GetPatPortion(procOld, listClaimProcs, listAdjustments);
                         if (procCurPatPortion != procOldPatPortion)
@@ -2162,9 +2162,9 @@ namespace OpenDentBusiness
                 //lookup will make it very fast to look up the fees we need.
             }
             long practDefaultProvNum = Preference.GetLong(PreferenceName.PracticeDefaultProv);
-            long practDefaultProvFeeSched = Providers.GetFirstOrDefault(x => x.ProvNum == practDefaultProvNum)?.FeeSched ?? 0;//default to 0 if prov is not found
-            long firstNonHiddenProvFeeSched = Providers.GetFirstOrDefault(x => !x.IsHidden)?.FeeSched ?? 0;//default to 0 if all provs hidden (not likely to happen)
-            Dictionary<long, long> dictProvFeeSched = Providers.GetDeepCopy().ToDictionary(x => x.ProvNum, x => x.FeeSched);
+            long practDefaultProvFeeSched = Provider.GetById(practDefaultProvNum)?.FeeScheduleId ?? 0;//default to 0 if prov is not found
+            long firstNonHiddenProvFeeSched = Provider.All().FirstOrDefault(x => !x.IsHidden)?.FeeScheduleId ?? 0;//default to 0 if all provs hidden (not likely to happen)
+            Dictionary<long, long> dictProvFeeSched = Provider.All().ToDictionary(x => x.Id, x => x.FeeScheduleId);
             //dictionary of fee key linked to a list of lists of longs in order to keep each update statement limited to updating 1000 procedures per query
             Dictionary<double, List<List<long>>> dictFeeListCodes = new Dictionary<double, List<List<long>>>();
             DataTable table = new DataTable();
@@ -4063,7 +4063,7 @@ namespace OpenDentBusiness
                     UpdateProcInAppointment(AptCur, procCur);//Doesn't update DB
                     if (doUpdateProcFees)
                     {
-                        procCur.ProcFee = Fees.GetAmount0(procCur.CodeNum, Providers.GetProv(procCur.ProvNum).FeeSched, procCur.ClinicNum, procCur.ProvNum);
+                        procCur.ProcFee = Fees.GetAmount0(procCur.CodeNum, Provider.GetById(procCur.ProvNum).FeeScheduleId, procCur.ClinicNum, procCur.ProvNum);
                     }
                     Update(procCur, procOld);//Update fields if needed.
                 }

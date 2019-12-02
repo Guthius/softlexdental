@@ -2136,11 +2136,11 @@ namespace OpenDental{
 				if(PatCur.DiscountPlanNum!=0) {
 					Fee procFee=Fees.GetFee(procCodeCur.CodeNum,discountPlan.FeeSchedNum,listProcForTP[i].ClinicNum,listProcForTP[i].ProvNum,loadActiveData.ListFees);
 					if(procFee==null) {//No fee for discount plan's feesched and proc's provider
-						Provider patProv=Providers.GetProv(PatCur.PriProv);
-						procFee=Fees.GetFee(procCodeCur.CodeNum,patProv.FeeSched,listProcForTP[i].ClinicNum,patProv.ProvNum,loadActiveData.ListFees);
+						Provider patProv=Provider.GetById(PatCur.PriProv);
+						procFee=Fees.GetFee(procCodeCur.CodeNum,patProv.FeeScheduleId,listProcForTP[i].ClinicNum,patProv.Id,loadActiveData.ListFees);
 						if(procFee==null) {//No fee for pat's pri prov feesched and pat's pri prov
-							patProv=Providers.GetProv(Preference.GetLong(PreferenceName.PracticeDefaultProv));
-							procFee=Fees.GetFee(procCodeCur.CodeNum,patProv.FeeSched,listProcForTP[i].ClinicNum,patProv.ProvNum,loadActiveData.ListFees);
+							patProv=Provider.GetById(Preference.GetLong(PreferenceName.PracticeDefaultProv));
+							procFee=Fees.GetFee(procCodeCur.CodeNum,patProv.FeeScheduleId,listProcForTP[i].ClinicNum,patProv.Id,loadActiveData.ListFees);
 						}
 					}
 					decimal procFeeAmt=(procFee == null) ? fee : (decimal)procFee.Amount;
@@ -3361,7 +3361,7 @@ namespace OpenDental{
 				if(ClaimCur.ProvTreat==0){//makes sure that at least one prov is set
 					ClaimCur.ProvTreat=proc.ProvNum;
 				}
-				if(!Providers.GetIsSec(proc.ProvNum)) {
+				if(!Provider.GetById(proc.ProvNum).IsSecondary) {
 					ClaimCur.ProvTreat=proc.ProvNum;
 				}
 			}
@@ -3404,14 +3404,14 @@ namespace OpenDental{
 			}
 			//Make the clinic on the claim match the clinic of the procedures.  Use the patients clinic if no procedures selected (shouldn't happen).
 			ClaimCur.ClinicNum=(procClinicNum > -1) ? procClinicNum : PatCur.ClinicNum;
-			if(Providers.GetIsSec(ClaimCur.ProvTreat)){
+			if(Provider.GetById(ClaimCur.ProvTreat).IsSecondary){
 				ClaimCur.ProvTreat=PatCur.PriProv;
 				//OK if 0, because auto select first in list when open claim
 			}
-			ClaimCur.ProvBill=Providers.GetBillingProvNum(ClaimCur.ProvTreat,ClaimCur.ClinicNum);
-			Provider prov=Providers.GetProv(ClaimCur.ProvBill);
-			if(prov.ProvNumBillingOverride!=0) {
-				ClaimCur.ProvBill=prov.ProvNumBillingOverride;
+			ClaimCur.ProvBill=Providers.GetBillingProviderId(ClaimCur.ProvTreat,ClaimCur.ClinicNum);
+			Provider prov=Provider.GetById(ClaimCur.ProvBill);
+			if(prov.BillingOverrideProviderId.HasValue) {
+				ClaimCur.ProvBill=prov.BillingOverrideProviderId.Value;
 			}
 			ClaimCur.EmployRelated=YN.No;
       ClaimCur.ClaimType="PreAuth";

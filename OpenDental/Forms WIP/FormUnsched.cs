@@ -380,7 +380,7 @@ namespace OpenDental{
 			comboOrder.SelectedIndex=0;
 			comboProv.Items.Add(Lan.g(this,"All"));
 			comboProv.SelectedIndex=0;
-			_listProviders=Providers.GetDeepCopy(true);
+			_listProviders=Provider.All().ToList();
 			for(int i=0;i<_listProviders.Count;i++) {
 				comboProv.Items.Add(_listProviders[i].GetLongDesc());
 			}
@@ -573,7 +573,7 @@ namespace OpenDental{
 					}
 					long provNum=0;
 					if(comboProv.SelectedIndex!=0) {
-						provNum=_listProviders[comboProv.SelectedIndex-1].ProvNum;
+						provNum=_listProviders[comboProv.SelectedIndex-1].Id;
 					}
 					long siteNum=0;
 					if(!Preference.GetBool(PreferenceName.EasyHidePublicHealth) && comboSite.SelectedIndex!=0) {

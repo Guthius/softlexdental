@@ -323,10 +323,10 @@ namespace OpenDental {
 				textDateEntry.Visible=false;
 			}
 			comboProvider.Items.Clear();
-			_listProviders=Providers.GetDeepCopy(true);
+            _listProviders = Provider.All().ToList();
 			for(int i=0;i<_listProviders.Count;i++) {
 				comboProvider.Items.Add(_listProviders[i].Abbr);
-				if(ClaimProcCur.ProvNum==_listProviders[i].ProvNum) {
+				if(ClaimProcCur.ProvNum==_listProviders[i].Id) {
 					comboProvider.SelectedIndex=i;
 				}
 			}
@@ -483,7 +483,7 @@ namespace OpenDental {
 				textFeeSched.Text=FeeScheds.GetDescription(insFeeSchedNum);//show ins fee sched, unless PPO plan and standard fee is greater, checked below
 				if(plan.PlanType=="p") {//if ppo
 					double insFee=Fees.GetAmount0(proc.CodeNum,insFeeSchedNum,proc.ClinicNum,proc.ProvNum);
-					long standFeeSchedNum=Providers.GetProv(Patients.GetProvNum(PatCur)).FeeSched;
+					long standFeeSchedNum=Provider.GetById(Patients.GetProvNum(PatCur)).FeeScheduleId;
 					double standardfee=Fees.GetAmount0(proc.CodeNum,standFeeSchedNum,proc.ClinicNum,proc.ProvNum);
 					if(standardfee>insFee) {//if standard fee is greater than ins fee for a PPO plan, show standard fee sched
 						textFeeSched.Text=FeeScheds.GetDescription(standFeeSchedNum);
@@ -765,13 +765,13 @@ namespace OpenDental {
 		private void butPickProv_Click(object sender,EventArgs e) {
 			FormProviderPick formp=new FormProviderPick();
 			if(comboProvider.SelectedIndex > -1) {
-				formp.SelectedProvNum=_listProviders[comboProvider.SelectedIndex].ProvNum;
+				formp.SelectedProvNum=_listProviders[comboProvider.SelectedIndex].Id;
 			}
 			formp.ShowDialog();
 			if(formp.DialogResult!=DialogResult.OK) {
 				return;
 			}
-			comboProvider.SelectedIndex=Providers.GetIndex(formp.SelectedProvNum);
+			//comboProvider.SelectedIndex=Providers.GetIndex(formp.SelectedProvNum);
 		}
 
 		private void comboStatus_SelectionChangeCommitted(object sender,EventArgs e) {
@@ -1230,7 +1230,7 @@ namespace OpenDental {
 			if(comboProvider.SelectedIndex!=-1) {//if no prov selected, then that prov must simply be hidden,
 				//because all claimprocs are initially created with a prov(except preauth).
 				//So, in this case, don't change.
-				ClaimProcCur.ProvNum=_listProviders[comboProvider.SelectedIndex].ProvNum;
+				ClaimProcCur.ProvNum=_listProviders[comboProvider.SelectedIndex].Id;
 			}
 			ClaimProcCur.ProcDate=PIn.Date(textProcDate.Text);
 			if(!textDateCP.ReadOnly){

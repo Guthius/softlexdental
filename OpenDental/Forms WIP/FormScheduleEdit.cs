@@ -334,7 +334,7 @@ namespace OpenDental{
 					listProvsOverlap=Schedules.GetOverlappingSchedProvNums(ListProvNums,SchedCur,listProvSchedsOnly,listSelectedOps);
 				}
 				if(listProvsOverlap.Count>0 && MessageBox.Show(Lan.g(this,"Overlapping provider schedules detected, would you like to continue anyway?")+"\r\n"+Lan.g(this,"Providers affected")+":\r\n  "
-					+string.Join("\r\n  ",listProvsOverlap.Select(x=>Providers.GetLongDesc(x))),"",MessageBoxButtons.YesNo)!=DialogResult.Yes) 
+					+string.Join("\r\n  ",listProvsOverlap.Select(x=>Provider.GetById(x).GetLongDesc())),"",MessageBoxButtons.YesNo)!=DialogResult.Yes) 
 				{ 
 					return;
 				}

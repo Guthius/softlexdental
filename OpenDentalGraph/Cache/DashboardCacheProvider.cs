@@ -11,12 +11,12 @@ namespace OpenDentalGraph.Cache {
 		private Dictionary<string,Color> _dictProvColors=new Dictionary<string, Color>();
 
 		protected override List<Provider> GetCache(DashboardFilter filter) {
-			List<Provider> list=Providers.GetDeepCopy();
+            List<Provider> list = Provider.All().ToList();
 			if(filter.UseProvFilter) {
-				list=list.FindAll(x => x.ProvNum==filter.ProvNum);
+				list=list.FindAll(x => x.Id==filter.ProvNum);
 			}
-			_dictProvNames=list.ToDictionary(x => x.ProvNum,x => string.IsNullOrEmpty(x.Abbr) ? x.ProvNum.ToString() : x.Abbr);
-			_dictProvColors=list.GroupBy(x => x.Abbr).ToDictionary(x => string.IsNullOrEmpty(x.Key) ? x.First().ProvNum.ToString() : x.Key,x => x.First().ProvColor);
+			_dictProvNames=list.ToDictionary(x => x.Id,x => string.IsNullOrEmpty(x.Abbr) ? x.Id.ToString() : x.Abbr);
+			_dictProvColors=list.GroupBy(x => x.Abbr).ToDictionary(x => string.IsNullOrEmpty(x.Key) ? x.First().Id.ToString() : x.Key,x => x.First().Color);
 			return list;
 		}
 

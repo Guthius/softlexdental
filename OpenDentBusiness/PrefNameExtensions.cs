@@ -11,24 +11,6 @@ namespace OpenDentBusiness
             return prefName.GetAttributeOrDefault<PrefNameAttribute>().ValueType;
         }
 
-        public static string GetValueAsText(this PreferenceName prefName)
-        {
-            switch (prefName.GetValueType())
-            {
-                case PrefValueType.NONE:
-                    return ""; //nothing to get
-                case PrefValueType.STRING:
-                    return Preference.GetString(prefName);
-                case PrefValueType.LONG:
-                    return POut.Long(Preference.GetLong(prefName));
-                case PrefValueType.LONG_NEG_ONE_AS_ZERO:
-                    return Preference.GetLongHideNegOne(prefName, true);
-                case PrefValueType.LONG_NEG_ONE_AS_BLANK:
-                    return Preference.GetLongHideNegOne(prefName);
-            }
-            return Preference.GetString(prefName);
-        }
-
         public static bool Update(this PreferenceName prefName, object value)
         {
             switch (prefName.GetValueType())
@@ -88,6 +70,7 @@ namespace OpenDentBusiness
     {
         ///<summary>0 - Based only on provider availability from the schedule.</summary>
         ProviderTime,
+
         ///<summary>1 - Based on provider schedule availability as well as the availabilty of their operatory (dynamic or directly assigned).</summary>
         ProviderTimeOperatory,
     }

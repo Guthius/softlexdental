@@ -173,13 +173,13 @@ namespace OpenDental
         {
             providersListBox.Items.Clear();
 
-            var providers = Providers.GetDeepCopy(true);
+            var providers = Provider.All().ToList();
 
             foreach (Provider provider in providers)
             {
                 int index = providersListBox.Items.Add(provider);
 
-                if (appointmentViewItems.Select(x => x.ProviderId).Contains(provider.ProvNum))
+                if (appointmentViewItems.Select(x => x.ProviderId).Contains(provider.Id))
                 {
                     providersListBox.SetSelected(index, true);
                 }
@@ -732,7 +732,7 @@ namespace OpenDental
                 AppointmentViewItem.Insert(new AppointmentViewItem
                 {
                     AppointmentViewId = appointmentView.Id,
-                    ProviderId = provider.ProvNum
+                    ProviderId = provider.Id
                 });
             }
 

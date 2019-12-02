@@ -166,11 +166,11 @@ namespace OpenDental
                 //get filtered providers
                 if (comboProviderFilter.ListSelectedIndices.Contains(0))
                 {//Contains "All"
-                    return comboProviderFilter.Items.Cast<ODBoxItem<Provider>>().Where(x => x.Tag != null).Select(x => x.Tag.ProvNum).ToList();
+                    return comboProviderFilter.Items.Cast<ODBoxItem<Provider>>().Where(x => x.Tag != null).Select(x => x.Tag.Id).ToList();
                 }
                 else
                 {
-                    return comboProviderFilter.ListSelectedItems.Cast<ODBoxItem<Provider>>().Where(x => x.Tag != null).Select(x => x.Tag.ProvNum).ToList();
+                    return comboProviderFilter.ListSelectedItems.Cast<ODBoxItem<Provider>>().Where(x => x.Tag != null).Select(x => x.Tag.Id).ToList();
                 }
             }
         }
@@ -1221,9 +1221,9 @@ namespace OpenDental
             comboProviderFilter.Items.Clear();
             comboProviderFilter.Items.Add(new ODBoxItem<Provider>(Lan.g(this, "All")));
             comboProviderFilter.Items.Add(new ODBoxItem<Provider>(Lan.g(this, "None"), new Provider()));
-            foreach (Provider prov in _listAccountCharges.Select(x => Providers.GetFirstOrDefault(y => y.ProvNum == x.ProvNum))
+            foreach (Provider prov in _listAccountCharges.Select(x => Provider.GetById(x.ProvNum))
                 .Where(x => x != null)
-                .DistinctBy(x => x.ProvNum))
+                .DistinctBy(x => x.Id))
             {
                 comboProviderFilter.Items.Add(new ODBoxItem<Provider>(prov.Abbr, prov));
             }

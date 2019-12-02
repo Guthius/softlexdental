@@ -773,8 +773,8 @@ namespace OpenDentBusiness.HL7
                     {
                         pat.PriProv = provNum;
                         SecurityLog.Write(pat.PatNum, SecurityLogEvents.PatPriProvEdit,
-                            "Primary provider changed automatically from " + (pat.PriProv == 0 ? "'blank'" : Providers.GetLongDesc(pat.PriProv)) + " to "
-                            + Providers.GetLongDesc(provNum) + " due to an indound HL7 message " + segDef.SegmentName.ToString() + " segment.");
+                            "Primary provider changed automatically from " + (pat.PriProv == 0 ? "'blank'" : Provider.GetById(pat.PriProv).GetLongDesc()) + " to "
+                            + Provider.GetById(provNum).GetLongDesc() + " due to an indound HL7 message " + segDef.SegmentName.ToString() + " segment.");
                     }
                 }
             }
@@ -2409,8 +2409,8 @@ namespace OpenDentBusiness.HL7
                         if (pat.PriProv != provNum)
                         {
                             pat.PriProv = provNum;
-                            securitylogText = "Primary provider changed automatically from " + (pat.PriProv == 0 ? "'blank'" : Providers.GetLongDesc(pat.PriProv)) + " to "
-                                + Providers.GetLongDesc(provNum) + " due to an indound HL7 message PV1 segment.";
+                            securitylogText = "Primary provider changed automatically from " + (pat.PriProv == 0 ? "'blank'" : Provider.GetById(pat.PriProv).GetLongDesc()) + " to "
+                                + Provider.GetById(provNum).GetLongDesc() + " due to an indound HL7 message PV1 segment.";
                         }
                         continue;
                     case "pat.site":

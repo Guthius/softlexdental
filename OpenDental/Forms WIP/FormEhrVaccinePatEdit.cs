@@ -106,26 +106,26 @@ namespace OpenDental {
 			}
 			_provNumSelectedOrdering=VaccinePatCur.ProvNumOrdering;
 			comboProvNumOrdering.Items.Clear();
-			_listProviders=Providers.GetDeepCopy(true);
+			_listProviders=Provider.All().ToList();
 			for(int i=0;i<_listProviders.Count;i++) {
 				comboProvNumOrdering.Items.Add(_listProviders[i].GetLongDesc());//Only visible provs added to combobox.
-				if(_listProviders[i].ProvNum==VaccinePatCur.ProvNumOrdering) {
+				if(_listProviders[i].Id==VaccinePatCur.ProvNumOrdering) {
 					comboProvNumOrdering.SelectedIndex=i;//Sets combo text too.
 				}
 			}
 			if(comboProvNumOrdering.SelectedIndex==-1) {//The provider exists but is hidden
-				comboProvNumOrdering.Text=Providers.GetLongDesc(_provNumSelectedOrdering);//Appends "(hidden)" to the end of the long description.
+				comboProvNumOrdering.Text=Provider.GetById(_provNumSelectedOrdering).GetLongDesc();//Appends "(hidden)" to the end of the long description.
 			}
 			_provNumSelectedAdministering=VaccinePatCur.ProvNumAdminister;
 			comboProvNumAdministering.Items.Clear();
 			for(int i=0;i<_listProviders.Count;i++) {
 				comboProvNumAdministering.Items.Add(_listProviders[i].GetLongDesc());//Only visible provs added to combobox.
-				if(_listProviders[i].ProvNum==VaccinePatCur.ProvNumAdminister) {
+				if(_listProviders[i].Id==VaccinePatCur.ProvNumAdminister) {
 					comboProvNumAdministering.SelectedIndex=i;//Sets combo text too.
 				}
 			}
 			if(comboProvNumAdministering.SelectedIndex==-1) {//The provider exists but is hidden
-				comboProvNumAdministering.Text=Providers.GetLongDesc(_provNumSelectedAdministering);//Appends "(hidden)" to the end of the long description.
+				comboProvNumAdministering.Text=Provider.GetById(_provNumSelectedAdministering).GetLongDesc();//Appends "(hidden)" to the end of the long description.
 			}
 			comboAdministrationRoute.Items.Clear();
 			string[] arrayVaccineAdministrationRoutes=Enum.GetNames(typeof(VaccineAdministrationRoute));
@@ -209,7 +209,7 @@ namespace OpenDental {
 		}
 
 		private void comboProvNumOrdering_SelectionChangeCommitted(object sender,EventArgs e) {
-			_provNumSelectedOrdering=_listProviders[comboProvNumOrdering.SelectedIndex].ProvNum;
+			_provNumSelectedOrdering=_listProviders[comboProvNumOrdering.SelectedIndex].Id;
 		}
 
 		private void butPickProvOrdering_Click(object sender,EventArgs e) {
@@ -221,7 +221,7 @@ namespace OpenDental {
 			if(formP.DialogResult!=DialogResult.OK) {
 				return;
 			}
-			comboProvNumOrdering.SelectedIndex=Providers.GetIndex(formP.SelectedProvNum);
+			//comboProvNumOrdering.SelectedIndex=Providers.GetIndex(formP.SelectedProvNum);
 			_provNumSelectedOrdering=formP.SelectedProvNum;
 		}
 
@@ -231,7 +231,7 @@ namespace OpenDental {
 		}
 
 		private void comboProvNumAdministering_SelectionChangeCommitted(object sender,EventArgs e) {
-			_provNumSelectedAdministering=_listProviders[comboProvNumAdministering.SelectedIndex].ProvNum;
+			_provNumSelectedAdministering=_listProviders[comboProvNumAdministering.SelectedIndex].Id;
 		}
 
 		private void butPickProvAdministering_Click(object sender,EventArgs e) {
@@ -243,7 +243,7 @@ namespace OpenDental {
 			if(formP.DialogResult!=DialogResult.OK) {
 				return;
 			}
-			comboProvNumAdministering.SelectedIndex=Providers.GetIndex(formP.SelectedProvNum);
+			//comboProvNumAdministering.SelectedIndex=Providers.GetIndex(formP.SelectedProvNum);
 			_provNumSelectedAdministering=formP.SelectedProvNum;
 		}
 

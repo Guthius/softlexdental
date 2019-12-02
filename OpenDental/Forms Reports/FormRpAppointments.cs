@@ -368,7 +368,7 @@ namespace OpenDental
 		#endregion
 
 		private void FormRpApptWithPhones_Load(object sender,System.EventArgs e) {
-			_listProviders=Providers.GetListReports();
+			_listProviders=Provider.GetForReporting().ToList();
 			for(int i=0;i<_listProviders.Count;i++) {
 				listProvs.Items.Add(_listProviders[i].GetLongDesc());
 			}
@@ -495,12 +495,12 @@ namespace OpenDental
 			List<long> listProvNums=new List<long>();
 			if(checkAllProvs.Checked) {
 				for(int i = 0;i<_listProviders.Count;i++) {
-					listProvNums.Add(_listProviders[i].ProvNum);
+					listProvNums.Add(_listProviders[i].Id);
 				}
 			}
 			else {
 				for(int i=0;i<listProvs.SelectedIndices.Count;i++) {
-					listProvNums.Add(_listProviders[listProvs.SelectedIndices[i]].ProvNum);
+					listProvNums.Add(_listProviders[listProvs.SelectedIndices[i]].Id);
 				}
 			}
 			ReportComplex report=new ReportComplex(true,true);

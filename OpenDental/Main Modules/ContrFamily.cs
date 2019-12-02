@@ -827,7 +827,7 @@ namespace OpenDental
                     case "Primary Provider":
                         if (PatCur.PriProv != 0)
                         {
-                            row.Cells.Add(Providers.GetLongDesc(Patients.GetProvNum(PatCur)));
+                            row.Cells.Add(Provider.GetById(Patients.GetProvNum(PatCur)).GetLongDesc());
                         }
                         else
                         {
@@ -959,7 +959,7 @@ namespace OpenDental
                     case "Sec. Provider":
                         if (PatCur.SecProv != 0)
                         {
-                            row.Cells.Add(Providers.GetLongDesc(PatCur.SecProv));
+                            row.Cells.Add(Provider.GetById(PatCur.SecProv).GetLongDesc());
                         }
                         else
                         {

@@ -284,7 +284,7 @@ namespace OpenDental{
 			_selectedClinicNum=ClaimCur.ClinicNum;
 			SetOrderingProvider(null);//Clears both the internal ordering and referral ordering providers.
 			if(ClaimCur.ProvOrderOverride!=0) {
-				SetOrderingProvider(Providers.GetProv(ClaimCur.ProvOrderOverride));
+				SetOrderingProvider(Provider.GetById(ClaimCur.ProvOrderOverride));
 			}
 			else if(ClaimCur.OrderingReferralNum!=0) {
 				Referral referral;
@@ -293,11 +293,11 @@ namespace OpenDental{
 			}
 			_selectedProvBillNum=ClaimCur.ProvBill;
 			if(_selectedProvBillNum==0) {
-				_selectedProvBillNum=Providers.GetFirst(true).ProvNum;//old 16.1 behavior to select a default provider for billing.
+				_selectedProvBillNum=Provider.GetDefault().Id;//old 16.1 behavior to select a default provider for billing.
 			}
 			_selectedProvTreatNum=ClaimCur.ProvTreat;
 			if(_selectedProvTreatNum==0) {
-				_selectedProvTreatNum=Providers.GetFirst(true).ProvNum;//old 16.1 behavior to select a default provider for treating.
+				_selectedProvTreatNum=Provider.GetDefault().Id;//old 16.1 behavior to select a default provider for treating.
 			}
 			//Set combo SelectedIndex to -1 so that fillComboBillTreatOrder works properly.
 			comboProvBill.SelectedIndex=-1;
@@ -398,13 +398,13 @@ namespace OpenDental{
 
 		private void comboProvBill_SelectedIndexChanged(object sender,EventArgs e) {
 			if(comboProvBill.SelectedIndex>-1) {
-				_selectedProvBillNum=_listProviders[comboProvBill.SelectedIndex].ProvNum;
+				_selectedProvBillNum=_listProviders[comboProvBill.SelectedIndex].Id;
 			}
 		}
 
 		private void comboProvTreat_SelectedIndexChanged(object sender,EventArgs e) {
 			if(comboProvTreat.SelectedIndex>-1) {
-				_selectedProvTreatNum=_listProviders[comboProvTreat.SelectedIndex].ProvNum;
+				_selectedProvTreatNum=_listProviders[comboProvTreat.SelectedIndex].Id;
 			}
 		}
 
@@ -415,7 +415,7 @@ namespace OpenDental{
 			if(formP.DialogResult!=DialogResult.OK) {
 				return;
 			}
-			SetOrderingProvider(Providers.GetProv(formP.SelectedProvNum));
+			SetOrderingProvider(Provider.GetById(formP.SelectedProvNum));
 		}
 
 		private void butPickOrderProvReferral_Click(object sender,EventArgs e) {
@@ -442,8 +442,8 @@ namespace OpenDental{
 				textOrderingProviderOverride.Text="";
 			}
 			else {
-				_selectedProvOrderNum=prov.ProvNum;
-				textOrderingProviderOverride.Text=prov.GetFormalName()+"  NPI: "+(prov.NationalProvID.Trim()==""?"Missing":prov.NationalProvID);
+				_selectedProvOrderNum=prov.Id;
+				textOrderingProviderOverride.Text=prov.GetFormalName()+"  NPI: "+(prov.NationalProviderId.Trim()==""?"Missing":prov.NationalProviderId);
 			}
 			_referralOrdering=null;
 		}
@@ -467,7 +467,7 @@ namespace OpenDental{
 				return;
 			}
 			_selectedProvBillNum=formP.SelectedProvNum;
-			comboProvBill.IndexSelectOrSetText(_listProviders.FindIndex(x => x.ProvNum==_selectedProvBillNum),() => { return Providers.GetAbbr(_selectedProvBillNum); });
+			comboProvBill.IndexSelectOrSetText(_listProviders.FindIndex(x => x.Id==_selectedProvBillNum),() => { return Providers.GetAbbr(_selectedProvBillNum); });
 		}
 
 		private void butPickProvTreat_Click(object sender,EventArgs e) {
@@ -478,26 +478,26 @@ namespace OpenDental{
 				return;
 			}
 			_selectedProvTreatNum=formP.SelectedProvNum;
-			comboProvTreat.IndexSelectOrSetText(_listProviders.FindIndex(x => x.ProvNum==_selectedProvTreatNum),() => { return Providers.GetAbbr(_selectedProvTreatNum); });
+			comboProvTreat.IndexSelectOrSetText(_listProviders.FindIndex(x => x.Id==_selectedProvTreatNum),() => { return Providers.GetAbbr(_selectedProvTreatNum); });
 		}
 
 		///<summary>Fills combo provider based on which clinic is selected and attempts to preserve provider selection if any.</summary>
 		private void FillComboBillTreatOrder() {
 			if(comboProvBill.SelectedIndex>-1) {//valid prov selected, non none or nothing.
-				_selectedProvBillNum = _listProviders[comboProvBill.SelectedIndex].ProvNum;
+				_selectedProvBillNum = _listProviders[comboProvBill.SelectedIndex].Id;
 			}
 			if(comboProvTreat.SelectedIndex>-1) {
-				_selectedProvTreatNum = _listProviders[comboProvTreat.SelectedIndex].ProvNum;
+				_selectedProvTreatNum = _listProviders[comboProvTreat.SelectedIndex].Id;
 			}
-			_listProviders=Providers.GetProvsForClinic(_selectedClinicNum).OrderBy(x => x.ProvNum>0).ThenBy(x => x.ItemOrder).ToList();//order list properly, None first
+			_listProviders=Providers.GetProvsForClinic(_selectedClinicNum).OrderBy(x => x.Id>0).ToList();//order list properly, None first
 			//Billing Provider
 			comboProvBill.Items.Clear();
 			_listProviders.ForEach(x => comboProvBill.Items.Add(x.Abbr));
-			comboProvBill.IndexSelectOrSetText(_listProviders.FindIndex(x => x.ProvNum==_selectedProvBillNum),() => { return Providers.GetAbbr(_selectedProvBillNum); });
+			comboProvBill.IndexSelectOrSetText(_listProviders.FindIndex(x => x.Id==_selectedProvBillNum),() => { return Providers.GetAbbr(_selectedProvBillNum); });
 			//Treating Provider
 			comboProvTreat.Items.Clear();
 			_listProviders.ForEach(x => comboProvTreat.Items.Add(x.Abbr));
-			comboProvTreat.IndexSelectOrSetText(_listProviders.FindIndex(x => x.ProvNum==_selectedProvTreatNum),() => { return Providers.GetAbbr(_selectedProvTreatNum); });
+			comboProvTreat.IndexSelectOrSetText(_listProviders.FindIndex(x => x.Id==_selectedProvTreatNum),() => { return Providers.GetAbbr(_selectedProvTreatNum); });
 		}
 		#endregion Provider Controls
 

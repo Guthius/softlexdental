@@ -947,7 +947,7 @@ namespace OpenDental {
 			}
 			long provNum=0;
 			if(comboProvider.SelectedIndex!=0) {
-				provNum=_listProvs[comboProvider.SelectedIndex-1].ProvNum;
+				provNum=_listProvs[comboProvider.SelectedIndex-1].Id;
 			}
 			long feeSchedNum=_listFeeScheds[comboFeeSched.SelectedIndex].FeeSchedNum;
 			ODProgress.ShowAction(() => {
@@ -976,7 +976,7 @@ namespace OpenDental {
 			}
 			long toProvNum=0;
 			if(comboProviderTo.SelectedIndex!=0) {
-				toProvNum=_listProvs[comboProviderTo.SelectedIndex-1].ProvNum;
+				toProvNum=_listProvs[comboProviderTo.SelectedIndex-1].Id;
 			}
 			FeeSched toFeeSched=_listFeeScheds[comboFeeSchedTo.SelectedIndex];
 			long fromClinicNum=0;
@@ -985,7 +985,7 @@ namespace OpenDental {
 			}
 			long fromProvNum=0;
 			if(comboProvider.SelectedIndex!=0) {
-				fromProvNum=_listProvs[comboProvider.SelectedIndex-1].ProvNum;
+				fromProvNum=_listProvs[comboProvider.SelectedIndex-1].Id;
 			}
 			FeeSched fromFeeSched=_listFeeScheds[comboFeeSched.SelectedIndex];
 			if(fromFeeSched.FeeSchedNum==toFeeSched.FeeSchedNum
@@ -1050,7 +1050,7 @@ namespace OpenDental {
             long provNum = 0;
             if (comboProvider.SelectedIndex > 0)
             {
-                provNum = _listProvs[comboProvider.SelectedIndex - 1].ProvNum;
+                provNum = _listProvs[comboProvider.SelectedIndex - 1].Id;
             }
             long feeSchedNum = _listFeeScheds[comboFeeSched.SelectedIndex].FeeSchedNum;
             //Modifies in-memory list, all entries increased (if they exist) will be a 100% match to the combo box settings.
@@ -1209,7 +1209,7 @@ namespace OpenDental {
 			}
 			long provNum=0;
 			if(comboProvider.SelectedIndex!=0) {
-				provNum=_listProvs[comboProvider.SelectedIndex-1].ProvNum;
+				provNum=_listProvs[comboProvider.SelectedIndex-1].Id;
 			}
 			ODProgress.ShowAction(
 				() => {
@@ -1253,7 +1253,7 @@ namespace OpenDental {
 			}
 			long provNum=0;
 			if(comboProvider.SelectedIndex!=0) {
-				provNum=_listProvs[comboProvider.SelectedIndex-1].ProvNum;
+				provNum=_listProvs[comboProvider.SelectedIndex-1].Id;
 			}
 			FeeSched feeSched=_listFeeScheds[comboFeeSched.SelectedIndex];
 			FeeL.ImportFees(feeSched.FeeSchedNum,clinicNum,provNum,Dlg.FileName,this);
@@ -1652,12 +1652,14 @@ namespace OpenDental {
 		///<summary>Launches the Provider picker and lets the user pick a specific provider.
 		///Returns the index of the selected provider within the Provider Cache (short).  Returns -1 if the user cancels out of the window.</summary>
 		private int GetProviderIndexFromPicker() {
-			FormProviderPick FormP=new FormProviderPick();
-			FormP.ShowDialog();
-			if(FormP.DialogResult!=DialogResult.OK) {
-				return -1;
-			}
-			return Providers.GetIndex(FormP.SelectedProvNum);
+			//FormProviderPick FormP=new FormProviderPick();
+			//FormP.ShowDialog();
+			//if(FormP.DialogResult!=DialogResult.OK) {
+			//	return -1;
+			//}
+			//return Providers.GetIndex(FormP.SelectedProvNum);
+            // TODO: Fix me
+            return 0;
 		}
 
 		///<summary>Launches the Clinics window and lets the user pick a specific clinic.

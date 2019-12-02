@@ -454,17 +454,17 @@ namespace OpenDental{
 						}
 						Provider prov=null;
 						if(Security.CurrentUser.ProviderId.HasValue) {
-							prov=Providers.GetProv(Security.CurrentUser.ProviderId.Value);
+							prov=Provider.GetById(Security.CurrentUser.ProviderId.Value);
 						}
 						else {
-							prov=Providers.GetProv(PatCur.PriProv);
+							prov=Provider.GetById(PatCur.PriProv);
 						}
 						EmailMessage msgWebMail=new EmailMessage();//New mail object				
 						msgWebMail.FromAddress=prov.GetFormalName();//Adding from address
 						msgWebMail.ToAddress=PatCur.GetNameFL();//Adding to address
 						msgWebMail.PatientId=PatCur.PatNum;//Adding patient number
                         msgWebMail.Status = EmailMessageStatus.Sent; // TODO: EmailMessageStatus.WebMailSent ;//Setting to sent
-                        msgWebMail.ProviderId=prov.ProvNum;//Adding provider number
+                        msgWebMail.ProviderId=prov.Id;//Adding provider number
 						msgWebMail.Subject="Referral To "+FormRS.SelectedReferral.GetNameFL();
 						msgWebMail.Body=
 							"You have been referred to another provider.  Your summary of care is attached.\r\n"

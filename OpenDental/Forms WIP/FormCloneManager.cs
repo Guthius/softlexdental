@@ -57,8 +57,8 @@ namespace OpenDental {
 				row.Cells.Add(_listPatClones[i].MiddleI.ToString());
 				row.Cells.Add(_listPatClones[i].Gender.ToString());
 				row.Cells.Add(_listPatClones[i].Birthdate.ToShortDateString());
-				row.Cells.Add(Providers.GetLongDesc(Patients.GetProvNum(_listPatClones[i])));
-				row.Cells.Add(Providers.GetLongDesc(_listPatClones[i].SecProv));
+				row.Cells.Add(Provider.GetById(Patients.GetProvNum(_listPatClones[i])).GetLongDesc());
+				row.Cells.Add(Provider.GetById(_listPatClones[i].SecProv).GetLongDesc());
 				row.Tag=_listPatClones[i];
 				gridMain.Rows.Add(row);	
 			}

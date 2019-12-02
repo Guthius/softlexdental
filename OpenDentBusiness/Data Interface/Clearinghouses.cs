@@ -504,17 +504,17 @@ namespace OpenDentBusiness
                 //which will cause all reports for that office to be returned.
                 //Here we loop through all providers and find CDAnet providers with a valid provider number and office number, and we only send
                 //one report download request for one provider from each office.  For most offices, the loop will only send a single request.
-                List<Provider> listProvs = Providers.GetDeepCopy(true);
+                List<Provider> listProvs = Provider.All().ToList();
                 List<string> listOfficeNums = new List<string>();
                 for (int j = 0; j < listProvs.Count; j++)
                 {//Get all unique office numbers from the providers.
-                    if (!listProvs[j].IsCDAnet || listProvs[j].NationalProvID == "" || listProvs[j].CanadianOfficeNum == "")
+                    if (!listProvs[j].IsCDAnet || listProvs[j].NationalProviderId == "" || listProvs[j].CanadianOfficeNumber == "")
                     {
                         continue;
                     }
-                    if (!listOfficeNums.Contains(listProvs[j].CanadianOfficeNum))
+                    if (!listOfficeNums.Contains(listProvs[j].CanadianOfficeNumber))
                     {//Ignore duplicate office numbers.
-                        listOfficeNums.Add(listProvs[j].CanadianOfficeNum);
+                        listOfficeNums.Add(listProvs[j].CanadianOfficeNumber);
                         try
                         {
                             clearinghouseHq = Eclaims.Canadian.GetCanadianClearinghouseHq(null);

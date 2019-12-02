@@ -671,18 +671,18 @@ namespace OpenDental
             {
                 if (clinicComboBox.SelectedIndex != 0)
                 {
-                    var prov = Providers.GetDefaultProvider(((ODBoxItem<Clinic>)clinicComboBox.SelectedItem).Tag.Id);
+                    var prov = Provider.GetDefault(((ODBoxItem<Clinic>)clinicComboBox.SelectedItem).Tag.Id);
                     if (prov != null)
                     {
-                        primaryProviderNum = prov.ProvNum;
+                        primaryProviderNum = prov.Id;
                     }
                 }
                 else
                 {
-                    var prov = Providers.GetDefaultProvider();
+                    var prov = Provider.GetDefault();
                     if (prov != null)
                     {
-                        primaryProviderNum = prov.ProvNum;
+                        primaryProviderNum = prov.Id;
                     }
                 }
             }

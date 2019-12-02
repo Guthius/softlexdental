@@ -204,7 +204,7 @@ namespace OpenDental {
 				//Subheading required by some states for EHR reporting.  Shows software name, date the report was generated, and which provider is logged in at time of report.
 				string providerName="";
 				if(Security.CurrentUser.ProviderId.HasValue) {
-					providerName=Providers.GetProv(Security.CurrentUser.ProviderId.Value).GetLongDesc(); //Used GetLongDesc to match the EHR measures printout.  In the future we may want to enhance to use Formal Name and NPI
+					providerName=Provider.GetById(Security.CurrentUser.ProviderId.Value).GetLongDesc(); //Used GetLongDesc to match the EHR measures printout.  In the future we may want to enhance to use Formal Name and NPI
 				}
 				text=providerName;
 				g.DrawString(text,subHeadingFont,Brushes.Black,center-g.MeasureString(text,subHeadingFont).Width/2,yPos);

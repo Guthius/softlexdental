@@ -218,7 +218,7 @@ namespace OpenDental{
 		#endregion
 		private void FormRpProcCodes_Load(object sender, System.EventArgs e) {
 			_listFeeScheds=FeeScheds.GetDeepCopy(true);
-			_listProviders=Providers.GetListReports();
+			_listProviders=Provider.GetForReporting().ToList();
 			_listClinics=Clinic.All().ToList();
 			for(int i=0;i<_listFeeScheds.Count;i++){
 				listBoxFeeSched.Items.Add(_listFeeScheds[i].Description);
@@ -247,7 +247,7 @@ namespace OpenDental{
 			}
 			long provNum=0;
 			if(listBoxProviders.SelectedIndex>0){
-				provNum=_listProviders[listBoxProviders.SelectedIndex-1].ProvNum;
+				provNum=_listProviders[listBoxProviders.SelectedIndex-1].Id;
 			}
 			DataTable dataTable=RpProcCodes.GetData(feeSched.FeeSchedNum,clinicNum,provNum,radioCategories.Checked,checkShowBlankFees.Checked);
 			report.ReportName="Procedure Codes - Fee Schedules";

@@ -597,7 +597,7 @@ namespace OpenDentBusiness
             if (signals.Count() == 0) return false;
 
             var visibleOperatoryIds = ApptDrawing.VisOps.Select(x => x.Id).ToList();
-            var visibleProviderIds = ApptDrawing.VisProvs.Select(x => x.ProvNum).ToList();
+            var visibleProviderIds = ApptDrawing.VisProvs.Select(x => x.Id).ToList();
 
             if (signals.Any(x => x.Param1 == "operatory" && visibleOperatoryIds.Contains(x.ExternalId.Value)) ||
                 signals.Any(x => x.Param1 == "provider" && visibleProviderIds.Contains(x.ExternalId.Value)))
@@ -643,7 +643,7 @@ namespace OpenDentBusiness
             if (signals.Count() == 0) return false;
 
             var visibleOperatoryIds = ApptDrawing.VisOps.Select(x => x.Id).ToList();
-            var visibleProviderIds = ApptDrawing.VisProvs.Select(x => x.ProvNum).ToList();
+            var visibleProviderIds = ApptDrawing.VisProvs.Select(x => x.Id).ToList();
 
             if (signals.Any(x => x.Param1 == "operatory" && visibleOperatoryIds.Contains(x.ExternalId.Value)) ||
                 signals.Any(x => x.Param1 == "provider" && visibleProviderIds.Contains(x.ExternalId.Value)) ||

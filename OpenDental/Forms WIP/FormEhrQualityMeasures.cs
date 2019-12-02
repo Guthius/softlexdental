@@ -11,6 +11,7 @@ using OpenDental.UI;
 using System.Xml;
 using System.Xml.XPath;
 using CodeBase;
+using System.Linq;
 #if EHRTEST
 using EHR;
 #endif
@@ -28,16 +29,16 @@ namespace OpenDental {
 		private void FormQualityMeasures_Load(object sender,EventArgs e) {
 			Cursor=Cursors.WaitCursor;
 			listProvsKeyed=new List<Provider>();
-			_listProviders=Providers.GetDeepCopy(true);
+			_listProviders=Provider.All().ToList();
 			for(int i=0;i<_listProviders.Count;i++) {
 				string ehrKey="";
 				int yearValue=0;
-				List<EhrProvKey> listProvKeys=EhrProvKeys.GetKeysByFLName(_listProviders[i].LName,_listProviders[i].FName);
+				List<EhrProvKey> listProvKeys=EhrProvKeys.GetKeysByFLName(_listProviders[i].LastName,_listProviders[i].FirstName);
 				if(listProvKeys.Count!=0) {
 					ehrKey=listProvKeys[0].ProvKey;
 					yearValue=listProvKeys[0].YearValue;
 				}
-				if(FormEHR.ProvKeyIsValid(_listProviders[i].LName,_listProviders[i].FName,yearValue,ehrKey)) {
+				if(FormEHR.ProvKeyIsValid(_listProviders[i].LastName,_listProviders[i].FirstName,yearValue,ehrKey)) {
 					//EHR has been valid.
 					listProvsKeyed.Add(_listProviders[i]);
 				}
@@ -49,7 +50,7 @@ namespace OpenDental {
 			}
 			for(int i=0;i<listProvsKeyed.Count;i++) {
 				comboProv.Items.Add(listProvsKeyed[i].GetLongDesc());
-				if(Security.CurrentUser.ProviderId==listProvsKeyed[i].ProvNum) {
+				if(Security.CurrentUser.ProviderId==listProvsKeyed[i].Id) {
 					comboProv.SelectedIndex=i;
 				}
 			}
@@ -72,7 +73,7 @@ namespace OpenDental {
 			}
 			DateTime dateStart=PIn.Date(textDateStart.Text);
 			DateTime dateEnd=PIn.Date(textDateEnd.Text);
-			long provNum=listProvsKeyed[comboProv.SelectedIndex].ProvNum;
+			long provNum=listProvsKeyed[comboProv.SelectedIndex].Id;
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col=new ODGridColumn("Id",80);
@@ -152,7 +153,7 @@ namespace OpenDental {
 					writer.WriteStartElement("measure-group");
 							writer.WriteAttributeString("ID","X");
 						writer.WriteStartElement("provider");
-							writer.WriteElementString("npi",prov.NationalProvID);
+							writer.WriteElementString("npi",prov.NationalProviderId);
 							writer.WriteElementString("tin",prov.SSN);
 							writer.WriteElementString("waiver-signed","Y");
 							writer.WriteElementString("encounter-from-date",dateStart.ToString("MM-dd-yyyy"));
@@ -199,7 +200,7 @@ namespace OpenDental {
 			FormEhrQualityMeasureEdit formQe=new FormEhrQualityMeasureEdit();
 			formQe.DateStart=PIn.Date(textDateStart.Text);
 			formQe.DateEnd=PIn.Date(textDateEnd.Text);
-			formQe.ProvNum=listProvsKeyed[comboProv.SelectedIndex].ProvNum;
+			formQe.ProvNum=listProvsKeyed[comboProv.SelectedIndex].Id;
 			formQe.Qcur=listQ[e.Row];
 			formQe.ShowDialog();
 		}

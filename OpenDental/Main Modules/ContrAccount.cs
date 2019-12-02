@@ -3599,7 +3599,7 @@ namespace OpenDental
             {
                 return;
             }
-            Provider patProv = Providers.GetProv(PatCur.PriProv);
+            Provider patProv = Provider.GetById(PatCur.PriProv);
             if (AddProcAndValidate(textQuickProcs.Text, patProv))
             {
                 SecurityLog.Write(PatCur.PatNum
@@ -3636,7 +3636,7 @@ namespace OpenDental
                 MsgBox.Show(this, "There are no Quick Charge items in Setup | Definitions.  There must be at least one in order to use the Quick Charge drop down menu.");
             }
             List<string> procCodesAdded = new List<string>();
-            Provider patProv = Providers.GetProv(PatCur.PriProv);
+            Provider patProv = Provider.GetById(PatCur.PriProv);
             for (int i = 0; i < procCodes.Length; i++)
             {
                 if (AddProcAndValidate(procCodes[i], patProv))
@@ -3679,7 +3679,7 @@ namespace OpenDental
             proc.ProvNum = procCode.ProvNumDefault;//use proc default prov if set
             if (proc.ProvNum == 0)
             { //if none set, use primary provider.
-                proc.ProvNum = patProv.ProvNum;
+                proc.ProvNum = patProv.Id;
             }
             List<InsSub> insSubList = InsSubs.RefreshForFam(FamCur);
             List<InsPlan> insPlanList = InsPlans.RefreshForSubList(insSubList);

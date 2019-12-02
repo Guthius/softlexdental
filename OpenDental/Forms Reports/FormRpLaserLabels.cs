@@ -32,7 +32,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using Microsoft.Win32;
 using CodeBase;
-
+using System.Linq;
 
 namespace OpenDental {
 	public partial class FormRpLaserLabels:ODForm {
@@ -960,7 +960,7 @@ namespace OpenDental {
 		// Load initial data for providers and patient status
 		//
 		private void FormLaserLabels_Load(object sender,System.EventArgs e) {
-			_listProviders=Providers.GetDeepCopy(true);
+            _listProviders = Provider.All().ToList();
 			for(int i = 0;i < _listProviders.Count;i++) {
 				listProviders.Items.Add(_listProviders[i].GetLongDesc());
 			}
@@ -1011,7 +1011,7 @@ namespace OpenDental {
 						if(i > 0) {
 							whereProv += ",";
 						}
-						whereProv += "'" + POut.Long(_listProviders[listProviders.SelectedIndices[i]].ProvNum) + "'";
+						whereProv += "'" + POut.Long(_listProviders[listProviders.SelectedIndices[i]].Id) + "'";
 					}
 					whereProv += ") ";
 					patStat = BuildPatStatList(checkActiveOnly.Checked);

@@ -365,7 +365,7 @@ namespace OpenDentBusiness
                 }
             }
             retVal["ChargeDate"] = PIn.DateT(rowBundleClaimProc["DateCP"].ToString()).ToShortDateString();//0 Date
-            retVal["Provider"] = Providers.GetLName(PIn.Long(rowBundleClaimProc["ProvNum"].ToString()));//1 Prov Abbr
+            retVal["Provider"] = Provider.GetById(PIn.Long(rowBundleClaimProc["ProvNum"].ToString())).LastName;//1 Prov Abbr
             retVal["Description"] = descript;//2 Descript
             retVal["Principal"] = "";//3 Principal
             retVal["Interest"] = "";//4 Interest

@@ -28,7 +28,7 @@ namespace OpenDental
         {
             comboProv.Items.Add(Lan.g(this, "All"));
             comboProv.SelectedIndex = 0;
-            _listProviders = Providers.GetDeepCopy(true);
+            _listProviders = Provider.All().ToList();
             for (int i = 0; i < _listProviders.Count; i++)
             {
                 comboProv.Items.Add(_listProviders[i].GetLongDesc());
@@ -94,7 +94,7 @@ namespace OpenDental
             long provNum = 0;
             if (comboProv.SelectedIndex != 0)
             {
-                provNum = _listProviders[comboProv.SelectedIndex - 1].ProvNum;
+                provNum = _listProviders[comboProv.SelectedIndex - 1].Id;
             }
             long clinicNum = 0;
             if (comboClinic.SelectedIndex != 0)

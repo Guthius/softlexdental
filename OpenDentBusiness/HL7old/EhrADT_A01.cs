@@ -46,8 +46,8 @@ namespace OpenDentBusiness.HL7
 
         private void InitializeVariables()
         {
-            Provider provFacility = Providers.GetProv(Preference.GetInt(PreferenceName.PracticeDefaultProv));
-            _sendingFacilityNpi = provFacility.NationalProvID;
+            Provider provFacility = Provider.GetById(Preference.GetInt(PreferenceName.PracticeDefaultProv));
+            _sendingFacilityNpi = provFacility.NationalProviderId;
             _sendingFacilityName = Preference.GetString(PreferenceName.PracticeTitle);
             _sendingFacilityAddress1 = Preference.GetString(PreferenceName.PracticeAddress);
             _sendingFacilityAddress2 = Preference.GetString(PreferenceName.PracticeAddress2);
@@ -606,8 +606,8 @@ namespace OpenDentBusiness.HL7
         public static string Validate(Appointment appt)
         {
             StringBuilder sb = new StringBuilder();
-            Provider provFacility = Providers.GetProv(Preference.GetInt(PreferenceName.PracticeDefaultProv));
-            if (!Regex.IsMatch(provFacility.NationalProvID, "^(80840)?[0-9]{10}$"))
+            Provider provFacility = Provider.GetById(Preference.GetInt(PreferenceName.PracticeDefaultProv));
+            if (!Regex.IsMatch(provFacility.NationalProviderId, "^(80840)?[0-9]{10}$"))
             {
                 WriteError(sb, "Invalid NPI for provider '" + provFacility.Abbr + "'");
             }

@@ -604,16 +604,21 @@ namespace OpenDental {
 			}
 		}
 
-		///<summary>Name sort order differs according to ScheduleType. This sorts accordingly.<returns></returns>
-		private int CompareNames(Schedule x,Schedule y) {
-			if(x.ProvNum!=y.ProvNum) { //we are dealing with a provider
-				return Providers.GetProv(x.ProvNum).ItemOrder.CompareTo(Providers.GetProv(y.ProvNum).ItemOrder);
-			}
-			if(x.EmployeeNum!=y.EmployeeNum) { //we are dealing with an employee
-				return Employee.GetById(x.EmployeeNum).FirstName.CompareTo(Employee.GetById(y.EmployeeNum).FirstName);
-			}
-			return 0;
-		}
+        ///<summary>Name sort order differs according to ScheduleType. This sorts accordingly.<returns></returns>
+        private int CompareNames(Schedule x, Schedule y)
+        {
+            if (x.ProvNum != y.ProvNum)
+            { //we are dealing with a provider
+                return Provider.GetById(x.ProvNum).Abbr.CompareTo(Provider.GetById(y.ProvNum).Abbr);
+            }
+
+            if (x.EmployeeNum != y.EmployeeNum)
+            { //we are dealing with an employee
+                return Employee.GetById(x.EmployeeNum).FirstName.CompareTo(Employee.GetById(y.EmployeeNum).FirstName);
+            }
+
+            return 0;
+        }
 
 		public enum SortBy {
 			Name,

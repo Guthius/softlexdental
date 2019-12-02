@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
+using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using OpenDentBusiness;
@@ -13,31 +14,31 @@ namespace OpenDental {
 		public FormProviderMerge() {
 			InitializeComponent();
 			
-			_listActiveProvs=Providers.GetWhere(x => x.ProvStatus != ProviderStatus.Deleted,true);
+			_listActiveProvs=Provider.All().Where(x => x.Status != ProviderStatus.Deleted).ToList();
 		}
 
 		private void butChangeProvInto_Click(object sender,EventArgs e) {
 			FormProviderPick FormPP=new FormProviderPick(_listActiveProvs);
 			FormPP.ShowDialog();
 			if(FormPP.DialogResult==DialogResult.OK) {
-				Provider selectedProv=Providers.GetProv(FormPP.SelectedProvNum);
+				Provider selectedProv=Provider.GetById(FormPP.SelectedProvNum);
 				textAbbrInto.Text=selectedProv.Abbr;
-				textProvNumInto.Text=POut.Long(selectedProv.ProvNum);
-				textNpiInto.Text=selectedProv.NationalProvID;
-				textFullNameInto.Text=selectedProv.FName+" "+selectedProv.LName;
+				textProvNumInto.Text=POut.Long(selectedProv.Id);
+				textNpiInto.Text=selectedProv.NationalProviderId;
+				textFullNameInto.Text=selectedProv.FirstName+" "+selectedProv.LastName;
 				CheckUIState();
 			}
 		}
 
 		private void butChangeProvFrom_Click(object sender,EventArgs e) {
-			FormProviderPick FormPP=new FormProviderPick(checkDeletedProvs.Checked ? Providers.GetDeepCopy() : _listActiveProvs);
+			FormProviderPick FormPP=new FormProviderPick(checkDeletedProvs.Checked ? Provider.All().ToList() : _listActiveProvs);
 			FormPP.ShowDialog();
 			if(FormPP.DialogResult==DialogResult.OK) {
-				Provider selectedProv=Providers.GetProv(FormPP.SelectedProvNum);
+				Provider selectedProv=Provider.GetById(FormPP.SelectedProvNum);
 				textAbbrFrom.Text=selectedProv.Abbr;
-				textProvNumFrom.Text=POut.Long(selectedProv.ProvNum);
-				textNpiFrom.Text=selectedProv.NationalProvID;
-				textFullNameFrom.Text=selectedProv.FName+" "+selectedProv.LName;
+				textProvNumFrom.Text=POut.Long(selectedProv.Id);
+				textNpiFrom.Text=selectedProv.NationalProviderId;
+				textFullNameFrom.Text=selectedProv.FirstName+" "+selectedProv.LastName;
 				CheckUIState();
 			}
 		}
@@ -59,8 +60,8 @@ namespace OpenDental {
 			if(textFullNameFrom.Text!=textFullNameInto.Text) {
 				differentFields+="\r\nFull Name";
 			}
-			long numPats=Providers.CountPats(PIn.Long(textProvNumFrom.Text));
-			long numClaims=Providers.CountClaims(PIn.Long(textProvNumFrom.Text));
+			long numPats=Provider.CountPatients(PIn.Long(textProvNumFrom.Text));
+			long numClaims=Provider.CountClaims(PIn.Long(textProvNumFrom.Text));
 			if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"Are you sure?  The results are permanent and cannot be undone.")) {
 				return;
 			}
@@ -84,7 +85,7 @@ namespace OpenDental {
 			textFullNameFrom.Clear();
 			MsgBox.Show(this,"Done.");
 			DataValid.SetInvalid(InvalidType.Providers);
-			_listActiveProvs=Providers.GetWhere(x => x.ProvStatus != ProviderStatus.Deleted,true);
+			_listActiveProvs=Provider.All().Where(x => x.Status != ProviderStatus.Deleted).ToList();
 		}
 
 		private void butClose_Click(object sender,EventArgs e) {

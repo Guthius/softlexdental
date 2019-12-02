@@ -109,7 +109,7 @@ namespace OpenDentBusiness
                 {
                     clinic = Clinic.GetById(pat.ClinicNum);
                 }
-                provClinic = ProviderClinic.GetByProviderAndClinic(prov.ProvNum, clinic.Id);
+                provClinic = ProviderClinic.GetByProviderAndClinic(prov.Id, clinic.Id);
                 ncScript.Location.ID = clinic.Id.ToString();//A positive integer.
                 ncScript.Location.locationName = clinic.Description;//May be blank.
                 ncScript.Location.LocationAddress = new AddressType();
@@ -138,7 +138,7 @@ namespace OpenDentBusiness
             if (isMidlevel)
             {
                 ncScript.MidlevelPrescriber = new MidlevelPrescriberType();
-                ncScript.MidlevelPrescriber.ID = prov.NationalProvID;
+                ncScript.MidlevelPrescriber.ID = prov.NationalProviderId;
                 //UPIN is obsolete
                 ncScript.MidlevelPrescriber.LicensedPrescriberName = NewCrop.GetPersonNameForProvider(prov);
                 if (deaNumDefault.ToLower() == "none")
@@ -155,12 +155,12 @@ namespace OpenDentBusiness
                     ncScript.MidlevelPrescriber.licenseState = provClinic.StateWhereLicensed.ToUpper();//Validated to be a US state code in the chart.
                     ncScript.MidlevelPrescriber.licenseNumber = provClinic.StateLicense;//Validated to exist in chart.
                 }
-                ncScript.MidlevelPrescriber.npi = prov.NationalProvID;//Validated to be 10 digits in chart.
+                ncScript.MidlevelPrescriber.npi = prov.NationalProviderId;//Validated to be 10 digits in chart.
             }
             else
             {//Licensed presriber
                 ncScript.LicensedPrescriber = new LicensedPrescriberType();
-                ncScript.LicensedPrescriber.ID = prov.NationalProvID;
+                ncScript.LicensedPrescriber.ID = prov.NationalProviderId;
                 //UPIN is obsolete
                 ncScript.LicensedPrescriber.LicensedPrescriberName = NewCrop.GetPersonNameForProvider(prov);
                 if (deaNumDefault.ToLower() == "none")
@@ -177,7 +177,7 @@ namespace OpenDentBusiness
                     ncScript.LicensedPrescriber.licenseState = provClinic.StateWhereLicensed.ToUpper();//Validated to be a US state code in the chart.
                     ncScript.LicensedPrescriber.licenseNumber = provClinic.StateLicense;//Validated to exist in chart.
                 }
-                ncScript.LicensedPrescriber.npi = prov.NationalProvID;//Validated to be 10 digits in chart.
+                ncScript.LicensedPrescriber.npi = prov.NationalProviderId;//Validated to be 10 digits in chart.
                                                                       //ncScript.LicensedPrescriber.freeformCredentials=;//This is where DDS and DMD should go, but we don't support this yet. Probably not necessary anyway.
             }
             if (emp != null)

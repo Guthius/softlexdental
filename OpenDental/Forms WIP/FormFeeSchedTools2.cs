@@ -930,7 +930,7 @@ namespace OpenDental {
             long provNum = 0;
             if (comboProvider.SelectedIndex != 0)
             {
-                provNum = _listProvs[comboProvider.SelectedIndex - 1].ProvNum;
+                provNum = _listProvs[comboProvider.SelectedIndex - 1].Id;
             }
             long feeSchedNum = _listFeeScheds[comboFeeSched.SelectedIndex].FeeSchedNum;
             //ODProgress.ShowAction(() => {
@@ -959,7 +959,7 @@ namespace OpenDental {
 			}
 			long toProvNum=0;
 			if(comboProviderTo.SelectedIndex!=0) {
-				toProvNum=_listProvs[comboProviderTo.SelectedIndex-1].ProvNum;
+				toProvNum=_listProvs[comboProviderTo.SelectedIndex-1].Id;
 			}
 			FeeSched toFeeSched=_listFeeScheds[comboFeeSchedTo.SelectedIndex];
 			long fromClinicNum=0;
@@ -968,7 +968,7 @@ namespace OpenDental {
 			}
 			long fromProvNum=0;
 			if(comboProvider.SelectedIndex!=0) {
-				fromProvNum=_listProvs[comboProvider.SelectedIndex-1].ProvNum;
+				fromProvNum=_listProvs[comboProvider.SelectedIndex-1].Id;
 			}
 			FeeSched fromFeeSched=_listFeeScheds[comboFeeSched.SelectedIndex];
 			if(fromFeeSched.FeeSchedNum==toFeeSched.FeeSchedNum
@@ -1024,7 +1024,7 @@ namespace OpenDental {
 			}
 			long provNum=0;
 			if(comboProvider.SelectedIndex>0){
-				provNum=_listProvs[comboProvider.SelectedIndex-1].ProvNum;
+				provNum=_listProvs[comboProvider.SelectedIndex-1].Id;
 			}
 			long feeSchedNum=_listFeeScheds[comboFeeSched.SelectedIndex].FeeSchedNum;
 			List<Fee> listFees=Fees.GetListExact(feeSchedNum,clinicNum,provNum);
@@ -1172,7 +1172,7 @@ namespace OpenDental {
 			}
 			long provNum=0;
 			if(comboProvider.SelectedIndex!=0) {
-				provNum=_listProvs[comboProvider.SelectedIndex-1].ProvNum;
+				provNum=_listProvs[comboProvider.SelectedIndex-1].Id;
 			}
 			ODProgress.ShowAction(
 				() => {
@@ -1213,7 +1213,7 @@ namespace OpenDental {
 			}
 			long provNum=0;
 			if(comboProvider.SelectedIndex!=0) {
-				provNum=_listProvs[comboProvider.SelectedIndex-1].ProvNum;
+				provNum=_listProvs[comboProvider.SelectedIndex-1].Id;
 			}
 			FeeSched feeSched=_listFeeScheds[comboFeeSched.SelectedIndex];
 			ODProgress.ShowAction(
@@ -1632,7 +1632,7 @@ namespace OpenDental {
 			if(FormP.DialogResult!=DialogResult.OK) {
 				return;// -1;
 			}
-			int selectedIndex= Providers.GetIndex(FormP.SelectedProvNum)+1;//All provider combo boxes have a none option, so always add 1.
+            int selectedIndex = 0; // TODO: Providers.GetIndex(FormP.SelectedProvNum)+1;//All provider combo boxes have a none option, so always add 1.
 			//If the selectedIndex is 0, simply return and do not do anything.  There is no such thing as picking 'None' from the picker window.
 			if(selectedIndex==0) {
 				return;

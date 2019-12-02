@@ -6581,7 +6581,7 @@ namespace OpenDentBusiness
             }
             string log = "";
             long insBillingProvNum = Preference.GetLong(PreferenceName.InsBillingProv);
-            Provider prov = Providers.GetProv(insBillingProvNum);
+            Provider prov = Provider.GetById(insBillingProvNum);
             if (insBillingProvNum == 0 || prov != null)
             {//0 means the program will use the default practice provider.
                 if (verbose)
@@ -7518,7 +7518,7 @@ namespace OpenDentBusiness
                         log += ", " + Lans.g("FormDatabaseMaintenance", "including") + ":\r\n";
                         for (int i = 0; i < table.Rows.Count; i++)
                         {
-                            prov = Providers.GetProv(PIn.Long(table.Rows[i]["ProvNum"].ToString()));
+                            prov = Provider.GetById(PIn.Long(table.Rows[i]["ProvNum"].ToString()));
                             log += prov.Abbr + " " + Lans.g("FormDatabaseMaintenance", "has claim payments entered as recently as") + " "
                                 + PIn.Date(table.Rows[i]["ProcDate"].ToString()).ToShortDateString() + "\r\n";
                         }

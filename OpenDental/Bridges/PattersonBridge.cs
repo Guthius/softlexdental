@@ -65,7 +65,7 @@ namespace OpenDental.Bridges
                 return;
             }
 
-            var provider = Providers.GetProv(patient.PriProv);
+            var provider = Provider.GetById(patient.PriProv);
 
             string ssn = Tidy(patient.SSN.ToString(), 9);
             if (ssn.Replace("-", "").Replace("0", "").Trim() == "")
@@ -88,7 +88,7 @@ namespace OpenDental.Bridges
                 Tidy((patient.Gender == PatientGender.Male ? "M" : (patient.Gender == PatientGender.Female ? "F" : " ")), 1),//uses "M" for male "F" for female and " " for unkown
                 Tidy(patient.Birthdate.ToShortDateString(), 11),
                 LTidy(patient.PatNum.ToString(), 5),
-                LTidy(provider.ProvNum.ToString(), 3),
+                LTidy(provider.Id.ToString(), 3),
                 //LTidy(pat.PatNum.ToString(),5),//Limit is 5 characters, but that would only be exceeded if they are using random primary keys or they have a lot of data, neither case is common.
                 //LTidy(prov.ProvNum.ToString(),3),//Limit is 3 characters, but that would only be exceeded if they are using random primary keys or they have a lot of data, neither case is common.
                 Tidy(patient.FName, 40),

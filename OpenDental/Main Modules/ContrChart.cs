@@ -4417,7 +4417,7 @@ namespace OpenDental
 //                 //or if someone lost a database and they are downloading all the prescriptions from scratch again.
 //                    if (rxOld == null)
 //                    {//The prescription is being dowloaded for the first time, or is being downloaded again after it was deleted manually by the user.
-//                        List<Provider> listProviders = Providers.GetDeepCopy(true);
+//                        List<Provider> listProviders = Provider.All().ToList();
 //                        for (int j = 0; j < listProviders.Count; j++)
 //                        {//Try to locate a visible provider matching the NPI on the prescription.
 //                            if (strProvNumOrNpi.Length == 10 && listProviders[j].NationalProvID == strProvNumOrNpi)
@@ -5490,7 +5490,7 @@ namespace OpenDental
             }
             //Quarterly key check was removed from here so that any customer can use EHR tools
             //But we require a EHR subscription for them to obtain their MU reports.
-            if (Providers.GetProv(PatCur.PriProv) == null)
+            if (Provider.GetById(PatCur.PriProv) == null)
             {
                 MsgBox.Show(this, "Please set the patient's primary provider first.");
                 return;
@@ -7379,7 +7379,7 @@ namespace OpenDental
                     && provNum > 0
                     && new[] { ProcStat.C, ProcStat.EC }.Contains((ProcStat)PIn.Int(rowCur["ProcStatus"].ToString())))
             {
-                row.BackColor = Providers.GetColor(provNum);
+                row.BackColor = Provider.GetById(provNum).Color;
             }
             else
             {

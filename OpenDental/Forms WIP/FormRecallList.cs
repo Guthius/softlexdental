@@ -1659,7 +1659,7 @@ namespace OpenDental
                 rowNew.Cells.Add(PIn.Date(row["DateLastProc"].ToString()).ToShortDateString());
                 rowNew.Cells.Add(Patients.GetNameLF(row["LName"].ToString(), row["FName"].ToString(), row["Preferred"].ToString(), row["MiddleI"].ToString()));
                 rowNew.Cells.Add(Patients.DateToAge(PIn.Date(row["Birthdate"].ToString())).ToString());
-                rowNew.Cells.Add(Providers.GetLongDesc(PIn.Long(row["PriProv"].ToString())));
+                rowNew.Cells.Add(Provider.GetById(PIn.Long(row["PriProv"].ToString())).GetLongDesc());
                 rowNew.Cells.Add(Clinic.GetById(PIn.Long(row["ClinicNum"].ToString())).Description);
 
                 if (!Preference.GetBool(PreferenceName.EasyHidePublicHealth))

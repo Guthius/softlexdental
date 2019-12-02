@@ -209,7 +209,7 @@ namespace OpenDental {
 						condVal=Defs.GetName(DefinitionCategory.BillingTypes,PIn.Long(condVal));
 						break;
 					case RequiredFieldName.PrimaryProvider:
-						condVal=Providers.GetLongDesc(PIn.Long(condVal));
+						condVal=Provider.GetById(PIn.Long(condVal)).GetLongDesc();
 						break;
 				}
 				allCondValues+=condVal;

@@ -73,7 +73,7 @@ namespace OpenDental {
 					ProviderClinic provClinic=_listProvClinic.Find(x => x.ClinicId == clinicCur.Id);
 					//Doesn't exist in Db, create a new one
 					if(provClinic==null) {
-						provClinic=ProviderClinic.GetByProviderAndClinic(_provCur.ProvNum,clinicCur.Id);
+						provClinic=ProviderClinic.GetByProviderAndClinic(_provCur.Id,clinicCur.Id);
 						if(provClinic==null) {
                         // TODO:
 							//provClinic=new ProviderClinic {

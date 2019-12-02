@@ -127,8 +127,8 @@ namespace OpenDental
                                 table.Rows[i][4].ToString();
 
                         var providerName =
-                            Providers.GetLName(
-                                long.Parse(table.Rows[i][15].ToString()));
+                            Provider.GetById(
+                                long.Parse(table.Rows[i][15].ToString())).LastName;
 
                         streamWriter.Write(Tidy(table.Rows[i][0].ToString()) + ",");                     // 0 - LastName
                         streamWriter.Write(Tidy(patientName) + ",");                                     // FirstName or PreferredName

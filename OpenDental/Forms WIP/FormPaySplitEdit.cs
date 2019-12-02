@@ -164,7 +164,7 @@ namespace OpenDental {
 
 		private void comboProvider_SelectionChangeCommitted(object sender,EventArgs e) {
 			if(comboProvider.SelectedIndex>-1) {
-				PaySplitCur.ProvNum=_listProviders[comboProvider.SelectedIndex].ProvNum;
+				PaySplitCur.ProvNum=_listProviders[comboProvider.SelectedIndex].Id;
 			}
 			else {
 				PaySplitCur.ProvNum=0;
@@ -219,18 +219,18 @@ namespace OpenDental {
 				return;
 			}
 			PaySplitCur.ProvNum=formp.SelectedProvNum;
-			comboProvider.IndexSelectOrSetText(_listProviders.FindIndex(x => x.ProvNum==PaySplitCur.ProvNum),() => { return Providers.GetAbbr(PaySplitCur.ProvNum); });
+			comboProvider.IndexSelectOrSetText(_listProviders.FindIndex(x => x.Id==PaySplitCur.ProvNum),() => { return Providers.GetAbbr(PaySplitCur.ProvNum); });
 		}
 
 		///<summary>Fills combo provider based on which clinic is selected and attempts to preserve provider selection if any.</summary>
 		private void FillComboProv() {
 			_listProviders=new List<Provider>() { new Provider() { Abbr=Lan.g(this,"None") } };
 			_listProviders.AddRange(Providers.GetProvsForClinic(PaySplitCur.ClinicNum));
-			_listProviders=_listProviders.OrderBy(x => x.ProvNum>0).ThenBy(x => x.ItemOrder).ToList();
+			_listProviders=_listProviders.OrderBy(x => x.Id>0).ToList();
 			//Fill comboProv
 			comboProvider.Items.Clear();
 			_listProviders.ForEach(x => comboProvider.Items.Add(x.Abbr));
-			comboProvider.IndexSelectOrSetText(_listProviders.FindIndex(x => x.ProvNum==PaySplitCur.ProvNum),() => { return Providers.GetAbbr(PaySplitCur.ProvNum); });
+			comboProvider.IndexSelectOrSetText(_listProviders.FindIndex(x => x.Id==PaySplitCur.ProvNum),() => { return Providers.GetAbbr(PaySplitCur.ProvNum); });
 		}
 
 		private void butRemainder_Click(object sender, System.EventArgs e) {
@@ -387,7 +387,7 @@ namespace OpenDental {
 			groupPatient.Enabled=false;
 			checkPatOtherFam.Enabled=false;
 			//Find the combo option for the procedure's clinic and provider.  If they don't exist in the list (are hidden) then it will set the text of the combo box instead.
-			comboProvider.IndexSelectOrSetText(_listProviders.FindIndex(x => x.ProvNum==PaySplitCur.ProvNum),() => { return Providers.GetAbbr(PaySplitCur.ProvNum); });
+			comboProvider.IndexSelectOrSetText(_listProviders.FindIndex(x => x.Id==PaySplitCur.ProvNum),() => { return Providers.GetAbbr(PaySplitCur.ProvNum); });
 
 				comboClinic.IndexSelectOrSetText(_listClinics.FindIndex(x => x.Id==PaySplitCur.ClinicNum),() => { return Clinic.GetById(PaySplitCur.ClinicNum).Abbr; });
 			
@@ -451,7 +451,7 @@ namespace OpenDental {
 			groupPatient.Enabled=false;
 			checkPatOtherFam.Enabled=false;
 			//Find the combo option for the adjustment's clinic and provider.  If they don't exist in the list (are hidden) then it will set the text of the combo box instead.
-			comboProvider.IndexSelectOrSetText(_listProviders.FindIndex(x => x.ProvNum==_adjCur.ProvNum),() => { return Providers.GetAbbr(_adjCur.ProvNum); });
+			comboProvider.IndexSelectOrSetText(_listProviders.FindIndex(x => x.Id==_adjCur.ProvNum),() => { return Providers.GetAbbr(_adjCur.ProvNum); });
 
             comboClinic.IndexSelectOrSetText(_listClinics.FindIndex(x => x.Id == _adjCur.ClinicNum), () => { return Clinic.GetById(_adjCur.ClinicNum).Abbr; });
 			
@@ -667,7 +667,7 @@ namespace OpenDental {
 			}
 			//Always switch when negative so it matches the original, only switch for positive proc splits when prepayment has provider
 			if(isNegSplit || SplitAssociated.PaySplitOrig.ProvNum!=0) {
-				comboProvider.SelectIndex(_listProviders.FindIndex(x => x.ProvNum==SplitAssociated.PaySplitOrig.ProvNum)
+				comboProvider.SelectIndex(_listProviders.FindIndex(x => x.Id==SplitAssociated.PaySplitOrig.ProvNum)
 					,Providers.GetAbbr(SplitAssociated.PaySplitOrig.ProvNum));
 				PaySplitCur.ProvNum=SplitAssociated.PaySplitOrig.ProvNum;
 			}

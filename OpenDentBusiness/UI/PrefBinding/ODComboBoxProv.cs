@@ -38,7 +38,7 @@ namespace OpenDental
                 {
                     return null;
                 }
-                return _listProvs.FirstOrDefault(x => x.ProvNum == this.SelectedTag<long>());
+                return _listProvs.FirstOrDefault(x => x.Id == this.SelectedTag<long>());
             }
         }
 
@@ -74,18 +74,13 @@ namespace OpenDental
 
         public void FillProviders()
         {
-            if (!DesignMode)
-            {
-                var providers = Providers.GetDeepCopy(isShort: true);
-
-            }
-
             if (!Db.HasDatabaseConnection && !Security.IsUserLoggedIn)
             {
                 return;
             }
-            _listProvs = Providers.GetDeepCopy(isShort: true);
-            SetItems(_listProvs, (prov) => new ODBoxItem<long>(IsUsingProvAbbr ? prov.GetAbbr() : prov.GetLongDesc(), prov.ProvNum));
+            _listProvs = Provider.All().ToList();
+
+            SetItems(_listProvs, (prov) => new ODBoxItem<long>(IsUsingProvAbbr ? prov.GetAbbr() : prov.GetLongDesc(), prov.Id));
             SetSelected();
         }
     }

@@ -275,13 +275,13 @@ namespace OpenDental
 
         private void FormDailySummary_Load(object sender, System.EventArgs e)
         {
-            _listProviders = Providers.GetListReports();
+            _listProviders = Provider.GetForReporting().ToList();
             date1.SelectionStart = DateTime.Today;
             date2.SelectionStart = DateTime.Today;
             if (!Security.IsAuthorized(Permissions.ReportDailyAllProviders, true))
             {
                 //They either have permission or have a provider at this point.  If they don't have permission they must have a provider.
-                _listProviders = _listProviders.FindAll(x => x.ProvNum == Security.CurrentUser.ProviderId);
+                _listProviders = _listProviders.FindAll(x => x.Id == Security.CurrentUser.ProviderId);
                 checkAllProv.Checked = false;
                 checkAllProv.Enabled = false;
             }
@@ -379,7 +379,7 @@ namespace OpenDental
             _listClinicNums = new List<long>();
             for (int i = 0; i < listProv.SelectedIndices.Count; i++)
             {
-                _listProvNums.Add(_listProviders[listProv.SelectedIndices[i]].ProvNum);
+                _listProvNums.Add(_listProviders[listProv.SelectedIndices[i]].Id);
             }
 
             for (int i = 0; i < listClin.SelectedIndices.Count; i++)

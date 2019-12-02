@@ -366,7 +366,7 @@ namespace OpenDental {
 			_selectedProvNum=_procCur.ProvNum;
 			SetOrderingProvider(null);//Clears both the internal ordering and referral ordering providers.
 			if(_procCur.ProvOrderOverride!=0) {
-				SetOrderingProvider(Providers.GetProv(_procCur.ProvOrderOverride));
+				SetOrderingProvider(Provider.GetById(_procCur.ProvOrderOverride));
 			}
 			else if(_procCur.OrderingReferralNum!=0) {
 				Referral referral;
@@ -450,7 +450,7 @@ namespace OpenDental {
 
 		private void comboProv_SelectedIndexChanged(object sender,EventArgs e) {
 			if(comboProv.SelectedIndex>-1) {
-				_selectedProvNum=_listProviders[comboProv.SelectedIndex].ProvNum;
+				_selectedProvNum=_listProviders[comboProv.SelectedIndex].Id;
 			}
 		}
 
@@ -462,7 +462,7 @@ namespace OpenDental {
 				return;
 			}
 			_selectedProvNum=formp.SelectedProvNum;
-			comboProv.IndexSelectOrSetText(_listProviders.FindIndex(x => x.ProvNum==_selectedProvNum),() => { return Providers.GetAbbr(_selectedProvNum); });
+			comboProv.IndexSelectOrSetText(_listProviders.FindIndex(x => x.Id==_selectedProvNum),() => { return Providers.GetAbbr(_selectedProvNum); });
 		}
 
 		private void butPickOrderProvInternal_Click(object sender,EventArgs e) {
@@ -472,7 +472,7 @@ namespace OpenDental {
 			if(formP.DialogResult!=DialogResult.OK) {
 				return;
 			}
-			SetOrderingProvider(Providers.GetProv(formP.SelectedProvNum));
+			SetOrderingProvider(Provider.GetById(formP.SelectedProvNum));
 		}
 
 		private void butPickOrderProvReferral_Click(object sender,EventArgs e) {
@@ -499,8 +499,8 @@ namespace OpenDental {
 				textOrderingProviderOverride.Text="";
 			}
 			else {
-				_selectedProvOrderNum=prov.ProvNum;
-				textOrderingProviderOverride.Text=prov.GetFormalName()+"  NPI: "+(prov.NationalProvID.Trim()==""?"Missing":prov.NationalProvID);
+				_selectedProvOrderNum=prov.Id;
+				textOrderingProviderOverride.Text=prov.GetFormalName()+"  NPI: "+(prov.NationalProviderId.Trim()==""?"Missing":prov.NationalProviderId);
 			}
 			_referralOrdering=null;
 		}
@@ -519,13 +519,13 @@ namespace OpenDental {
 		///<summary>Fills combo provider based on which clinic is selected and attempts to preserve provider selection if any.</summary>
 		private void FillCombosForProviders() {
 			if(comboProv.SelectedIndex>-1) {//valid prov selected, non none or nothing.
-				_selectedProvNum = _listProviders[comboProv.SelectedIndex].ProvNum;
+				_selectedProvNum = _listProviders[comboProv.SelectedIndex].Id;
 			}
-			_listProviders=Providers.GetProvsForClinic(_selectedClinicNum).OrderBy(x => x.ProvNum>0).ThenBy(x => x.ItemOrder).ToList();//order list properly, None first
+			_listProviders=Providers.GetProvsForClinic(_selectedClinicNum).OrderBy(x => x.Id>0).ToList();//order list properly, None first
 			//Provider
 			comboProv.Items.Clear();
 			_listProviders.ForEach(x => comboProv.Items.Add(x.Abbr));
-			comboProv.IndexSelectOrSetText(_listProviders.FindIndex(x => x.ProvNum==_selectedProvNum),() => { return Providers.GetAbbr(_selectedProvNum); });
+			comboProv.IndexSelectOrSetText(_listProviders.FindIndex(x => x.Id==_selectedProvNum),() => { return Providers.GetAbbr(_selectedProvNum); });
 		}
 
 		///<summary>ONLY run on startup. Fills the basic controls, except not the ones in the upper left panel which are handled in SetControlsUpperLeft.</summary>

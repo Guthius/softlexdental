@@ -108,7 +108,7 @@ namespace OpenDental.Bridges
                 streamWriter.WriteLine("WorkPhone=" + patient.WkPhone);
                 streamWriter.WriteLine("WorkPhoneExt=");
                 streamWriter.WriteLine("SSN=" + (patient.SSN.Replace("0", "").Trim() != "" ? patient.SSN : ""));
-                streamWriter.WriteLine("ProviderName=" + Providers.GetFormalName(patient.PriProv));
+                streamWriter.WriteLine("ProviderName=" + Provider.GetById(patient.PriProv).GetFormalName());
 
                 var guarantor = Patients.GetPat(patient.Guarantor);
                 streamWriter.WriteLine("[ACCOUNT]");

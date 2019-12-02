@@ -386,50 +386,45 @@ namespace OpenDentBusiness
         }
 
 
-        ///<summary>Replaces all clinic fields in the given message with the supplied clinic's information.  Returns the resulting string.
-        ///Will use clinic information when available, otherwise defaults to practice info.
-        ///Replaces: [OfficePhone], [OfficeFax], [OfficeName], [OfficeAddress]. </summary>
+        private static string FormatPhoneNumber(string phoneNumber)
+        {
+            if (CultureInfo.CurrentCulture.Name == "en-US" && phoneNumber.Length == 10)
+            {
+                phoneNumber = "(" + phoneNumber.Substring(0, 3) + ")" + phoneNumber.Substring(3, 3) + "-" + phoneNumber.Substring(6);
+            }
+
+            return phoneNumber;
+        }
+
+        /// <summary>
+        ///     <para>
+        ///         Replaces all clinic fields in the given <paramref name="message"/> with 
+        ///         information of the specified <paramref name="clinic"/> and returns
+        ///         the resulting string.
+        ///     </para>
+        ///     <para>
+        ///         Replaces [OfficePhone], [OfficeFax], [OfficeName], [OfficeAddress].
+        ///     </para>
+        /// </summary>
         public static string ReplaceOffice(string message, Clinic clinic)
         {
-            string retVal = message;
-            string officePhone = Preference.GetString(PreferenceName.PracticePhone);
-            string officeFax = Preference.GetString(PreferenceName.PracticeFax);
-            string officeName = Preference.GetString(PreferenceName.PracticeTitle);
-            string officeAddr = Patients.GetAddressFull(
-                Preference.GetString(PreferenceName.PracticeAddress),
-                Preference.GetString(PreferenceName.PracticeAddress2),
-                Preference.GetString(PreferenceName.PracticeCity),
-                Preference.GetString(PreferenceName.PracticeST),
-                Preference.GetString(PreferenceName.PracticeZip));
-            if (clinic != null && !String.IsNullOrEmpty(clinic.Phone))
-            {
-                officePhone = clinic.Phone;
-            }
-            if (clinic != null && !String.IsNullOrEmpty(clinic.Fax))
-            {
-                officeFax = clinic.Fax;
-            }
-            if (clinic != null && !String.IsNullOrEmpty(clinic.Description))
-            {
-                officeName = clinic.Description;
-            }
-            if (clinic != null && !String.IsNullOrEmpty(clinic.AddressLine1))
-            {
-                officeAddr = Patients.GetAddressFull(clinic.AddressLine1, clinic.AddressLine2, clinic.City, clinic.State, clinic.Zip);
-            }
-            if (CultureInfo.CurrentCulture.Name == "en-US" && officePhone.Length == 10)
-            {
-                officePhone = "(" + officePhone.Substring(0, 3) + ")" + officePhone.Substring(3, 3) + "-" + officePhone.Substring(6);
-            }
-            if (CultureInfo.CurrentCulture.Name == "en-US" && officeFax.Length == 10)
-            {
-                officeFax = "(" + officeFax.Substring(0, 3) + ")" + officeFax.Substring(3, 3) + "-" + officeFax.Substring(6);
-            }
-            retVal = retVal.Replace("[OfficePhone]", officePhone);
-            retVal = retVal.Replace("[OfficeFax]", officeFax);
-            retVal = retVal.Replace("[OfficeName]", officeName);
-            retVal = retVal.Replace("[OfficeAddress]", officeAddr);
-            return retVal;
+            string phone = FormatPhoneNumber(clinic.Phone);
+            string fax = FormatPhoneNumber(clinic.Fax);
+
+            string address = 
+                Patients.GetAddressFull(
+                    clinic.AddressLine1, 
+                    clinic.AddressLine2, 
+                    clinic.City, 
+                    clinic.State, 
+                    clinic.Zip);
+
+            return 
+                message
+                    .Replace("[OfficePhone]", phone)
+                    .Replace("[OfficeFax]", fax)
+                    .Replace("[OfficeName]", clinic.Description)
+                    .Replace("[OfficeAddress]", address);
         }
     }
 }

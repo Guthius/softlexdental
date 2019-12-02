@@ -230,6 +230,7 @@
     <Compile Include="Data Interface\PayConnectResponseWebs.cs" />
     <Compile Include="Data Interface\PharmClinics.cs" />
     <Compile Include="Data Interface\ProcMultiVisits.cs" />
+    <Compile Include="Data Interface\Providers.cs" />
     <Compile Include="Data Interface\Reactivations.cs" />
     <Compile Include="DataException.cs" />
     <Compile Include="DataRecord.cs" />
@@ -244,7 +245,7 @@
     <Compile Include="Db\SIn.cs" />
     <Compile Include="Db\SOut.cs" />
     <Compile Include="Data\DefinitionCategory.cs" />
-    <Compile Include="DefCatOptions.cs" />
+    <Compile Include="__WIP\DefCatOptions.cs" />
     <Compile Include="Data Interface\RecurringCharges.cs" />
     <Compile Include="Db Multi Table\AgingData.cs" />
     <Compile Include="Db Multi Table\MarkupEdit.cs" />
@@ -520,9 +521,7 @@
     <Compile Include="Crud\ProcGroupItemCrud.cs" />
     <Compile Include="Crud\ProcNoteCrud.cs" />
     <Compile Include="Crud\ProcTPCrud.cs" />
-    <Compile Include="Crud\ProviderCrud.cs" />
     <Compile Include="Crud\ProviderErxCrud.cs" />
-    <Compile Include="Crud\ProviderIdentCrud.cs" />
     <Compile Include="Crud\QuestionCrud.cs" />
     <Compile Include="Crud\QuestionDefCrud.cs" />
     <Compile Include="Crud\QuickPasteCatCrud.cs" />
@@ -828,7 +827,6 @@
     <Compile Include="Data Interface\ProcedureCodes.cs" />
     <Compile Include="Data Interface\Procedures.cs" />
     <Compile Include="Data Interface\ProcTPs.cs" />
-    <Compile Include="Data Interface\ProviderIdents.cs" />
     <Compile Include="Data Interface\QuestionDefs.cs" />
     <Compile Include="Data Interface\Questions.cs" />
     <Compile Include="Data Interface\QuickPasteCats.cs" />
@@ -859,7 +857,7 @@
     <Compile Include="Data Interface\Pharmacies.cs" />
     <Compile Include="Data Interface\CovCats.cs" />
     <Compile Include="Data Interface\CovSpans.cs" />
-    <Compile Include="__WIP\ClockEventStatus.cs" />
+    <Compile Include="Data\ClockEventStatus.cs" />
     <Compile Include="__WIP\Defs.cs" />
     <Compile Include="Db Multi Table\FamilyModules.cs" />
     <Compile Include="Data Interface\SigButDefs.cs" />
@@ -875,7 +873,6 @@
     <Compile Include="Data Interface\Mounts.cs" />
     <Compile Include="Data Interface\PatientNotes.cs" />
     <Compile Include="Data Interface\Patients.cs" />
-    <Compile Include="Data Interface\Providers.cs" />
     <Compile Include="Data Interface\TaskAncestors.cs" />
     <Compile Include="Data Interface\TaskLists.cs" />
     <Compile Include="Data Interface\Tasks.cs" />

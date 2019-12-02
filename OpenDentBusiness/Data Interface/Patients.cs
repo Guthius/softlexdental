@@ -1053,7 +1053,7 @@ namespace OpenDentBusiness
             retVal = retVal.Replace("[PatientTitle]", pat.Title);
             retVal = retVal.Replace("[PatientMiddleInitial]", pat.MiddleI);
             retVal = retVal.Replace("[PatientPreferredName]", pat.Preferred);
-            retVal = retVal.Replace("[PrimaryProviderNameFLSuffix]", Providers.GetFormalName(pat.PriProv));
+            retVal = retVal.Replace("[PrimaryProviderNameFLSuffix]", Provider.GetById(pat.PriProv).GetFormalName());
             if (retVal.Contains("[ReferredFromProvNameFL]"))
             {
                 Referral patRef = Referrals.GetReferralForPat(pat.PatNum);
@@ -2883,7 +2883,7 @@ namespace OpenDentBusiness
             }
             if (retval == 0)
             {
-                retval = Providers.GetFirstOrDefault(x => true, true)?.ProvNum ?? 0;
+                retval = Provider.GetDefault()?.Id ?? 0;
             }
             return retval;
         }

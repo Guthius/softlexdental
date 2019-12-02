@@ -52,7 +52,7 @@ namespace OpenDental {
 
 		private void FillProvs() {
 			listBoxProvs.Items.Clear();
-			List<Provider> listProvs = Providers.GetListReports();
+			List<Provider> listProvs = Provider.GetForReporting().ToList();
 			for(int i = 0;i < listProvs.Count;i++) {
 				listBoxProvs.Items.Add(new ODBoxItem<Provider>(listProvs[i].Abbr,listProvs[i]));
 				listBoxProvs.SetSelected(i,true);

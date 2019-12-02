@@ -417,7 +417,7 @@ namespace OpenDental{
 			comboPlaceService.SelectedIndex=(int)SiteCur.PlaceService;
 			_selectedProvNum=SiteCur.ProvNum;
 			comboProviders.SelectedIndex=-1;
-			_listProviders=Providers.GetDeepCopy(true);
+			_listProviders=Provider.All().ToList();
 			FillComboProviders();
 			textAddress.Text=SiteCur.Address;
 			textAddress2.Text=SiteCur.Address2;
@@ -431,12 +431,12 @@ namespace OpenDental{
 		private void FillComboProviders() {
 			comboProviders.Items.Clear();
 			_listProviders.ForEach(x => comboProviders.Items.Add(x.Abbr));
-			comboProviders.IndexSelectOrSetText(_listProviders.FindIndex(x => x.ProvNum==_selectedProvNum),() => { return Providers.GetAbbr(_selectedProvNum); });
+			comboProviders.IndexSelectOrSetText(_listProviders.FindIndex(x => x.Id==_selectedProvNum),() => { return Providers.GetAbbr(_selectedProvNum); });
 		}
 
 		private void comboProvider_SelectedIndexChanged(object sender,EventArgs e) {
 			if(comboProviders.SelectedIndex>-1) {
-				_selectedProvNum=_listProviders[comboProviders.SelectedIndex].ProvNum;
+				_selectedProvNum=_listProviders[comboProviders.SelectedIndex].Id;
 			}
 		}
 

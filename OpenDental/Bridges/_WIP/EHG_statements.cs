@@ -95,10 +95,10 @@ namespace OpenDental.Bridges {
 			}
 			writer.WriteEndElement();//remitAddress
 			//Rendering provider------------------------------------------------------
-			Provider prov=Providers.GetProv(Preference.GetLong(PreferenceName.PracticeDefaultProv));
+			Provider prov=Provider.GetById(Preference.GetLong(PreferenceName.PracticeDefaultProv));
 			writer.WriteStartElement("RenderingProvider");
 			writer.WriteElementString("Name",prov.GetFormalName());
-			ProviderClinic provClinic=ProviderClinic.GetByProviderAndClinic(prov.ProvNum,clinicNum);
+			ProviderClinic provClinic=ProviderClinic.GetByProviderAndClinic(prov.Id,clinicNum);
 			writer.WriteElementString("LicenseNumber",(provClinic==null ? "" : provClinic.StateLicense));
 			writer.WriteElementString("State",Preference.GetString(PreferenceName.PracticeST));
 			writer.WriteEndElement();//Rendering provider

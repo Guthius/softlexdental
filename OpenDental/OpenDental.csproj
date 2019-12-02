@@ -1772,42 +1772,6 @@
     <Compile Include="Forms WIP\FormEtrans835PickEob.designer.cs">
       <DependentUpon>FormEtrans835PickEob.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms WIP\FormEvaluationReport.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms WIP\FormEvaluationReport.designer.cs">
-      <DependentUpon>FormEvaluationReport.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms WIP\FormDispensary.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms WIP\FormDispensary.designer.cs">
-      <DependentUpon>FormDispensary.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms WIP\FormEvaluationEdit.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms WIP\FormEvaluationEdit.designer.cs">
-      <DependentUpon>FormEvaluationEdit.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms WIP\FormEvaluationCriterionEdit.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms WIP\FormEvaluationCriterionEdit.designer.cs">
-      <DependentUpon>FormEvaluationCriterionEdit.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms WIP\FormEvaluations.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms WIP\FormEvaluations.designer.cs">
-      <DependentUpon>FormEvaluations.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms WIP\FormEvaluationCriterionDefEdit.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms WIP\FormEvaluationCriterionDefEdit.designer.cs">
-      <DependentUpon>FormEvaluationCriterionDefEdit.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms WIP\FormGradingScaleItemEdit.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1826,30 +1790,6 @@
     <Compile Include="Forms WIP\FormGradingScales.designer.cs">
       <DependentUpon>FormGradingScales.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms WIP\FormEvaluationDefEdit.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms WIP\FormEvaluationDefEdit.designer.cs">
-      <DependentUpon>FormEvaluationDefEdit.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms WIP\FormEvaluationDefs.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms WIP\FormEvaluationDefs.designer.cs">
-      <DependentUpon>FormEvaluationDefs.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms WIP\FormProvStudentEdit.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms WIP\FormProvStudentEdit.designer.cs">
-      <DependentUpon>FormProvStudentEdit.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms WIP\FormProvStudentBulkEdit.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms WIP\FormProvStudentBulkEdit.designer.cs">
-      <DependentUpon>FormProvStudentBulkEdit.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms WIP\FormTreatPlanDiscount.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1858,12 +1798,6 @@
     </Compile>
     <Compile Include="Forms\FormUserGroupEdit.Designer.cs">
       <DependentUpon>FormUserGroupEdit.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms WIP\FormDentalSchoolSetup.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms WIP\FormDentalSchoolSetup.designer.cs">
-      <DependentUpon>FormDentalSchoolSetup.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms WIP\FormEhrProviderKeyEdit.cs">
       <SubType>Form</SubType>
@@ -3729,9 +3663,6 @@
     <Compile Include="Forms WIP\FormTrojanCollect.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms WIP\FormReqAppt.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Forms WIP\FormEtransEdit.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -5436,24 +5367,6 @@
     <EmbeddedResource Include="Forms WIP\FormEtrans835PickEob.resx">
       <DependentUpon>FormEtrans835PickEob.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms WIP\FormEvaluationReport.resx">
-      <DependentUpon>FormEvaluationReport.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms WIP\FormDispensary.resx">
-      <DependentUpon>FormDispensary.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms WIP\FormEvaluationEdit.resx">
-      <DependentUpon>FormEvaluationEdit.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms WIP\FormEvaluationCriterionEdit.resx">
-      <DependentUpon>FormEvaluationCriterionEdit.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms WIP\FormEvaluations.resx">
-      <DependentUpon>FormEvaluations.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms WIP\FormEvaluationCriterionDefEdit.resx">
-      <DependentUpon>FormEvaluationCriterionDefEdit.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forms WIP\FormGradingScaleItemEdit.resx">
       <DependentUpon>FormGradingScaleItemEdit.cs</DependentUpon>
     </EmbeddedResource>
@@ -5463,23 +5376,8 @@
     <EmbeddedResource Include="Forms WIP\FormGradingScales.resx">
       <DependentUpon>FormGradingScales.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms WIP\FormEvaluationDefEdit.resx">
-      <DependentUpon>FormEvaluationDefEdit.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms WIP\FormEvaluationDefs.resx">
-      <DependentUpon>FormEvaluationDefs.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms WIP\FormProvStudentEdit.resx">
-      <DependentUpon>FormProvStudentEdit.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms WIP\FormProvStudentBulkEdit.resx">
-      <DependentUpon>FormProvStudentBulkEdit.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forms WIP\FormTreatPlanDiscount.resx">
       <DependentUpon>FormTreatPlanDiscount.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms WIP\FormDentalSchoolSetup.resx">
-      <DependentUpon>FormDentalSchoolSetup.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms WIP\FormEhrProviderKeyEdit.resx">
       <DependentUpon>FormEhrProviderKeyEdit.cs</DependentUpon>
@@ -6398,10 +6296,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms WIP\FormTrojanCollect.resx">
       <DependentUpon>FormTrojanCollect.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms WIP\FormReqAppt.resx">
-      <DependentUpon>FormReqAppt.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms WIP\FormEtransEdit.resx">

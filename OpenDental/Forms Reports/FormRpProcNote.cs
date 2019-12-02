@@ -44,11 +44,11 @@ namespace OpenDental{
 		private List<long> _listSelectedProvNums {
 			get {
 				if(!comboBoxMultiProv.ListSelectedItems.Select(x => ((ODBoxItem<Provider>)x).Tag).Contains(null)) { //"All" is not selected.
-					return comboBoxMultiProv.ListSelectedItems.Select(x => ((ODBoxItem<Provider>)x).Tag.ProvNum).ToList();
+					return comboBoxMultiProv.ListSelectedItems.Select(x => ((ODBoxItem<Provider>)x).Tag.Id).ToList();
 				}
 				return comboBoxMultiProv.Items.ToArray().Select(x => ((ODBoxItem<Provider>)x).Tag)
 					.Where(x => x!=null)
-					.Select(x => x.ProvNum).ToList();
+					.Select(x => x.Id).ToList();
 			}
 		}
 
@@ -373,7 +373,7 @@ namespace OpenDental{
 
 		private void FillProvs() {
 			comboBoxMultiProv.Items.Add(new ODBoxItem<Provider>(Lan.g(this,"All"))); //tag = null
-			foreach(Provider provCur in Providers.GetListReports()) {
+			foreach(Provider provCur in Provider.GetForReporting()) {
 				comboBoxMultiProv.Items.Add(new ODBoxItem<Provider>(provCur.GetLongDesc(),provCur));
 			}
 			comboBoxMultiProv.SetSelected(0,true);

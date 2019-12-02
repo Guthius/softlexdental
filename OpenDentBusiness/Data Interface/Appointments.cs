@@ -2782,7 +2782,7 @@ namespace OpenDentBusiness
             }
             if (appt.ProvNum == 0)
             {
-                appt.ProvNum = Providers.GetFirst(true).ProvNum;
+                appt.ProvNum = Provider.GetDefault().Id;
             }
             double dayInterval = Preference.GetDouble(PreferenceName.ApptReminderDayInterval);
             double hourInterval = Preference.GetDouble(PreferenceName.ApptReminderHourInterval);

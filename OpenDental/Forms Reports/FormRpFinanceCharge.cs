@@ -229,7 +229,7 @@ namespace OpenDental {
 		private void FormRpFinanceCharge_Load(object sender, System.EventArgs e) {
 			textDateFrom.Text=Preference.GetDate(PreferenceName.FinanceChargeLastRun).ToShortDateString();
 			textDateTo.Text=Preference.GetDate(PreferenceName.FinanceChargeLastRun).ToShortDateString();
-			_listProviders=Providers.GetListReports();
+			_listProviders=Provider.GetForReporting().ToList();
 			_listBillingTypeDefs=Definition.GetByCategory(DefinitionCategory.BillingTypes);
 			foreach(Definition billingType in _listBillingTypeDefs) {
 				listBillingType.Items.Add(billingType.Description);
@@ -273,7 +273,7 @@ namespace OpenDental {
 			ReportComplex report=new ReportComplex(true,false);
 			List<long> listProvNums = new List<long>();
 			if(!checkAllProv.Checked) {
-				listProvNums.AddRange(listProv.SelectedIndices.OfType<int>().Select(x => _listProviders[x].ProvNum).ToList());
+				listProvNums.AddRange(listProv.SelectedIndices.OfType<int>().Select(x => _listProviders[x].Id).ToList());
 			}
 			List<long> listBillingDefNums= new List<long>();
 			if(!checkAllBilling.Checked) {

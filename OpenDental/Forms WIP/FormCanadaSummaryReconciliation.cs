@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using OpenDentBusiness;
@@ -31,10 +32,10 @@ namespace OpenDental {
 				listCarriers.Items.Add(carrier.CarrierName);
 			}
 			long defaultProvNum=Preference.GetLong(PreferenceName.PracticeDefaultProv);
-			_listProviders=Providers.GetDeepCopy(true);
+			_listProviders=Provider.All().ToList();
 			for(int i=0;i<_listProviders.Count;i++) {
 				listTreatingProvider.Items.Add(_listProviders[i].Abbr);
-				if(_listProviders[i].ProvNum==defaultProvNum) {
+				if(_listProviders[i].Id==defaultProvNum) {
 					listTreatingProvider.SelectedIndex=i;
 				}
 			}

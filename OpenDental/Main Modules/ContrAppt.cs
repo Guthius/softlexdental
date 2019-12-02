@@ -683,14 +683,14 @@ namespace OpenDental
                     if (totalColumns >= _listOpPanels.Count)
                     {
                         //We can enhance this later to include Hygienists as an additional option in the menu.
-                        opPanel = new OpPanel(this, curOp, Providers.GetProv(curOp.ProvDentistId.GetValueOrDefault()), panelOps.Height, new Point(2 + (int)(ApptDrawing.TimeWidth + ApptDrawing.ProvWidth * ApptDrawing.ProvCount + i * ApptDrawing.ColWidth), 0));
+                        opPanel = new OpPanel(this, curOp, Provider.GetById(curOp.ProvDentistId.GetValueOrDefault()), panelOps.Height, new Point(2 + (int)(ApptDrawing.TimeWidth + ApptDrawing.ProvWidth * ApptDrawing.ProvCount + i * ApptDrawing.ColWidth), 0));
                         panelOps.Controls.Add(opPanel.GetPanel());
                         _listOpPanels.Add(opPanel);
                     }
                     else
                     {
                         opPanel = _listOpPanels[totalColumns];
-                        opPanel.ResetOpPanel(this, curOp, Providers.GetProv(curOp.ProvDentistId.GetValueOrDefault()), panelOps.Height, new Point(2 + (int)(ApptDrawing.TimeWidth + ApptDrawing.ProvWidth * ApptDrawing.ProvCount + i * ApptDrawing.ColWidth), 0));
+                        opPanel.ResetOpPanel(this, curOp, Provider.GetById(curOp.ProvDentistId.GetValueOrDefault()), panelOps.Height, new Point(2 + (int)(ApptDrawing.TimeWidth + ApptDrawing.ProvWidth * ApptDrawing.ProvCount + i * ApptDrawing.ColWidth), 0));
                     }
                     totalColumns++;
                 }
@@ -1173,12 +1173,12 @@ namespace OpenDental
                 ToolStripMenuItem noProv = new ToolStripMenuItem(("There is no provider associated with this operatory."));
                 _menuOp.Items.Add(noProv);
             }
-            else
+            else if (prov.SpecialtyId.HasValue)
             {//Provider associated to the Operatory
-                Definition defaultProvDef = Defs.GetDef(DefinitionCategory.ProviderSpecialties, prov.Specialty);
+                Definition defaultProvDef = Defs.GetDef(DefinitionCategory.ProviderSpecialties, prov.SpecialtyId.Value);
                 if (defaultProvDef != null)
                 {
-                    ToolStripMenuItem strip = new ToolStripMenuItem(("Default: " + prov.FName + " " + prov.LName + ", " + defaultProvDef.Description));
+                    ToolStripMenuItem strip = new ToolStripMenuItem(("Default: " + prov.FirstName + " " + prov.LastName + ", " + defaultProvDef.Description));
                     _menuOp.Items.Add(strip);
                 }
             }
@@ -1188,21 +1188,29 @@ namespace OpenDental
             //Get the provider for each ScheduleOp and populate the menu with the provider's info.
             foreach (Schedule scheduleCur in listScheds)
             {
-                scheduledProv = Providers.GetProv(scheduleCur.ProvNum);
+                scheduledProv = Provider.GetById(scheduleCur.ProvNum);
                 if (scheduledProv == null)
                 {
                     return;
                 }
-                Definition scheduledProvDef = Defs.GetDef(DefinitionCategory.ProviderSpecialties, scheduledProv.Specialty);
+                
                 string schedProcDef = "";
-                if (scheduledProvDef != null)
+
+                if (scheduledProv.SpecialtyId.HasValue)
                 {
-                    schedProcDef = ", " + scheduledProvDef.Description;
+                    Definition scheduledProvDef = Defs.GetDef(DefinitionCategory.ProviderSpecialties, scheduledProv.SpecialtyId.Value);
+                    if (scheduledProvDef != null)
+                    {
+                        schedProcDef = ", " + scheduledProvDef.Description;
+                    }
                 }
-                string stripText = Lans.g(this, "Scheduled") + " " + scheduleCur.StartTime.ToShortTimeString() + "-" + scheduleCur.StopTime.ToShortTimeString() + ": "
+
+                string stripText = "Scheduled " + scheduleCur.StartTime.ToShortTimeString() + "-" + scheduleCur.StopTime.ToShortTimeString() + ": "
                     + scheduledProv.GetFormalName() + schedProcDef;
-                stripText += !string.IsNullOrWhiteSpace(scheduledProv.SchedNote) ? "\r\n\t(" + scheduledProv.SchedNote + ")" : "";
+                stripText += !string.IsNullOrWhiteSpace(scheduledProv.SchedulingNote) ? "\r\n\t(" + scheduledProv.SchedulingNote + ")" : "";
+
                 ToolStripMenuItem scheduledStrip = new ToolStripMenuItem(stripText);
+
                 _menuOp.Items.Add(scheduledStrip);
             }
             if (Clinics.ClinicId != 0)
@@ -2222,7 +2230,7 @@ namespace OpenDental
             if (Clinics.ClinicId != 0 || comboView.SelectedIndex != 0)
             {
                 listOpNums = ApptDrawing.VisOps.Select(x => x.Id).ToList();
-                listProvNums = ApptDrawing.VisProvs.Select(x => x.ProvNum).ToList();
+                listProvNums = ApptDrawing.VisProvs.Select(x => x.Id).ToList();
             }
             ModuleSelected(PatCur.PatNum, listOpNums: listOpNums, listProvNums: listProvNums);
             pinBoard.ResetData(apt.AptNum);
@@ -6505,7 +6513,7 @@ namespace OpenDental
         private void ShowSearch()
         {
             ProviderList = new List<Provider>();
-            List<Provider> listProvidersShort = Providers.GetDeepCopy(true);
+            List<Provider> listProvidersShort = Provider.All().ToList();
             groupSearch.Location = new Point(panelCalendar.Location.X, panelCalendar.Location.Y + pinBoard.Bottom + 2);
             textBefore.Text = "";
             textAfter.Text = "";
@@ -6513,14 +6521,14 @@ namespace OpenDental
             for (int i = 0; i < listProvidersShort.Count; i++)
             {
                 if (pinBoard.SelectedAppt.IsHygiene
-                    && listProvidersShort[i].ProvNum == pinBoard.SelectedAppt.ProvHyg)
+                    && listProvidersShort[i].Id == pinBoard.SelectedAppt.ProvHyg)
                 {
                     //If their appiontment is hygine, the list will start with just their hygine provider
                     _listBoxProviders.Items.Add(new ODBoxItem<Provider>(listProvidersShort[i].Abbr, listProvidersShort[i]));
                     ProviderList.Add(listProvidersShort[i]);
                 }
                 else if (!pinBoard.SelectedAppt.IsHygiene
-                    && listProvidersShort[i].ProvNum == pinBoard.SelectedAppt.ProvNum)
+                    && listProvidersShort[i].Id == pinBoard.SelectedAppt.ProvNum)
                 {
                     //If their appointment is not hygine, they will start with just their primary provider
                     _listBoxProviders.Items.Add(new ODBoxItem<Provider>(listProvidersShort[i].Abbr, listProvidersShort[i]));
@@ -6619,8 +6627,8 @@ namespace OpenDental
             List<long> providerNums = new List<long>();
             for (int i = 0; i < providers.Length; i++)
             {
-                providers[i] = ProviderList[i].ProvNum;
-                providerNums.Add(ProviderList[i].ProvNum);
+                providers[i] = ProviderList[i].Id;
+                providerNums.Add(ProviderList[i].Id);
                 //providersList.Add(providers[i]);
             }
             List<long> listOpNums = new List<long>();
@@ -6936,10 +6944,10 @@ namespace OpenDental
         {
             ProviderList = new List<Provider>();
             _listBoxProviders.Items.Clear();
-            List<Provider> listProvidersShort = Providers.GetDeepCopy(true);
+            List<Provider> listProvidersShort = Provider.All().ToList();
             for (int i = 0; i < listProvidersShort.Count; i++)
             {
-                if (ApptViewItemL.ProvIsInView(listProvidersShort[i].ProvNum))
+                if (ApptViewItemL.ProvIsInView(listProvidersShort[i].Id))
                 {
                     if (listProvidersShort[i].IsSecondary)
                     {
@@ -6960,10 +6968,10 @@ namespace OpenDental
         {
             ProviderList = new List<Provider>();
             _listBoxProviders.Items.Clear();
-            List<Provider> listProvidersShort = Providers.GetDeepCopy(true);
+            List<Provider> listProvidersShort = Provider.All().ToList();
             for (int i = 0; i < listProvidersShort.Count; i++)
             {
-                if (ApptViewItemL.ProvIsInView(listProvidersShort[i].ProvNum))
+                if (ApptViewItemL.ProvIsInView(listProvidersShort[i].Id))
                 {
                     if (!listProvidersShort[i].IsSecondary)
                     {
@@ -6996,7 +7004,7 @@ namespace OpenDental
             List<long> listProvsInBox = new List<long>();
             foreach (ODBoxItem<Provider> prov in _listBoxProviders.Items)
             {
-                listProvsInBox.Add(prov.Tag.ProvNum);
+                listProvsInBox.Add(prov.Tag.Id);
             }
             FormASA.SetSearchArgs(pinBoard.SelectedAppt.AptNum, listProvsInBox, textBefore.Text, textAfter.Text, PIn.Date(dateSearch.Text));
             FormASA.ShowDialog();
@@ -7071,11 +7079,11 @@ namespace OpenDental
                 _labelOpName.Text = op.Description;
                 if (op.ProvDentistId.HasValue && !op.IsHygiene)
                 {
-                    _backPanel.BackColor = Providers.GetColor(op.ProvDentistId.Value);
+                    _backPanel.BackColor = Provider.GetById(op.ProvDentistId.Value).Color;
                 }
                 else if (op.ProvHygienistId.HasValue && op.IsHygiene)
                 {
-                    _backPanel.BackColor = Providers.GetColor(op.ProvHygienistId.Value);
+                    _backPanel.BackColor = Provider.GetById(op.ProvHygienistId.Value).Color;
                 }
                 else
                 {
@@ -7133,7 +7141,7 @@ namespace OpenDental
             public void ResetProvPanel(ContrAppt apptModule, Provider prov, int panelHeight, Point location, bool isFirst)
             {
                 _backPanel.Visible = true;
-                _backPanel.BackColor = prov.ProvColor;
+                _backPanel.BackColor = prov.Color;
                 _backPanel.Location = location;
                 _backPanel.Width = (int)ApptDrawing.ProvWidth;
                 if (isFirst)

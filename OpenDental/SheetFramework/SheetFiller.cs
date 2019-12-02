@@ -60,7 +60,7 @@ namespace OpenDental
                     RxPat rx = RxPats.GetRx((long)GetParamByName(sheet, "RxNum").ParamValue);
                     patNum = rx.PatNum;
                     pat = (pat == null || pat.PatNum != patNum ? Patients.GetPat(patNum) : pat);
-                    Provider prov = Providers.GetProv(rx.ProvNum);
+                    Provider prov = Provider.GetById(rx.ProvNum);
                     FillFieldsForRx(sheet, rx, pat, prov);
                     break;
                 case SheetTypeEnum.Consent:
@@ -140,7 +140,7 @@ namespace OpenDental
                     SheetParameter paraProvNum = GetParamByName(sheet, "ProvNum");
                     if (paraProvNum != null && paraProvNum.ParamValue != null)
                     {
-                        provider = Providers.GetProv((long)paraProvNum.ParamValue);
+                        provider = Provider.GetById((long)paraProvNum.ParamValue);
                     }
                     FillFieldsForScreening(sheet, screenGroup, pat, provider);
                     break;
@@ -981,7 +981,7 @@ namespace OpenDental
                 }
                 #endregion
                 #region Clinic
-                priProv = Providers.GetProv(Patients.GetProvNum(pat));//guaranteed to work
+                priProv = Provider.GetById(Patients.GetProvNum(pat));//guaranteed to work
                                                                       //Pat Clinic-------------------------------------------------------------------------------------------------------------
                 Clinic clinic = Clinic.GetById(pat.ClinicNum);
                 if (clinic == null)
@@ -1409,7 +1409,7 @@ namespace OpenDental
                         field.FieldValue = "BD: " + pat.Birthdate.ToShortDateString();
                         break;
                     case "priProvName":
-                        field.FieldValue = Providers.GetLongDesc(pat.PriProv);
+                        field.FieldValue = Provider.GetById(pat.PriProv).GetLongDesc();
                         break;
                     case "text":
                         //If the user sets a Label Text as their patient label, then the "text" param will be null.
@@ -1572,7 +1572,7 @@ namespace OpenDental
                             field.FieldValue = pat.City + ", " + pat.State + " " + pat.Zip;
                             break;
                         case "patient.provider":
-                            field.FieldValue = Providers.GetProv(Patients.GetProvNum(pat)).GetFormalName();
+                            field.FieldValue = Provider.GetById(Patients.GetProvNum(pat)).GetFormalName();
                             break;
                             //case "notes"://an input field
                     }
@@ -1624,7 +1624,7 @@ namespace OpenDental
             {
                 clinic = Clinic.GetById(pat.ClinicNum);
             }
-            ProviderClinic provClinic = ProviderClinic.GetByProviderAndClinic(prov.ProvNum, clinic.Id);
+            ProviderClinic provClinic = ProviderClinic.GetByProviderAndClinic(prov.Id, clinic.Id);
             foreach (SheetField field in sheet.SheetFields)
             {
                 switch (field.FieldName)
@@ -1650,7 +1650,7 @@ namespace OpenDental
                     case "prov.dEANum":
                         if (rx.IsControlled)
                         {
-                            field.FieldValue = ProviderClinic.GetByProviderAndClinic(prov.ProvNum, clinic.Id).DEANum;
+                            field.FieldValue = ProviderClinic.GetByProviderAndClinic(prov.Id, clinic.Id).DEANum;
                         }
                         else
                         {
@@ -1703,7 +1703,7 @@ namespace OpenDental
                         field.FieldValue = (provClinic == null ? "" : provClinic.StateLicense);
                         break;
                     case "prov.NationalProvID":
-                        field.FieldValue = prov.NationalProvID;
+                        field.FieldValue = prov.NationalProviderId;
                         break;
                     case "ProcCode":
                         field.FieldValue = GetRxFieldProcCode(rx);
@@ -1744,10 +1744,10 @@ namespace OpenDental
         {
             long rxNum = (long)GetParamByName(sheet, "RxNum").ParamValue;
             RxPat rx = RxPats.GetRx(rxNum);
-            Provider prov = Providers.GetProv(rx.ProvNum);
+            Provider prov = Provider.GetById(rx.ProvNum);
             Patient pat = Patients.GetPat(rx.PatNum);
             Clinic clinic = Clinic.GetById(pat.ClinicNum);
-            ProviderClinic provClinic = ProviderClinic.GetByProviderAndClinic(prov.ProvNum, clinic.Id);
+            ProviderClinic provClinic = ProviderClinic.GetByProviderAndClinic(prov.Id, clinic.Id);
             foreach (SheetField field in sheet.SheetFields)
             {
                 switch (field.FieldName)
@@ -1802,16 +1802,16 @@ namespace OpenDental
                         field.FieldValue = pat.Birthdate.ToShortDateString();
                         break;
                     case SheetFieldsAvailable.Patient.PriProvNameFL:
-                        field.FieldValue = Providers.GetFormalName(pat.PriProv);
+                        field.FieldValue = Provider.GetById(pat.PriProv).GetFormalName();
                         break;
                     case SheetFieldsAvailable.Prov.NameFL:
-                        field.FieldValue = prov.FName + " " + prov.LName;
+                        field.FieldValue = prov.FirstName + " " + prov.LastName;
                         break;
                     case SheetFieldsAvailable.Prov.DEANum:
-                        field.FieldValue = prov.DEANum;
+                        //field.FieldValue = prov.DEANum;
                         break;
                     case SheetFieldsAvailable.Prov.NationalProvID:
-                        field.FieldValue = prov.NationalProvID;
+                        field.FieldValue = prov.NationalProviderId;
                         break;
                     case SheetFieldsAvailable.Prov.StateRxID:
                         field.FieldValue = (provClinic == null ? "" : provClinic.StateRxId);
@@ -1918,7 +1918,7 @@ namespace OpenDental
                         field.FieldValue = "Dear " + pat.GetSalutation() + ":";
                         break;
                     case "patient.priProvNameFL":
-                        field.FieldValue = Providers.GetFormalName(pat.PriProv);
+                        field.FieldValue = Provider.GetById(pat.PriProv).GetFormalName();
                         break;
                 }
             }
@@ -2264,7 +2264,7 @@ namespace OpenDental
                             field.FieldValue = pat.Birthdate.ToShortDateString();
                             break;
                         case "patient.priProvNameFL":
-                            field.FieldValue = Providers.GetFormalName(pat.PriProv);
+                            field.FieldValue = Provider.GetById(pat.PriProv).GetFormalName();
                             break;
                     }
                 }
@@ -2555,10 +2555,10 @@ namespace OpenDental
                         field.FieldValue = (apt.Pattern.Length * 5).ToString() + " " + Lan.g("SheetRoutingSlip", "minutes");
                         break;
                     case "appt.providers":
-                        str = Providers.GetLongDesc(apt.ProvNum);
+                        str = Provider.GetById(apt.ProvNum).GetLongDesc();
                         if (apt.ProvHyg != 0)
                         {
-                            str += "\r\n" + Providers.GetLongDesc(apt.ProvHyg);
+                            str += "\r\n" + Provider.GetById(apt.ProvHyg).GetLongDesc();
                         }
                         field.FieldValue = str;
                         break;
@@ -2800,11 +2800,11 @@ namespace OpenDental
         private static void FillFieldsForLabCase(Sheet sheet, Patient pat, LabCase labcase)
         {
             Laboratory lab = Laboratories.GetOne(labcase.LaboratoryNum);//might possibly be null
-            Provider prov = Providers.GetProv(labcase.ProvNum);
+            Provider prov = Provider.GetById(labcase.ProvNum);
             Appointment appt = Appointments.GetOneApt(labcase.AptNum);//might be null
             long clinicNum = pat.ClinicNum;
 
-            ProviderClinic provClinic = ProviderClinic.GetByProviderAndClinic(prov.ProvNum, clinicNum);
+            ProviderClinic provClinic = ProviderClinic.GetByProviderAndClinic(prov.Id, clinicNum);
             foreach (SheetField field in sheet.SheetFields)
             {
                 switch (field.FieldName)
@@ -2901,7 +2901,7 @@ namespace OpenDental
                         field.FieldValue = pat.MiddleI;
                         break;
                     case "patient.priProvNameFL":
-                        field.FieldValue = Providers.GetFormalName(pat.PriProv);
+                        field.FieldValue = Provider.GetById(pat.PriProv).GetFormalName();
                         break;
                     case "Preferred":
                         field.FieldValue = pat.Preferred;
@@ -3309,12 +3309,12 @@ namespace OpenDental
                             field.FieldValue = clinic.Description + "\r\n";
                             if (CultureInfo.CurrentCulture.Name == "en-AU")
                             {//Australia
-                                Provider defaultProv = Providers.GetProv(Preference.GetLong(PreferenceName.PracticeDefaultProv));
-                                field.FieldValue += "ABN: " + defaultProv.NationalProvID + "\r\n";
+                                Provider defaultProv = Provider.GetById(Preference.GetLong(PreferenceName.PracticeDefaultProv));
+                                field.FieldValue += "ABN: " + defaultProv.NationalProviderId + "\r\n";
                             }
                             if (CultureInfo.CurrentCulture.Name == "en-NZ")
                             {//New Zealand
-                                Provider defaultProv = Providers.GetProv(Preference.GetLong(PreferenceName.PracticeDefaultProv));
+                                Provider defaultProv = Provider.GetById(Preference.GetLong(PreferenceName.PracticeDefaultProv));
                                 field.FieldValue += "GST: " + defaultProv.SSN + "\r\n";
                             }
                             field.FieldValue += clinic.AddressLine1 + "\r\n";
@@ -3348,12 +3348,12 @@ namespace OpenDental
                             field.FieldValue = Preference.GetString(PreferenceName.PracticeTitle) + "\r\n";
                             if (CultureInfo.CurrentCulture.Name == "en-AU")
                             {//Australia
-                                Provider defaultProv = Providers.GetProv(Preference.GetLong(PreferenceName.PracticeDefaultProv));
-                                field.FieldValue += "ABN: " + defaultProv.NationalProvID + "\r\n";
+                                Provider defaultProv = Provider.GetById(Preference.GetLong(PreferenceName.PracticeDefaultProv));
+                                field.FieldValue += "ABN: " + defaultProv.NationalProviderId + "\r\n";
                             }
                             if (CultureInfo.CurrentCulture.Name == "en-NZ")
                             {//New Zealand
-                                Provider defaultProv = Providers.GetProv(Preference.GetLong(PreferenceName.PracticeDefaultProv));
+                                Provider defaultProv = Provider.GetById(Preference.GetLong(PreferenceName.PracticeDefaultProv));
                                 field.FieldValue += "GST: " + defaultProv.SSN + "\r\n";
                             }
                             field.FieldValue += Preference.GetString(PreferenceName.PracticeAddress) + "\r\n";
@@ -3461,7 +3461,7 @@ namespace OpenDental
                         field.FieldValue = "Dear " + pat.GetSalutation() + ":";
                         break;
                     case "patient.priProvNameFL":
-                        field.FieldValue = Providers.GetFormalName(pat.PriProv);
+                        field.FieldValue = Provider.GetById(pat.PriProv).GetFormalName();
                         break;
                     case "ProviderLegendAUS":
                         #region ProviderLegendAUS
@@ -3470,8 +3470,8 @@ namespace OpenDental
                             field.FieldValue = "";
                             break;
                         }
-                        Providers.RefreshCache();
-                        List<Provider> listProviders = Providers.GetDeepCopy(true);
+                        CacheManager.Invalidate<Provider>();
+                        List<Provider> listProviders = Provider.All().ToList();
                         field.FieldValue = "PROVIDERS:" + "\r\n";
                         for (int i = 0; i < listProviders.Count; i++)
                         {//All non-hidden providers are added to the legend.
@@ -3481,7 +3481,7 @@ namespace OpenDental
                             {
                                 suffix = ", " + prov.Suffix.Trim();
                             }
-                            field.FieldValue += prov.Abbr + " - " + prov.FName + " " + prov.LName + suffix + " - " + prov.MedicaidID + "\r\n";
+                            field.FieldValue += prov.Abbr + " - " + prov.FirstName + " " + prov.LastName + suffix + " - " + prov.MedicaidID + "\r\n";
                         }
                         #endregion
                         break;
@@ -4077,7 +4077,7 @@ namespace OpenDental
                     case "ProvName":
                         if (prov != null)
                         {
-                            field.FieldValue = prov.LName + ", " + prov.FName;
+                            field.FieldValue = prov.LastName + ", " + prov.FirstName;
                         }
                         else
                         {
@@ -4411,14 +4411,14 @@ namespace OpenDental
             for (int i = 0; i < listMultiRx.Count; i++)
             {
                 dictRxs.Add(listMultiRxSheet[i], listMultiRx[i].Copy());
-                dictProvs.Add(listMultiRxSheet[i], Providers.GetProv(listMultiRx[i].ProvNum));
+                dictProvs.Add(listMultiRxSheet[i], Provider.GetById(listMultiRx[i].ProvNum));
             }
             Clinic clinic = null;
             if (pat.ClinicNum != 0)
             {
                 clinic = Clinic.GetById(pat.ClinicNum);
             }
-            List<ProviderClinic> listProvClinics = ProviderClinic.GetByProviders(dictProvs.Select(x => x.Value).Select(y => y.ProvNum).Distinct()).ToList();
+            List<ProviderClinic> listProvClinics = ProviderClinic.GetByProviders(dictProvs.Select(x => x.Value).Select(y => y.Id).Distinct()).ToList();
             foreach (SheetField field in sheet.SheetFields)
             {
                 switch (field.FieldName)
@@ -5231,37 +5231,37 @@ namespace OpenDental
                     case "prov.NationalProvID":
                         if (dictRxs.ContainsKey(1))
                         {
-                            field.FieldValue = dictProvs[1].NationalProvID;
+                            field.FieldValue = dictProvs[1].NationalProviderId;
                         }
                         break;
                     case "prov.NationalProvID2":
                         if (dictRxs.ContainsKey(2))
                         {
-                            field.FieldValue = dictProvs[2].NationalProvID;
+                            field.FieldValue = dictProvs[2].NationalProviderId;
                         }
                         break;
                     case "prov.NationalProvID3":
                         if (dictRxs.ContainsKey(3))
                         {
-                            field.FieldValue = dictProvs[3].NationalProvID;
+                            field.FieldValue = dictProvs[3].NationalProviderId;
                         }
                         break;
                     case "prov.NationalProvID4":
                         if (dictRxs.ContainsKey(4))
                         {
-                            field.FieldValue = dictProvs[4].NationalProvID;
+                            field.FieldValue = dictProvs[4].NationalProviderId;
                         }
                         break;
                     case "prov.NationalProvID5":
                         if (dictRxs.ContainsKey(5))
                         {
-                            field.FieldValue = dictProvs[5].NationalProvID;
+                            field.FieldValue = dictProvs[5].NationalProviderId;
                         }
                         break;
                     case "prov.NationalProvID6":
                         if (dictRxs.ContainsKey(6))
                         {
-                            field.FieldValue = dictProvs[6].NationalProvID;
+                            field.FieldValue = dictProvs[6].NationalProviderId;
                         }
                         break;
                     case "ProcCode":

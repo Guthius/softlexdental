@@ -58,7 +58,7 @@ namespace OpenDental.Bridges
         {
             arguments = "";
 
-            var provider = Providers.GetProv(patient.PriProv);
+            var provider = Provider.GetById(patient.PriProv);
             if (provider == null)
             {
                 MessageBox.Show(

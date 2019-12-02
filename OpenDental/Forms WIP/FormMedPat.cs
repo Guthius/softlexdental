@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Windows.Forms;
 using OpenDentBusiness;
+using System.Linq;
 
 namespace OpenDental{
 	/// <summary></summary>
@@ -478,7 +479,7 @@ namespace OpenDental{
 				textMedNote.Text= Medication.GetGeneric(MedicationPatCur.MedicationNum).Notes;
 			}
 			comboProv.Items.Add(Lan.g(this,"none"));
-			_listProviders=Providers.GetDeepCopy(true);
+			_listProviders=Provider.All().ToList();
 			for(int i=0;i<_listProviders.Count;i++) {
 				comboProv.Items.Add(_listProviders[i].GetLongDesc());
 			}
@@ -487,7 +488,7 @@ namespace OpenDental{
 			}
 			else{
 				for(int i=0;i<_listProviders.Count;i++) {
-					if(MedicationPatCur.ProvNum==_listProviders[i].ProvNum) {
+					if(MedicationPatCur.ProvNum==_listProviders[i].Id) {
 						comboProv.SelectedIndex=i+1;
 					}
 				}
@@ -619,7 +620,7 @@ namespace OpenDental{
 				MedicationPatCur.ProvNum=0;
 			}
 			else {
-				MedicationPatCur.ProvNum=_listProviders[comboProv.SelectedIndex-1].ProvNum;
+				MedicationPatCur.ProvNum=_listProviders[comboProv.SelectedIndex-1].Id;
 			}
 			MedicationPatCur.PatNote=textPatNote.Text;
 			MedicationPatCur.DateStart=PIn.Date(textDateStart.Text);

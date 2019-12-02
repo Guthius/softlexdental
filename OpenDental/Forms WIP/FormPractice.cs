@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using OpenDentBusiness;
 using CodeBase;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace OpenDental{
 ///<summary></summary>
@@ -768,10 +769,10 @@ namespace OpenDental{
 				groupSwiss.Visible=false;
 			}
 			listProvider.Items.Clear();
-			_listProviders=Providers.GetDeepCopy(true);
+			_listProviders=Provider.All().ToList();
 			for(int i=0;i<_listProviders.Count;i++){
 				listProvider.Items.Add(_listProviders[i].GetLongDesc());
-				if(_listProviders[i].ProvNum==Preference.GetLong(PreferenceName.PracticeDefaultProv)){
+				if(_listProviders[i].Id==Preference.GetLong(PreferenceName.PracticeDefaultProv)){
 					listProvider.SelectedIndex=i;
 				}
 			}
@@ -808,12 +809,12 @@ namespace OpenDental{
 			}
 			else {
 				radioInsBillingProvSpecific.Checked=true;//specific=any number >0. Foreign key to ProvNum
-				comboInsBillingProv.IndexSelectOrSetText(Providers.GetIndex(_insBillingProvNum),() => Providers.GetAbbr(_insBillingProvNum));
+				//comboInsBillingProv.IndexSelectOrSetText(Providers.GetIndex(_insBillingProvNum),() => Providers.GetAbbr(_insBillingProvNum));
 			}
 		}
 
 		private void comboInsBillingProv_SelectionChangeCommitted(object sender,EventArgs e) {
-			_selectedBillingProvNum=_listProviders[comboInsBillingProv.SelectedIndex].ProvNum;
+			_selectedBillingProvNum=_listProviders[comboInsBillingProv.SelectedIndex].Id;
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
@@ -837,7 +838,7 @@ namespace OpenDental{
 				listProvider.SelectedIndex=0;
 			}
 			if(_listProviders.Count > 0
-			  && _listProviders[listProvider.SelectedIndex].FeeSched==0)//Default provider must have a fee schedule set.
+			  && _listProviders[listProvider.SelectedIndex].FeeScheduleId==0)//Default provider must have a fee schedule set.
 			{
 				MsgBox.Show(this,"The selected provider must have a fee schedule set before they can be the default provider.");
 				return;
@@ -875,7 +876,7 @@ namespace OpenDental{
 				}
 			}
 			if(listProvider.SelectedIndex!=-1){
-				if(Preference.Update(PreferenceName.PracticeDefaultProv,_listProviders[listProvider.SelectedIndex].ProvNum)){
+				if(Preference.Update(PreferenceName.PracticeDefaultProv,_listProviders[listProvider.SelectedIndex].Id)){
 					changed=true;
 				}
 			}

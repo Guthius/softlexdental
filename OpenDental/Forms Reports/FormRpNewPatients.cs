@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using OpenDentBusiness;
 using OpenDental.ReportingComplex;
 using CodeBase;
+using System.Linq;
 
 namespace OpenDental{
 ///<summary></summary>
@@ -278,7 +279,7 @@ namespace OpenDental{
 		#endregion
 
 		private void FormNewPatients_Load(object sender, System.EventArgs e) {
-			_listProviders=Providers.GetListReports();
+			_listProviders=Provider.GetForReporting().ToList();
 			textToday.Text=DateTime.Today.ToShortDateString();
 			//always defaults to the current month
 			textDateFrom.Text=new DateTime(DateTime.Today.Year,DateTime.Today.Month,1).ToShortDateString();
@@ -372,17 +373,17 @@ namespace OpenDental{
 				report=new ReportComplex(true,false);
 			}
 			List<long> listProvNums=new List<long>();
-			List<Provider> listProvs=Providers.GetListReports();
+			List<Provider> listProvs=Provider.GetForReporting().ToList();
 			string subtitleProvs="";
 			if(listProv.SelectedIndices[0]==0) {//'All' is selected
 				for(int i=0;i<listProvs.Count;i++) {
-					listProvNums.Add(listProvs[i].ProvNum);
+					listProvNums.Add(listProvs[i].Id);
 					subtitleProvs=Lan.g(this,"All Providers");
 				}
 			}
 			else {
 				for(int i=0;i<listProv.SelectedIndices.Count;i++) {
-					listProvNums.Add(listProvs[listProv.SelectedIndices[i]-1].ProvNum);//Minus 1 from the selected index to account for 'All' option
+					listProvNums.Add(listProvs[listProv.SelectedIndices[i]-1].Id);//Minus 1 from the selected index to account for 'All' option
 					if(i>0) {
 						subtitleProvs+=", ";
 					}

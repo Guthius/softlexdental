@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using OpenDentBusiness;
 using OpenDentBusiness.UI;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace OpenDental{
 	/// <summary></summary>
@@ -261,11 +262,11 @@ namespace OpenDental{
 		#endregion
 
 		private void FormProcCodeNoteEdit_Load(object sender,EventArgs e) {
-			_listProviders=Providers.GetDeepCopy(true);
+			_listProviders=Provider.All().ToList();
 			strBTime=new StringBuilder(NoteCur.ProcTime);
 			for(int i=0;i<_listProviders.Count;i++){
 				listProv.Items.Add(_listProviders[i].GetLongDesc());
-				if(NoteCur.ProvNum==_listProviders[i].ProvNum){
+				if(NoteCur.ProvNum==_listProviders[i].Id){
 					listProv.SelectedIndex=i;
 				}
 			}
@@ -353,7 +354,7 @@ namespace OpenDental{
 				return;
 			}
 			NoteCur.ProcTime=strBTime.ToString();
-			NoteCur.ProvNum=_listProviders[listProv.SelectedIndex].ProvNum;
+			NoteCur.ProvNum=_listProviders[listProv.SelectedIndex].Id;
 			NoteCur.Note=textNote.Text;
 			if(_isTp) {
 				NoteCur.ProcStatus=ProcStat.TP;

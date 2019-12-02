@@ -361,7 +361,7 @@ namespace OpenDental{
 			comboOrder.SelectedIndex=0;
 			comboProv.Items.Add(Lan.g(this,"All"));
 			comboProv.SelectedIndex=0;
-			_listProviders=Providers.GetDeepCopy(true);
+            _listProviders = Provider.All().ToList();
 			for(int i=0;i<_listProviders.Count;i++) {
 				comboProv.Items.Add(_listProviders[i].GetLongDesc());
 			}
@@ -450,11 +450,11 @@ namespace OpenDental{
 						}
 						row.Cells.Add(Defs.GetName(DefinitionCategory.RecallUnschedStatus,apt.UnschedStatus));
 						if(apt.IsHygiene) {
-							Provider provHyg=Providers.GetFirstOrDefault(x => x.ProvNum==apt.ProvHyg);
+							Provider provHyg=Provider.GetById(apt.ProvHyg);
 							row.Cells.Add(provHyg==null?Lan.g(this,"INVALID"):provHyg.Abbr);
 						}
 						else {
-							Provider prov=Providers.GetFirstOrDefault(x => x.ProvNum==apt.ProvNum);
+							Provider prov=Provider.GetById(apt.ProvNum);
 							row.Cells.Add(prov==null?Lan.g(this,"INVALID"):prov.Abbr);
 						}
 						row.Cells.Add(apt.ProcDescript);
@@ -485,7 +485,7 @@ namespace OpenDental{
 			}
 			long provNum=0;
 			if(comboProv.SelectedIndex!=0) {
-				provNum=_listProviders[comboProv.SelectedIndex-1].ProvNum;
+				provNum=_listProviders[comboProv.SelectedIndex-1].Id;
 			}
 			long siteNum=0;
 			if(!Preference.GetBool(PreferenceName.EasyHidePublicHealth) && comboSite.SelectedIndex!=0) {

@@ -331,7 +331,7 @@ namespace OpenDental
             _tableComms = _loadData.TableComms;
             _listAdjustments = _loadData.ListAdjustments;
             _listClaimProcs = _loadData.ListClaimProcs;
-            _listProvidersAll = Providers.GetDeepCopy();
+            _listProvidersAll = Provider.All().ToList();
             _isPlanned = false;
             if (AptCur.AptStatus == ApptStatus.Planned)
             {
@@ -461,11 +461,11 @@ namespace OpenDental
             _listClinics.ForEach(x => comboClinic.Items.Add(x.Abbr));
             //Set Selected Nums
             _selectedClinicNum = AptCur.ClinicNum;
-            if (IsNew)
-            {
-                //Try to auto-select a provider when in Orion mode. Only for new appointments so we don't change historical data.
-                AptCur.ProvNum = Providers.GetOrionProvNum(AptCur.ProvNum);
-            }
+            //if (IsNew)
+            //{
+            //    //Try to auto-select a provider when in Orion mode. Only for new appointments so we don't change historical data.
+            //    AptCur.ProvNum = Providers.GetOrionProvNum(AptCur.ProvNum);
+            //}
             _selectedProvNum = AptCur.ProvNum;
             _selectedProvHygNum = AptCur.ProvHyg;
             //Set combo indexes for first pass through fillComboProvHyg
@@ -533,8 +533,8 @@ namespace OpenDental
                     {
                         requirements += "\r\n";
                     }
-                    Provider student = _listProvidersAll.First(x => x.ProvNum == listStudents[i].ProvNum);
-                    requirements += student.LName + ", " + student.FName + ": " + listStudents[i].Descript;
+                    Provider student = _listProvidersAll.First(x => x.Id == listStudents[i].ProvNum);
+                    requirements += student.LastName + ", " + student.FirstName + ": " + listStudents[i].Descript;
                 }
                 textRequirement.Text = requirements;
             }
@@ -655,7 +655,7 @@ namespace OpenDental
         {
             if (comboProv.SelectedIndex > -1)
             {
-                _selectedProvNum = _listProvs[comboProv.SelectedIndex].ProvNum;
+                _selectedProvNum = _listProvs[comboProv.SelectedIndex].Id;
             }
         }
 
@@ -663,7 +663,7 @@ namespace OpenDental
         {
             if (comboProvHyg.SelectedIndex > -1)
             {
-                _selectedProvHygNum = _listProvHygs[comboProvHyg.SelectedIndex].ProvNum;
+                _selectedProvHygNum = _listProvHygs[comboProvHyg.SelectedIndex].Id;
             }
         }
 
@@ -677,7 +677,7 @@ namespace OpenDental
                 return;
             }
             _selectedProvNum = formp.SelectedProvNum;
-            comboProv.IndexSelectOrSetText(_listProvs.FindIndex(x => x.ProvNum == _selectedProvNum), () => { return Providers.GetAbbr(_selectedProvNum); });
+            comboProv.IndexSelectOrSetText(_listProvs.FindIndex(x => x.Id == _selectedProvNum), () => { return Providers.GetAbbr(_selectedProvNum); });
         }
 
         private void butPickHyg_Click(object sender, EventArgs e)
@@ -690,7 +690,7 @@ namespace OpenDental
                 return;
             }
             _selectedProvHygNum = formp.SelectedProvNum;
-            comboProvHyg.IndexSelectOrSetText(_listProvHygs.FindIndex(x => x.ProvNum == _selectedProvHygNum), () => { return Providers.GetAbbr(_selectedProvHygNum); });
+            comboProvHyg.IndexSelectOrSetText(_listProvHygs.FindIndex(x => x.Id == _selectedProvHygNum), () => { return Providers.GetAbbr(_selectedProvHygNum); });
         }
 
         ///<summary>Fills combo provider based on which clinic is selected and attempts to preserve provider selection if any.</summary>
@@ -698,24 +698,24 @@ namespace OpenDental
         {
             if (comboProv.SelectedIndex > -1)
             {//valid prov selected, non none or nothing.
-                _selectedProvNum = _listProvs[comboProv.SelectedIndex].ProvNum;
+                _selectedProvNum = _listProvs[comboProv.SelectedIndex].Id;
             }
             if (comboProvHyg.SelectedIndex > -1)
             {
-                _selectedProvHygNum = _listProvHygs[comboProvHyg.SelectedIndex].ProvNum;
+                _selectedProvHygNum = _listProvHygs[comboProvHyg.SelectedIndex].Id;
             }
-            _listProvs = Providers.GetProvsForClinic(_selectedClinicNum).OrderBy(x => x.ItemOrder).ToList();
+            _listProvs = Providers.GetProvsForClinic(_selectedClinicNum).ToList();
             _listProvHygs = Providers.GetProvsForClinic(_selectedClinicNum);
             _listProvHygs.Add(new Provider() { Abbr = "none" });
-            _listProvHygs = _listProvHygs.OrderBy(x => x.ProvNum > 0).ThenBy(x => x.ItemOrder).ToList();
+            _listProvHygs = _listProvHygs.OrderBy(x => x.Id > 0).ToList();
             //Fill comboProv
             comboProv.Items.Clear();
             _listProvs.ForEach(x => comboProv.Items.Add(x.Abbr));
-            comboProv.IndexSelectOrSetText(_listProvs.FindIndex(x => x.ProvNum == _selectedProvNum), () => { return Providers.GetAbbr(_selectedProvNum); });
+            comboProv.IndexSelectOrSetText(_listProvs.FindIndex(x => x.Id == _selectedProvNum), () => { return Providers.GetAbbr(_selectedProvNum); });
             //Fill comboProvHyg
             comboProvHyg.Items.Clear();
             _listProvHygs.ForEach(x => comboProvHyg.Items.Add(x.Abbr));
-            comboProvHyg.IndexSelectOrSetText(_listProvHygs.FindIndex(x => x.ProvNum == _selectedProvHygNum), () => { return Providers.GetAbbr(_selectedProvHygNum); });
+            comboProvHyg.IndexSelectOrSetText(_listProvHygs.FindIndex(x => x.Id == _selectedProvHygNum), () => { return Providers.GetAbbr(_selectedProvHygNum); });
         }
 
         private void butColor_Click(object sender, EventArgs e)
@@ -1591,22 +1591,6 @@ namespace OpenDental
 
         private void butRequirement_Click(object sender, EventArgs e)
         {
-            if (insertRequired && !UpdateListAndDB(false))
-            {
-                return;
-            }
-            FormReqAppt FormR = new FormReqAppt();
-            FormR.AptNum = AptCur.AptNum;
-            FormR.PatNum = AptCur.PatNum;
-            FormR.ShowDialog();
-            if (FormR.DialogResult != DialogResult.OK)
-            {
-                return;
-            }
-            List<ReqStudent> listStudents = ReqStudents.GetForAppt(AptCur.AptNum);
-            textRequirement.Text = string.Join("\r\n", listStudents
-                .Select(x => new { Student = _listProvidersAll.First(y => y.ProvNum == x.ProvNum), Descript = x.Descript })
-                .Select(x => x.Student.LName + ", " + x.Student.FName + ": " + x.Descript).ToList());
         }
 
         private void butSyndromicObservations_Click(object sender, EventArgs e)
@@ -2271,7 +2255,7 @@ namespace OpenDental
             {
                 Procedure proc = procsForDay[i];
                 ProcedureCode procCode = ProcedureCodes.GetProcCode(proc.CodeNum);
-                Provider prov = _listProvidersAll.First(x => x.ProvNum == proc.ProvNum);
+                Provider prov = _listProvidersAll.First(x => x.Id == proc.ProvNum);
                 User usr = User.GetById(proc.UserNum);
                 ODGridRow row = new ODGridRow();
                 row.ColorLborder = System.Drawing.Color.Black;

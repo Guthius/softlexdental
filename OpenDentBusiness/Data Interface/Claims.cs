@@ -1061,10 +1061,10 @@ namespace OpenDentBusiness
                     {//if no prov set, then use practice default.
                         provNum = Preference.GetLong(PreferenceName.PracticeDefaultProv);
                     }
-                    Provider providerFirst = Providers.GetFirst();//Used in order to preserve old behavior...  If this fails, then old code would have failed.
-                    Provider provider = Providers.GetFirstOrDefault(x => x.ProvNum == provNum) ?? providerFirst;
+                    Provider providerFirst = Provider.GetDefault();//Used in order to preserve old behavior...  If this fails, then old code would have failed.
+                    Provider provider = Provider.GetById(provNum) ?? providerFirst;
                     //get the fee based on code and prov fee sched
-                    double ppoFee = Fees.GetAmount0(ProcCur.CodeNum, provider.FeeSched, ProcCur.ClinicNum, provNum, listFees);
+                    double ppoFee = Fees.GetAmount0(ProcCur.CodeNum, provider.FeeScheduleId, ProcCur.ClinicNum, provNum, listFees);
                     double ucrFee = ProcCur.ProcFee;//Usual Customary and Regular (UCR) fee.  Also known as billed fee.
                     if (ucrFee > ppoFee)
                     {
@@ -1231,13 +1231,13 @@ namespace OpenDentBusiness
                 claimCur.ClaimType = "Cap";
             }
             claimCur.ProvTreat = proc.ProvNum;
-            if (Providers.GetIsSec(proc.ProvNum))
+            if (Provider.GetById(proc.ProvNum).IsSecondary)
             {
                 claimCur.ProvTreat = Patients.GetPat(proc.PatNum).PriProv;
                 //OK if zero, because auto select first in list when open claim
             }
             claimCur.IsProsthesis = "N";
-            claimCur.ProvBill = Providers.GetBillingProvNum(claimCur.ProvTreat, claimCur.ClinicNum);//OK if zero, because it will get fixed in claim
+            claimCur.ProvBill = Providers.GetBillingProviderId(claimCur.ProvTreat, claimCur.ClinicNum);//OK if zero, because it will get fixed in claim
             claimCur.EmployRelated = YN.No;
             claimCur.ClaimForm = planCur.ClaimFormNum;
             claimCur.AttachedFlags = "Mail";
@@ -1367,13 +1367,13 @@ namespace OpenDentBusiness
                 claimCur.ClaimType = "Cap";
             }
             claimCur.ProvTreat = proc.ProvNum;
-            if (Providers.GetIsSec(proc.ProvNum))
+            if (Provider.GetById(proc.ProvNum).IsSecondary)
             {
                 claimCur.ProvTreat = Patients.GetPat(proc.PatNum).PriProv;
                 //OK if zero, because auto select first in list when open claim
             }
             claimCur.IsProsthesis = "N";
-            claimCur.ProvBill = Providers.GetBillingProvNum(claimCur.ProvTreat, claimCur.ClinicNum);//OK if zero, because it will get fixed in claim
+            claimCur.ProvBill = Providers.GetBillingProviderId(claimCur.ProvTreat, claimCur.ClinicNum);//OK if zero, because it will get fixed in claim
             claimCur.EmployRelated = YN.No;
             claimCur.ClaimForm = insPlanCur.ClaimFormNum;
             claimCur.AttachedFlags = "Mail";

@@ -228,7 +228,7 @@ namespace OpenDental {
 		#endregion
 
 		private void FormRpReceivablesBreakdown_Load(object sender,EventArgs e) {
-			_listProvs=Providers.GetListReports();
+			_listProvs=Provider.GetForReporting().ToList();
 			radioWriteoffPay.Checked = true;
 			listProv.Items.Add(Lan.g(this,"Practice"));
 			for(int i = 0;i < _listProvs.Count;i++) {
@@ -281,7 +281,7 @@ namespace OpenDental {
 			if(!hasAllProvs) {
 				for(int i = 0;i<listProv.SelectedIndices.Count;i++) {
 					//Minus 1 due to the 'Practice' option.
-					listProvNums.Add(_listProvs[listProv.SelectedIndices[i]-1].ProvNum);
+					listProvNums.Add(_listProvs[listProv.SelectedIndices[i]-1].Id);
 				}
 			}
 			bool isPayPlan2;

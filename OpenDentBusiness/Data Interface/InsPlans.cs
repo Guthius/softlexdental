@@ -874,17 +874,17 @@ namespace OpenDentBusiness
                 {//slight corruption
                     if (lookupFees != null)
                     {
-                        listFees = lookupFees[new FeeKey2(substCodeNum, Providers.GetProv(Preference.GetLong(PreferenceName.PracticeDefaultProv)).FeeSched)].ToList();
+                        listFees = lookupFees[new FeeKey2(substCodeNum, Provider.GetById(Preference.GetLong(PreferenceName.PracticeDefaultProv)).FeeScheduleId)].ToList();
                     }
-                    return Fees.GetAmount(substCodeNum, Providers.GetProv(Preference.GetLong(PreferenceName.PracticeDefaultProv)).FeeSched, clinicNum, provNum, listFees);
+                    return Fees.GetAmount(substCodeNum, Provider.GetById(Preference.GetLong(PreferenceName.PracticeDefaultProv)).FeeScheduleId, clinicNum, provNum, listFees);
                 }
                 else
                 {
                     if (lookupFees != null)
                     {
-                        listFees = lookupFees[new FeeKey2(substCodeNum, Providers.GetProv(provNum).FeeSched)].ToList();
+                        listFees = lookupFees[new FeeKey2(substCodeNum, Provider.GetById(provNum).FeeScheduleId)].ToList();
                     }
-                    return Fees.GetAmount(substCodeNum, Providers.GetProv(provNum).FeeSched, clinicNum, provNum, listFees);
+                    return Fees.GetAmount(substCodeNum, Provider.GetById(provNum).FeeScheduleId, clinicNum, provNum, listFees);
                 }
             }
             if (lookupFees != null)

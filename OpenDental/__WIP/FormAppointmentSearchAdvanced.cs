@@ -162,7 +162,7 @@ namespace OpenDental
                 var providerListItem = new ODBoxItem<Provider>(provider.GetLongDesc(), provider);
 
                 providersComboBox.Items.Add(providerListItem);
-                if (provider.ProvNum.In(selectedProviderIds))
+                if (provider.Id.In(selectedProviderIds))
                 {
                     providersComboBox.SetSelected(providersComboBox.Items.IndexOf(providerListItem), true);
                 }
@@ -354,7 +354,7 @@ namespace OpenDental
             {
                 foreach (ODBoxItem<Provider> provBoxItem in providersComboBox.ListSelectedItems)
                 {
-                    providerIds.Add(provBoxItem.Tag.ProvNum);
+                    providerIds.Add(provBoxItem.Tag.Id);
                 }
             }
 
@@ -407,7 +407,7 @@ namespace OpenDental
                 var providerIds = new List<long>();
                 foreach (var provider in formProvidersMultiPick.SelectedProviders)
                 {
-                    providerIds.Add(provider.ProvNum);
+                    providerIds.Add(provider.Id);
                 }
 
                 FillProviders(GetProvidersForSelectedClinic(), providerIds);
@@ -429,7 +429,7 @@ namespace OpenDental
                 appointmentViewLabel.Visible = false;
             }
 
-            var selectedProviderIds = providersComboBox.SelectedTags<Provider>().FindAll(x => x != null).Select(x => x.ProvNum).ToList();
+            var selectedProviderIds = providersComboBox.SelectedTags<Provider>().FindAll(x => x != null).Select(x => x.Id).ToList();
 
             FillProviders(GetProvidersForSelectedClinic(), selectedProviderIds);
         }
@@ -474,7 +474,7 @@ namespace OpenDental
         {
             var providers = GetProvidersForSelectedClinic(ProviderMode.Dentist);
 
-            FillProviders(providers, providers.Select(x => x.ProvNum).ToList());
+            FillProviders(providers, providers.Select(x => x.Id).ToList());
 
             DoSearch();
         }
@@ -483,7 +483,7 @@ namespace OpenDental
         {
             var providers = GetProvidersForSelectedClinic(ProviderMode.Hygienist);
 
-            FillProviders(providers, providers.Select(x => x.ProvNum).ToList());
+            FillProviders(providers, providers.Select(x => x.Id).ToList());
 
             DoSearch();
         }

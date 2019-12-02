@@ -717,19 +717,19 @@ namespace OpenDental{
 			//security is handled on the Rx button click in the Chart module
 			_provNumSelected=RxPatCur.ProvNum;
 			comboProvNum.Items.Clear();
-			_listProviders=Providers.GetDeepCopy(true);
+            _listProviders = Provider.All().ToList();
 			for(int i=0;i<_listProviders.Count;i++) {
 				comboProvNum.Items.Add(_listProviders[i].GetLongDesc());//Only visible provs added to combobox.
-				if(_listProviders[i].ProvNum==RxPatCur.ProvNum) {
+				if(_listProviders[i].Id==RxPatCur.ProvNum) {
 					comboProvNum.SelectedIndex=i;//Sets combo text too.
 				}
 			}
 			if(_provNumSelected==0) {//Is new
 				comboProvNum.SelectedIndex=0;
-				_provNumSelected=_listProviders[0].ProvNum;
+				_provNumSelected=_listProviders[0].Id;
 			}
 			if(comboProvNum.SelectedIndex==-1) {//The provider exists but is hidden
-				comboProvNum.Text=Providers.GetLongDesc(_provNumSelected);//Appends "(hidden)" to the end of the long description.
+				comboProvNum.Text=Provider.GetById(_provNumSelected).GetLongDesc();//Appends "(hidden)" to the end of the long description.
 			}
 			textDate.Text=RxPatCur.RxDate.ToString("d");
 			checkControlled.Checked=RxPatCur.IsControlled;
@@ -803,7 +803,7 @@ namespace OpenDental{
 		}
 
 		private void comboProvNum_SelectionChangeCommitted(object sender,EventArgs e) {
-			_provNumSelected=_listProviders[comboProvNum.SelectedIndex].ProvNum;
+			_provNumSelected=_listProviders[comboProvNum.SelectedIndex].Id;
 		}
 
 		private void butPickProv_Click(object sender,EventArgs e) {
@@ -815,7 +815,7 @@ namespace OpenDental{
 			if(formP.DialogResult!=DialogResult.OK) {
 				return;
 			}
-			comboProvNum.SelectedIndex=Providers.GetIndex(formP.SelectedProvNum);
+			//comboProvNum.SelectedIndex=Providers.GetIndex(formP.SelectedProvNum);
 			_provNumSelected=formP.SelectedProvNum;
 		}
 
@@ -847,7 +847,7 @@ namespace OpenDental{
 				MessageBox.Show(Lan.g(this,"Please fix data entry errors first."));
 				return false;
 			}
-			Provider prov=Providers.GetProv(_provNumSelected);
+			Provider prov=Provider.GetById(_provNumSelected);
 			if(prov==null) {
 				MessageBox.Show(Lan.g(this,"Please select a valid provider."));
 				return false;

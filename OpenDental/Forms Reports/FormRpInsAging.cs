@@ -492,7 +492,7 @@ namespace OpenDental
 
         private void FormRpInsAging_Load(object sender, System.EventArgs e)
         {
-            _listProviders = Providers.GetListReports();
+            _listProviders = Provider.GetForReporting().ToList();
             DateTime lastAgingDate = Preference.GetDate(PreferenceName.DateLastAging);
             if (lastAgingDate.Year < 1880)
             {
@@ -572,7 +572,7 @@ namespace OpenDental
             }
             if (!checkProvAll.Checked)
             {
-                rpo.ListProvNums = listProv.SelectedIndices.OfType<int>().Select(x => _listProviders[x].ProvNum).ToList();
+                rpo.ListProvNums = listProv.SelectedIndices.OfType<int>().Select(x => _listProviders[x].Id).ToList();
             }
 
             //if "All" is selected and the user is not restricted, show ALL clinics, including the 0 clinic.

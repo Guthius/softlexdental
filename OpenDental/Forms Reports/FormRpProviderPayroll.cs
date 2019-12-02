@@ -416,8 +416,8 @@ namespace OpenDental
         private void FormProduction_Load(object sender, System.EventArgs e)
         {
             checkAllProv.Checked = false;
-            _listProviders = Providers.GetListReports();
-            _listProviders.Insert(0, Providers.GetUnearnedProv());
+            _listProviders = Provider.GetForReporting().ToList();
+            //_listProviders.Insert(0, Providers.GetUnearnedProv());
             textToday.Text = DateTime.Today.ToShortDateString();
             for (int i = 0; i < _listProviders.Count; i++)
             {

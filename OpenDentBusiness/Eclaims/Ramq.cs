@@ -28,7 +28,7 @@ namespace OpenDentBusiness.Eclaims {
 				//Now we need to update our cache of claims to reflect the change that took place in the database above in Etranss.SetClaimSentOrPrinted()
 				queueItem.ClaimStatus="S";
 				Claim claim=Claims.GetClaim(queueItem.ClaimNum);
-				Provider provClaimTreat=Providers.GetProv(claim.ProvTreat);
+				Provider provClaimTreat= Provider.GetById(claim.ProvTreat);
 				DP_RACINDP dp=new DP_RACINDP();
 				#region Header
 				dp.CHN=DP_RACINDPCHN.Item06;
@@ -40,7 +40,7 @@ namespace OpenDentBusiness.Eclaims {
 #else
 				//dp.TRNSM=;//TODO:
 #endif
-				dp.DISP=provClaimTreat.NationalProvID;
+				dp.DISP=provClaimTreat.NationalProviderId;
 				//dp.CPTE_ADMN=;//Administrative account number.  Not currently used.
 				JulianCalendar calendar=new JulianCalendar();
 				dp.ATTES=(DateTime.Now.Year%10).ToString()//One digit for year
@@ -49,7 +49,7 @@ namespace OpenDentBusiness.Eclaims {
 				dp.NCE=(etrans.CarrierTransCounter%10000).ToString().PadLeft(4,'0');
 				dp.DISP_REFNT=claim.CanadianReferralProviderNum.Trim();
 				//dp.DIAGN=;//Diagnostic code.  Not currently used.
-				dp.ETAB=provClaimTreat.CanadianOfficeNum;//Usually empty.
+				dp.ETAB=provClaimTreat.CanadianOfficeNumber;//Usually empty.
 				//dp.ADMIS=;//Date of patient admission.  Not currently used.  This would be the same as the date of service for dental claims anyway.
 				//dp.SORTI=;//Date patient discharged.  Not currently used.  This would be the same as the date of service for dental claims anyway.
 				dp.TOT_DEM=claim.ClaimFee.ToString().Replace(".","").PadLeft(6,'0');
@@ -208,12 +208,12 @@ namespace OpenDentBusiness.Eclaims {
 			StringBuilder sbErrors=new StringBuilder();
 			StringBuilder sbWarnings=new StringBuilder();
 			Claim claim=Claims.GetClaim(queueItem.ClaimNum);
-			Provider provClaimTreat=Providers.GetProv(claim.ProvTreat);
+			Provider provClaimTreat= Provider.GetById(claim.ProvTreat);
 			InsSub insSub=InsSubs.GetOne(claim.InsSubNum);
 			Patient pat=Patients.GetPat(claim.PatNum);
 			#region Header
 			//DISP
-			if(!Regex.IsMatch(provClaimTreat.NationalProvID,@"^[27][0-9]{5}$")) {
+			if(!Regex.IsMatch(provClaimTreat.NationalProviderId,@"^[27][0-9]{5}$")) {
 				if(sbErrors.Length!=0) {
 					sbErrors.Append(",");
 				}
@@ -229,7 +229,7 @@ namespace OpenDentBusiness.Eclaims {
 				sbErrors.Append("Referral provider ID for RAMQ is invalid");
 			}
 			//ETAB
-			if(!Regex.IsMatch(provClaimTreat.CanadianOfficeNum,@"^[0-9]{5}$")) {
+			if(!Regex.IsMatch(provClaimTreat.CanadianOfficeNumber,@"^[0-9]{5}$")) {
 				if(sbErrors.Length!=0) {
 					sbErrors.Append(",");
 				}

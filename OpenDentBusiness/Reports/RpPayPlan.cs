@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 
 namespace OpenDentBusiness
 {
@@ -134,7 +135,7 @@ namespace OpenDentBusiness
             command += "ORDER BY ClinicNum,LName,FName";
 
             DataTable raw = DataConnection.ExecuteDataTable(command);
-            List<Provider> listProvs = Providers.GetAll();
+            List<Provider> listProvs = Provider.All().ToList();
             //DateTime payplanDate;
             Patient pat;
             double princ;
@@ -173,7 +174,7 @@ namespace OpenDentBusiness
                 pat.FName = raw.Rows[i]["FName"].ToString();
                 pat.MiddleI = raw.Rows[i]["MiddleI"].ToString();
                 pat.Preferred = raw.Rows[i]["Preferred"].ToString();
-                row["provider"] = Providers.GetLName(PIn.Long(raw.Rows[i]["ProvNum"].ToString()), listProvs);
+                row["provider"] = Provider.GetById(PIn.Long(raw.Rows[i]["ProvNum"].ToString())).LastName;
                 row["guarantor"] = pat.GetNameLF();
                 if (raw.Rows[i]["PlanNum"].ToString() == "0")
                 {

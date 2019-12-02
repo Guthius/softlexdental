@@ -594,7 +594,7 @@ namespace OpenDental{
 			//Seed emp list and prov list with a dummy emp/prov with 'none' for the field that fills the list, FName and Abbr respectively.
 			//That way we don't have to add/subtract one in order when selecting from the list based on selected indexes.
 			_listEmps=new List<Employee>() { new Employee() { FirstName="none" } };
-			_listProviders=new List<Provider>() { new Provider() { ProvNum=0,Abbr="none" } };
+			_listProviders=new List<Provider>() { /*new Provider() { Id=0,Abbr="none" }*/ };
 
 				Clinic selectedClinic=comboClinic.SelectedTag<Clinic>();
 				if(selectedClinic!=null) {
@@ -606,7 +606,7 @@ namespace OpenDental{
 			List<long> listPreviouslySelectedEmpNums=listBoxEmps.SelectedTags<Employee>().Select(x => x.Id).ToList();
 			listBoxEmps.Items.Clear();
 			_listEmps.ForEach(x => listBoxEmps.Items.Add(new ODBoxItem<Employee>(x.FirstName,x)));
-			List<long> listPreviouslySelectedProvNums=listBoxProvs.SelectedTags<Provider>().Select(x => x.ProvNum).ToList();
+			List<long> listPreviouslySelectedProvNums=listBoxProvs.SelectedTags<Provider>().Select(x => x.Id).ToList();
 			listBoxProvs.Items.Clear();
 			_listProviders.ForEach(x => listBoxProvs.Items.Add(new ODBoxItem<Provider>(x.Abbr,x)));
 			if(_listPreSelectedEmpNums!=null || _listPreSelectedProvNums!=null) {
@@ -625,7 +625,7 @@ namespace OpenDental{
 				if(_listPreSelectedProvNums!=null && _listPreSelectedProvNums.Count>0) {
 					//Provider Listbox
 					for(int i=1;i<listBoxProvs.Items.Count;i++) {
-						if(!_listPreSelectedProvNums.Contains(_listProviders[i].ProvNum)) {
+						if(!_listPreSelectedProvNums.Contains(_listProviders[i].Id)) {
 							continue;
 						}
 						listBoxProvs.SetSelected(i,true);
@@ -653,7 +653,7 @@ namespace OpenDental{
 					listBoxEmps.SelectedIndex=0;//select the 'none' entry;
 				}
 				if(listPreviouslySelectedProvNums.Count > 0) {
-					listBoxProvs.SetSelectedItem<Provider>(x => listPreviouslySelectedProvNums.Contains(x.ProvNum));
+					listBoxProvs.SetSelectedItem<Provider>(x => listPreviouslySelectedProvNums.Contains(x.Id));
 				}
 				else {
 					listBoxProvs.SelectedIndex=0;//select the 'none' entry; 
@@ -719,7 +719,7 @@ namespace OpenDental{
 			_provsChanged=false;
 			List<long> provNums=new List<long>();
 			for(int i=0;i<listBoxProvs.SelectedIndices.Count;i++){
-				provNums.Add(_listProviders[listBoxProvs.SelectedIndices[i]].ProvNum);
+				provNums.Add(_listProviders[listBoxProvs.SelectedIndices[i]].Id);
 			}
 			List<long> empNums=new List<long>();
 			for(int i=0;i<listBoxEmps.SelectedIndices.Count;i++){
@@ -854,7 +854,7 @@ namespace OpenDental{
 			listProvNums=new List<long>();
 			//Don't populate listProvNums if 'none' is selected; not allowed to select 'none' and another prov validated above.
 			if(!listBoxProvs.SelectedIndices.Contains(0)) {
-				listProvNums=listBoxProvs.SelectedTags<Provider>().Select(x => x.ProvNum).ToList();
+				listProvNums=listBoxProvs.SelectedTags<Provider>().Select(x => x.Id).ToList();
 			}
 			listEmployeeNums=new List<long>();
 			//Don't populate listEmployeeNums if 'none' is selected; not allowed to select 'none' and another emp validated above.
@@ -970,7 +970,7 @@ namespace OpenDental{
 			string provAbbr="";
 			string empFName="";
 			//Get all of the selected providers and employees (removing the "none" options).
-			List<Provider> listSelectedProvs=listBoxProvs.SelectedTags<Provider>().FindAll(x => x.ProvNum > 0);
+			List<Provider> listSelectedProvs=listBoxProvs.SelectedTags<Provider>().FindAll(x => x.Id > 0);
 			List<Employee> listSelectedEmps=listBoxEmps.SelectedTags<Employee>().FindAll(x => x.Id > 0);
 			if(listSelectedProvs.Count==1 && listSelectedEmps.Count==0) {//only 1 provider selected, pass into schedule day filter
 				provAbbr=listSelectedProvs[0].Abbr;
@@ -980,8 +980,8 @@ namespace OpenDental{
 			}
 			else if(listSelectedProvs.Count==1 && listSelectedEmps.Count==1) {//1 provider and 1 employee selected
 				//see if the names match, if we're dealing with the same person it's okay to pass both in, if not then don't pass in either. 
-				if(listSelectedProvs[0].FName==listSelectedEmps[0].FirstName 
-					&& listSelectedProvs[0].LName==listSelectedEmps[0].LastName) 
+				if(listSelectedProvs[0].FirstName==listSelectedEmps[0].FirstName 
+					&& listSelectedProvs[0].LastName==listSelectedEmps[0].LastName) 
 				{
 					provAbbr=listSelectedProvs[0].Abbr;
 					empFName=listSelectedEmps[0].FirstName;
@@ -1184,7 +1184,7 @@ namespace OpenDental{
 					actionCloseScheduleProgress?.Invoke();
 					if(MessageBox.Show(Lan.g(this,"Overlapping provider schedules detected, would you like to continue anyway?")
 						+"\r\n"+Lan.g(this,"Providers affected")
-						+":\r\n  "+string.Join("\r\n  ",listOverlappingProvNums.Select(x=>Providers.GetLongDesc(x))),"",MessageBoxButtons.YesNo)!=DialogResult.Yes) 
+						+":\r\n  "+string.Join("\r\n  ",listOverlappingProvNums.Select(x=>Provider.GetById(x).GetLongDesc())),"",MessageBoxButtons.YesNo)!=DialogResult.Yes) 
 					{
 						return;
 					}
@@ -1359,7 +1359,7 @@ namespace OpenDental{
 					actionCloseScheduleProgress?.Invoke();
 					if(MessageBox.Show(Lan.g(this,"Overlapping provider schedules detected, would you like to continue anyway?")
 						+"\r\n"+Lan.g(this,"Providers affected")
-						+":\r\n  "+string.Join("\r\n  ",listOverlappingProvNums.Select(x=>Providers.GetLongDesc(x))),"",MessageBoxButtons.YesNo)!=DialogResult.Yes) 
+						+":\r\n  "+string.Join("\r\n  ",listOverlappingProvNums.Select(x=>Provider.GetById(x).GetLongDesc())),"",MessageBoxButtons.YesNo)!=DialogResult.Yes) 
 					{
 						return;
 					}

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using OpenDentBusiness;
@@ -25,13 +26,13 @@ namespace OpenDental {
 			foreach(Carrier carrier in carriers) {
 				listCarriers.Items.Add(carrier.CarrierName);
 			}
-			_listProviders=Providers.GetDeepCopy(true);
+			_listProviders=Provider.All().ToList();
 			for(int i=0;i<_listProviders.Count;i++) {
-				if(!_listProviders[i].IsCDAnet || _listProviders[i].NationalProvID=="" || _listProviders[i].CanadianOfficeNum=="") {
+				if(!_listProviders[i].IsCDAnet || _listProviders[i].NationalProviderId=="" || _listProviders[i].CanadianOfficeNumber=="") {
 					continue;
 				}
-				if(!listOfficeNumbers.Items.Contains(_listProviders[i].CanadianOfficeNum)) {
-					listOfficeNumbers.Items.Add(_listProviders[i].CanadianOfficeNum);
+				if(!listOfficeNumbers.Items.Contains(_listProviders[i].CanadianOfficeNumber)) {
+					listOfficeNumbers.Items.Add(_listProviders[i].CanadianOfficeNumber);
 				}
 			}
 			if(listOfficeNumbers.Items.Count<1) {
@@ -75,8 +76,8 @@ namespace OpenDental {
 			Cursor=Cursors.WaitCursor;
 			Provider prov=null;
 			for(int i=0;i<_listProviders.Count;i++) {
-				if(_listProviders[i].CanadianOfficeNum==listOfficeNumbers.Items[listOfficeNumbers.SelectedIndex].ToString() 
-					&& _listProviders[i].NationalProvID!="" && _listProviders[i].IsCDAnet) {
+				if(_listProviders[i].CanadianOfficeNumber==listOfficeNumbers.Items[listOfficeNumbers.SelectedIndex].ToString() 
+					&& _listProviders[i].NationalProviderId!="" && _listProviders[i].IsCDAnet) {
 					prov=_listProviders[i];
 					break;
 				}

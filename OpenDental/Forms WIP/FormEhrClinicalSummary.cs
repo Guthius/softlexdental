@@ -96,10 +96,10 @@ namespace OpenDental {
 			}
 			Provider prov=null;
 			if(Security.CurrentUser.ProviderId.HasValue) {//If the current user is a provider.
-				prov=Providers.GetProv(Security.CurrentUser.ProviderId.Value);
+				prov=Provider.GetById(Security.CurrentUser.ProviderId.Value);
 			}
 			else {
-				prov=Providers.GetProv(PatCur.PriProv);//PriProv is not 0, because EhrCCD.ValidatePatient() will block if PriProv is 0.
+				prov=Provider.GetById(PatCur.PriProv);//PriProv is not 0, because EhrCCD.ValidatePatient() will block if PriProv is 0.
 			}
 			try {
 				//Create the Clinical Summary.
@@ -130,7 +130,7 @@ namespace OpenDental {
 				msgWebMail.ToAddress=PatCur.GetNameFL();
 				msgWebMail.PatientId=PatCur.PatNum;
 				msgWebMail.Status=EmailMessageStatus.Sent; // WebMailSent
-				msgWebMail.ProviderId=prov.ProvNum;
+				msgWebMail.ProviderId=prov.Id;
 				msgWebMail.Subject="Clinical Summary";
 				msgWebMail.Body="To view the clinical summary:\r\n1) Download all attachments to the same folder.  Do not rename the files.\r\n2) Open the ccd.xml file in an internet browser.";
 				msgWebMail.Date=DateTime.Now;

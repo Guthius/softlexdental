@@ -42,7 +42,7 @@ namespace OpenDental {
 			}
 			_listBillingTypeDefs=Definition.GetByCategory(DefinitionCategory.BillingTypes);
             _listClinics = Clinic.All().ToList();
-			_listProvs=Providers.GetDeepCopy(true);
+			_listProvs=Provider.All().ToList();
 			comboOperator1.Items.Add(">");
 			comboOperator1.Items.Add("<");
 			comboOperator1.Items.Add("\u2265");//Greater than or equal to
@@ -297,7 +297,7 @@ namespace OpenDental {
 					continue;
 				}
 				if(selectedType==RequiredFieldName.PrimaryProvider
-					&& _listReqFieldConds.Exists(x => x.ConditionValue==_listProvs[i].ProvNum.ToString()))
+					&& _listReqFieldConds.Exists(x => x.ConditionValue==_listProvs[i].Id.ToString()))
 				{
 					listConditionValues.SelectedIndices.Add(i);
 					continue;
@@ -319,13 +319,13 @@ namespace OpenDental {
 		private void butPickProv_Click(object sender,EventArgs e) {
 			FormProviderPick FormP=new FormProviderPick(_listProvs);
 			if(listConditionValues.SelectedIndices.Count>0) {//Initial FormP selection
-				FormP.SelectedProvNum=_listProvs[listConditionValues.SelectedIndices[0]].ProvNum;
+				FormP.SelectedProvNum=_listProvs[listConditionValues.SelectedIndices[0]].Id;
 			}
 			FormP.ShowDialog();
 			if(FormP.DialogResult!=DialogResult.OK) {
 				return;
 			}
-			listConditionValues.SelectedIndices.Add(_listProvs.FindIndex(x => x.ProvNum==FormP.SelectedProvNum));
+			listConditionValues.SelectedIndices.Add(_listProvs.FindIndex(x => x.Id==FormP.SelectedProvNum));
 		}
 
 		private void butDelete_Click(object sender,EventArgs e) {
@@ -430,7 +430,7 @@ namespace OpenDental {
 					List<long> listFkNums=new List<long>();
 					if(selectedField==RequiredFieldName.PrimaryProvider) {
 						for(int i=0;i<listConditionValues.SelectedIndices.Count;i++) {
-							listFkNums.Add(_listProvs[listConditionValues.SelectedIndices[i]].ProvNum);
+							listFkNums.Add(_listProvs[listConditionValues.SelectedIndices[i]].Id);
 						}
 					}
 					else if(selectedField==RequiredFieldName.BillingType) {

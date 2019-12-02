@@ -196,7 +196,7 @@ namespace OpenDental
             {
                 get
                 {
-                    var providers = Providers.GetDeepCopy(true);
+                    var providers = Provider.All().ToList();
                     if (providers.Count == 0)
                     {
                         return ODSetupStatus.NotStarted;
@@ -208,11 +208,11 @@ namespace OpenDental
                         bool isHyg = provider.IsSecondary;
 
                         if (((isDentist || isHyg) && string.IsNullOrEmpty(provider.Abbr)) ||
-                            ((isDentist || isHyg) && string.IsNullOrEmpty(provider.LName)) ||
-                            ((isDentist || isHyg) && string.IsNullOrEmpty(provider.FName)) ||
+                            ((isDentist || isHyg) && string.IsNullOrEmpty(provider.LastName)) ||
+                            ((isDentist || isHyg) && string.IsNullOrEmpty(provider.FirstName)) ||
                             (isDentist && string.IsNullOrEmpty(provider.Suffix)) ||
                             (isDentist && string.IsNullOrEmpty(provider.SSN)) ||
-                            (isDentist && string.IsNullOrEmpty(provider.NationalProvID)))
+                            (isDentist && string.IsNullOrEmpty(provider.NationalProviderId)))
                         {
                             // TODO: It would be nice if we had a way to communicate what is still is need of attention...
 
@@ -228,14 +228,17 @@ namespace OpenDental
             {
                 if (provider.IsSecondary || provider.IsNotPerson) return false;
 
-                if (Defs.GetName(DefinitionCategory.ProviderSpecialties, provider.Specialty).ToLower() == "hygienist" ||
-                    Defs.GetName(DefinitionCategory.ProviderSpecialties, provider.Specialty).ToLower() == "assistant" || 
-                    Defs.GetName(DefinitionCategory.ProviderSpecialties, provider.Specialty).ToLower() == "labtech" || 
-                    Defs.GetName(DefinitionCategory.ProviderSpecialties, provider.Specialty).ToLower() == "other" || 
-                    Defs.GetName(DefinitionCategory.ProviderSpecialties, provider.Specialty).ToLower() == "notes" || 
-                    Defs.GetName(DefinitionCategory.ProviderSpecialties, provider.Specialty).ToLower() == "none")
+                if (provider.SpecialtyId.HasValue)
                 {
-                    return false;
+                    if (Defs.GetName(DefinitionCategory.ProviderSpecialties, provider.SpecialtyId.Value).ToLower() == "hygienist" ||
+                        Defs.GetName(DefinitionCategory.ProviderSpecialties, provider.SpecialtyId.Value).ToLower() == "assistant" ||
+                        Defs.GetName(DefinitionCategory.ProviderSpecialties, provider.SpecialtyId.Value).ToLower() == "labtech" ||
+                        Defs.GetName(DefinitionCategory.ProviderSpecialties, provider.SpecialtyId.Value).ToLower() == "other" ||
+                        Defs.GetName(DefinitionCategory.ProviderSpecialties, provider.SpecialtyId.Value).ToLower() == "notes" ||
+                        Defs.GetName(DefinitionCategory.ProviderSpecialties, provider.SpecialtyId.Value).ToLower() == "none")
+                    {
+                        return false;
+                    }
                 }
 
                 return true;
@@ -408,10 +411,10 @@ namespace OpenDental
                         return ODSetupStatus.NotStarted;
                     }
 
-                    var providers = Providers.GetWhere(x => !x.IsNotPerson, true).ToList();
+                    var providers = Provider.All().Where(x => !x.IsNotPerson).ToList();
                     foreach (var provider in providers)
                     {
-                        if (!schedules.Select(x => x.ProvNum).Contains(provider.ProvNum))
+                        if (!schedules.Select(x => x.ProvNum).Contains(provider.Id))
                         {
                             return ODSetupStatus.NeedsAttention;
                         }

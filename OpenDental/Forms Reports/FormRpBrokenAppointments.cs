@@ -27,7 +27,7 @@ namespace OpenDental {
 
 		private void FormRpBrokenAppointments_Load(object sender,EventArgs e) {
 
-			_listProviders=Providers.GetListReports();
+			_listProviders=Provider.GetForReporting().ToList();
 			dateStart.SelectionStart=DateTime.Today;
 			dateEnd.SelectionStart=DateTime.Today;
 			for(int i=0;i<_listProviders.Count;i++) {
@@ -192,12 +192,12 @@ namespace OpenDental {
 			List<long> listProvNums=new List<long>();
 			if(checkAllProvs.Checked) {
 				for(int i = 0;i<_listProviders.Count;i++) {
-					listProvNums.Add(_listProviders[i].ProvNum);
+					listProvNums.Add(_listProviders[i].Id);
 				}
 			}
 			else {
 				for(int i=0;i<listProvs.SelectedIndices.Count;i++) {
-				listProvNums.Add(_listProviders[listProvs.SelectedIndices[i]].ProvNum);
+				listProvNums.Add(_listProviders[listProvs.SelectedIndices[i]].Id);
 				}
 			}
 			List<long> listAdjDefNums=new List<long>();

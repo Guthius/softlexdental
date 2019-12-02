@@ -200,7 +200,7 @@ namespace OpenDental
                 return;
             }
             _selectedProvNum = FormPP.SelectedProvNum;
-            comboProv.IndexSelectOrSetText(_listProviders.FindIndex(x => x.ProvNum == _selectedProvNum), () => { return Providers.GetAbbr(_selectedProvNum); });
+            comboProv.IndexSelectOrSetText(_listProviders.FindIndex(x => x.Id == _selectedProvNum), () => { return Providers.GetAbbr(_selectedProvNum); });
         }
 
         private void comboClinic_SelectedIndexChanged(object sender, EventArgs e)
@@ -216,7 +216,7 @@ namespace OpenDental
         {
             if (comboProv.SelectedIndex > -1)
             {
-                _selectedProvNum = _listProviders[comboProv.SelectedIndex].ProvNum;
+                _selectedProvNum = _listProviders[comboProv.SelectedIndex].Id;
             }
         }
 
@@ -225,12 +225,12 @@ namespace OpenDental
         {
             if (comboProv.SelectedIndex > -1)
             {//valid prov selected, not none or nothing.
-                _selectedProvNum = _listProviders[comboProv.SelectedIndex].ProvNum;
+                _selectedProvNum = _listProviders[comboProv.SelectedIndex].Id;
             }
             _listProviders = Providers.GetProvsForClinic(_selectedClinicNum);
             comboProv.Items.Clear();
             _listProviders.ForEach(x => comboProv.Items.Add(x.Abbr));
-            comboProv.IndexSelectOrSetText(_listProviders.FindIndex(x => x.ProvNum == _selectedProvNum), () => { return Providers.GetAbbr(_selectedProvNum); });
+            comboProv.IndexSelectOrSetText(_listProviders.FindIndex(x => x.Id == _selectedProvNum), () => { return Providers.GetAbbr(_selectedProvNum); });
         }
 
         private void FillProcedure()
@@ -305,7 +305,7 @@ namespace OpenDental
             {//Enforce Linking
                 _selectedProvNum = FormPS.ListSelectedProcs[0].ProvNum;
                 _selectedClinicNum = FormPS.ListSelectedProcs[0].ClinicNum;
-                comboProv.IndexSelectOrSetText(_listProviders.FindIndex(x => x.ProvNum == _selectedProvNum), () => { return Providers.GetAbbr(_selectedProvNum); });
+                comboProv.IndexSelectOrSetText(_listProviders.FindIndex(x => x.Id == _selectedProvNum), () => { return Providers.GetAbbr(_selectedProvNum); });
                 comboClinic.IndexSelectOrSetText(_listClinics.FindIndex(x => x.Id == _selectedClinicNum), () => { return Clinic.GetById(_selectedClinicNum).Abbr; });
                 if (Preference.GetInt(PreferenceName.RigorousAdjustments) == (int)RigorousAdjustments.EnforceFully && !_isEditAnyway)
                 {

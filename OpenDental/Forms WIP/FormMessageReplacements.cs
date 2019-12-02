@@ -223,9 +223,9 @@ namespace OpenDental {
 			string userNameF="";
 			string userNameL="";
 			if(userod.ProviderId.HasValue) {
-				Provider prov=Providers.GetProv(userod.ProviderId.Value);
-				userNameF=prov.FName;
-				userNameL=prov.LName;
+				Provider prov=Provider.GetById(userod.ProviderId.Value);
+				userNameF=prov.FirstName;
+				userNameL=prov.LastName;
 			}
 			else if(userod.EmployeeId.HasValue) {
 				Employee emp=Employee.GetById(userod.EmployeeId.Value);

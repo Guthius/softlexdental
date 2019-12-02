@@ -34,7 +34,7 @@ namespace OpenDentBusiness.Eclaims {
 			CanadianNetwork network=CanadianNetworks.GetNetwork(carrier.CanadianNetworkNum,clearinghouseClin);
 			Patient patient=Patients.GetPat(patNum);
 			Patient subscriber=Patients.GetPat(insSub.Subscriber);
-			Provider provDefaultTreat=Providers.GetProv(Preference.GetLong(PreferenceName.PracticeDefaultProv));
+			Provider provDefaultTreat= Provider.GetById(Preference.GetLong(PreferenceName.PracticeDefaultProv));
 			if(clearinghouseClin==null) {
 				throw new ApplicationException("Canadian clearinghouse not found.");
 			}
@@ -55,11 +55,11 @@ namespace OpenDentBusiness.Eclaims {
 			if(!provDefaultTreat.IsCDAnet) {
 				error+="Prov not setup as CDA provider";
 			}
-			if(provDefaultTreat.NationalProvID.Length!=9) {
+			if(provDefaultTreat.NationalProviderId.Length!=9) {
 				if(error!="") error+=", ";
 				error+="Prov CDA num 9 digits";
 			}
-			if(provDefaultTreat.CanadianOfficeNum.Length!=4) {
+			if(provDefaultTreat.CanadianOfficeNumber.Length!=4) {
 				if(error!="") error+=", ";
 				error+="Prov office num 4 char";
 			}
@@ -155,13 +155,13 @@ namespace OpenDentBusiness.Eclaims {
 				strb.Append(Canadian.TidyN(etrans.CarrierTransCounter,5));
 			}
 			//B01 CDA provider number 9 AN
-			strb.Append(Canadian.TidyAN(provDefaultTreat.NationalProvID,9));//already validated
+			strb.Append(Canadian.TidyAN(provDefaultTreat.NationalProviderId,9));//already validated
 																																			//B02 provider office number 4 AN
-			strb.Append(Canadian.TidyAN(provDefaultTreat.CanadianOfficeNum,4));//already validated
+			strb.Append(Canadian.TidyAN(provDefaultTreat.CanadianOfficeNumber,4));//already validated
 			if(carrier.CDAnetVersion=="04") {
 				//B03 billing provider number 9 AN
-				Provider provBilling=Providers.GetProv(Providers.GetBillingProvNum(provDefaultTreat.ProvNum,patient.ClinicNum));
-				strb.Append(Canadian.TidyAN(provBilling.NationalProvID,9));//already validated
+				Provider provBilling= Provider.GetById(Providers.GetBillingProviderId(provDefaultTreat.Id,patient.ClinicNum));
+				strb.Append(Canadian.TidyAN(provBilling.NationalProviderId,9));//already validated
 			}
 			if(carrier.CDAnetVersion=="02") {
 				//C01 primary policy/plan number 8 AN (group number)
@@ -338,12 +338,12 @@ namespace OpenDentBusiness.Eclaims {
 			etrans.ClaimNum=claim.ClaimNum;//We don't normally use a claim number with Etranss.CreateCanadianOutput(), but here we need the claim number so that we can show the claim reversal in the claim history.
 			Etranss.Update(etrans);
 			Patient patient=Patients.GetPat(claim.PatNum);
-			Provider prov=Providers.GetProv(claim.ProvTreat);
+			Provider prov= Provider.GetById(claim.ProvTreat);
 			if(!prov.IsCDAnet) {
 				throw new ApplicationException(Lans.g("CanadianOutput","Treating provider is not setup to use CDANet."));
 			}
-			Provider providerFirst=Providers.GetFirst();//Used in order to preserve old behavior...  If this fails, then old code would have failed.
-			Provider billProv=Providers.GetFirstOrDefault(x => x.ProvNum==claim.ProvBill)??providerFirst;
+			Provider providerFirst= Provider.GetDefault();//Used in order to preserve old behavior...  If this fails, then old code would have failed.
+			Provider billProv= Provider.GetById(claim.ProvBill)??providerFirst;
 			if(!billProv.IsCDAnet) {
 				throw new ApplicationException(Lans.g("CanadianOutput","Billing provider is not setup to use CDANet."));
 			}
@@ -406,15 +406,15 @@ namespace OpenDentBusiness.Eclaims {
 #endif
 			}
 			//B01 CDA provider number 9 AN
-			strb.Append(Canadian.TidyAN(prov.NationalProvID,9));//already validated
+			strb.Append(Canadian.TidyAN(prov.NationalProviderId,9));//already validated
 																													//B02 provider office number 4 AN
-			strb.Append(Canadian.TidyAN(prov.CanadianOfficeNum,4));//already validated
+			strb.Append(Canadian.TidyAN(prov.CanadianOfficeNumber,4));//already validated
 			if(carrier.CDAnetVersion!="02") { //version 04
 																				//B03 billing provider number 9 AN
 																				//might need to account for possible 5 digit prov id assigned by carrier
-				strb.Append(Canadian.TidyAN(billProv.NationalProvID,9));//already validated
+				strb.Append(Canadian.TidyAN(billProv.NationalProviderId,9));//already validated
 																																//B04 billing provider office number 4 AN
-				strb.Append(Canadian.TidyAN(billProv.CanadianOfficeNum,4));//already validated
+				strb.Append(Canadian.TidyAN(billProv.CanadianOfficeNumber,4));//already validated
 			}
 			if(carrier.CDAnetVersion=="02") {
 				//C01 primary policy/plan number 8 AN
@@ -570,14 +570,14 @@ namespace OpenDentBusiness.Eclaims {
 				//A09 carrier transaction counter 5 N
 				strb.Append(Canadian.TidyN(etrans.CarrierTransCounter,5));
 				//B01 CDA provider number 9 AN
-				strb.Append(Canadian.TidyAN(provTreat.NationalProvID,9));//already validated
+				strb.Append(Canadian.TidyAN(provTreat.NationalProviderId,9));//already validated
 																																 //B02 (treating) provider office number 4 AN
-				strb.Append(Canadian.TidyAN(provTreat.CanadianOfficeNum,4));//already validated
+				strb.Append(Canadian.TidyAN(provTreat.CanadianOfficeNumber,4));//already validated
 																																		//B03 billing provider number 9 AN
 																																		//might need to account for possible 5 digit prov id assigned by carrier
-				strb.Append(Canadian.TidyAN(provBilling.NationalProvID,9));//already validated
+				strb.Append(Canadian.TidyAN(provBilling.NationalProviderId,9));//already validated
 																																	 //B04 billing provider office number 4 AN
-				strb.Append(Canadian.TidyAN(provBilling.CanadianOfficeNum,4));//already validated
+				strb.Append(Canadian.TidyAN(provBilling.CanadianOfficeNumber,4));//already validated
 																																			//F33 Reconciliation Date 8 N
 				strb.Append(reconciliationDate.ToString("yyyyMMdd"));
 				//F38 Current Reconciliation Page Number N 1
@@ -678,9 +678,9 @@ namespace OpenDentBusiness.Eclaims {
 			//A09 carrier transaction counter 5 N
 			strb.Append(Canadian.TidyN(etrans.CarrierTransCounter,5));
 			//B01 CDA provider number 9 AN
-			strb.Append(Canadian.TidyAN(provTreat.NationalProvID,9));//already validated
+			strb.Append(Canadian.TidyAN(provTreat.NationalProviderId,9));//already validated
 																															 //B02 (treating) provider office number 4 AN
-			strb.Append(Canadian.TidyAN(provTreat.CanadianOfficeNum,4));//already validated
+			strb.Append(Canadian.TidyAN(provTreat.CanadianOfficeNumber,4));//already validated
 																																	//F33 Reconciliation Date 8 N
 			strb.Append(reconciliationDate.ToString("yyyyMMdd"));
 			//End of message construction.
@@ -802,13 +802,13 @@ namespace OpenDentBusiness.Eclaims {
 				//and that will trigger acknowledgements for all providers of the practice. I am assuming here that the same is true for the 
 				//billing provider in field B03, because there is no real reason to limit the request to any particular provider.
 				//B01 CDA provider number 9 AN
-				strb.Append(Canadian.TidyAN(prov.NationalProvID,9));//already validated
+				strb.Append(Canadian.TidyAN(prov.NationalProviderId,9));//already validated
 				//B02 (treating) provider office number 4 AN
-				strb.Append(Canadian.TidyAN(prov.CanadianOfficeNum,4));//already validated
+				strb.Append(Canadian.TidyAN(prov.CanadianOfficeNumber,4));//already validated
 				if(formatVersion=="04") {
 					//B03 billing provider number 9 AN
 					//might need to account for possible 5 digit prov id assigned by carrier
-					strb.Append(Canadian.TidyAN(prov.NationalProvID,9));//already validated
+					strb.Append(Canadian.TidyAN(prov.NationalProviderId,9));//already validated
 				}
 				string errorMsg="";
 				string result=Canadian.PassToIca(strb.ToString(),clearinghouseClin,network,isAutomatic,out errorMsg);

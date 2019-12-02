@@ -377,7 +377,7 @@ namespace OpenDentBusiness
                         {
                             continue;
                         }
-                        if (provCur.ProvNum == PIn.Long(tableProduction.Rows[j]["ProvNum"].ToString()))
+                        if (provCur.Id == PIn.Long(tableProduction.Rows[j]["ProvNum"].ToString()))
                         {
                             production += PIn.Decimal(tableProduction.Rows[j]["Production"].ToString());
                             hasData = true;
@@ -393,7 +393,7 @@ namespace OpenDentBusiness
                         {
                             continue;
                         }
-                        if (provCur.ProvNum == PIn.Long(tableAdj.Rows[j]["ProvNum"].ToString()))
+                        if (provCur.Id == PIn.Long(tableAdj.Rows[j]["ProvNum"].ToString()))
                         {
                             adjust += PIn.Decimal(tableAdj.Rows[j]["AdjAmt"].ToString());
                             hasData = true;
@@ -409,7 +409,7 @@ namespace OpenDentBusiness
                         {
                             continue;
                         }
-                        if (provCur.ProvNum == PIn.Long(tableInsWriteoff.Rows[j]["ProvNum"].ToString()))
+                        if (provCur.Id == PIn.Long(tableInsWriteoff.Rows[j]["ProvNum"].ToString()))
                         {
                             if (writeoffType == PPOWriteoffDateCalc.ClaimPayDate)
                             {
@@ -432,7 +432,7 @@ namespace OpenDentBusiness
                         {
                             continue;
                         }
-                        if (provCur.ProvNum == PIn.Long(tableWriteOffAdjustments.Rows[j]["ProvNum"].ToString()))
+                        if (provCur.Id == PIn.Long(tableWriteOffAdjustments.Rows[j]["ProvNum"].ToString()))
                         {
                             inswriteoffadj += PIn.Decimal(tableWriteOffAdjustments.Rows[j]["WriteOffEst"].ToString()) + PIn.Decimal(tableWriteOffAdjustments.Rows[j]["WriteOff"].ToString());
                             hasData = true;
@@ -448,7 +448,7 @@ namespace OpenDentBusiness
                         {
                             continue;
                         }
-                        if (provCur.ProvNum == PIn.Long(tablePay.Rows[j]["ProvNum"].ToString()))
+                        if (provCur.Id == PIn.Long(tablePay.Rows[j]["ProvNum"].ToString()))
                         {
                             ptincome += PIn.Decimal(tablePay.Rows[j]["PayAmt"].ToString());
                             unearnedPtIncome += PIn.Decimal(tablePay.Rows[j]["UnearnedIncome"].ToString());
@@ -465,7 +465,7 @@ namespace OpenDentBusiness
                         {
                             continue;
                         }
-                        if (provCur.ProvNum == PIn.Long(tableIns.Rows[j]["ProvNum"].ToString()))
+                        if (provCur.Id == PIn.Long(tableIns.Rows[j]["ProvNum"].ToString()))
                         {
                             insincome += PIn.Decimal(tableIns.Rows[j]["InsPayAmt"].ToString());
                             hasData = true;
@@ -528,7 +528,7 @@ namespace OpenDentBusiness
                 totalincome = 0;
                 for (int j = 0; j < tableProduction.Rows.Count; j++)
                 {
-                    if (provCur.ProvNum == PIn.Long(tableProduction.Rows[j]["ProvNum"].ToString()))
+                    if (provCur.Id == PIn.Long(tableProduction.Rows[j]["ProvNum"].ToString()))
                     {
                         production += PIn.Decimal(tableProduction.Rows[j]["Production"].ToString());
                         hasData = true;
@@ -536,7 +536,7 @@ namespace OpenDentBusiness
                 }
                 for (int j = 0; j < tableAdj.Rows.Count; j++)
                 {
-                    if (provCur.ProvNum == PIn.Long(tableAdj.Rows[j]["ProvNum"].ToString()))
+                    if (provCur.Id == PIn.Long(tableAdj.Rows[j]["ProvNum"].ToString()))
                     {
                         adjust += PIn.Decimal(tableAdj.Rows[j]["AdjAmt"].ToString());
                         hasData = true;
@@ -544,7 +544,7 @@ namespace OpenDentBusiness
                 }
                 for (int j = 0; j < tableInsWriteoff.Rows.Count; j++)
                 {
-                    if (provCur.ProvNum == PIn.Long(tableInsWriteoff.Rows[j]["ProvNum"].ToString()))
+                    if (provCur.Id == PIn.Long(tableInsWriteoff.Rows[j]["ProvNum"].ToString()))
                     {
                         if (writeoffType == PPOWriteoffDateCalc.ClaimPayDate)
                         {
@@ -559,7 +559,7 @@ namespace OpenDentBusiness
                 }
                 for (int j = 0; j < tableWriteOffAdjustments.Rows.Count; j++)
                 {
-                    if (provCur.ProvNum == PIn.Long(tableWriteOffAdjustments.Rows[j]["ProvNum"].ToString()))
+                    if (provCur.Id == PIn.Long(tableWriteOffAdjustments.Rows[j]["ProvNum"].ToString()))
                     {
                         inswriteoffadj += PIn.Decimal(tableWriteOffAdjustments.Rows[j]["WriteOffEst"].ToString()) + PIn.Decimal(tableWriteOffAdjustments.Rows[j]["WriteOff"].ToString());
                         hasData = true;
@@ -567,7 +567,7 @@ namespace OpenDentBusiness
                 }
                 for (int j = 0; j < tablePay.Rows.Count; j++)
                 {
-                    if (provCur.ProvNum == PIn.Long(tablePay.Rows[j]["ProvNum"].ToString()))
+                    if (provCur.Id == PIn.Long(tablePay.Rows[j]["ProvNum"].ToString()))
                     {
                         ptincome += PIn.Decimal(tablePay.Rows[j]["PayAmt"].ToString());
                         unearnedPtIncome += PIn.Decimal(tablePay.Rows[j]["UnearnedIncome"].ToString());
@@ -576,7 +576,7 @@ namespace OpenDentBusiness
                 }
                 for (int j = 0; j < tableIns.Rows.Count; j++)
                 {
-                    if (provCur.ProvNum == PIn.Long(tableIns.Rows[j]["ProvNum"].ToString()))
+                    if (provCur.Id == PIn.Long(tableIns.Rows[j]["ProvNum"].ToString()))
                     {
                         insincome += PIn.Decimal(tableIns.Rows[j]["InsPayAmt"].ToString());
                         hasData = true;
@@ -885,7 +885,7 @@ namespace OpenDentBusiness
         public static DataSet GetDailyProdIncDataSet(DateTime dateFrom, DateTime dateTo, List<Provider> listProvs, List<Clinic> listClinics
             , bool hasAllProvs, bool hasAllClinics, bool isUnearnedIncluded, PPOWriteoffDateCalc writeoffType, bool isCEMT = false)
         {
-            List<long> listProvNums = listProvs.Select(x => x.ProvNum).ToList();
+            List<long> listProvNums = listProvs.Select(x => x.Id).ToList();
             List<long> listClinicNums = listClinics.Select(x => x.Id).ToList();
             #region Procedures
             string whereProv = "";
@@ -1226,7 +1226,7 @@ namespace OpenDentBusiness
             List<long> listProvNums = new List<long>();
             for (int i = 0; i < listProvs.Count; i++)
             {
-                listProvNums.Add(listProvs[i].ProvNum);
+                listProvNums.Add(listProvs[i].Id);
             }
             List<long> listClinicNums = new List<long>();
             for (int i = 0; i < listClinics.Count; i++)
@@ -1426,7 +1426,7 @@ namespace OpenDentBusiness
             List<long> listProvNums = new List<long>();
             for (int i = 0; i < listProvs.Count; i++)
             {
-                listProvNums.Add(listProvs[i].ProvNum);
+                listProvNums.Add(listProvs[i].Id);
             }
             List<long> listClinicNums = new List<long>();
             for (int i = 0; i < listClinics.Count; i++)
@@ -2015,7 +2015,7 @@ namespace OpenDentBusiness
         public static DataSet GetMonthlyProdIncDataSet(DateTime dateFrom, DateTime dateTo, List<Provider> listProvs, List<Clinic> listClinics, bool writeOffPay, bool hasAllProvs, bool hasAllClinics, bool hasChangeInWriteoff, bool isUnearnedIncluded, bool isCEMT = false)
         {
             List<long> listClinicNums = listClinics.Select(x => x.Id).ToList();
-            List<long> listProvNums = listProvs.Select(x => x.ProvNum).ToList();
+            List<long> listProvNums = listProvs.Select(x => x.Id).ToList();
             #region Procedures
             string whereProv = "";
             if (!hasAllProvs && listProvNums.Count > 0)
@@ -2627,7 +2627,7 @@ namespace OpenDentBusiness
         public static DataSet GetAnnualProdIncDataSet(DateTime dateFrom, DateTime dateTo, List<Provider> listProvs, List<Clinic> listClinics, bool writeOffPay, bool hasAllProvs, bool hasAllClinics, bool hasChangeInWriteoff, bool isUnearnedIncluded, bool isCEMT = false)
         {
             List<long> listClinicNums = listClinics.Select(x => x.Id).ToList();
-            List<long> listProvNums = listProvs.Select(x => x.ProvNum).ToList();
+            List<long> listProvNums = listProvs.Select(x => x.Id).ToList();
             #region Procedures
             string whereProv = "";
             if (!hasAllProvs && listProvNums.Count > 0)

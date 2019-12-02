@@ -312,10 +312,10 @@ namespace OpenDentBusiness
         {
             if (user != null && user.ProviderId.HasValue)
             {
-                var provider = Providers.GetProv(user.ProviderId.Value);
+                var provider = Provider.GetById(user.ProviderId.Value);
                 if (provider != null)
                 {
-                    return EhrProvKeys.HasProvHadKey(provider.LName, provider.FName);
+                    return EhrProvKeys.HasProvHadKey(provider.LastName, provider.FirstName);
                 }
             }
 

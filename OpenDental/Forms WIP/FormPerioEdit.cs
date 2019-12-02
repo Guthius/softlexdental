@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Windows.Forms;
 using OpenDentBusiness;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace OpenDental{
 	/// <summary>
@@ -153,10 +154,10 @@ namespace OpenDental{
 		private void FormPerioEdit_Load(object sender, System.EventArgs e) {
 			textDate.Text=PerioExamCur.ExamDate.ToShortDateString();
 			listProv.Items.Clear();
-			_listProviders=Providers.GetDeepCopy(true);
+			_listProviders=Provider.All().ToList();
 			for(int i=0;i<_listProviders.Count;i++) {
 				listProv.Items.Add(_listProviders[i].Abbr);
-				if(_listProviders[i].ProvNum==PerioExamCur.ProvNum){
+				if(_listProviders[i].Id==PerioExamCur.ProvNum){
 					listProv.SelectedIndex=i;
 				}
 			}
@@ -170,7 +171,7 @@ namespace OpenDental{
 				return;
 			}
 			PerioExamCur.ExamDate=PIn.Date(textDate.Text);
-			PerioExamCur.ProvNum=_listProviders[listProv.SelectedIndex].ProvNum;
+			PerioExamCur.ProvNum=_listProviders[listProv.SelectedIndex].Id;
 			PerioExams.Update(PerioExamCur);
 			DialogResult=DialogResult.OK;
 		}

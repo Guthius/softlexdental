@@ -1213,11 +1213,11 @@ namespace OpenDental{
 				listCategory.SelectedIndex=0;
 			}
 			_selectedProvNumDefault=ProcCode.ProvNumDefault;
-			_listProviders=new List<Provider>() { new Provider() { ProvNum=0,Abbr=Lan.g(this,"None") } };
-			_listProviders.AddRange(Providers.GetDeepCopy(true));
+			_listProviders=new List<Provider>() { /*new Provider() { Id=0,Abbr=Lan.g(this,"None") } */};
+			_listProviders.AddRange(Provider.All());
 			comboProvNumDefault.Items.Clear();
 			_listProviders.ForEach(x => comboProvNumDefault.Items.Add(x.Abbr));
-			comboProvNumDefault.IndexSelectOrSetText(_listProviders.FindIndex(x => x.ProvNum==_selectedProvNumDefault)
+			comboProvNumDefault.IndexSelectOrSetText(_listProviders.FindIndex(x => x.Id==_selectedProvNumDefault)
 				,() => { return Providers.GetAbbr(_selectedProvNumDefault); });
 			if(Clinic.GetById(Clinics.ClinicId).IsMedicalOnly) {
 				labelTreatArea.Visible=false;
@@ -1468,7 +1468,7 @@ namespace OpenDental{
 		}
 
 		private void comboProvNumDefault_SelectedIndexChanged(object sender,EventArgs e) {
-			_selectedProvNumDefault=_listProviders[comboProvNumDefault.SelectedIndex].ProvNum;		
+			_selectedProvNumDefault=_listProviders[comboProvNumDefault.SelectedIndex].Id;		
 		}
 
 		///<summary>Returns a line that can be used in a security log entry if the entries are changed.</summary>

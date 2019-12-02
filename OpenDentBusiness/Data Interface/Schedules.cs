@@ -904,11 +904,11 @@ namespace OpenDentBusiness
                 {
                     continue;
                 }
-                if (isSecondary && !Providers.GetIsSec(listForPeriod[i].ProvNum))
+                if (isSecondary && !Provider.GetById(listForPeriod[i].ProvNum).IsSecondary)
                 {
                     continue;
                 }
-                if (!isSecondary && Providers.GetIsSec(listForPeriod[i].ProvNum))
+                if (!isSecondary && Provider.GetById(listForPeriod[i].ProvNum).IsSecondary)
                 {
                     continue;
                 }
@@ -1734,7 +1734,7 @@ namespace OpenDentBusiness
             }
             List<long> listProvNums;
 
-                listProvNums = Providers.GetProvsForClinic(clinicNum).Select(x => x.ProvNum).ToList();
+                listProvNums = Providers.GetProvsForClinic(clinicNum).Select(x => x.Id).ToList();
                 if (listProvNums.Count == 0)
                 {
                     return table;

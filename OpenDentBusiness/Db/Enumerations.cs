@@ -829,17 +829,7 @@ namespace OpenDentBusiness{
 		Ramq,
 	}
 
-	///<summary>Used when submitting e-claims to some carriers who require extra provider identifiers.  Usage varies by company.  Only used as needed.  SiteNumber is the only one that is still used on 5010s.  The other 3 have been deprecated and replaced by NPI.</summary>
-	public enum ProviderSupplementalID{
-		///<summary>0</summary>
-		BlueCross,
-		///<summary>1</summary>
-		BlueShield,
-		///<summary>2</summary>
-		SiteNumber,
-		///<summary>3</summary>
-		CommercialNumber
-	}
+
 
 	///<summary>Each clearinghouse can have a hard-coded comm bridge which handles all the communications of transfering the claim files to the clearinghouse/carrier.  Does not just include X12, but can include any format at all.</summary>
 	public enum EclaimsCommBridge{

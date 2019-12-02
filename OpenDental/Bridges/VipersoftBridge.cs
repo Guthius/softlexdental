@@ -90,7 +90,7 @@ namespace OpenDental.Bridges
         /// <param name="patient">The patient.</param>
         protected override void SendCommands(DdeClient client, long programId, Patient patient)
         {
-            var provider = Providers.GetProv(Patients.GetProvNum(patient));
+            var provider = Provider.GetById(Patients.GetProvNum(patient));
 
             var command = '\x4' +
                 Application.OpenForms[0].Handle.ToString() + "|" +
@@ -99,8 +99,8 @@ namespace OpenDental.Bridges
                 patient.LName + "|" + 
                 patient.FName + "|" + 
                 patient.MiddleI + "||" +
-                provider.LName + ", " +
-                provider.FName + "|||||||||" + 
+                provider.LastName + ", " +
+                provider.FirstName + "|||||||||" + 
                 patient.SSN + "|1|";
 
             client.Execute(command, 2000);

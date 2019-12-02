@@ -67,7 +67,7 @@ namespace OpenDental.Bridges
                 streamWriter.WriteLine("PATIENT_ADDR=" + patient.Address);
                 streamWriter.WriteLine("PATIENT_PID=" + patient.ChartNumber.ToString());
                 streamWriter.WriteLine("PATIENT_IPDOPD=");
-                streamWriter.WriteLine("PATIENT_DOCTOR=" + Providers.GetFormalName(patient.PriProv));
+                streamWriter.WriteLine("PATIENT_DOCTOR=" + Provider.GetById(patient.PriProv).GetFormalName());
                 streamWriter.WriteLine("PATIENT_PHON1=" + patient.WirelessPhone);
                 streamWriter.WriteLine("PATIENT_PHON2=" + patient.HmPhone);
                 streamWriter.WriteLine("PATIENT_EXAMNAME=");

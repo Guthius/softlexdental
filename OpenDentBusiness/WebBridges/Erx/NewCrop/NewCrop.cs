@@ -91,9 +91,9 @@ namespace OpenDentBusiness
         {
             //No need to check RemotingRole; no call to db.
             PersonNameType personName = new PersonNameType();
-            personName.last = prov.LName.Trim();//Cannot be blank.
-            personName.first = prov.FName.Trim();//Cannot be blank.
-            personName.middle = prov.MI;//May be blank.
+            personName.last = prov.LastName.Trim();//Cannot be blank.
+            personName.first = prov.FirstName.Trim();//Cannot be blank.
+            personName.middle = prov.MiddleInitial;//May be blank.
             if (prov.Suffix != "")
             {
                 personName.suffixSpecified = true;

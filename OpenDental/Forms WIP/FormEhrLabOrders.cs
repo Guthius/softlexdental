@@ -128,8 +128,8 @@ namespace OpenDental
                     //It would be better to check for updated results, unfortunately results have no unique identifiers.
                 }
 
-                var provider = Providers.GetProv(Security.CurrentUser.ProviderId.GetValueOrDefault());
-                if (Security.CurrentUser.ProviderId != 0 && EhrProvKeys.GetKeysByFLName(provider.LName, provider.FName).Count > 0)
+                var provider = Provider.GetById(Security.CurrentUser.ProviderId.GetValueOrDefault());
+                if (Security.CurrentUser.ProviderId != 0 && EhrProvKeys.GetKeysByFLName(provider.LastName, provider.FirstName).Count > 0)
                 {
                     // The user who is currently logged in is a provider and has a valid EHR key.
                     erhLab.IsCpoe = true;

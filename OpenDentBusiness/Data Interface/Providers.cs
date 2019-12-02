@@ -1,229 +1,86 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Reflection;
-using CodeBase;
 
 namespace OpenDentBusiness
 {
-
-    ///<summary></summary>
     public class Providers
     {
-        #region Get Methods
-
-        ///<summary>Checks to see if the providers passed in have term dates that occur after the date passed in.
-        ///Returns a list of the ProvNums that have invalid term dates.  Otherwise; empty list.</summary>
-        public static List<long> GetInvalidProvsByTermDate(List<long> listProvNums, DateTime dateCompare)
+        /// <summary>
+        /// Checks to see if the providers passed in have term dates that occur after the date passed in.
+        /// Returns a list of the ProvNums that have invalid term dates.  Otherwise; empty list.
+        /// </summary>
+        public static List<long> GetInvalidProvsByTermDate(List<long> providerIds, DateTime dateCompare)
         {
-            //No need to check RemotingRole; no call to db.
-            return GetWhere(x => listProvNums.Any(y => y == x.ProvNum) && x.DateTerm.Year > 1880 && x.DateTerm.Date < dateCompare.Date)
-                .Select(x => x.ProvNum).ToList();
+            return Provider.All()
+                .Where(provider => 
+                    providerIds.Any(y => y == provider.Id) && 
+                    provider.DateTermEnd.HasValue && 
+                    provider.DateTermEnd.Value.Date < dateCompare.Date)
+                .Select(provider => 
+                    provider.Id)
+                .ToList();
         }
 
-        #endregion
-
-        #region Modification Methods
-
-        #region Insert
-        #endregion
-
-        #region Update
-        #endregion
-
-        #region Delete
-        #endregion
-
-        #endregion
-
-        #region Misc Methods
-
-        ///<summary>Checks the appointment's provider and hygienist's term dates to see if an appointment should be scheduled or marked complete.
-        ///Returns an empty string if the appointment does not violate the Term Date for the provider or hygienist.
-        ///A non-empty return value should be displayed to the user in a message box (already translated).
-        ///isSetComplete simply modifies the message. Use this when checking if an appointment should be set complete.</summary>
-        public static string CheckApptProvidersTermDates(Appointment apt, bool isSetComplete = false)
+        /// <summary>
+        /// Checks the appointment's provider and hygienist's term dates to see if an appointment should be scheduled or marked complete.
+        /// Returns an empty string if the appointment does not violate the Term Date for the provider or hygienist.
+        /// A non-empty return value should be displayed to the user in a message box (already translated).
+        /// isSetComplete simply modifies the message. Use this when checking if an appointment should be set complete.
+        /// </summary>
+        public static string CheckApptProvidersTermDates(Appointment appointment, bool isSetComplete = false)
         {
-            //No need to check RemotingRole; no call to db.
             string message = "";
-            List<long> listProvNums = new List<long> { apt.ProvNum, apt.ProvHyg };
-            List<long> listInvalidProvNums = Providers.GetInvalidProvsByTermDate(listProvNums, apt.AptDateTime);
-            if (listInvalidProvNums.Count == 0)
-            {
-                return message;
-            }
-            if (listInvalidProvNums.Contains(apt.ProvNum))
+
+            var providerIds = new List<long> { appointment.ProvNum, appointment.ProvHyg };
+            var invalidProviderIds = GetInvalidProvsByTermDate(providerIds, appointment.AptDateTime);
+
+            if (invalidProviderIds.Count == 0) return message;
+
+            if (invalidProviderIds.Contains(appointment.ProvNum))
             {
                 message += "provider";
             }
-            if (listInvalidProvNums.Contains(apt.ProvHyg))
+
+            if (invalidProviderIds.Contains(appointment.ProvHyg))
             {
                 if (message != "")
                 {
                     message += " and ";
                 }
+
                 message += "hygienist";
             }
-            if (listInvalidProvNums.Contains(apt.ProvNum) && listInvalidProvNums.Contains(apt.ProvHyg))
-            {//used for grammar
-                message = "The " + message + " selected for this appointment have Term Dates prior to the selected day and time. "
-                    + "Please select another " + message + (isSetComplete ? " to set the appointment complete." : ".");
+
+            if (invalidProviderIds.Contains(appointment.ProvNum) && invalidProviderIds.Contains(appointment.ProvHyg))
+            {
+                message = 
+                    "The " + message + " selected for this appointment have Term Dates prior to the selected day and time. " + 
+                    "Please select another " + message + (isSetComplete ? " to set the appointment complete." : ".");
             }
             else
             {
-                message = "The " + message + " selected for this appointment has a Term Date prior to the selected day and time. "
-                    + "Please select another " + message + (isSetComplete ? " to set the appointment complete." : ".");
+                message = 
+                    "The " + message + " selected for this appointment has a Term Date prior to the selected day and time. " + 
+                    "Please select another " + message + (isSetComplete ? " to set the appointment complete." : ".");
             }
-            Lans.g("Providers", message);
+
             return message;
         }
 
-        #endregion
-
-        #region CachePattern
-
-        private class ProviderCache : CacheListAbs<Provider>
-        {
-            protected override List<Provider> GetCacheFromDb()
-            {
-                string command = "SELECT * FROM provider";
-                if (Preference.GetBool(PreferenceName.EasyHideDentalSchools))
-                {
-                    command += " ORDER BY ItemOrder";
-                }
-                return Crud.ProviderCrud.SelectMany(command);
-            }
-            protected override List<Provider> TableToList(DataTable table)
-            {
-                return Crud.ProviderCrud.TableToList(table);
-            }
-            protected override Provider Copy(Provider provider)
-            {
-                return provider.Copy();
-            }
-            protected override DataTable ListToTable(List<Provider> listProviders)
-            {
-                return Crud.ProviderCrud.ListToTable(listProviders, "Provider");
-            }
-            protected override void FillCacheIfNeeded()
-            {
-                Providers.GetTableFromCache(false);
-            }
-            protected override bool IsInListShort(Provider provider)
-            {
-                return !provider.IsHidden && provider.ProvStatus != ProviderStatus.Deleted;
-            }
-        }
-
-        ///<summary>The object that accesses the cache in a thread-safe manner.</summary>
-        private static ProviderCache _providerCache = new ProviderCache();
-
-        public static List<Provider> GetDeepCopy(bool isShort = false)
-        {
-            return _providerCache.GetDeepCopy(isShort);
-        }
-
-        public static bool GetExists(Predicate<Provider> match, bool isShort = false)
-        {
-            return _providerCache.GetExists(match, isShort);
-        }
-
-        public static int GetFindIndex(Predicate<Provider> match, bool isShort = false)
-        {
-            return _providerCache.GetFindIndex(match, isShort);
-        }
-
-        public static Provider GetFirst(bool isShort = false)
-        {
-            return _providerCache.GetFirst(isShort);
-        }
-
-        public static Provider GetFirst(Func<Provider, bool> match, bool isShort = false)
-        {
-            return _providerCache.GetFirst(match, isShort);
-        }
-
-        public static Provider GetFirstOrDefault(Func<Provider, bool> match, bool isShort = false)
-        {
-            return _providerCache.GetFirstOrDefault(match, isShort);
-        }
-
-        public static Provider GetLastOrDefault(Func<Provider, bool> match, bool isShort = false)
-        {
-            return _providerCache.GetLastOrDefault(match, isShort);
-        }
-
-        public static List<Provider> GetWhere(Predicate<Provider> match, bool isShort = false)
-        {
-            return _providerCache.GetWhere(match, isShort);
-        }
-
-        ///<summary>Refreshes the cache and returns it as a DataTable. This will refresh the ClientWeb's cache and the ServerWeb's cache.</summary>
-        public static DataTable RefreshCache()
-        {
-            return GetTableFromCache(true);
-        }
-
-        ///<summary>Fills the local cache with the passed in DataTable.</summary>
-        public static void FillCacheFromTable(DataTable table)
-        {
-            _providerCache.FillCacheFromTable(table);
-        }
-
-        ///<summary>Always refreshes the ClientWeb's cache.</summary>
-        public static DataTable GetTableFromCache(bool doRefreshCache)
-        {
-            return _providerCache.GetTableFromCache(doRefreshCache);
-        }
-
-        #endregion
-
-        ///<summary>Gets list of all instructors.  Returns an empty list if none are found.</summary>
-        public static List<Provider> GetAll()
-        {
-            string command = "SELECT * FROM provider";
-            return Crud.ProviderCrud.SelectMany(command);
-        }
-
-        ///<summary></summary>
-        public static void Update(Provider provider)
-        {
-            Crud.ProviderCrud.Update(provider);
-        }
-
-        ///<summary></summary>
-        public static long Insert(Provider provider)
-        {
-            return Crud.ProviderCrud.Insert(provider);
-        }
-
-        /// <summary>This checks for the maximum number of provnum in the database and then returns the one directly after.  Not guaranteed to be a unique primary key.</summary>
+        /// <summary>
+        /// This checks for the maximum number of provnum in the database and then returns the one directly after.
+        /// Not guaranteed to be a unique primary key.
+        /// </summary>
         public static long GetNextAvailableProvNum()
         {
-            string command = "SELECT MAX(provNum) FROM provider";
-            return PIn.Long(Db.GetScalar(command)) + 1;
+            return DataConnection.ExecuteLong("SELECT MAX(provNum) FROM provider") + 1;
         }
 
-        ///<summary>Increments all (privider.ItemOrder)s that are >= the ItemOrder of the provider passed in 
-        ///but does not change the item order of the provider passed in.</summary>
-        public static void MoveDownBelow(Provider provider)
-        {
-            //Add 1 to all item orders equal to or greater than new provider's item order
-            Db.NonQ("UPDATE provider SET ItemOrder=ItemOrder+1"
-                + " WHERE ProvNum!=" + provider.ProvNum
-                + " AND ItemOrder>=" + provider.ItemOrder);
-        }
-
-        ///<summary>Only used from FormProvEdit if user clicks cancel before finishing entering a new provider.</summary>
-        public static void Delete(Provider prov)
-        {
-            string command = "DELETE from provider WHERE provnum = '" + prov.ProvNum.ToString() + "'";
-            Db.NonQ(command);
-        }
-
-        ///<summary>Gets table for the FormProviderSetup window.  Always orders by ItemOrder.</summary>
+        /// <summary>
+        /// Gets table for the FormProviderSetup window. Always orders by ItemOrder.
+        /// </summary>
         public static DataTable RefreshStandard()
         {
             string command = "SELECT Abbr,LName,FName,provider.IsHidden,provider.ItemOrder,provider.ProvNum,MAX(UserName) UserName,"//Max function used for Oracle compatability (some providers may have multiple user names).
@@ -231,391 +88,89 @@ namespace OpenDentBusiness
                 + "FROM provider "
                 + "LEFT JOIN userod ON userod.ProvNum=provider.ProvNum "//there can be multiple userods attached to one provider
                 + "LEFT JOIN (SELECT PriProv, COUNT(*) PatCountPri FROM patient "
-                    + "WHERE patient.PatStatus!=" + POut.Int((int)PatientStatus.Deleted) + " AND patient.PatStatus!=" + POut.Int((int)PatientStatus.Deceased) + " "
+                    + "WHERE patient.PatStatus!=" + (int)PatientStatus.Deleted + " AND patient.PatStatus!=" +  (int)PatientStatus.Deceased + " "
                     + "GROUP BY PriProv) patPri ON provider.ProvNum=patPri.PriProv  ";
             command += "LEFT JOIN (SELECT SecProv,COUNT(*) PatCountSec FROM patient "
-                + "WHERE patient.PatStatus!=" + POut.Int((int)PatientStatus.Deleted) + " AND patient.PatStatus!=" + POut.Int((int)PatientStatus.Deceased) + " "
+                + "WHERE patient.PatStatus!=" + (int)PatientStatus.Deleted + " AND patient.PatStatus!=" + (int)PatientStatus.Deceased + " "
                 + "GROUP BY SecProv) patSec ON provider.ProvNum=patSec.SecProv ";
             command += "GROUP BY Abbr,LName,FName,provider.IsHidden,provider.ItemOrder,provider.ProvNum,PatCountPri,PatCountSec,ProvStatus,IsHiddenReport ";
             command += "ORDER BY ItemOrder";
-            return Db.GetTable(command);
+            return DataConnection.ExecuteDataTable(command);
         }
 
-        ///<summary>Gets table for main provider edit list when in dental school mode.  Always orders alphabetically, but there will be lots of filters to get the list shorter.  Must be very fast because refreshes while typing.  selectAll will trump selectInstructors and always return all providers.</summary>
-        public static DataTable RefreshForDentalSchool(long schoolClassNum, string lastName, string firstName, string provNum, bool selectInstructors, bool selectAll)
-        {
-            string command = "SELECT Abbr,LName,FName,provider.IsHidden,provider.ItemOrder,provider.ProvNum,GradYear,IsInstructor,Descript,"
-                + "MAX(UserName) UserName,"//Max function used for Oracle compatability (some providers may have multiple user names).
-                + "PatCountPri,PatCountSec,ProvStatus,IsHiddenReport "
-                + "FROM provider LEFT JOIN schoolclass ON provider.SchoolClassNum=schoolclass.SchoolClassNum "
-                + "LEFT JOIN userod ON userod.ProvNum=provider.ProvNum "//there can be multiple userods attached to one provider
-                + "LEFT JOIN (SELECT PriProv, COUNT(*) PatCountPri FROM patient "
-                    + "WHERE patient.PatStatus!=" + POut.Int((int)PatientStatus.Deleted) + " AND patient.PatStatus!=" + POut.Int((int)PatientStatus.Deceased) + " "
-                    + "GROUP BY PriProv) pat ON provider.ProvNum=pat.PriProv ";
-            command += "LEFT JOIN (SELECT SecProv,COUNT(*) PatCountSec FROM patient "
-                + "WHERE patient.PatStatus!=" + POut.Int((int)PatientStatus.Deleted) + " AND patient.PatStatus!=" + POut.Int((int)PatientStatus.Deceased) + " "
-                + "GROUP BY SecProv) patSec ON provider.ProvNum=patSec.SecProv ";
-            command += "WHERE TRUE ";//This is here so that we can prevent nested if-statements
-            if (schoolClassNum > 0)
-            {
-                command += "AND provider.SchoolClassNum=" + POut.Long(schoolClassNum) + " ";
-            }
-            if (lastName != "")
-            {
-                command += "AND provider.LName LIKE '%" + POut.String(lastName) + "%' ";
-            }
-            if (firstName != "")
-            {
-                command += "AND provider.FName LIKE '%" + POut.String(firstName) + "%' ";
-            }
-            if (provNum != "")
-            {
-                command += "AND provider.ProvNum LIKE '%" + POut.String(provNum) + "%' ";
-            }
-            if (!selectAll)
-            {
-                command += "AND provider.IsInstructor=" + POut.Bool(selectInstructors) + " ";
-                if (!selectInstructors)
-                {
-                    command += "AND provider.SchoolClassNum!=0 ";
-                }
-            }
-            command += "GROUP BY Abbr,LName,FName,provider.IsHidden,provider.ItemOrder,provider.ProvNum,GradYear,IsInstructor,Descript,PatCountPri,PatCountSec "
-                + "ORDER BY LName,FName";
-            return Db.GetTable(command);
-        }
+        public static string GetAbbr(long provNum) => Provider.GetById(provNum)?.Abbr ?? "";
 
-        ///<summary>Gets list of all instructors.  Returns an empty list if none are found.</summary>
-        public static List<Provider> GetInstructors()
+        /// <summary>
+        /// Gets a list of providers from ListLong.
+        /// If none found or if either LName or FName are an empty string, returns an empty list.
+        /// There may be more than on provider with the same FName and LName so we will return a list of all such providers.
+        /// Usually only one will exist with the FName and LName provided so list returned will have count 0 or 1 normally.
+        /// Name match is not case sensitive.
+        /// </summary>
+        public static List<Provider> GetProvsByFLName(string lastName, string firstName)
         {
-            //No need to check RemotingRole; no call to db.
-            return GetWhere(x => x.IsInstructor);
-        }
-
-        public static List<Provider> GetChangedSince(DateTime changedSince)
-        {
-            string command = "SELECT * FROM provider WHERE DateTStamp > " + POut.DateT(changedSince);
-            //DataTable table=Db.GetTable(command);
-            //return TableToList(table);
-            return Crud.ProviderCrud.SelectMany(command);
-        }
-
-        ///<summary></summary>
-        public static string GetAbbr(long provNum)
-        {
-            //No need to check RemotingRole; no call to db.
-            Provider prov = _providerCache.GetFirstOrDefault(x => x.ProvNum == provNum);
-            if (prov == null)
-            {
-                return "";
-            }
-            return prov.Abbr;
-        }
-
-        ///<summary></summary>
-        public static string GetLName(long provNum, List<Provider> listProvs = null)
-        {
-            //No need to check RemotingRole; no call to db.
-            Provider provider;
-            if (listProvs == null)
-            {//Use the cache.
-                provider = GetLastOrDefault(x => x.ProvNum == provNum);
-            }
-            else
-            {//Use the custom list passed in.
-                provider = listProvs.LastOrDefault(x => x.ProvNum == provNum);
-            }
-            return (provider == null ? "" : provider.LName);
-        }
-
-        ///<summary>First Last, Suffix</summary>
-        public static string GetFormalName(long provNum)
-        {
-            //No need to check RemotingRole; no call to db.
-            Provider provider = GetLastOrDefault(x => x.ProvNum == provNum);
-            string retStr = "";
-            if (provider != null)
-            {
-                retStr = provider.FName + " " + provider.LName;
-                if (provider.Suffix != "")
-                {
-                    retStr += ", " + provider.Suffix;
-                }
-            }
-            return retStr;
-        }
-
-        ///<summary>Abbr - LName, FName (hidden).  For dental schools -- ProvNum - LName, FName (hidden).</summary>
-        public static string GetLongDesc(long provNum)
-        {
-            //No need to check RemotingRole; no call to db.
-            Provider provider = GetFirstOrDefault(x => x.ProvNum == provNum);
-            return (provider == null ? "" : provider.GetLongDesc());
-        }
-
-        ///<summary></summary>
-        public static Color GetColor(long provNum)
-        {
-            //No need to check RemotingRole; no call to db.
-            Provider prov = _providerCache.GetFirstOrDefault(x => x.ProvNum == provNum);
-            if (prov == null)
-            {
-                return Color.White;
-            }
-            return prov.ProvColor;
-        }
-
-        ///<summary></summary>
-        public static Color GetOutlineColor(long provNum)
-        {
-            //No need to check RemotingRole; no call to db.
-            Provider prov = _providerCache.GetFirstOrDefault(x => x.ProvNum == provNum);
-            if (prov == null)
-            {
-                return Color.Black;
-            }
-            return prov.OutlineColor;
-        }
-
-        ///<summary></summary>
-        public static bool GetIsSec(long provNum)
-        {
-            //No need to check RemotingRole; no call to db.
-            Provider prov = _providerCache.GetFirstOrDefault(x => x.ProvNum == provNum);
-            if (prov == null)
-            {
-                return false;
-            }
-            return prov.IsSecondary;
-        }
-
-        ///<summary>Gets a provider from ListLong.  If provnum is not valid, then it returns null.</summary>
-        public static Provider GetProv(long provNum)
-        {
-            //No need to check RemotingRole; no call to db.
-            return _providerCache.GetFirstOrDefault(x => x.ProvNum == provNum);
-        }
-
-        ///<summary>Gets all providers that have the matching prov nums from ListLong.  Returns an empty list if no matches.</summary>
-        public static List<Provider> GetProvsByProvNums(List<long> listProvNums, bool isShort = false)
-        {
-            //No need to check RemotingRole; no call to db.
-            return GetWhere(x => x.ProvNum.In(listProvNums), isShort);
-        }
-
-        ///<summary>Gets a list of providers from ListLong.  If none found or if either LName or FName are an empty string, returns an empty list.  There may be more than on provider with the same FName and LName so we will return a list of all such providers.  Usually only one will exist with the FName and LName provided so list returned will have count 0 or 1 normally.  Name match is not case sensitive.</summary>
-        public static List<Provider> GetProvsByFLName(string lName, string fName)
-        {
-            //No need to check RemotingRole; no call to db.
-            if (string.IsNullOrWhiteSpace(lName) || string.IsNullOrWhiteSpace(fName))
+            if (string.IsNullOrWhiteSpace(lastName) || 
+                string.IsNullOrWhiteSpace(firstName))
             {
                 return new List<Provider>();
             }
-            //GetListLong already returns a copy of the prov from the cache, no need to .Copy
-            return Providers.GetWhere(x => x.LName.ToLower() == lName.ToLower() && x.FName.ToLower() == fName.ToLower());
+
+            return Provider.All().Where(x => x.LastName.ToLower() == lastName.ToLower() && x.FirstName.ToLower() == firstName.ToLower()).ToList();
         }
 
-        ///<summary>Gets a list of providers from ListLong with either the NPI provided or a blank NPI and the Medicaid ID provided.
-        ///medicaidId can be blank.  If the npi param is blank, or there are no matching provs, returns an empty list.
-        ///Shouldn't be two separate functions or we would have to compare the results of the two lists.</summary>
-        public static List<Provider> GetProvsByNpiOrMedicaidId(string npi, string medicaidId)
+        /// <summary>
+        /// Gets a list of providers from ListLong with either the NPI provided or a blank NPI and the Medicaid ID provided. medicaidId can be blank.
+        /// If the npi param is blank, or there are no matching provs, returns an empty list.
+        /// Shouldn't be two separate functions or we would have to compare the results of the two lists.
+        /// </summary>
+        public static IEnumerable<Provider> GetProvsByNpiOrMedicaidId(string nationalProviderId, string medicaidId)
         {
-            //No need to check RemotingRole; no call to db.
-            List<Provider> retval = new List<Provider>();
-            if (npi == "")
-            {
-                return retval;
-            }
-            List<Provider> listProvs = Providers.GetDeepCopy();
-            for (int i = 0; i < listProvs.Count; i++)
+            if (string.IsNullOrEmpty(nationalProviderId)) yield break;
+
+            foreach (var provider in Provider.All())
             {
                 //if the prov has a NPI set and it's a match, add this prov to the list
-                if (listProvs[i].NationalProvID != "")
+                if (provider.NationalProviderId != "")
                 {
-                    if (listProvs[i].NationalProvID.Trim().ToLower() == npi.Trim().ToLower())
+                    if (provider.NationalProviderId.Trim().ToLower() == nationalProviderId.Trim().ToLower())
                     {
-                        retval.Add(listProvs[i].Copy());
+                        yield return provider;
                     }
                 }
                 else
                 {//if the NPI is blank and the Medicaid ID is set and it's a match, add this prov to the list
-                    if (listProvs[i].MedicaidID != ""
-                        && listProvs[i].MedicaidID.Trim().ToLower() == medicaidId.Trim().ToLower())
+                    if (provider.MedicaidID != "" && provider.MedicaidID.Trim().ToLower() == medicaidId.Trim().ToLower())
                     {
-                        retval.Add(listProvs[i].Copy());
+                        yield return provider;
                     }
                 }
             }
-            return retval;
-        }
-
-        ///<summary>Gets all providers associated to users that have a clinic set to the clinic passed in.  Passing in 0 will get a list of providers not assigned to any clinic or to any users.</summary>
-        public static List<Provider> GetProvsByClinic(long clinicNum)
-        {
-            //No need to check RemotingRole; no call to db.
-            List<Provider> listProvsWithClinics = new List<Provider>();
-            List<User> listUsersShort = User.All();
-            for (int i = 0; i < listUsersShort.Count; i++)
-            {
-                if (!listUsersShort[i].ProviderId.HasValue) continue;
-
-                Provider prov = Providers.GetProv(listUsersShort[i].ProviderId.Value);
-                if (prov == null)
-                {
-                    continue;
-                }
-                var listUserClinics = ClinicUser.GetForUser(listUsersShort[i].Id);
-                //If filtering by a specific clinic, make sure the clinic matches the clinic passed in.
-                //If the user is associated to multiple clinics we check to make sure one of them isn't the clinic in question.
-                if (clinicNum > 0 && !listUserClinics.Any(x => x.ClinicId == clinicNum))
-                {
-                    continue;
-                }
-                if (listUsersShort[i].ClinicId > 0)
-                {//User is associated to a clinic, add the provider to the list of provs with clinics.
-                    listProvsWithClinics.Add(prov);
-                }
-            }
-            if (clinicNum == 0)
-            {//Return the list of providers without clinics.
-             //We need to find all providers not associated to a clinic (via userod) and also include all providers not even associated to a user.
-             //Since listProvsWithClinics is comprised of all providers associated to a clinic, simply loop through the provider cache and remove providers present in listProvsWithClinics.
-                List<Provider> listProvsUnassigned = Providers.GetDeepCopy(true);
-                for (int i = listProvsUnassigned.Count - 1; i >= 0; i--)
-                {
-                    for (int j = 0; j < listProvsWithClinics.Count; j++)
-                    {
-                        if (listProvsWithClinics[j].ProvNum == listProvsUnassigned[i].ProvNum)
-                        {
-                            listProvsUnassigned.RemoveAt(i);
-                            break;
-                        }
-                    }
-                }
-                return listProvsUnassigned;
-            }
-            else
-            {
-                return listProvsWithClinics;
-            }
-        }
-
-        ///<summary>Gets all providers from the database.  Doesn't use the cache.</summary>
-        public static List<Provider> GetProvsNoCache()
-        {
-            string command = "SELECT * FROM provider";
-            return Crud.ProviderCrud.SelectMany(command);
-
-        }
-
-        ///<summary>Gets a provider from the List.  If EcwID is not found, then it returns null.</summary>
-        public static Provider GetProvByEcwID(string eID)
-        {
-            //No need to check RemotingRole; no call to db.
-            if (eID == "")
-            {
-                return null;
-            }
-            Provider provider = GetFirstOrDefault(x => x.EcwID == eID);
-            if (provider != null)
-            {
-                return provider;
-            }
-            //If using eCW, a provider might have been added from the business layer.
-            //The UI layer won't know about the addition.
-            //So we need to refresh if we can't initially find the prov.
-            RefreshCache();
-            return GetFirstOrDefault(x => x.EcwID == eID);
-        }
-
-        /// <summary>Takes a provNum. Normally returns that provNum. If in Orion mode, returns the user's ProvNum, if that user is a primary provider. Otherwise, in Orion Mode, returns 0.</summary>
-        public static long GetOrionProvNum(long providerId)
-        {
-            //if (Programs.UsingOrion)
-            //{
-            //    var user = Security.CurrentUser;
-            //    if (user != null && user.ProviderId.HasValue)
-            //    {
-            //        var provider = Providers.GetProv(user.ProviderId.Value);
-            //        if (provider != null)
-            //        {
-            //            if (!provider.IsSecondary)
-            //            {
-            //                return user.ProviderId.Value;
-            //            }
-            //        }
-            //    }
-            //    return 0;
-            //}
-            return providerId;
-        }
-
-        ///<summary>Within the regular list of visible providers.  Will return -1 if the specified provider is not in the list.</summary>
-        public static int GetIndex(long provNum)
-        {
-            //No need to check RemotingRole; no call to db.
-            return _providerCache.GetFindIndex(x => x.ProvNum == provNum, true);
         }
 
         public static List<User> GetAttachedUsers(long provNum) => User.GetByProvider(provNum);
 
-        ///<summary>If useClinic, then clinicInsBillingProv will be used.  Otherwise, the pref for the practice.  Either way, there are three different choices for getting the billing provider.  One of the three is to use the treating provider, so supply that as an argument.  It will return a valid provNum unless the supplied treatProv was invalid.</summary>
-        public static long GetBillingProvNum(long treatProv, long clinicNum)
-        {//,bool useClinic,int clinicInsBillingProv){
-         //No need to check RemotingRole; no call to db.
-            long clinicInsBillingProv = 0;
-            bool useClinic = false;
-            if (clinicNum > 0)
-            {
-                useClinic = true;
-                clinicInsBillingProv = Clinic.GetById(clinicNum).InsuranceBillingProviderId.GetValueOrDefault();
-            }
-            if (useClinic)
-            {
-                if (clinicInsBillingProv == 0)
-                {//default=0
-                    return Preference.GetLong(PreferenceName.PracticeDefaultProv);
-                }
-                else if (clinicInsBillingProv == -1)
-                {//treat=-1
-                    return treatProv;
-                }
-                else
-                {
-                    return clinicInsBillingProv;
-                }
-            }
-            else
-            {
-                if (Preference.GetLong(PreferenceName.InsBillingProv) == 0)
-                {//default=0
-                    return Preference.GetLong(PreferenceName.PracticeDefaultProv);
-                }
-                else if (Preference.GetLong(PreferenceName.InsBillingProv) == -1)
-                {//treat=-1
-                    return treatProv;
-                }
-                else
-                {
-                    return Preference.GetLong(PreferenceName.InsBillingProv);
-                }
-            }
-        }
+        /// <summary>
+        /// If useClinic, then clinicInsBillingProv will be used. 
+        /// Otherwise, the pref for the practice. 
+        /// Either way, there are three different choices for getting the billing provider. 
+        /// One of the three is to use the treating provider, so supply that as an argument. 
+        /// It will return a valid provNum unless the supplied treatProv was invalid.
+        /// </summary>
+        public static long GetBillingProviderId(long treatingProviderId, long? clinicId)
+        {
+            long providerId = treatingProviderId;
 
-        /*
-		///<summary>Used when adding a provider to get the next available itemOrder.</summary>
-		public static int GetNextItemOrder(){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetInt(MethodBase.GetCurrentMethod());
-			}
-			//Is this valid in Oracle??
-			string command="SELECT MAX(ItemOrder) FROM provider";
-			DataTable table=Db.GetTable(command);
-			if(table.Rows.Count==0){
-				return 0;
-			}
-			return PIn.Int(table.Rows[0][0].ToString())+1;
-		}*/
+            if (clinicId.HasValue)
+            {
+                var clinic = Clinic.GetById(clinicId.Value);
+                if (clinic != null && clinic.InsuranceBillingProviderId.HasValue)
+                {
+                    providerId = clinic.InsuranceBillingProviderId.Value;
+                }
+            }
+
+            return providerId;
+        }
 
         ///<summary>Returns list of providers that are either not restricted to a clinic, or are restricted to the ClinicNum provided. 
         ///Passing ClinicNum=0 returns all unrestricted providers. Ordered by provider.Abbr.</summary>
@@ -626,53 +181,25 @@ namespace OpenDentBusiness
             Dictionary<long, List<long>> dictProvUsers = User.AllProviders().GroupBy(x => x.ProviderId.Value)
                 .ToDictionary(x => x.Key, x => x.Select(y => y.Id).ToList());
             HashSet<long> hashSetProvsRestrictedOtherClinic = new HashSet<long>(ProviderClinic.GetProvsRestrictedToOtherClinics(clinicNum).Select(x => x.ProviderId));
-            return Providers.GetWhere(x =>
-                (!dictProvUsers.ContainsKey(x.ProvNum) //provider not associated to any users.
-                || dictProvUsers[x.ProvNum].Any(y => dictUserClinics[y].Count == 0) //provider associated with user not restricted to any clinics
-                || dictProvUsers[x.ProvNum].Any(y => dictUserClinics[y].Contains(clinicNum))) //provider associated to user restricted to clinic at hand
-                && !hashSetProvsRestrictedOtherClinic.Contains(x.ProvNum)
-                , true).OrderBy(x => x.ItemOrder).ToList();
+            return Provider.All().Where(x =>
+                (!dictProvUsers.ContainsKey(x.Id) //provider not associated to any users.
+                || dictProvUsers[x.Id].Any(y => dictUserClinics[y].Count == 0) //provider associated with user not restricted to any clinics
+                || dictProvUsers[x.Id].Any(y => dictUserClinics[y].Contains(clinicNum))) //provider associated to user restricted to clinic at hand
+                && !hashSetProvsRestrictedOtherClinic.Contains(x.Id)).ToList();
         }
 
         ///<Summary>Used once in the Provider Select window to warn user of duplicate Abbrs.</Summary>
         public static string GetDuplicateAbbrs()
         {
-            string command = "SELECT Abbr FROM provider WHERE ProvStatus!=" + POut.Int((int)ProviderStatus.Deleted);
+            string command = "SELECT Abbr FROM provider WHERE ProvStatus!=" + (int)ProviderStatus.Deleted;
             List<string> listDuplicates = Db.GetListString(command).GroupBy(x => x).Where(x => x.Count() > 1).Select(x => x.Key).ToList();
             return string.Join(",", listDuplicates);//returns empty string when listDuplicates is empty
         }
 
-        ///<summary>Returns the default practice provider. Returns null if there is no default practice provider set.</summary>
-        public static Provider GetDefaultProvider()
-        {
-            //No need to check RemotingRole; no call to db.
-            return GetDefaultProvider(0);
-        }
-
-        ///<summary>Returns the default provider for the clinic if it exists, else returns the default practice provider.  
-        ///Pass 0 to get practice default.  Can return null if no clinic or practice default provider found.</summary>
-        public static Provider GetDefaultProvider(long clinicNum)
-        {
-            //No need to check RemotingRole; no call to db.
-            Clinic clinic = Clinic.GetById(clinicNum);
-            Provider provider = null;
-            if (clinic != null && clinic.ProviderId.HasValue)
-            {//the clinic exists
-                provider = Providers.GetProv(clinic.ProviderId.Value);
-            }
-            if (provider == null)
-            {//If not using clinics or if the specified clinic does not have a valid default provider set.
-                provider = Providers.GetProv(Preference.GetLong(PreferenceName.PracticeDefaultProv));//Try to get the practice default.
-            }
-            return provider;
-        }
-
         public static DataTable GetDefaultPracticeProvider()
         {
-            string command = @"SELECT FName,LName,Suffix,StateLicense
-				FROM provider
-        WHERE provnum=" + Preference.GetString(PreferenceName.PracticeDefaultProv);
-            return Db.GetTable(command);
+            return DataConnection.ExecuteDataTable(
+                "SELECT FName,LName,Suffix,StateLicense FROM provider WHERE provnum=" + Preference.GetLong(PreferenceName.PracticeDefaultProv));
         }
 
         ///<summary>We should merge these results with GetDefaultPracticeProvider(), but
@@ -680,11 +207,8 @@ namespace OpenDentBusiness
         ///faster to do as we are just moving the queries down in to the business layer for now.</summary>
         public static DataTable GetDefaultPracticeProvider2()
         {
-            string command = @"SELECT FName,LName,Specialty " +
-                "FROM provider WHERE provnum=" +
-                POut.Long(Preference.GetLong(PreferenceName.PracticeDefaultProv));
-            //Convert.ToInt32(((Pref)PrefC.HList["PracticeDefaultProv"]).ValueString);
-            return Db.GetTable(command);
+            return DataConnection.ExecuteDataTable(
+                "SELECT FName,LName,Specialty FROM provider WHERE provnum=" + Preference.GetLong(PreferenceName.PracticeDefaultProv));
         }
 
         ///<summary>We should merge these results with GetDefaultPracticeProvider(), but
@@ -692,10 +216,8 @@ namespace OpenDentBusiness
         ///faster to do as we are just moving the queries down in to the business layer for now.</summary>
         public static DataTable GetDefaultPracticeProvider3()
         {
-            string command = @"SELECT NationalProvID " +
-                "FROM provider WHERE provnum=" +
-                POut.Long(Preference.GetLong(PreferenceName.PracticeDefaultProv));
-            return Db.GetTable(command);
+            return DataConnection.ExecuteDataTable(
+                "SELECT NationalProvID FROM provider WHERE provnum=" + Preference.GetLong(PreferenceName.PracticeDefaultProv));
         }
 
         public static DataTable GetPrimaryProviders(long PatNum)
@@ -703,7 +225,7 @@ namespace OpenDentBusiness
             string command = @"SELECT Fname,Lname from provider
                         WHERE provnum in (select priprov from 
                         patient where patnum = " + PatNum + ")";
-            return Db.GetTable(command);
+            return DataConnection.ExecuteDataTable(command);
         }
 
         ///<summary>Returns the patient's last seen hygienist.  Returns null if no hygienist has been seen.</summary>
@@ -712,191 +234,94 @@ namespace OpenDentBusiness
             //Look at all completed appointments and get the most recent secondary provider on it.
             string command = @"SELECT appointment.ProvHyg
 				FROM appointment
-				WHERE appointment.PatNum=" + POut.Long(patNum) + @"
+				WHERE appointment.PatNum=" + patNum + @"
 				AND appointment.ProvHyg!=0
-				AND appointment.AptStatus=" + POut.Int((int)ApptStatus.Complete) + @"
-				ORDER BY AptDateTime DESC";
+				AND appointment.AptStatus=" + (int)ApptStatus.Complete + " " +
+                "ORDER BY AptDateTime DESC";
             List<long> listPatHygNums = Db.GetListLong(command);
             //Now that we have all hygienists for this patient.  Lets find the last non-hidden hygienist and return that one.
-            List<Provider> listProviders = Providers.GetDeepCopy(true);
-            List<long> listProvNums = listProviders.Select(x => x.ProvNum).Distinct().ToList();
+            var listProviders = Provider.All();
+            List<long> listProvNums = listProviders.Select(x => x.Id).Distinct().ToList();
             long lastHygNum = listPatHygNums.FirstOrDefault(x => listProvNums.Contains(x));
-            return listProviders.FirstOrDefault(x => x.ProvNum == lastHygNum);
+            return listProviders.FirstOrDefault(x => x.Id == lastHygNum);
         }
 
-        ///<summary>Gets a list of providers based for the patient passed in based on the WebSchedProviderRule preference.</summary>
-        public static List<Provider> GetProvidersForWebSched(long patNum)
+        /// <summary>
+        /// Currently only used for Dental Schools and will only return Providers.ListShort if Dental Schools is not active. 
+        /// Otherwise this will return a filtered provider list.
+        /// </summary>
+        public static IEnumerable<Provider> GetFilteredProviderList(long? providerId, string lastName, string firstName)
         {
-            //No need to check RemotingRole; no call to db.
-            List<Provider> listProviders = Providers.GetDeepCopy(true);
-            WebSchedProviderRules providerRule = (WebSchedProviderRules)Preference.GetInt(PreferenceName.WebSchedProviderRule);
-            switch (providerRule)
-            {
-                case WebSchedProviderRules.PrimaryProvider:
-                    Patient patPri = Patients.GetPat(patNum);
-                    Provider patPriProv = listProviders.Find(x => x.ProvNum == patPri.PriProv);
-                    if (patPriProv == null)
-                    {
-                        throw new Exception(Lans.g("Providers", "Invalid primary provider set for patient."));
-                    }
-                    return new List<Provider>() { patPriProv };
-                case WebSchedProviderRules.SecondaryProvider:
-                    Patient patSec = Patients.GetPat(patNum);
-                    Provider patSecProv = listProviders.Find(x => x.ProvNum == patSec.SecProv);
-                    if (patSecProv == null)
-                    {
-                        throw new Exception(Lans.g("Providers", "No secondary provider set for patient."));
-                    }
-                    return new List<Provider>() { patSecProv };
-                case WebSchedProviderRules.LastSeenHygienist:
-                    Provider lastHygProvider = GetLastSeenHygienistForPat(patNum);
-                    if (lastHygProvider == null)
-                    {
-                        throw new Exception(Lans.g("Providers", "No last seen hygienist found for patient."));
-                    }
-                    return new List<Provider>() { lastHygProvider };
-                case WebSchedProviderRules.FirstAvailable:
-                default:
-                    return listProviders;
-            }
-        }
+            lastName = lastName.Trim();
+            firstName = firstName.Trim();
 
-        ///<summary>Gets a list of providers that are allowed to have new patient appointments scheduled for them.</summary>
-        public static List<Provider> GetProvidersForWebSchedNewPatAppt()
-        {
-            //No need to check RemotingRole; no call to db.
-            //Currently all providers are allowed to be considered for new patient appointments.
-            //This follows the "WebSchedProviderRules.FirstAvailable" logic for recall Web Sched appointments which is what Nathan agreed upon.
-            //This method is here so that we have a central location to go and get these types of providers in case we change this in the future.
-            return Providers.GetWhere(x => !x.IsNotPerson, true);//Make sure that we only return not is not persons.
-        }
-
-        public static List<long> GetChangedSinceProvNums(DateTime changedSince)
-        {
-            string command = "SELECT ProvNum FROM provider WHERE DateTStamp > " + POut.DateT(changedSince);
-            DataTable dt = Db.GetTable(command);
-            List<long> provnums = new List<long>(dt.Rows.Count);
-            for (int i = 0; i < dt.Rows.Count; i++)
+            foreach (var provider in Provider.All())
             {
-                provnums.Add(PIn.Long(dt.Rows[i]["ProvNum"].ToString()));
-            }
-            return provnums;
-        }
-
-        ///<summary>Used along with GetChangedSinceProvNums</summary>
-        public static List<Provider> GetMultProviders(List<long> provNums)
-        {
-            string strProvNums = "";
-            DataTable table;
-            if (provNums.Count > 0)
-            {
-                for (int i = 0; i < provNums.Count; i++)
-                {
-                    if (i > 0)
-                    {
-                        strProvNums += "OR ";
-                    }
-                    strProvNums += "ProvNum='" + provNums[i].ToString() + "' ";
-                }
-                string command = "SELECT * FROM provider WHERE " + strProvNums;
-                table = Db.GetTable(command);
-            }
-            else
-            {
-                table = new DataTable();
-            }
-            Provider[] multProviders = Crud.ProviderCrud.TableToList(table).ToArray();
-            List<Provider> providerList = new List<Provider>(multProviders);
-            return providerList;
-        }
-
-        /// <summary>Currently only used for Dental Schools and will only return Providers.ListShort if Dental Schools is not active.  Otherwise this will return a filtered provider list.</summary>
-        public static List<Provider> GetFilteredProviderList(long provNum, string lName, string fName, long classNum)
-        {
-            //No need to check RemotingRole; no call to db.
-            List<Provider> listProvs = Providers.GetDeepCopy(true);
-            if (Preference.GetBool(PreferenceName.EasyHideDentalSchools))
-            {//This is here to save doing the logic below for users who have no way to filter the provider picker list.
-                return listProvs;
-            }
-            for (int i = listProvs.Count - 1; i >= 0; i--)
-            {
-                if (provNum != 0 && !listProvs[i].ProvNum.ToString().Contains(provNum.ToString()))
-                {
-                    listProvs.Remove(listProvs[i]);
+                if (providerId != null && provider.Id != providerId) 
                     continue;
-                }
-                if (!String.IsNullOrWhiteSpace(lName) && !listProvs[i].LName.Contains(lName))
-                {
-                    listProvs.Remove(listProvs[i]);
+
+                if (lastName.Length > 0 && !provider.LastName.Contains(lastName))
                     continue;
-                }
-                if (!String.IsNullOrWhiteSpace(fName) && !listProvs[i].FName.Contains(fName))
-                {
-                    listProvs.Remove(listProvs[i]);
+
+                if (firstName.Length > 0 && !provider.FirstName.Contains(firstName))
                     continue;
-                }
-                if (classNum != 0 && classNum != listProvs[i].SchoolClassNum)
-                {
-                    listProvs.Remove(listProvs[i]);
-                    continue;
-                }
+
+                yield return provider;
             }
-            return listProvs;
         }
 
-        ///<summary>Returns a dictionary, with the key being ProvNum and the value being the production goal amount.</summary>
-        public static Dictionary<long, decimal> GetProductionGoalForProviders(List<long> listProvNums, List<long> listOpNums, DateTime start, DateTime end)
+        /// <summary>
+        /// Returns a dictionary, with the key being ProvNum and the value being the production goal amount.
+        /// </summary>
+        public static Dictionary<long, decimal> GetProductionGoalForProviders(List<long> providerIds, List<long> operatoryIds, DateTime start, DateTime end)
         {
-            //No need to check RemotingRole; no call to db.
-            Dictionary<long, double> dictProvSchedHrs = Schedules.GetHoursSchedForProvsInRange(listProvNums, listOpNums, start, end);
-            Dictionary<long, decimal> retVal = new Dictionary<long, decimal>();
-            foreach (KeyValuePair<long, double> kvp in dictProvSchedHrs)
+            var scheduledProviders = Schedules.GetHoursSchedForProvsInRange(providerIds, operatoryIds, start, end);
+
+            var productionGoals = new Dictionary<long, decimal>();
+
+            foreach (var kvp in scheduledProviders)
             {
-                Provider prov = GetProv(kvp.Key);
-                if (prov != null)
+                var provider = Provider.GetById(kvp.Key);
+
+                if (provider != null)
                 {
-                    retVal[prov.ProvNum] = (decimal)(kvp.Value * prov.HourlyProdGoalAmt);
+                    productionGoals[provider.Id] = (decimal)(kvp.Value * provider.HourlyProducationGoal);
                 }
             }
-            return retVal;
+
+            return productionGoals;
         }
 
-        ///<summary>Removes a provider from the future schedule.  Currently called after a provider is hidden.</summary>
-        public static void RemoveProvFromFutureSchedule(long provNum)
+        /// <summary>
+        /// Removes a provider from the future schedule. Currently called after a provider is hidden.
+        /// </summary>
+        public static void RemoveProvFromFutureSchedule(long providerId)
         {
-            //No need to check RemotingRole; no call to db.
-            if (provNum < 1)
-            {//Invalid provNum, nothing to do.
+            if (providerId < 1) return;
+
+            RemoveProvsFromFutureSchedule(
+                new List<long>
+                {
+                    providerId
+                });
+        }
+
+        /// <summary>
+        /// Removes the providers from the future schedule.  Currently called from DBM to clean up hidden providers still on the schedule.
+        /// </summary>
+        public static void RemoveProvsFromFutureSchedule(List<long> providerIds)
+        {
+            if (providerIds==null || providerIds.Count == 0)
+            {
                 return;
             }
-            List<long> provNums = new List<long>();
-            provNums.Add(provNum);
-            RemoveProvsFromFutureSchedule(provNums);
-        }
 
-        ///<summary>Removes the providers from the future schedule.  Currently called from DBM to clean up hidden providers still on the schedule.</summary>
-        public static void RemoveProvsFromFutureSchedule(List<long> provNums)
-        {
-            string provs = "";
-            for (int i = 0; i < provNums.Count; i++)
-            {
-                if (provNums[i] < 1)
-                {//Invalid provNum, nothing to do.
-                    continue;
-                }
-                if (i > 0)
-                {
-                    provs += ",";
-                }
-                provs += provNums[i].ToString();
-            }
-            if (provs == "")
-            {//No valid provNums were passed in.  Simply return.
-                return;
-            }
-            string command = "SELECT ScheduleNum FROM schedule WHERE ProvNum IN (" + provs + ") AND SchedDate > " + DbHelper.Now();
-            DataTable table = Db.GetTable(command);
+            var provs = string.Join(", ", providerIds);
+
+            DataTable table = 
+                DataConnection.ExecuteDataTable(
+                    "SELECT ScheduleNum FROM schedule WHERE ProvNum IN (" + provs + ") AND SchedDate > " + DbHelper.Now());
+
             List<string> listScheduleNums = new List<string>();//Used for deleting scheduleops below
             for (int i = 0; i < table.Rows.Count; i++)
             {
@@ -904,50 +329,39 @@ namespace OpenDentBusiness
                 DeletedObjects.SetDeleted(DeletedObjectType.ScheduleProv, PIn.Long(table.Rows[i]["ScheduleNum"].ToString()));
                 listScheduleNums.Add(table.Rows[i]["ScheduleNum"].ToString());
             }
+
             if (listScheduleNums.Count != 0)
             {
-                command = "DELETE FROM scheduleop WHERE ScheduleNum IN(" + POut.String(String.Join(",", listScheduleNums)) + ")";
-                Db.NonQ(command);
+                DataConnection.ExecuteNonQuery(
+                    "DELETE FROM scheduleop WHERE ScheduleNum IN(" + string.Join(",", listScheduleNums) + ")");
             }
-            command = "DELETE FROM schedule WHERE ProvNum IN (" + provs + ") AND SchedDate > " + DbHelper.Now();
-            Db.NonQ(command);
+
+            DataConnection.ExecuteNonQuery(
+                "DELETE FROM schedule WHERE ProvNum IN (" + provs + ") AND SchedDate > " + DbHelper.Now());
         }
 
-        public static bool IsAttachedToUser(long provNum)
+        /// <summary>
+        /// Used to check if a specialty is in use when user is trying to hide it.
+        /// </summary>
+        public static bool IsSpecialtyInUse(long definitionId)
         {
-            string command = "SELECT COUNT(*) FROM userod,provider "
-                    + "WHERE userod.ProvNum=provider.ProvNum "
-                    + "AND provider.provNum=" + POut.Long(provNum);
-            int count = PIn.Int(Db.GetCount(command));
-            if (count > 0)
-            {
-                return true;
-            }
-            return false;
-        }
-
-        ///<summary>Used to check if a specialty is in use when user is trying to hide it.</summary>
-        public static bool IsSpecialtyInUse(long defNum)
-        {
-            string command = "SELECT COUNT(*) FROM provider WHERE Specialty=" + POut.Long(defNum);
-            if (Db.GetCount(command) == "0")
-            {
-                return false;
-            }
-            return true;
+            return DataConnection.ExecuteLong("SELECT COUNT(*) FROM `providers` WHERE `specialty_id` = " + definitionId) > 0;
         }
 
         ///<summary>Used to get a list of providers that are scheduled for today.  
         ///Pass in specific clinicNum for providers scheduled in specific clinic, clinicNum of -1 for all clinics</summary>
-        public static List<Provider> GetProvsScheduledToday(long clinicNum = -1)
+        public static List<Provider> GetProvsScheduledToday(long clinicId = -1)
         {
-            List<Schedule> listSchedulesForDate = Schedules.GetAllForDateAndType(DateTime.Today, ScheduleType.Provider);
-            if (clinicNum >= 0)
+            var schedulesForToday = Schedules.GetAllForDateAndType(DateTime.Today, ScheduleType.Provider);
+
+            if (clinicId >= 0)
             {
-                listSchedulesForDate.FindAll(x => x.ClinicNum == clinicNum);
+                schedulesForToday.FindAll(x => x.ClinicNum == clinicId);
             }
-            List<long> listProvNums = listSchedulesForDate.Select(x => x.ProvNum).ToList();
-            return Providers.GetMultProviders(listProvNums);
+
+            var providerIds = schedulesForToday.Select(x => x.ProvNum).ToList();
+
+            return Provider.GetByIds(providerIds).ToList();
         }
 
         ///<summary>Provider merge tool.  Returns the number of rows changed when the tool is used.</summary>
@@ -1019,38 +433,6 @@ namespace OpenDentBusiness
             return retVal;
         }
 
-        public static long CountPats(long provNum)
-        {
-            string command = "SELECT COUNT(DISTINCT patient.PatNum) FROM patient WHERE (patient.PriProv=" + POut.Long(provNum)
-                + " OR patient.SecProv=" + POut.Long(provNum) + ")"
-                + " AND patient.PatStatus=0";
-            string retVal = Db.GetScalar(command);
-            return PIn.Long(retVal);
-        }
 
-        public static long CountClaims(long provNum)
-        {
-            string command = "SELECT COUNT(DISTINCT claim.ClaimNum) FROM claim WHERE claim.ProvBill=" + POut.Long(provNum)
-                + " OR claim.ProvTreat=" + POut.Long(provNum);
-            string retVal = Db.GetScalar(command);
-            return PIn.Long(retVal);
-        }
-
-        ///<summary>Gets the 0 provider for reports that display payments.</summary>
-        public static Provider GetUnearnedProv()
-        {
-            return new Provider()
-            {
-                ProvNum = 0,
-                Abbr = Lans.g("Providers", "No Provider")
-            };
-        }
-
-        ///<summary>Only for reports. Includes all providers where IsHiddenReport = 0 and ProvStatus != Deleted.</summary>
-        public static List<Provider> GetListReports()
-        {
-            //No need to check RemotingRole; no call to db.
-            return GetWhere(x => !x.IsHiddenReport && x.ProvStatus != ProviderStatus.Deleted);
-        }
     }
 }

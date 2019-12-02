@@ -57,12 +57,12 @@ namespace OpenDental
             textAge.Text = PatientLogic.DateToAgeString(_patientMaster.Birthdate, _patientMaster.DateTimeDeceased);
             //We intentionally don't synch the patient's provider since the clone feature is so the clone can be assigned to a different provider for tracking production.
             _provNumSelected = Preference.GetLong(PreferenceName.PracticeDefaultProv);
-            _listProviders = Providers.GetDeepCopy(true);
+            _listProviders = Provider.All().ToList();
             comboPriProv.Items.Clear();
             for (int i = 0; i < _listProviders.Count; i++)
             {
                 comboPriProv.Items.Add(_listProviders[i].GetLongDesc());
-                if (_listProviders[i].ProvNum == _provNumSelected)
+                if (_listProviders[i].Id == _provNumSelected)
                 {
                     comboPriProv.SelectedIndex = i;
                 }
@@ -70,11 +70,11 @@ namespace OpenDental
             if (_provNumSelected == 0)
             {
                 comboPriProv.SelectedIndex = 0;
-                _provNumSelected = _listProviders[0].ProvNum;
+                _provNumSelected = _listProviders[0].Id;
             }
             if (comboPriProv.SelectedIndex == -1)
             {
-                comboPriProv.Text = Providers.GetLongDesc(_provNumSelected);
+                comboPriProv.Text = Provider.GetById(_provNumSelected).GetLongDesc();
             }
             labelSpecialty.Visible = true;
             comboSpecialty.Visible = true;
@@ -199,13 +199,13 @@ namespace OpenDental
             {
                 return;
             }
-            comboPriProv.SelectedIndex = _listProviders.FindIndex(x => x.ProvNum == FormPP.SelectedProvNum);
+            comboPriProv.SelectedIndex = _listProviders.FindIndex(x => x.Id == FormPP.SelectedProvNum);
             _provNumSelected = FormPP.SelectedProvNum;
         }
 
         private void comboPriProv_SelectionChangeCommitted(object sender, EventArgs e)
         {
-            _provNumSelected = _listProviders[comboPriProv.SelectedIndex].ProvNum;
+            _provNumSelected = _listProviders[comboPriProv.SelectedIndex].Id;
         }
 
         ///<summary>The clinic combo box needs to get refilled every time the specialty changes.</summary>

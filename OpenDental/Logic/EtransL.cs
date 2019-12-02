@@ -681,7 +681,7 @@ namespace OpenDental
 						member.Pat.BillingType=Preference.GetLong(PreferenceName.PracticeDefaultBillType);
 						if(!Preference.GetBool(PreferenceName.PriProvDefaultToSelectProv)) {
 							//Set the patients primary provider to the practice default provider.
-							member.Pat.PriProv=Providers.GetDefaultProvider().ProvNum;
+							member.Pat.PriProv=Provider.GetDefault().Id;
 						}
 						member.Pat.ClinicNum=Clinics.ClinicId;
 						member.Pat.Guarantor=member.Pat.PatNum;

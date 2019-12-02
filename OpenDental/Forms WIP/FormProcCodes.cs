@@ -1086,7 +1086,7 @@ namespace OpenDental{
 				listCategories.SetSelected(i,true);
 			}
 			_listClinics=Clinic.GetByUser(Security.CurrentUser).ToList();
-			_listProviders=Providers.GetDeepCopy(true);
+			_listProviders=Provider.All().ToList();
 			_feeCache=Fees.GetCache();
 			_feeCache.BeginTransaction();
 			_colorProv=Defs.GetColor(DefinitionCategory.FeeColors,Defs.GetByExactName(DefinitionCategory.FeeColors,"Provider"));
@@ -1333,13 +1333,13 @@ namespace OpenDental{
 			long provider2Num=0;
 			long provider3Num=0;
 			if(comboProvider1.SelectedIndex>0) {
-				provider1Num=_listProviders[comboProvider1.SelectedIndex-1].ProvNum;
+				provider1Num=_listProviders[comboProvider1.SelectedIndex-1].Id;
 			}
 			if(comboProvider2.SelectedIndex>0) {
-				provider2Num=_listProviders[comboProvider2.SelectedIndex-1].ProvNum;
+				provider2Num=_listProviders[comboProvider2.SelectedIndex-1].Id;
 			}
 			if(comboProvider3.SelectedIndex>0) {
-				provider3Num=_listProviders[comboProvider3.SelectedIndex-1].ProvNum;
+				provider3Num=_listProviders[comboProvider3.SelectedIndex-1].Id;
 			}
 			//Clinic nums will be 0 for "Default" or "Off" value.
 			long clinic1Num=0;
@@ -1510,7 +1510,7 @@ namespace OpenDental{
 			if(e.Column==4) {
 				feeSched=_listFeeScheds[comboFeeSched1.SelectedIndex];
 				if(comboProvider1.SelectedIndex>0) {
-					provNum=_listProviders[comboProvider1.SelectedIndex-1].ProvNum;
+					provNum=_listProviders[comboProvider1.SelectedIndex-1].Id;
 				}
 				if(comboClinic1.SelectedIndex>0) {
 					clinicNum=_listClinics[comboClinic1.SelectedIndex-1].Id;
@@ -1523,7 +1523,7 @@ namespace OpenDental{
 				}
 				feeSched=_listFeeScheds[comboFeeSched2.SelectedIndex-1];
 				if(comboProvider2.SelectedIndex>0) {
-					provNum=_listProviders[comboProvider2.SelectedIndex-1].ProvNum;
+					provNum=_listProviders[comboProvider2.SelectedIndex-1].Id;
 				}
 				if(comboClinic2.SelectedIndex>0) {
 					clinicNum=_listClinics[comboClinic2.SelectedIndex-1].Id;
@@ -1536,7 +1536,7 @@ namespace OpenDental{
 				}
 				feeSched=_listFeeScheds[comboFeeSched3.SelectedIndex-1];
 				if(comboProvider3.SelectedIndex>0) {
-					provNum=_listProviders[comboProvider3.SelectedIndex-1].ProvNum;
+					provNum=_listProviders[comboProvider3.SelectedIndex-1].Id;
 				}
 				if(comboClinic3.SelectedIndex>0) {
 					clinicNum=_listClinics[comboClinic3.SelectedIndex-1].Id;
@@ -1968,12 +1968,15 @@ namespace OpenDental{
 		///<summary>Launches the Provider picker and lets the user pick a specific provider.
 		///Returns the index of the selected provider within the Provider Cache (short).  Returns -1 if the user cancels out of the window.</summary>
 		private int GetProviderIndexFromPicker() {
-			FormProviderPick FormP=new FormProviderPick();
-			FormP.ShowDialog();
-			if(FormP.DialogResult!=DialogResult.OK) {
-				return -1;
-			}
-			return Providers.GetIndex(FormP.SelectedProvNum);
+			//FormProviderPick FormP=new FormProviderPick();
+			//FormP.ShowDialog();
+			//if(FormP.DialogResult!=DialogResult.OK) {
+			//	return -1;
+			//}
+			//return Providers.GetIndex(FormP.SelectedProvNum);
+
+            // TODO: Fix me
+            return 0;
 		}
 
 		///<summary>Launches the Clinics window and lets the user pick a specific clinic.

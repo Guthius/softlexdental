@@ -214,7 +214,7 @@ namespace OpenDental{
 			else {
 				checkIsGlobal.Checked=FeeSchedCur.IsGlobal;
 			}
-			_listProviders=Providers.GetDeepCopy(true);
+			_listProviders=Provider.All().ToList();
 		}
 
 		private void checkIsGlobal_Click(object sender,EventArgs e) {
@@ -251,7 +251,7 @@ namespace OpenDental{
 			}
 			string providersUsingFee="";
 			for(int i=0;i<_listProviders.Count;i++) {
-				if(FeeSchedCur.FeeSchedNum==_listProviders[i].FeeSched) {
+				if(FeeSchedCur.FeeSchedNum==_listProviders[i].FeeScheduleId) {
 					if(providersUsingFee!=""){//There is a name before this on the list
 						providersUsingFee+=", ";
 					}

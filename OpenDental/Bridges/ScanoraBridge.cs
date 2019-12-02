@@ -94,8 +94,8 @@ namespace OpenDental.Bridges
                 // format when it gets saved.
                 streamWriter.WriteLine("PATBD = " + patient.Birthdate.ToShortDateString());
 
-                streamWriter.WriteLine("PROVIDER1 = " + Providers.GetFormalName(patient.PriProv));
-                streamWriter.WriteLine("PROVIDER2 = " + Providers.GetFormalName(patient.SecProv));
+                streamWriter.WriteLine("PROVIDER1 = " + Provider.GetById(patient.PriProv).GetFormalName());
+                streamWriter.WriteLine("PROVIDER2 = " + Provider.GetById(patient.SecProv).GetFormalName());
                 streamWriter.WriteLine("ADDRESS1 = " + Tidy(patient.Address));
                 streamWriter.WriteLine("ADDRESS2 = " + Tidy(patient.Address2));
                 streamWriter.WriteLine("CITY = " + Tidy(patient.City));

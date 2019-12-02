@@ -175,9 +175,9 @@ namespace OpenDentBusiness.Eclaims
             }
             claim = Claims.GetClaim(claim.ClaimNum);//Refresh the claim since the status might have changed above.
             clinic = Clinic.GetById(claim.ClinicNum);
-            Provider providerFirst = Providers.GetFirst();//Used in order to preserve old behavior...  If this fails, then old code would have failed.
-            billProv = Providers.GetFirstOrDefault(x => x.ProvNum == claim.ProvBill) ?? providerFirst;
-            treatProv = Providers.GetFirstOrDefault(x => x.ProvNum == claim.ProvTreat) ?? providerFirst;
+            Provider providerFirst = Provider.GetDefault();//Used in order to preserve old behavior...  If this fails, then old code would have failed.
+            billProv = Provider.GetById(claim.ProvBill) ?? providerFirst;
+            treatProv = Provider.GetById(claim.ProvTreat) ?? providerFirst;
             insPlan = InsPlans.GetPlan(planNum, new List<InsPlan>());
             insSub = InsSubs.GetSub(insSubNum, new List<InsSub>());
             if (planNum2 > 0)
@@ -300,16 +300,16 @@ namespace OpenDentBusiness.Eclaims
 #endif
             }
             //B01 CDA provider number 9 AN
-            strb.Append(TidyAN(treatProv.NationalProvID, 9));//already validated
+            strb.Append(TidyAN(treatProv.NationalProviderId, 9));//already validated
                                                              //B02 (treating) provider office number 4 AN
-            strb.Append(TidyAN(treatProv.CanadianOfficeNum, 4));//already validated	
+            strb.Append(TidyAN(treatProv.CanadianOfficeNumber, 4));//already validated	
             if (carrierReceiver.CDAnetVersion != "02")
             { //version 04
               //B03 billing provider number 9 AN
               //might need to account for possible 5 digit prov id assigned by carrier
-                strb.Append(TidyAN(billProv.NationalProvID, 9));//already validated
+                strb.Append(TidyAN(billProv.NationalProviderId, 9));//already validated
                                                                 //B04 billing provider office number 4 AN
-                strb.Append(TidyAN(billProv.CanadianOfficeNum, 4));//already validated	
+                strb.Append(TidyAN(billProv.CanadianOfficeNumber, 4));//already validated	
                                                                    //B05 referring provider 10 AN
                 strb.Append(TidyAN(claim.CanadianReferralProviderNum, 10));
                 //B06 referral reason 2 N
@@ -2622,9 +2622,9 @@ namespace OpenDentBusiness.Eclaims
             string retVal = "";
             Claim claim = Claims.GetClaim(queueItem.ClaimNum);
             Clinic clinic = Clinic.GetById(claim.ClinicNum);
-            Provider providerFirst = Providers.GetFirst();//Used in order to preserve old behavior...  If this fails, then old code would have failed.
-            Provider billProv = Providers.GetFirstOrDefault(x => x.ProvNum == claim.ProvBill) ?? providerFirst;
-            Provider treatProv = Providers.GetFirstOrDefault(x => x.ProvNum == claim.ProvTreat) ?? providerFirst;
+            Provider providerFirst = Provider.GetDefault();//Used in order to preserve old behavior...  If this fails, then old code would have failed.
+            Provider billProv = Provider.GetById(claim.ProvBill) ?? providerFirst;
+            Provider treatProv = Provider.GetById(claim.ProvTreat) ?? providerFirst;
             InsSub insSub = InsSubs.GetSub(claim.InsSubNum, new List<InsSub>());
             InsPlan insPlan = InsPlans.GetPlan(claim.PlanNum, new List<InsPlan>());
             Carrier carrier = Carriers.GetCarrier(insPlan.CarrierNum);
@@ -2674,25 +2674,25 @@ namespace OpenDentBusiness.Eclaims
                     retVal += ", ";
                 retVal += "CarrierId 6 digits";
             }
-            if (treatProv.NationalProvID.Length != 9)
+            if (treatProv.NationalProviderId.Length != 9)
             {
                 if (retVal != "")
                     retVal += ", ";
                 retVal += "TreatingProv CDA num 9 digits";
             }
-            if (treatProv.CanadianOfficeNum.Length != 4)
+            if (treatProv.CanadianOfficeNumber.Length != 4)
             {
                 if (retVal != "")
                     retVal += ", ";
                 retVal += "TreatingProv office num 4 char";
             }
-            if (billProv.NationalProvID.Length != 9)
+            if (billProv.NationalProviderId.Length != 9)
             {
                 if (retVal != "")
                     retVal += ", ";
                 retVal += "BillingProv CDA num 9 digits";
             }
-            if (billProv.CanadianOfficeNum.Length != 4)
+            if (billProv.CanadianOfficeNumber.Length != 4)
             {
                 if (retVal != "")
                     retVal += ", ";

@@ -504,18 +504,18 @@ namespace OpenDental
         #endregion
         private void FormProduction_Load(object sender, System.EventArgs e)
         {
-            _listProviders = Providers.GetListReports();
-            _listProviders.Insert(0, Providers.GetUnearnedProv());
+            _listProviders = Provider.GetForReporting().ToList();
+            //_listProviders.Insert(0, Providers.GetUnearnedProv());
             _listFilteredProviders = new List<Provider>();
             textToday.Text = DateTime.Today.ToShortDateString();
             if (!Security.IsAuthorized(Permissions.ReportProdIncAllProviders, true))
             {
                 //They either have permission or have a provider at this point.  If they don't have permission they must have a provider.
-                _listProviders = _listProviders.FindAll(x => x.ProvNum == Security.CurrentUser.ProviderId);
+                _listProviders = _listProviders.FindAll(x => x.Id == Security.CurrentUser.ProviderId);
                 Provider prov = _listProviders.FirstOrDefault();
                 if (prov != null)
                 {
-                    _listProviders.AddRange(Providers.GetWhere(x => x.FName == prov.FName && x.LName == prov.LName && x.ProvNum != prov.ProvNum));
+                    _listProviders.AddRange(Provider.All().Where(x => x.FirstName == prov.FirstName && x.LastName == prov.LastName && x.Id != prov.Id));
                 }
                 checkAllProv.Checked = false;
                 checkAllProv.Enabled = false;
@@ -528,7 +528,7 @@ namespace OpenDental
                     continue;
                 }
                 listProv.Items.Add(_listProviders[i].GetLongDesc());
-                _listFilteredProviders.Add(_listProviders[i].Copy());
+                _listFilteredProviders.Add(_listProviders[i]);
             }
             //If the user is not allowed to run the report for all providers, default the selection to the first in the list box.
             if (checkAllProv.Enabled == false && listProv.Items.Count > 0)

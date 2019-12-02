@@ -220,8 +220,8 @@ namespace OpenDentBusiness
             {
                 throw new Exception(Lans.g("Erx", "Provider not found"));
             }
-            ProviderClinic provClinic = ProviderClinic.GetByProviderAndClinic(prov.ProvNum, clinic.Id);
-            if (prov.IsErxEnabled == ErxEnabledStatus.Disabled)
+            ProviderClinic provClinic = ProviderClinic.GetByProviderAndClinic(prov.Id, clinic.Id);
+            if (prov.IsErxEnabled == ProviderErxStatus.Disabled)
             {
                 throw new ODException(Lans.g("Erx", "Erx is disabled for provider") + ": " + prov.Abbr + ".  " + Lans.g("Erx", "To enable, edit provider in Lists | Providers and acknowledge Electronic Prescription fees."));
             }
@@ -233,7 +233,7 @@ namespace OpenDentBusiness
             {
                 throw new ODException(Lans.g("Erx", "Provider must be a person") + ": " + prov.Abbr);
             }
-            string fname = prov.FName.Trim();
+            string fname = prov.FirstName.Trim();
             if (fname == "")
             {
                 throw new ODException(Lans.g("Erx", "Provider first name missing") + ": " + prov.Abbr);
@@ -242,7 +242,7 @@ namespace OpenDentBusiness
             {
                 throw new ODException(Lans.g("Erx", "Provider first name can only contain letters, dashes, apostrophes, or spaces.") + ": " + prov.Abbr);
             }
-            string lname = prov.LName.Trim();
+            string lname = prov.LastName.Trim();
             if (lname == "")
             {
                 throw new ODException(Lans.g("Erx", "Provider last name missing") + ": " + prov.Abbr);
@@ -252,7 +252,7 @@ namespace OpenDentBusiness
                 throw new ODException(Lans.g("Erx", "Provider last name can only contain letters, dashes, apostrophes, or spaces.  Use the suffix box for I, II, III, Jr, or Sr") + ": " + prov.Abbr);
             }
             //prov.Suffix is not validated here. In ErxXml.cs, the suffix is converted to the appropriate suffix enumeration value, or defaults to DDS if the suffix does not make sense.
-            string deaNum = prov.DEANum;
+            string deaNum = "";
             if (provClinic != null)
             {
                 deaNum = provClinic.DEANum;
@@ -261,7 +261,7 @@ namespace OpenDentBusiness
             {
                 throw new ODException(Lans.g("Erx", "Provider DEA Number must be 2 letters followed by 7 digits.  If no DEA Number, enter NONE.") + ": " + prov.Abbr);
             }
-            string npi = Regex.Replace(prov.NationalProvID, "[^0-9]*", "");//NPI with all non-numeric characters removed.
+            string npi = Regex.Replace(prov.NationalProviderId, "[^0-9]*", "");//NPI with all non-numeric characters removed.
             if (npi.Length != 10)
             {
                 throw new ODException(Lans.g("Erx", "Provider NPI must be exactly 10 digits") + ": " + prov.Abbr);

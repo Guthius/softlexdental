@@ -250,11 +250,11 @@ namespace OpenDentBusiness.UI
                             continue;
                         }
                         float provWidthAdj = 0f;//use to adjust for primary and secondary provider bars in op
-                        if (Providers.GetIsSec(schedCur.ProvNum))
+                        if (Provider.GetById(schedCur.ProvNum).IsSecondary)
                         {
                             provWidthAdj = ProvWidth;//drawing secondary prov bar so shift right
                         }
-                        using (SolidBrush solidBrushProvColor = new SolidBrush(Providers.GetColor(schedCur.ProvNum)))
+                        using (SolidBrush solidBrushProvColor = new SolidBrush(Provider.GetById(schedCur.ProvNum).Color))
                         {
                             g.FillRectangle(solidBrushProvColor
                                 , TimeWidth + ProvWidth * ProvCount + i * ColWidth + provWidthAdj
@@ -546,7 +546,7 @@ namespace OpenDentBusiness.UI
             for (int j = 0; j < VisProvs.Count; j++)
             {
                 provCur = VisProvs[j];
-                schedForType = Schedules.GetForType(SchedListPeriod, ScheduleType.Provider, provCur.ProvNum);
+                schedForType = Schedules.GetForType(SchedListPeriod, ScheduleType.Provider, provCur.Id);
                 for (int i = 0; i < schedForType.Length; i++)
                 {
                     stopHour = stopTime.Hour;//Reset stopHour every time.
@@ -603,7 +603,7 @@ namespace OpenDentBusiness.UI
                         case 1:
                             try
                             {
-                                using (SolidBrush solidBrushProvColor = new SolidBrush(VisProvs[j].ProvColor))
+                                using (SolidBrush solidBrushProvColor = new SolidBrush(VisProvs[j].Color))
                                 {
                                     g.FillRectangle(solidBrushProvColor, TimeWidth + ProvWidth * j + 1, ((i - startingPoint) * LineH) + 1, ProvWidth - 1, LineH - 1);
                                 }
@@ -614,7 +614,7 @@ namespace OpenDentBusiness.UI
                             }
                             break;
                         case 2:
-                            using (HatchBrush hatchBrushProvColor = new HatchBrush(HatchStyle.DarkUpwardDiagonal, Color.Black, VisProvs[j].ProvColor))
+                            using (HatchBrush hatchBrushProvColor = new HatchBrush(HatchStyle.DarkUpwardDiagonal, Color.Black, VisProvs[j].Color))
                             {
                                 g.FillRectangle(hatchBrushProvColor, TimeWidth + ProvWidth * j + 1, ((i - startingPoint) * LineH) + 1, ProvWidth - 1, LineH - 1);
                             }

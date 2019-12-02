@@ -18,6 +18,7 @@
 using OpenDentBusiness;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace OpenDental
@@ -36,7 +37,7 @@ namespace OpenDental
             {
                 if (providerComboBox.SelectedItem is Provider provider)
                 {
-                    return provider.ProvNum;
+                    return provider.Id;
                 }
                 return null;
             }
@@ -46,7 +47,7 @@ namespace OpenDental
                 {
                     for (int i = 1; i < providerComboBox.Items.Count; i++)
                     {
-                        if (providerComboBox.Items[i] is Provider provider && provider.ProvNum == value.Value)
+                        if (providerComboBox.Items[i] is Provider provider && provider.Id == value.Value)
                         {
                             providerComboBox.SelectedItem = provider;
 
@@ -67,7 +68,7 @@ namespace OpenDental
             {
                 if (hygienistComboBox.SelectedItem is Provider provider)
                 {
-                    return provider.ProvNum;
+                    return provider.Id;
                 }
                 return null;
             }
@@ -77,7 +78,7 @@ namespace OpenDental
                 {
                     for (int i = 1; i < hygienistComboBox.Items.Count; i++)
                     {
-                        if (hygienistComboBox.Items[i] is Provider provider && provider.ProvNum == value.Value)
+                        if (hygienistComboBox.Items[i] is Provider provider && provider.Id == value.Value)
                         {
                             hygienistComboBox.SelectedItem = provider;
 
@@ -165,7 +166,7 @@ namespace OpenDental
 
         private void LoadProviders()
         {
-            providers = Providers.GetProvsByClinic(SelectedClinicId);
+            providers = Provider.GetByClinic(SelectedClinicId).ToList();
 
             providerComboBox.Items.Add("None");
 
@@ -174,13 +175,13 @@ namespace OpenDental
             foreach (var provider in providers)
             {
                 providerComboBox.Items.Add(provider);
-                if (provider.ProvNum == operatory.ProvDentistId)
+                if (provider.Id == operatory.ProvDentistId)
                 {
                     providerComboBox.SelectedItem = provider;
                 }
 
                 hygienistComboBox.Items.Add(provider);
-                if (provider.ProvNum == operatory.ProvHygienistId)
+                if (provider.Id == operatory.ProvHygienistId)
                 {
                     hygienistComboBox.SelectedItem = provider;
                 }

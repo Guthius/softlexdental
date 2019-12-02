@@ -94,7 +94,7 @@ namespace OpenDental
                     Proc.ClinicNum, Proc.ProvNum);
                 if (priplan != null && priplan.PlanType == "p")
                 {//PPO
-                    double standardfee = Fees.GetAmount0(Proc.CodeNum, Providers.GetProv(Patients.GetProvNum(_patCur)).FeeSched, Proc.ClinicNum,
+                    double standardfee = Fees.GetAmount0(Proc.CodeNum, Provider.GetById(Patients.GetProvNum(_patCur)).FeeScheduleId, Proc.ClinicNum,
                         Proc.ProvNum);
                     Proc.ProcFee = Math.Max(Proc.ProcFee, standardfee);
                 }

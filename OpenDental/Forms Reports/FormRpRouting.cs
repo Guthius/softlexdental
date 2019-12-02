@@ -260,7 +260,7 @@ namespace OpenDental {
 		#endregion
 
 		private void FormRpRouting_Load(object sender, System.EventArgs e) {
-			_listProviders=Providers.GetListReports();
+			_listProviders=Provider.GetForReporting().ToList();
 			if(IsAutoRunForDateSelected) {
 				//Creates routing slips for the defined DateSelected, currently selected clinic (if Clinics is enabled), not filtered by providers.
 				List<long> emptyProvNumList=new List<long>();
@@ -394,7 +394,7 @@ namespace OpenDental {
 
 			List<long> listProvNums=new List<long>();
 			if(!checkProvAll.Checked) {
-				listProvNums=listProv.SelectedIndices.OfType<int>().Select(x => _listProviders[x].ProvNum).ToList();
+				listProvNums=listProv.SelectedIndices.OfType<int>().Select(x => _listProviders[x].Id).ToList();
 			}
 			List<long> listClinicNums=new List<long>();
 

@@ -27,7 +27,7 @@ namespace OpenDental.User_Controls.SetupWizard {
 		}
 
 		private void FillControls() {
-			_listProviders=Providers.GetDeepCopy(true);
+            _listProviders = Provider.All().ToList();
 			textPracticeTitle.Text=Preference.GetString(PreferenceName.PracticeTitle);
 			textAddress.Text=Preference.GetString(PreferenceName.PracticeAddress);
 			textAddress2.Text=Preference.GetString(PreferenceName.PracticeAddress2);
@@ -39,7 +39,7 @@ namespace OpenDental.User_Controls.SetupWizard {
 			listProvider.Items.Clear();
 			for(int i = 0;i<_listProviders.Count;i++) {
 				listProvider.Items.Add(_listProviders[i].GetLongDesc());
-				if(_listProviders[i].ProvNum==Preference.GetLong(PreferenceName.PracticeDefaultProv)) {
+				if(_listProviders[i].Id==Preference.GetLong(PreferenceName.PracticeDefaultProv)) {
 					listProvider.SelectedIndex=i;
 				}
 			}
@@ -70,7 +70,7 @@ namespace OpenDental.User_Controls.SetupWizard {
 				listProvider.SelectedIndex=0;
 			}
 			if(_listProviders.Count > 0
-				&& _listProviders[listProvider.SelectedIndex].FeeSched==0)//Default provider must have a fee schedule set.
+				&& _listProviders[listProvider.SelectedIndex].FeeScheduleId==0)//Default provider must have a fee schedule set.
 			{
 				//listProvider.BackColor = OpenDental.SetupWizard.GetColor(ODSetupStatus.NeedsAttention);
 				IsDone=false;
@@ -122,7 +122,7 @@ namespace OpenDental.User_Controls.SetupWizard {
             }
             if (listProvider.SelectedIndex != -1)
             {
-                if (Preference.Update(PreferenceName.PracticeDefaultProv, _listProviders[listProvider.SelectedIndex].ProvNum))
+                if (Preference.Update(PreferenceName.PracticeDefaultProv, _listProviders[listProvider.SelectedIndex].Id))
                 {
                     changed = true;
                 }

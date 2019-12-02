@@ -505,15 +505,15 @@ namespace OpenDental{
 			FillSheets();
 			_provNumSelected=RefAttachCur.ProvNum;
 			comboProvNum.Items.Clear();
-			_listProviders=Providers.GetDeepCopy(true);
+			_listProviders=Provider.All().ToList();
 			for(int i=0;i<_listProviders.Count;i++) {
 				comboProvNum.Items.Add(_listProviders[i].GetLongDesc());//Only visible provs added to combobox.
-				if(_listProviders[i].ProvNum==RefAttachCur.ProvNum) {
+				if(_listProviders[i].Id==RefAttachCur.ProvNum) {
 					comboProvNum.SelectedIndex=i;//Sets combo text too.
 				}
 			}
 			if(comboProvNum.SelectedIndex==-1) {//The provider exists but is hidden
-				comboProvNum.Text=Providers.GetLongDesc(_provNumSelected);//Appends "(hidden)" to the end of the long description.
+				comboProvNum.Text=Provider.GetById(_provNumSelected).GetLongDesc();//Appends "(hidden)" to the end of the long description.
 			}
 			if(RefAttachCur.RefType==ReferralType.RefFrom) {
 				butNoneProv.Visible=false;
@@ -613,7 +613,7 @@ namespace OpenDental{
 		}
 
 		private void comboProvNum_SelectionChangeCommitted(object sender,EventArgs e) {
-			_provNumSelected=_listProviders[comboProvNum.SelectedIndex].ProvNum;
+			_provNumSelected=_listProviders[comboProvNum.SelectedIndex].Id;
 		}
 
 		private void butPickProv_Click(object sender,EventArgs e) {
@@ -625,7 +625,7 @@ namespace OpenDental{
 			if(formP.DialogResult!=DialogResult.OK) {
 				return;
 			}
-			comboProvNum.SelectedIndex=Providers.GetIndex(formP.SelectedProvNum);
+			//comboProvNum.SelectedIndex=Providers.GetIndex(formP.SelectedProvNum);
 			_provNumSelected=formP.SelectedProvNum;
 		}
 

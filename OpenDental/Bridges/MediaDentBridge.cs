@@ -93,7 +93,7 @@ namespace OpenDental.Bridges
         {
             string Tidy(string input) => input.Replace("\"", "").Replace("'", "").Replace("/", "");
 
-            var provider = Providers.GetProv(Patients.GetProvNum(patient));
+            var provider = Provider.GetById(Patients.GetProvNum(patient));
 
             var imageFolder = ProgramPreference.GetString(programId, "image_folder");
             if (string.IsNullOrEmpty(imageFolder))
@@ -103,7 +103,7 @@ namespace OpenDental.Bridges
 
             arguments = 
                 " /P" + Tidy(patient.FName + " " + patient.LName) + 
-                " /D" + provider.FName + " " + provider.LName + " /L1" +
+                " /D" + provider.FirstName + " " + provider.LastName + " /L1" +
                 " /F" + Path.Combine(imageFolder,  Tidy(GetPatientId(programId, patient))) + "" +
                 " /B" + patient.Birthdate.ToString("ddMMyyyy");
 

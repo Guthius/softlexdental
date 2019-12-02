@@ -31,7 +31,7 @@ namespace OpenDental
             {
                 listBillingTypes.Items.Add(_listBillingTypeDefs[i].Description);
             }
-            _listProviders = Providers.GetListReports();
+            _listProviders = Provider.GetForReporting().ToList();
             for (int i = 0; i < _listProviders.Count; i++)
             {
                 listProv.Items.Add(_listProviders[i].GetLongDesc());
@@ -134,14 +134,14 @@ namespace OpenDental
             {
                 for (int i = 0; i < _listProviders.Count; i++)
                 {
-                    listProvNums.Add(_listProviders[i].ProvNum);
+                    listProvNums.Add(_listProviders[i].Id);
                 }
             }
             else
             {
                 for (int i = 0; i < listProv.SelectedIndices.Count; i++)
                 {
-                    listProvNums.Add(_listProviders[listProv.SelectedIndices[i]].ProvNum);
+                    listProvNums.Add(_listProviders[listProv.SelectedIndices[i]].Id);
                 }
             }
 

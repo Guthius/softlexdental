@@ -46,7 +46,7 @@ namespace OpenDental
             {
                 if (defaultProviderComboBox.SelectedItem is Provider provider)
                 {
-                    return provider.ProvNum;
+                    return provider.Id;
                 }
                 return null;
             }
@@ -56,7 +56,7 @@ namespace OpenDental
                 {
                     foreach (Provider provider in defaultProviderComboBox.Items)
                     {
-                        if (provider.ProvNum == value.Value)
+                        if (provider.Id == value.Value)
                         {
                             defaultProviderComboBox.SelectedItem = provider;
 
@@ -78,7 +78,7 @@ namespace OpenDental
                 if (insBillingProviderSpecificRadioButton.Checked && 
                     insBillingProviderComboBox.SelectedItem is Provider provider)
                 {
-                    return provider.ProvNum;
+                    return provider.Id;
                 }
                 return null;
             }
@@ -88,7 +88,7 @@ namespace OpenDental
                 {
                     foreach (Provider provider in insBillingProviderComboBox.Items)
                     {
-                        if (provider.ProvNum == value.Value)
+                        if (provider.Id == value.Value)
                         {
                             insBillingProviderSpecificRadioButton.Checked = true;
                             insBillingProviderComboBox.SelectedItem = provider;
@@ -218,13 +218,13 @@ namespace OpenDental
             foreach (var provider in providers)
             {
                 defaultProviderComboBox.Items.Add(provider);
-                if (provider.ProvNum == clinic.ProviderId)
+                if (provider.Id == clinic.ProviderId)
                 {
                     defaultProviderComboBox.SelectedItem = provider;
                 }
 
                 insBillingProviderComboBox.Items.Add(provider);
-                if (clinic.InsuranceBillingProviderId.HasValue && clinic.InsuranceBillingProviderId.Value == provider.ProvNum)
+                if (clinic.InsuranceBillingProviderId.HasValue && clinic.InsuranceBillingProviderId.Value == provider.Id)
                 {
                     insBillingProviderComboBox.SelectedItem = provider;
                 }

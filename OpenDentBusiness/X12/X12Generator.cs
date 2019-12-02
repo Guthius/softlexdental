@@ -56,7 +56,12 @@ namespace OpenDentBusiness
             
 
             string spec = "1223G0001X";//general
-            Definition provSpec = Defs.GetDef(DefinitionCategory.ProviderSpecialties, provider.Specialty);
+            if (!provider.SpecialtyId.HasValue)
+            {
+                return spec;
+            }
+
+            Definition provSpec = Defs.GetDef(DefinitionCategory.ProviderSpecialties, provider.SpecialtyId.Value);
             if (provSpec == null)
             {
                 return spec;

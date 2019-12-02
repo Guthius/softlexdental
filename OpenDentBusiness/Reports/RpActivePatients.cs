@@ -10,7 +10,7 @@ namespace OpenDentBusiness
         ///<summary>If not using clinics then supply an empty list of clinicNums. dateStart and dateEnd can be MinVal/MaxVal to indicate "forever".</summary>
         public static DataTable GetActivePatientTable(DateTime dateStart, DateTime dateEnd, List<long> listProvNums, List<long> listClinicNums, List<long> listBillingTypes, bool hasAllProvs, bool hasAllClinics, bool hasAllBilling)
         {
-            List<Provider> listProvs = Providers.GetAll();
+            List<Provider> listProvs = Provider.All().ToList();
             List<Definition> listDefs = Definition.GetByCategory(DefinitionCategory.BillingTypes);
             List<Clinic> listClinics = Clinic.All().ToList();
             DataTable table = new DataTable();
@@ -76,7 +76,7 @@ namespace OpenDentBusiness
                 row["WkPhone"] = raw.Rows[i]["WkPhone"].ToString();
                 row["WirelessPhone"] = raw.Rows[i]["WirelessPhone"].ToString();
                 row["billingType"] = (billingType == null) ? "" : billingType.Value;
-                row["secProv"] = Providers.GetLName(PIn.Long(raw.Rows[i]["SecProv"].ToString()), listProvs);
+                row["secProv"] = Provider.GetById(PIn.Long(raw.Rows[i]["SecProv"].ToString())).LastName;
 
                 string clinicDesc = Clinic.GetById(PIn.Long(raw.Rows[i]["ClinicNum"].ToString())).Description;
                 row["clinic"] = (clinicDesc == "") ? "Unassigned" : clinicDesc;

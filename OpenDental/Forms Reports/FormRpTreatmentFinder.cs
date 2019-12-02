@@ -541,12 +541,12 @@ namespace OpenDental{
 		#endregion
 
 		private void FormRpTreatmentFinder_Load(object sender, System.EventArgs e) {
-			_listProviders=Providers.GetListReports();
+            _listProviders = Provider.GetForReporting().ToList();
 			//DateTime today=DateTime.Today;
 			//will start out 1st through 30th of previous month
 			//date1.SelectionStart=new DateTime(today.Year,today.Month,1).AddMonths(-1);
 			//date2.SelectionStart=new DateTime(today.Year,today.Month,1).AddDays(-1);
-			comboBoxMultiProv.Items.Add(new ODBoxItem<Provider>("All",new Provider() { ProvNum = 0 }));
+			//comboBoxMultiProv.Items.Add(new ODBoxItem<Provider>("All",new Provider() { Id = 0 }));
 			for(int i=0;i<_listProviders.Count;i++){
 			  comboBoxMultiProv.Items.Add(new ODBoxItem<Provider>(_listProviders[i].GetLongDesc(),_listProviders[i]));
 			}
@@ -641,7 +641,7 @@ namespace OpenDental{
 			gridMain.Rows.Clear();
 			Cursor=Cursors.WaitCursor;
 			table=RpTreatmentFinder.GetTreatmentFinderList(checkIncludeNoIns.Checked,checkIncludePatsWithApts.Checked,monthStart,dateSince,aboveAmount,
-				comboBoxMultiProv.ListSelectedItems.Select(x => ((ODBoxItem<Provider>)x).Tag).Select(x => x.ProvNum).ToList(),
+				comboBoxMultiProv.ListSelectedItems.Select(x => ((ODBoxItem<Provider>)x).Tag).Select(x => x.Id).ToList(),
 				comboBoxMultiBilling.ListSelectedItems.Select(x => ((ODBoxItem<Definition>)x).Tag).Select(x => x.Id).ToList(),codeRangeFilter.StartRange,
 				codeRangeFilter.EndRange,listClinicNums,checkBenefitAssumeGeneral.Checked);
 			ODGridRow row;

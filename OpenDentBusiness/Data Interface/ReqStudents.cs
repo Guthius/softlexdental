@@ -7,19 +7,12 @@ using System.Reflection;
 
 namespace OpenDentBusiness
 {
-    ///<summary></summary>
     public class ReqStudents
     {
         public static List<ReqStudent> GetForAppt(long aptNum)
         {
             string command = "SELECT * FROM reqstudent WHERE AptNum=" + POut.Long(aptNum) + " ORDER BY ProvNum,Descript";
             return Crud.ReqStudentCrud.SelectMany(command);
-        }
-
-        public static ReqStudent GetOne(long ReqStudentNum)
-        {
-            string command = "SELECT * FROM reqstudent WHERE ReqStudentNum=" + POut.Long(ReqStudentNum);
-            return Crud.ReqStudentCrud.SelectOne(ReqStudentNum);
         }
 
         ///<summary></summary>
@@ -32,105 +25,6 @@ namespace OpenDentBusiness
         public static long Insert(ReqStudent req)
         {
             return Crud.ReqStudentCrud.Insert(req);
-        }
-
-        ///<summary>Surround with try/catch.</summary>
-        public static void Delete(long reqStudentNum)
-        {
-            ReqStudent req = GetOne(reqStudentNum);
-            //if a reqneeded exists, then disallow deletion.
-            if (ReqNeededs.GetReq(req.ReqNeededNum) == null)
-            {
-                throw new Exception(Lans.g("ReqStudents", "Cannot delete requirement.  Delete the requirement needed instead."));
-            }
-            string command = "DELETE FROM reqstudent WHERE ReqStudentNum = " + POut.Long(reqStudentNum);
-            Db.NonQ(command);
-        }
-
-        public static DataTable RefreshOneStudent(long provNum)
-        {
-            DataTable table = new DataTable();
-            DataRow row;
-            //columns that start with lowercase are altered for display rather than being raw data.
-            table.Columns.Add("appointment");
-            table.Columns.Add("course");
-            table.Columns.Add("done");
-            table.Columns.Add("patient");
-            table.Columns.Add("ReqStudentNum");
-            table.Columns.Add("requirement");
-            string command = "SELECT AptDateTime,CourseID,reqStudent.Descript ReqDescript,"
-                + "schoolcourse.Descript CourseDescript,reqstudent.DateCompleted, "
-                + "patient.LName,patient.FName,patient.MiddleI,patient.Preferred,ProcDescript,reqstudent.ReqStudentNum "
-                + "FROM reqstudent "
-                + "LEFT JOIN schoolcourse ON reqstudent.SchoolCourseNum=schoolcourse.SchoolCourseNum "
-                + "LEFT JOIN patient ON reqstudent.PatNum=patient.PatNum "
-                + "LEFT JOIN appointment ON reqstudent.AptNum=appointment.AptNum "
-                + "WHERE reqstudent.ProvNum=" + POut.Long(provNum)
-                + " ORDER BY CourseID,ReqDescript";
-            DataTable raw = Db.GetTable(command);
-            DateTime AptDateTime;
-            DateTime dateCompleted;
-            for (int i = 0; i < raw.Rows.Count; i++)
-            {
-                row = table.NewRow();
-                AptDateTime = PIn.DateT(raw.Rows[i]["AptDateTime"].ToString());
-                if (AptDateTime.Year > 1880)
-                {
-                    row["appointment"] = AptDateTime.ToShortDateString() + " " + AptDateTime.ToShortTimeString()
-                        + " " + raw.Rows[i]["ProcDescript"].ToString();
-                }
-                row["course"] = raw.Rows[i]["CourseID"].ToString();//+" "+raw.Rows[i]["CourseDescript"].ToString();
-                dateCompleted = PIn.Date(raw.Rows[i]["DateCompleted"].ToString());
-                if (dateCompleted.Year > 1880)
-                {
-                    row["done"] = "X";
-                }
-                row["patient"] = PatientLogic.GetNameLF(raw.Rows[i]["LName"].ToString(), raw.Rows[i]["FName"].ToString(),
-                    raw.Rows[i]["Preferred"].ToString(), raw.Rows[i]["MiddleI"].ToString());
-                row["ReqStudentNum"] = raw.Rows[i]["ReqStudentNum"].ToString();
-                row["requirement"] = raw.Rows[i]["ReqDescript"].ToString();
-                table.Rows.Add(row);
-            }
-            return table;
-        }
-
-        public static DataTable RefreshManyStudents(long classNum, long courseNum)
-        {
-            DataTable table = new DataTable();
-            DataRow row;
-            //columns that start with lowercase are altered for display rather than being raw data.
-            table.Columns.Add("donereq");
-            table.Columns.Add("FName");
-            table.Columns.Add("LName");
-            table.Columns.Add("studentNum");//ProvNum
-            table.Columns.Add("totalreq");//not used yet.  It will be changed to be based upon reqneeded. Or not used at all.
-            string command = "SELECT COUNT(DISTINCT req2.ReqStudentNum) donereq,FName,LName,provider.ProvNum,"
-                + "COUNT(DISTINCT req1.ReqStudentNum) totalreq "
-                + "FROM provider "
-                + "LEFT JOIN reqstudent req1 ON req1.ProvNum=provider.ProvNum AND req1.SchoolCourseNum=" + POut.Long(courseNum) + " "
-                + "LEFT JOIN reqstudent req2 ON req2.ProvNum=provider.ProvNum AND " + DbHelper.Year("req2.DateCompleted") + " > 1880 "
-                + "AND req2.SchoolCourseNum=" + POut.Long(courseNum) + " "
-                + "WHERE provider.SchoolClassNum=" + POut.Long(classNum)
-                + " GROUP BY FName,LName,provider.ProvNum "
-                + "ORDER BY LName,FName";
-            DataTable raw = Db.GetTable(command);
-            for (int i = 0; i < raw.Rows.Count; i++)
-            {
-                row = table.NewRow();
-                row["donereq"] = raw.Rows[i]["donereq"].ToString();
-                row["FName"] = raw.Rows[i]["FName"].ToString();
-                row["LName"] = raw.Rows[i]["LName"].ToString();
-                row["studentNum"] = raw.Rows[i]["ProvNum"].ToString();
-                row["totalreq"] = raw.Rows[i]["totalreq"].ToString();
-                table.Rows.Add(row);
-            }
-            return table;
-        }
-
-        public static List<Provider> GetStudents(long classNum)
-        {
-            //No need to check RemotingRole; no call to db.
-            return Providers.GetWhere(x => x.SchoolClassNum == classNum, true);
         }
 
         ///<summary>Provider(student) is required.</summary>
@@ -180,22 +74,6 @@ namespace OpenDentBusiness
                     ReqStudents.Update(listReqsAttached[i]);
                 }
             }
-        }
-
-        ///<summary>Before reqneeded.Delete, this checks to make sure that req is not in use by students.  Used to prompt user.</summary>
-        public static string InUseBy(long reqNeededNum)
-        {
-            string command = "SELECT LName,FName FROM provider,reqstudent "
-                + "WHERE provider.ProvNum=reqstudent.ProvNum "
-                + "AND reqstudent.ReqNeededNum=" + POut.Long(reqNeededNum)
-                + " AND reqstudent.DateCompleted > " + POut.Date(new DateTime(1880, 1, 1));
-            DataTable table = Db.GetTable(command);
-            string retVal = "";
-            for (int i = 0; i < table.Rows.Count; i++)
-            {
-                retVal += table.Rows[i]["LName"].ToString() + ", " + table.Rows[i]["FName"].ToString() + "\r\n";
-            }
-            return retVal;
         }
     }
 }

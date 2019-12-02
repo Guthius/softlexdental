@@ -5422,25 +5422,6 @@ namespace OpenDental
             SecurityLog.Write(SecurityLogEvents.Setup, "Database Maintenance");
         }
 
-        private void menuItemDispensary_Click(object sender, System.EventArgs e)
-        {
-            FormDispensary FormD = new FormDispensary();
-            FormD.ShowDialog();
-        }
-
-        private void menuItemEvaluations_Click(object sender, EventArgs e)
-        {
-            if (!Security.CurrentUser.ProviderId.HasValue) return;
-
-            if (!Security.IsAuthorized(Permissions.AdminDentalEvaluations, true) && (Security.CurrentUser.ProviderId == 0 || Providers.GetProv(Security.CurrentUser.ProviderId.Value).SchoolClassNum != 0))
-            {
-                MsgBox.Show(this, "Only Instructors may view or edit evaluations.");
-                return;
-            }
-            FormEvaluations FormE = new FormEvaluations();
-            FormE.ShowDialog();
-        }
-
         private void menuItemTerminal_Click(object sender, EventArgs e)
         {
             if (Preference.GetLong(PreferenceName.ProcessSigsIntervalInSecs) == 0)

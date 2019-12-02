@@ -66,13 +66,13 @@ namespace OpenDentBusiness.UI
             List<Definition> listDefs = Definition.GetByCategory(DefinitionCategory.AppointmentColors);
             if (dataRoww["ProvNum"].ToString() != "0" && dataRoww["IsHygiene"].ToString() == "0")
             {//dentist
-                provColor = Providers.GetColor(PIn.Long(dataRoww["ProvNum"].ToString()));
-                penProvOutline = new Pen(Providers.GetOutlineColor(PIn.Long(dataRoww["ProvNum"].ToString())));
+                provColor = Provider.GetById(PIn.Long(dataRoww["ProvNum"].ToString())).Color;
+                penProvOutline = new Pen(Provider.GetById(PIn.Long(dataRoww["ProvNum"].ToString())).OutlineColor);
             }
             else if (dataRoww["ProvHyg"].ToString() != "0" && dataRoww["IsHygiene"].ToString() == "1")
             {//hygienist
-                provColor = Providers.GetColor(PIn.Long(dataRoww["ProvHyg"].ToString()));
-                penProvOutline = new Pen(Providers.GetOutlineColor(PIn.Long(dataRoww["ProvHyg"].ToString())));
+                provColor = Provider.GetById(PIn.Long(dataRoww["ProvHyg"].ToString())).Color;
+                penProvOutline = new Pen(Provider.GetById(PIn.Long(dataRoww["ProvHyg"].ToString())).OutlineColor);
             }
             else
             {//unknown

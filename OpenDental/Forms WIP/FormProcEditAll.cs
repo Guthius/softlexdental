@@ -174,19 +174,19 @@ namespace OpenDental {
 		private void FillProviderCombo(bool tryMaintainOldSelection=false) {
 			_listProvsForClinic=new List<Provider>();
 			if(comboClinic.SelectedTag<Clinic>()==null) {//Dummy clinic is selected either directly or on load due to procs having multiple clinics.
-				//default the list to use all providers
-				//We might want to change this to instead load all providers for all ClinicNums in ProcList.
-				_listProvsForClinic=Providers.GetDeepCopy(true);
+                                                         //default the list to use all providers
+                                                         //We might want to change this to instead load all providers for all ClinicNums in ProcList.
+                _listProvsForClinic = Provider.All().ToList();
 			}
 			else {
 				_listProvsForClinic=Providers.GetProvsForClinic(comboClinic.SelectedTag<Clinic>().Id);
 			}
-			_listProvsForClinic=_listProvsForClinic.Where(x => !x.IsHidden).OrderBy(x => x.ItemOrder).ToList();
+			_listProvsForClinic=_listProvsForClinic.Where(x => !x.IsHidden).ToList();
 			ODBoxItem<Provider> oldSelection=null;
 			Provider providerPreviousSelection=null;
 			if(tryMaintainOldSelection && ((ODBoxItem<Provider>)comboProv.SelectedItem).Tag!=null) {//Only true on manual selection, not on load.
 				oldSelection=(ODBoxItem<Provider>)comboProv.SelectedItem;
-				providerPreviousSelection=_listProvsForClinic.FirstOrDefault(x => x.ProvNum==(oldSelection.Tag).ProvNum);
+				providerPreviousSelection=_listProvsForClinic.FirstOrDefault(x => x.Id==(oldSelection.Tag).Id);
 			}
 			comboProv.Items.Clear();
 			comboProv.Items.Add(new ODBoxItem<Provider>(Lan.g(this,""),null));
@@ -195,16 +195,16 @@ namespace OpenDental {
 			foreach(Provider prov in _listProvsForClinic) {
 				ODBoxItem<Provider> boxItemProv=new ODBoxItem<Provider>(prov.GetLongDesc(),prov);
 				comboProv.Items.Add(boxItemProv);
-				if((tryMaintainOldSelection && providerPreviousSelection!=null && prov.ProvNum==providerPreviousSelection.ProvNum)
-					||(isAllProcsForSameProv && prov.ProvNum==ProcList[0].ProvNum))//default to the proc's prov if all procs have same prov
+				if((tryMaintainOldSelection && providerPreviousSelection!=null && prov.Id==providerPreviousSelection.Id)
+					||(isAllProcsForSameProv && prov.Id==ProcList[0].ProvNum))//default to the proc's prov if all procs have same prov
 				{
 					comboProv.SelectedItem=boxItemProv;
 				}
 			}
-			if(isAllProcsForSameProv && !_listProvsForClinic.Any(x => x.ProvNum==ProcList[0].ProvNum)) {
+			if(isAllProcsForSameProv && !_listProvsForClinic.Any(x => x.Id==ProcList[0].ProvNum)) {
 				//All procedure clinics are the same but value is missing from our list.
 				//We might eventaully check to see how many clincs from proc list do not exists in listClinics.
-				comboProv.IndexSelectOrSetText(-1,() => { return Providers.GetLongDesc(ProcList[0].ProvNum); });
+				comboProv.IndexSelectOrSetText(-1,() => { return Provider.GetById(ProcList[0].ProvNum).GetLongDesc(); });
 			}
 		}
 
@@ -214,7 +214,7 @@ namespace OpenDental {
 				return;
 			}
 			//x.ProvNum is null for blank row.
-			comboProv.SetSelectedItem<Provider>(x => (x?.ProvNum??-1)==FormPP.SelectedProvNum,"");
+			comboProv.SetSelectedItem<Provider>(x => (x?.Id??-1)==FormPP.SelectedProvNum,"");
 		}
 
 		private void butEditAnyway_Click(object sender,EventArgs e) {
@@ -266,7 +266,7 @@ namespace OpenDental {
 				}
 				#region Provider change validation.
 				List<ClaimProc> listClaimProcsForProc=ClaimProcs.GetForProc(listClaimProcsForPat,proc.ProcNum);
-				long selectedProvNum=(comboProv.SelectedTag<Provider>()?.ProvNum??0);//0 if no selection made
+				long selectedProvNum=(comboProv.SelectedTag<Provider>()?.Id??0);//0 if no selection made
 				if(selectedProvNum!=0 && !ProcedureL.ValidateProvider(listClaimProcsForProc,selectedProvNum,proc.ProvNum)) {
 					return false;
 				}
@@ -353,8 +353,8 @@ namespace OpenDental {
 					hasDateChanged=true;
 					hasChanged=true;
 				}
-				if(comboProv.SelectedTag<Provider>()!=null && comboProv.SelectedTag<Provider>().ProvNum!=proc.ProvNum) {//Using selection
-					proc.ProvNum=comboProv.SelectedTag<Provider>().ProvNum;
+				if(comboProv.SelectedTag<Provider>()!=null && comboProv.SelectedTag<Provider>().Id!=proc.ProvNum) {//Using selection
+					proc.ProvNum=comboProv.SelectedTag<Provider>().Id;
 					//Mimics FormProcEdit, uses different criteria than Procedures.ComputeEstimates().
 					ClaimProcs.TrySetProvFromProc(proc,listClaimProcsForProc);
 					hasChanged=true;

@@ -185,7 +185,7 @@ namespace OpenDental
             comboSecProv4.SelectedIndex = 0;
             comboSecProv5.Items.Add(Lan.g(this, "none"));
             comboSecProv5.SelectedIndex = 0;
-            _listProviders = Providers.GetDeepCopy(true);
+            _listProviders = Provider.All().ToList();
             for (int i = 0; i < _listProviders.Count; i++)
             {
                 comboPriProv1.Items.Add(_listProviders[i].GetLongDesc());
@@ -202,14 +202,14 @@ namespace OpenDental
             int defaultindex = 0;
             if (!Preference.GetBool(PreferenceName.PriProvDefaultToSelectProv))
             {
-                if (Clinics.ClinicId != 0)
-                {
-                    defaultindex = Providers.GetIndex(Clinic.GetById(Clinics.ClinicId).ProviderId.GetValueOrDefault());
-                }
-                else
-                {
-                    defaultindex = Providers.GetIndex(Preference.GetLong(PreferenceName.PracticeDefaultProv));
-                }
+                //if (Clinics.ClinicId != 0)
+                //{
+                //    defaultindex = Providers.GetIndex(Clinic.GetById(Clinics.ClinicId).ProviderId.GetValueOrDefault());
+                //}
+                //else
+                //{
+                //    defaultindex = Providers.GetIndex(Preference.GetLong(PreferenceName.PracticeDefaultProv));
+                //}
                 if (defaultindex == -1)
                 {//default provider hidden
                     defaultindex = 0;
@@ -700,14 +700,14 @@ namespace OpenDental
                                 continue;
                             }
                             if (listConditions[i].Operator == ConditionOperator.Equals
-                                && PIn.Long(listConditions[i].ConditionValue) == _listProviders[provIdx].ProvNum)
+                                && PIn.Long(listConditions[i].ConditionValue) == _listProviders[provIdx].Id)
                             {
                                 areConditionsMet = true;
                                 break;//From the for loop
                             }
                             if (listConditions[i].Operator == ConditionOperator.NotEquals
                                 && !listConditions.FindAll(x => x.ConditionType == RequiredFieldName.PrimaryProvider)
-                                        .Any(x => x.ConditionValue == _listProviders[provIdx].ProvNum.ToString()))
+                                        .Any(x => x.ConditionValue == _listProviders[provIdx].Id.ToString()))
                             {
                                 areConditionsMet = true;
                                 break;//From the for loop
@@ -2651,16 +2651,16 @@ namespace OpenDental
                         {
                             if (comboPriProv1.SelectedIndex > 0)
                             {//'Select Provider'
-                                pat.PriProv = _listProviders[comboPriProv1.SelectedIndex - 1].ProvNum;
+                                pat.PriProv = _listProviders[comboPriProv1.SelectedIndex - 1].Id;
                             }
                         }
                         else
                         {
-                            pat.PriProv = _listProviders[comboPriProv1.SelectedIndex].ProvNum;
+                            pat.PriProv = _listProviders[comboPriProv1.SelectedIndex].Id;
                         }
                         if (comboSecProv1.SelectedIndex > 0)
                         {
-                            pat.SecProv = _listProviders[comboSecProv1.SelectedIndex - 1].ProvNum;//comboSecProv# contains 'none' so selected index -1
+                            pat.SecProv = _listProviders[comboSecProv1.SelectedIndex - 1].Id;//comboSecProv# contains 'none' so selected index -1
                         }
                         pat.SSN = Patients.SSNRemoveDashes(textSSN1.Text);
                         pat.Email = textEmail1.Text;
@@ -2686,16 +2686,16 @@ namespace OpenDental
                         {
                             if (comboPriProv2.SelectedIndex > 0)
                             {//'Select Provider'
-                                pat.PriProv = _listProviders[comboPriProv2.SelectedIndex - 1].ProvNum;
+                                pat.PriProv = _listProviders[comboPriProv2.SelectedIndex - 1].Id;
                             }
                         }
                         else
                         {
-                            pat.PriProv = _listProviders[comboPriProv2.SelectedIndex].ProvNum;
+                            pat.PriProv = _listProviders[comboPriProv2.SelectedIndex].Id;
                         }
                         if (comboSecProv2.SelectedIndex > 0)
                         {
-                            pat.SecProv = _listProviders[comboSecProv2.SelectedIndex - 1].ProvNum;//comboSecProv# contains 'none' so selected index -1
+                            pat.SecProv = _listProviders[comboSecProv2.SelectedIndex - 1].Id;//comboSecProv# contains 'none' so selected index -1
                         }
                         pat.SSN = Patients.SSNRemoveDashes(textSSN2.Text);
                         pat.Email = textEmail2.Text;
@@ -2721,16 +2721,16 @@ namespace OpenDental
                         {
                             if (comboPriProv3.SelectedIndex > 0)
                             {//'Select Provider'
-                                pat.PriProv = _listProviders[comboPriProv3.SelectedIndex - 1].ProvNum;
+                                pat.PriProv = _listProviders[comboPriProv3.SelectedIndex - 1].Id;
                             }
                         }
                         else
                         {
-                            pat.PriProv = _listProviders[comboPriProv3.SelectedIndex].ProvNum;
+                            pat.PriProv = _listProviders[comboPriProv3.SelectedIndex].Id;
                         }
                         if (comboSecProv3.SelectedIndex > 0)
                         {
-                            pat.SecProv = _listProviders[comboSecProv3.SelectedIndex - 1].ProvNum;//comboSecProv# contains 'none' so selected index -1
+                            pat.SecProv = _listProviders[comboSecProv3.SelectedIndex - 1].Id;//comboSecProv# contains 'none' so selected index -1
                         }
                         pat.SSN = Patients.SSNRemoveDashes(textSSN3.Text);
                         pat.Email = textEmail3.Text;
@@ -2756,16 +2756,16 @@ namespace OpenDental
                         {
                             if (comboPriProv4.SelectedIndex > 0)
                             {//'Select Provider'
-                                pat.PriProv = _listProviders[comboPriProv4.SelectedIndex - 1].ProvNum;
+                                pat.PriProv = _listProviders[comboPriProv4.SelectedIndex - 1].Id;
                             }
                         }
                         else
                         {
-                            pat.PriProv = _listProviders[comboPriProv4.SelectedIndex].ProvNum;
+                            pat.PriProv = _listProviders[comboPriProv4.SelectedIndex].Id;
                         }
                         if (comboSecProv4.SelectedIndex > 0)
                         {
-                            pat.SecProv = _listProviders[comboSecProv4.SelectedIndex - 1].ProvNum;//comboSecProv# contains 'none' so selected index -1
+                            pat.SecProv = _listProviders[comboSecProv4.SelectedIndex - 1].Id;//comboSecProv# contains 'none' so selected index -1
                         }
                         pat.SSN = Patients.SSNRemoveDashes(textSSN4.Text);
                         pat.Email = textEmail4.Text;
@@ -2791,16 +2791,16 @@ namespace OpenDental
                         {
                             if (comboPriProv5.SelectedIndex > 0)
                             {//'Select Provider'
-                                pat.PriProv = _listProviders[comboPriProv5.SelectedIndex - 1].ProvNum;
+                                pat.PriProv = _listProviders[comboPriProv5.SelectedIndex - 1].Id;
                             }
                         }
                         else
                         {
-                            pat.PriProv = _listProviders[comboPriProv5.SelectedIndex].ProvNum;
+                            pat.PriProv = _listProviders[comboPriProv5.SelectedIndex].Id;
                         }
                         if (comboSecProv5.SelectedIndex > 0)
                         {
-                            pat.SecProv = _listProviders[comboSecProv5.SelectedIndex - 1].ProvNum;//comboSecProv# contains 'none' so selected index -1
+                            pat.SecProv = _listProviders[comboSecProv5.SelectedIndex - 1].Id;//comboSecProv# contains 'none' so selected index -1
                         }
                         pat.SSN = Patients.SSNRemoveDashes(textSSN5.Text);
                         pat.Email = textEmail5.Text;

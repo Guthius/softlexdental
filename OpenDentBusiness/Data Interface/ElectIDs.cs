@@ -92,22 +92,22 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static ProviderSupplementalID[] GetRequiredIdents(string payorID){
+		public static ProviderIdentityType[] GetRequiredIdents(string payorID){
 			//No need to check RemotingRole; no call to db.
 			ElectID electID=GetID(payorID);
 			if(electID==null){
-				return new ProviderSupplementalID[0];
+				return new ProviderIdentityType[0];
 			}
 			if(electID.ProviderTypes==""){
-				return new ProviderSupplementalID[0];
+				return new ProviderIdentityType[0];
 			}
 			string[] provTypes=electID.ProviderTypes.Split(',');
 			if(provTypes.Length==0){
-				return new ProviderSupplementalID[0];
+				return new ProviderIdentityType[0];
 			}
-			ProviderSupplementalID[] retVal=new ProviderSupplementalID[provTypes.Length];
+			ProviderIdentityType[] retVal=new ProviderIdentityType[provTypes.Length];
 			for(int i=0;i<provTypes.Length;i++){
-				retVal[i]=(ProviderSupplementalID)(Convert.ToInt32(provTypes[i]));
+				retVal[i]=(ProviderIdentityType)(Convert.ToInt32(provTypes[i]));
 			}
 			/*
 			if(electID=="SB601"){//BCBS of GA

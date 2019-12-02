@@ -319,7 +319,7 @@ namespace OpenDental
             dateStart.Value = DateTime.Today;
             dateEnd.Value = DateTime.Today;
             checkHideCompletePlans.Checked = true;
-            _listProviders = Providers.GetListReports();
+            _listProviders = Provider.GetForReporting().ToList();
             for (int i = 0; i < _listProviders.Count; i++)
             {
                 listProv.Items.Add(_listProviders[i].GetLongDesc());
@@ -413,11 +413,11 @@ namespace OpenDental
 			List<long> listProvNums=new List<long>();
 			List<long> listClinicNums=new List<long>();
 			for(int i=0;i<listProv.SelectedIndices.Count;i++) {
-				listProvNums.Add(_listProviders[listProv.SelectedIndices[i]].ProvNum);
+				listProvNums.Add(_listProviders[listProv.SelectedIndices[i]].Id);
 			}
 			if(checkAllProv.Checked) {
 				for(int i=0;i<_listProviders.Count;i++) {
-					listProvNums.Add(_listProviders[i].ProvNum);
+					listProvNums.Add(_listProviders[i].Id);
 				}
 			}
 

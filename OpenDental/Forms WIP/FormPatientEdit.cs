@@ -646,13 +646,13 @@ namespace OpenDental{
 
 		private void comboPriProv_SelectedIndexChanged(object sender,EventArgs e) {
 			if(comboPriProv.SelectedIndex>-1) {
-				_selectedProvNum=_listProviders[comboPriProv.SelectedIndex].ProvNum;
+				_selectedProvNum=_listProviders[comboPriProv.SelectedIndex].Id;
 			}
 		}
 
 		private void comboSecProv_SelectedIndexChanged(object sender,EventArgs e) {
 			if(comboSecProv.SelectedIndex>-1) {
-				_selectedProvHygNum=_listProvHygs[comboSecProv.SelectedIndex].ProvNum;
+				_selectedProvHygNum=_listProvHygs[comboSecProv.SelectedIndex].Id;
 			}
 		}
 
@@ -667,8 +667,8 @@ namespace OpenDental{
 				return;
 			}
 			_selectedProvNum=formp.SelectedProvNum;
-			comboPriProv.IndexSelectOrSetText(_listProviders.FindIndex(x => x.ProvNum==_selectedProvNum),
-				() => { return Preference.GetBool(PreferenceName.EasyHideDentalSchools) ? Providers.GetAbbr(_selectedProvNum) : Providers.GetLongDesc(_selectedProvNum); });
+			comboPriProv.IndexSelectOrSetText(_listProviders.FindIndex(x => x.Id==_selectedProvNum),
+				() => { return Providers.GetAbbr(_selectedProvNum); });
 		}
 
 		private void butPickSecondary_Click(object sender,EventArgs e) {
@@ -679,23 +679,23 @@ namespace OpenDental{
 				return;
 			}
 			_selectedProvHygNum=formp.SelectedProvNum;
-			comboSecProv.IndexSelectOrSetText(_listProvHygs.FindIndex(x => x.ProvNum==_selectedProvHygNum),
-				() => { return Preference.GetBool(PreferenceName.EasyHideDentalSchools) ? Providers.GetAbbr(_selectedProvHygNum) : Providers.GetLongDesc(_selectedProvHygNum); });
+			comboSecProv.IndexSelectOrSetText(_listProvHygs.FindIndex(x => x.Id==_selectedProvHygNum),
+				() => { return Providers.GetAbbr(_selectedProvHygNum); });
 		}
 
 		///<summary>Fills combo provider based on which clinic is selected and attempts to preserve provider selection if any.</summary>
 		private void fillComboProvHyg() {
 			if(comboPriProv.SelectedIndex>-1) {//valid prov selected, non none or nothing.
-				_selectedProvNum = _listProviders[comboPriProv.SelectedIndex].ProvNum;
+				_selectedProvNum = _listProviders[comboPriProv.SelectedIndex].Id;
 			}
 			if(comboSecProv.SelectedIndex>-1) {
-				_selectedProvHygNum = _listProvHygs[comboSecProv.SelectedIndex].ProvNum;
+				_selectedProvHygNum = _listProvHygs[comboSecProv.SelectedIndex].Id;
 			}
 			//Fill List Providers
-			_listProviders=Providers.GetProvsForClinic(_selectedClinicNum).OrderBy(x => x.ItemOrder).ToList();
+			_listProviders=Providers.GetProvsForClinic(_selectedClinicNum).ToList();
 			if(!Security.IsAuthorized(Permissions.PatPriProvEdit,DateTime.MinValue,true,true) && PatCur.PriProv>0) {
 				//remove all except pat's current PriProv, list may be empty after this but user not authorized to edit anyway
-				_listProviders.RemoveAll(x => x.ProvNum!=PatCur.PriProv);
+				_listProviders.RemoveAll(x => x.Id!=PatCur.PriProv);
 			}
 			else if(Preference.GetBool(PreferenceName.PriProvDefaultToSelectProv)) {
 				_listProviders.Add(new Provider() { Abbr=Lan.g(this,"Select Provider") });
@@ -703,8 +703,8 @@ namespace OpenDental{
 			//Fill List Hyg
 			_listProvHygs=Providers.GetProvsForClinic(_selectedClinicNum);
 			_listProvHygs.Add(new Provider() { Abbr="None" });
-			_listProviders=_listProviders.OrderBy(x => x.ProvNum>0).ThenBy(x => x.ItemOrder).ToList();
-			_listProvHygs=_listProvHygs.OrderBy(x => x.ProvNum>0).ThenBy(x => x.ItemOrder).ToList();
+			_listProviders=_listProviders.OrderBy(x => x.Id>0).ToList();
+			_listProvHygs=_listProvHygs.OrderBy(x => x.Id>0).ToList();
 			//Fill ComboProv
 			comboPriProv.Items.Clear();
 			if(!Preference.GetBool(PreferenceName.EasyHideDentalSchools)) {
@@ -713,8 +713,8 @@ namespace OpenDental{
 			else {
 				_listProviders.ForEach(x => comboPriProv.Items.Add(x.Abbr));
 			}
-			comboPriProv.IndexSelectOrSetText(_listProviders.FindIndex(x => x.ProvNum==_selectedProvNum), 
-				()=> { return Preference.GetBool(PreferenceName.EasyHideDentalSchools) ? Providers.GetAbbr(_selectedProvNum) : Providers.GetLongDesc(_selectedProvNum); });
+			comboPriProv.IndexSelectOrSetText(_listProviders.FindIndex(x => x.Id==_selectedProvNum), 
+				()=> { return Providers.GetAbbr(_selectedProvNum); });
 			//Fill ComboSecProv
 			comboSecProv.Items.Clear();
 			if(!Preference.GetBool(PreferenceName.EasyHideDentalSchools)) {
@@ -723,8 +723,8 @@ namespace OpenDental{
 			else {
 				_listProvHygs.ForEach(x => comboSecProv.Items.Add(x.Abbr));
 			}
-			comboSecProv.IndexSelectOrSetText(_listProvHygs.FindIndex(x => x.ProvNum==_selectedProvHygNum),
-				() => { return Preference.GetBool(PreferenceName.EasyHideDentalSchools) ? Providers.GetAbbr(_selectedProvHygNum) : Providers.GetLongDesc(_selectedProvHygNum); });
+			comboSecProv.IndexSelectOrSetText(_listProvHygs.FindIndex(x => x.Id==_selectedProvHygNum),
+				() => { return Providers.GetAbbr(_selectedProvHygNum); });
 		}
 
 		private void checkBillProvSame_Click(object sender,EventArgs e) {
@@ -2939,10 +2939,10 @@ namespace OpenDental{
 			PatCurNote.ICEPhone=textIcePhone.Text;
 			Patients.Update(PatCur,PatOld);
 			PatientNotes.Update(PatCurNote,PatCur.Guarantor);
-			string strPatPriProvDesc=Providers.GetLongDesc(PatCur.PriProv);
+			string strPatPriProvDesc=Provider.GetById(PatCur.PriProv).GetLongDesc();
 			if(PatCur.PriProv!=PatOld.PriProv) {
 				SecurityLog.Write(Permissions.PatPriProvEdit,PatCur.PatNum,
-					"Primary provider changed from "+(PatOld.PriProv==0?"'blank'":Providers.GetLongDesc(PatOld.PriProv))+" to "+strPatPriProvDesc+".");
+					"Primary provider changed from "+(PatOld.PriProv==0?"'blank'":Provider.GetById(PatOld.PriProv).GetLongDesc())+" to "+strPatPriProvDesc+".");
 			}
 			if(checkRestrictSched.Checked) {
 				PatRestrictions.Upsert(PatCur.PatNum,PatRestrict.ApptSchedule);//will only insert if one does not already exist in the db.
@@ -2979,8 +2979,9 @@ namespace OpenDental{
 				bool isChangePriProvs=(listPatsForPriProvEdit.Count>0 && Security.IsAuthorized(Permissions.PatPriProvEdit,DateTime.MinValue,true,true));
 				Patients.UpdateBillingProviderForFam(PatCur,isChangePriProvs,isAuthArchivedEdit);//if user is not authorized this will not update PriProvs for fam
 				if(isChangePriProvs) {
-					listPatsForPriProvEdit.ForEach(x => SecurityLog.Write(Permissions.PatPriProvEdit,x.PatNum,
-						"Primary provider changed from "+(x.PriProv==0?"'blank'":Providers.GetLongDesc(x.PriProv))+" to "+strPatPriProvDesc+"."));
+					listPatsForPriProvEdit.ForEach(x => 
+                    SecurityLog.Write(x.PatNum, Permissions.PatPriProvEdit,
+						"Primary provider changed from "+(x.PriProv==0?"'blank'":Provider.GetById(x.PriProv).GetLongDesc())+" to "+strPatPriProvDesc+"."));
 				}
 			}
 			if(checkNotesSame.Checked){

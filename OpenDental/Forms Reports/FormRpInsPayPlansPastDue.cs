@@ -43,7 +43,7 @@ namespace OpenDental {
 		}
 
 		private void FillProvs() {
-			_listProviders=Providers.GetListReports();
+			_listProviders=Provider.GetForReporting().ToList();
 			comboBoxMultiProv.Items.Add(Lan.g(this,"All"));
 			for(int i = 0;i<_listProviders.Count;i++) {
 				comboBoxMultiProv.Items.Add(_listProviders[i].GetLongDesc());
@@ -111,11 +111,11 @@ namespace OpenDental {
 			int daysPassedFilter=PIn.Int(textDaysPastDue.Text,false); //returns 0 if exceptions are thrown.
 			List<long> listProvNums=new List<long>();
 			if(comboBoxMultiProv.SelectedIndices[0].ToString()=="0") {
-				listProvNums.AddRange(_listProviders.Select(x => x.ProvNum).ToList());
+				listProvNums.AddRange(_listProviders.Select(x => x.Id).ToList());
 			}
 			else {
 				for(int i = 0;i<comboBoxMultiProv.SelectedIndices.Count;i++) {
-					listProvNums.Add((long)_listProviders[(int)comboBoxMultiProv.SelectedIndices[i]-1].ProvNum);
+					listProvNums.Add((long)_listProviders[(int)comboBoxMultiProv.SelectedIndices[i]-1].Id);
 				}
 			}
 			List<long> listClinicNums=new List<long>();

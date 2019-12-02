@@ -336,14 +336,14 @@ namespace OpenDentBusiness
         {
             string command = "";
             DataTable tableRaw = new DataTable();
-            Provider provCur = Providers.GetProv(provNum);
+            Provider provCur = Provider.GetById(provNum);
             command = "SELECT " + DbHelper.GroupConcat("provider.ProvNum") + " FROM provider WHERE provider.ProvNum IN "
                 + "(SELECT ProvNum FROM provider pv, ehrprovkey epk WHERE pv.LName=epk.LName AND pv.FName=epk.FName "
-                + "AND epk.LName='" + POut.String(provCur.LName) + "' AND epk.FName='" + POut.String(provCur.FName) + "') ";
+                + "AND epk.LName='" + POut.String(provCur.LastName) + "' AND epk.FName='" + POut.String(provCur.FirstName) + "') ";
             string provs = Db.GetScalar(command);
             command = "SELECT " + DbHelper.GroupConcat("provider.NationalProvID") + " FROM provider WHERE provider.ProvNum IN "
                 + "(SELECT ProvNum FROM provider pv, ehrprovkey epk WHERE pv.LName=epk.LName AND pv.FName=epk.FName "
-                + "AND epk.LName='" + POut.String(provCur.LName) + "' AND epk.FName='" + POut.String(provCur.FName) + "') "
+                + "AND epk.LName='" + POut.String(provCur.LastName) + "' AND epk.FName='" + POut.String(provCur.FirstName) + "') "
                 + "AND provider.NationalProvID !='' AND provider.NationalProvID !=','";
             string provNPIs = Db.GetScalar(command);
             provNPIs.Trim(',');
@@ -1691,10 +1691,10 @@ namespace OpenDentBusiness
             int retval = 0;
             string command = "";
             DataTable tableRaw = new DataTable();
-            Provider provCur = Providers.GetProv(provNum);
+            Provider provCur = Provider.GetById(provNum);
             command = "SELECT GROUP_CONCAT(provider.ProvNum) FROM provider WHERE provider.ProvNum IN "
                 + "(SELECT ProvNum FROM provider pv, ehrprovkey epk WHERE pv.LName=epk.LName AND pv.FName=epk.FName "
-                + "AND epk.LName='" + POut.String(provCur.LName) + "' AND epk.FName='" + POut.String(provCur.FName) + "')";
+                + "AND epk.LName='" + POut.String(provCur.LastName) + "' AND epk.FName='" + POut.String(provCur.FirstName) + "')";
             string provs = Db.GetScalar(command);
             switch (mtype)
             {
@@ -3092,10 +3092,10 @@ namespace OpenDentBusiness
         {
             string command = "";
             DataTable tableRaw = new DataTable();
-            Provider provCur = Providers.GetProv(provNum);
+            Provider provCur = Provider.GetById(provNum);
             command = "SELECT GROUP_CONCAT(provider.ProvNum) FROM provider WHERE provider.ProvNum IN "
                 + "(SELECT ProvNum FROM provider pv, ehrprovkey epk WHERE pv.LName=epk.LName AND pv.FName=epk.FName "
-                + "AND epk.LName='" + POut.String(provCur.LName) + "' AND epk.FName='" + POut.String(provCur.FName) + "')";
+                + "AND epk.LName='" + POut.String(provCur.LastName) + "' AND epk.FName='" + POut.String(provCur.FirstName) + "')";
             string provs = Db.GetScalar(command);
             string[] tempProv = provs.Split(',');
             string provOID = "";
@@ -3109,7 +3109,7 @@ namespace OpenDentBusiness
             }
             command = "SELECT GROUP_CONCAT(provider.NationalProvID) FROM provider WHERE provider.ProvNum IN "
                 + "(SELECT ProvNum FROM provider pv, ehrprovkey epk WHERE pv.LName=epk.LName AND pv.FName=epk.FName "
-                + "AND epk.LName='" + POut.String(provCur.LName) + "' AND epk.FName='" + POut.String(provCur.FName) + "') "
+                + "AND epk.LName='" + POut.String(provCur.LastName) + "' AND epk.FName='" + POut.String(provCur.FirstName) + "') "
                 + "AND provider.NationalProvID !='' AND provider.NationalProvID !=','";
             string provNPIs = Db.GetScalar(command);
             provNPIs.Trim(',');
@@ -4241,10 +4241,10 @@ namespace OpenDentBusiness
             int retval = 0;
             string command = "";
             DataTable tableRaw = new DataTable();
-            Provider provCur = Providers.GetProv(provNum);
+            Provider provCur = Provider.GetById(provNum);
             command = "SELECT GROUP_CONCAT(provider.ProvNum) FROM provider WHERE provider.ProvNum IN "
                 + "(SELECT ProvNum FROM provider pv, ehrprovkey epk WHERE pv.LName=epk.LName AND pv.FName=epk.FName "
-                + "AND epk.LName='" + POut.String(provCur.LName) + "' AND epk.FName='" + POut.String(provCur.FName) + "')";
+                + "AND epk.LName='" + POut.String(provCur.LastName) + "' AND epk.FName='" + POut.String(provCur.FirstName) + "')";
             string provs = Db.GetScalar(command);
             switch (mtype)
             {
@@ -4762,7 +4762,7 @@ namespace OpenDentBusiness
                                 continue;
                             }
                             else if ((ehrLabList[m].OrderingProviderID == pat.PriProv.ToString()
-                                || ehrLabList[m].OrderingProviderID == Providers.GetProv(pat.PriProv).NationalProvID)
+                                || ehrLabList[m].OrderingProviderID == Provider.GetById(pat.PriProv).NationalProviderId)
                                 && (loinc == null || !loinc.ClassType.ToUpper().Contains("RAD")))
                             {
                                 labOrderCount++;
@@ -4800,7 +4800,7 @@ namespace OpenDentBusiness
                                 continue;
                             }
                             else if ((ehrLabList[m].OrderingProviderID == pat.PriProv.ToString()
-                                || ehrLabList[m].OrderingProviderID == Providers.GetProv(pat.PriProv).NationalProvID)
+                                || ehrLabList[m].OrderingProviderID == Provider.GetById(pat.PriProv).NationalProviderId)
                                 && (loinc != null && loinc.ClassType.ToUpper().Contains("RAD")))
                             {
                                 radOrderCount++;
@@ -5787,7 +5787,7 @@ namespace OpenDentBusiness
                                 continue;
                             }
                             else if ((ehrLabList[m].OrderingProviderID == pat.PriProv.ToString()
-                                || ehrLabList[m].OrderingProviderID == Providers.GetProv(pat.PriProv).NationalProvID)
+                                || ehrLabList[m].OrderingProviderID == Provider.GetById(pat.PriProv).NationalProviderId)
                                 && (loinc == null || !loinc.ClassType.ToUpper().Contains("RAD")))
                             {
                                 labOrderCount++;
@@ -5825,7 +5825,7 @@ namespace OpenDentBusiness
                                 continue;
                             }
                             else if ((ehrLabList[m].OrderingProviderID == pat.PriProv.ToString()
-                                || ehrLabList[m].OrderingProviderID == Providers.GetProv(pat.PriProv).NationalProvID)
+                                || ehrLabList[m].OrderingProviderID == Provider.GetById(pat.PriProv).NationalProviderId)
                                 && (loinc != null && loinc.ClassType.ToUpper().Contains("RAD")))
                             {
                                 radOrderCount++;
@@ -6432,10 +6432,10 @@ namespace OpenDentBusiness
         {
             string command = "";
             DataTable tableRaw = new DataTable();
-            Provider provCur = Providers.GetProv(provNum);
+            Provider provCur = Provider.GetById(provNum);
             command = "SELECT GROUP_CONCAT(provider.ProvNum) FROM provider WHERE provider.ProvNum IN "
                 + "(SELECT ProvNum FROM provider pv, ehrprovkey epk WHERE pv.LName=epk.LName AND pv.FName=epk.FName "
-                + "AND epk.LName='" + POut.String(provCur.LName) + "' AND epk.FName='" + POut.String(provCur.FName) + "')";
+                + "AND epk.LName='" + POut.String(provCur.LastName) + "' AND epk.FName='" + POut.String(provCur.FirstName) + "')";
             string provs = Db.GetScalar(command);
             string[] tempProv = provs.Split(',');
             string provOID = "";
@@ -6449,7 +6449,7 @@ namespace OpenDentBusiness
             }
             command = "SELECT GROUP_CONCAT(provider.NationalProvID) FROM provider WHERE provider.ProvNum IN "
                 + "(SELECT ProvNum FROM provider pv, ehrprovkey epk WHERE pv.LName=epk.LName AND pv.FName=epk.FName "
-                + "AND epk.LName='" + POut.String(provCur.LName) + "' AND epk.FName='" + POut.String(provCur.FName) + "') "
+                + "AND epk.LName='" + POut.String(provCur.LastName) + "' AND epk.FName='" + POut.String(provCur.FirstName) + "') "
                 + "AND provider.NationalProvID !='' AND provider.NationalProvID !=','";
             string provNPIs = Db.GetScalar(command);
             provNPIs.Trim(',');

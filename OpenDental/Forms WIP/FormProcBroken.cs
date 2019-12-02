@@ -53,7 +53,7 @@ namespace OpenDental {
 
 		private void comboProv_SelectedIndexChanged(object sender,EventArgs e) {
 			if(comboProv.SelectedIndex>-1) {
-				_selectedProvNum=_listProviders[comboProv.SelectedIndex].ProvNum;
+				_selectedProvNum=_listProviders[comboProv.SelectedIndex].Id;
 			}
 		}
 
@@ -65,19 +65,19 @@ namespace OpenDental {
 				return;
 			}
 			_selectedProvNum=FormP.SelectedProvNum;
-			comboProv.IndexSelectOrSetText(_listProviders.FindIndex(x => x.ProvNum==_selectedProvNum),() => { return Providers.GetLongDesc(_selectedProvNum); });
+			comboProv.IndexSelectOrSetText(_listProviders.FindIndex(x => x.Id==_selectedProvNum),() => { return Provider.GetById(_selectedProvNum).GetLongDesc(); });
 		}
 
 		///<summary>Fills combo provider based on which clinic is selected and attempts to preserve provider selection if any.</summary>
 		private void fillComboProv() {
 			if(comboProv.SelectedIndex>-1) {//valid prov selected, non none or nothing.
-				_selectedProvNum = _listProviders[comboProv.SelectedIndex].ProvNum;
+				_selectedProvNum = _listProviders[comboProv.SelectedIndex].Id;
 			}
 			_listProviders=Providers.GetProvsForClinic(_selectedClinicNum);
 			//Fill comboProv
 			comboProv.Items.Clear();
 			_listProviders.ForEach(x => comboProv.Items.Add(x.Abbr));
-			comboProv.IndexSelectOrSetText(_listProviders.FindIndex(x => x.ProvNum==_selectedProvNum),() => { return Providers.GetLongDesc(_selectedProvNum); });
+			comboProv.IndexSelectOrSetText(_listProviders.FindIndex(x => x.Id==_selectedProvNum),() => { return Provider.GetById(_selectedProvNum).GetLongDesc(); });
 		}
 
 		private void butAutoNoteChart_Click(object sender,EventArgs e) {

@@ -1256,13 +1256,11 @@
             this.menuItemDispensary.Index = 8;
             this.menuItemDispensary.Text = "Dispensary";
             this.menuItemDispensary.Visible = false;
-            this.menuItemDispensary.Click += new System.EventHandler(this.menuItemDispensary_Click);
             // 
             // menuItemEvaluations
             // 
             this.menuItemEvaluations.Index = 9;
             this.menuItemEvaluations.Text = "Evaluations";
-            this.menuItemEvaluations.Click += new System.EventHandler(this.menuItemEvaluations_Click);
             // 
             // menuItemTerminal
             // 

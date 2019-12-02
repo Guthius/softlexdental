@@ -1390,7 +1390,7 @@ namespace OpenDental{
 
 		private void comboProv_SelectedIndexChanged(object sender,EventArgs e) {
 			if(comboProv.SelectedIndex>-1) {
-				_selectedProvNum=_listProviders[comboProv.SelectedIndex].ProvNum;
+				_selectedProvNum=_listProviders[comboProv.SelectedIndex].Id;
 			}
 		}
 
@@ -1402,19 +1402,19 @@ namespace OpenDental{
 				return;
 			}
 			_selectedProvNum=formp.SelectedProvNum;
-			comboProv.IndexSelectOrSetText(_listProviders.FindIndex(x => x.ProvNum==_selectedProvNum),() => { return Providers.GetLongDesc(_selectedProvNum); });
+			comboProv.IndexSelectOrSetText(_listProviders.FindIndex(x => x.Id==_selectedProvNum),() => { return Provider.GetById(_selectedProvNum).GetLongDesc(); });
 		}
 
 		///<summary>Fills combo provider based on which clinic is selected and attempts to preserve provider selection if any.</summary>
 		private void FillComboProv() {
 			if(comboProv.SelectedIndex>-1) {
-				_selectedProvNum = _listProviders[comboProv.SelectedIndex].ProvNum;
+				_selectedProvNum = _listProviders[comboProv.SelectedIndex].Id;
 			}
 			_listProviders=Providers.GetProvsForClinic(_selectedClinicNum).OrderBy(x => x.GetLongDesc()).ToList();
 			//Select Provider
 			comboProv.Items.Clear();
 			_listProviders.ForEach(x => comboProv.Items.Add(x.GetLongDesc()));
-			comboProv.IndexSelectOrSetText(_listProviders.FindIndex(x => x.ProvNum==_selectedProvNum),() => { return Providers.GetLongDesc(_selectedProvNum); });
+			comboProv.IndexSelectOrSetText(_listProviders.FindIndex(x => x.Id==_selectedProvNum),() => { return Provider.GetById(_selectedProvNum).GetLongDesc(); });
 		}
 
 		/// <summary>Called 5 times.  This also fills prov and clinic based on the first charge if not new.</summary>
@@ -1624,7 +1624,7 @@ namespace OpenDental{
 			}
 			ODGridRow row=new ODGridRow();
 			row.Cells.Add(PIn.DateT(rowBundleClaimProc["DateCP"].ToString()).ToShortDateString());//0 Date
-			row.Cells.Add(Providers.GetLName(PIn.Long(rowBundleClaimProc["ProvNum"].ToString())));//1 Prov Abbr
+			row.Cells.Add(Provider.GetById(PIn.Long(rowBundleClaimProc["ProvNum"].ToString())).GetAbbr());//1 Prov Abbr
 			row.Cells.Add(descript);//2 Descript
 			row.Cells.Add("");//3 Principal
 			row.Cells.Add("");//4 Interest

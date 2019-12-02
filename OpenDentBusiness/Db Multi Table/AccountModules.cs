@@ -3429,12 +3429,12 @@ namespace OpenDentBusiness
             for (int i = 0; i < listProcs.Count; i++)
             {
                 proc = listProcs[i];
-                if (!Providers.GetIsSec(proc.ProvNum))
+                if (!Provider.GetById(proc.ProvNum).IsSecondary)
                 {//if not a hygienist
                     ClaimCur.ProvTreat = proc.ProvNum;
                 }
             }
-            if (Providers.GetIsSec(ClaimCur.ProvTreat))
+            if (Provider.GetById(ClaimCur.ProvTreat).IsSecondary)
             {
                 ClaimCur.ProvTreat = pat.PriProv;
                 //OK if 0, because auto select first in list when open claim
@@ -3451,11 +3451,11 @@ namespace OpenDentBusiness
             //	useClinic=true;
             //	clinicInsBillingProv=Clinics.GetClinic(ClaimCur.ClinicNum).InsBillingProv;
             //}
-            ClaimCur.ProvBill = Providers.GetBillingProvNum(ClaimCur.ProvTreat, ClaimCur.ClinicNum);//,useClinic,clinicInsBillingProv);//OK if zero, because it will get fixed in claim
-            Provider prov = Providers.GetProv(ClaimCur.ProvTreat);
-            if (prov.ProvNumBillingOverride != 0)
+            ClaimCur.ProvBill = Providers.GetBillingProviderId(ClaimCur.ProvTreat, ClaimCur.ClinicNum);//,useClinic,clinicInsBillingProv);//OK if zero, because it will get fixed in claim
+            Provider prov = Provider.GetById(ClaimCur.ProvTreat);
+            if (prov.BillingOverrideProviderId.HasValue)
             {
-                ClaimCur.ProvBill = prov.ProvNumBillingOverride;
+                ClaimCur.ProvBill = prov.BillingOverrideProviderId.Value;
             }
             ClaimCur.EmployRelated = YN.No;
             ClaimCur.ClaimForm = PlanCur.ClaimFormNum;

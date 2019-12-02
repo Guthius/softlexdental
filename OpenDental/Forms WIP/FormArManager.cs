@@ -46,7 +46,7 @@ namespace OpenDental
 			//else {//clinics disabled
 			//	_listClinics.Add(Clinics.GetPracticeAsClinicZero(Lan.g(this,"Unassigned")));
 			//}
-			//_listProviders=Providers.GetDeepCopy(true);
+			//_listProviders=Provider.All().ToList();
 			//_tsiProg=Programs.GetCur(ProgramName.Transworld);
 			//_dictClinicProgProps=new Dictionary<long,List<ProgramProperty>>();
 			//if(_tsiProg!=null && _tsiProg.Enabled) {
@@ -678,7 +678,7 @@ namespace OpenDental
 			#region Fill Grid Rows
 			gridUnsent.Rows.Clear();
 			Dictionary<long,string> dictClinicAbbrs=_listClinics.ToDictionary(x => x.Id,x => x.Abbr);
-			Dictionary<long,string> dictProvAbbrs=_listProviders.ToDictionary(x => x.ProvNum,x => x.Abbr);
+			Dictionary<long,string> dictProvAbbrs=_listProviders.ToDictionary(x => x.Id,x => x.Abbr);
 			Dictionary<long,string> dictBillTypeNames=Definition.GetByCategory(DefinitionCategory.BillingTypes).ToDictionary(x => x.Id,x => x.Description);
 			Dictionary<long,DateTime> dictSuspendDateTimes=new Dictionary<long,DateTime>();
 			foreach(PatAging pAgeCur in listPatAgingIndexFiltered.Select(x => _listPatAgingUnsentAll[x])) {
@@ -820,7 +820,7 @@ namespace OpenDental
 			}
 			List<long> listProvNums=new List<long>();
 			if(!comboBoxMultiUnsentProvs.ListSelectedIndices.Contains(0)) {
-				listProvNums=comboBoxMultiUnsentProvs.ListSelectedIndices.Select(x => _listProviders[x-1].ProvNum).ToList();
+				listProvNums=comboBoxMultiUnsentProvs.ListSelectedIndices.Select(x => _listProviders[x-1].Id).ToList();
 			}
 			List<long> listClinicNums=new List<long>();
 
@@ -1457,7 +1457,7 @@ namespace OpenDental
 			#region Fill Grid Rows
 			gridSent.Rows.Clear();
 			Dictionary<long,string> dictClinicAbbrs=_listClinics.ToDictionary(x => x.Id,x => x.Abbr);
-			Dictionary<long,string> dictProvAbbrs=_listProviders.ToDictionary(x => x.ProvNum,x => x.Abbr);
+			Dictionary<long,string> dictProvAbbrs=_listProviders.ToDictionary(x => x.Id,x => x.Abbr);
 			double bal0_30=0;
 			double bal31_60=0;
 			double bal61_90=0;
@@ -1586,7 +1586,7 @@ namespace OpenDental
 			}
 			List<long> listProvNums=new List<long>();
 			if(!comboBoxMultiSentProvs.ListSelectedIndices.Contains(0)) {
-				listProvNums=comboBoxMultiSentProvs.ListSelectedIndices.Select(x => _listProviders[x-1].ProvNum).ToList();
+				listProvNums=comboBoxMultiSentProvs.ListSelectedIndices.Select(x => _listProviders[x-1].Id).ToList();
 			}
 			List<long> listClinicNums=new List<long>();
 

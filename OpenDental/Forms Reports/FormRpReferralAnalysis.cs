@@ -9,6 +9,7 @@ using OpenDentBusiness;
 using System.Collections.Generic;
 using OpenDental.ReportingComplex;
 using CodeBase;
+using System.Linq;
 
 namespace OpenDental{
 ///<summary></summary>
@@ -306,7 +307,7 @@ namespace OpenDental{
 
 		private void FormReferralAnalysis_Load(object sender, System.EventArgs e) {
 			checkLandscape.Visible=false;
-			_listProviders=Providers.GetListReports();
+			_listProviders=Provider.GetForReporting().ToList();
 			textToday.Text=DateTime.Today.ToShortDateString();
 			//always defaults to the current month
 			textDateFrom.Text=new DateTime(DateTime.Today.Year,DateTime.Today.Month,1).ToShortDateString();
@@ -412,7 +413,7 @@ namespace OpenDental{
 			}
 			for(int i=0;i<listProv.SelectedIndices.Count;i++) {
 				//Minus 1 due to the 'All' option.
-				listProvNums.Add(_listProviders[listProv.SelectedIndices[i]-1].ProvNum);
+				listProvNums.Add(_listProviders[listProv.SelectedIndices[i]-1].Id);
 				listProvNames.Add(_listProviders[listProv.SelectedIndices[i]-1].Abbr);
 			}
 			ReportComplex report;
