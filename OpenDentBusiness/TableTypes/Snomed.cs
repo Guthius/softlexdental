@@ -6,7 +6,7 @@
     /// SNOMED CT maintained, owned and copyright International Health Terminology Standards 
     /// Development Organisation (IHTSDO).
     /// </summary>
-    public class Snomed : ODTable
+    public class Snomed
     {
         public long SnomedNum;
         

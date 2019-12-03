@@ -128,94 +128,96 @@ namespace OpenDentBusiness
         ///Both itemCur and itemOld cannot be null.</summary>
         public static void MakeLogEntry<T>(T itemCur, T itemOld, InsEditLogType logType, long userNumCur)
         {
-            //No need to check RemotingRole; no call to db.
-            T priKeyItem = itemCur == null ? itemOld : itemCur;
-            FieldInfo priKeyField = priKeyItem.GetType().GetFields().Where(x => x.IsDefined(typeof(ODTableColumn))
-             && ((ODTableColumn)x.GetCustomAttribute(typeof(ODTableColumn))).PrimaryKey).First();
-            long priKey = (long)priKeyField.GetValue(priKeyItem);
-            string priKeyColName = priKeyField.Name;
-            long parentKey = priKeyItem.GetType() == typeof(Benefit) ? ((Benefit)(object)priKeyItem).PlanNum : 0; //parentKey only filled for Benefits.
-            string descript = "";
-            switch (logType)
-            { //always default the descript to the priKeyItem (preferring current unless deleted).
-                case InsEditLogType.InsPlan:
-                    descript = priKeyItem is InsPlan ? ((priKeyItem as InsPlan).GroupNum + " - " + (priKeyItem as InsPlan).GroupName) : "";
-                    break;
-                case InsEditLogType.Carrier:
-                    descript = priKeyItem is Carrier ? ((priKeyItem as Carrier).CarrierNum + " - " + (priKeyItem as Carrier).CarrierName) : "";
-                    break;
-                case InsEditLogType.Benefit:
-                    descript = priKeyItem is Benefit ? Benefits.GetCategoryString(priKeyItem as Benefit) : "";
-                    break;
-                case InsEditLogType.Employer:
-                    descript = (priKeyItem as Employer)?.EmpName ?? "";
-                    break;
-                default:
-                    break;
-            }
-            if (itemOld == null)
-            { //new, just inserted. Show PriKey Column only.
-                InsEditLog logCur = new InsEditLog()
-                {
-                    FieldName = priKeyColName,
-                    UserNum = userNumCur,
-                    OldValue = "NEW",
-                    NewValue = priKey.ToString(),
-                    LogType = logType,
-                    FKey = priKey,
-                    ParentKey = parentKey,
-                    Description = descript,
-                };
-                Insert(logCur);
-                return;
-            }
-            foreach (FieldInfo prop in priKeyItem.GetType().GetFields())
-            {
-                if (prop.IsDefined(typeof(ODTableColumn))
-                && (((ODTableColumn)prop.GetCustomAttribute(typeof(ODTableColumn))).SpecialType.HasFlag(CrudSpecialColType.DateEntry)
-                 || ((ODTableColumn)prop.GetCustomAttribute(typeof(ODTableColumn))).SpecialType.HasFlag(CrudSpecialColType.DateTEntry)
-                 || ((ODTableColumn)prop.GetCustomAttribute(typeof(ODTableColumn))).SpecialType.HasFlag(CrudSpecialColType.ExcludeFromUpdate)
-                 || ((ODTableColumn)prop.GetCustomAttribute(typeof(ODTableColumn))).SpecialType.HasFlag(CrudSpecialColType.TimeStamp)))
-                {
-                    continue; //skip logs that are not user editable.
-                }
-                object valOld = prop.GetValue(itemOld) ?? "";
-                if (itemCur == null)
-                { //deleted, show all deleted columns
-                    InsEditLog logCur = new InsEditLog()
-                    {
-                        FieldName = prop.Name,
-                        UserNum = userNumCur,
-                        OldValue = valOld.ToString(),
-                        NewValue = "DELETED",
-                        LogType = logType,
-                        FKey = priKey,
-                        ParentKey = parentKey,
-                        Description = descript,
-                    };
-                    Insert(logCur);
-                }
-                else
-                { //updated, just show changes.
-                    object valCur = prop.GetValue(itemCur) ?? "";
-                    if (valCur.ToString() == valOld.ToString())
-                    {
-                        continue;
-                    }
-                    InsEditLog logCur = new InsEditLog()
-                    {
-                        FieldName = prop.Name,
-                        UserNum = userNumCur,
-                        OldValue = valOld.ToString(),
-                        NewValue = valCur.ToString(),
-                        LogType = logType,
-                        FKey = priKey,
-                        ParentKey = parentKey,
-                        Description = descript,
-                    };
-                    Insert(logCur);
-                }
-            }
+            // TODO: Fix me...
+
+            ////No need to check RemotingRole; no call to db.
+            //T priKeyItem = itemCur == null ? itemOld : itemCur;
+            //FieldInfo priKeyField = priKeyItem.GetType().GetFields().Where(x => x.IsDefined(typeof(ODTableColumn))
+            // && ((ODTableColumn)x.GetCustomAttribute(typeof(ODTableColumn))).PrimaryKey).First();
+            //long priKey = (long)priKeyField.GetValue(priKeyItem);
+            //string priKeyColName = priKeyField.Name;
+            //long parentKey = priKeyItem.GetType() == typeof(Benefit) ? ((Benefit)(object)priKeyItem).PlanNum : 0; //parentKey only filled for Benefits.
+            //string descript = "";
+            //switch (logType)
+            //{ //always default the descript to the priKeyItem (preferring current unless deleted).
+            //    case InsEditLogType.InsPlan:
+            //        descript = priKeyItem is InsPlan ? ((priKeyItem as InsPlan).GroupNum + " - " + (priKeyItem as InsPlan).GroupName) : "";
+            //        break;
+            //    case InsEditLogType.Carrier:
+            //        descript = priKeyItem is Carrier ? ((priKeyItem as Carrier).CarrierNum + " - " + (priKeyItem as Carrier).CarrierName) : "";
+            //        break;
+            //    case InsEditLogType.Benefit:
+            //        descript = priKeyItem is Benefit ? Benefits.GetCategoryString(priKeyItem as Benefit) : "";
+            //        break;
+            //    case InsEditLogType.Employer:
+            //        descript = (priKeyItem as Employer)?.EmpName ?? "";
+            //        break;
+            //    default:
+            //        break;
+            //}
+            //if (itemOld == null)
+            //{ //new, just inserted. Show PriKey Column only.
+            //    InsEditLog logCur = new InsEditLog()
+            //    {
+            //        FieldName = priKeyColName,
+            //        UserNum = userNumCur,
+            //        OldValue = "NEW",
+            //        NewValue = priKey.ToString(),
+            //        LogType = logType,
+            //        FKey = priKey,
+            //        ParentKey = parentKey,
+            //        Description = descript,
+            //    };
+            //    Insert(logCur);
+            //    return;
+            //}
+            //foreach (FieldInfo prop in priKeyItem.GetType().GetFields())
+            //{
+            //    if (prop.IsDefined(typeof(ODTableColumn))
+            //    && (((ODTableColumn)prop.GetCustomAttribute(typeof(ODTableColumn))).SpecialType.HasFlag(CrudSpecialColType.DateEntry)
+            //     || ((ODTableColumn)prop.GetCustomAttribute(typeof(ODTableColumn))).SpecialType.HasFlag(CrudSpecialColType.DateTEntry)
+            //     || ((ODTableColumn)prop.GetCustomAttribute(typeof(ODTableColumn))).SpecialType.HasFlag(CrudSpecialColType.ExcludeFromUpdate)
+            //     || ((ODTableColumn)prop.GetCustomAttribute(typeof(ODTableColumn))).SpecialType.HasFlag(CrudSpecialColType.TimeStamp)))
+            //    {
+            //        continue; //skip logs that are not user editable.
+            //    }
+            //    object valOld = prop.GetValue(itemOld) ?? "";
+            //    if (itemCur == null)
+            //    { //deleted, show all deleted columns
+            //        InsEditLog logCur = new InsEditLog()
+            //        {
+            //            FieldName = prop.Name,
+            //            UserNum = userNumCur,
+            //            OldValue = valOld.ToString(),
+            //            NewValue = "DELETED",
+            //            LogType = logType,
+            //            FKey = priKey,
+            //            ParentKey = parentKey,
+            //            Description = descript,
+            //        };
+            //        Insert(logCur);
+            //    }
+            //    else
+            //    { //updated, just show changes.
+            //        object valCur = prop.GetValue(itemCur) ?? "";
+            //        if (valCur.ToString() == valOld.ToString())
+            //        {
+            //            continue;
+            //        }
+            //        InsEditLog logCur = new InsEditLog()
+            //        {
+            //            FieldName = prop.Name,
+            //            UserNum = userNumCur,
+            //            OldValue = valOld.ToString(),
+            //            NewValue = valCur.ToString(),
+            //            LogType = logType,
+            //            FKey = priKey,
+            //            ParentKey = parentKey,
+            //            Description = descript,
+            //        };
+            //        Insert(logCur);
+            //    }
+            //}
         }
 
         public static long Insert(InsEditLog logCur)

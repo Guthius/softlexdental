@@ -981,7 +981,6 @@
     <Compile Include="TableTypes\UpdateHistory.cs" />
     <Compile Include="TableTypes\CDSPermission.cs" />
     <Compile Include="__WIP\AppointmentType.cs" />
-    <Compile Include="TableTypes\ConnGroupAttach.cs" />
     <Compile Include="TableTypes\ClaimSnapshot.cs" />
     <Compile Include="TableTypes\DashboardCell.cs" />
     <Compile Include="TableTypes\DashboardLayout.cs" />
@@ -1012,7 +1011,6 @@
     <Compile Include="TableTypes\UserodApptView.cs" />
     <Compile Include="__WIP\UserPreference.cs" />
     <Compile Include="TableTypes\UserWeb.cs" />
-    <Compile Include="TableTypes\WebSchedRecall.cs" />
     <Compile Include="TableTypes\WikiListHist.cs" />
     <Compile Include="TableTypes\DispSupply.cs" />
     <Compile Include="TableTypes\ProcButtonQuick.cs" />
@@ -1062,12 +1060,7 @@
     <Compile Include="TableTypes\Snomed.cs" />
     <Compile Include="TableTypes\VaccineObs.cs" />
     <Compile Include="TableTypes\WikiListHeaderWidth.cs" />
-    <Compile Include="TableTypes\EvaluationCriterion.cs" />
-    <Compile Include="TableTypes\GradingScaleItem.cs" />
-    <Compile Include="TableTypes\EvaluationCriterionDef.cs" />
-    <Compile Include="TableTypes\EvaluationDef.cs" />
     <Compile Include="Data\GradingScale.cs" />
-    <Compile Include="TableTypes\Evaluation.cs" />
     <Compile Include="TableTypes\WikiPageHist.cs" />
     <Compile Include="TableTypes\WikiPage.cs" />
     <Compile Include="TableTypes\DictCustom.cs" />
@@ -1112,7 +1105,6 @@
     <Compile Include="TableTypes\TaskNote.cs" />
     <Compile Include="TableTypes\TaskUnread.cs" />
     <Compile Include="TableTypes\Equipment.cs" />
-    <Compile Include="TableTypes\ReplicationServer.cs" />
     <Compile Include="TableTypes\EtransMessageText.cs" />
     <Compile Include="TableTypes\InsFilingCode.cs" />
     <Compile Include="TableTypes\InsFilingCodeSubtype.cs" />
@@ -1228,8 +1220,6 @@
     <Compile Include="TableTypes\Popup.cs" />
     <Compile Include="TableTypes\DisplayField.cs" />
     <Compile Include="TableTypes\ProcCodeNote.cs" />
-    <Compile Include="TableTypes\ReqStudent.cs" />
-    <Compile Include="TableTypes\ReqNeeded.cs" />
     <Compile Include="TableTypes\LabTurnaround.cs" />
     <Compile Include="TableTypes\LabCase.cs" />
     <Compile Include="TableTypes\Laboratory.cs" />
@@ -1257,7 +1247,6 @@
     <Compile Include="TableTypes\Fee.cs" />
     <Compile Include="Data\UserGroupPermission.cs" />
     <Compile Include="TableTypes\InsPlan.cs" />
-    <Compile Include="TableTypes\InstructorOld.cs" />
     <Compile Include="Db\Interval.cs" />
     <Compile Include="TableTypes\JournalEntry.cs" />
     <Compile Include="Data\Letter.cs" />
@@ -1303,8 +1292,6 @@
     <Compile Include="TableTypes\RxDef.cs" />
     <Compile Include="TableTypes\RxPat.cs" />
     <Compile Include="TableTypes\Schedule.cs" />
-    <Compile Include="TableTypes\SchoolClass.cs" />
-    <Compile Include="TableTypes\SchoolCourse.cs" />
     <Compile Include="TableTypes\ScreenGroup.cs" />
     <Compile Include="TableTypes\Screen.cs" />
     <Compile Include="__WIP\SecurityLog.cs" />

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Xml.Serialization;
 
 namespace OpenDentBusiness
 {
@@ -9,20 +8,6 @@ namespace OpenDentBusiness
     abstract public class ODTable
     {
         static long maxAllowedPacketCount = 0;
-
-        /// <summary>
-        /// Will only be true if explicitly set to true by programmer.
-        /// When CRUD grabs a table from db, it is naturally set to False.
-        /// Once set, this value is not used by the CRUD in any manner.
-        /// Just used by the programmer for making decisions about whether to Insert or Update.
-        /// </summary>
-        public bool IsNew { get; set; } = false;
-
-        /// <summary>
-        /// Tag can be useful when you need to associate this object to another object and do not have a control Tag.
-        /// </summary>
-        [XmlIgnore]
-        public object ODTag { get; set; }
 
         /// <summary>
         /// We cannot make the returned value too large, because we want to allow the server to 
@@ -45,7 +30,7 @@ namespace OpenDentBusiness
                 var retVal = MiscData.GetMaxAllowedPacket() - 8 * kilobyte;
 
                 // Minimum of 8K (for network packet headers), maximum of 1MB for parallel.
-                maxAllowedPacketCount = Math.Min(Math.Max(retVal, 8 * kilobyte), megabyte); 
+                maxAllowedPacketCount = Math.Min(Math.Max(retVal, 8 * kilobyte), megabyte);
 
                 return maxAllowedPacketCount;
             }

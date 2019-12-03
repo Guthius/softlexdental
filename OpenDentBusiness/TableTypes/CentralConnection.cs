@@ -1,5 +1,8 @@
+using System;
+
 namespace OpenDentBusiness
 {
+    [Obsolete]
     public class CentralConnection
     {
         public string ServerName { get; set; }

@@ -6,7 +6,7 @@ namespace OpenDentBusiness
     /// extended to provide more complex rules, such as partial double booking, time 
     /// limitations, etc.
     /// </summary>
-    public class AppointmentRule : ODTable
+    public class AppointmentRule
     {
         public long AppointmentRuleNum;
 

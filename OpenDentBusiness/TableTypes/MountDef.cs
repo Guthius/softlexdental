@@ -1,14 +1,12 @@
-using System;
-using System.Collections;
-
 namespace OpenDentBusiness
 {
-    /// <summary>THIS TABLE IS NOT BEING USED.  These can be freely deleted, renamed, moved, etc. without affecting any patient info.  mountitemdef</summary>
-    [Serializable()]
-    public class MountDef : ODTable
+    /// <summary>
+    /// THIS TABLE IS NOT BEING USED. 
+    /// These can be freely deleted, renamed, moved, etc. without affecting any patient info.
+    /// </summary>
+    public class MountDef
     {
         public long MountDefNum;
-        
 
         public string Description;
         

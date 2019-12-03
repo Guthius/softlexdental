@@ -1,23 +1,19 @@
-﻿using System;
-using System.Collections;
-using System.Drawing;
+﻿namespace OpenDentBusiness
+{
+    ///<summary>And other kinds of units.  We will only prefill this list with units needed for the tests.  Users would have to manually add any other units.</summary>
+    public class DrugUnit
+    {
+        public long DrugUnitNum;
 
-namespace OpenDentBusiness {
-	///<summary>And other kinds of units.  We will only prefill this list with units needed for the tests.  Users would have to manually add any other units.</summary>
-	[Serializable]
-	public class DrugUnit:ODTable {
-		///<summary>Primary key.</summary>
-		[ODTableColumn(PrimaryKey=true)]
-		public long DrugUnitNum;
-		///<summary>Example ml, capitalization not critical. Usually entered as lowercase except for L.</summary>
-		public string UnitIdentifier;//VARCHAR(20)/VARCHAR2(20).
-		///<summary>Example milliliter.</summary>
-		public string UnitText;
+        ///<summary>Example ml, capitalization not critical. Usually entered as lowercase except for L.</summary>
+        public string UnitIdentifier;
 
-		///<summary></summary>
-		public DrugUnit Copy() {
-			return (DrugUnit)this.MemberwiseClone();
-		}
+        ///<summary>Example milliliter.</summary>
+        public string UnitText;
 
-	}
+        public DrugUnit Copy()
+        {
+            return (DrugUnit)this.MemberwiseClone();
+        }
+    }
 }

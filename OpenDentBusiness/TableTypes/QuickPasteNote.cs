@@ -1,40 +1,29 @@
 using System;
 
-namespace OpenDentBusiness{
-	
-	///<summary>Template for quick pasted note feature.</summary>
-	[Serializable]
-	[ODTable(IsSynchable=true)]
-	public class QuickPasteNote:ODTable {
-		///<summary>Primary key.</summary>
-		[ODTableColumn(PrimaryKey=true)]
-		public long QuickPasteNoteNum;
-		///<summary>FK to quickpastecat.QuickPasteCatNum.  Keeps track of which category this note is in.</summary>
-		public long QuickPasteCatNum;
-		///<summary>The order of this note within it's category. 0-based.</summary>
-		public int ItemOrder;
-		///<summary>The actual note. Can be multiple lines and possibly very long.</summary>
-		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
-		public string Note;
-		///<summary>The abbreviation which will automatically substitute when preceded by a ?.</summary>
-		public string Abbreviation;
+namespace OpenDentBusiness
+{
+    /// <summary>
+    /// Template for quick pasted note feature.
+    /// </summary>
+    public class QuickPasteNote
+    {
+        public long QuickPasteNoteNum;
 
-		public QuickPasteNote Copy() {
-			return (QuickPasteNote)this.MemberwiseClone();
-		}
+        ///<summary>FK to quickpastecat.QuickPasteCatNum.  Keeps track of which category this note is in.</summary>
+        public long QuickPasteCatNum;
 
-	}
+        ///<summary>The order of this note within it's category. 0-based.</summary>
+        public int ItemOrder;
 
-	
+        ///<summary>The actual note. Can be multiple lines and possibly very long.</summary>
+        public string Note;
 
+        ///<summary>The abbreviation which will automatically substitute when preceded by a ?.</summary>
+        public string Abbreviation;
 
+        public QuickPasteNote Copy()
+        {
+            return (QuickPasteNote)this.MemberwiseClone();
+        }
+    }
 }
-
-
-
-
-
-
-
-
-

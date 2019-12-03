@@ -6,9 +6,14 @@ using System.Threading.Tasks;
 
 namespace OpenDentBusiness
 {
-    ///<summary>Tracks which clinics have access to eRx based on ClinicDescr.  Synchronized with HQ.</summary>
-    public class ClinicErx : ODTable
+    /// <summary>
+    /// Tracks which clinics have access to eRx based on ClinicDescr. 
+    /// Synchronized with HQ.
+    /// </summary>
+    public class ClinicErx
     {
+        // TODO: This is only relevant for OD HQ? If so delete this...
+
         public long ClinicErxNum;
 
         ///<summary>FK to patient.PatNum.  Holder of registration key only for HQ record, in customer record this will be 0.</summary>

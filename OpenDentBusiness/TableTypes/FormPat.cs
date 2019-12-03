@@ -1,59 +1,23 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 
-namespace OpenDentBusiness{
+namespace OpenDentBusiness
+{
+    /// <summary>
+    /// One form or questionnaire filled out by a patient. 
+    /// Each patient can have multiple forms.
+    /// </summary>
+    public class FormPat
+    {
+        public long FormPatNum;
 
-	///<summary>One form or questionnaire filled out by a patient.  Each patient can have multiple forms.</summary>
-	[Serializable]
-	public class FormPat:ODTable {
-		///<summary>Primary key.</summary>
-		[ODTableColumn(PrimaryKey=true)]
-		public long FormPatNum;
-		///<summary>FK to patient.PatNum.</summary>
-		public long PatNum;
-		///<summary>The date and time that this questionnaire was filled out.</summary>
-		[ODTableColumn(SpecialType=CrudSpecialColType.DateT)]
-		public DateTime FormDateTime;
-		///<summary>Not a database field.</summary>
-		[ODTableColumn(IsNotDbColumn=true)]
-		public List<Question> QuestionList;
+        ///<summary>FK to patient.PatNum.</summary>
+        public long PatNum;
 
-		///<summary>Constructor</summary>
-		public FormPat(){
-			QuestionList=new List<Question>();
-		}
-		
-		///<summary></summary>
-		public FormPat Copy(){
-			FormPat f=new FormPat();
-			f=(FormPat)this.MemberwiseClone();
-			f.QuestionList=new List<Question>(QuestionList);
-			return f;
-		}
-	}
+        ///<summary>The date and time that this questionnaire was filled out.</summary>
+        public DateTime FormDateTime;
 
-	
-	
-
+        ///<summary>Not a database field.</summary>
+        public List<Question> QuestionList = new List<Question>();
+    }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

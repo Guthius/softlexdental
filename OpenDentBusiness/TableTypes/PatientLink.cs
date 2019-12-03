@@ -1,41 +1,38 @@
 ﻿using System;
 
-namespace OpenDentBusiness {
-	///<summary></summary>
-	[Serializable]
-	public class PatientLink:ODTable {
-		///<summary>Primary key.</summary>
-		[ODTableColumn(PrimaryKey=true)]
-		public long PatientLinkNum;
-		///<summary>FK to patient.PatNum. The patient that is linked from.
-		///For a Merge type, this is that patient that was merged from.
-		///For a Clone type, this is the original or master patient.</summary>
-		public long PatNumFrom;
-		///<summary>FK to patient.PatNum, unless LinkType=PaySimple. The patient that is linked to.
-		///For a Merge type, this is that patient that was merged into.
-		///For a Clone type, this represents the clone that was made from the PatNumFrom patient.</summary>
-		public long PatNumTo;
-		///<summary>Enum:PatientLinkType The type of link.</summary>
-		public PatientLinkType LinkType;
-		///<summary>The time the link was created.</summary>
-		[ODTableColumn(SpecialType=CrudSpecialColType.DateTEntry)]
-		public DateTime DateTimeLink;
+namespace OpenDentBusiness
+{
+    public class PatientLink
+    {
+        public long PatientLinkNum;
 
-		///<summary></summary>
-		public PatientLink Copy() {
-			return (PatientLink)this.MemberwiseClone();
-		}
-	}
+        ///<summary>FK to patient.PatNum. The patient that is linked from.
+        ///For a Merge type, this is that patient that was merged from.
+        ///For a Clone type, this is the original or master patient.</summary>
+        public long PatNumFrom;
 
-	///<summary>The manner in which two patients are linked together.</summary>
-	public enum PatientLinkType {
-		///<summary>0</summary>
-		Undefined,
-		///<summary>1 - The two patients have been merged into each other.</summary>
-		Merge,
-		///<summary>2 - A clone has been made of the From patient.  PatNumFrom is the original or master and PatNumTo is the clone.</summary>
-		Clone,
-		///<summary>3 - The PatFromTo column will hold the ID for PaySimple.  This should not be used in OpenDental to get a patient.</summary>
-		PaySimple,
-	}
+        ///<summary>FK to patient.PatNum, unless LinkType=PaySimple. The patient that is linked to.
+        ///For a Merge type, this is that patient that was merged into.
+        ///For a Clone type, this represents the clone that was made from the PatNumFrom patient.</summary>
+        public long PatNumTo;
+
+        ///<summary>Enum:PatientLinkType The type of link.</summary>
+        public PatientLinkType LinkType;
+
+        ///<summary>The time the link was created.</summary>
+        public DateTime DateTimeLink;
+    }
+
+    ///<summary>The manner in which two patients are linked together.</summary>
+    public enum PatientLinkType
+    {
+        ///<summary>0</summary>
+        Undefined,
+        ///<summary>1 - The two patients have been merged into each other.</summary>
+        Merge,
+        ///<summary>2 - A clone has been made of the From patient.  PatNumFrom is the original or master and PatNumTo is the clone.</summary>
+        Clone,
+        ///<summary>3 - The PatFromTo column will hold the ID for PaySimple.  This should not be used in OpenDental to get a patient.</summary>
+        PaySimple,
+    }
 }

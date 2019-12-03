@@ -21,10 +21,8 @@ using System.Reflection;
 
 namespace OpenDentBusiness
 {
-    [Serializable()]
-    public class DatabaseMaintenance : ODTable
+    public class DatabaseMaintenance
     {
-        [ODTableColumn(PrimaryKey = true)]
         public long DatabaseMaintenanceNum;
 
         /// <summary>
@@ -45,7 +43,6 @@ namespace OpenDentBusiness
         /// <summary>
         /// Updates the date and time they run the method.
         /// </summary>
-        [ODTableColumn(SpecialType = CrudSpecialColType.DateT)]
         public DateTime DateLastRun;
     }
 
@@ -93,11 +90,6 @@ namespace OpenDentBusiness
     /// </summary>
     public class MethodInfoComparer : IComparer<MethodInfo>
     {
-
-        public MethodInfoComparer()
-        {
-        }
-
         public int Compare(MethodInfo x, MethodInfo y)
         {
             return x.Name.CompareTo(y.Name);

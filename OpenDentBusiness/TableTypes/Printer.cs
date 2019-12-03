@@ -2,8 +2,10 @@ using CodeBase;
 
 namespace OpenDentBusiness
 {
-    ///<summary>One printer selection for one situation for one computer.</summary>
-    public class Printer : ODTable
+    /// <summary>
+    /// One printer selection for one situation for one computer.
+    /// </summary>
+    public class Printer 
     {
         ///<summary>Primary key.</summary>
         public long PrinterNum;
@@ -19,11 +21,5 @@ namespace OpenDentBusiness
         
         ///<summary>If true, then user will be prompted for printer.  Otherwise, print directly with little user interaction.</summary>
         public bool DisplayPrompt;
-
-        ///<summary>Returns a copy of the printer.</summary>
-        public Printer Clone()
-        {
-            return (Printer)this.MemberwiseClone();
-        }
     }
 }

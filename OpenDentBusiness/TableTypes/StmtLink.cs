@@ -1,34 +1,31 @@
-﻿using System;
+﻿namespace OpenDentBusiness
+{
+    public class StmtLink
+    {
+        public long StmtLinkNum;
 
-namespace OpenDentBusiness {
-	///<summary></summary>
-	[Serializable()]
-	public class StmtLink:ODTable {
-		///<summary>Primary key.</summary>
-		[ODTableColumn(PrimaryKey=true)]
-		public long StmtLinkNum;
-		///<summary>FK to statement.StatementNum.</summary>
-		public long StatementNum;
-		///<summary>Enum:StmtLinkTypes Represents what object FKey corresponds to.</summary>
-		public StmtLinkTypes StmtLinkType;
-		///<summary>FK to type of PK of another object depending on StmtLinkType value. E.g. procedurelog.ProcNum, paysplit.PaySplitNum, adjustment.AdjNum, etc.</summary>
-		public long FKey;
+        ///<summary>FK to statement.StatementNum.</summary>
+        public long StatementNum;
 
+        ///<summary>Enum:StmtLinkTypes Represents what object FKey corresponds to.</summary>
+        public StmtLinkTypes StmtLinkType;
 
-		public StmtLink Copy() {
-			return (StmtLink)this.MemberwiseClone();
-		}
-	}
+        ///<summary>FK to type of PK of another object depending on StmtLinkType value. E.g. procedurelog.ProcNum, paysplit.PaySplitNum, adjustment.AdjNum, etc.</summary>
+        public long FKey;
+    }
 
-	///<summary></summary>
-	public enum StmtLinkTypes {
-		///<summary>0 - Procedure</summary>
-		Proc,
-		///<summary>1 - Pay split</summary>
-		PaySplit,
-		///<summary>2 - Adjustment</summary>
-		Adj,
-		///<summary>3 - ClaimPay</summary>
-		ClaimPay
-	}
+    public enum StmtLinkTypes
+    {
+        ///<summary>Procedure</summary>
+        Proc,
+
+        ///<summary>Pay split</summary>
+        PaySplit,
+
+        ///<summary>Adjustment</summary>
+        Adj,
+
+        ///<summary>ClaimPay</summary>
+        ClaimPay
+    }
 }

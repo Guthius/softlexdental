@@ -1,85 +1,102 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace OpenDentBusiness{
-	///<summary>Represents a single document in the images module.</summary>
-	[Serializable]
-	[ODTable(AuditPerms=CrudAuditPerm.ImageDelete|CrudAuditPerm.ImageEdit,IsLargeTable=true)]
-	public class Document:ODTable {
-		///<summary>Primary key.</summary>
-		[ODTableColumn(PrimaryKey=true)]
-		public long DocNum;
-		/// <summary>Description of the document.</summary>
-		public string Description;
-		/// <summary>Date/time created.</summary>
-		[ODTableColumn(SpecialType=CrudSpecialColType.DateT)]
-		public DateTime DateCreated;
-		/// <summary>FK to definition.DefNum. Categories for documents.</summary>
-		public long DocCategory;
-		/// <summary>FK to patient.PatNum.  The document will be located in the patient folder of this patient.</summary>
-		public long PatNum;
-		/// <summary>The name of the file. Does not include any directory info.</summary>
-		public string FileName;
-		/// <summary>Enum:ImageType eg. document, radiograph, photo, file</summary>
-		public ImageType ImgType;
-		/// <summary>True if flipped horizontally. A vertical flip would be stored as a horizontal flip plus a 180 rotation.</summary>
-		public bool IsFlipped;
-		/// <summary>Only allowed 0,90,180, and 270.</summary>
-		public int DegreesRotated;
-		/// <summary>Incomplete.  An optional list of tooth numbers separated by commas.  The tooth numbers will be in American format and must be processed for display.  When displayed, dashes will be used for sequences of 3 or more tooth numbers.</summary>
-		public string ToothNumbers;
-		/// <summary>.</summary>
-		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
-		public string Note;
-		/// <summary>True if the signature is in Topaz format rather than OD format.</summary>
-		public bool SigIsTopaz;
-		/// <summary>The encrypted and bound signature in base64 format.  The signature is bound to the byte sequence of the original image.</summary>
-		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
-		public string Signature;
-		/// <summary>Crop rectangle X in original image pixel coordinates.  May be negative.</summary>
-		public int CropX;
-		/// <summary>Crop rectangle Y in original image pixel coordinates.  May be negative.</summary>
-		public int CropY;
-		/// <summary>Crop rectangle Width in original image pixel coordinates.  May be zero if no cropping.  May be greater than original image width.</summary>
-		public int CropW;
-		/// <summary>Crop rectangle Height in original image pixel coordinates.  May be zero if no cropping.  May be greater than original image height.</summary>
-		public int CropH;
-		/// <summary>The lower value of the "windowing" (contrast/brightness) for radiographs.  Default is 0.  Max is 255.</summary>
-		public int WindowingMin;
-		/// <summary>The upper value of the "windowing" (contrast/brightness) for radiographs.  Default is 0(no windowing).  Max is 255.</summary>
-		public int WindowingMax;
-		/// <summary>FK to mountitem.MountItemNum. If set, then this image will only show on a mount, not in the main tree. If set to 0, then no mount item is associated with this document.</summary>
-		public long MountItemNum;
-		/// <summary>Date/time last altered.</summary>
-		[ODTableColumn(SpecialType=CrudSpecialColType.TimeStamp)]
-		public DateTime DateTStamp;
-		///<summary>The raw file data encoded as base64.  Only used if there is no AtoZ folder.</summary>
-		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
-		public string RawBase64;
-		///<summary>Thumbnail encoded as base64.  Only present if not using AtoZ folder. 100x100 pixels, jpg, takes around 5.5k.</summary>
-		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
-		public string Thumbnail;
-		///<summary>The primary key associated to a document hosted on an external source.</summary>
-		public string ExternalGUID;
-		///<summary>Enum:ExternalSourceType The source for the corresponding ExternalGUID.</summary>
-		[ODTableColumn(SpecialType=CrudSpecialColType.EnumAsString)]
-		public ExternalSourceType ExternalSource;
+namespace OpenDentBusiness
+{
+    ///<summary>Represents a single document in the images module.</summary>
+    public class Document
+    {
+        public long DocNum;
 
-		///<summary>Returns a copy of this Document.</summary>
-		public Document Copy() {
-			return (Document)this.MemberwiseClone();
-		}
-	}
-	
-		///<summary>Supported sources that help identify what the corresponding ExternalGUID column should be used for.</summary>
-		public enum ExternalSourceType {
-			///<summary>This is a document that is not stored in an external source.  All documents stored by Open Dental will be this type.</summary>
-			None,
-			///<summary>This document can be found in a corresponding Dropbox account.</summary>
-			Dropbox,
-			///<summary>This document is saved from a download from XVWeb program link.</summary>
-			XVWeb,
-		}
-	
+        /// <summary>Description of the document.</summary>
+        public string Description;
+
+        /// <summary>Date/time created.</summary>
+        public DateTime DateCreated;
+
+        /// <summary>FK to definition.DefNum. Categories for documents.</summary>
+        public long DocCategory;
+
+        /// <summary>FK to patient.PatNum.  The document will be located in the patient folder of this patient.</summary>
+        public long PatNum;
+
+        /// <summary>The name of the file. Does not include any directory info.</summary>
+        public string FileName;
+
+        /// <summary>Enum:ImageType eg. document, radiograph, photo, file</summary>
+        public ImageType ImgType;
+
+        /// <summary>True if flipped horizontally. A vertical flip would be stored as a horizontal flip plus a 180 rotation.</summary>
+        public bool IsFlipped;
+
+        /// <summary>Only allowed 0,90,180, and 270.</summary>
+        public int DegreesRotated;
+
+        /// <summary>Incomplete.  An optional list of tooth numbers separated by commas.  The tooth numbers will be in American format and must be processed for display.  When displayed, dashes will be used for sequences of 3 or more tooth numbers.</summary>
+        public string ToothNumbers;
+
+        /// <summary>.</summary>
+        public string Note;
+
+        /// <summary>True if the signature is in Topaz format rather than OD format.</summary>
+        public bool SigIsTopaz;
+
+        /// <summary>The encrypted and bound signature in base64 format.  The signature is bound to the byte sequence of the original image.</summary>
+        public string Signature;
+
+        /// <summary>Crop rectangle X in original image pixel coordinates.  May be negative.</summary>
+        public int CropX;
+
+        /// <summary>Crop rectangle Y in original image pixel coordinates.  May be negative.</summary>
+        public int CropY;
+
+        /// <summary>Crop rectangle Width in original image pixel coordinates.  May be zero if no cropping.  May be greater than original image width.</summary>
+        public int CropW;
+
+        /// <summary>Crop rectangle Height in original image pixel coordinates.  May be zero if no cropping.  May be greater than original image height.</summary>
+        public int CropH;
+
+        /// <summary>The lower value of the "windowing" (contrast/brightness) for radiographs.  Default is 0.  Max is 255.</summary>
+        public int WindowingMin;
+
+        /// <summary>The upper value of the "windowing" (contrast/brightness) for radiographs.  Default is 0(no windowing).  Max is 255.</summary>
+        public int WindowingMax;
+
+        /// <summary>FK to mountitem.MountItemNum. If set, then this image will only show on a mount, not in the main tree. If set to 0, then no mount item is associated with this document.</summary>
+        public long MountItemNum;
+
+        /// <summary>Date/time last altered.</summary>
+        public DateTime DateTStamp;
+
+        ///<summary>The raw file data encoded as base64.  Only used if there is no AtoZ folder.</summary>
+        public string RawBase64;
+
+        ///<summary>Thumbnail encoded as base64.  Only present if not using AtoZ folder. 100x100 pixels, jpg, takes around 5.5k.</summary>
+        public string Thumbnail;
+
+        ///<summary>The primary key associated to a document hosted on an external source.</summary>
+        public string ExternalGUID;
+
+        ///<summary>Enum:ExternalSourceType The source for the corresponding ExternalGUID.</summary>
+        public ExternalSourceType ExternalSource;
+
+        ///<summary>Returns a copy of this Document.</summary>
+        public Document Copy()
+        {
+            return (Document)this.MemberwiseClone();
+        }
+    }
+
+    ///<summary>Supported sources that help identify what the corresponding ExternalGUID column should be used for.</summary>
+    public enum ExternalSourceType
+    {
+        ///<summary>This is a document that is not stored in an external source.  All documents stored by Open Dental will be this type.</summary>
+        None,
+
+        ///<summary>This document can be found in a corresponding Dropbox account.</summary>
+        Dropbox,
+
+        ///<summary>This document is saved from a download from XVWeb program link.</summary>
+        XVWeb,
+    }
 }
+

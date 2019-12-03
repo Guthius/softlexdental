@@ -1,6 +1,6 @@
 namespace OpenDentBusiness
 {
-    public class ClinicPref : ODTable
+    public class ClinicPref
     {
         public long ClinicPrefNum;
         public long ClinicNum;
@@ -17,6 +17,7 @@ namespace OpenDentBusiness
             PrefName = prefName;
             ValueString = valueString;
         }
+
         public ClinicPref(long clinicNum, PreferenceName prefName, bool valueBool) : this(clinicNum, prefName, valueBool.ToString())
         {
         }

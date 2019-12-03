@@ -1,9 +1,10 @@
 using System;
-using System.Collections;
 
 namespace OpenDentBusiness
 {
-    ///<summary>A deposit slip.  Contains multiple insurance and patient checks.</summary>
+    /// <summary>
+    /// Represents a deposit slip. Contains multiple insurance and patient checks.
+    /// </summary>
     public class Deposit
     {
         public long DepositNum;
@@ -16,7 +17,6 @@ namespace OpenDentBusiness
         /// <summary>
         /// User editable.  Usually includes name on the account and account number.  Possibly the bank name as well.
         /// </summary>
-        [ODTableColumn(SpecialType = CrudSpecialColType.TextIsClob)]
         public string BankAccountInfo;
         
         /// <summary>

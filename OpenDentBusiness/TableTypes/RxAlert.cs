@@ -4,7 +4,7 @@ namespace OpenDentBusiness
     /// Many-to-many relationship connecting Rx with DiseaseDef, AllergyDef, or Medication. 
     /// Only one of those links may be specified in a single row; the other two will be 0.
     /// </summary>
-    public class RxAlert : ODTable
+    public class RxAlert
     {
         public long RxAlertNum;
         

@@ -1,119 +1,118 @@
 using System;
-using System.Collections;
 using System.ComponentModel;
 
-namespace OpenDentBusiness{
+namespace OpenDentBusiness
+{
+    ///<summary>Always attached to a payment.  Always affects exactly one patient account and one provider.</summary>
+    public class PaySplit 
+    {
+        public long SplitNum;
 
-	///<summary>Always attached to a payment.  Always affects exactly one patient account and one provider.</summary>
-	[Serializable]
-	[ODTable(IsSecurityStamped=true,IsSynchable=true,HasBatchWriteMethods=true)]
-	public class PaySplit:ODTable {
-		///<summary>Primary key.</summary>
-		[ODTableColumn(PrimaryKey=true)]
-		public long SplitNum;
-		///<summary>Amount of split.</summary>
-		public double SplitAmt;
-		///<summary>FK to patient.PatNum.
-		///Can be the PatNum of the guarantor if this is a split for a payment plan and the guarantor is in another family.</summary>
-		public long PatNum;
-		///<summary>DEPRECATED.  No longer used.  In older versions (before 7.0), this was the date that showed on the account.  Frequently the same as the date of the payment, but not necessarily.  Not when the payment was made.</summary>
-		public DateTime ProcDate;
-		///<summary>FK to payment.PayNum.  Every paysplit must be linked to a payment.</summary>
-		public long PayNum;
-		///<summary>No longer used.</summary>
-		public bool IsDiscount;
-		///<summary>No longer used</summary>
-		public byte DiscountType;
-		///<summary>FK to provider.ProvNum.</summary>
-		public long ProvNum;
-		///<summary>FK to payplan.PayPlanNum.  0 if not attached to a payplan.</summary>
-		public long PayPlanNum;
-		///<summary>Date always in perfect synch with Payment date.</summary>
-		public DateTime DatePay;
-		///<summary>FK to procedurelog.ProcNum.  0 if not attached to a procedure.</summary>
-		public long ProcNum;
-		///<summary>Date this paysplit was created.  User not allowed to edit.</summary>
-		[ODTableColumn(SpecialType=CrudSpecialColType.DateEntry)]
-		public DateTime DateEntry;
-		///<summary>FK to definition.DefNum.  Usually 0 unless this is a special unearned split.</summary>
-		public long UnearnedType;
-		///<summary>FK to clinic.ClinicNum.  Can be 0.  Need not match the ClinicNum of the Payment, because a payment can be split between clinics.</summary>
-		public long ClinicNum;
-		///<summary>FK to userod.UserNum.  Set to the user logged in when the row was inserted at SecDateEntry date and time.</summary>
-		[ODTableColumn(SpecialType=CrudSpecialColType.ExcludeFromUpdate)]
-		public long SecUserNumEntry;
-		//No SecDateEntry, DateEntry already exists and is set by MySQL when the row is inserted and never updated
-		///<summary>Automatically updated by MySQL every time a row is added or changed. Could be changed due to user editing, custom queries or program
-		///updates.  Not user editable with the UI.</summary>
-		[ODTableColumn(SpecialType=CrudSpecialColType.TimeStamp)]
-		public DateTime SecDateTEdit;
-		///<summary>FK to paysplit.SplitNum.  Can be 0.  Indicates that this paysplit is meant to counteract another Paysplit.</summary>
-		public long FSplitNum;
-		///<summary>FK to adjustment.AdjNum.  Can be 0.  Indicates that this paysplit is meant to counteract an Adjustment.</summary>
-		public long AdjNum;
+        ///<summary>Amount of split.</summary>
+        public double SplitAmt;
 
-		[ODTableColumn(IsNotDbColumn=true)]
-		public bool IsInterestSplit;
-		///<summary>The amount of this split that is applied to an Outstanding Charge (AccountEntry).</summary>
-		[ODTableColumn(IsNotDbColumn=true)]
-		public decimal AccountEntryAmtPaid;
+        ///<summary>FK to patient.PatNum.
+        ///Can be the PatNum of the guarantor if this is a split for a payment plan and the guarantor is in another family.</summary>
+        public long PatNum;
 
-		public PaySplit() {
+        ///<summary>DEPRECATED.  No longer used.  In older versions (before 7.0), this was the date that showed on the account.  Frequently the same as the date of the payment, but not necessarily.  Not when the payment was made.</summary>
+        public DateTime ProcDate;
+
+        ///<summary>FK to payment.PayNum.  Every paysplit must be linked to a payment.</summary>
+        public long PayNum;
+
+        ///<summary>No longer used.</summary>
+        public bool IsDiscount;
+
+        ///<summary>No longer used</summary>
+        public byte DiscountType;
+
+        ///<summary>FK to provider.ProvNum.</summary>
+        public long ProvNum;
+
+        ///<summary>FK to payplan.PayPlanNum.  0 if not attached to a payplan.</summary>
+        public long PayPlanNum;
+
+        ///<summary>Date always in perfect synch with Payment date.</summary>
+        public DateTime DatePay;
+
+        ///<summary>FK to procedurelog.ProcNum.  0 if not attached to a procedure.</summary>
+        public long ProcNum;
+
+        ///<summary>Date this paysplit was created.  User not allowed to edit.</summary>
+        public DateTime DateEntry;
+
+        ///<summary>FK to definition.DefNum.  Usually 0 unless this is a special unearned split.</summary>
+        public long UnearnedType;
+
+        ///<summary>FK to clinic.ClinicNum.  Can be 0.  Need not match the ClinicNum of the Payment, because a payment can be split between clinics.</summary>
+        public long ClinicNum;
+
+        ///<summary>FK to userod.UserNum.  Set to the user logged in when the row was inserted at SecDateEntry date and time.</summary>
+        public long SecUserNumEntry;
+
+        //No SecDateEntry, DateEntry already exists and is set by MySQL when the row is inserted and never updated
+        ///<summary>Automatically updated by MySQL every time a row is added or changed. Could be changed due to user editing, custom queries or program
+        ///updates.  Not user editable with the UI.</summary>
+        public DateTime SecDateTEdit;
+
+        ///<summary>FK to paysplit.SplitNum.  Can be 0.  Indicates that this paysplit is meant to counteract another Paysplit.</summary>
+        public long FSplitNum;
+
+        ///<summary>FK to adjustment.AdjNum.  Can be 0.  Indicates that this paysplit is meant to counteract an Adjustment.</summary>
+        public long AdjNum;
+
+        //[ODTableColumn(IsNotDbColumn = true)]
+        public bool IsInterestSplit;
+
+        ///<summary>The amount of this split that is applied to an Outstanding Charge (AccountEntry).</summary>
+        //[ODTableColumn(IsNotDbColumn = true)]
+        public decimal AccountEntryAmtPaid;
+
+        public PaySplit()
+        {
             ODTag = Guid.NewGuid().ToString();//Used to identify PaySplits that have not been entered into the database yet.
-		}
+        }
 
-		///<summary>Returns a copy of this PaySplit.</summary>
-		public PaySplit Copy(){
-			return (PaySplit)this.MemberwiseClone();
-		}
+        ///<summary>Returns a copy of this PaySplit.</summary>
+        public PaySplit Copy()
+        {
+            return (PaySplit)MemberwiseClone();
+        }
 
-		///<summary>Determines if this is the same paysplit based on SplitNum or TagOD.</summary>
-		public bool IsSame(PaySplit otherSplit) {
-			if(this.SplitNum==otherSplit.SplitNum && this.SplitNum!=0) {
-				return true;
-			}
-			if(this.ODTag == otherSplit.ODTag) {
-				return true;
-			}
-			return false;
-		}
-  }
+        ///<summary>Determines if this is the same paysplit based on SplitNum or TagOD.</summary>
+        public bool IsSame(PaySplit otherSplit)
+        {
+            if (SplitNum == otherSplit.SplitNum && SplitNum != 0)
+            {
+                return true;
+            }
+            if (ODTag == otherSplit.ODTag)
+            {
+                return true;
+            }
+            return false;
+        }
+    }
 
-  public enum SplitManagerPromptType {
-    ///<summary>0</summary>
-    [Description("Do Not Use")]
-    DoNotUse,
-    ///<summary>1</summary>
-    [Description("Prompt")]
-    Prompt,
-    ///<summary>2</summary>
-    [Description("Forced")]
-    Force,
-    ///<summary>3</summary>
-    [Description("Procedure Forced")]
-    ForceProc
-  }
+    public enum SplitManagerPromptType
+    {
+        DoNotUse,
+        Prompt,
 
-	public enum AutoSplitPreference {
-			///<summary>0 - Splits to adjustments, procedures, and pay plan charges in FIFO order.</summary>
-			FIFO,
-			///<summary>1- Adjustments. Paysplits that are not explicitly attached to anything will apply to adjustments first in FIFO order then to any 
-			///remaining procedures in FIFO order.</summary>
-			Adjustments
-	}
+        [Description("Forced")]
+        Force,
 
+        [Description("Procedure Forced")]
+        ForceProc
+    }
 
-
-
-
+    public enum AutoSplitPreference
+    {
+        ///<summary>0 - Splits to adjustments, procedures, and pay plan charges in FIFO order.</summary>
+        FIFO,
+        ///<summary>1- Adjustments. Paysplits that are not explicitly attached to anything will apply to adjustments first in FIFO order then to any 
+        ///remaining procedures in FIFO order.</summary>
+        Adjustments
+    }
 }
-
-
-
-
-
-
-
-
-
-
