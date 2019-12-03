@@ -1,19 +1,24 @@
-﻿using System;
-
-namespace OpenDentBusiness
+﻿namespace OpenDentBusiness
 {
     public class OIDInternal
     {
         public long OIDInternalNum;
 
-        ///<summary>Internal data type to be associated with OIDRoot</summary>
+        /// <summary>
+        /// Internal data type to be associated with OIDRoot
+        /// </summary>
         public IdentifierType IDType;
 
-        ///<summary>This is the root OID for this data type, when combined with extension, uniquely identifies a single object.</summary>
+        /// <summary>
+        /// This is the root OID for this data type, when combined with extension, uniquely identifies a single object.
+        /// </summary>
         public string IDRoot;
     }
 
-    ///<summary>Stored as string. Sorted and displayed in the order they are present in this enum.  Root should always be first.</summary>
+    /// <summary>
+    /// Stored as string. Sorted and displayed in the order they are present in this enum. 
+    /// Root should always be first.
+    /// </summary>
     public enum IdentifierType
     {
         ///<summary>Will most likely be the root of all other OIDs.  Represents the organization.</summary>

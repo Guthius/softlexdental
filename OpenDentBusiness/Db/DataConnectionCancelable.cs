@@ -32,7 +32,7 @@ namespace OpenDentBusiness
         /// other connection can use. This is so that user queries can be safely cancelled if 
         /// needed. Required as a first step for user queries (and ONLY user queries).
         /// </summary>
-        public static int GetServerThread(bool isReportServer)
+        public static int GetServerThread()
         {
             var connection = new MySqlConnection(DataConnection.ConnectionString);
             connection.Open();
@@ -51,6 +51,7 @@ namespace OpenDentBusiness
             {
                 serverConnections[serverThread] = connection;
             }
+
             return serverThread;
         }
 
@@ -66,6 +67,9 @@ namespace OpenDentBusiness
             {
                 throw new ApplicationException("Critical error in GetTableConAlreadyOpen: A connection could not be found via the given server thread ID.");
             }
+
+            // TODO: Rather than trying to figure out whether a query is a 'command' query or
+            //       not, we should just execute the query within a read only transaction.
 
             // Throws Exception if SQL is not allowed, which is handled by the ExceptionThreadHandler and output in a MsgBox.
             if (!isValidated && !Db.IsSqlAllowed(commandText))

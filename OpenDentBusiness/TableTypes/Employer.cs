@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-
 namespace OpenDentBusiness
 {
     /// <summary>
@@ -13,30 +10,33 @@ namespace OpenDentBusiness
     {
         public long EmployerNum;
 
-        ///<summary>Name of the employer.</summary>
+        /// <summary>
+        /// The name of the employer.
+        /// </summary>
         public string EmpName;
 
-        ///<summary>.</summary>
+        /// <summary>
+        /// The first address line of the employer.
+        /// </summary>
         public string Address;
 
-        ///<summary>Second line of address.</summary>
+        /// <summary>
+        /// The second address line of the employer.
+        /// </summary>
         public string Address2;
 
-        ///<summary>.</summary>
+        /// <summary>
+        /// The city of the employer.
+        /// </summary>
         public string City;
 
-        ///<summary>2 char in the US.</summary>
         public string State;
-
-        ///<summary>.</summary>
         public string Zip;
-
-        ///<summary>Includes any punctuation.</summary>
         public string Phone;
 
         public Employer Copy()
         {
-            return (Employer)this.MemberwiseClone();
+            return (Employer)MemberwiseClone();
         }
     }
 }

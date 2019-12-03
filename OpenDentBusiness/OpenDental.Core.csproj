@@ -190,8 +190,6 @@
     <Compile Include="Claims\ClaimProcessorProgramBridge.cs" />
     <Compile Include="Claims\IClaimProcessorProgramBridge.cs" />
     <Compile Include="Claims\IClaimProcessor.cs" />
-    <Compile Include="Crud Interface\CrudColumnAttribute.cs" />
-    <Compile Include="Crud Interface\CrudTableAttribute.cs" />
     <Compile Include="Crud Interface\TableBase.cs" />
     <Compile Include="Crud\AsapCommCrud.cs" />
     <Compile Include="Crud\MobileAppDeviceCrud.cs" />
@@ -245,6 +243,7 @@
     <Compile Include="Db\SIn.cs" />
     <Compile Include="Db\SOut.cs" />
     <Compile Include="Data\DefinitionCategory.cs" />
+    <Compile Include="SheetFramework\SheetType.cs" />
     <Compile Include="__WIP\DefCatOptions.cs" />
     <Compile Include="Data Interface\RecurringCharges.cs" />
     <Compile Include="Db Multi Table\AgingData.cs" />
@@ -1128,7 +1127,6 @@
     <Compile Include="WebBridges\Erx\Erx.cs" />
     <Compile Include="WebBridges\Erx\NewCrop\NewCrop.cs" />
     <Compile Include="WebBridges\Podium.cs" />
-    <Compile Include="WebBridges\Sftp.cs" />
     <Compile Include="WebTypes\Shared\XWeb\XWeb.cs" />
     <Compile Include="WebTypes\Shared\XWeb\XWebs.cs" />
     <Compile Include="X12\X12Segment.cs" />

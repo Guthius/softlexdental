@@ -8,7 +8,7 @@ namespace OpenDentBusiness
         public bool IsRequired = false;
 
         /// <summary>
-        /// Usually, a column name.
+        /// The name of the paramter. Usually, a column name.
         /// </summary>
         public string ParamName;
         

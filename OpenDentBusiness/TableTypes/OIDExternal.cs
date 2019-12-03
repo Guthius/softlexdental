@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace OpenDentBusiness
+﻿namespace OpenDentBusiness
 {
     public class OIDExternal
     {

@@ -57,7 +57,7 @@ namespace OpenDentBusiness
 				((int)TsiServiceCode.Diplomatic+1).ToString(),//(enum 0 based, plus 1 to send to TSI) 1 - Diplomatic, 2 - Intensive or 3 - Bad Check.
 				"Transferred to TSI" };
 
-            return fieldVals.Aggregate((a, b) => (a ?? "") + "|" + (b ?? ""));
+            return fieldVals.Aggregate((a, b) => a + "|" + b);
         }
 
         public static string GenerateUpdate(long patientId, string clientID, TsiTransType transType, double transAmount, double newBal)

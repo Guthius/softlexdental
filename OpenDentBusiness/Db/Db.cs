@@ -45,40 +45,12 @@ namespace OpenDentBusiness
         }
 
         /// <summary>
-        /// Returns true if mysql variable "AUTO_INCREMENT_OFFSET" equals 1, otherwise false.
+        /// Checks to see if the user has permission to run a command query if it is a command query.
         /// </summary>
-        public static bool IsAutoIncrementOffsetSetForReplication()
-        {
-            return !GetAutoIncrementOffset().In(1, -1); //auto_increment_offset is default value or not found (not found shouldn't happen, but for safety's sake).
-        }
-
-        /// <summary>Returns mysql variable "AUTO_INCREMENT_OFFSET", or -1 if variable not found.</summary>
-        public static int GetAutoIncrementOffset()
-        {
-            string command = "SHOW VARIABLES LIKE 'auto_increment_offset'";
-            DataTable table = GetTable(command);
-            if (table.Rows.Count > 0)
-            {
-                foreach (DataRow row in table.Rows)
-                {
-                    if ((string)row["Variable_name"] == "auto_increment_offset")
-                    {
-                        return PIn.Int((string)table.Rows[0]["Value"]);
-                    }
-                }
-            }
-            return -1;//auto_increment_offset variable not found, just in case.
-        }
-
-        ///<summary>Throws Exception.
-        ///Checks to see if the query is safe for replication and if the user has permission to run a command query if it is a command query.</summary>
         public static bool IsSqlAllowed(string command)
         {
-            if (!IsSafeSqlForReplication(command))
-            {
-                return false;
-            }
             bool isCommand;
+
             try
             {
                 isCommand = IsCommandSql(command);
@@ -87,55 +59,17 @@ namespace OpenDentBusiness
             {
                 throw new ApplicationException("Validation failed. Please remove mid-query comments and try again.");
             }
-            if (isCommand && !Security.IsAuthorized(Permissions.CommandQuery))
-            {
-                return false;
-            }
+
             if (isCommand)
             {
+                if (!Security.IsAuthorized(Permissions.CommandQuery))
+                {
+                    return false;
+                }
+
                 SecurityLog.Write(null, SecurityLogEvents.CommandQuery, "Command query run.");
             }
-            return true;
-        }
 
-        ///<summary>Throws Exception.
-        ///Checks to see if the computer is allowed to use create table or drop table syntax queries.
-        ///Will return false if using replication and the computer OD is running on is not the ReplicationUserQueryServer set in replication setup.
-        ///Otherwise true.</summary>
-        private static bool IsSafeSqlForReplication(string command)
-        {
-            if (!Preferences.RandomKeys && !Db.IsAutoIncrementOffsetSetForReplication())
-            {//If replication is disabled, then any command is safe.
-             //Previously users could set PrefName.RandomPrimaryKeys but there is no longer a UI for this.
-             //PrefName.RandomPrimaryKeys use to be required for replication but this has since changed so we can not rely on this due to replication setup changes.
-                return true;
-            }
-            bool isSafe = true;
-            if (Regex.IsMatch(command, ".*CREATE[\\s]+TABLE.*", RegexOptions.IgnoreCase))
-            {
-                isSafe = false;
-            }
-            if (Regex.IsMatch(command, ".*CREATE[\\s]+TEMPORARY[\\s]+TABLE.*", RegexOptions.IgnoreCase))
-            {
-                isSafe = false;
-            }
-            if (Regex.IsMatch(command, ".*DROP[\\s]+TABLE.*", RegexOptions.IgnoreCase))
-            {
-                isSafe = false;
-            }
-            if (isSafe)
-            {
-                return true;
-            }
-            //At this point we know that replication is enabled and the command is potentially unsafe.
-            if (Preference.GetLong(PreferenceName.ReplicationUserQueryServer) == 0)
-            {//if no allowed ReplicationUserQueryServer set in replication setup
-                throw new ApplicationException("This query contains unsafe syntax that can crash replication.  There is currently no computer set that is allowed to run these types of queries.  This can be set in the replication setup window.");
-            }
-            else if (!ReplicationServers.IsConnectedReportServer())
-            {//if not running query from the ReplicationUserQueryServer set in replication setup 
-                throw new ApplicationException("This query contains unsafe syntax that can crash replication.  Only computers connected to the report server are allowed to run these queries.  The current report server can be found in the replication setup window.");
-            }
             return true;
         }
 

@@ -29,10 +29,11 @@ namespace OpenDentBusiness
         {
             if (IsFormattingAllowed)
             {
-                phoneNumber = phoneNumber.Replace("(", "");
-                phoneNumber = phoneNumber.Replace(")", "");
-                phoneNumber = phoneNumber.Replace(" ", "");
-                phoneNumber = phoneNumber.Replace("-", "");
+                phoneNumber = phoneNumber
+                    .Replace("(", "")
+                    .Replace(")", "")
+                    .Replace(" ", "")
+                    .Replace("-", "");
 
                 if (phoneNumber.Length != 0 && phoneNumber.Length != 10)
                 {
@@ -175,32 +176,6 @@ namespace OpenDentBusiness
             return phoneNum;
         }
 
-        /// <summary>
-        /// Also truncates if more than two non-numbers in a row.  This is to avoid the notes that can follow phone numbers.
-        /// </summary>
-        public static string FormatNumbersOnly(string phoneNumber)
-        {
-            string result = "";
-
-            int nonnumcount = 0;
-            for (int i = 0; i < phoneNumber.Length; i++)
-            {
-                if (nonnumcount == 2) return result;
-
-                if (char.IsNumber(phoneNumber, i))
-                {
-                    result += phoneNumber[i];
-                    nonnumcount = 0;
-                }
-                else
-                {
-                    nonnumcount++;
-                }
-            }
-
-            return result;
-        }
-
         public static string FormatNumbersExactTen(string phoneNumber)
         {
             string result = "";
@@ -238,19 +213,6 @@ namespace OpenDentBusiness
                 phoneNum2 = "1" + phoneNum2;
             }
             return (phoneNum1 == phoneNum2);
-        }
-
-        /// <summary>
-        /// Only for US numbers. Returns the area code of the phone number. Returns an empty string if unable to extract an area code.
-        /// </summary>
-        public static string GetAreaCode(string phoneNumber)
-        {
-            string tenDigits = FormatNumbersExactTen(phoneNumber);
-            if (tenDigits.Length != 10)
-            {
-                return "";
-            }
-            return tenDigits.Substring(0, 3);
         }
     }
 }

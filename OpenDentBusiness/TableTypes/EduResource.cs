@@ -1,6 +1,7 @@
 ﻿namespace OpenDentBusiness
 {
-    ///<summary>EHR education resource.  Only one of the 3 FK fields will be used at a time (DiseaseDefNum, MedicationNum, or LabResultID).  The other two will be blank.   Displays a clickable URL if the patient meets certain criteria.  </summary>
+    /// <summary>
+    /// EHR education resource.  Only one of the 3 FK fields will be used at a time (DiseaseDefNum, MedicationNum, or LabResultID).  The other two will be blank.   Displays a clickable URL if the patient meets certain criteria.  </summary>
     public class EduResource
     {
         public long EduResourceNum;

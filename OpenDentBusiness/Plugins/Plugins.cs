@@ -337,6 +337,7 @@ namespace OpenDentBusiness
     }
 
     public delegate void PluginActionHandler(object sender, object[] args);
+
     public delegate TValue PluginFilterHandler<TValue>(object sender, TValue value, object[] args);
 
     public static class PluginManager
